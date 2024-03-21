@@ -1,0 +1,62 @@
+.d-block { display: block !important; }
+.d-inline { display: inline !important; }
+.d-inline-block { display: inline-block !important; }
+.d-none { display: none !important; }
+.d-flex { display: flex !important; }
+
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+
+.flex-container {
+  @extend .d-flex;
+  @extend .flex-wrap;
+}
+
+.flex-row {
+  @extend .d-flex;
+  align-items: center;
+}
+
+.mt-auto, .my-auto, .m-auto { margin-top: auto !important; }
+.mb-auto, .my-auto, .m-auto { margin-bottom: auto !important; }
+.ml-auto, .mx-auto, .m-auto { margin-left: auto !important; }
+.mr-auto, .mx-auto, .m-auto { margin-right: auto !important; }
+
+.mt-0, .my-0, .m-0 { margin-top: 0 !important; }
+.mb-0, .my-0, .m-0 { margin-bottom: 0 !important; }
+.ml-0, .mx-0, .m-0 { margin-left: 0 !important; }
+.mr-0, .mx-0, .m-0 { margin-right: 0 !important; }
+
+.pt-0, .py-0, .p-0 { padding-top: 0 !important; }
+.pb-0, .py-0, .p-0 { padding-bottom: 0 !important; }
+.pl-0, .px-0, .p-0 { padding-left: 0 !important; }
+.pr-0, .px-0, .p-0 { padding-right: 0 !important; }
+
+$base: 8px;
+$multipliers: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10;
+
+@each $value in $multipliers {
+  .mt-#{$value}, .my-#{$value}, .m-#{$value} { margin-top:    0.5 * $value * $base !important; }
+  .mb-#{$value}, .my-#{$value}, .m-#{$value} { margin-bottom: 0.5 * $value * $base !important; }
+  .ml-#{$value}, .mx-#{$value}, .m-#{$value} { margin-left:   0.5 * $value * $base !important; }
+  .mr-#{$value}, .mx-#{$value}, .m-#{$value} { margin-right:  0.5 * $value * $base !important; }
+
+  .mt-n#{$value}, .my-n#{$value}, .m-n#{$value} { margin-top:    -0.5 * $value * $base !important; }
+  .mb-n#{$value}, .my-n#{$value}, .m-n#{$value} { margin-bottom: -0.5 * $value * $base !important; }
+  .ml-n#{$value}, .mx-n#{$value}, .m-n#{$value} { margin-left:   -0.5 * $value * $base !important; }
+  .mr-n#{$value}, .mx-n#{$value}, .m-n#{$value} { margin-right:  -0.5 * $value * $base !important; }
+
+  .pt-#{$value}, .py-#{$value}, .p-#{$value} { padding-top:    0.5 * $value * $base !important; }
+  .pb-#{$value}, .py-#{$value}, .p-#{$value} { padding-bottom: 0.5 * $value * $base !important; }
+  .pl-#{$value}, .px-#{$value}, .p-#{$value} { padding-left:   0.5 * $value * $base !important; }
+  .pr-#{$value}, .px-#{$value}, .p-#{$value} { padding-right:  0.5 * $value * $base !important; }
+}
+
+.mw-100 {
+  max-width: 100% !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}

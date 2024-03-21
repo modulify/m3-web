@@ -1,0 +1,30 @@
+import Inline from './Inline'
+import { defineComponent, h, ref } from 'vue'
+
+import { M3Icon } from '@/components/icon'
+import { M3IconButton } from '@/components/icon-button'
+
+# M3IconButton
+
+Icon buttons help people take minor actions with one tap
+
+[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+
+<Inline tag={'p'} is={defineComponent({
+  setup () {
+    const selected = ref(false)
+    const icon = {
+      default: () => h(M3Icon, { name: 'favorite' }),
+    }
+
+    return () => [
+      h(M3IconButton, { appearance: 'filled' }, icon),
+      h(M3IconButton, {
+        appearance: 'filled',
+        selected: selected.value,
+        toggleable: true,
+        onClick: () => selected.value = !selected.value,
+      }, icon)
+    ]
+  },
+})} />

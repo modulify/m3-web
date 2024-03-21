@@ -1,0 +1,70 @@
+$m3-screen-medium: 600px;
+$m3-screen-expanded: 840px;
+$m3-screen-large: 1200px;
+$m3-screen-extra-large: 1600px;
+
+@mixin screen($media) {
+  @if $media == 'compact' {
+    @media only screen and (max-width: $m3-screen-medium - 1px) { @content; }
+  }
+
+  @if $media == 'medium' {
+    @media only screen and (min-width: $m3-screen-medium) and (max-width: $m3-screen-expanded - 1px) { @content; }
+  }
+
+  @if $media == 'expanded' {
+    @media only screen and (min-width: $m3-screen-expanded) and (max-width: $m3-screen-large - 1px) { @content; }
+  }
+
+  @if $media == 'large' {
+    @media only screen and (min-width: $m3-screen-large) and (max-width: $m3-screen-extra-large - 1px) { @content; }
+  }
+
+  @if $media == 'extra-large' {
+    @media only screen and (min-width: $m3-screen-extra-large) { @content; }
+  }
+}
+
+@mixin screen-maximum($media) {
+  @if $media == 'compact' {
+    @media only screen and (max-width: $m3-screen-medium - 1px) { @content; }
+  }
+
+  @if $media == 'medium' {
+    @media only screen and (max-width: $m3-screen-expanded - 1px) { @content; }
+  }
+
+  @if $media == 'expanded' {
+    @media only screen and (max-width: $m3-screen-large - 1px) { @content; }
+  }
+
+  @if $media == 'large' {
+    @media only screen and (max-width: $m3-screen-extra-large - 1px) { @content; }
+  }
+
+  @if $media == 'extra-large' {
+    @media only screen { @content; }
+  }
+}
+
+@mixin screen-minimum($media) {
+  @if $media == 'compact' {
+    @media only screen and (max-width: $m3-screen-medium - 1px) { @content; }
+  }
+
+  @if $media == 'medium' {
+    @media only screen and (min-width: $m3-screen-medium) { @content; }
+  }
+
+  @if $media == 'expanded' {
+    @media only screen and (min-width: $m3-screen-expanded) { @content; }
+  }
+
+  @if $media == 'large' {
+    @media only screen and (min-width: $m3-screen-large) { @content; }
+  }
+
+  @if $media == 'extra-large' {
+    @media only screen and (min-width: $m3-screen-extra-large) { @content; }
+  }
+}

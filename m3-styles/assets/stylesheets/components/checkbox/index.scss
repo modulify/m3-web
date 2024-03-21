@@ -1,0 +1,129 @@
+@import "../../basics/motion";
+@import "../../basics/shape";
+
+.m3-checkbox {
+  @include m3-shape-reset-box-sizing();
+
+  --m3-ripple-color: var(--m3-state-layers-primary-opacity-020);
+  --m3-ripple-effect-duration: 0.75s;
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+
+  &_checked,
+  &_indeterminate {
+    --m3-ripple-color: var(--m3-state-layers-on-surface-opacity-020);
+    color: var(--m3-sys-on-primary);
+  }
+
+  &_invalid { --m3-ripple-color: var(--m3-state-layers-error-opacity-020); }
+
+  &_checked#{&}_invalid,
+  &_indeterminate#{&}_invalid {
+    color: var(--m3-sys-on-error);
+  }
+
+  &__checkmark {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    z-index: 2;
+
+    &:before {
+      content: ' ';
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--m3-sys-on-surface-variant);
+      border-radius: 2px;
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      transition:
+        m3-sys-motion-standard(background-color),
+        m3-sys-motion-standard(border-color)
+      ;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+
+  &_checked       &__checkmark:before,
+  &_indeterminate &__checkmark:before {
+    background-color: var(--m3-sys-primary);
+    border-color: var(--m3-sys-primary);
+  }
+
+  &_checked#{&}_invalid       &__checkmark:before,
+  &_indeterminate#{&}_invalid &__checkmark:before {
+    background-color: var(--m3-sys-error);
+  }
+
+  &_invalid &__checkmark:before {
+    border-color: var(--m3-sys-error);
+  }
+
+  &__state {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background: var(--m3-state-layers-on-surface-opacity-008);
+    border-radius: inherit;
+    opacity: 0;
+    overflow: hidden;
+    animation: m3-sys-motion-standard(m3-animation-zoom-out);
+    animation-fill-mode: forwards;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  &:hover   &__state,
+  &_focused &__state {
+    animation: m3-sys-motion-standard(m3-animation-zoom-in);
+    animation-fill-mode: forwards;
+  }
+
+  &_focused &__state {
+    background: var(--m3-state-layers-on-surface-opacity-012);
+  }
+
+  &_checked:hover       &__state { background: var(--m3-state-layers-primary-opacity-008); }
+  &_checked#{&}_focused &__state { background: var(--m3-state-layers-primary-opacity-012); }
+
+  &_indeterminate:hover       &__state { background: var(--m3-state-layers-primary-opacity-008); }
+  &_indeterminate#{&}_focused &__state { background: var(--m3-state-layers-primary-opacity-012); }
+
+  &_invalid:hover       &__state { background: var(--m3-state-layers-error-opacity-008); }
+  &_invalid#{&}_focused &__state { background: var(--m3-state-layers-error-opacity-012); }
+
+  &_disabled &__state {
+    background: transparent;
+  }
+
+  &__input {
+    opacity: 0;
+    outline: none;
+    position: absolute;
+    margin: 0;
+    width: 0;
+    height: 0;
+    z-index: -1;
+  }
+}

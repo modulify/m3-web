@@ -1,0 +1,78 @@
+@import '../../basics/shape';
+@import '../../basics/typography';
+
+.m3-menu {
+  @include m3-shape-corner('extra-small');
+
+  display: flex;
+  width: 200px;
+  min-width: 112px;
+  padding: 8px 0;
+  align-items: flex-start;
+  flex-direction: column;
+  background: var(--m3-sys-surface-container);
+  box-shadow: var(--m3-elevation-2);
+  z-index: 3;
+}
+
+.m3-menu-item {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: flex-start;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+
+  &__state {
+    --background: transparent;
+
+    display: flex;
+    height: 56px;
+    padding: 8px 12px;
+    align-items: center;
+    gap: 12px;
+    align-self: stretch;
+    background: var(--background);
+  }
+
+  &:hover &__state,
+  &:focus &__state {
+    --background: var(--m3-state-layers-on-surface-opacity-008);
+  }
+
+  &_selected &__state {
+    background: var(--m3-sys-surface-container-highest);
+  }
+
+  &:disabled &__state,
+  &_disabled &__state {
+    background: transparent;
+    opacity: 0.38;
+  }
+
+  &__icon {
+    @include m3-shape-square(24px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    @include m3-body-large;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1 0 0;
+    color: var(--m3-sys-on-surface);
+    text-align: left;
+  }
+
+  .m3-ripple {
+    background: var(--m3-state-layers-primary-opacity-020);
+  }
+}

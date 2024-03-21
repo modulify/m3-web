@@ -1,0 +1,30 @@
+import Inline from './Inline'
+import M3FabButton from './M3FabButtonExample.vue'
+
+# Floating action buttons
+
+Floating action buttons (FABs) help people take primary actions
+
+[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+
+### Standard FABs
+
+[Guidelines](https://m3.material.io/components/floating-action-button/guidelines)
+
+<p style={{ display: 'flex', gap: '16px' }}>
+  <Inline tag={'span'} is={M3FabButton} icon={'edit'} aria-label={'Edit'} variant={'surface'} />
+  <Inline tag={'span'} is={M3FabButton} icon={'edit'} aria-label={'Edit'} />
+  <Inline tag={'span'} is={M3FabButton} icon={'edit'} aria-label={'Edit'} variant={'secondary'} />
+  <Inline tag={'span'} is={M3FabButton} icon={'edit'} aria-label={'Edit'} variant={'tertiary'} />
+</p>
+
+### Extended FABs
+
+[Guidelines](https://m3.material.io/components/extended-fab/guidelines)
+
+<p style={{ display: 'flex', gap: '16px' }}>
+  <Inline tag={'span'} is={M3FabButton} icon={'add'} label={'New task'} variant={'surface'} />
+  <Inline tag={'span'} is={M3FabButton} icon={'add'} label={'New task'} />
+  <Inline tag={'span'} is={M3FabButton} icon={'add'} label={'New task'} variant={'secondary'} />
+  <Inline tag={'span'} is={M3FabButton} icon={'add'} label={'New task'} variant={'tertiary'} />
+</p>

@@ -1,0 +1,27 @@
+<style>
+    body {
+        background: var(--m3-sys-surface);
+        color: var(--m3-sys-on-surface);
+    }
+
+    [class*=css] {
+        background: transparent !important;
+        color: var(--m3-sys-on-surface) !important;
+
+        :where(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p)) {
+            color: var(--m3-sys-on-surface) !important;
+        }
+
+        :where(h2:not(.sb-anchor, .sb-unstyled, .sb-unstyled h2)) {
+            border-color: var(--m3-state-layers-on-surface-opacity-020) !important;
+        }
+
+        a& {
+            color: var(--m3-sys-primary) !important;
+
+            &:hover {
+                color: var(--m3-state-layers-primary-opacity-080) !important;
+            }
+        }
+    }
+</style>

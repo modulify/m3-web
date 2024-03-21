@@ -1,0 +1,77 @@
+{
+  "name": "@modulify/m3-react",
+  "license": "ISC",
+  "description": "Material design components for React",
+  "keywords": [
+    "components",
+    "material",
+    "material design",
+    "react"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint --ext .js,.jsx,.mjs,.ts,.tsx src storybook tests types",
+    "storybook": "storybook dev -c storybook -p 6006",
+    "storybook:build": "storybook build -c storybook"
+  },
+  "dependencies": {
+    "@floating-ui/core": "^1.6.0",
+    "@floating-ui/dom": "^1.6.3",
+    "lodash.isequal": "^4.5.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^1.1.10",
+    "@modulify/m3-styles": "workspace:^",
+    "@storybook/addon-a11y": "^8.0.2",
+    "@storybook/addon-essentials": "^8.0.2",
+    "@storybook/addon-interactions": "^8.0.2",
+    "@storybook/addon-links": "^8.0.2",
+    "@storybook/addon-themes": "^8.0.2",
+    "@storybook/blocks": "^8.0.2",
+    "@storybook/builder-vite": "^8.0.2",
+    "@storybook/manager-api": "^8.0.2",
+    "@storybook/react": "^8.0.2",
+    "@storybook/react-vite": "^8.0.2",
+    "@storybook/test": "^8.0.2",
+    "@storybook/theming": "^8.0.2",
+    "@types/lodash.isequal": "^4.5.8",
+    "@types/node": "^18.15.3",
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-storybook": "^0.8.0",
+    "eslint-plugin-unused-imports": "^3.1.0",
+    "flag-icons": "^7.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.71.1",
+    "storybook": "^8.0.2",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.2",
+    "uuid": "^9.0.1",
+    "vite": "^5.2.2",
+    "vite-plugin-svgr": "^4.2.0"
+  },
+  "contributors": [
+    "Zaitsev Kirill <zaytsev.cmath10@gmail.com>"
+  ],
+  "homepage": "https://github.com/modulify/m3-web/m3-react/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/modulify/m3-web.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

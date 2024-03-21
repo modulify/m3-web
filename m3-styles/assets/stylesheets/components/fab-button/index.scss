@@ -1,0 +1,154 @@
+@import '../../basics/motion';
+@import '../../basics/shape';
+@import '../../basics/typography';
+
+.m3-fab-button {
+  --m3-ripple-color: var(--m3-state-layers-on-primary-container-opacity-012);
+  --m3-ripple-effect-duration: 0.75s;
+
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  background: var(--m3-sys-primary-container);
+  border-radius: 16px;
+  box-shadow: var(--m3-elevation-3);
+  color: var(--m3-sys-on-primary-container);
+  text-decoration: none;
+  outline: none;
+  overflow: hidden;
+  transition:
+    m3-sys-motion-standard(background),
+    m3-sys-motion-standard(border-radius),
+    m3-sys-motion-standard(color)
+  ;
+  position: relative;
+
+  &:hover {
+    box-shadow: var(--m3-elevation-4);
+  }
+
+  &:focus,
+  &:active {
+    box-shadow: var(--m3-elevation-3);
+  }
+
+  &_secondary {
+    --m3-ripple-color: var(--m3-state-layers-on-secondary-container-opacity-012);
+    background: var(--m3-sys-secondary-container);
+    color: var(--m3-sys-on-secondary-container);
+  }
+
+  &_surface {
+    --m3-ripple-color: var(--m3-state-layers-primary-opacity-012);
+    background: var(--m3-sys-surface-container-high);
+    color: var(--m3-sys-primary);
+  }
+
+  &_tertiary {
+    --m3-ripple-color: var(--m3-state-layers-on-tertiary-container-opacity-012);
+    background: var(--m3-sys-tertiary-container);
+    color: var(--m3-sys-on-tertiary-container);
+  }
+
+  &_sm { border-radius: 12px; }
+  &_lg {
+    --m3-ripple-effect-duration: 1s;
+    border-radius: 28px;
+  }
+
+  &__state {
+    --background-hover: var(--m3-state-layers-on-primary-container-opacity-008);
+    --background-focus: var(--m3-state-layers-on-primary-container-opacity-012);
+    display: flex;
+    flex: 1 0 0;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    gap: 12px;
+    background: transparent;
+    border-radius: inherit;
+    transition:
+      m3-sys-motion-standard(padding),
+      m3-sys-motion-standard(gap),
+      m3-sys-motion-standard(background)
+    ;
+  }
+
+  &:hover    &__state { background: var(--background-hover); }
+  &:focus    &__state { background: var(--background-focus); }
+  &:active   &__state,
+  &:disabled &__state { background: transparent; }
+
+  &_secondary &__state {
+    --background-hover: var(--m3-state-layers-on-secondary-container-opacity-008);
+    --background-focus: var(--m3-state-layers-on-secondary-container-opacity-012);
+  }
+
+  &_surface &__state {
+    --background-hover: var(--m3-state-layers-primary-opacity-008);
+    --background-focus: var(--m3-state-layers-primary-opacity-012);
+  }
+
+  &_tertiary &__state {
+    --background-hover: var(--m3-state-layers-on-tertiary-container-opacity-008);
+    --background-focus: var(--m3-state-layers-on-tertiary-container-opacity-012);
+  }
+
+  &_sm &__state {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  &_lg &__state {
+    padding: 30px;
+    gap: 18px;
+  }
+
+  &_has-leading-icon        &__state { padding-right: 20px; }
+  &_has-leading-icon#{&}_sm &__state { padding-right: 10px; }
+  &_has-leading-icon#{&}_lg &__state { padding-right: 37.5px; }
+
+  &_has-trailing-icon        &__state { padding-left: 20px; }
+  &_has-trailing-icon#{&}_sm &__state { padding-left: 10px; }
+  &_has-trailing-icon#{&}_lg &__state { padding-left: 37.5px; }
+
+  &__icon {
+    @include m3-shape-square(24px);
+    --m3-icon-size: 24px;
+    display: inline-flex;
+    transition:
+      m3-sys-motion-standard(width),
+      m3-sys-motion-standard(height)
+    ;
+  }
+
+  &__icon > * {
+    @include m3-shape-square(100%);
+    transition:
+      m3-sys-motion-standard(font-size)
+    ;
+  }
+
+  &_lg &__icon {
+    @include m3-shape-square(36px);
+    --m3-icon-size: 36px;
+  }
+
+  &__text {
+    @include m3-label-large();
+    display: inline-flex;
+    align-items: center;
+    transition:
+      m3-sys-motion-standard(font-size)
+    ;
+  }
+
+  &_lg &__text {
+    @include m3-title-large();
+  }
+
+  &:disabled &__icon,
+  &:disabled &__text {
+    opacity: 0.38;
+  }
+}

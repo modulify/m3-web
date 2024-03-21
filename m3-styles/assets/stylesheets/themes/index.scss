@@ -1,0 +1,16 @@
+@import 'dark';
+@import 'light';
+
+:root {
+  @include m3-theme-light;
+}
+
+.m3-theme-light,
+.m3-theme-light:root {
+  @include m3-theme-light;
+}
+
+.m3-theme-dark,
+.m3-theme-dark:root {
+  @include m3-theme-dark;
+}

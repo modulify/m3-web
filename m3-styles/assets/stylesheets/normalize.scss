@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+@import 'basics/typography';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body, #__nuxt {
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  @include m3-body-medium;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+}
+
+h1 { @include m3-headline-large; }
+h2 { @include m3-headline-medium; }
+h3 { @include m3-headline-small; }
+h4 { @include m3-title-large; }
+h5 { @include m3-title-medium; }
+h6 { @include m3-title-small; }
+
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  display: inline-block;
+  padding: 0;
+  appearance: none;
+  background: none;
+  border: none;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  margin: 0;
+}
+
+button:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus {
+  outline: none;
+}
+
+input[type=checkbox] {
+  margin: 0;
+}
+
+label[for] {
+  cursor: pointer;
+}

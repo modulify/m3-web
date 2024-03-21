@@ -1,0 +1,18 @@
+import Inline from './Inline'
+import LiveMusic1 from '../examples/card/LiveMusic1.vue'
+import LiveMusic2 from '../examples/card/LiveMusic2.vue'
+
+import { defineComponent, h } from 'vue'
+
+# Cards
+
+Cards display content and actions about a single subject
+
+[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+
+<Inline is={defineComponent({
+  render: () => h('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '16px' } }, [
+    h(LiveMusic1),
+    h(LiveMusic2),
+  ]),
+})} />

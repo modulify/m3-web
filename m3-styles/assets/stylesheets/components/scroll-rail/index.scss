@@ -1,0 +1,59 @@
+@import "../../basics/motion";
+
+.m3-scroll-rail {
+  display: flex;
+  width: 12px;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  position: absolute;
+  right: 0;
+
+  &_disabled {
+    width: 0;
+  }
+
+  &_horizontal {
+    width: 100%;
+    height: 12px;
+    flex-direction: row;
+    right: auto;
+    bottom: 0;
+  }
+
+  &_horizontal#{&}_disabled {
+    height: 0;
+  }
+
+  &__slider {
+    width: 6px;
+    background: var(--m3-state-layers-on-surface-opacity-012);
+    border-radius: 4px;
+    cursor: pointer;
+    transition:
+      m3-sys-motion-standard(width),
+      m3-sys-motion-standard(background-color),
+      m3-sys-motion-standard(opacity)
+    ;
+    position: relative;
+  }
+
+  &_horizontal &__slider {
+    transition:
+      m3-sys-motion-standard(height),
+      m3-sys-motion-standard(background-color),
+      m3-sys-motion-standard(opacity)
+    ;
+  }
+
+  &:hover  &__slider,
+  &_active &__slider {
+    width: 8px;
+    background: var(--m3-state-layers-on-surface-opacity-020);
+  }
+
+  &_disabled &__slider {
+    opacity: 0;
+  }
+}

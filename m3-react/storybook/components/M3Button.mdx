@@ -1,0 +1,26 @@
+import { Unstyled } from '@storybook/blocks'
+
+import { M3Button } from '@/components/button'
+import { M3Icon } from '@/components/icon'
+
+# Buttons
+
+Common buttons prompt most actions in a UI
+
+<Unstyled>
+  <p style={{ display: 'flex', gap: '16px' }}>
+    <M3Button>Edit</M3Button>
+    <M3Button appearance={'elevated'}>Edit</M3Button>
+    <M3Button appearance={'outlined'}>Edit</M3Button>
+    <M3Button appearance={'text'}>Edit</M3Button>
+    <M3Button appearance={'tonal'}>Edit</M3Button>
+  </p>
+
+  <p style={{ display: 'flex', gap: '16px' }}>
+    <M3Button><M3Icon name={'edit'} /> Edit</M3Button>
+    <M3Button appearance={'elevated'}><M3Icon name={'edit'} /> Edit</M3Button>
+    <M3Button appearance={'outlined'}><M3Icon name={'edit'} /> Edit</M3Button>
+    <M3Button appearance={'text'}><M3Icon name={'edit'} /> Edit</M3Button>
+    <M3Button appearance={'tonal'}><M3Icon name={'edit'} /> Edit</M3Button>
+  </p>
+</Unstyled>

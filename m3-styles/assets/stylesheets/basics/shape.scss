@@ -1,0 +1,63 @@
+$m3-sys-shape-corner-extra-small: 4px;
+$m3-sys-shape-corner-medium: 12px;
+$m3-sys-shape-corner-large: 16px;
+
+$m3-sys-shape-corner-map: (
+  'extra-small': $m3-sys-shape-corner-extra-small,
+  'medium': $m3-sys-shape-corner-medium,
+  'large': $m3-sys-shape-corner-large,
+);
+
+@function m3-sys-shape-corner($keyOrValue) {
+  @if map-has-key($m3-sys-shape-corner-map, $keyOrValue) {
+    @return map-get($m3-sys-shape-corner-map, $keyOrValue);
+  } @else {
+    @return $keyOrValue;
+  }
+}
+
+@mixin m3-shape-corner($radius) {
+  border-radius: m3-sys-shape-corner($radius);
+}
+
+@mixin m3-shape-corner-left($radius) {
+  border-top-left-radius: m3-sys-shape-corner($radius);
+  border-bottom-left-radius: m3-sys-shape-corner($radius);
+}
+
+@mixin m3-shape-corner-top($radius) {
+  border-top-left-radius: m3-sys-shape-corner($radius);
+  border-top-right-radius: m3-sys-shape-corner($radius);
+}
+
+@mixin m3-shape-corner-right($radius) {
+  border-top-right-radius: m3-sys-shape-corner($radius);
+  border-bottom-right-radius: m3-sys-shape-corner($radius);
+}
+
+@mixin m3-shape-corner-bottom($radius) {
+  border-bottom-left-radius: m3-sys-shape-corner($radius);
+  border-bottom-right-radius: m3-sys-shape-corner($radius);
+}
+
+@mixin m3-shape-square($size) {
+  width: $size;
+  height: $size;
+}
+
+@mixin m3-shape-circle($diameter) {
+  width: $diameter;
+  height: $diameter;
+  border-radius: 50%;
+}
+
+@mixin m3-shape-reset-box-sizing() {
+  &,
+  &::before,
+  &::after,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+}

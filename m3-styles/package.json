@@ -1,0 +1,46 @@
+{
+  "name": "@modulify/m3-styles",
+  "license": "ISC",
+  "version": "0.0.0",
+  "description": "Styles for Material Design v3",
+  "keywords": [
+    "CSS",
+    "material",
+    "material design",
+    "styles"
+  ],
+  "main": "dist/m3-styles.common.js",
+  "module": "dist/m3-styles.esm.js",
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint --ext .js,.mjs,.ts src tests types"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-unused-imports": "^3.1.0",
+    "husky": "^9.0.11",
+    "sass": "^1.72.0",
+    "standard-version": "^9.5.0",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.2",
+    "uuid": "^9.0.1",
+    "vite": "^5.2.2"
+  },
+  "contributors": [
+    "Zaitsev Kirill <zaytsev.cmath10@gmail.com>"
+  ],
+  "homepage": "https://github.com/modulify/m3-web/m3-styles/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/modulify/m3-web.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

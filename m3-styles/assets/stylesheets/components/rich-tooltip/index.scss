@@ -1,0 +1,39 @@
+@import '../../basics/shape';
+@import '../../basics/typography';
+
+.m3-rich-tooltip {
+  @include m3-shape-corner('medium');
+  @include m3-body-medium;
+
+  display: flex;
+  padding-bottom: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: var(--m3-sys-surface-container);
+  box-shadow: var(--m3-elevation-2);
+  color: var(--m3-sys-on-surface-variant);
+  z-index: 10;
+
+  &__content {
+    display: flex;
+    width: 312px;
+    padding: 12px 16px 4px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  &__subheading {
+    @include m3-title-small;
+    margin-bottom: 0;
+  }
+
+  &__footer {
+    display: flex;
+    padding: 0 8px;
+    align-items: center;
+    align-self: stretch;
+    gap: 8px;
+  }
+}

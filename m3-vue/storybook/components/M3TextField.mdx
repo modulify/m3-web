@@ -1,0 +1,75 @@
+import { Unstyled } from '@storybook/blocks'
+
+import Inline from './Inline'
+import { defineComponent, h, ref } from 'vue'
+
+import { M3Icon } from '@/components/icon'
+import { M3TextField } from '@/components/text-field'
+
+<Unstyled>
+# Text fields
+
+Text fields let users enter text into a UI
+
+[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+
+<Inline tag={'p'} is={defineComponent({
+  setup () {
+    const text = ref('')
+
+    return () => h(M3TextField, {
+      value: text.value,
+      label: 'E-mail',
+      'onUpdate:value': value => text.value = value,
+    }, {
+      'leading-icon': () => h(M3Icon, { name: 'mail' }),
+    })
+  },
+})} />
+
+Outlined text field:
+
+<Inline tag={'p'} is={defineComponent({
+  setup () {
+    const text = ref('')
+
+    return () => h(M3TextField, {
+      value: text.value,
+      label: 'E-mail',
+      outlined: true,
+      'onUpdate:value': value => text.value = value,
+    }, {
+      'leading-icon': () => h(M3Icon, { name: 'mail' }),
+    })
+  },
+})} />
+
+### Multiline text fields
+
+<Inline tag={'p'} is={defineComponent({
+  setup () {
+    const text = ref('')
+
+    return () => h(M3TextField, {
+      value: text.value,
+      label: 'About',
+      multiline: true,
+      'onUpdate:value': value => text.value = value,
+    })
+  },
+})} />
+
+<Inline tag={'p'} is={defineComponent({
+  setup () {
+    const text = ref('')
+
+    return () => h(M3TextField, {
+      value: text.value,
+      label: 'About',
+      multiline: true,
+      outlined: true,
+      'onUpdate:value': value => text.value = value,
+    })
+  },
+})} />
+</Unstyled>

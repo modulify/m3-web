@@ -1,0 +1,40 @@
+import Inline from './Inline'
+import M3CheckboxExample from './M3CheckboxExample.vue'
+
+# Checkboxes
+
+Checkboxes let users select one or more items from a list, or turn an item on or off
+
+[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+
+[Guidelines](https://m3.material.io/components/checkbox/guidelines)
+
+### Regular list
+
+<Inline is={M3CheckboxExample} options={[{
+  label: 'Apples',
+  value: 'apples',
+}, {
+  label: 'Bananas',
+  value: 'bananas',
+}, {
+  label: 'Oranges',
+  value: 'oranges',
+}]} />
+
+### Nested list
+
+<Inline is={M3CheckboxExample} options={[{
+  label: 'Remind',
+  value: 'remind',
+  subordinates: [{
+    label: 'Daily',
+    value: 'daily',
+  }, {
+    label: 'Weekly',
+    value: 'weekly',
+  }, {
+    label: 'Monthly',
+    value: 'monthly',
+  }],
+}]} />

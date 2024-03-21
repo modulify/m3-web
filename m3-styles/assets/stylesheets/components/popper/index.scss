@@ -1,0 +1,22 @@
+@import "../../basics/motion";
+
+.m3-popper {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    m3-sys-motion-standard-decelerate(opacity),
+    m3-sys-motion-standard-decelerate(visibility)
+  ;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  &_shown {
+    visibility: visible;
+    opacity: 1;
+    transition:
+      m3-sys-motion-standard-accelerate(opacity),
+      m3-sys-motion-standard-accelerate(visibility)
+    ;
+  }
+}

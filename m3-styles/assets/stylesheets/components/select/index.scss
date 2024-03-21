@@ -1,0 +1,32 @@
+@import "../../basics/motion";
+
+.m3-select {
+  &__field {
+    width: 100%;
+  }
+
+  &__caret {
+    animation: m3-sys-motion-standard(m3-rotate-90deg-back) forwards;
+  }
+
+  &_expanded &__caret {
+    animation: m3-sys-motion-standard(m3-rotate-90deg) forwards;
+  }
+
+  &__scroll-box {
+    width: 100%;
+    max-height: 6 * 56px;
+    padding-right: 12px;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &:has(.m3-scroll-rail_disabled) {
+      padding-right: 0;
+    }
+  }
+}

@@ -1,0 +1,117 @@
+// Duration
+
+// Short durations
+// These are used for small utility-focused transitions.
+$m3-sys-motion-duration-short1: 50ms;
+$m3-sys-motion-duration-short2: 100ms;
+$m3-sys-motion-duration-short3: 150ms;
+$m3-sys-motion-duration-short4: 200ms;
+
+// Medium durations
+// These are used for transitions that traverse a medium area of the screen.
+$m3-sys-motion-duration-medium1: 250ms;
+$m3-sys-motion-duration-medium2: 300ms;
+$m3-sys-motion-duration-medium3: 350ms;
+$m3-sys-motion-duration-medium4: 400ms;
+
+// Long durations
+// These durations are often paired with Emphasized easing.
+// They're used for large expressive transitions.
+$m3-sys-motion-duration-long1: 450ms;
+$m3-sys-motion-duration-long2: 500ms;
+$m3-sys-motion-duration-long3: 550ms;
+$m3-sys-motion-duration-long4: 600ms;
+
+// Extra long durations
+// Though rare, some transitions use durations above 600ms.
+// These are usually used for ambient transitions that don't involve user input.
+$m3-sys-motion-duration-extra-long1: 700ms;
+$m3-sys-motion-duration-extra-long2: 800ms;
+$m3-sys-motion-duration-extra-long3: 900ms;
+$m3-sys-motion-duration-extra-long4: 1000ms;
+
+$m3-sys-motion-duration-map: (
+  'short1': $m3-sys-motion-duration-short1,
+  'short2': $m3-sys-motion-duration-short2,
+  'short3': $m3-sys-motion-duration-short3,
+  'short4': $m3-sys-motion-duration-short4,
+  'medium1': $m3-sys-motion-duration-medium1,
+  'medium2': $m3-sys-motion-duration-medium2,
+  'medium3': $m3-sys-motion-duration-medium3,
+  'medium4': $m3-sys-motion-duration-medium4,
+  'long1': $m3-sys-motion-duration-long1,
+  'long2': $m3-sys-motion-duration-long2,
+  'long3': $m3-sys-motion-duration-long3,
+  'long4': $m3-sys-motion-duration-long4,
+  'extra-long1': $m3-sys-motion-duration-extra-long1,
+  'extra-long2': $m3-sys-motion-duration-extra-long2,
+  'extra-long3': $m3-sys-motion-duration-extra-long3,
+  'extra-long4': $m3-sys-motion-duration-extra-long4
+);
+
+@function m3-sys-motion-duration($type) {
+  @if map-has-key($m3-sys-motion-duration-map, $type) {
+    @return map-get($m3-sys-motion-duration-map, $type);
+  } @else {
+    @warn "Unknown duration `#{$type}`.";
+    @return null;
+  }
+}
+
+// Easing
+
+// Emphasized
+$m3-sys-motion-easing-emphasized: cubic-bezier(0.2, 0.0, 0, 1.0);
+$m3-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0.0, 0.8, 0.15);
+$m3-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1.0);
+
+// Standard
+$m3-sys-motion-easing-standard: cubic-bezier(0.2, 0.0, 0, 1.0);
+$m3-sys-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+$m3-sys-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+
+$m3-sys-motion-easing-map: (
+  'emphasized': $m3-sys-motion-easing-emphasized,
+  'emphasized-accelerate': $m3-sys-motion-easing-emphasized-accelerate,
+  'emphasized-decelerate': $m3-sys-motion-easing-emphasized-decelerate,
+  'standard': $m3-sys-motion-easing-standard,
+  'standard-accelerate': $m3-sys-motion-easing-standard-accelerate,
+  'standard-decelerate': $m3-sys-motion-easing-standard-decelerate,
+);
+
+@function m3-sys-motion-easing($key) {
+  @if map-has-key($m3-sys-motion-easing-map, $key) {
+    @return map-get($m3-sys-motion-easing-map, $key);
+  } @else {
+    @warn "Unknown key `#{$key}` in easing map.";
+    @return null;
+  }
+}
+
+@function m3-sys-motion($duration, $easing) {
+  @return #{m3-sys-motion-duration($duration)} + ' ' + #{m3-sys-motion-easing($easing)}
+}
+
+@function m3-sys-motion-emphasized($property, $duration: 'long2') {
+  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'emphasized')}
+}
+
+@function m3-sys-motion-emphasized-accelerate($property, $duration: 'short4') {
+  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'emphasized-accelerate')}
+}
+
+@function m3-sys-motion-emphasized-decelerate($property, $duration: 'medium4') {
+  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'emphasized-decelerate')}
+}
+
+@function m3-sys-motion-standard($property, $duration: 'medium2') {
+  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'standard')}
+}
+
+@function m3-sys-motion-standard-accelerate($property, $duration: 'short4') {
+  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'standard-accelerate')}
+}
+
+@function m3-sys-motion-standard-decelerate($property, $duration: 'medium1') {
+  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'standard-decelerate')}
+}

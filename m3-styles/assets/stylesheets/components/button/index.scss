@@ -1,0 +1,174 @@
+@import '../../basics/motion';
+@import '../../basics/typography';
+
+.m3-button {
+  --m3-icon-size: 18px;
+  --state-color-hover: transparent;
+  --state-color-focus: transparent;
+  --state-color-disabled: transparent;
+  --text-color: var(--m3-sys-on-surface);
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 40px;
+  border-radius: 100px;
+  color: var(--text-color);
+  text-decoration: none;
+  outline: none;
+  overflow: hidden;
+  transition:
+    m3-sys-motion-standard(background),
+    m3-sys-motion-standard(color)
+  ;
+  position: relative;
+
+  &,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &_elevated {
+    &:not(:disabled) {
+      background: var(--m3-sys-surface-container-low);
+      box-shadow: var(--m3-elevation-1);
+    }
+
+    &:not(:disabled):hover {
+      box-shadow: var(--m3-elevation-2);
+    }
+
+    &:not(:disabled):focus,
+    &:not(:disabled):active {
+      box-shadow: var(--m3-elevation-1);
+    }
+
+    &:disabled {
+      background: var(--m3-state-layers-on-surface-opacity-012);
+    }
+  }
+
+  &_filled {
+    --m3-ripple-color: var(--m3-state-layers-on-primary-opacity-020);
+    --state-color-hover: var(--m3-state-layers-on-primary-opacity-008);
+    --state-color-focus: var(--m3-state-layers-on-primary-opacity-012);
+    --state-color-disabled: var(--m3-state-layers-on-surface-opacity-012);
+    --text-color: var(--m3-sys-on-primary);
+
+    &:not(:disabled) {
+      background: var(--m3-sys-primary);
+    }
+
+    &:not(:disabled):hover {
+      box-shadow: var(--m3-elevation-1);
+    }
+
+    &:not(:disabled):focus,
+    &:not(:disabled):active {
+      box-shadow: none;
+    }
+
+    &:disabled {
+      background: var(--m3-state-layers-on-surface-opacity-012);
+    }
+  }
+
+  &_outlined {
+    border: 1px solid var(--m3-sys-outline);
+
+    &:not(:disabled):focus  { border: 1px solid var(--m3-sys-primary); }
+    &:not(:disabled):active { border: 1px solid var(--m3-sys-outline); }
+
+    &:disabled {
+      border-color: var(--m3-state-layers-on-surface-opacity-012);
+    }
+  }
+
+  &_elevated,
+  &_outlined,
+  &_text {
+    --m3-ripple-color: var(--m3-state-layers-primary-opacity-020);
+    --state-color-hover: var(--m3-state-layers-primary-opacity-008);
+    --state-color-focus: var(--m3-state-layers-primary-opacity-012);
+    --text-color: var(--m3-sys-primary);
+  }
+
+  &_tonal {
+    --m3-ripple-color: var(--m3-state-layers-on-secondary-container-opacity-020);
+    --state-color-hover: var(--m3-state-layers-on-secondary-container-opacity-008);
+    --state-color-focus: var(--m3-state-layers-on-secondary-container-opacity-012);
+    --state-color-disabled: var(--m3-state-layers-on-surface-opacity-012);
+    --text-color: var(--m3-sys-on-secondary-container);
+
+    &:not(:disabled) {
+      background: var(--m3-sys-secondary-container);
+    }
+
+    &:not(:disabled):hover {
+      box-shadow: var(--m3-elevation-1);
+    }
+
+    &:not(:disabled):focus,
+    &:not(:disabled):active {
+      box-shadow: none;
+    }
+
+    &:disabled {
+      background: var(--m3-state-layers-on-surface-opacity-012);
+    }
+  }
+
+  &__state {
+    @include m3-label-large;
+
+    display: flex;
+    flex: 1 0 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px 24px;
+    align-items: center;
+    align-self: stretch;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    border-radius: inherit;
+    overflow: hidden;
+    transition: m3-sys-motion-standard(background);
+    position: relative;
+  }
+
+  &:hover    &__state { background: var(--state-color-hover); }
+  &:focus    &__state,
+  &:active   &__state { background: var(--state-color-focus); }
+  &:disabled &__state { background: var(--state-color-disabled); }
+
+  &_has-leading-icon  &__state { padding-left: 16px; }
+  &_has-trailing-icon &__state { padding-right: 16px; }
+
+  &_text &__state {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  &_text#{&}_has-leading-icon  &__state { padding-right: 16px; }
+  &_text#{&}_has-trailing-icon &__state { padding-left: 16px; }
+
+  &__icon {
+    display: inline-flex;
+  }
+
+  &__icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:disabled &__icon,
+  &:disabled &__text {
+    opacity: 0.38;
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@modulify/m3-web",
+  "version": "0.0.0",
+  "description": "Material design v3 implementation for web",
+  "workspaces": [
+    "m3-react",
+    "m3-styles",
+    "m3-vue"
+  ],
+  "scripts": {
+    "commitlint": "commitlint --edit"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-unused-imports": "^3.1.0",
+    "typescript": "^5.4.2"
+  },
+  "packageManager": "yarn@4.1.0",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}

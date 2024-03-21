@@ -1,0 +1,154 @@
+@import "../../basics/motion";
+
+.m3-icon-button {
+  --m3-ripple-color: var(--m3-state-layers-primary-opacity-020);
+  --m3-ripple-effect-duration: #{m3-sys-motion-duration('extra-long1')};
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border-radius: 50%;
+  color: var(--m3-sys-on-surface-variant);
+  font-size: 0;
+  overflow: hidden;
+  transition:
+    m3-sys-motion-standard(background),
+    m3-sys-motion-standard(color)
+  ;
+  position: relative;
+
+  &_toggleable#{&}_selected {
+    color: var(--m3-sys-primary);
+  }
+
+  &_filled:not(:disabled):not(&_toggleable),
+  &_filled:not(:disabled)#{&}_toggleable#{&}_selected {
+    background: var(--m3-sys-primary);
+    color: var(--m3-sys-on-primary);
+  }
+
+  &_filled#{&}_toggleable:not(:disabled) {
+    background: var(--m3-sys-surface-container-highest);
+    color: var(--m3-sys-primary);
+  }
+
+  &_filled:disabled {
+    background: var(--m3-state-layers-on-surface-opacity-012);
+  }
+
+  &_tonal {
+    color: var(--m3-sys-on-secondary-container);
+  }
+
+  &_tonal:not(&_toggleable),
+  &_tonal#{&}_toggleable#{&}_selected {
+    background: var(--m3-sys-secondary-container);
+  }
+
+  &_tonal#{&}_toggleable {
+    background: var(--m3-sys-surface-container-highest);
+  }
+
+  &_tonal:disabled {
+    background: var(--m3-state-layers-on-surface-opacity-012);
+  }
+
+  &_outlined {
+    border: 1px solid var(--m3-sys-outline);
+  }
+
+  &_outlined:disabled {
+    border-color: var(--m3-state-layers-on-surface-opacity-012);
+  }
+
+  &_outlined#{&}_toggleable {
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &_outlined#{&}_toggleable#{&}_selected {
+    background: var(--m3-sys-inverse-surface);
+    border: none;
+    color: var(--m3-sys-inverse-on-surface);
+  }
+
+  &_outlined#{&}_toggleable#{&}_selected:disabled {
+    background: var(--m3-state-layers-on-surface-opacity-012);
+    color: var(--m3-sys-on-surface);
+  }
+
+  &:disabled {
+    color: var(--m3-sys-on-surface);
+    cursor: default;
+  }
+
+  &__state {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border-radius: 50%;
+  }
+
+  &:not(:disabled):hover  &__state { background: var(--m3-state-layers-on-surface-variant-opacity-008); }
+  &:not(:disabled):focus  &__state { background: var(--m3-state-layers-on-surface-variant-opacity-012); }
+  &:not(:disabled):active &__state { background: var(--m3-state-layers-on-surface-variant-opacity-020); }
+
+  &:disabled &__state {
+    opacity: 0.38;
+  }
+
+  &_filled:not(:disabled):hover  &__state { background: var(--m3-state-layers-on-primary-opacity-008); }
+  &_filled:not(:disabled):focus  &__state { background: var(--m3-state-layers-on-primary-opacity-012); }
+  &_filled:not(:disabled):active &__state { background: var(--m3-state-layers-on-primary-opacity-020); }
+
+  &_tonal:not(&_toggleable):not(:disabled):hover           &__state,
+  &_tonal#{&}_toggleable#{&}_selected:not(:disabled):hover &__state {
+    background: var(--m3-state-layers-on-secondary-container-opacity-008);
+  }
+
+  &_tonal:not(&_toggleable):not(:disabled):focus            &__state,
+  &_tonal#{&}_toggleable#{&}_selected:not(:disabled):focus  &__state {
+    background: var(--m3-state-layers-on-secondary-container-opacity-012);
+  }
+
+  &_tonal:not(&_toggleable):not(:disabled):active           &__state,
+  &_tonal#{&}_toggleable#{&}_selected:not(:disabled):active &__state {
+    background: var(--m3-state-layers-on-secondary-container-opacity-020);
+  }
+
+  &_tonal#{&}_toggleable:not(:disabled):hover  &__state {
+    background: var(--m3-state-layers-on-surface-variant-opacity-008);
+  }
+  &_tonal#{&}_toggleable:not(:disabled):focus  &__state {
+    background: var(--m3-state-layers-on-surface-variant-opacity-012);
+  }
+  &_tonal#{&}_toggleable:not(:disabled):active &__state {
+    background: var(--m3-state-layers-on-surface-variant-opacity-020);
+  }
+
+  &_outlined#{&}_toggleable#{&}_selected:not(:disabled):hover &__state {
+    background: var(--m3-state-layers-inverse-on-surface-opacity-008);
+  }
+  &_outlined#{&}_toggleable#{&}_selected:not(:disabled):focus  &__state {
+    background: var(--m3-state-layers-inverse-on-surface-opacity-012);
+  }
+  &_outlined#{&}_toggleable#{&}_selected:not(:disabled):active &__state {
+    background: var(--m3-state-layers-inverse-on-surface-opacity-020);
+  }
+
+  &_toggleable              { --m3-ripple-color: var(--m3-state-layers-on-surface-variant-opacity-020); }
+  &_toggleable#{&}_selected { --m3-ripple-color: var(--m3-state-layers-primary-opacity-020); }
+
+  &_filled { --m3-ripple-color: var(--m3-state-layers-on-primary-opacity-020); }
+  &_tonal  { --m3-ripple-color: var(--m3-state-layers-on-secondary-container-opacity-020); }
+
+  &_outlined#{&}_toggleable#{&}_selected { --m3-ripple-color: var(--m3-state-layers-inverse-on-surface-opacity-020); }
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}

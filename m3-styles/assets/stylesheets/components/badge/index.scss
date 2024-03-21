@@ -1,0 +1,21 @@
+@import '../../basics/shape';
+@import '../../basics/typography';
+
+.m3-badge {
+  @include m3-shape-circle(6px);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--m3-sys-error);
+  color: var(--m3-sys-on-error);
+
+  &_labelled {
+    @include m3-label-small();
+
+    width: auto;
+    height: 16px;
+    padding: 4px;
+    border-radius: 8px;
+  }
+}

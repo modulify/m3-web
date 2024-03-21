@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  node: &node
+    image: node:20
+    user: node
+    volumes:
+      - ./:/project
+    working_dir: /project
+
+  storybook-react:
+    <<: *node
+    command: 'yarn storybook'
+    working_dir: /project/m3-react
+    labels:
+      traefik.port: 6006
+      traefik.enable: 'true'
+      traefik.http.routers.m3-react-modulify.rule: 'HostRegexp(`m3-react.modulify.{[^.]+}`)'
+      traefik.http.routers.m3-react-modulify.priority: 1
+      traefik.http.routers.m3-react-modulify.service: m3-react-modulify
+      traefik.http.services.m3-react-modulify.loadbalancer.server.port: '6006'
+
+  storybook-vue:
+    <<: *node
+    command: 'yarn storybook'
+    working_dir: /project/m3-vue
+    labels:
+      traefik.port: 6006
+      traefik.enable: 'true'
+      traefik.http.routers.m3-vue-modulify.rule: 'HostRegexp(`m3-vue.modulify.{[^.]+}`)'
+      traefik.http.routers.m3-vue-modulify.priority: 1
+      traefik.http.routers.m3-vue-modulify.service: m3-vue-modulify
+      traefik.http.services.m3-vue-modulify.loadbalancer.server.port: '6006'
