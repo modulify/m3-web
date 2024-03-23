@@ -1,0 +1,17 @@
+import { Unstyled } from '@storybook/blocks'
+
+import { M3Icon } from '@/components/icon'
+import { M3IconButton } from '@/components/icon-button'
+
+# M3IconButton
+
+Icon buttons help people take minor actions with one tap
+
+[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+
+<Unstyled>
+  <p style={{ display: 'flex', gap: '16px' }}>
+    <M3IconButton appearance="filled"><M3Icon name="favorite" /></M3IconButton>
+    <M3IconButton appearance="filled" toggleable={true}><M3Icon name="favorite" /></M3IconButton>
+  </p>
+</Unstyled>

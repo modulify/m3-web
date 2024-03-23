@@ -1,3 +1,5 @@
+import type { Focusable } from '~types/dom'
+
 import type {
   Size,
   Variant,
@@ -26,10 +28,7 @@ export interface M3FabButtonProps extends React.HTMLAttributes<RootElement> {
   disabled?: boolean;
 }
 
-export interface M3FabButtonMethods {
-  focus (): void;
-  blur (): void;
-}
+export interface M3FabButtonMethods extends Focusable {}
 
 const M3FabButton: React.ForwardRefRenderFunction<
   M3FabButtonMethods,

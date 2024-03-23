@@ -9,10 +9,7 @@ export interface M3IconProps extends React.HTMLAttributes<HTMLElement> {
   appearance?: Appearance;
 }
 
-// Usage example
-// <M3IconAppearanceContext.Provider value={'filled'}>...</M3IconAppearanceContext.Provider>
-// <M3IconAppearanceContext.Provider value={'outlined'}>...</M3IconAppearanceContext.Provider>
-export const M3IconAppearanceContext = React.createContext<Appearance | null>(null)
+export const M3IconAppearance = React.createContext<Appearance | null>(null)
 
 const M3Icon: React.FC<M3IconProps> = ({
   name,
@@ -20,7 +17,7 @@ const M3Icon: React.FC<M3IconProps> = ({
   className = '',
   ...attrs
 }) => {
-  const appearanceInherited: Appearance = useContext(M3IconAppearanceContext)
+  const appearanceInherited: Appearance = useContext(M3IconAppearance)
   const appearanceActual: Appearance = appearanceInherited ?? appearance
 
   return (

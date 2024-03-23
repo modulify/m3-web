@@ -4,5 +4,5 @@ export type {
 
 export {
   default as M3Icon,
-  M3IconAppearanceContext,
+  M3IconAppearance,
 } from './M3Icon'

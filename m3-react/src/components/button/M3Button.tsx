@@ -1,4 +1,5 @@
 import type { Appearance } from '~types/components/button'
+import type { Focusable } from '~types/dom'
 
 import type { M3RippleMethods } from '@/components/ripple'
 
@@ -22,10 +23,7 @@ export interface M3ButtonProps extends React.HTMLAttributes<RootElement> {
   disabled?: boolean;
 }
 
-export interface M3ButtonMethods {
-  focus (): void;
-  blur (): void;
-}
+export interface M3ButtonMethods extends Focusable {}
 
 const M3Button: React.ForwardRefRenderFunction<
   M3ButtonMethods,
