@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
+import React from 'react'
+
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
 

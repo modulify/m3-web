@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import React from 'react'
+
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 
@@ -43,8 +45,7 @@ export const WithTextOnly: Story = {}
 export const WithLeadingIcon: Story = {
   render: (args) => (
     <M3Button {...args}>
-      <M3Icon name={'share'} />
-      Share
+      <M3Icon name="share" /> Share
     </M3Button>
   ),
 }
