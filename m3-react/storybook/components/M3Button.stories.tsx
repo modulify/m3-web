@@ -3,15 +3,15 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 
+import * as values from '@/components/button/values'
+
 const meta: Meta<typeof M3Button> = {
   component: M3Button,
 
   argTypes: {
     appearance: {
-      control: {
-        control: 'select',
-        options: ['elevated', 'filled', 'outlined', 'text', 'tonal'],
-      },
+      control: 'select',
+      options: values.appearances,
     },
 
     href: { control: 'text' },
@@ -24,7 +24,11 @@ const meta: Meta<typeof M3Button> = {
     disabled: false,
   },
 
-  render: (args) => <M3Button {...args}>Share</M3Button>,
+  render: (args) => (
+    <M3Button {...args}>
+      Share
+    </M3Button>
+  ),
 
   parameters: {
     layout: 'centered',

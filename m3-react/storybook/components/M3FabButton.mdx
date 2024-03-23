@@ -1,0 +1,36 @@
+import { Unstyled } from '@storybook/blocks'
+
+import { M3FabButton } from '@/components/fab-button'
+import { M3Icon } from '@/components/icon'
+
+# Floating action buttons
+
+Floating action buttons (FABs) help people take primary actions
+
+[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+
+### Standard FABs
+
+[Guidelines](https://m3.material.io/components/floating-action-button/guidelines)
+
+<Unstyled>
+  <p style={{ display: 'flex', gap: '16px' }}>
+    <M3FabButton aria-label="New task" variant={'surface'}><M3Icon name={'edit'} /></M3FabButton>
+    <M3FabButton aria-label="New task"><M3Icon name={'edit'} /></M3FabButton>
+    <M3FabButton aria-label="New task" variant={'secondary'}><M3Icon name={'edit'} /></M3FabButton>
+    <M3FabButton aria-label="New task" variant={'tertiary'}><M3Icon name={'edit'} /></M3FabButton>
+  </p>
+</Unstyled>
+
+### Extended FABs
+
+[Guidelines](https://m3.material.io/components/extended-fab/guidelines)
+
+<Unstyled>
+  <p style={{ display: 'flex', gap: '16px' }}>
+    <M3FabButton variant={'surface'}><M3Icon name={'edit'} /> New task</M3FabButton>
+    <M3FabButton><M3Icon name={'edit'} /> New task</M3FabButton>
+    <M3FabButton variant={'secondary'}><M3Icon name={'edit'} /> New task</M3FabButton>
+    <M3FabButton variant={'tertiary'}><M3Icon name={'edit'} /> New task</M3FabButton>
+  </p>
+</Unstyled>

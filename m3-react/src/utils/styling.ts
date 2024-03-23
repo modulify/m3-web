@@ -19,7 +19,7 @@ export const toClassNameList = (classes: CSSClassDeclaration): CSSClass[] => {
     result.push(...filter(classes))
   }
 
-  return result
+  return result.filter(t => t.length > 0)
 }
 
 export const toClassName = (classes: CSSClassDeclaration) => toClassNameList(classes).join(' ')

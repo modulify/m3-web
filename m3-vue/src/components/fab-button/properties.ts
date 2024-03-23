@@ -10,14 +10,14 @@ import {
   variants,
 } from '@/components/fab-button/values'
 
-export const size: Prop<Size, 'md'> = {
+export const size = {
   type: String as PropType<Size>,
   validator: (size: string) => sizes.includes(size as Size),
   default: 'md',
-}
+} satisfies Prop<Size, 'md'>
 
-export const variant: Prop<Variant, 'primary'> = {
+export const variant = {
   type: String as PropType<Variant>,
   validator: (variant: string) => variants.includes(variant as Variant),
   default: 'primary',
-}
+} satisfies Prop<Variant, 'primary'>

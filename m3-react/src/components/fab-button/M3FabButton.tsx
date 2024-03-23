@@ -1,4 +1,7 @@
-import type { Appearance } from '~types/components/button'
+import type {
+  Size,
+  Variant,
+} from '~types/components/fab-button'
 
 import type { M3RippleMethods } from '@/components/ripple'
 
@@ -15,25 +18,27 @@ import { toClassName } from '@/utils/styling'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement
 
-export interface M3ButtonProps extends React.HTMLAttributes<RootElement> {
+export interface M3FabButtonProps extends React.HTMLAttributes<RootElement> {
   type?: HTMLButtonElement['type'];
   href?: string;
-  appearance?: Appearance;
+  variant?: Variant;
+  size?: Size;
   disabled?: boolean;
 }
 
-export interface M3ButtonMethods {
+export interface M3FabButtonMethods {
   focus (): void;
   blur (): void;
 }
 
-const M3Button: React.ForwardRefRenderFunction<
-  M3ButtonMethods,
-  M3ButtonProps
+const M3FabButton: React.ForwardRefRenderFunction<
+  M3FabButtonMethods,
+  M3FabButtonProps
 > = ({
   type = 'button',
   href = '',
-  appearance = 'filled',
+  variant = 'filled',
+  size = 'md',
   disabled = false,
   className = '',
   children = [],
@@ -76,25 +81,27 @@ const M3Button: React.ForwardRefRenderFunction<
     <button
       ref={root}
       type={type}
-      className={toClassName([className, {
-        ['m3-button']: true,
-        ['m3-button_' + appearance]: true,
-        ['m3-button_has-leading-icon']: hasText && hasLeadingIcon,
-        ['m3-button_has-trailing-icon']: hasText && hasTrailingIcon,
-      }])}
+      className={toClassName({
+        [className]: className.length > 0,
+        ['m3-fab-button']: true,
+        ['m3-fab-button_' + variant]: variant !== 'filled',
+        ['m3-fab-button_' + size]: size !== 'md',
+        ['m3-fab-button_has-leading-icon']: hasText && hasLeadingIcon,
+        ['m3-fab-button_has-trailing-icon']: hasText && hasTrailingIcon,
+      })}
       disabled={disabled}
       onKeyDown={_onKeyDown}
       onKeyUp={_onKeyUp}
       {...attrs}
     >
       <M3Ripple ref={ripple} owner={root} />
-      <span className="m3-button__state">
+      <span className="m3-fab-button__state">
         {content.map(([child, isIcon], index) => (
           <span
             key={index}
             className={toClassName({
-              'm3-button__icon': isIcon,
-              'm3-button__text': !isIcon,
+              'm3-fab-button__icon': isIcon,
+              'm3-fab-button__text': !isIcon,
             })}
           >
             {child}
@@ -105,4 +112,4 @@ const M3Button: React.ForwardRefRenderFunction<
   )
 }
 
-export default forwardRef(M3Button)
+export default forwardRef(M3FabButton)

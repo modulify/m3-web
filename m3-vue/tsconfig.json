@@ -23,6 +23,7 @@
   "include": [
     "shims-*.d.ts",
     "src/**/*.ts",
+    "storybook/**/*.ts",
     "tests/**/*.ts"
   ]
 }

@@ -6,6 +6,10 @@ export {
 } from '@/components/button'
 
 export {
+  M3FabButton,
+} from '@/components/fab-button'
+
+export {
   M3Icon,
 } from '@/components/icon'
 
