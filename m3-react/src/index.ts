@@ -18,5 +18,9 @@ export {
 } from '@/components/icon'
 
 export {
+  M3IconButton,
+} from '@/components/icon-button'
+
+export {
   M3Ripple,
 } from '@/components/ripple'
