@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-import type { Appearance } from '~types/components/icon-button'
+import type { Appearance } from '@modulify/m3-foundation/types/components/icon-button'
 
 import { M3Ripple } from '@/components/ripple'
 

@@ -1,4 +1,4 @@
-import type { Appearance } from '~types/components/navigation'
+import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
 
 import {
   computed,

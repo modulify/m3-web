@@ -3,10 +3,8 @@ import type {
   Ref,
 } from 'vue'
 
-import type {
-  Appearance,
-  Sprite,
-} from '~types/components/icon'
+import type { Appearance } from '@modulify/m3-foundation/types/components/icon'
+import type { Sprite } from '~types/components/icon'
 
 import { M3IconAppearance } from './injections'
 

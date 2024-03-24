@@ -1,4 +1,4 @@
-import type { Appearance } from '~types/components/icon'
+import type { Appearance } from '@modulify/m3-foundation/types/components/icon'
 
 import React, { useContext } from 'react'
 

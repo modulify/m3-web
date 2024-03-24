@@ -1,5 +1,5 @@
-import type { Appearance } from '~types/components/button'
-import type { Focusable } from '~types/dom'
+import type { Appearance } from '@modulify/m3-foundation/types/components/button'
+import type { Focusable } from '@modulify/m3-foundation'
 
 import type { M3RippleMethods } from '@/components/ripple'
 

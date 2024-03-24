@@ -75,7 +75,7 @@
 
 <script lang="ts" setup>
 import type { Ref } from 'vue'
-import type { Appearance } from '~types/components/navigation'
+import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
 
 import { M3Badge } from '@/components/badge'
 import { M3Link } from '@/components/link'

@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import type { PropType, Ref } from 'vue'
-import type { Appearance } from '~types/components/icon'
+import type { Appearance } from '@modulify/m3-foundation/types/components/icon'
 
 import { M3IconAppearance } from '@/components/icon'
 import {

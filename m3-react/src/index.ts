@@ -15,6 +15,7 @@ export {
 
 export {
   M3Icon,
+  M3IconAppearance,
 } from '@/components/icon'
 
 export {

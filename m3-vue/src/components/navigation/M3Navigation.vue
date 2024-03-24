@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-import type { Appearance } from '~types/components/navigation'
+import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
 
 import M3NavigationSection from './M3NavigationSection.vue'
 

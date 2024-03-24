@@ -3,7 +3,7 @@ import type { Prop, PropType } from 'vue'
 import type {
   Size,
   Variant,
-} from '~types/components/fab-button'
+} from '@modulify/m3-foundation/types/components/fab-button'
 
 import {
   sizes,

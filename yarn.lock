@@ -2085,7 +2085,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@modulify/m3-foundation@workspace:^, @modulify/m3-foundation@workspace:m3-foundation":
+"@modulify/m3-foundation@npm:0.0.0, @modulify/m3-foundation@workspace:m3-foundation":
   version: 0.0.0-use.local
   resolution: "@modulify/m3-foundation@workspace:m3-foundation"
   dependencies:
@@ -2114,7 +2114,7 @@ __metadata:
     "@chromatic-com/storybook": "npm:^1.1.10"
     "@floating-ui/core": "npm:^1.6.0"
     "@floating-ui/dom": "npm:^1.6.3"
-    "@modulify/m3-foundation": "workspace:^"
+    "@modulify/m3-foundation": "npm:0.0.0"
     "@storybook/addon-a11y": "npm:^8.0.4"
     "@storybook/addon-essentials": "npm:^8.0.4"
     "@storybook/addon-interactions": "npm:^8.0.4"
@@ -2165,7 +2165,7 @@ __metadata:
     "@chromatic-com/storybook": "npm:^1.1.10"
     "@floating-ui/core": "npm:^1.6.0"
     "@floating-ui/dom": "npm:^1.6.3"
-    "@modulify/m3-foundation": "workspace:^"
+    "@modulify/m3-foundation": "npm:0.0.0"
     "@storybook/addon-a11y": "npm:^8.0.4"
     "@storybook/addon-essentials": "npm:^8.0.4"
     "@storybook/addon-interactions": "npm:^8.0.4"

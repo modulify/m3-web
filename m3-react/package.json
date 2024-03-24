@@ -1,13 +1,16 @@
 {
   "name": "@modulify/m3-react",
-  "license": "ISC",
   "description": "Material design components for React",
+  "license": "ISC",
+  "version": "0.0.0",
   "keywords": [
     "components",
     "material",
     "material design",
     "react"
   ],
+  "main": "dist/m3-react.common.js",
+  "module": "dist/m3-react.esm.js",
   "scripts": {
     "build": "vite build",
     "lint": "eslint --ext .js,.jsx,.mjs,.ts,.tsx src storybook tests types",
@@ -17,6 +20,7 @@
   "dependencies": {
     "@floating-ui/core": "^1.6.0",
     "@floating-ui/dom": "^1.6.3",
+    "@modulify/m3-foundation": "0.0.0",
     "lodash.isequal": "^4.5.0"
   },
   "peerDependencies": {
@@ -25,7 +29,6 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.1.10",
-    "@modulify/m3-foundation": "workspace:^",
     "@storybook/addon-a11y": "^8.0.4",
     "@storybook/addon-essentials": "^8.0.4",
     "@storybook/addon-interactions": "^8.0.4",

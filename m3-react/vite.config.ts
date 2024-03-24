@@ -23,7 +23,7 @@ export default defineConfig({
     minify: false,
     rollupOptions: {
       external: [
-        ...Object.keys(dependencies),
+        ...Object.keys(dependencies).filter(d => d !== '@modulify/m3-foundation'),
         ...Object.keys(peerDependencies),
       ],
       output: {

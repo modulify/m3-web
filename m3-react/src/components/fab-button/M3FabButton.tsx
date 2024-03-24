@@ -1,9 +1,9 @@
-import type { Focusable } from '~types/dom'
+import type { Focusable } from '@modulify/m3-foundation'
 
 import type {
   Size,
   Variant,
-} from '~types/components/fab-button'
+} from '@modulify/m3-foundation/types/components/fab-button'
 
 import type { M3RippleMethods } from '@/components/ripple'
 

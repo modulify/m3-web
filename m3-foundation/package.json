@@ -1,8 +1,8 @@
 {
   "name": "@modulify/m3-foundation",
+  "description": "Styles for Material Design v3",
   "license": "ISC",
   "version": "0.0.0",
-  "description": "Styles for Material Design v3",
   "keywords": [
     "CSS",
     "material",

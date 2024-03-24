@@ -1,1 +1,0 @@
-export type Appearance = 'auto' | 'bar' | 'drawer' | 'rail'

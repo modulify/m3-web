@@ -1,4 +1,4 @@
-import type { Focusable } from '~types/dom'
+import type { Focusable } from '@modulify/m3-foundation'
 import type { M3RippleMethods } from '@/components/ripple'
 
 import IconCheckmark from '@modulify/m3-foundation/assets/sprites/checkbox/checkmark.svg?react'
