@@ -2085,6 +2085,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@modulify/m3-foundation@workspace:^, @modulify/m3-foundation@workspace:m3-foundation":
+  version: 0.0.0-use.local
+  resolution: "@modulify/m3-foundation@workspace:m3-foundation"
+  dependencies:
+    "@types/node": "npm:^18.15.3"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    eslint: "npm:^8.57.0"
+    eslint-plugin-import: "npm:^2.29.1"
+    eslint-plugin-json: "npm:^3.1.0"
+    eslint-plugin-unused-imports: "npm:^3.1.0"
+    husky: "npm:^9.0.11"
+    sass: "npm:^1.72.0"
+    standard-version: "npm:^9.5.0"
+    ts-node: "npm:^10.9.2"
+    tslib: "npm:^2.6.2"
+    typescript: "npm:^5.4.2"
+    uuid: "npm:^9.0.1"
+    vite: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
 "@modulify/m3-react@workspace:m3-react":
   version: 0.0.0-use.local
   resolution: "@modulify/m3-react@workspace:m3-react"
@@ -2092,7 +2114,7 @@ __metadata:
     "@chromatic-com/storybook": "npm:^1.1.10"
     "@floating-ui/core": "npm:^1.6.0"
     "@floating-ui/dom": "npm:^1.6.3"
-    "@modulify/m3-styles": "workspace:^"
+    "@modulify/m3-foundation": "workspace:^"
     "@storybook/addon-a11y": "npm:^8.0.4"
     "@storybook/addon-essentials": "npm:^8.0.4"
     "@storybook/addon-interactions": "npm:^8.0.4"
@@ -2136,28 +2158,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@modulify/m3-styles@workspace:^, @modulify/m3-styles@workspace:m3-styles":
-  version: 0.0.0-use.local
-  resolution: "@modulify/m3-styles@workspace:m3-styles"
-  dependencies:
-    "@types/node": "npm:^18.15.3"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    eslint: "npm:^8.57.0"
-    eslint-plugin-import: "npm:^2.29.1"
-    eslint-plugin-json: "npm:^3.1.0"
-    eslint-plugin-unused-imports: "npm:^3.1.0"
-    husky: "npm:^9.0.11"
-    sass: "npm:^1.72.0"
-    standard-version: "npm:^9.5.0"
-    ts-node: "npm:^10.9.2"
-    tslib: "npm:^2.6.2"
-    typescript: "npm:^5.4.2"
-    uuid: "npm:^9.0.1"
-    vite: "npm:^5.2.2"
-  languageName: unknown
-  linkType: soft
-
 "@modulify/m3-vue@workspace:m3-vue":
   version: 0.0.0-use.local
   resolution: "@modulify/m3-vue@workspace:m3-vue"
@@ -2165,7 +2165,7 @@ __metadata:
     "@chromatic-com/storybook": "npm:^1.1.10"
     "@floating-ui/core": "npm:^1.6.0"
     "@floating-ui/dom": "npm:^1.6.3"
-    "@modulify/m3-styles": "workspace:^"
+    "@modulify/m3-foundation": "workspace:^"
     "@storybook/addon-a11y": "npm:^8.0.4"
     "@storybook/addon-essentials": "npm:^8.0.4"
     "@storybook/addon-interactions": "npm:^8.0.4"

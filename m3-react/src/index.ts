@@ -1,5 +1,5 @@
-import '@modulify/m3-styles/assets/stylesheets/normalize.scss'
-import '@modulify/m3-styles/assets/stylesheets/index.scss'
+import '@modulify/m3-foundation/assets/stylesheets/normalize.scss'
+import '@modulify/m3-foundation/assets/stylesheets/index.scss'
 
 export {
   M3Button,

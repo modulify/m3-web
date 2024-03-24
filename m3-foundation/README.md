@@ -1,4 +1,4 @@
-# @modulify/m3-styles
+# @modulify/m3-foundation
 
 CSS stylesheet, SCSS resources for Material Design v3 components.
 
@@ -7,12 +7,12 @@ CSS stylesheet, SCSS resources for Material Design v3 components.
 Using `yarn`:
 
 ```
-yarn add @modulify/m3-styles
+yarn add @modulify/m3-foundation
 ```
 
 or, using `npm`:
 
 ```
-npm i @modulify/m3-styles --save
+npm i @modulify/m3-foundation --save
 ```
 

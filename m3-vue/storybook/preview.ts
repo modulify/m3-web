@@ -1,7 +1,7 @@
 import type { Preview, VueRenderer } from '@storybook/vue3'
 
-import '@modulify/m3-styles/assets/stylesheets/normalize.scss'
-import '@modulify/m3-styles/assets/stylesheets/index.scss'
+import '@modulify/m3-foundation/assets/stylesheets/normalize.scss'
+import '@modulify/m3-foundation/assets/stylesheets/index.scss'
 
 import './stylesheets/utils.scss'
 

@@ -1,5 +1,5 @@
 {
-  "name": "@modulify/m3-styles",
+  "name": "@modulify/m3-foundation",
   "license": "ISC",
   "version": "0.0.0",
   "description": "Styles for Material Design v3",
@@ -9,8 +9,8 @@
     "material design",
     "styles"
   ],
-  "main": "dist/m3-styles.common.js",
-  "module": "dist/m3-styles.esm.js",
+  "main": "dist/m3-foundation.common.js",
+  "module": "dist/m3-foundation.esm.js",
   "scripts": {
     "build": "vite build",
     "lint": "eslint --ext .js,.mjs,.ts src tests types"
@@ -35,7 +35,7 @@
   "contributors": [
     "Zaitsev Kirill <zaytsev.cmath10@gmail.com>"
   ],
-  "homepage": "https://github.com/modulify/m3-web/m3-styles/README.md",
+  "homepage": "https://github.com/modulify/m3-web/m3-foundation/README.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/modulify/m3-web.git"

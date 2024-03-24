@@ -4,7 +4,7 @@
   "description": "Material design v3 implementation for web",
   "workspaces": [
     "m3-react",
-    "m3-styles",
+    "m3-foundation",
     "m3-vue"
   ],
   "scripts": {
