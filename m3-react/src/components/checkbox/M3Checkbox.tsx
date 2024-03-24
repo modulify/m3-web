@@ -1,8 +1,8 @@
 import type { Focusable } from '~types/dom'
 import type { M3RippleMethods } from '@/components/ripple'
 
-import IconCheckmark from './checkmark.svg?react'
-import IconIndeterminate from './indeterminate.svg?react'
+import IconCheckmark from '@modulify/m3-foundation/assets/sprites/checkbox/checkmark.svg?react'
+import IconIndeterminate from '@modulify/m3-foundation/assets/sprites/checkbox/indeterminate.svg?react'
 
 import { M3Ripple } from '@/components/ripple'
 

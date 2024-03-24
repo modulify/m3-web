@@ -37,8 +37,8 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue'
 
-import IconCheckmark from './checkmark.svg'
-import IconIndeterminate from './indeterminate.svg'
+import IconCheckmark from '@modulify/m3-foundation/assets/sprites/checkbox/checkmark.svg'
+import IconIndeterminate from '@modulify/m3-foundation/assets/sprites/checkbox/indeterminate.svg'
 import { M3Ripple } from '@/components/ripple'
 
 import {
