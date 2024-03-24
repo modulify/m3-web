@@ -16,6 +16,7 @@
 import type { PropType, Ref } from 'vue'
 
 import {
+  onBeforeUnmount,
   ref,
   watch,
 } from 'vue'
@@ -38,6 +39,12 @@ const y = ref(0)
 
 const active = ref(false)
 
+let lastKey: string | null = null
+
+const rememberKey = (event: KeyboardEvent) => {
+  lastKey = event.code
+}
+
 const activate = (event: KeyboardEvent | MouseEvent) => {
   active.value = false
 
@@ -47,11 +54,12 @@ const activate = (event: KeyboardEvent | MouseEvent) => {
 
   const el = props.owner.value
   const rect = el.getBoundingClientRect()
+  const center = props.centered || lastKey === 'Space'
 
   diameter.value = Math.max(el.clientWidth, el.clientHeight)
 
-  x.value = 'clientX' in event && !props.centered ? event.clientX - rect.x : el.clientWidth / 2
-  y.value = 'clientY' in event && !props.centered ? event.clientY - rect.y : el.clientHeight / 2
+  x.value = 'clientX' in event && !center ? event.clientX - rect.x : el.clientWidth / 2
+  y.value = 'clientY' in event && !center ? event.clientY - rect.y : el.clientHeight / 2
 
   requestAnimationFrame(() => {
     active.value = true
@@ -64,11 +72,20 @@ defineExpose({
 
 watch(() => props.owner.value, (curr, prev) => {
   if (curr && curr !== prev) {
+    curr.addEventListener('keyup', rememberKey, { passive: true })
     curr.addEventListener('click', activate, { passive: true })
   }
 
   if (prev && curr !== prev) {
     prev.removeEventListener('click', activate)
+    prev.removeEventListener('keyup', rememberKey)
   }
 }, { immediate: true })
+
+onBeforeUnmount(() => {
+  const el = props.owner.value
+
+  el.removeEventListener('click', activate)
+  el.removeEventListener('keyup', rememberKey)
+})
 </script>

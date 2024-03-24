@@ -31,12 +31,25 @@
     color: var(--m3-sys-on-error);
   }
 
+  &__input {
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    cursor: inherit;
+    outline: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    z-index: 1;
+  }
+
   &__checkmark {
     display: inline-block;
     width: 24px;
     height: 24px;
     position: relative;
-    z-index: 2;
+    z-index: 0;
 
     &:before {
       content: ' ';
@@ -88,42 +101,30 @@
     overflow: hidden;
     animation: m3-sys-motion-standard(m3-animation-zoom-out);
     animation-fill-mode: forwards;
-    z-index: 1;
+    z-index: 0;
     position: absolute;
     left: 0;
     top: 0;
   }
 
-  &:hover   &__state,
-  &_focused &__state {
+  &__input:hover ~ &__state,
+  &__input:focus ~ &__state {
     animation: m3-sys-motion-standard(m3-animation-zoom-in);
     animation-fill-mode: forwards;
   }
 
-  &_focused &__state {
-    background: var(--m3-state-layers-on-surface-opacity-012);
-  }
+  &__input:focus ~ &__state { background: var(--m3-state-layers-on-surface-opacity-012); }
 
-  &_checked:hover       &__state { background: var(--m3-state-layers-primary-opacity-008); }
-  &_checked#{&}_focused &__state { background: var(--m3-state-layers-primary-opacity-012); }
+  &_checked &__input:hover ~ &__state { background: var(--m3-state-layers-primary-opacity-008); }
+  &_checked &__input:focus ~ &__state { background: var(--m3-state-layers-primary-opacity-012); }
 
-  &_indeterminate:hover       &__state { background: var(--m3-state-layers-primary-opacity-008); }
-  &_indeterminate#{&}_focused &__state { background: var(--m3-state-layers-primary-opacity-012); }
+  &_indeterminate &__input:hover ~ &__state { background: var(--m3-state-layers-primary-opacity-008); }
+  &_indeterminate &__input:focus ~ &__state { background: var(--m3-state-layers-primary-opacity-012); }
 
-  &_invalid:hover       &__state { background: var(--m3-state-layers-error-opacity-008); }
-  &_invalid#{&}_focused &__state { background: var(--m3-state-layers-error-opacity-012); }
+  &_invalid &__input:hover ~ &__state { background: var(--m3-state-layers-error-opacity-008); }
+  &_invalid &__input:focus ~ &__state { background: var(--m3-state-layers-error-opacity-012); }
 
   &_disabled &__state {
     background: transparent;
-  }
-
-  &__input {
-    opacity: 0;
-    outline: none;
-    position: absolute;
-    margin: 0;
-    width: 0;
-    height: 0;
-    z-index: -1;
   }
 }

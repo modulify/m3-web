@@ -1,0 +1,49 @@
+import { Unstyled } from '@storybook/blocks'
+
+import CheckboxList from '../examples/checkbox/CheckboxList'
+
+# Checkboxes
+
+Checkboxes let users select one or more items from a list, or turn an item on or off
+
+[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+
+[Guidelines](https://m3.material.io/components/checkbox/guidelines)
+
+### Regular list
+
+<Unstyled className="m3-panel m3-panel_elevated-1">
+  <CheckboxList
+    options={[{
+      label: 'Apples',
+      value: 'apples',
+    }, {
+      label: 'Bananas',
+      value: 'bananas',
+    }, {
+      label: 'Oranges',
+      value: 'oranges',
+    }]}
+  />
+</Unstyled>
+
+### Nested list
+
+<Unstyled className="m3-panel m3-panel_elevated-1">
+  <CheckboxList
+    options={[{
+      label: 'Remind',
+      value: 'remind',
+      subordinates: [{
+        label: 'Daily',
+        value: 'daily',
+      }, {
+        label: 'Weekly',
+        value: 'weekly',
+      }, {
+        label: 'Monthly',
+        value: 'monthly',
+      }],
+    }]}
+  />
+</Unstyled>

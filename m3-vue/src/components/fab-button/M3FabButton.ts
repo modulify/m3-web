@@ -65,12 +65,6 @@ export default defineComponent({
       blur: () => root.value?.blur(),
     })
 
-    const onKeydown = (event: KeyboardEvent) => {
-      if (event.code === 'Space') {
-        event.preventDefault()
-        ripple.value?.activate(event)
-      }
-    }
     const onKeyup = (event: KeyboardEvent) => {
       if (event.code === 'Enter') {
         ripple.value?.activate(event)
@@ -98,7 +92,6 @@ export default defineComponent({
           ['m3-fab-button_has-trailing-icon']: hasText && hasTrailingIcon,
         }],
         disabled: props.disabled,
-        onKeydown,
         onKeyup,
       }, () => [
         h(M3Ripple, { ref: ripple, owner: rootElement }),

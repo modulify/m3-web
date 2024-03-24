@@ -7,7 +7,7 @@
                         :id="id + '-option-' + i"
                         :model="isSelected(o)"
                         :indeterminate="isIndeterminate(o)"
-                        @change="checked => toggle(o, checked)"
+                        @change="(checked: boolean) => toggle(o, checked)"
                     />
 
                     <label :for="id + '-option-' + i">
@@ -69,7 +69,7 @@ interface OptionWithSubordinates extends Option {
   subordinates?: Option[],
 }
 
-const props = defineProps({
+defineProps({
   options: {
     type: Array as PropType<OptionWithSubordinates[]>,
     default: () => [],
@@ -89,16 +89,12 @@ const isIndeterminate = (option: Required<OptionWithSubordinates>) => {
 }
 
 const toggle = (option: Required<OptionWithSubordinates>, checked: boolean) => {
+  const values = (option.subordinates ?? []).map(o => o.value)
+
   if (checked) {
-    option.subordinates.forEach(o => {
-      if (!model.value.includes(o.value)) {
-        model.value.push(o.value)
-      }
-    })
+    model.value.push(...values.filter(v => !model.value.includes(v)))
   } else {
-    option.subordinates.forEach(o => {
-      model.value = model.value.filter(v => v !== o.value)
-    })
+    model.value = model.value.filter(v => !values.includes(v))
   }
 }
 </script>

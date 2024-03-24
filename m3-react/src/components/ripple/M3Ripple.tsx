@@ -11,7 +11,7 @@ export interface M3RippleProps {
 }
 
 export interface M3RippleMethods {
-  activate: (event: React.KeyboardEvent | React.MouseEvent | MouseEvent) => void;
+  activate: (event: React.KeyboardEvent | React.MouseEvent | KeyboardEvent | MouseEvent) => void;
 }
 
 const M3Ripple: React.ForwardRefRenderFunction<
@@ -23,18 +23,27 @@ const M3Ripple: React.ForwardRefRenderFunction<
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
 
-  const activate = (event: React.KeyboardEvent | React.MouseEvent | MouseEvent) => {
-    setActive(false);
+  let lastKey: string | null = null
+
+  const rememberKey = (event: KeyboardEvent) => {
+    lastKey = event.code
+  }
+
+  const activate = (event: React.KeyboardEvent | React.MouseEvent | KeyboardEvent | MouseEvent) => {
+    setActive(false)
 
     if (!owner.current) {
       return
     }
 
     const rect = owner.current.getBoundingClientRect()
+    const center = centered || lastKey === 'Space'
+
+    lastKey = null
 
     setDiameter(Math.max(owner.current.clientWidth, owner.current.clientHeight))
-    setX('clientX' in event && !centered ? event.clientX - rect.x : owner.current.clientWidth / 2)
-    setY('clientY' in event && !centered ? event.clientY - rect.y : owner.current.clientHeight / 2)
+    setX('clientX' in event && !center ? event.clientX - rect.x : owner.current.clientWidth / 2)
+    setY('clientY' in event && !center ? event.clientY - rect.y : owner.current.clientHeight / 2)
 
     requestAnimationFrame(() => setActive(true))
   }
@@ -46,12 +55,14 @@ const M3Ripple: React.ForwardRefRenderFunction<
   useEffect(() => {
     const el = owner.current
     if (el) {
+      el.addEventListener('keyup', rememberKey, { passive: true })
       el.addEventListener('click', activate, { passive: true })
     }
 
     return () => {
       if (el) {
         el.removeEventListener('click', activate)
+        el.removeEventListener('keyup', rememberKey)
       }
     }
   }, [owner])

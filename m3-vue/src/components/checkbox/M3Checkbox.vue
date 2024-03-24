@@ -1,42 +1,33 @@
 <template>
     <span
         ref="root"
-        :aria-checked="checked ? 'true' : 'false'"
-        :aria-disabled="disabled ? 'true' : 'false'"
         :class="{
             'm3-checkbox': true,
             'm3-checkbox_checked': checked,
-            'm3-checkbox_focused': focused,
             'm3-checkbox_indeterminate': indeterminate,
             'm3-checkbox_invalid': invalid,
             'm3-checkbox_disabled': disabled,
         }"
-        role="checkbox"
-        tabindex="0"
-        @click="onClick"
-        @focus="focus"
-        @keydown.space="click"
+        v-bind="$attrs"
     >
         <M3Ripple :owner="ref(root)" />
-
-        <span class="m3-checkbox__state" />
 
         <input
             :id="id"
             ref="input"
+            :aria-checked="checked ? 'true' : 'false'"
+            :aria-invalid="invalid ? 'true' : 'false'"
             :name="name"
             :value="value"
             :checked="checked"
             :disabled="disabled"
-            v-bind="$attrs"
             type="checkbox"
             class="m3-checkbox__input"
             @change="onChange"
-            @focus="focused = true"
-            @blur="focused = false"
         />
 
-        <span class="m3-checkbox__checkmark">
+        <span aria-hidden="true" class="m3-checkbox__state" />
+        <span aria-hidden="true" class="m3-checkbox__checkmark">
             <IconIndeterminate v-if="indeterminate" />
             <IconCheckmark v-else-if="checked" />
         </span>
@@ -121,7 +112,6 @@ const emit = defineEmits([
 
 const root = ref<HTMLElement | null>(null)
 const input = ref<HTMLInputElement | null>(null)
-const focused = ref(false)
 
 const click = () => input.value?.click()
 const focus = () => input.value?.focus()

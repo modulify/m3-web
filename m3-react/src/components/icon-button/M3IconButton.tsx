@@ -12,6 +12,7 @@ import React, {
   useRef,
 } from 'react'
 
+import { compose } from '@/utils/events'
 import { toClassName } from '@/utils/styling'
 
 export interface M3IconButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
@@ -35,7 +36,6 @@ const M3IconButton: React.ForwardRefRenderFunction<
   disabled = false,
   className = '',
   children = [],
-  onKeyDown = () => {},
   onKeyUp = () => {},
   ...attrs
 }, ref) => {
@@ -58,21 +58,11 @@ const M3IconButton: React.ForwardRefRenderFunction<
         ['m3-icon-button_selected']: toggleable && selected,
       }])}
       disabled={disabled}
-      onKeyDown={event => {
-        if (event.code === 'Space') {
-          event.preventDefault()
-          ripple.current?.activate(event)
-        }
-
-        onKeyDown(event)
-      }}
-      onKeyUp={event => {
+      onKeyUp={compose(event => {
         if (event.code === 'Enter') {
           ripple.current?.activate(event)
         }
-
-        onKeyUp(event)
-      }}
+      }, onKeyUp)}
       {...attrs}
     >
       <M3Ripple ref={ripple} owner={root}/>

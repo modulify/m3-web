@@ -1,5 +1,5 @@
 import Inline from './Inline'
-import M3CheckboxExample from './M3CheckboxExample.vue'
+import CheckboxList from '../examples/checkbox/CheckboxList.vue'
 
 # Checkboxes
 
@@ -11,7 +11,7 @@ Checkboxes let users select one or more items from a list, or turn an item on or
 
 ### Regular list
 
-<Inline is={M3CheckboxExample} options={[{
+<Inline is={CheckboxList} options={[{
   label: 'Apples',
   value: 'apples',
 }, {
@@ -24,7 +24,7 @@ Checkboxes let users select one or more items from a list, or turn an item on or
 
 ### Nested list
 
-<Inline is={M3CheckboxExample} options={[{
+<Inline is={CheckboxList} options={[{
   label: 'Remind',
   value: 'remind',
   subordinates: [{

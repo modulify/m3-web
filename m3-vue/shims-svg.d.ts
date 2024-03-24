@@ -1,8 +1,12 @@
 declare module '*.svg' {
   import type { DefineComponent, SVGAttributes } from 'vue'
 
-  const component: DefineComponent<NonNullable<SVGAttributes>, NonNullable<unknown>, never>
+  const sprite: DefineComponent<
+    NonNullable<SVGAttributes>,
+    NonNullable<unknown>,
+    unknown
+  >
 
   // noinspection JSUnusedGlobalSymbols
-  export default component
+  export default sprite
 }

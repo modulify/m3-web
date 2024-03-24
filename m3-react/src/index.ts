@@ -6,6 +6,10 @@ export {
 } from '@/components/button'
 
 export {
+  M3Checkbox,
+} from '@/components/checkbox'
+
+export {
   M3FabButton,
 } from '@/components/fab-button'
 

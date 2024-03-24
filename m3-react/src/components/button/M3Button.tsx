@@ -11,6 +11,7 @@ import React, {
   useRef,
 } from 'react'
 
+import { compose } from '@/utils/events'
 import { normalize } from '@/utils/runtime'
 import { toClassName } from '@/utils/styling'
 
@@ -35,7 +36,6 @@ const M3Button: React.ForwardRefRenderFunction<
   disabled = false,
   className = '',
   children = [],
-  onKeyDown = () => {},
   onKeyUp = () => {},
   ...attrs
 }, ref) => {
@@ -46,23 +46,6 @@ const M3Button: React.ForwardRefRenderFunction<
     focus: () => root.current?.focus(),
     blur: () => root.current?.blur(),
   }))
-
-  const _onKeyDown = (event: React.KeyboardEvent<RootElement>) => {
-    if (event.code === 'Space') {
-      event.preventDefault()
-      ripple.current?.activate(event)
-    }
-
-    onKeyDown(event)
-  }
-
-  const _onKeyUp = (event: React.KeyboardEvent<RootElement>) => {
-    if (event.code === 'Enter') {
-      ripple.current?.activate(event)
-    }
-
-    onKeyUp(event)
-  }
 
   const content = normalize(children)
 
@@ -81,8 +64,11 @@ const M3Button: React.ForwardRefRenderFunction<
         ['m3-button_has-trailing-icon']: hasText && hasTrailingIcon,
       }])}
       disabled={disabled}
-      onKeyDown={_onKeyDown}
-      onKeyUp={_onKeyUp}
+      onKeyUp={compose(event => {
+        if (event.code === 'Enter') {
+          ripple.current?.activate(event)
+        }
+      }, onKeyUp)}
       {...attrs}
     >
       <M3Ripple ref={ripple} owner={root} />
