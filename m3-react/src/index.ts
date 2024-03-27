@@ -1,6 +1,31 @@
 import '@modulify/m3-foundation/assets/stylesheets/normalize.scss'
 import '@modulify/m3-foundation/assets/stylesheets/index.scss'
 
+export type {
+  M3ButtonMethods,
+  M3ButtonProps,
+} from '@/components/button'
+
+export type {
+  M3CheckboxMethods,
+  M3CheckboxProps,
+} from '@/components/checkbox'
+
+export type {
+  M3IconProps,
+} from '@/components/icon'
+
+export type {
+  M3IconButtonMethods,
+  M3IconButtonProps,
+} from '@/components/icon-button'
+
+export type {
+  M3NavigationProps,
+  M3NavigationTabMethods,
+  M3NavigationTabProps,
+} from '@/components/navigation'
+
 export {
   M3Button,
 } from '@/components/button'
@@ -21,6 +46,14 @@ export {
 export {
   M3IconButton,
 } from '@/components/icon-button'
+
+export {
+  M3Navigation,
+  M3NavigationAppearance,
+  M3NavigationSection,
+  M3NavigationTab,
+  useM3NavigationAppearance,
+} from '@/components/navigation'
 
 export {
   M3Ripple,

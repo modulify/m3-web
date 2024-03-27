@@ -88,7 +88,7 @@ watch(() => props.expanded, () => {
 })
 
 watch(() => breakpoint.value, () => {
-  if (breakpoint.value.ge('large')) {
+  if (props.appearance === 'auto' && breakpoint.value.ge('large')) {
     emit('update:expanded', false)
     transitioning.value = false
   }

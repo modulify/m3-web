@@ -16,7 +16,7 @@ import React, {
 } from 'react'
 
 import { compose } from '@/utils/events'
-import { normalize } from '@/utils/runtime'
+import { normalize } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement

@@ -8,10 +8,8 @@
             ['m3-navigation-tab_active']: active,
         }"
         v-bind="{
+            ...('aria-label' in $attrs ? {} : { 'aria-labelledby': labelId }),
             ...$attrs,
-            ...('aria-label' in $attrs || 'aria-labelledby' in $attrs ? {} : {
-                'aria-labelledby': labelId,
-            })
         }"
         role="tab"
     >
@@ -32,7 +30,7 @@
                 <span
                     v-if="('label' in $slots || label.length > 0)"
                     :id="labelIdForDrawer"
-                    :aria-hidden="inDrawer ? 'false' : 'true'"
+                    :aria-hidden="!inDrawer ? 'true' : 'false'"
                     class="m3-navigation-tab__label"
                 >
                     <slot name="label">{{ label }}</slot>
@@ -40,7 +38,7 @@
 
                 <span
                     v-if="'badge' in $slots"
-                    :aria-hidden="inDrawer ? 'false' : 'true'"
+                    :aria-hidden="!inDrawer ? 'true' : 'false'"
                     class="m3-navigation-tab__badge-label"
                     role="status"
                 >
@@ -93,6 +91,11 @@ import { provideM3IconAppearance } from '@/components/icon/injections'
 import { useBreakpoint } from '@/composables/breakpoint'
 
 const props = defineProps({
+  id: {
+    type: String,
+    default: () => makeId('m3-navigation-item'),
+  },
+
   href: {
     type: String,
     default: undefined,
@@ -122,8 +125,6 @@ const props = defineProps({
 
 const emit = defineEmits(['navigate'])
 
-const id = makeId('m3-navigation-item')
-
 const appearance = inject<Ref<Appearance>>(M3NavigationAppearance, ref('auto'))
 const breakpoint = useBreakpoint()
 const button = ref<(typeof M3Link) | null>(null)
@@ -131,9 +132,9 @@ const buttonElement = computed(() => button.value?.getElement())
 
 const inDrawer = computed(() => breakpoint.value.ge('large') || appearance.value === 'drawer')
 
-const labelIdForDrawer = id + '-label-for-drawer'
-const labelIdForRail = id + '-label-for-rail'
-const labelId = computed(() => inDrawer.value ? labelIdForDrawer : labelIdForRail)
+const labelIdForDrawer = computed(() => props.id + '-label-for-drawer')
+const labelIdForRail = computed(() => props.id + '-label-for-rail')
+const labelId = computed(() => inDrawer.value ? labelIdForDrawer.value : labelIdForRail.value)
 
 provideM3IconAppearance(() => props.active ? 'filled' : 'outlined')
 
