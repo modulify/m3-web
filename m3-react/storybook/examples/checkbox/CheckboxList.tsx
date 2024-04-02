@@ -1,6 +1,9 @@
+import type { FC } from 'react'
+
 import { M3Checkbox } from '@/components/checkbox'
 
-import React, {
+import {
+  Fragment,
   useState,
 } from 'react'
 
@@ -12,7 +15,7 @@ interface Option {
   subordinates?: Option[];
 }
 
-const CheckboxList: React.FC<{
+const CheckboxList: FC<{
   options: Option[];
 }> = ({ options }) => {
   const id = makeId('m3-checkbox-example')
@@ -46,7 +49,7 @@ const CheckboxList: React.FC<{
       {options.map((o, i) =>
         o.subordinates?.length
           ? (
-            <React.Fragment key={`option-${i}`}>
+            <Fragment key={`option-${i}`}>
               <div className="flex-row">
                 <M3Checkbox
                   id={`${id}-option-${i}`}
@@ -72,7 +75,7 @@ const CheckboxList: React.FC<{
                   </div>
                 )}
               </div>
-            </React.Fragment>
+            </Fragment>
           )
           : (
             <div key={`option-${i}`} className="flex-row">

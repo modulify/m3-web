@@ -7,6 +7,10 @@ export type {
 } from '@/components/button'
 
 export type {
+  M3CardProps,
+} from '@/components/card'
+
+export type {
   M3CheckboxMethods,
   M3CheckboxProps,
 } from '@/components/checkbox'
@@ -29,6 +33,10 @@ export type {
 export {
   M3Button,
 } from '@/components/button'
+
+export {
+  M3Card,
+} from '@/components/card'
 
 export {
   M3Checkbox,

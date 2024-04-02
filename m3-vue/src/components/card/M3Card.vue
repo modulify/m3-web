@@ -10,7 +10,7 @@
         v-bind="{
             role: 'region',
             ...(interactive ? { tabindex: 0 } : {}),
-            ...(!('aria-label' in $attrs) && !('content' in $slots) && 'heading' in $slots || heading.length ? {
+            ...(!('aria-label' in $attrs) && !('content' in $slots) && ('heading' in $slots || heading.length) ? {
                 'aria-labelledby': id + '-heading',
             } : {}),
             ...$attrs,
@@ -60,23 +60,22 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
+import type { Appearance } from '@modulify/m3-foundation/types/components/card'
 
 import { M3Ripple } from '@/components/ripple'
 
-import {
-  ref,
-} from 'vue'
+import { ref } from 'vue'
 
 import makeId from '@/utils/id'
 
-const props = defineProps({
+defineProps({
   id: {
     type: String,
     default: () => makeId('m3-card'),
   },
 
   appearance: {
-    type: String as PropType<'elevated' | 'filled' | 'outlined'>,
+    type: String as PropType<Appearance>,
     default: 'filled',
   },
 

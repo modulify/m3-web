@@ -13,7 +13,7 @@ import React, {
 
 import makeId from '@/utils/id'
 import { compose } from '@/utils/events'
-import { distribute } from '@/utils/content'
+import { distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 import { useBreakpoint } from '@/composables/breakpoint'
 import { useM3NavigationAppearance } from './M3NavigationAppearance'
@@ -61,7 +61,7 @@ const M3NavigationTab: React.ForwardRefRenderFunction<
   const button = useRef<HTMLButtonElement | null>(null)
   const ripple = useRef<M3RippleMethods | null>(null)
 
-  const [slots, content] = distribute(children, {
+  const [slots, content, hasSlot] = distinct(children, {
     icon: Icon,
     label: Label,
     badge: Badge,
@@ -72,7 +72,7 @@ const M3NavigationTab: React.ForwardRefRenderFunction<
 
   const inDrawer = breakpoint.ge('large') || appearance === 'drawer'
 
-  const hasLabel = !!slots.label || label.length > 0
+  const hasLabel = hasSlot('label') || label.length > 0
 
   const labelIdForDrawer = id + '-label-for-drawer'
   const labelIdForRail = id + '-label-for-rail'
@@ -120,43 +120,36 @@ const M3NavigationTab: React.ForwardRefRenderFunction<
             {slots.icon ?? content}
           </M3IconAppearance.Provider>
 
-          {hasLabel
-            ?
+          {hasLabel ? (
             <span
               id={labelIdForDrawer}
               aria-hidden={!inDrawer}
               className="m3-navigation-tab__label"
               children={slots.label ?? label}
             />
-            : null
-          }
+          ) : null}
 
-          {slots.badge
-            ?
+          {hasSlot('badge') ? (
             <span
               aria-hidden={!inDrawer}
               className="m3-navigation-tab__badge-label"
               children={slots.badge}
               role="status"
             />
-            : null
-          }
+          ) : null}
         </span>
       </button>
 
-      {hasLabel
-        ?
+      {hasLabel ? (
         <div
           id={labelIdForRail}
           aria-hidden={inDrawer}
           className="m3-navigation-tab__label"
           children={slots.label ?? label}
         />
-        : null
-      }
+      ) : null}
 
-      {slots.badge || badged
-        ?
+      {hasSlot('badge') || badged ? (
         <M3Badge
           aria-hidden={inDrawer}
           className={toClassName({
@@ -165,8 +158,7 @@ const M3NavigationTab: React.ForwardRefRenderFunction<
           })}
           children={slots.badge}
         />
-        : null
-      }
+      ) : null}
     </div>
   )
 }

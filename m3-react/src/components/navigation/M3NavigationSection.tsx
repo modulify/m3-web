@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { distribute } from '@/utils/content'
+import { distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 const Header: React.FC<React.HTMLAttributes<HTMLElement>> = ({
@@ -19,7 +19,7 @@ const M3NavigationSection: React.FC<React.HTMLAttributes<HTMLElement>> = ({
   children,
   ...attrs
 }) => {
-  const [{ header }, content] = distribute(children, {
+  const [{ header }, content] = distinct(children, {
     header: Header,
   })
 
