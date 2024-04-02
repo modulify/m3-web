@@ -142,16 +142,11 @@ const calculate = (checked: boolean) => {
   return checked ? props.trueValue : props.falseValue
 }
 
-const onChange = (event: InputEvent) => {
+const onChange = (event: Event) => {
   const input = event.target as HTMLInputElement
   const value = calculate(input.checked)
 
   emit('change', value)
   emit('update:model', value)
-}
-
-const onClick = () => {
-  click()
-  focus()
 }
 </script>
