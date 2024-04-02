@@ -1,4 +1,11 @@
-import React, {
+import type {
+  ForwardRefRenderFunction,
+  KeyboardEvent as SyntheticKeyboardEvent,
+  MouseEvent as SyntheticMouseEvent,
+  RefObject,
+} from 'react'
+
+import {
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -6,15 +13,15 @@ import React, {
 } from 'react'
 
 export interface M3RippleProps {
-  owner: React.RefObject<HTMLElement>;
+  owner: RefObject<HTMLElement>;
   centered?: boolean;
 }
 
 export interface M3RippleMethods {
-  activate: (event: React.KeyboardEvent | React.MouseEvent | KeyboardEvent | MouseEvent) => void;
+  activate: (event: SyntheticKeyboardEvent | SyntheticMouseEvent | KeyboardEvent | MouseEvent) => void;
 }
 
-const M3Ripple: React.ForwardRefRenderFunction<
+const M3Ripple: ForwardRefRenderFunction<
   M3RippleMethods,
   M3RippleProps
 > = ({ owner, centered = false }, ref) => {
@@ -29,7 +36,7 @@ const M3Ripple: React.ForwardRefRenderFunction<
     lastKey = event.code
   }
 
-  const activate = (event: React.KeyboardEvent | React.MouseEvent | KeyboardEvent | MouseEvent) => {
+  const activate = (event: SyntheticKeyboardEvent | SyntheticMouseEvent | KeyboardEvent | MouseEvent) => {
     setActive(false)
 
     if (!owner.current) {
@@ -76,7 +83,7 @@ const M3Ripple: React.ForwardRefRenderFunction<
           width: `${diameter}px`,
           height: `${diameter}px`,
           left: `${x - 0.5 * diameter}px`,
-          top: `${y - 0.5 * diameter}px`
+          top: `${y - 0.5 * diameter}px`,
         }}
       />
     ) : null

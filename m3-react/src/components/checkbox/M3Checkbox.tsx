@@ -1,3 +1,8 @@
+import type {
+  ForwardRefRenderFunction,
+  HTMLAttributes,
+} from 'react'
+
 import type { Focusable } from '@modulify/m3-foundation'
 import type { M3RippleMethods } from '@/components/ripple'
 
@@ -6,7 +11,7 @@ import IconIndeterminate from '@modulify/m3-foundation/assets/sprites/checkbox/i
 
 import { M3Ripple } from '@/components/ripple'
 
-import React, {
+import {
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -17,7 +22,7 @@ import React, {
 import makeId from '@/utils/id'
 import { toClassName } from '@/utils/styling'
 
-export interface M3CheckboxProps extends React.HTMLAttributes<HTMLElement> {
+export interface M3CheckboxProps extends HTMLAttributes<HTMLElement> {
   id?: string;
   model?: unknown;
   value?: unknown;
@@ -36,7 +41,7 @@ export interface M3CheckboxMethods extends Focusable {
 
 const isArray = Array.isArray
 
-const M3Checkbox: React.ForwardRefRenderFunction<
+const M3Checkbox: ForwardRefRenderFunction<
   M3CheckboxMethods,
   M3CheckboxProps
 > = ({

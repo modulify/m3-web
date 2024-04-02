@@ -1,12 +1,20 @@
+import type {
+  ForwardRefRenderFunction,
+  HTMLAttributes,
+} from 'react'
+
 import type { Appearance } from '@modulify/m3-foundation/types/components/icon-button'
-import type { Focusable } from '@modulify/m3-foundation'
+import type {
+  Clickable,
+  Focusable,
+} from '@modulify/m3-foundation'
 
 import type { M3RippleMethods } from '@/components/ripple'
 
 import { M3IconAppearance } from '@/components/icon'
 import { M3Ripple } from '@/components/ripple'
 
-import React, {
+import {
   forwardRef,
   useImperativeHandle,
   useRef,
@@ -15,7 +23,7 @@ import React, {
 import { compose } from '@/utils/events'
 import { toClassName } from '@/utils/styling'
 
-export interface M3IconButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface M3IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
   type?: HTMLButtonElement['type'];
   appearance?: Appearance;
   toggleable?: boolean;
@@ -23,9 +31,9 @@ export interface M3IconButtonProps extends React.HTMLAttributes<HTMLButtonElemen
   disabled?: boolean;
 }
 
-export interface M3IconButtonMethods extends Focusable {}
+export interface M3IconButtonMethods extends Clickable, Focusable {}
 
-const M3IconButton: React.ForwardRefRenderFunction<
+const M3IconButton: ForwardRefRenderFunction<
   M3IconButtonMethods,
   M3IconButtonProps
 > = ({
@@ -43,6 +51,7 @@ const M3IconButton: React.ForwardRefRenderFunction<
   const ripple = useRef<M3RippleMethods | null>(null)
 
   useImperativeHandle(ref, () => ({
+    click: () => root.current?.click(),
     focus: () => root.current?.focus(),
     blur: () => root.current?.blur(),
   }))

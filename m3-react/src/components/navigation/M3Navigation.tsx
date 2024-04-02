@@ -1,4 +1,10 @@
 import type {
+  FC,
+  HTMLAttributes,
+  ReactNode,
+} from 'react'
+
+import type {
   Alignment,
   Appearance,
 } from '@modulify/m3-foundation/types/components/navigation'
@@ -8,7 +14,8 @@ import { CSSTransition } from 'react-transition-group'
 import M3NavigationAppearance from '@/components/navigation/M3NavigationAppearance'
 import M3NavigationSection from './M3NavigationSection'
 
-import React, {
+import {
+  Children,
   isValidElement,
   useEffect,
   useState,
@@ -19,14 +26,14 @@ import { compose } from '@/utils/events'
 import { toClassName } from '@/utils/styling'
 import { useBreakpoint } from '@/composables/breakpoint'
 
-export interface M3NavigationProps extends React.HTMLAttributes<HTMLElement> {
+export interface M3NavigationProps extends HTMLAttributes<HTMLElement> {
   appearance?: Appearance;
   alignment?: Alignment;
   expanded?: boolean;
   onToggle?: (expanded: boolean) => void;
 }
 
-const Top: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+const Top: FC<HTMLAttributes<HTMLElement>> = ({
   className = '',
   children = [],
   ...attrs
@@ -36,7 +43,7 @@ const Top: React.FC<React.HTMLAttributes<HTMLElement>> = ({
   </div>
 )
 
-const Header: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+const Header: FC<HTMLAttributes<HTMLElement>> = ({
   className = '',
   children = [],
   ...attrs
@@ -46,7 +53,7 @@ const Header: React.FC<React.HTMLAttributes<HTMLElement>> = ({
   </div>
 )
 
-const Subheader: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+const Subheader: FC<HTMLAttributes<HTMLElement>> = ({
   className = '',
   children = [],
   ...attrs
@@ -56,15 +63,15 @@ const Subheader: React.FC<React.HTMLAttributes<HTMLElement>> = ({
   </M3NavigationSection.Header>
 )
 
-const toSlots = (children: React.ReactNode) => {
-  let top: React.ReactNode = null
-  let header: React.ReactNode = null
-  let subheader: React.ReactNode = null
+const distinct = (children: ReactNode) => {
+  let top: ReactNode = null
+  let header: ReactNode = null
+  let subheader: ReactNode = null
 
-  const content: React.ReactNode[] = []
-  const sections: React.ReactNode[] = []
+  const content: ReactNode[] = []
+  const sections: ReactNode[] = []
 
-  React.Children.forEach(children, child => {
+  Children.forEach(children, child => {
     if (isValidElement(child)) {
       switch (child.type) {
         case Top:
@@ -87,7 +94,7 @@ const toSlots = (children: React.ReactNode) => {
 }
 
 // eslint-disable-next-line max-lines-per-function
-const M3Navigation: React.FC<M3NavigationProps> = ({
+const M3Navigation: FC<M3NavigationProps> = ({
   appearance = 'auto',
   alignment = 'top',
   expanded = false,
@@ -100,7 +107,7 @@ const M3Navigation: React.FC<M3NavigationProps> = ({
   const appearanceActual: Appearance = expanded ? 'drawer' : appearance
   const breakpoint = useBreakpoint()
 
-  const slots = toSlots(children)
+  const slots = distinct(children)
 
   const [transitioning, setTransitioning] = useState(expanded)
 

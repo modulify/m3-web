@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { M3Checkbox } from '@/components/checkbox'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import makeId from '@/utils/id'
 

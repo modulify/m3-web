@@ -1,11 +1,22 @@
-import type { Focusable } from '@modulify/m3-foundation'
+import type {
+  FC,
+  ForwardRefRenderFunction,
+  HTMLAttributes,
+  ReactNode,
+} from 'react'
+
+import type {
+  Clickable,
+  Focusable,
+} from '@modulify/m3-foundation'
+
 import type { M3RippleMethods } from '@/components/ripple'
 
 import { M3Badge } from '@/components/badge'
 import { M3IconAppearance } from '@/components/icon'
 import { M3Ripple } from '@/components/ripple'
 
-import React, {
+import {
   forwardRef,
   useImperativeHandle,
   useRef,
@@ -18,7 +29,7 @@ import { toClassName } from '@/utils/styling'
 import { useBreakpoint } from '@/composables/breakpoint'
 import { useM3NavigationAppearance } from './M3NavigationAppearance'
 
-export interface M3NavigationTabProps extends React.HTMLAttributes<HTMLElement> {
+export interface M3NavigationTabProps extends HTMLAttributes<HTMLElement> {
   href?: string;
   label?: string;
   active?: boolean;
@@ -28,9 +39,9 @@ export interface M3NavigationTabProps extends React.HTMLAttributes<HTMLElement> 
   onNavigate?: () => void;
 }
 
-export interface M3NavigationTabMethods extends Focusable {}
+export interface M3NavigationTabMethods extends Clickable, Focusable {}
 
-const Icon: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+const Icon: FC<HTMLAttributes<HTMLElement>> = ({
   className = '',
   children = [],
   ...attrs
@@ -40,10 +51,10 @@ const Icon: React.FC<React.HTMLAttributes<HTMLElement>> = ({
   </span>
 )
 
-const Label: React.FC<{ children: React.ReactNode }> = props => <>{props.children}</>
-const Badge: React.FC<{ children: React.ReactNode }> = props => <>{props.children}</>
+const Label: FC<{ children: ReactNode }> = props => <>{props.children}</>
+const Badge: FC<{ children: ReactNode }> = props => <>{props.children}</>
 
-const M3NavigationTab: React.ForwardRefRenderFunction<
+const M3NavigationTab: ForwardRefRenderFunction<
   M3NavigationTabMethods,
   M3NavigationTabProps
 > = ({
@@ -79,6 +90,7 @@ const M3NavigationTab: React.ForwardRefRenderFunction<
   const labelId = inDrawer ? labelIdForDrawer : labelIdForRail
 
   useImperativeHandle(ref, () => ({
+    click: () => button.current?.click(),
     focus: () => button.current?.focus(),
     blur: () => button.current?.blur(),
   }))

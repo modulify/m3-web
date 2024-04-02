@@ -1,11 +1,19 @@
+import type {
+  ForwardRefRenderFunction,
+  HTMLAttributes,
+} from 'react'
+
 import type { Appearance } from '@modulify/m3-foundation/types/components/button'
-import type { Focusable } from '@modulify/m3-foundation'
+import type {
+  Clickable,
+  Focusable,
+} from '@modulify/m3-foundation'
 
 import type { M3RippleMethods } from '@/components/ripple'
 
 import { M3Ripple } from '@/components/ripple'
 
-import React, {
+import {
   forwardRef,
   useImperativeHandle,
   useRef,
@@ -17,16 +25,16 @@ import { toClassName } from '@/utils/styling'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement
 
-export interface M3ButtonProps extends React.HTMLAttributes<RootElement> {
+export interface M3ButtonProps extends HTMLAttributes<RootElement> {
   type?: HTMLButtonElement['type'];
   href?: string;
   appearance?: Appearance;
   disabled?: boolean;
 }
 
-export interface M3ButtonMethods extends Focusable {}
+export interface M3ButtonMethods extends Clickable, Focusable {}
 
-const M3Button: React.ForwardRefRenderFunction<
+const M3Button: ForwardRefRenderFunction<
   M3ButtonMethods,
   M3ButtonProps
 > = ({
@@ -43,6 +51,7 @@ const M3Button: React.ForwardRefRenderFunction<
   const ripple = useRef<M3RippleMethods | null>(null)
 
   useImperativeHandle(ref, () => ({
+    click: () => root.current?.click(),
     focus: () => root.current?.focus(),
     blur: () => root.current?.blur(),
   }))
