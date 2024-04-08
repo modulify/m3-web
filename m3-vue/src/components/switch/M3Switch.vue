@@ -1,54 +1,42 @@
 <template>
     <span
-        ref="root"
-        :aria-checked="checked ? 'true' : 'false'"
-        :aria-disabled="disabled ? 'true' : 'false'"
         :class="{
             'm3-switch': true,
             'm3-switch_checked': checked,
-            'm3-switch_focused': focused,
             'm3-switch_disabled': disabled,
         }"
-        role="switch"
-        tabindex="0"
-        @click="onClick"
-        @focus="focus"
-        @keydown.enter="click"
-        @keydown.space="click"
+        v-bind="$attrs"
     >
-        <span
-            :class="{
-                'm3-switch__handle': true,
-                'm3-switch__handle_has-icon': 'icon' in $slots,
-            }"
-            @mousedown="onMousedown"
-            @touchstart="onTouchstart"
-        >
-            <span class="m3-switch__state" />
-            <span class="m3-switch__checkmark">
-                <slot
-                    name="icon"
-                    :checked="checked"
-                    :focused="focused"
-                    :disabled="disabled"
-                />
-            </span>
-        </span>
-
         <input
             :id="id"
             ref="input"
             :name="name"
+            :aria-checked="checked ? 'true' : 'false'"
+            :aria-disabled="disabled ? 'true' : 'false'"
             :checked="checked"
             :disabled="disabled"
             type="checkbox"
-            aria-hidden="true"
+            role="switch"
             class="m3-switch__input"
-            tabindex="-1"
+            @click="onClick"
             @change="onChange"
-            @focus="focused = true"
-            @blur="focused = false"
+            @keydown.enter="click"
+            @mousedown="onMouseDown"
+            @touchstart="onTouchStart"
         />
+
+        <span
+            :class="{
+                'm3-switch__handle': true,
+                'm3-switch__handle_has-icon': 'default' in $slots,
+            }"
+            aria-hidden="true"
+        >
+            <span class="m3-switch__state" />
+            <span class="m3-switch__checkmark">
+                <slot :checked="checked" :disabled="disabled" />
+            </span>
+        </span>
     </span>
 </template>
 
@@ -66,12 +54,12 @@ const props = defineProps({
   id: {
     type: null as unknown as PropType<string | undefined>,
     validator: (id: unknown) => id === undefined || typeof id === 'string' && id.length > 0 && /^[A-Za-z]/.test(id),
-    default: undefined,
+    default: () => makeId('m3-switch'),
   },
 
   name: {
-    type: String,
-    default: () => makeId('m3-switch'),
+    type: null as unknown as PropType<string | undefined>,
+    default: undefined,
   },
 
   checked: {
@@ -95,9 +83,7 @@ const emitUpdate = (value: boolean) => {
   emit('update:checked', value)
 }
 
-const root = ref<HTMLElement | null>(null)
 const input = ref<HTMLInputElement | null>(null)
-const focused = ref(false)
 
 const click = () => input.value?.click()
 const focus = () => input.value?.focus()
@@ -109,25 +95,23 @@ defineExpose({
   blur,
 })
 
-let dragged = false
+let dragging = false
 let startX = 0
 
 const getEventX = (event: MouseEvent | TouchEvent) => {
-  if ('clientX' in event) {
-    return event.clientX
-  }
-
-  return event.touches[0].clientX
+  return 'clientX' in event ? event.clientX : event.touches[0].clientX
 }
+
+const DRAG_THRESHOLD = 4
 
 const onMove = (event: MouseEvent | TouchEvent) => {
   const shiftX = getEventX(event) - startX
 
-  dragged = Math.abs(shiftX) > 4
+  dragging = Math.abs(shiftX) > DRAG_THRESHOLD
 
-  if (shiftX > 4 && !props.checked) {
+  if (shiftX > DRAG_THRESHOLD && !props.checked) {
     emitUpdate(true)
-  } else if (shiftX < -4 && props.checked) {
+  } else if (shiftX < -1 * DRAG_THRESHOLD && props.checked) {
     emitUpdate(false)
   }
 }
@@ -137,43 +121,42 @@ const stopMouseListening = () => {
   window.removeEventListener('mouseup', stopMouseListening)
 }
 
-const onMousedown = (event: MouseEvent) => {
+const onMouseDown = (event: MouseEvent) => {
   startX = getEventX(event)
 
   window.addEventListener('mousemove', onMove)
   window.addEventListener('mouseup', stopMouseListening)
 }
 
-const onTouchcancel = () => {
-  dragged = false
+const onTouchCancel = () => {
+  dragging = false
+  stopTouchListening()
 }
 
 const stopTouchListening = () => {
-  dragged = false
+  dragging = false
 
   window.removeEventListener('touchmove', onMove)
-  window.removeEventListener('touchcancel', onTouchcancel)
+  window.removeEventListener('touchcancel', onTouchCancel)
   window.removeEventListener('touchend', stopTouchListening)
 }
 
-const onTouchstart = (event: TouchEvent) => {
+const onTouchStart = (event: TouchEvent) => {
   startX = getEventX(event)
 
   window.addEventListener('touchmove', onMove)
-  window.addEventListener('touchcancel', onTouchcancel)
+  window.addEventListener('touchcancel', onTouchCancel)
   window.addEventListener('touchend', stopTouchListening)
 }
 
-const onClick = () => {
-  if (!dragged) {
-    click()
-    focus()
-  } else {
-    dragged = false
+const onClick = (event: Event) => {
+  if (dragging) {
+    event.preventDefault()
+    dragging = false
   }
 }
 
-const onChange = (event: InputEvent) => {
+const onChange = (event: Event) => {
   emitUpdate((event.target as HTMLInputElement).checked)
 }
 

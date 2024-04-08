@@ -21,7 +21,9 @@ const meta = {
   },
 
   render: (args: unknown) => ({
-    components: { M3Switch },
+    components: {
+      M3Switch,
+    },
 
     setup () {
       return {
@@ -32,18 +34,17 @@ const meta = {
     },
 
     template: `
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="flex-row">
+            <label :for="id" class="mr-6">Airplane mode</label>
+
             <M3Switch
                 :id="id"
-                :aria-labelledby="id + '-label'"
                 v-model:checked="checked"
                 v-bind="args"
-            /> <label :id="id + '-label'" :for="id">Choice</label>
+            />
         </div>
     `,
   }),
-
-  tags: ['autodocs'],
 
   parameters: {
     layout: 'centered',
@@ -54,4 +55,4 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const DefaultSwitch: Story = {}
+export const StandardSwitch: Story = {}

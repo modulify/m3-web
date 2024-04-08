@@ -17,6 +17,7 @@
     m3-sys-motion-standard(background-color),
     m3-sys-motion-standard(border-color)
   ;
+  position: relative;
 
   &_checked {
     background: var(--m3-sys-primary);
@@ -32,6 +33,19 @@
   &_disabled#{&}_checked {
     background: var(--m3-state-layers-on-surface-opacity-012);
     border-color: transparent;
+  }
+
+  &__input {
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    cursor: inherit;
+    outline: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    z-index: 1;
   }
 
   &__handle {
@@ -66,20 +80,17 @@
     background: var(--m3-state-layers-primary-opacity-008);
   }
 
-  &:hover:not(&_disabled)   &__state,
-  &:focus:not(&_disabled)   &__state,
-  &_focused:not(&_disabled) &__state {
+  &:not(&_disabled) &__input:hover ~ &__handle &__state,
+  &:not(&_disabled) &__input:focus ~ &__handle &__state {
     animation: m3-sys-motion-standard(m3-animation-zoom-in);
     animation-fill-mode: forwards;
   }
 
-  &:focus   &__state,
-  &_focused &__state {
+  &__input:focus ~ &__handle &__state {
     background: var(--m3-state-layers-on-surface-opacity-012);
   }
 
-  &_checked:focus:not(&_disabled)       &__state,
-  &_checked#{&}_focused:not(&_disabled) &__state {
+  &_checked:not(&_disabled) &__input:focus ~ &__handle &__state {
     background: var(--m3-state-layers-primary-opacity-012);
   }
 
@@ -102,11 +113,11 @@
     ;
   }
 
-  &:hover:not(&_disabled) &__checkmark {
+  &:not(&_disabled) &__input:hover ~ &__handle &__checkmark {
     --background: var(--m3-sys-on-surface-variant);
   }
 
-  &:active:not(&_disabled) &__checkmark {
+  &:not(&_disabled) &__input:active ~ &__handle &__checkmark {
     @include m3-shape-square(28px);
   }
 
@@ -120,10 +131,9 @@
     color: var(--m3-sys-on-primary-container);
   }
 
-  &_checked:active:not(&_disabled) &__checkmark,
-  &_checked:hover:not(&_disabled) &__checkmark,
-  &_checked:focus:not(&_disabled) &__checkmark,
-  &_checked#{&}_focused:not(&_disabled) &__checkmark {
+  &_checked:not(&_disabled) &__input:hover ~ &__handle &__checkmark,
+  &_checked:not(&_disabled) &__input:focus ~ &__handle &__checkmark,
+  &_checked:not(&_disabled) &__input:active ~ &__handle &__checkmark {
     --background: var(--m3-sys-primary-container);
   }
 
@@ -139,15 +149,5 @@
 
   &_checked#{&}_disabled &__checkmark * {
     opacity: 0.38;
-  }
-
-  &__input {
-    opacity: 0;
-    outline: none;
-    position: absolute;
-    margin: 0;
-    width: 0;
-    height: 0;
-    z-index: -1;
   }
 }
