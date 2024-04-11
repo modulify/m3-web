@@ -3,7 +3,11 @@ import type {
   HTMLAttributes,
 } from 'react'
 
-import type { Focusable } from '@modulify/m3-foundation'
+import type {
+  Clickable,
+  Focusable,
+} from '@modulify/m3-foundation'
+
 import type { M3RippleMethods } from '@/components/ripple'
 
 import IconCheckmark from '@modulify/m3-foundation/assets/sprites/checkbox/checkmark.svg?react'
@@ -13,13 +17,13 @@ import { M3Ripple } from '@/components/ripple'
 
 import {
   forwardRef,
-  useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
-  useState,
 } from 'react'
 
-import makeId from '@/utils/id'
+import useId from '@/hooks/useId'
+
 import { toClassName } from '@/utils/styling'
 
 export interface M3CheckboxProps extends HTMLAttributes<HTMLElement> {
@@ -35,9 +39,7 @@ export interface M3CheckboxProps extends HTMLAttributes<HTMLElement> {
   onChange?: (value: unknown) => void;
 }
 
-export interface M3CheckboxMethods extends Focusable {
-  click (): void;
-}
+export interface M3CheckboxMethods extends Clickable, Focusable {}
 
 const isArray = Array.isArray
 
@@ -45,7 +47,7 @@ const M3Checkbox: ForwardRefRenderFunction<
   M3CheckboxMethods,
   M3CheckboxProps
 > = ({
-  id= makeId('m3-checkbox'),
+  id,
   model,
   value,
   indeterminate = false,
@@ -68,7 +70,9 @@ const M3Checkbox: ForwardRefRenderFunction<
     blur: () => input.current?.blur(),
   }))
 
-  const [checked, setChecked] = useState(false)
+  const checked = useMemo(() => {
+    return isArray(model) ? contains(model, value) : equalsFn(model, trueValue)
+  }, [model, value, trueValue])
 
   const contains = (array: unknown[], value: unknown) => array.some(v => equalsFn(v, value))
   const calculate = (checked: boolean) => {
@@ -80,10 +84,6 @@ const M3Checkbox: ForwardRefRenderFunction<
 
     return checked ? trueValue : falseValue
   }
-
-  useEffect(() => setChecked(
-    isArray(model) ? contains(model, value) : equalsFn(model, trueValue)
-  ), [model, value, trueValue])
 
   return (
     <span
@@ -100,7 +100,7 @@ const M3Checkbox: ForwardRefRenderFunction<
       <M3Ripple ref={ripple} owner={root} />
 
       <input
-        id={id}
+        id={useId(id, 'm3-checkbox')}
         type="checkbox"
         aria-checked={checked}
         aria-invalid={invalid}
