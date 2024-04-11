@@ -30,6 +30,16 @@ export type {
   M3NavigationTabProps,
 } from '@/components/navigation'
 
+export type {
+  M3RippleMethods,
+  M3RippleProps,
+} from '@/components/ripple'
+
+export type {
+  M3SwitchMethods,
+  M3SwitchProps,
+} from '@/components/switch'
+
 export {
   M3Button,
 } from '@/components/button'
@@ -66,3 +76,9 @@ export {
 export {
   M3Ripple,
 } from '@/components/ripple'
+
+export {
+  M3Switch,
+  M3SwitchScope,
+  useM3SwitchScope,
+} from '@/components/switch'
