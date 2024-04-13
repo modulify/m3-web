@@ -4,10 +4,10 @@ import { M3Switch } from '@/components/switch'
 
 import { useState } from 'react'
 
-import makeId from '@/utils/id'
 import { toClassName } from '@/utils/styling'
+import useId from '@/hooks/useId'
 
-const FieldSwitch: FC<{
+const SwitchExample: FC<{
   className?: string;
   label?: string;
   disabled?: boolean
@@ -16,7 +16,7 @@ const FieldSwitch: FC<{
   label = '',
   disabled = false,
 }) => {
-  const id = makeId('m3-switch')
+  const id = useId(null, 'm3-switch')
   const [checked, toggle] = useState(false)
 
   return (
@@ -38,4 +38,4 @@ const FieldSwitch: FC<{
   )
 }
 
-export default FieldSwitch
+export default SwitchExample
