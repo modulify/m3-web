@@ -52,21 +52,25 @@ import type {
   OverflowBehavior,
   Trigger,
   TriggerOptions,
-} from '~types/components/popper'
+} from '@modulify/m3-foundation/types/components/popper'
 
 import { M3Popper } from '@/components/popper'
 
 import {
-  isTriggerArray,
+  isHTMLElement,
+  isNull,
+  isNumeric,
+  isString,
+  oneOf,
+} from '@modulify/m3-foundation/lib/predicates'
+
+import {
+  isBoundary,
+  isOverflowBehavior,
   isTriggerOptions,
-} from '@/components/popper/validators'
+} from '@modulify/m3-foundation/lib/popper/predicates'
 
 defineProps({
-  shown: {
-    type: Boolean,
-    default: false,
-  },
-
   target: {
     type: Function as PropType<() => Element>,
     required: true,
@@ -74,14 +78,19 @@ defineProps({
 
   targetTriggers: {
     type: [Array, Object] as PropType<Trigger[] | TriggerOptions>,
-    validator: (triggers: unknown) => isTriggerArray(triggers) || isTriggerOptions(triggers),
+    validator: isTriggerOptions,
     default: () => ['click'],
   },
 
   popperTriggers: {
     type: [Array, Object] as PropType<Trigger[] | TriggerOptions>,
-    validator: (triggers: unknown) => isTriggerArray(triggers) || isTriggerOptions(triggers),
+    validator: isTriggerOptions,
     default: () => [],
+  },
+
+  shown: {
+    type: Boolean,
+    default: false,
   },
 
   hideOnMissClick: {
@@ -91,55 +100,53 @@ defineProps({
 
   placement: {
     type: String as PropType<Placement>,
-    default: 'bottom',
+    default: 'bottom' as Placement,
   },
 
   offsetMainAxis: {
     type: [Number, String],
-    validator: (value: number|string) => !isNaN(Number(value)),
+    validator: isNumeric,
     default: 8,
   },
 
   offsetCrossAxis: {
     type: [Number, String],
-    validator: (value: number|string) => !isNaN(Number(value)),
+    validator: isNumeric,
     default: 0,
   },
 
   overflow: {
     type: Array as PropType<OverflowBehavior[]>,
+    validator: isOverflowBehavior,
     default: (): OverflowBehavior[] => ['flip', 'shift', 'hide'],
   },
 
   boundary: {
     type: null as unknown as PropType<Boundary>,
-    validator: (boundary: unknown) => {
-      return boundary === 'clippingAncestors' ||
-        boundary instanceof Element ||
-        Array.isArray(boundary) && boundary.every(b => b instanceof Element)
-    },
-    default: 'clippingAncestors',
+    validator: isBoundary,
+    default: 'clippingAncestors' as Boundary,
   },
 
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
-    validator: (container: unknown) => typeof container === 'string' || container instanceof HTMLElement,
+    validator: oneOf(isString, isHTMLElement),
     default: 'body',
   },
 
   strategy: {
     type: String as PropType<Strategy>,
-    default: 'absolute',
+    default: 'absolute' as Strategy,
   },
 
   delay: {
-    type: [Number, String, Object] as PropType<number|string|Delay>,
-    validator: (value: number|string|Delay) => typeof value === 'object' || !isNaN(Number(value)),
+    type: [Number, String, Object] as PropType<number | string  |Delay>,
+    validator: (value: number | string | Delay) => typeof value === 'object' || isNumeric(value),
     default: () => ({ hide: 150 }),
   },
 
   detachTimeout: {
-    type: null as unknown as PropType<number|string|null>,
+    type: null as unknown as PropType<number | string | null>,
+    validator: oneOf(isNull, isNumeric),
     default: 5000,
   },
 

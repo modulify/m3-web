@@ -35,9 +35,10 @@ import type {
   OverflowBehavior,
   Trigger,
   TriggerOptions,
-} from '~types/components/popper'
+} from '@modulify/m3-foundation/types/components/popper'
 
-import Listener from './Listener'
+import { Listener } from '@modulify/m3-foundation/lib/popper'
+import Scheduler from '@modulify/m3-foundation/lib/Scheduler'
 
 import {
   computed,
@@ -53,22 +54,27 @@ import {
 
 import isEqual from 'lodash.isequal'
 
-import {
-  computePosition,
-  useAutoUpdate,
-} from './floating'
+import { computePosition } from '@modulify/m3-foundation/lib/popper/floating'
+import { useAutoUpdate } from './floating'
+
+import { normalizeDelay } from '@modulify/m3-foundation/lib/popper/scheduling'
 
 import {
-  Scheduler,
-  normalizeDelay,
-} from './scheduling'
+  isHTMLElement,
+  isNull,
+  isNumeric,
+  isShape,
+  isString,
+  oneOf,
+} from '@modulify/m3-foundation/lib/predicates'
 
 import {
-  isTriggerArray,
+  isBoundary,
+  isOverflowBehavior,
   isTriggerOptions,
-} from './validators'
+} from '@modulify/m3-foundation/lib/popper/predicates'
 
-import * as globalEvents from './globalEvents'
+import * as globalEvents from '@modulify/m3-foundation/lib/popper/globalEvents'
 
 const props = defineProps({
   target: {
@@ -78,14 +84,14 @@ const props = defineProps({
 
   targetTriggers: {
     type: [Array, Object] as PropType<Trigger[] | TriggerOptions>,
-    validator: (triggers: unknown) => isTriggerArray(triggers) || isTriggerOptions(triggers),
-    default: () => ['click'],
+    validator: isTriggerOptions,
+    default: (): Trigger[] => ['click'],
   },
 
   popperTriggers: {
     type: [Array, Object] as PropType<Trigger[] | TriggerOptions>,
-    validator: (triggers: unknown) => isTriggerArray(triggers) || isTriggerOptions(triggers),
-    default: () => [],
+    validator: isTriggerOptions,
+    default: (): Trigger[] => [],
   },
 
   shown: {
@@ -100,50 +106,50 @@ const props = defineProps({
 
   placement: {
     type: String as PropType<Placement>,
-    default: 'bottom',
+    default: 'bottom' as Placement,
   },
 
   strategy: {
     type: String as PropType<Strategy>,
-    default: 'absolute',
+    default: 'absolute' as Strategy,
   },
 
   boundary: {
     type: null as unknown as PropType<Boundary>,
-    validator: (boundary: unknown) => {
-      return boundary === 'clippingAncestors' ||
-        boundary instanceof Element ||
-        Array.isArray(boundary) && boundary.every(b => b instanceof Element)
-    },
-    default: 'clippingAncestors',
+    validator: isBoundary,
+    default: 'clippingAncestors' as Boundary,
   },
 
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
-    validator: (container: unknown) => typeof container === 'string' || container instanceof HTMLElement,
+    validator: oneOf(isString, isHTMLElement),
     default: 'body',
   },
 
   offsetMainAxis: {
     type: [Number, String],
-    validator: (value: number|string) => !isNaN(Number(value)),
+    validator: isNumeric,
     default: 8,
   },
 
   offsetCrossAxis: {
     type: [Number, String],
-    validator: (value: number|string) => !isNaN(Number(value)),
+    validator: isNumeric,
     default: 0,
   },
 
   overflow: {
     type: Array as PropType<OverflowBehavior[]>,
+    validator: isOverflowBehavior,
     default: (): OverflowBehavior[] => ['flip', 'shift', 'hide'],
   },
 
   delay: {
-    type: [Number, String, Object] as PropType<number|string|Delay>,
-    validator: (value: number|string|Delay) => typeof value === 'object' || !isNaN(Number(value)),
+    type: [Number, String, Object] as PropType<number | string | Delay>,
+    validator: oneOf(isNumeric, isShape({
+      show: isNumeric,
+      hide: isNumeric,
+    })),
     default: 0,
   },
 
@@ -153,7 +159,8 @@ const props = defineProps({
   },
 
   detachTimeout: {
-    type: null as unknown as PropType<number|string|null>,
+    type: null as unknown as PropType<null | number | string>,
+    validator: oneOf(isNull, isNumeric),
     default: 5000,
   },
 })
@@ -205,8 +212,8 @@ const adjust = async () => {
 const contains = (el: Element | null): boolean => popper.value?.contains(el) ?? false
 
 const {
-  autoUpdateOn,
-  autoUpdateOff,
+  autoAdjustOn,
+  autoAdjustOff,
 } = useAutoUpdate(target, popper, adjust)
 
 const showingScheduler = new Scheduler()
@@ -223,7 +230,7 @@ const doShow = async () => {
 
     if (!state.hiding) {
       await adjust()
-      autoUpdateOn()
+      autoAdjustOn()
 
       state.shown = true
       emit('update:shown', true)
@@ -238,7 +245,7 @@ const doHide = async () => {
     return
   }
 
-  autoUpdateOff()
+  autoAdjustOff()
 
   state.shown = false
   emit('update:shown', false)
@@ -359,7 +366,7 @@ watch(() => target.value, async (newTarget, oldTarget) => {
     targetListener.target = newTarget
 
     if (state.shown) {
-      autoUpdateOn()
+      autoAdjustOn()
       await adjust()
     }
   }
@@ -376,9 +383,9 @@ watch(() => state.attached, (isAttached, wasAttached) => {
   if (isAttached && !wasAttached) {
     nextTick(async () => {
       if (state.shown) {
-        autoUpdateOff()
+        autoAdjustOff()
         await adjust()
-        autoUpdateOn()
+        autoAdjustOn()
       }
     })
   }
@@ -413,7 +420,7 @@ onActivated(() => props.shown ? show() : hide())
 onDeactivated(() => hide())
 
 onBeforeUnmount(() => {
-  autoUpdateOff()
+  autoAdjustOff()
 
   globalEvents.off('click', onGlobalClick)
   globalEvents.off('mousedown', onGlobalMousedown)

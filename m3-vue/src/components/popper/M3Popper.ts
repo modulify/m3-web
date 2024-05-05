@@ -4,7 +4,7 @@ import type {
   Ref,
 } from 'vue'
 
-import type { PopperOptions } from '~types/components/popper'
+import type { PopperOptions } from '@modulify/m3-foundation/types/components/popper'
 import type { None } from '~types/scaffolding'
 
 import M3Popper from './M3Popper.vue'

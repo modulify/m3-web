@@ -1,5 +1,5 @@
 import type { Directive } from 'vue'
-import type { CloserEvent } from '~types/components/popper'
+import type { CloserEvent } from '@modulify/m3-foundation/types/components/popper'
 
 type CloserTarget<E extends Element = Element> = E & {
   m3PopperCloseAll?: boolean;

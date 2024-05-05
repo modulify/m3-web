@@ -40,9 +40,20 @@ import type {
 import type {
   Delay,
   OverflowBehavior,
-} from '~types/components/popper'
+} from '@modulify/m3-foundation/types/components/popper'
 
 import { M3Popper } from '@/components/popper'
+
+import {
+  isHTMLElement,
+  isNull,
+  isNumeric, isString,
+  oneOf,
+} from '@modulify/m3-foundation/lib/predicates'
+
+import {
+  isBoundary,
+} from '@modulify/m3-foundation/lib/popper/predicates'
 
 defineProps({
   target: {
@@ -62,13 +73,13 @@ defineProps({
 
   offsetMainAxis: {
     type: [Number, String],
-    validator: (value: number|string) => !isNaN(Number(value)),
+    validator: isNumeric,
     default: 0,
   },
 
   offsetCrossAxis: {
     type: [Number, String],
-    validator: (value: number|string) => !isNaN(Number(value)),
+    validator: isNumeric,
     default: 0,
   },
 
@@ -79,17 +90,13 @@ defineProps({
 
   boundary: {
     type: null as unknown as PropType<Boundary>,
-    validator: (boundary: unknown) => {
-      return boundary === 'clippingAncestors' ||
-        boundary instanceof Element ||
-        Array.isArray(boundary) && boundary.every(b => b instanceof Element)
-    },
+    validator: isBoundary,
     default: 'clippingAncestors',
   },
 
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
-    validator: (container: unknown) => typeof container === 'string' || container instanceof HTMLElement,
+    validator: oneOf(isString, isHTMLElement),
     default: 'body',
   },
 
@@ -100,12 +107,13 @@ defineProps({
 
   delay: {
     type: [Number, String, Object] as PropType<number | string | Delay>,
-    validator: (value: number|string|Delay) => typeof value === 'object' || !isNaN(Number(value)),
+    validator: (value: number | string | Delay) => typeof value === 'object' || !isNaN(Number(value)),
     default: () => ({ hide: 200 }),
   },
 
   detachTimeout: {
     type: null as unknown as PropType<number | string | null>,
+    validator: oneOf(isNull, isNumeric),
     default: 5000,
   },
 
