@@ -2089,6 +2089,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@modulify/m3-foundation@workspace:m3-foundation"
   dependencies:
+    "@types/lodash.isequal": "npm:^4.5.8"
     "@types/node": "npm:^18.15.3"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -2097,6 +2098,7 @@ __metadata:
     eslint-plugin-json: "npm:^3.1.0"
     eslint-plugin-unused-imports: "npm:^3.1.0"
     husky: "npm:^9.0.11"
+    lodash.isequal: "npm:^4.5.0"
     sass: "npm:^1.72.0"
     standard-version: "npm:^9.5.0"
     ts-node: "npm:^10.9.2"

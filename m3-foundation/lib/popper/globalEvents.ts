@@ -1,4 +1,4 @@
-import { isIOS } from '@modulify/m3-foundation/lib/platform'
+import { isIOS } from '../platform'
 
 export type GlobalEventType = 'click' | 'mousedown' | 'touchend'
 export type GlobalEventHandler = (event: Event) => void

@@ -1,15 +1,4 @@
-import type { Delay } from '~types/components/popper'
-
-export const normalizeDelay = (delay: number | string | Delay): Required<Delay> => ({
-  show: 0,
-  hide: 0,
-  ...(typeof delay === 'object' ? delay : {
-    show: Number(delay),
-    hide: Number(delay),
-  }),
-})
-
-export class Scheduler {
+export default class Scheduler {
   private _timer: number | undefined = undefined
 
   schedule (operation: () => void, delay: number) {

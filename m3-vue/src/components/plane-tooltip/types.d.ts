@@ -1,5 +1,5 @@
 import type { ContentToRender } from '~types/render'
-import type { PopperOptions } from '~types/components/popper'
+import type { PopperOptions } from '@modulify/m3-foundation/types/components/popper'
 
 export type Definition = PopperOptions & {
   content: ContentToRender | null;

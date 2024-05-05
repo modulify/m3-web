@@ -2,13 +2,14 @@ import type {
   Trigger,
   TriggerHandler,
   TriggerOptions,
-} from '~types/components/popper'
+} from '@modulify/m3-foundation/types/components/popper'
 
 import isEqual from 'lodash.isequal'
 
-const normalizeTriggers = (triggers: Trigger[] | TriggerOptions): Required<TriggerOptions> => {
-  const show = Array.isArray(triggers) ? triggers : triggers.show ?? []
-  const hide = Array.isArray(triggers) ? triggers : triggers.hide ?? []
+const isArray = Array.isArray
+const normalize = (triggers: Trigger[] | TriggerOptions): Required<TriggerOptions> => {
+  const show = isArray(triggers) ? triggers : triggers.show ?? []
+  const hide = isArray(triggers) ? triggers : triggers.hide ?? []
 
   return {
     show: [...show],
@@ -59,7 +60,7 @@ export default class Listener {
   set triggers (triggers: Trigger[] | TriggerOptions) {
     if (!isEqual(triggers, this._triggers)) {
       this.stop()
-      this._triggers = normalizeTriggers(triggers)
+      this._triggers = normalize(triggers)
       if (this._target) {
         this._subscribe()
       }
@@ -68,7 +69,7 @@ export default class Listener {
 
   start (target: EventTarget, triggers: Trigger[] | TriggerOptions) {
     this._target = target
-    this._triggers = normalizeTriggers(triggers)
+    this._triggers = normalize(triggers)
     this._subscribe()
   }
 

@@ -6,7 +6,10 @@ import type {
 
 export type OverflowBehavior = 'flip' | 'shift' | 'hide'
 
-export type Delay = { show?: number; hide?: number; }
+export type Delay = {
+  show?: number | string;
+  hide?: number | string;
+}
 
 export type Trigger = 'hover' | 'focus' | 'click' | 'touch'
 export type TriggerOptions = {
@@ -14,7 +17,7 @@ export type TriggerOptions = {
   hide?: Trigger[],
 }
 
-export type TriggerHandler = (event: Event) => void
+export type TriggerHandler = (event: Event & { processedByM3Popper?: boolean }) => void
 
 export type FloatingOptions = {
   placement?: Placement;
