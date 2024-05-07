@@ -4,10 +4,13 @@ import { M3Checkbox } from '@/components/checkbox'
 
 import {
   Fragment,
-  useState,
+  useCallback,
 } from 'react'
 
-import makeId from '@/utils/id'
+import {
+  useId,
+  useRecord,
+} from '@/hooks'
 
 interface Option {
   label: string;
@@ -18,31 +21,32 @@ interface Option {
 const CheckboxList: FC<{
   options: Option[];
 }> = ({ options }) => {
-  const id = makeId('m3-checkbox-example')
+  const id = useId(null, 'm3-checkbox-example')
+  const state = useRecord({
+    model: [] as string[],
+  }, ['model'])
 
-  const [model, setModel] = useState<string[]>([])
-
-  const isSelected = (option: Option) => {
+  const isSelected = useCallback((option: Option) => {
     return 'subordinates' in option
-      ? option.subordinates.every((o) => model.includes(o.value))
-      : model.includes(option.value)
-  }
+      ? option.subordinates.every((o) => state.model.includes(o.value))
+      : state.model.includes(option.value)
+  }, [])
 
-  const isIndeterminate = (option: Option) => {
+  const isIndeterminate = useCallback((option: Option) => {
     return 'subordinates' in option
-      && option.subordinates.some((o) => model.includes(o.value))
+      && option.subordinates.some((o) => state.model.includes(o.value))
       && !isSelected(option)
-  }
+  }, [])
 
-  const toggle = (option: Option, checked: boolean) => {
+  const toggle = useCallback((option: Option, checked: boolean) => {
     const values = (option.subordinates ?? []).map(o => o.value)
 
     if (checked) {
-      setModel([...model, ...values.filter(v => !model.includes(v))])
+      state.model = [...state.model, ...values.filter(v => !state.model.includes(v))]
     } else {
-      setModel([...model.filter(v => !values.includes(v))])
+      state.model = [...state.model.filter(v => !values.includes(v))]
     }
-  }
+  }, [])
 
   return (
     <div className="m3-panel m3-panel_elevated-1">
@@ -66,9 +70,9 @@ const CheckboxList: FC<{
                   <div key={`option-${i}-${j}`} className="flex-row">
                     <M3Checkbox
                       id={`${id}-option-${i}-${j}`}
-                      model={model}
+                      model={state.model}
                       value={s.value}
-                      onChange={setModel}
+                      onChange={(model: string[]) => state.model = model}
                     />
 
                     <label htmlFor={`${id}-option-${i}-${j}`}>{s.label}</label>
@@ -81,9 +85,9 @@ const CheckboxList: FC<{
             <div key={`option-${i}`} className="flex-row">
               <M3Checkbox
                 id={`${id}-option-${i}`}
-                model={model}
+                model={state.model}
                 value={o.value}
-                onChange={setModel}
+                onChange={(model: string[]) => state.model = model}
               />
 
               <label htmlFor={`${id}-option-${i}`}>{o.label}</label>
