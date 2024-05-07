@@ -31,6 +31,11 @@ export type {
 } from '@/components/navigation'
 
 export type {
+  M3RichTooltipMethods,
+  M3RichTooltipProps,
+} from '@/components/rich-tooltip'
+
+export type {
   M3RippleMethods,
   M3RippleProps,
 } from '@/components/ripple'
@@ -72,6 +77,10 @@ export {
   M3NavigationTab,
   useM3NavigationAppearance,
 } from '@/components/navigation'
+
+export {
+  M3RichTooltip,
+} from '@/components/rich-tooltip'
 
 export {
   M3Ripple,
