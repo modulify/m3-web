@@ -17,6 +17,7 @@ import { M3Ripple } from '@/components/ripple'
 
 import {
   forwardRef,
+  useCallback,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -70,12 +71,15 @@ const M3Checkbox: ForwardRefRenderFunction<
     blur: () => input.current?.blur(),
   }))
 
+  const contains = useCallback((array: unknown[], value: unknown) => {
+    return array.some(v => equalsFn(v, value))
+  }, [equalsFn])
+
   const checked = useMemo(() => {
     return isArray(model) ? contains(model, value) : equalsFn(model, trueValue)
   }, [model, value, trueValue])
 
-  const contains = (array: unknown[], value: unknown) => array.some(v => equalsFn(v, value))
-  const calculate = (checked: boolean) => {
+  const calculate = useCallback((checked: boolean) => {
     if (isArray(model)) {
       return checked
         ? (contains(model, value) ? model : [...model, value])
@@ -83,7 +87,7 @@ const M3Checkbox: ForwardRefRenderFunction<
     }
 
     return checked ? trueValue : falseValue
-  }
+  }, [model, contains, checked, trueValue, falseValue])
 
   return (
     <span
