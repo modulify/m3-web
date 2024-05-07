@@ -31,9 +31,11 @@ export default <
 
     set (_, property, value: T[K]) {
       if (keys.includes(property as K)) {
-        ref.current[property as K] = value
-        if (property in dispatchers) {
-          dispatchers[property](value)
+        if (ref.current[property as K] !== value) {
+          ref.current[property as K] = value
+          if (property in dispatchers) {
+            dispatchers[property](value)
+          }
         }
         return true
       }
