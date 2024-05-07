@@ -19,7 +19,11 @@ import {
   useRef,
 } from 'react'
 
-import useId from '@/hooks/useId'
+import {
+  useId,
+  useRecord,
+  useWatch,
+} from '@/hooks'
 
 import { toClassName } from '@/utils/styling'
 
@@ -59,20 +63,23 @@ const M3Switch: ForwardRefRenderFunction<
     blur: () => input.current?.blur(),
   }))
 
-  const dragging = useRef(false)
+  const state = useRecord({
+    checked,
+    dragging: false,
+  }, ['checked'])
 
-  const shouldBeChecked = useRef(checked)
+  useWatch(checked, checked => state.checked = checked)
+
+  const handlers = useRecord({
+    onToggle,
+  })
+
+  useWatch(onToggle, onToggle => handlers.onToggle = onToggle)
 
   const toggle = useCallback((checked: boolean) => {
-    shouldBeChecked.current = checked
-    onToggle(checked)
-  }, [onToggle])
-
-  useEffect(() => {
-    if (shouldBeChecked.current !== checked) {
-      shouldBeChecked.current = checked
-    }
-  }, [checked])
+    state.checked = checked
+    handlers.onToggle(checked)
+  }, [])
 
   useEffect(() => {
     let startX = 0
@@ -80,17 +87,17 @@ const M3Switch: ForwardRefRenderFunction<
     const onMove = (event: MouseEvent | TouchEvent) => {
       const shiftX = getEventX(event) - startX
 
-      dragging.current = Math.abs(shiftX) > DRAG_THRESHOLD
+      state.dragging = Math.abs(shiftX) > DRAG_THRESHOLD
 
-      if (shiftX > DRAG_THRESHOLD && !shouldBeChecked.current) {
+      if (shiftX > DRAG_THRESHOLD && !state.checked) {
         toggle(true)
-      } else if (shiftX < -1 * DRAG_THRESHOLD && shouldBeChecked.current) {
+      } else if (shiftX < -1 * DRAG_THRESHOLD && state.checked) {
         toggle(false)
       }
     }
 
     const stopMouseListening = () => {
-      dragging.current = false
+      state.dragging = false
 
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseup', stopMouseListening)
@@ -104,12 +111,12 @@ const M3Switch: ForwardRefRenderFunction<
     }
 
     const onTouchCancel = () => {
-      dragging.current = false
+      state.dragging = false
       stopTouchListening()
     }
 
     const stopTouchListening = () => {
-      dragging.current = false
+      state.dragging = false
 
       window.removeEventListener('touchmove', onMove)
       window.removeEventListener('touchcancel', onTouchCancel)
@@ -125,9 +132,9 @@ const M3Switch: ForwardRefRenderFunction<
     }
 
     const onClick = (event: Event) => {
-      if (dragging.current) {
+      if (state.dragging) {
         event.preventDefault()
-        dragging.current = false
+        state.dragging = false
       }
     }
 
@@ -144,13 +151,13 @@ const M3Switch: ForwardRefRenderFunction<
       stopMouseListening()
       stopTouchListening()
     }
-  }, [toggle])
+  }, [])
 
   return (
     <span
       className={toClassName([className, {
         'm3-switch': true,
-        'm3-switch_checked': checked,
+        'm3-switch_checked': state.checked,
         'm3-switch_disabled': disabled,
       }])}
       {...attrs}
@@ -159,16 +166,14 @@ const M3Switch: ForwardRefRenderFunction<
         id={useId(id, 'm3-switch')}
         ref={input}
         name={name}
-        aria-checked={checked}
+        aria-checked={state.checked}
         aria-disabled={disabled}
-        checked={checked}
+        checked={state.checked}
         disabled={disabled}
         type="checkbox"
         role="switch"
         className="m3-switch__input"
-        onChange={event => {
-          toggle(event.target.checked)
-        }}
+        onChange={event => toggle(event.target.checked)}
         onKeyDown={event => {
           if (event.code === 'Enter') {
             input.current?.click()
@@ -185,7 +190,7 @@ const M3Switch: ForwardRefRenderFunction<
       >
         <span className="m3-switch__state" />
         <span className="m3-switch__checkmark">
-          <M3SwitchScope.Provider value={{ checked, disabled }}>
+          <M3SwitchScope.Provider value={{ checked: state.checked, disabled }}>
             {children}
           </M3SwitchScope.Provider>
         </span>
