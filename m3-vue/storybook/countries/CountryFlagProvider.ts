@@ -1,5 +1,5 @@
 import type { DefineComponent, SVGAttributes } from 'vue'
-import type { Code } from '@/domain/country/codes'
+import type { Code } from './codes'
 
 import ad from 'flag-icons/flags/1x1/ad.svg'
 import am from 'flag-icons/flags/1x1/am.svg'
