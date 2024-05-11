@@ -64,28 +64,21 @@
     justify-content: space-between;
   }
 
-  &_drawer {
-    @include m3-navigation-drawer;
-  }
+  &_drawer { @include m3-navigation-drawer; }
 
   &_auto {
-    @include screen-maximum('expanded') {
-      @include m3-navigation-rail;
-    };
-
-    @include screen-minimum('large') {
-      @include m3-navigation-drawer;
-    }
+    @include screen-to('expanded') { @include m3-navigation-rail; };
+    @include screen-from('large')  { @include m3-navigation-drawer; }
   }
 
   &_auto#{&}_middle {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       gap: 60px;
     };
   }
 
   &_auto#{&}_bottom {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       gap: normal;
       justify-content: space-between;
     };
@@ -104,7 +97,7 @@
   }
 
   &_auto &__top {
-    @include screen-minimum('large') {
+    @include screen-from('large') {
       display: none;
     }
   }
@@ -129,7 +122,7 @@
   }
 
   &_auto &__header {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       display: none;
     }
   }
@@ -151,7 +144,7 @@
   }
 
   &_auto &__section:nth-of-type(1) ~ &__section {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       display: none;
     }
   }
@@ -161,7 +154,7 @@
   }
 
   &_auto &__section:first-of-type {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       @include m3-navigation-rail-destinations;
     };
   }
@@ -181,7 +174,7 @@
   }
 
   &_auto &__section-header {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       display: none;
     };
   }
@@ -210,7 +203,7 @@
   }
 
   &_in-auto {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       width: 56px;
     }
   }
@@ -248,11 +241,11 @@
   }
 
   &_in-auto &__state {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       justify-content: center;
     }
 
-    @include screen-minimum('large') {
+    @include screen-from('large') {
       padding: 16px 24px 16px 16px;
       gap: 12px;
     }
@@ -263,7 +256,7 @@
   }
 
   &_in-auto#{&}_labelled &__state {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       padding: 4px 16px;
     }
   }
@@ -315,7 +308,7 @@
   }
 
   &_in-auto > &__label {
-    @include screen-minimum('large') {
+    @include screen-from('large') {
       display: none;
     }
   }
@@ -331,7 +324,7 @@
   }
 
   &_in-auto &__state &__label {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       display: none;
     }
   }
@@ -346,7 +339,7 @@
   }
 
   &_in-auto &__state &__badge-label {
-    @include screen-maximum('expanded') {
+    @include screen-to('expanded') {
       display: none;
     }
   }
@@ -367,7 +360,7 @@
   }
 
   &_in-auto &__badge {
-    @include screen-minimum('large') {
+    @include screen-from('large') {
       display: none;
     }
   }
@@ -377,7 +370,7 @@
   padding-left: $m3-navigation-rail-width;
   transition: m3-sys-motion-emphasized(padding-left);
 
-  @include screen-minimum('large') {
+  @include screen-from('large') {
     padding-left: $m3-navigation-drawer-width;
   }
 }

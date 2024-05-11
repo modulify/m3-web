@@ -3,68 +3,71 @@ $m3-screen-expanded: 840px;
 $m3-screen-large: 1200px;
 $m3-screen-extra-large: 1600px;
 
-@mixin screen($media) {
-  @if $media == 'compact' {
-    @media only screen and (max-width: $m3-screen-medium - 1px) { @content; }
-  }
+$screen-min: (
+  'compact': 0,
+  'medium': $m3-screen-medium,
+  'expanded': $m3-screen-expanded,
+  'large': $m3-screen-large,
+  'extra-large': $m3-screen-extra-large
+);
 
-  @if $media == 'medium' {
-    @media only screen and (min-width: $m3-screen-medium) and (max-width: $m3-screen-expanded - 1px) { @content; }
-  }
+$screen-max: (
+  'compact': $m3-screen-medium - 1px,
+  'medium': $m3-screen-expanded - 1px,
+  'expanded': $m3-screen-large - 1px,
+  'large': $m3-screen-extra-large - 1px,
+  'extra-large': 'UNLIMITED'
+);
 
-  @if $media == 'expanded' {
-    @media only screen and (min-width: $m3-screen-expanded) and (max-width: $m3-screen-large - 1px) { @content; }
-  }
-
-  @if $media == 'large' {
-    @media only screen and (min-width: $m3-screen-large) and (max-width: $m3-screen-extra-large - 1px) { @content; }
-  }
-
-  @if $media == 'extra-large' {
-    @media only screen and (min-width: $m3-screen-extra-large) { @content; }
+@function get-screen-min ($keyOrValue) {
+  @if map-has-key($screen-min, $keyOrValue) {
+    @return map-get($screen-min, $keyOrValue);
+  } @else {
+    @return $keyOrValue;
   }
 }
 
-@mixin screen-maximum($media) {
-  @if $media == 'compact' {
-    @media only screen and (max-width: $m3-screen-medium - 1px) { @content; }
-  }
-
-  @if $media == 'medium' {
-    @media only screen and (max-width: $m3-screen-expanded - 1px) { @content; }
-  }
-
-  @if $media == 'expanded' {
-    @media only screen and (max-width: $m3-screen-large - 1px) { @content; }
-  }
-
-  @if $media == 'large' {
-    @media only screen and (max-width: $m3-screen-extra-large - 1px) { @content; }
-  }
-
-  @if $media == 'extra-large' {
-    @media only screen { @content; }
+@function get-screen-max ($keyOrValue) {
+  @if map-has-key($screen-max, $keyOrValue) {
+    @return map-get($screen-max, $keyOrValue);
+  } @else {
+    @return $keyOrValue;
   }
 }
 
-@mixin screen-minimum($media) {
-  @if $media == 'compact' {
-    @media only screen and (max-width: $m3-screen-medium - 1px) { @content; }
+@mixin screen-min ($min) {
+  @if $min == 0 { @content; }
+  @else {
+    @media only screen and (min-width: $min) { @content; }
   }
+}
 
-  @if $media == 'medium' {
-    @media only screen and (min-width: $m3-screen-medium) { @content; }
+@mixin screen-max ($max) {
+  @if $max == 'UNLIMITED' { @content; }
+  @else {
+    @media only screen and (max-width: $max) { @content; }
   }
+}
 
-  @if $media == 'expanded' {
-    @media only screen and (min-width: $m3-screen-expanded) { @content; }
-  }
+@mixin screen-range ($min, $max) {
+  @media only screen and (min-width: $min) and (max-width: $max) { @content; }
+}
 
-  @if $media == 'large' {
-    @media only screen and (min-width: $m3-screen-large) { @content; }
-  }
+@mixin screen ($media) {
+  $max: get-screen-max($media);
+  $min: get-screen-min($media);
 
-  @if $media == 'extra-large' {
-    @media only screen and (min-width: $m3-screen-extra-large) { @content; }
+  @if $min == 0 { @include screen-max($max) { @content; } }
+  @else {
+    @if $max == 'UNLIMITED' { @include screen-min($min) { @content; } }
+    @else { @include screen-range($min, $max) { @content; } }
   }
+}
+
+@mixin screen-from ($media) {
+  @include screen-min(get-screen-min($media)) { @content; }
+}
+
+@mixin screen-to ($media) {
+  @include screen-max(get-screen-max($media)) { @content; }
 }
