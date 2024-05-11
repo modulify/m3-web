@@ -20,10 +20,10 @@
     >
         <div class="m3-rich-tooltip__content">
             <h3
-                v-if="'subheading' in $slots"
-                class="m3-rich-tooltip__subheading"
+                v-if="'heading' in $slots"
+                class="m3-rich-tooltip__heading"
             >
-                <slot name="subheading" />
+                <slot name="heading" />
             </h3>
 
             <slot />
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue'
+import type {PropType, Ref} from 'vue'
 
 import type {
   Boundary,
@@ -72,7 +72,7 @@ import {
 
 defineProps({
   target: {
-    type: Function as PropType<() => Element>,
+    type: [Function, Object] as PropType<(() => Element | null) | Ref<Element | null>>,
     required: true,
   },
 
