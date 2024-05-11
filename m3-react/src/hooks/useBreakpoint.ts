@@ -38,7 +38,7 @@ const calculateBreakpoint = (): BreakpointValue => {
   return new BreakpointValue('extra-large')
 }
 
-export const useBreakpoint = () => {
+export default () => {
   const [breakpoint, setBreakpoint] = useState(new BreakpointValue('compact'))
   const update = () => setBreakpoint(calculateBreakpoint())
 
