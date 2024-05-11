@@ -22,11 +22,14 @@ import {
   useRef,
 } from 'react'
 
-import makeId from '@/utils/id'
+import {
+  useBreakpoint,
+  useId,
+} from '@/hooks'
+
 import { compose } from '@/utils/events'
 import { distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useBreakpoint } from '@/composables/breakpoint'
 import { useM3NavigationAppearance } from './M3NavigationAppearance'
 
 export interface M3NavigationTabProps extends HTMLAttributes<HTMLElement> {
@@ -58,7 +61,7 @@ const M3NavigationTab: ForwardRefRenderFunction<
   M3NavigationTabMethods,
   M3NavigationTabProps
 > = ({
-  id= makeId('m3-navigation-item'),
+  id,
   href,
   label = '',
   active = false,
@@ -85,8 +88,10 @@ const M3NavigationTab: ForwardRefRenderFunction<
 
   const hasLabel = hasSlot('label') || label.length > 0
 
-  const labelIdForDrawer = id + '-label-for-drawer'
-  const labelIdForRail = id + '-label-for-rail'
+  const _id = useId(id, 'm3-navigation-item')
+
+  const labelIdForDrawer = _id + '-label-for-drawer'
+  const labelIdForRail = _id + '-label-for-rail'
   const labelId = inDrawer ? labelIdForDrawer : labelIdForRail
 
   useImperativeHandle(ref, () => ({

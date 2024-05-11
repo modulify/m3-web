@@ -18,13 +18,18 @@ import {
   Children,
   isValidElement,
   useEffect,
-  useState,
 } from 'react'
 
 import { createPortal } from 'react-dom'
+
+import {
+  useBreakpoint,
+  useRecord,
+  useWatch,
+} from '@/hooks'
+
 import { compose } from '@/utils/events'
 import { toClassName } from '@/utils/styling'
-import { useBreakpoint } from '@/composables/breakpoint'
 
 export interface M3NavigationProps extends HTMLAttributes<HTMLElement> {
   appearance?: Appearance;
@@ -104,25 +109,37 @@ const M3Navigation: FC<M3NavigationProps> = ({
   onTransitionEnd = (_) => {},
   ...attrs
 }) => {
-  const appearanceActual: Appearance = expanded ? 'drawer' : appearance
   const breakpoint = useBreakpoint()
+
+  const state = useRecord({
+    appearance: expanded ? 'drawer' : appearance,
+    transitioning: expanded,
+  }, ['appearance', 'transitioning'])
 
   const slots = distinct(children)
 
-  const [transitioning, setTransitioning] = useState(expanded)
+  const handlers = useRecord({
+    onToggle,
+  })
 
-  useEffect(() => {
+  useWatch(onToggle, onToggle => handlers.onToggle = onToggle)
+
+  useWatch(expanded, expanded => {
     if (expanded) {
-      setTransitioning(true)
+      state.transitioning = true
     }
-  }, [expanded])
+  })
 
   useEffect(() => {
     if (appearance === 'auto' && breakpoint.ge('large')) {
-      onToggle(false)
-      setTransitioning(false)
+      handlers.onToggle(false)
+      state.transitioning = false
     }
   }, [appearance, breakpoint])
+
+  useEffect(() => {
+    state.appearance = expanded ? 'drawer' : appearance
+  }, [appearance, expanded]);
 
   return createPortal(
     <>
@@ -138,28 +155,28 @@ const M3Navigation: FC<M3NavigationProps> = ({
       >
         <div
           className="m3-scrim"
-          style={!expanded && !transitioning ? { display: 'none' } : null}
-          onClick={() => onToggle(false)}
+          style={!expanded && !state.transitioning ? { display: 'none' } : null}
+          onClick={() => handlers.onToggle(false)}
         />
       </CSSTransition>
 
       <nav
         className={toClassName([className, {
           ['m3-navigation']: true,
-          ['m3-navigation_' + appearanceActual]: true,
+          ['m3-navigation_' + state.appearance]: true,
           ['m3-navigation_' + alignment]: true,
-          ['m3-navigation_modal']: expanded || transitioning,
+          ['m3-navigation_modal']: expanded || state.transitioning,
         }])}
         onTransitionEnd={compose(() => {
           if (!expanded) {
-            setTransitioning(false)
+            state.transitioning = false
           }
         }, onTransitionEnd)}
         {...attrs}
       >
         {slots.top}
         {slots.header}
-        <M3NavigationAppearance.Provider value={appearanceActual}>
+        <M3NavigationAppearance.Provider value={state.appearance}>
           <M3NavigationSection>
             {slots.subheader}
             {slots.content}
