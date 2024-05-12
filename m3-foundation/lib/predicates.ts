@@ -12,7 +12,7 @@ export const isExactly = <T>(subject: T) => (value: unknown) => value === subjec
 
 export const isHTMLElement = (value: unknown) => value instanceof HTMLElement
 
-export const isNull = (value: unknown) => value === null
+export const isNull = (value: unknown): value is null => value === null
 export const isNumeric = (value: unknown) => !isNaN(Number(value))
 
 export const isShape = (shape: Record<string, [Predicate, boolean] | Predicate>) => {
@@ -29,7 +29,7 @@ export const isShape = (shape: Record<string, [Predicate, boolean] | Predicate>)
   })
 }
 
-export const isString = (value: unknown) => typeof value === 'string'
+export const isString = (value: unknown): value is string => typeof value === 'string'
 
 export const oneOf = (...predicates: Predicate[]): Predicate => {
   return (value: unknown) => predicates.some(p => p(value))
