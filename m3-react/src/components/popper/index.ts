@@ -3,6 +3,11 @@ export type {
   M3PopperProps,
 } from './types'
 
-export { createM3PopperCloserEffect } from './closer'
+export type {
+  M3PopperCloserOptions,
+} from './closer'
 
 export { default as M3Popper } from './M3Popper'
+
+export { default as useM3PopperCloserEffect } from './closer'
+export { default as useM3PopperTarget } from './target'

@@ -31,6 +31,12 @@ export type {
 } from '@/components/navigation'
 
 export type {
+  M3PopperMethods,
+  M3PopperProps,
+  M3PopperCloserOptions,
+} from '@/components/popper'
+
+export type {
   M3RichTooltipMethods,
   M3RichTooltipProps,
 } from '@/components/rich-tooltip'
@@ -80,7 +86,8 @@ export {
 
 export {
   M3Popper,
-  createM3PopperCloserEffect,
+  useM3PopperCloserEffect,
+  useM3PopperTarget,
 } from '@/components/popper'
 
 export {
