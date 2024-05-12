@@ -7,6 +7,8 @@ import {
   useState,
 } from 'react'
 
+import { createM3PopperCloserEffect } from '@/components/popper/closer'
+
 const DeleteTooltip: FC = () => {
   const [target, setTarget] = useState<HTMLElement | null>(null)
 
@@ -24,11 +26,17 @@ const DeleteTooltip: FC = () => {
         This action can not be undone
 
         <M3RichTooltip.Footer>
-          <M3Button appearance="text">
+          <M3Button
+            appearance="text"
+            effects={[createM3PopperCloserEffect()]}
+          >
             Proceed
           </M3Button>
 
-          <M3Button appearance="text">
+          <M3Button
+            appearance="text"
+            effects={[createM3PopperCloserEffect()]}
+          >
             Cancel
           </M3Button>
         </M3RichTooltip.Footer>
