@@ -79,6 +79,11 @@ export {
 } from '@/components/navigation'
 
 export {
+  M3Popper,
+  createM3PopperCloserEffect,
+} from '@/components/popper'
+
+export {
   M3RichTooltip,
 } from '@/components/rich-tooltip'
 
