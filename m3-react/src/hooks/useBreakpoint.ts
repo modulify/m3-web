@@ -38,16 +38,30 @@ const calculateBreakpoint = (): BreakpointValue => {
   return new BreakpointValue('extra-large')
 }
 
+type Subscriber = (value: BreakpointValue) => void
+
+const subscribers = new Set<Subscriber>()
+const subscribe = (subscriber: Subscriber): () => void => {
+  if (!subscribers.has(subscriber)) {
+    subscribers.add(subscriber)
+  }
+
+  return () => { subscribers.delete(subscriber) }
+}
+
+let _breakpoint = new BreakpointValue('compact')
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('resize', () => {
+    _breakpoint = calculateBreakpoint()
+    subscribers.forEach(s => s(_breakpoint))
+  })
+}
+
 export default () => {
-  const [breakpoint, setBreakpoint] = useState(new BreakpointValue('compact'))
-  const update = () => setBreakpoint(calculateBreakpoint())
+  const [breakpoint, setBreakpoint] = useState(_breakpoint)
 
-  useEffect(() => {
-    update()
-    window.addEventListener('resize', update)
-
-    return () => window.removeEventListener('resize', update)
-  }, [])
+  useEffect(() => subscribe(setBreakpoint), [])
 
   return breakpoint
 }
