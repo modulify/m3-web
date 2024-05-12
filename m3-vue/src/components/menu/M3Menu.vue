@@ -47,7 +47,8 @@ import { M3Popper } from '@/components/popper'
 import {
   isHTMLElement,
   isNull,
-  isNumeric, isString,
+  isNumeric,
+  isString,
   oneOf,
 } from '@modulify/m3-foundation/lib/predicates'
 
