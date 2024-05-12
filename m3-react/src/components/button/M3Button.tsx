@@ -9,6 +9,8 @@ import type {
   Focusable,
 } from '@modulify/m3-foundation'
 
+import type { ElementEffect } from '@/hooks/useElementEffect'
+
 import type { M3RippleMethods } from '@/components/ripple'
 
 import { M3Ripple } from '@/components/ripple'
@@ -16,8 +18,11 @@ import { M3Ripple } from '@/components/ripple'
 import {
   forwardRef,
   useImperativeHandle,
+  useMemo,
   useRef,
 } from 'react'
+
+import { useElementEffect } from '@/hooks'
 
 import { compose } from '@/utils/events'
 import { normalize } from '@/utils/content'
@@ -29,6 +34,7 @@ export interface M3ButtonProps extends HTMLAttributes<RootElement> {
   type?: HTMLButtonElement['type'];
   href?: string;
   appearance?: Appearance;
+  effects?: ElementEffect<RootElement>[];
   disabled?: boolean;
 }
 
@@ -41,6 +47,7 @@ const M3Button: ForwardRefRenderFunction<
   type = 'button',
   href = '',
   appearance = 'filled',
+  effects = [],
   disabled = false,
   className = '',
   children = [],
@@ -56,9 +63,11 @@ const M3Button: ForwardRefRenderFunction<
     blur: () => root.current?.blur(),
   }))
 
-  const content = normalize(children)
+  useElementEffect(root, effects)
 
-  const hasText = content.some(([, isIcon]) => !isIcon)
+  const content = useMemo(() => normalize(children), [children])
+
+  const hasText = useMemo(() => content.some(([, isIcon]) => !isIcon), [content])
   const [, hasLeadingIcon] = content[0] ?? [null, false]
   const [, hasTrailingIcon] = content[content.length - 1] ?? [null, false]
 
