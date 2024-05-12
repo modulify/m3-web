@@ -56,3 +56,8 @@ export type CloserEvent<E extends Event = Event> = E & {
   m3PopperClose?: boolean;
   m3PopperCloseAll?: boolean;
 }
+
+export type CloserTarget<E extends Element = Element> = E & {
+  m3PopperCloseAll?: boolean;
+  m3PopperCloserTouch?: Touch;
+}
