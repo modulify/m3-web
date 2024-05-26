@@ -3,8 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { M3Checkbox } from '@/components/checkbox'
 
 import { useState } from 'react'
-
-import makeId from '@/utils/id'
+import { useId } from '@/hooks'
 
 const meta = {
   title: 'Components/M3Checkbox',
@@ -32,7 +31,7 @@ const meta = {
   },
 
   render: (args) => {
-    const id = makeId('m3-checkbox')
+    const id = useId(null, 'm3-checkbox')
     const [model, setModel] = useState(false)
 
     return (

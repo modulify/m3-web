@@ -47,6 +47,11 @@ export type {
 } from '@/components/ripple'
 
 export type {
+  M3ScrollRailMethods,
+  M3ScrollRailProps,
+} from '@/components/scroll-rail'
+
+export type {
   M3SwitchMethods,
   M3SwitchProps,
 } from '@/components/switch'
@@ -97,6 +102,10 @@ export {
 export {
   M3Ripple,
 } from '@/components/ripple'
+
+export {
+  M3ScrollRail,
+} from '@/components/scroll-rail'
 
 export {
   M3Switch,
