@@ -1,4 +1,4 @@
-import type {
+import {
   FC,
   HTMLAttributes,
   ReactNode,
@@ -12,7 +12,11 @@ import { M3Ripple } from '@/components/ripple'
 
 import { useRef } from 'react'
 
-import makeId from '@/utils/id'
+import {
+  useElementEffect,
+  useId,
+  useTarget,
+} from '@/hooks'
 
 import { compose } from '@/utils/events'
 import {
@@ -62,7 +66,7 @@ const Subheading: FC<HTMLAttributes<HTMLElement>> = ({
 )
 
 const M3Card: FC<M3CardProps> = ({
-  id = makeId('m3-card'),
+  id,
   appearance = 'filled',
   heading = '',
   subheading = '',
@@ -74,8 +78,10 @@ const M3Card: FC<M3CardProps> = ({
   onClick = (_) => {},
   ...attrs
 }) => {
+  const _id = useId(id ,'m3-card')
   const state = useRef<HTMLDivElement | null>(null)
   const ripple = useRef<M3RippleMethods | null>(null)
+  const [rippleTarget, setRippleTarget] = useTarget<HTMLDivElement>()
 
   const [slots, content, hasSlot] = distinct(children, {
     content: Content,
@@ -84,18 +90,20 @@ const M3Card: FC<M3CardProps> = ({
     subheading: Subheading,
   })
 
+  useElementEffect(state, setRippleTarget)
+
   const hasHeading = hasSlot('heading') || heading.length > 0
   const hasSubheading = hasSlot('subheading') || subheading.length > 0
 
   const headingId = slots.heading?.props.id ?? null
   const headingEl = slots.heading
-    ? headingId ? slots.heading : augment(slots.heading, { id: id + '-heading' })
+    ? headingId ? slots.heading : augment(slots.heading, { id: _id + '-heading' })
     : heading.length
-      ? <Heading id={id + '-heading'} children={heading} />
+      ? <Heading id={_id + '-heading'} children={heading} />
       : null
 
   const aria = !('aria-label' in attrs) && !hasSlot('content') && hasHeading ? {
-    'aria-labelledby': headingId ?? id + '-heading',
+    'aria-labelledby': headingId ?? _id + '-heading',
   } : {}
 
   return (
@@ -109,18 +117,18 @@ const M3Card: FC<M3CardProps> = ({
       role={role}
       onClick={compose(event => {
         if (interactive) {
-          ripple.current?.activate(event)
+          ripple.current?.activate(event.nativeEvent)
         }
       }, onClick)}
       {...{
-        ...(interactive ? { tabindex: 0 } : {}),
+        ...(interactive ? { tabIndex: 0 } : {}),
         ...aria,
         ...attrs,
       }}
     >
       {interactive ? (
         <div ref={state} className="m3-card__state">
-          <M3Ripple ref={ripple} owner={state}/>
+          <M3Ripple ref={ripple} owner={rippleTarget} />
         </div>
       ) : null}
       {slots.content ?? (<>

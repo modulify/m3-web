@@ -10,4 +10,3 @@ export type {
 export { default as M3Popper } from './M3Popper'
 
 export { default as useM3PopperCloserEffect } from './closer'
-export { default as useM3PopperTarget } from './target'

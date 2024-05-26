@@ -1,4 +1,4 @@
-import type {
+import {
   ForwardRefRenderFunction,
   HTMLAttributes,
 } from 'react'
@@ -19,6 +19,11 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react'
+
+import {
+  useElementEffect,
+  useTarget,
+} from '@/hooks'
 
 import { compose } from '@/utils/events'
 import { toClassName } from '@/utils/styling'
@@ -49,12 +54,15 @@ const M3IconButton: ForwardRefRenderFunction<
 }, ref) => {
   const root = useRef<HTMLButtonElement | null>(null)
   const ripple = useRef<M3RippleMethods | null>(null)
+  const [rippleTarget, setRippleTarget] = useTarget<HTMLButtonElement>()
 
   useImperativeHandle(ref, () => ({
     click: () => root.current?.click(),
     focus: () => root.current?.focus(),
     blur: () => root.current?.blur(),
   }))
+
+  useElementEffect(root, setRippleTarget)
 
   return (
     <button
@@ -69,12 +77,12 @@ const M3IconButton: ForwardRefRenderFunction<
       disabled={disabled}
       onKeyUp={compose(event => {
         if (event.code === 'Enter') {
-          ripple.current?.activate(event)
+          ripple.current?.activate(event.nativeEvent)
         }
       }, onKeyUp)}
       {...attrs}
     >
-      <M3Ripple ref={ripple} owner={root}/>
+      <M3Ripple ref={ripple} owner={rippleTarget} />
       <span className="m3-icon-button__state">
         <M3IconAppearance.Provider value={toggleable && selected ? 'filled' : 'outlined'}>
           {children}

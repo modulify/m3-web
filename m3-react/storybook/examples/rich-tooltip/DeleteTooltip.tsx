@@ -3,13 +3,11 @@ import type { FC } from 'react'
 import { M3Button } from '@/components/button'
 import { M3RichTooltip } from '@/components/rich-tooltip'
 
-import {
-  useM3PopperCloserEffect,
-  useM3PopperTarget,
-} from '@/components/popper'
+import { useM3PopperCloserEffect } from '@/components/popper'
+import { useTarget } from '@/hooks'
 
 const DeleteTooltip: FC = () => {
-  const [target, setTarget] = useM3PopperTarget()
+  const [target, setTarget] = useTarget()
 
   return (
     <>

@@ -22,7 +22,10 @@ import {
   useRef,
 } from 'react'
 
-import { useElementEffect } from '@/hooks'
+import {
+  useElementEffect,
+  useTarget,
+} from '@/hooks'
 
 import { compose } from '@/utils/events'
 import { normalize } from '@/utils/content'
@@ -57,6 +60,8 @@ const M3Button: ForwardRefRenderFunction<
   const root = useRef<HTMLButtonElement | null>(null)
   const ripple = useRef<M3RippleMethods | null>(null)
 
+  const [rippleTarget, setRippleTarget] = useTarget<HTMLButtonElement>()
+
   useImperativeHandle(ref, () => ({
     click: () => root.current?.click(),
     focus: () => root.current?.focus(),
@@ -64,6 +69,7 @@ const M3Button: ForwardRefRenderFunction<
   }))
 
   useElementEffect(root, effects)
+  useElementEffect(root, setRippleTarget)
 
   const content = useMemo(() => normalize(children), [children])
 
@@ -84,12 +90,12 @@ const M3Button: ForwardRefRenderFunction<
       disabled={disabled}
       onKeyUp={compose(event => {
         if (event.code === 'Enter') {
-          ripple.current?.activate(event)
+          ripple.current?.activate(event.nativeEvent)
         }
       }, onKeyUp)}
       {...attrs}
     >
-      <M3Ripple ref={ripple} owner={root} />
+      <M3Ripple ref={ripple} owner={rippleTarget} />
       <span className="m3-button__state">
         {content.map(([child, isIcon], index) => (
           <span

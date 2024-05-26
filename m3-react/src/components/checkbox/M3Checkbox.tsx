@@ -23,7 +23,11 @@ import {
   useRef,
 } from 'react'
 
-import useId from '@/hooks/useId'
+import {
+  useElementEffect,
+  useId,
+  useTarget,
+} from '@/hooks'
 
 import { toClassName } from '@/utils/styling'
 
@@ -64,12 +68,15 @@ const M3Checkbox: ForwardRefRenderFunction<
   const root = useRef<HTMLElement | null>(null)
   const input = useRef<HTMLInputElement | null>(null)
   const ripple = useRef<M3RippleMethods | null>(null)
+  const [rippleTarget, setRippleTarget] = useTarget<HTMLElement>()
 
   useImperativeHandle(ref, () => ({
     click: () => input.current?.click(),
     focus: () => input.current?.focus(),
     blur: () => input.current?.blur(),
   }))
+
+  useElementEffect(root, setRippleTarget)
 
   const contains = useCallback((array: unknown[], value: unknown) => {
     return array.some(v => equalsFn(v, value))
@@ -101,7 +108,7 @@ const M3Checkbox: ForwardRefRenderFunction<
       }])}
       {...args}
     >
-      <M3Ripple ref={ripple} owner={root} />
+      <M3Ripple ref={ripple} owner={rippleTarget} />
 
       <input
         id={useId(id, 'm3-checkbox')}

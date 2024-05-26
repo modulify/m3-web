@@ -19,12 +19,15 @@ import { M3Ripple } from '@/components/ripple'
 import {
   forwardRef,
   useImperativeHandle,
+  useMemo,
   useRef,
 } from 'react'
 
 import {
   useBreakpoint,
+  useElementEffect,
   useId,
+  useTarget,
 } from '@/hooks'
 
 import { compose } from '@/utils/events'
@@ -74,12 +77,15 @@ const M3NavigationTab: ForwardRefRenderFunction<
 }, ref) => {
   const button = useRef<HTMLButtonElement | null>(null)
   const ripple = useRef<M3RippleMethods | null>(null)
+  const [rippleTarget, setRippleTarget] = useTarget<HTMLElement>()
 
-  const [slots, content, hasSlot] = distinct(children, {
+  useElementEffect(button, setRippleTarget)
+
+  const [slots, content, hasSlot] = useMemo(() => distinct(children, {
     icon: Icon,
     label: Label,
     badge: Badge,
-  })
+  }), [children])
 
   const appearance = useM3NavigationAppearance()
   const breakpoint = useBreakpoint()
@@ -126,11 +132,11 @@ const M3NavigationTab: ForwardRefRenderFunction<
         }}
         onKeyUp={compose(event => {
           if (event.code === 'Enter') {
-            ripple.current?.activate(event)
+            ripple.current?.activate(event.nativeEvent)
           }
         }, onKeyUp)}
       >
-        <M3Ripple ref={ripple} owner={button} />
+        <M3Ripple ref={ripple} owner={rippleTarget} />
 
         <span className="m3-navigation-tab__state">
           <M3IconAppearance.Provider value={active ? 'filled' : 'outlined'}>

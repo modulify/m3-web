@@ -1,93 +1,106 @@
 import type {
   ForwardRefRenderFunction,
-  KeyboardEvent as SyntheticKeyboardEvent,
-  MouseEvent as SyntheticMouseEvent,
-  RefObject,
 } from 'react'
 
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
-  useState,
+  useRef,
 } from 'react'
 
+import {
+  useRecord,
+  useWatch,
+} from '@/hooks'
+
 export interface M3RippleProps {
-  owner: RefObject<HTMLElement>;
+  owner: HTMLElement | null;
   centered?: boolean;
 }
 
 export interface M3RippleMethods {
-  activate: (event: SyntheticKeyboardEvent | SyntheticMouseEvent | KeyboardEvent | MouseEvent) => void;
+  activate: (event: KeyboardEvent | MouseEvent) => void;
 }
 
 const M3Ripple: ForwardRefRenderFunction<
   M3RippleMethods,
   M3RippleProps
 > = ({ owner, centered = false }, ref) => {
-  const [active, setActive] = useState(false)
-  const [diameter, setDiameter] = useState(0)
-  const [x, setX] = useState(0)
-  const [y, setY] = useState(0)
+  const root = useRef<HTMLSpanElement | null>(null)
 
-  let lastKey: string | null = null
+  const state = useRecord({
+    centered,
+    owner,
+  })
 
-  const rememberKey = (event: KeyboardEvent) => {
-    lastKey = event.code
-  }
+  useWatch(centered, centered => state.centered = centered)
+  useWatch(owner, owner => state.owner = owner)
 
-  const activate = (event: SyntheticKeyboardEvent | SyntheticMouseEvent | KeyboardEvent | MouseEvent) => {
-    setActive(false)
+  const lastKey = useRef<string | null>(null)
 
-    if (!owner.current) {
+  const activate = useCallback((event: KeyboardEvent | MouseEvent) => {
+    const target = state.owner
+    if (!target) {
       return
     }
 
-    const rect = owner.current.getBoundingClientRect()
-    const center = centered || lastKey === 'Space'
+    const center = state.centered || lastKey.current === 'Space'
 
-    lastKey = null
+    lastKey.current = null
 
-    setDiameter(Math.max(owner.current.clientWidth, owner.current.clientHeight))
-    setX('clientX' in event && !center ? event.clientX - rect.x : owner.current.clientWidth / 2)
-    setY('clientY' in event && !center ? event.clientY - rect.y : owner.current.clientHeight / 2)
+    const el = root.current
+    if (el) {
+      const rect = target.getBoundingClientRect()
+      const hide = () => {
+        el.style.display = 'none'
+        el.removeEventListener('animationend', hide)
+      }
 
-    requestAnimationFrame(() => setActive(true))
-  }
+      hide()
+
+      const diameter = Math.max(target.clientWidth, target.clientHeight)
+      const x = 'clientX' in event && !center ? event.clientX - rect.x : target.clientWidth / 2
+      const y = 'clientY' in event && !center ? event.clientY - rect.y : target.clientHeight / 2
+
+      el.style.width = `${diameter}px`
+      el.style.height = `${diameter}px`
+      el.style.left = `${x - 0.5 * diameter}px`
+      el.style.top = `${y - 0.5 * diameter}px`
+
+      requestAnimationFrame(() => {
+        el.style.display = 'inline-block'
+        el.addEventListener('animationend', hide)
+      })
+    }
+  }, [])
 
   useImperativeHandle(ref, () => ({
     activate,
   }))
 
   useEffect(() => {
-    const el = owner.current
-    if (el) {
-      el.addEventListener('keyup', rememberKey, { passive: true })
-      el.addEventListener('click', activate, { passive: true })
-    }
+    const rememberKey = (event: KeyboardEvent) => lastKey.current = event.code
 
-    return () => {
-      if (el) {
-        el.removeEventListener('click', activate)
-        el.removeEventListener('keyup', rememberKey)
+    if (owner) {
+      owner.addEventListener('keyup', rememberKey, { passive: true })
+      owner.addEventListener('click', activate, { passive: true })
+
+      return () => {
+        owner.removeEventListener('click', activate)
+        owner.removeEventListener('keyup', rememberKey)
       }
     }
+
+    return () => {}
   }, [owner])
 
-  return (
-    active ? (
-      <span
-        className="m3-ripple"
-        onAnimationEnd={() => setActive(false)}
-        style={{
-          width: `${diameter}px`,
-          height: `${diameter}px`,
-          left: `${x - 0.5 * diameter}px`,
-          top: `${y - 0.5 * diameter}px`,
-        }}
-      />
-    ) : null
-  )
+  return <span
+    ref={root}
+    className="m3-ripple"
+    style={{ display: 'none' }}
+  />
 }
 
 export default forwardRef(M3Ripple)

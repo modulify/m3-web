@@ -92,7 +92,6 @@ export {
 export {
   M3Popper,
   useM3PopperCloserEffect,
-  useM3PopperTarget,
 } from '@/components/popper'
 
 export {
