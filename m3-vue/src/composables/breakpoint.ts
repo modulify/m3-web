@@ -2,8 +2,6 @@ import type { Breakpoint } from '@modulify/m3-foundation'
 
 import {
   computed,
-  onBeforeUnmount,
-  onMounted,
   ref,
 } from 'vue'
 
@@ -40,19 +38,12 @@ const calculateBreakpoint = (): BreakpointValue => {
   return new BreakpointValue('extra-large')
 }
 
-export const useBreakpoint = () => {
-  const breakpoint = ref<BreakpointValue>(new BreakpointValue('compact'))
+const breakpoint = ref<BreakpointValue>(new BreakpointValue('compact'))
+const update = () => breakpoint.value = calculateBreakpoint()
 
-  const update = () => breakpoint.value = calculateBreakpoint()
-
-  onMounted(() => {
-    update()
-    window.addEventListener('resize', update)
-  })
-
-  onBeforeUnmount(() => {
-    window.removeEventListener('resize', update)
-  })
-
-  return computed(() => breakpoint.value)
+if (typeof window !== 'undefined') {
+  update()
+  window.addEventListener('resize', update)
 }
+
+export const useBreakpoint = () => computed(() => breakpoint.value)

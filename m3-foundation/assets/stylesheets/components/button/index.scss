@@ -43,7 +43,6 @@
       box-shadow: var(--m3-elevation-2);
     }
 
-    &:not(:disabled):focus,
     &:not(:disabled):active {
       box-shadow: var(--m3-elevation-1);
     }
@@ -68,7 +67,6 @@
       box-shadow: var(--m3-elevation-1);
     }
 
-    &:not(:disabled):focus,
     &:not(:disabled):active {
       box-shadow: none;
     }
@@ -113,7 +111,6 @@
       box-shadow: var(--m3-elevation-1);
     }
 
-    &:not(:disabled):focus,
     &:not(:disabled):active {
       box-shadow: none;
     }

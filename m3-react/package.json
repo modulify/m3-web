@@ -26,7 +26,8 @@
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-transition-group": "^4.4.5"
+    "react-transition-group": "^4.4.5",
+    "react-transition-state": "^2.1.1"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.1.10",
@@ -60,6 +61,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-transition-group": "^4.4.5",
+    "react-transition-state": "^2.1.1",
     "sass": "^1.71.1",
     "storybook": "^8.1.1",
     "ts-node": "^10.9.2",

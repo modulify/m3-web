@@ -1,17 +1,15 @@
 @import './basics/motion';
 
 // Fade
-.m3-transition-fade-enter-active {
+.m3-transition-fade-enter {
+  opacity: 0;
+}
+.m3-transition-fade-enter-active,
+.m3-transition-fade-leave-active {
   opacity: 1;
   transition: m3-sys-motion-emphasized(opacity);
 }
 
-.m3-transition-fade-leave-active {
-  opacity: 1;
-  transition: m3-sys-motion-emphasized(opacity) 0.3s;
-}
-
-.m3-transition-fade-enter,
 .m3-transition-fade-enter-from,
 .m3-transition-fade-leave-to {
   opacity: 0;
@@ -33,4 +31,24 @@
 .m3-transition-slide-right-enter-from,
 .m3-transition-slide-right-leave-to {
   transform: translateX(100%);
+}
+
+// Zoom
+.m3-transition-zoom-enter-active {
+  transition: m3-sys-motion('short4', 'emphasized-accelerate');
+  transform: scale(1);
+  transform-origin: center center;
+  opacity: 1;
+}
+
+.m3-transition-zoom-leave-active {
+  transition: m3-sys-motion('medium4', 'emphasized-decelerate');
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+.m3-transition-zoom-enter,
+.m3-transition-zoom-enter-from,
+.m3-transition-zoom-leave-to {
+  transform: scale(0.65);
 }
