@@ -5,6 +5,8 @@
   width: 100%;
   height: 100%;
   background: rgba($m3-palette-neutral-variant-20, 0.4);
-  position: fixed;
   z-index: 1000;
+  position: fixed;
+  left: 0;
+  top: 0;
 }

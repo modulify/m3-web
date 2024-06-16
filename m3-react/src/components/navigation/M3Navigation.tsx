@@ -18,6 +18,7 @@ import {
   Children,
   isValidElement,
   useEffect,
+  useMemo,
 } from 'react'
 
 import { createPortal } from 'react-dom'
@@ -98,7 +99,6 @@ const distinct = (children: ReactNode) => {
   return { top, header, subheader, content, sections }
 }
 
-// eslint-disable-next-line max-lines-per-function
 const M3Navigation: FC<M3NavigationProps> = ({
   appearance = 'auto',
   alignment = 'top',
@@ -116,7 +116,7 @@ const M3Navigation: FC<M3NavigationProps> = ({
     transitioning: expanded,
   }, ['appearance', 'transitioning'])
 
-  const slots = distinct(children)
+  const slots = useMemo(() => distinct(children), [children])
 
   const handlers = useRecord({
     onToggle,
