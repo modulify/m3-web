@@ -1,4 +1,3 @@
-@use '../../basics/colors';
 @use '../../basics/shape';
 @use '../../basics/motion';
 
@@ -38,9 +37,9 @@
   width: 312px;
   max-width: 560px;
   min-width: 280px;
-  background: colors.$m3-sys-surface-container-high;
+  background: var(--m3-sys-surface-container-high);
   border-radius: 28px;
-  color: colors.$m3-sys-on-surface;
+  color: var(--m3-sys-on-surface);
   flex-direction: column;
   align-items: flex-end;
   z-index: 1;
@@ -56,7 +55,7 @@
     display: flex;
     padding: 24px 24px 0 24px;
     @include shape.m3-shape-corner-top(inherit);
-    color: colors.$m3-sys-on-surface;
+    color: var(--m3-sys-on-surface);
 
     h1, h2, h3, h4, h5, h6 {
       margin-bottom: 0;
@@ -72,7 +71,7 @@
   &__content {
     padding: 24px 24px 0 24px;
     @include shape.m3-shape-corner-top(inherit);
-    color: colors.$m3-sys-on-surface-variant;
+    color: var(--m3-sys-on-surface-variant);
     align-self: stretch;
   }
 

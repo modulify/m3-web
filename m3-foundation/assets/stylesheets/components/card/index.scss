@@ -1,4 +1,3 @@
-@import '../../basics/colors';
 @import '../../basics/shape';
 @import '../../basics/typography';
 
@@ -12,18 +11,18 @@
   align-items: center;
   justify-content: center;
   width: 360px;
-  background: $m3-sys-surface-container-highest;
+  background: var(--m3-sys-surface-container-highest);
   color: var(--m3-sys-on-surface-variant);
   outline: none;
   position: relative;
 
   &_elevated {
-    background: $m3-sys-surface-container-low;
+    background: var(--m3-sys-surface-container-low);
     box-shadow: var(--m3-elevation-1);
   }
 
   &_outlined {
-    background: $m3-sys-surface-container-low;
+    background: var(--m3-sys-surface-container-low);
     border: 1px solid var(--m3-sys-outline-variant);
   }
 
