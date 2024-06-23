@@ -1,9 +1,9 @@
-@import '../../basics/shape';
-@import '../../basics/typography';
+@use '../../basics/shape' as m3-shape;
+@use '../../basics/typography' as m3-typography;
 
 .m3-rich-tooltip {
-  @include m3-shape-corner('medium');
-  @include m3-body-medium;
+  @include m3-shape.corner('medium');
+  @include m3-typography.body-medium;
 
   display: flex;
   padding-bottom: 8px;
@@ -25,7 +25,7 @@
   }
 
   &__heading {
-    @include m3-title-small;
+    @include m3-typography.title-small;
     margin-bottom: 0;
   }
 

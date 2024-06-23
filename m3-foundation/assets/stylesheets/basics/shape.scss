@@ -1,14 +1,16 @@
 $m3-sys-shape-corner-extra-small: 4px;
+$m3-sys-shape-corner-small: 8px;
 $m3-sys-shape-corner-medium: 12px;
 $m3-sys-shape-corner-large: 16px;
 
 $m3-sys-shape-corner-map: (
   'extra-small': $m3-sys-shape-corner-extra-small,
+  'small': $m3-sys-shape-corner-small,
   'medium': $m3-sys-shape-corner-medium,
   'large': $m3-sys-shape-corner-large,
 );
 
-@function m3-sys-shape-corner($keyOrValue) {
+@function get-corner($keyOrValue) {
   @if map-has-key($m3-sys-shape-corner-map, $keyOrValue) {
     @return map-get($m3-sys-shape-corner-map, $keyOrValue);
   } @else {
@@ -16,42 +18,42 @@ $m3-sys-shape-corner-map: (
   }
 }
 
-@mixin m3-shape-corner($radius) {
-  border-radius: m3-sys-shape-corner($radius);
+@mixin corner($radius) {
+  border-radius: get-corner($radius);
 }
 
-@mixin m3-shape-corner-left($radius) {
-  border-top-left-radius: m3-sys-shape-corner($radius);
-  border-bottom-left-radius: m3-sys-shape-corner($radius);
+@mixin corner-left($radius) {
+  border-top-left-radius: get-corner($radius);
+  border-bottom-left-radius: get-corner($radius);
 }
 
-@mixin m3-shape-corner-top($radius) {
-  border-top-left-radius: m3-sys-shape-corner($radius);
-  border-top-right-radius: m3-sys-shape-corner($radius);
+@mixin corner-top($radius) {
+  border-top-left-radius: get-corner($radius);
+  border-top-right-radius: get-corner($radius);
 }
 
-@mixin m3-shape-corner-right($radius) {
-  border-top-right-radius: m3-sys-shape-corner($radius);
-  border-bottom-right-radius: m3-sys-shape-corner($radius);
+@mixin corner-right($radius) {
+  border-top-right-radius: get-corner($radius);
+  border-bottom-right-radius: get-corner($radius);
 }
 
-@mixin m3-shape-corner-bottom($radius) {
-  border-bottom-left-radius: m3-sys-shape-corner($radius);
-  border-bottom-right-radius: m3-sys-shape-corner($radius);
+@mixin corner-bottom($radius) {
+  border-bottom-left-radius: get-corner($radius);
+  border-bottom-right-radius: get-corner($radius);
 }
 
-@mixin m3-shape-square($size) {
+@mixin square($size) {
   width: $size;
   height: $size;
 }
 
-@mixin m3-shape-circle($diameter) {
+@mixin circle($diameter) {
   width: $diameter;
   height: $diameter;
   border-radius: 50%;
 }
 
-@mixin m3-shape-reset-box-sizing() {
+@mixin reset-box-sizing() {
   &,
   &::before,
   &::after,

@@ -1,8 +1,8 @@
-@import '../../basics/shape';
-@import '../../basics/typography';
+@use '../../basics/shape' as m3-shape;
+@use '../../basics/typography' as m3-typography;
 
 .m3-menu {
-  @include m3-shape-corner('extra-small');
+  @include m3-shape.corner('extra-small');
 
   display: flex;
   width: 200px;
@@ -53,7 +53,7 @@
   }
 
   &__icon {
-    @include m3-shape-square(24px);
+    @include m3-shape.square(24px);
 
     display: flex;
     align-items: center;
@@ -62,7 +62,7 @@
   }
 
   &__content {
-    @include m3-body-large;
+    @include m3-typography.body-large;
 
     display: flex;
     flex-direction: column;

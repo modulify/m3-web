@@ -1,8 +1,8 @@
-@import "../../basics/motion";
+@use "../../basics/motion" as m3-motion;
 
 .m3-icon-button {
   --m3-ripple-color: var(--m3-state-layers-primary-opacity-020);
-  --m3-ripple-effect-duration: #{m3-sys-motion-duration('extra-long1')};
+  --m3-ripple-effect-duration: #{m3-motion.duration('extra-long1')};
   display: inline-block;
   width: 40px;
   height: 40px;
@@ -12,8 +12,8 @@
   font-size: 0;
   overflow: hidden;
   transition:
-    m3-sys-motion-standard(background),
-    m3-sys-motion-standard(color)
+    m3-motion.timing-standard(background),
+    m3-motion.timing-standard(color)
   ;
   position: relative;
 

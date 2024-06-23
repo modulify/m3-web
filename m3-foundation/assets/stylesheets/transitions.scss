@@ -1,4 +1,4 @@
-@import './basics/motion';
+@use './basics/motion' as m3-motion;
 
 // Fade
 .m3-transition-fade-enter {
@@ -7,7 +7,7 @@
 .m3-transition-fade-enter-active,
 .m3-transition-fade-leave-active {
   opacity: 1;
-  transition: m3-sys-motion-emphasized(opacity);
+  transition: m3-motion.timing-emphasized(opacity);
 }
 
 .m3-transition-fade-enter-from,
@@ -16,8 +16,8 @@
 }
 
 // Slide left
-.m3-transition-slide-left-enter-active { transition: m3-sys-motion-emphasized-accelerate(transform); }
-.m3-transition-slide-left-leave-active { transition: m3-sys-motion-emphasized-decelerate(transform); }
+.m3-transition-slide-left-enter-active { transition: m3-motion.timing-emphasized-accelerate(transform); }
+.m3-transition-slide-left-leave-active { transition: m3-motion.timing-emphasized-decelerate(transform); }
 .m3-transition-slide-left-enter,
 .m3-transition-slide-left-enter-from,
 .m3-transition-slide-left-leave-to {
@@ -25,8 +25,8 @@
 }
 
 // Slide right
-.m3-transition-slide-right-enter-active { transition: m3-sys-motion-emphasized-accelerate(transform); }
-.m3-transition-slide-right-leave-active { transition: m3-sys-motion-emphasized-decelerate(transform, 'long2') 0.3s; }
+.m3-transition-slide-right-enter-active { transition: m3-motion.timing-emphasized-accelerate(transform); }
+.m3-transition-slide-right-leave-active { transition: m3-motion.timing-emphasized-decelerate(transform, 'long2') 0.3s; }
 .m3-transition-slide-right-enter,
 .m3-transition-slide-right-enter-from,
 .m3-transition-slide-right-leave-to {
@@ -35,14 +35,14 @@
 
 // Zoom
 .m3-transition-zoom-enter-active {
-  transition: m3-sys-motion('short4', 'emphasized-accelerate');
+  transition: m3-motion.timing('short4', 'emphasized-accelerate');
   transform: scale(1);
   transform-origin: center center;
   opacity: 1;
 }
 
 .m3-transition-zoom-leave-active {
-  transition: m3-sys-motion('medium4', 'emphasized-decelerate');
+  transition: m3-motion.timing('medium4', 'emphasized-decelerate');
   transform: scale(0.8);
   opacity: 0;
 }

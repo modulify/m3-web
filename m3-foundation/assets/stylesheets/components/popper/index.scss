@@ -1,11 +1,11 @@
-@import "../../basics/motion";
+@use "../../basics/motion" as m3-motion;
 
 .m3-popper {
   visibility: hidden;
   opacity: 0;
   transition:
-    m3-sys-motion-standard-decelerate(opacity),
-    m3-sys-motion-standard-decelerate(visibility)
+    m3-motion.timing-standard-decelerate(opacity),
+    m3-motion.timing-standard-decelerate(visibility)
   ;
   position: absolute;
   top: 0;
@@ -15,8 +15,8 @@
     visibility: visible;
     opacity: 1;
     transition:
-      m3-sys-motion-standard-accelerate(opacity),
-      m3-sys-motion-standard-accelerate(visibility)
+      m3-motion.timing-standard-accelerate(opacity),
+      m3-motion.timing-standard-accelerate(visibility)
     ;
   }
 }

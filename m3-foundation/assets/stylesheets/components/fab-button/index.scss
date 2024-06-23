@@ -1,6 +1,6 @@
-@import '../../basics/motion';
-@import '../../basics/shape';
-@import '../../basics/typography';
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/shape' as m3-shape;
+@use '../../basics/typography' as m3-typography;
 
 .m3-fab-button {
   --m3-ripple-color: var(--m3-state-layers-on-primary-container-opacity-012);
@@ -17,9 +17,9 @@
   outline: none;
   overflow: hidden;
   transition:
-    m3-sys-motion-standard(background),
-    m3-sys-motion-standard(border-radius),
-    m3-sys-motion-standard(color)
+    m3-motion.timing-standard(background),
+    m3-motion.timing-standard(border-radius),
+    m3-motion.timing-standard(color)
   ;
   position: relative;
 
@@ -68,9 +68,9 @@
     background: transparent;
     border-radius: inherit;
     transition:
-      m3-sys-motion-standard(padding),
-      m3-sys-motion-standard(gap),
-      m3-sys-motion-standard(background)
+      m3-motion.timing-standard(padding),
+      m3-motion.timing-standard(gap),
+      m3-motion.timing-standard(background)
     ;
   }
 
@@ -113,38 +113,34 @@
   &_has-trailing-icon#{&}_lg &__state { padding-left: 37.5px; }
 
   &__icon {
-    @include m3-shape-square(24px);
+    @include m3-shape.square(24px);
     --m3-icon-size: 24px;
     display: inline-flex;
     transition:
-      m3-sys-motion-standard(width),
-      m3-sys-motion-standard(height)
+      m3-motion.timing-standard(width),
+      m3-motion.timing-standard(height)
     ;
   }
 
   &__icon > * {
-    @include m3-shape-square(100%);
-    transition:
-      m3-sys-motion-standard(font-size)
-    ;
+    @include m3-shape.square(100%);
+    transition: m3-motion.timing-standard(font-size);
   }
 
   &_lg &__icon {
-    @include m3-shape-square(36px);
+    @include m3-shape.square(36px);
     --m3-icon-size: 36px;
   }
 
   &__text {
-    @include m3-label-large();
     display: inline-flex;
+    @include m3-typography.label-large;
     align-items: center;
-    transition:
-      m3-sys-motion-standard(font-size)
-    ;
+    transition: m3-motion.timing-standard(font-size);
   }
 
   &_lg &__text {
-    @include m3-title-large();
+    @include m3-typography.title-large;
   }
 
   &:disabled &__icon,

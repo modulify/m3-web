@@ -1,21 +1,19 @@
-@import '../../basics/shape';
-@import '../../basics/typography';
+@use '../../basics/shape' as m3-shape;
+@use '../../basics/typography' as m3-typography;
 
 .m3-badge {
-  @include m3-shape-circle(6px);
-
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @include m3-shape.circle(6px);
   background: var(--m3-sys-error);
   color: var(--m3-sys-on-error);
+  align-items: center;
+  justify-content: center;
 
   &_labelled {
-    @include m3-label-small();
-
     width: auto;
     height: 16px;
     padding: 4px;
-    border-radius: 8px;
+    @include m3-shape.corner('small');
+    @include m3-typography.label-small;
   }
 }

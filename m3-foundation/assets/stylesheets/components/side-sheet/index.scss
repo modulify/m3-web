@@ -1,8 +1,8 @@
-@import '../../basics/shape';
-@import '../../basics/typography';
+@use '../../basics/shape' as m3-shape;
+@use '../../basics/typography' as m3-typography;
 
 .m3-side-sheet {
-  @include m3-shape-corner-left('large');
+  @include m3-shape.corner-left('large');
 
   display: flex;
   min-width: 320px;
@@ -19,7 +19,7 @@
   z-index: 1000;
 
   &_docked {
-    @include m3-shape-corner(0);
+    @include m3-shape.corner(0);
     width: 256px;
     min-width: 256px;
   }
@@ -47,7 +47,7 @@
   }
 
   &__title {
-    @include m3-title-large;
+    @include m3-typography.title-large;
     flex: 1 0 0;
     padding-top: 12px;
   }

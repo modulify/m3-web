@@ -1,15 +1,15 @@
-@import '../../basics/motion';
-@import '../../basics/typography';
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/typography' as m3-typography;
+
 @import './variables.scss';
 
 .m3-text-field {
-  @include m3-body-large;
-
   display: inline-flex;
   flex-direction: column;
   background: var(--m3-sys-surface-container-highest);
   border-radius: $m3-text-field-border-radius $m3-text-field-border-radius 0 0;
   color: var(--m3-sys-on-surface-variant);
+  @include m3-typography.body-large;
   position: relative;
 
   --m3-text-field-border-width: 1px;
@@ -27,8 +27,6 @@
 
   input,
   textarea {
-    @include m3-body-large;
-
     display: block;
     flex-grow: 1;
     width: 100%;
@@ -36,6 +34,7 @@
     background: transparent;
     border: none;
     color: var(--m3-sys-on-surface);
+    @include m3-typography.body-large;
     z-index: 2;
 
     &::placeholder {
@@ -71,15 +70,15 @@
   &__label {
     display: inline-block;
     transition:
-      m3-sys-motion-standard(width),
-      m3-sys-motion-standard(font-size),
-      m3-sys-motion-standard(line-height)
+      m3-motion.timing-standard(width),
+      m3-motion.timing-standard(font-size),
+      m3-motion.timing-standard(line-height)
     ;
   }
 
   &_filled &__label,
   &_focused &__label {
-    @include m3-text-size-small;
+    @include m3-typography.size-small;
   }
 
   &_focused &__label {
@@ -141,8 +140,8 @@
     border-right: none;
     border-radius: $m3-text-field-border-radius 0 0 $m3-text-field-border-radius;
     transition:
-      m3-sys-motion-standard(border, 'short2'),
-      m3-sys-motion-standard(width)
+      m3-motion.timing-standard(border, 'short2'),
+      m3-motion.timing-standard(width)
     ;
   }
 
@@ -161,16 +160,16 @@
     border-left: none;
     border-right: none;
     transition:
-      m3-sys-motion-standard(padding-left),
-      m3-sys-motion-standard(padding-right),
-      m3-sys-motion-standard(border, 'short2')
+      m3-motion.timing-standard(padding-left),
+      m3-motion.timing-standard(padding-right),
+      m3-motion.timing-standard(border, 'short2')
     ;
     position: relative;
   }
 
   &__outline-notch &__label {
     width: 100%;
-    animation: m3-sys-motion-standard(m3-text-field-outlined-label-slide-out);
+    animation: m3-motion.timing-standard(m3-text-field-outlined-label-slide-out);
   }
 
   &_filled &__outline-notch,
@@ -183,15 +182,15 @@
 
   &_filled &__outline-notch &__label,
   &_focused &__outline-notch &__label {
+    animation: m3-motion.timing-standard(m3-text-field-outlined-label-slide-in);
     transform: translate3d(0, -28px, 0);
-    animation: m3-sys-motion-standard(m3-text-field-outlined-label-slide-in);
   }
 
   &__outline-trailing {
     flex-grow: 1;
     border-left: none;
     border-radius: 0 $m3-text-field-border-radius $m3-text-field-border-radius 0;
-    transition: m3-sys-motion-standard(border, 'short2');
+    transition: m3-motion.timing-standard(border, 'short2');
   }
 
   &__state {
@@ -200,7 +199,7 @@
     padding: 4px 16px;
     background: transparent;
     border-radius: $m3-text-field-border-radius $m3-text-field-border-radius 0 0;
-    transition: m3-sys-motion-standard(background-color);
+    transition: m3-motion.timing-standard(background-color);
   }
 
   &_outlined &__state {
@@ -226,13 +225,13 @@
 
   &_has-leading:not(&_outlined) &__label {
     left: 48px;
-    animation: m3-sys-motion-standard(m3-text-field-label-slide-out);
+    animation: m3-motion.timing-standard(m3-text-field-label-slide-out);
   }
 
   &_filled:not(&_outlined) &__label,
   &_focused:not(&_outlined) &__label {
     transform: translate3d(0, -8px, 0);
-    animation: m3-sys-motion-standard(m3-text-field-label-slide-in);
+    animation: m3-motion.timing-standard(m3-text-field-label-slide-in);
   }
 
   &__icon {
@@ -251,7 +250,7 @@
     width: 100%;
     height: var(--m3-text-field-border-width);
     background: var(--m3-sys-on-surface-variant);
-    transition: m3-sys-motion-standard(height, 'short2');
+    transition: m3-motion.timing-standard(height, 'short2');
     position: absolute;
     bottom: 0;
 
@@ -263,7 +262,7 @@
       position: absolute;
       left: 50%;
       bottom: 0;
-      transition: m3-sys-motion-standard(all);
+      transition: m3-motion.timing-standard(all);
     }
   }
 

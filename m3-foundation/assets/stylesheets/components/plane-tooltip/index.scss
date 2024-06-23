@@ -1,13 +1,12 @@
-@import '../../basics/shape';
-@import '../../basics/typography';
+@use '../../basics/shape' as m3-shape;
+@use '../../basics/typography' as m3-typography;
 
 .m3-plane-tooltip {
-  @include m3-shape-corner('extra-small');
-  @include m3-body-small;
-
   min-height: 24px;
   padding: 4px 8px;
   background: var(--m3-sys-inverse-surface);
+  @include m3-shape.corner('extra-small');
   color: var(--m3-sys-inverse-on-surface);
+  @include m3-typography.body-small;
   z-index: 11;
 }

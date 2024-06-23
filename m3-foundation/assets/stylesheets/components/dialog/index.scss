@@ -1,5 +1,5 @@
-@use '../../basics/shape';
-@use '../../basics/motion';
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/shape' as m3-shape;
 
 .m3-dialog-container {
   display: flex;
@@ -24,7 +24,7 @@
 
 .m3-dialog-appear-enter-active,
 .m3-dialog-appear-leave-active {
-  transition: motion.m3-sys-motion('long2', 'emphasized');
+  transition: m3-motion.timing('long2', 'emphasized');
   transform: translateY(0);
 }
 
@@ -47,14 +47,14 @@
   &__icon {
     display: flex;
     padding: 24px 24px 0 24px;
-    @include shape.m3-shape-corner-top(inherit);
+    @include m3-shape.corner-top(inherit);
     justify-content: center;
   }
 
   &__header {
     display: flex;
     padding: 24px 24px 0 24px;
-    @include shape.m3-shape-corner-top(inherit);
+    @include m3-shape.corner-top(inherit);
     color: var(--m3-sys-on-surface);
 
     h1, h2, h3, h4, h5, h6 {
@@ -64,26 +64,26 @@
 
   &__icon + &__header {
     padding-top: 16px;
-    @include shape.m3-shape-corner-top(0);
+    @include m3-shape.corner-top(0);
     justify-content: center;
   }
 
   &__content {
     padding: 24px 24px 0 24px;
-    @include shape.m3-shape-corner-top(inherit);
+    @include m3-shape.corner-top(inherit);
     color: var(--m3-sys-on-surface-variant);
     align-self: stretch;
   }
 
   &__header + &__content {
     padding-top: 16px;
-    @include shape.m3-shape-corner-top(0);
+    @include m3-shape.corner-top(0);
   }
 
   &__footer {
     display: flex;
     padding: 24px;
-    @include shape.m3-shape-corner-bottom(inherit);
+    @include m3-shape.corner-bottom(inherit);
     align-items: center;
     align-self: stretch;
     justify-content: flex-end;

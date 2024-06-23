@@ -1,135 +1,128 @@
-@mixin m3-font {
+@mixin font-normal($weight: 400) {
   font-family: 'Roboto', sans-serif;
-}
-
-@mixin m3-font-normal($weight: 400) {
-  @include m3-font;
-
   font-style: normal;
   font-weight: $weight;
 }
 
-@mixin m3-text-size-large {
+@mixin size-large {
   font-size: 16px;
   line-height: 24px; /* 150% */
 }
 
-@mixin m3-text-size-medium {
+@mixin size-medium {
   font-size: 14px;
   line-height: 20px; /* 142.857% */
 }
 
-@mixin m3-text-size-small {
+@mixin size-small {
   font-size: 12px;
   line-height: 16px; /* 133.333% */
 }
 
-@mixin m3-display-large {
-  @include m3-font-normal;
+@mixin display-large {
+  @include font-normal;
 
   font-size: 57px;
   line-height: 64px; /* 112.281% */
   letter-spacing: -0.25px;
 }
 
-@mixin m3-display-medium {
-  @include m3-font-normal;
+@mixin display-medium {
+  @include font-normal;
 
   font-size: 45px;
   line-height: 52px; /* 115.556% */
 }
 
-@mixin m3-display-small {
-  @include m3-font-normal;
+@mixin display-small {
+  @include font-normal;
 
   font-size: 36px;
   line-height: 44px; /* 122.222% */
 }
 
-@mixin m3-headline-large {
-  @include m3-font-normal;
+@mixin headline-large {
+  @include font-normal;
 
   font-size: 32px;
   line-height: 40px; /* 125% */
 }
 
-@mixin m3-headline-medium {
-  @include m3-font-normal;
+@mixin headline-medium {
+  @include font-normal;
 
   font-size: 28px;
   line-height: 36px; /* 128.571% */
 }
 
-@mixin m3-headline-small {
-  @include m3-font-normal;
+@mixin headline-small {
+  @include font-normal;
 
   font-size: 24px;
   line-height: 32px; /* 133.333% */
 }
 
-@mixin m3-title-large {
-  @include m3-font-normal;
+@mixin title-large {
+  @include font-normal;
 
   font-size: 22px;
   line-height: 28px; /* 127.273% */
 }
 
-@mixin m3-title-medium {
-  @include m3-font-normal(500);
-  @include m3-text-size-large;
+@mixin title-medium {
+  @include font-normal(500);
+  @include size-large;
 
   letter-spacing: 0.15px;
 }
 
-@mixin m3-title-small {
-  @include m3-font-normal(500);
-  @include m3-text-size-medium;
+@mixin title-small {
+  @include font-normal(500);
+  @include size-medium;
 }
 
-@mixin m3-label-large {
-  @include m3-font-normal(500);
-  @include m3-text-size-medium;
+@mixin label-large {
+  @include font-normal(500);
+  @include size-medium;
 
   letter-spacing: 0.1px;
 }
 
-@mixin m3-label-medium {
-  @include m3-font-normal(500);
-  @include m3-text-size-small;
+@mixin label-medium {
+  @include font-normal(500);
+  @include size-small;
 
   letter-spacing: 0.5px;
 }
 
-@mixin m3-label-medium-prominent {
-  @include m3-font-normal(600);
-  @include m3-text-size-small;
+@mixin label-medium-prominent {
+  @include font-normal(600);
+  @include size-small;
 
   letter-spacing: 0.5px;
 }
 
-@mixin m3-label-small {
-  @include m3-font-normal(500);
+@mixin label-small {
+  @include font-normal(500);
 
   font-size: 11px;
   line-height: 16px; /* 145.455% */
   letter-spacing: 0.5px;
 }
 
-@mixin m3-body-large {
-  @include m3-font-normal;
-  @include m3-text-size-large;
-
+@mixin body-large {
+  @include font-normal;
+  @include size-large;
   letter-spacing: 0.5px;
 }
 
-@mixin m3-body-medium {
-  @include m3-font-normal;
-  @include m3-text-size-medium;
-
+@mixin body-medium {
+  @include font-normal;
+  @include size-medium;
   letter-spacing: 0.25px;
 }
 
-@mixin m3-body-small {
-  @include m3-font-normal;
-  @include m3-text-size-small;
+@mixin body-small {
+  @include font-normal;
+  @include size-small;
 }

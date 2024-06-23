@@ -1,8 +1,8 @@
-@import "../../basics/motion";
-@import "../../basics/shape";
+@use "../../basics/motion" as m3-motion;
+@use "../../basics/shape" as m3-shape;
 
 .m3-checkbox {
-  @include m3-shape-reset-box-sizing();
+  @include m3-shape.reset-box-sizing;
 
   --m3-ripple-color: var(--m3-state-layers-primary-opacity-020);
   --m3-ripple-effect-duration: 0.75s;
@@ -62,8 +62,8 @@
       left: 3px;
       top: 3px;
       transition:
-        m3-sys-motion-standard(background-color),
-        m3-sys-motion-standard(border-color)
+        m3-motion.timing-standard(background-color),
+        m3-motion.timing-standard(border-color)
       ;
     }
 
@@ -99,7 +99,7 @@
     border-radius: inherit;
     opacity: 0;
     overflow: hidden;
-    animation: m3-sys-motion-standard(m3-animation-zoom-out);
+    animation: m3-motion.timing-standard(m3-animation-zoom-out);
     animation-fill-mode: forwards;
     z-index: 0;
     position: absolute;
@@ -109,7 +109,7 @@
 
   &__input:hover ~ &__state,
   &__input:focus ~ &__state {
-    animation: m3-sys-motion-standard(m3-animation-zoom-in);
+    animation: m3-motion.timing-standard(m3-animation-zoom-in);
     animation-fill-mode: forwards;
   }
 

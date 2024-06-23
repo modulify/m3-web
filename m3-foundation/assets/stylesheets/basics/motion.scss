@@ -49,7 +49,7 @@ $m3-sys-motion-duration-map: (
   'extra-long4': $m3-sys-motion-duration-extra-long4
 );
 
-@function m3-sys-motion-duration($type) {
+@function duration($type) {
   @if map-has-key($m3-sys-motion-duration-map, $type) {
     @return map-get($m3-sys-motion-duration-map, $type);
   } @else {
@@ -79,7 +79,7 @@ $m3-sys-motion-easing-map: (
   'standard-decelerate': $m3-sys-motion-easing-standard-decelerate,
 );
 
-@function m3-sys-motion-easing($key) {
+@function easing($key) {
   @if map-has-key($m3-sys-motion-easing-map, $key) {
     @return map-get($m3-sys-motion-easing-map, $key);
   } @else {
@@ -88,30 +88,30 @@ $m3-sys-motion-easing-map: (
   }
 }
 
-@function m3-sys-motion($duration, $easing) {
-  @return #{m3-sys-motion-duration($duration)} + ' ' + #{m3-sys-motion-easing($easing)}
+@function timing($duration, $easing) {
+  @return #{duration($duration)} + ' ' + #{easing($easing)}
 }
 
-@function m3-sys-motion-emphasized($property, $duration: 'long2') {
-  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'emphasized')}
+@function timing-emphasized($property, $duration: 'long2') {
+  @return #{$property} + ' ' + #{timing($duration, 'emphasized')}
 }
 
-@function m3-sys-motion-emphasized-accelerate($property, $duration: 'short4') {
-  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'emphasized-accelerate')}
+@function timing-emphasized-accelerate($property, $duration: 'short4') {
+  @return #{$property} + ' ' + #{timing($duration, 'emphasized-accelerate')}
 }
 
-@function m3-sys-motion-emphasized-decelerate($property, $duration: 'medium4') {
-  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'emphasized-decelerate')}
+@function timing-emphasized-decelerate($property, $duration: 'medium4') {
+  @return #{$property} + ' ' + #{timing($duration, 'emphasized-decelerate')}
 }
 
-@function m3-sys-motion-standard($property, $duration: 'medium2') {
-  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'standard')}
+@function timing-standard($property, $duration: 'medium2') {
+  @return #{$property} + ' ' + #{timing($duration, 'standard')}
 }
 
-@function m3-sys-motion-standard-accelerate($property, $duration: 'short4') {
-  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'standard-accelerate')}
+@function timing-standard-accelerate($property, $duration: 'short4') {
+  @return #{$property} + ' ' + #{timing($duration, 'standard-accelerate')}
 }
 
-@function m3-sys-motion-standard-decelerate($property, $duration: 'medium1') {
-  @return #{$property} + ' ' + #{m3-sys-motion($duration, 'standard-decelerate')}
+@function timing-standard-decelerate($property, $duration: 'medium1') {
+  @return #{$property} + ' ' + #{timing($duration, 'standard-decelerate')}
 }

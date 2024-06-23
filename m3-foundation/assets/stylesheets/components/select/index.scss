@@ -1,4 +1,4 @@
-@import "../../basics/motion";
+@use "../../basics/motion" as m3-motion;
 
 .m3-select {
   &__field {
@@ -6,11 +6,11 @@
   }
 
   &__caret {
-    animation: m3-sys-motion-standard(m3-rotate-90deg-back) forwards;
+    animation: m3-motion.timing-standard(m3-rotate-90deg-back) forwards;
   }
 
   &_expanded &__caret {
-    animation: m3-sys-motion-standard(m3-rotate-90deg) forwards;
+    animation: m3-motion.timing-standard(m3-rotate-90deg) forwards;
   }
 
   &__scroll-box {

@@ -1,5 +1,5 @@
-@import '../../basics/motion';
-@import '../../basics/typography';
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/typography' as m3-typography;
 
 .m3-button {
   --m3-icon-size: 18px;
@@ -17,8 +17,8 @@
   outline: none;
   overflow: hidden;
   transition:
-    m3-sys-motion-standard(background),
-    m3-sys-motion-standard(color)
+    m3-motion.timing-standard(background),
+    m3-motion.timing-standard(color)
   ;
   position: relative;
 
@@ -121,7 +121,7 @@
   }
 
   &__state {
-    @include m3-label-large;
+    @include m3-typography.label-large;
 
     display: flex;
     flex: 1 0 0;
@@ -135,7 +135,7 @@
     background: transparent;
     border-radius: inherit;
     overflow: hidden;
-    transition: m3-sys-motion-standard(background);
+    transition: m3-motion.timing-standard(background);
     position: relative;
   }
 

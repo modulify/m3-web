@@ -1,11 +1,11 @@
-@import "./motion";
+@use "./motion" as m3-motion;
 
 @mixin m3-transition-zoom-in($duration, $easing) {
   opacity: 1;
   transform: scale(1);
   transition:
-    transform m3-sys-motion($duration, $easing),
-    opacity m3-sys-motion($duration, $easing)
+    transform m3-motion.timing($duration, $easing),
+    opacity m3-motion.timing($duration, $easing)
   ;
 }
 
@@ -13,7 +13,7 @@
   opacity: 0;
   transform: scale(0);
   transition:
-    transform m3-sys-motion($duration, $easing),
-    opacity m3-sys-motion($duration, $easing)
+    transform m3-motion.timing($duration, $easing),
+    opacity m3-motion.timing($duration, $easing)
   ;
 }

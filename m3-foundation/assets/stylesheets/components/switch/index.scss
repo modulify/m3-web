@@ -1,8 +1,8 @@
-@import "../../basics/motion";
-@import "../../basics/shape";
+@use "../../basics/motion" as m3-motion;
+@use "../../basics/shape" as m3-shape;
 
 .m3-switch {
-  @include m3-shape-reset-box-sizing();
+  @include m3-shape.reset-box-sizing;
 
   display: flex;
   width: 52px;
@@ -14,8 +14,8 @@
   border-radius: 100px;
   cursor: pointer;
   transition:
-    m3-sys-motion-standard(background-color),
-    m3-sys-motion-standard(border-color)
+    m3-motion.timing-standard(background-color),
+    m3-motion.timing-standard(border-color)
   ;
   position: relative;
 
@@ -49,12 +49,11 @@
   }
 
   &__handle {
-    @include m3-shape-square(28px);
-
     display: flex;
+    @include m3-shape.square(28px);
     align-items: center;
     justify-content: center;
-    transition: m3-sys-motion-standard(transform);
+    transition: m3-motion.timing-standard(transform);
     position: relative;
   }
 
@@ -63,14 +62,12 @@
   }
 
   &__state {
-    @include m3-shape-square(40px);
-
     display: inline-flex;
-    border-radius: 50%;
+    @include m3-shape.circle(40px);
     background: var(--m3-state-layers-on-surface-opacity-008);
-    animation: m3-sys-motion-standard(m3-animation-zoom-out);
+    animation: m3-motion.timing-standard(m3-animation-zoom-out);
     animation-fill-mode: forwards;
-    transition: m3-sys-motion-standard(background-color);
+    transition: m3-motion.timing-standard(background-color);
     position: absolute;
     left: -6px;
     top: -6px;
@@ -82,7 +79,7 @@
 
   &:not(&_disabled) &__input:hover ~ &__handle &__state,
   &:not(&_disabled) &__input:focus ~ &__handle &__state {
-    animation: m3-sys-motion-standard(m3-animation-zoom-in);
+    animation: m3-motion.timing-standard(m3-animation-zoom-in);
     animation-fill-mode: forwards;
   }
 
@@ -95,21 +92,19 @@
   }
 
   &__checkmark {
-    @include m3-shape-square(16px);
-
     --background: var(--m3-sys-outline);
 
     display: inline-flex;
+    @include m3-shape.circle(16px);
     background: var(--background);
-    border-radius: 50%;
     align-items: center;
     justify-content: center;
     color: var(--m3-sys-surface-container-highest);
     transition:
-      m3-sys-motion-standard(width, 'long4'),
-      m3-sys-motion-standard(height, 'long4'),
-      m3-sys-motion-standard(background-color)
-      m3-sys-motion-standard(opacity)
+      m3-motion.timing-standard(width, 'long4'),
+      m3-motion.timing-standard(height, 'long4'),
+      m3-motion.timing-standard(background-color)
+      m3-motion.timing-standard(opacity)
     ;
   }
 
@@ -118,15 +113,15 @@
   }
 
   &:not(&_disabled) &__input:active ~ &__handle &__checkmark {
-    @include m3-shape-square(28px);
+    @include m3-shape.square(28px);
   }
 
   &__handle_has-icon &__checkmark {
-    @include m3-shape-square(24px);
+    @include m3-shape.square(24px);
   }
 
   &_checked &__checkmark {
-    @include m3-shape-square(24px);
+    @include m3-shape.square(24px);
     background: var(--m3-sys-on-primary);
     color: var(--m3-sys-on-primary-container);
   }

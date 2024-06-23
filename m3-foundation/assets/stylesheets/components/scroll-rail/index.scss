@@ -1,10 +1,9 @@
-@import '../../basics/motion';
+@use '../../basics/motion' as m3-motion;
 
 .m3-scroll-rail {
   $rail-thickness: var(--m3-scroll-rail-thickness, 12px);
   $slider-thickness: var(--m3-scroll-slider-thickness, 6px);
   $slider-thickness-on-hover: var(--m3-scroll-slider-thickness-on-hover, 8px);
-  $slider-rounding: var(--m3-scroll-slider-rounding, 4px);
 
   display: flex;
   width: $rail-thickness;
@@ -38,12 +37,12 @@
   &__slider {
     width: $slider-thickness;
     background: var(--m3-state-layers-on-surface-opacity-012);
-    border-radius: $slider-rounding;
+    border-radius: var(--m3-scroll-slider-rounding, 4px);
     cursor: pointer;
     transition:
-      m3-sys-motion-standard(width),
-      m3-sys-motion-standard(background-color),
-      m3-sys-motion-standard(opacity)
+      m3-motion.timing-standard(width),
+      m3-motion.timing-standard(background-color),
+      m3-motion.timing-standard(opacity)
     ;
     position: relative;
   }
@@ -51,9 +50,9 @@
   &_horizontal &__slider {
     height: $slider-thickness;
     transition:
-      m3-sys-motion-standard(height),
-      m3-sys-motion-standard(background-color),
-      m3-sys-motion-standard(opacity)
+      m3-motion.timing-standard(height),
+      m3-motion.timing-standard(background-color),
+      m3-motion.timing-standard(opacity)
     ;
   }
 
@@ -63,7 +62,7 @@
     background: var(--m3-state-layers-on-surface-opacity-020);
   }
 
-  &_horizontal:hover  &__slider,
+  &_horizontal:hover      &__slider,
   &_horizontal#{&}_active &__slider {
     height: $slider-thickness-on-hover;
   }
