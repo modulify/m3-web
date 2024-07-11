@@ -56,6 +56,11 @@ export type {
   M3SwitchProps,
 } from '@/components/switch'
 
+export type {
+  M3TextFieldProps,
+  M3TextFieldSupportTextProps,
+} from '@/components/text-field'
+
 export {
   M3Button,
 } from '@/components/button'
@@ -111,3 +116,8 @@ export {
   M3SwitchScope,
   useM3SwitchScope,
 } from '@/components/switch'
+
+export type {
+  M3TextField,
+  M3TextFieldSupportText,
+} from '@/components/text-field'
