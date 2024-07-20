@@ -1,0 +1,269 @@
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/shape' as m3-shape;
+
+.m3-slider {
+  min-width: 120px;
+  padding-inline: 6px;
+
+  @include m3-shape.reset-box-sizing;
+
+  &__track {
+    display: flex;
+    position: relative;
+  }
+
+  &__scale {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  &__notch {
+    display: flex;
+    width: 0;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    position: absolute;
+    left: var(--percentage, 0);
+
+    &_hidden {
+      opacity: 0;
+      z-index: 0;
+    }
+  }
+
+  &__notch-control {
+    display: flex;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      flex-shrink: 0;
+      width: 4px;
+      height: 4px;
+      background: var(--m3-sys-primary);
+      border-radius: 50%;
+      transition:
+        m3-motion.timing-standard(background),
+        m3-motion.timing-standard(opacity)
+      ;
+    }
+  }
+
+  &_disabled &__notch-control::before {
+    background: var(--m3-sys-on-surface);
+    opacity: 0.38;
+  }
+
+  &__notch_active &__notch-control::before {
+    background: var(--m3-sys-primary-container);
+  }
+
+  &_disabled &__notch_active &__notch-control::before {
+    background: var(--m3-sys-inverse-on-surface);
+    opacity: 1;
+  }
+
+  &_disabled &__notch-control,
+  &__notch_hidden &__notch-control{
+    cursor: default;
+  }
+
+  &__filler {
+    display: flex;
+    width: calc(var(--percentage, 50%) + 6px);
+    height: var(--m3-slider-track-thickness, 16px);
+    position: relative;
+
+    &_min,
+    &_active {
+      margin-left: -6px;
+    }
+
+    &_max {
+      margin-left: auto;
+      margin-right: -6px;
+    }
+
+    &::before {
+      content: ' ';
+      width: calc(100% - 8px);
+      height: 100%;
+      background: var(--m3-sys-primary-container);
+      border-radius: 2px;
+      opacity: 1;
+      position: absolute;
+      top: 0;
+      transition:
+        m3-motion.timing-standard(background),
+        m3-motion.timing-standard(opacity)
+      ;
+    }
+
+    &_min::before,
+    &_active::before {
+      left: 0;
+      border-end-start-radius: 8px;
+      border-start-start-radius: 8px;
+    }
+
+    &_max::before {
+      left: auto;
+      right: 0;
+      border-start-end-radius: 8px;
+      border-end-end-radius: 8px;
+    }
+
+    &_active::before {
+      background: var(--m3-sys-primary);
+    }
+
+    &_min + &_active::before {
+      width: calc(100% - 16px);
+      left: 8px;
+    }
+  }
+
+  &_range &__filler {
+    width: calc(var(--percentage, 50%) + 6px);
+  }
+
+  &_range &__filler_active {
+    width: var(--percentage, 50%);
+    margin-left: 0;
+  }
+
+  &_range &__filler_active::before {
+    border-radius: 2px;
+  }
+
+  &_stepped &__filler {
+    transition:
+      m3-motion.timing-standard(width),
+      m3-motion.timing-standard(left)
+    ;
+  }
+
+  &_stepped &__filler::before {
+    transition:
+      m3-motion.timing-standard(background),
+      m3-motion.timing-standard(opacity),
+      m3-motion.timing-standard(width),
+      m3-motion.timing-standard(left)
+    ;
+  }
+
+  &_disabled &__filler::before {
+    background: var(--m3-sys-on-surface);
+    opacity: 0.12;
+  }
+
+  &_disabled &__filler_active::before {
+    opacity: 0.38;
+  }
+
+  &__value {
+    display: flex;
+    width: 0;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    position: absolute;
+    left: var(--percentage, 25%);
+    top: 0;
+
+    &_min { left: var(--percentage, 25%); }
+    &_max { left: var(--percentage, 75%); }
+  }
+
+  &_stepped &__value {
+    transition: m3-motion.timing-standard(left);
+  }
+
+  &__handle {
+    display: flex;
+    flex-shrink: 0;
+    width: 16px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 100%;
+      background: var(--m3-sys-primary);
+      border-radius: 2px;
+      transition:
+        m3-motion.timing-standard(background),
+        m3-motion.timing-standard(opacity)
+      ;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:not([aria-disabled="true"]):focus::before {
+      box-shadow: 0 0 0 2px var(--m3-sys-primary-container);
+    }
+  }
+
+  &:active &__handle:not([aria-disabled="true"]) {
+    cursor: grabbing;
+  }
+
+  &_disabled &__handle {
+    cursor: default;
+
+    &::before {
+      background: var(--m3-sys-on-surface);
+      opacity: 0.38;
+    }
+  }
+
+  &:not(&_disabled) &__value:active &__handle {
+    width: 14px;
+
+    &:not([aria-disabled="true"])::before {
+      width: 2px;
+      border-radius: 1px;
+    }
+  }
+
+  &:not(&_disabled) &__value_min:active ~ &__filler_min::before {
+    width: calc(100% - 7px);
+  }
+
+  &:not(&_disabled) &__value_min:active ~ &__filler_active::before {
+    width: calc(100% - 15px);
+    left: 7px;
+  }
+
+  &:not(&_disabled) &__value_max:active ~ &__filler_max::before {
+    width: calc(100% - 7px);
+  }
+
+  &:not(&_disabled) &__value_max:active ~ &__filler_active::before {
+    width: calc(100% - 7px);
+  }
+
+  &_range:not(&_disabled) &__value_max:active ~ &__filler_active::before {
+    width: calc(100% - 15px);
+  }
+}
