@@ -37,4 +37,5 @@ export default {
       defaultTheme: 'light',
     }),
   ],
+  tags: ['autodocs'],
 } as Preview

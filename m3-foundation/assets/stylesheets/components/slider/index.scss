@@ -1,0 +1,176 @@
+@use '../../basics/shape' as m3-shape;
+
+.m3-slider {
+  min-width: 120px;
+  padding-inline: 6px;
+
+  @include m3-shape.reset-box-sizing;
+
+  &__track {
+    display: flex;
+    position: relative;
+  }
+
+  &__scale {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  &__notch {
+    display: flex;
+    width: 0;
+    align-items: center;
+    justify-content: center;
+
+    &:before {
+      content: '';
+      display: inline-block;
+      flex-shrink: 0;
+      width: 4px;
+      height: 4px;
+      background: var(--m3-sys-primary);
+      border-radius: 50%;
+    }
+
+    &_active:before {
+      background: var(--m3-sys-primary-container);
+    }
+  }
+
+  &__filler {
+    display: flex;
+    width: calc(var(--percentage, 50%) + 6px);
+    height: var(--m3-slider-track-thickness, 16px);
+
+    &_min,
+    &_active {
+      justify-content: start;
+      margin-left: -6px;
+    }
+
+    &_max {
+      justify-content: end;
+      margin-right: -6px;
+    }
+
+    &::before {
+      content: ' ';
+      width: calc(100% - 8px);
+      height: 100%;
+      background: var(--m3-sys-primary-container);
+      border-radius: 2px;
+    }
+
+    &_min::before,
+    &_active::before {
+      border-end-start-radius: 8px;
+      border-start-start-radius: 8px;
+    }
+
+    &_max::before {
+      border-start-end-radius: 8px;
+      border-end-end-radius: 8px;
+    }
+
+    &_active::before {
+      background: var(--m3-sys-primary);
+    }
+
+    &_min + &_active::before {
+      width: calc(100% - 16px);
+    }
+  }
+
+  &_range &__filler {
+    width: calc(var(--percentage, 50%) + 6px);
+  }
+
+  &_range &__filler_active {
+    width: var(--percentage, 50%);
+    margin-left: 0;
+    justify-content: center;
+  }
+
+  &_range &__filler_active::before {
+    border-radius: 2px;
+  }
+
+  &__value {
+    display: flex;
+    width: 0;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: var(--percentage, 25%);
+    top: 0;
+
+    &_min { left: var(--percentage, 25%); }
+    &_max { left: var(--percentage, 75%); }
+  }
+
+  &__handle {
+    display: flex;
+    flex-shrink: 0;
+    width: 16px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 100%;
+      background: var(--m3-sys-primary);
+      border-radius: 2px;
+    }
+  }
+
+  &:active &__handle {
+    cursor: grabbing;
+  }
+
+  &_disabled &__handle {
+    cursor: default;
+  }
+
+  &__value:active &__handle {
+    width: 14px;
+
+    &::before {
+      width: 2px;
+      border-radius: 1px;
+    }
+  }
+
+  &__value_min:active ~ &__filler_min::before {
+    width: calc(100% - 7px);
+  }
+
+  &__value_min:active ~ &__filler_active::before {
+    width: calc(100% - 15px);
+    margin-right: 1px;
+  }
+
+  &__value_max:active ~ &__filler_max::before {
+    width: calc(100% - 7px);
+  }
+
+  &__value_max:active ~ &__filler_active::before {
+    width: calc(100% - 7px);
+  }
+
+  &_range &__value_max:active ~ &__filler_active::before {
+    width: calc(100% - 15px);
+    margin-left: 1px;
+  }
+}
