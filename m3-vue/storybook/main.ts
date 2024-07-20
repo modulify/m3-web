@@ -27,9 +27,6 @@ const config: StorybookConfig = {
       },
     },
   },
-  docs: {
-    autodocs: 'tag',
-  },
   framework: {
     name: getAbsolutePath('@storybook/vue3-vite'),
     options: {},
