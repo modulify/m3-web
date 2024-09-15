@@ -3,16 +3,17 @@
 
 .m3-button {
   --m3-icon-size: 18px;
-  --state-color-hover: transparent;
-  --state-color-focus: transparent;
-  --state-color-disabled: transparent;
-  --text-color: var(--m3-sys-on-surface);
+  --m3-ripple-color: var(--m3-sys-primary);
+  --m3-ripple-opacity: 0.2;
+  --state-color:          var(--m3-sys-primary);
+  --state-color-disabled: var(--m3-sys-on-surface);
+
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
   height: 40px;
-  border-radius: 100px;
-  color: var(--text-color);
+  border-radius: var(--m3-button-rounding, 100px);
+  color: var(--m3-sys-on-surface);
   text-decoration: none;
   outline: none;
   overflow: hidden;
@@ -39,88 +40,83 @@
       box-shadow: var(--m3-elevation-1);
     }
 
-    &:not(:disabled):hover {
-      box-shadow: var(--m3-elevation-2);
-    }
-
-    &:not(:disabled):active {
-      box-shadow: var(--m3-elevation-1);
-    }
-
-    &:disabled {
-      background: var(--m3-state-layers-on-surface-opacity-012);
-    }
+    &:not(:disabled):hover  { box-shadow: var(--m3-elevation-2); }
+    &:not(:disabled):active { box-shadow: var(--m3-elevation-1); }
   }
 
   &_filled {
-    --m3-ripple-color: var(--m3-state-layers-on-primary-opacity-020);
-    --state-color-hover: var(--m3-state-layers-on-primary-opacity-008);
-    --state-color-focus: var(--m3-state-layers-on-primary-opacity-012);
-    --state-color-disabled: var(--m3-state-layers-on-surface-opacity-012);
-    --text-color: var(--m3-sys-on-primary);
+    --m3-ripple-color: var(--m3-sys-on-primary);
+    --state-color:          var(--m3-sys-on-primary);
+    --state-color-disabled: var(--m3-sys-on-surface);
 
     &:not(:disabled) {
       background: var(--m3-sys-primary);
+      color: var(--m3-sys-on-primary);
     }
 
-    &:not(:disabled):hover {
-      box-shadow: var(--m3-elevation-1);
-    }
-
-    &:not(:disabled):active {
-      box-shadow: none;
-    }
-
-    &:disabled {
-      background: var(--m3-state-layers-on-surface-opacity-012);
-    }
+    &:not(:disabled):hover  { box-shadow: var(--m3-elevation-1); }
+    &:not(:disabled):active { box-shadow: none; }
   }
 
   &_outlined {
-    border: 1px solid var(--m3-sys-outline);
-
-    &:not(:disabled):focus  { border: 1px solid var(--m3-sys-primary); }
-    &:not(:disabled):active { border: 1px solid var(--m3-sys-outline); }
-
-    &:disabled {
-      border-color: var(--m3-state-layers-on-surface-opacity-012);
+    &::before {
+      content: ' ';
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--m3-sys-outline);
+      border-radius: inherit;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
-  }
 
-  &_elevated,
-  &_outlined,
-  &_text {
-    --m3-ripple-color: var(--m3-state-layers-primary-opacity-020);
-    --state-color-hover: var(--m3-state-layers-primary-opacity-008);
-    --state-color-focus: var(--m3-state-layers-primary-opacity-012);
-    --text-color: var(--m3-sys-primary);
+    &:not(:disabled):focus::before  { border-color: var(--m3-sys-primary); }
+    &:not(:disabled):active::before { border-color: var(--m3-sys-outline); }
+
+    &:disabled::before {
+      border-color: var(--m3-sys-on-surface);
+      opacity: 0.12;
+    }
   }
 
   &_tonal {
-    --m3-ripple-color: var(--m3-state-layers-on-secondary-container-opacity-020);
-    --state-color-hover: var(--m3-state-layers-on-secondary-container-opacity-008);
-    --state-color-focus: var(--m3-state-layers-on-secondary-container-opacity-012);
-    --state-color-disabled: var(--m3-state-layers-on-surface-opacity-012);
-    --text-color: var(--m3-sys-on-secondary-container);
+    --m3-ripple-color: var(--m3-sys-on-secondary-container);
+    --state-color:          var(--m3-sys-on-secondary-container);
+    --state-color-disabled: var(--m3-sys-on-surface);
 
     &:not(:disabled) {
       background: var(--m3-sys-secondary-container);
+      color: var(--m3-sys-on-secondary-container);
     }
 
-    &:not(:disabled):hover {
-      box-shadow: var(--m3-elevation-1);
-    }
-
-    &:not(:disabled):active {
-      box-shadow: none;
-    }
-
-    &:disabled {
-      background: var(--m3-state-layers-on-surface-opacity-012);
-    }
+    &:not(:disabled):hover  { box-shadow: var(--m3-elevation-1); }
+    &:not(:disabled):active { box-shadow: none; }
   }
 
   &__state {
+    @include m3-typography.label-large;
+
+    width: 100%;
+    height: 100%;
+    background: var(--state-color);
+    border-radius: inherit;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      m3-motion.timing-standard(background),
+      m3-motion.timing-standard(opacity)
+    ;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &:hover    &__state { opacity: 0.08 }
+  &:focus    &__state,
+  &:active   &__state { opacity: 0.12 }
+  &:disabled &__state { background: var(--state-color-disabled); opacity: 0.12 }
+
+  &__content {
     @include m3-typography.label-large;
 
     display: flex;
@@ -132,28 +128,21 @@
     align-self: stretch;
     justify-content: center;
     gap: 8px;
-    background: transparent;
     border-radius: inherit;
     overflow: hidden;
-    transition: m3-motion.timing-standard(background);
     position: relative;
   }
 
-  &:hover    &__state { background: var(--state-color-hover); }
-  &:focus    &__state,
-  &:active   &__state { background: var(--state-color-focus); }
-  &:disabled &__state { background: var(--state-color-disabled); }
+  &_has-leading-icon  &__content { padding-left: 16px; }
+  &_has-trailing-icon &__content { padding-right: 16px; }
 
-  &_has-leading-icon  &__state { padding-left: 16px; }
-  &_has-trailing-icon &__state { padding-right: 16px; }
-
-  &_text &__state {
+  &_text &__content {
     padding-left: 12px;
     padding-right: 12px;
   }
 
-  &_text#{&}_has-leading-icon  &__state { padding-right: 16px; }
-  &_text#{&}_has-trailing-icon &__state { padding-left: 16px; }
+  &_text#{&}_has-leading-icon  &__content { padding-right: 16px; }
+  &_text#{&}_has-trailing-icon &__content { padding-left: 16px; }
 
   &__icon {
     display: inline-flex;

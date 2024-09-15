@@ -4,6 +4,7 @@
   animation: m3-ripple-spread var(--m3-ripple-effect-duration, 1s) linear;
   background: var(--m3-ripple-color, transparent);
   transform: scale(0);
+  opacity: var(--m3-ripple-opacity, 1);
   position: absolute;
 }
 

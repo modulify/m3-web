@@ -96,7 +96,8 @@ const M3Button: ForwardRefRenderFunction<
       {...attrs}
     >
       <M3Ripple ref={ripple} owner={rippleTarget} />
-      <span className="m3-button__state">
+      <span className="m3-button__state" />
+      <span className="m3-button__content">
         {content.map(([child, isIcon], index) => (
           <span
             key={index}
