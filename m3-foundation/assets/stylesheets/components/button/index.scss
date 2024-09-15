@@ -13,7 +13,7 @@
   flex-shrink: 0;
   height: 40px;
   border-radius: var(--m3-button-rounding, 100px);
-  color: var(--m3-sys-on-surface);
+  color: var(--m3-sys-primary);
   text-decoration: none;
   outline: none;
   overflow: hidden;
@@ -31,6 +31,7 @@
   }
 
   &:disabled {
+    color: var(--m3-sys-on-surface);
     cursor: default;
   }
 
