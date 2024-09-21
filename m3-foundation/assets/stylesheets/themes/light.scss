@@ -24,15 +24,15 @@ $m3-sys-light-on-surface:         $m3-palette-neutral-10;
 $m3-sys-light-on-surface-variant: $m3-palette-neutral-variant-30;
 
 // Inverse surface
-$m3-sys-light-inverse-surface: $m3-palette-neutral-20;
+$m3-sys-light-inverse-surface:    $m3-palette-neutral-20;
 $m3-sys-light-inverse-on-surface: $m3-palette-neutral-95;
 
 // Secondary container
-$m3-sys-light-secondary-container: $m3-palette-secondary-90;
+$m3-sys-light-secondary-container:    $m3-palette-secondary-90;
 $m3-sys-light-on-secondary-container: $m3-palette-secondary-10;
 
 /** Tertiary container */
-$m3-sys-light-tertiary-container: $m3-palette-tertiary-90;
+$m3-sys-light-tertiary-container:    $m3-palette-tertiary-90;
 $m3-sys-light-on-tertiary-container: $m3-palette-tertiary-10;
 
 // Elevation
@@ -50,8 +50,6 @@ $m3-elevation-light-5: 0 4px 4px 0   rgba(0, 0, 0, 0.30), 0 8px 12px 6px rgba(0,
   --m3-sys-on-primary-container: #{$m3-sys-light-on-primary-container};
   --m3-state-layers-primary-opacity-008: #{rgba($m3-sys-light-primary, 0.08)};
   --m3-state-layers-primary-opacity-012: #{rgba($m3-sys-light-primary, 0.12)};
-  --m3-state-layers-primary-opacity-020: #{rgba($m3-sys-light-primary, 0.20)};
-  --m3-state-layers-primary-opacity-080: #{rgba($m3-sys-light-primary, 0.80)};
 
   /** Outline */
   --m3-sys-outline: #{$m3-sys-light-outline};
