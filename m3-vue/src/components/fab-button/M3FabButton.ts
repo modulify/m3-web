@@ -95,7 +95,8 @@ export default defineComponent({
         onKeyup,
       }, () => [
         h(M3Ripple, { ref: ripple, owner: rootElement }),
-        h('span', { class: 'm3-fab-button__state' }, wrap(content)),
+        h('span', { class: 'm3-fab-button__state' }),
+        h('span', { class: 'm3-fab-button__content' }, wrap(content)),
       ])
     }
   },

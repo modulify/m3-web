@@ -3,8 +3,12 @@
 @use '../../basics/typography' as m3-typography;
 
 .m3-fab-button {
-  --m3-ripple-color: var(--m3-state-layers-on-primary-container-opacity-012);
+  --m3-icon-size: 24px;
+  --m3-ripple-color: var(--m3-sys-on-primary-container);
   --m3-ripple-effect-duration: 0.75s;
+  --m3-ripple-opacity: 0.2;
+  --state-color: var(--m3-sys-on-primary-container);
+  --state-color-disabled: var(--m3-sys-on-surface);
 
   display: inline-block;
   flex-grow: 0;
@@ -32,104 +36,101 @@
     box-shadow: var(--m3-elevation-3);
   }
 
+  &:disabled {
+    cursor: default;
+  }
+
   &_secondary {
-    --m3-ripple-color: var(--m3-state-layers-on-secondary-container-opacity-012);
+    --m3-ripple-color: var(--m3-sys-on-secondary-container);
+    --state-color: var(--m3-sys-on-secondary-container);
     background: var(--m3-sys-secondary-container);
     color: var(--m3-sys-on-secondary-container);
   }
 
   &_surface {
-    --m3-ripple-color: var(--m3-state-layers-primary-opacity-012);
+    --m3-ripple-color: var(--m3-sys-primary);
+    --state-color: var(--m3-sys-primary);
     background: var(--m3-sys-surface-container-high);
     color: var(--m3-sys-primary);
   }
 
   &_tertiary {
-    --m3-ripple-color: var(--m3-state-layers-on-tertiary-container-opacity-012);
+    --m3-ripple-color: var(--m3-sys-on-tertiary-container);
+    --state-color: var(--m3-sys-on-tertiary-container);
     background: var(--m3-sys-tertiary-container);
     color: var(--m3-sys-on-tertiary-container);
   }
 
   &_sm { border-radius: 12px; }
   &_lg {
+    --m3-icon-size: 36px;
     --m3-ripple-effect-duration: 1s;
     border-radius: 28px;
   }
 
   &__state {
-    --background-hover: var(--m3-state-layers-on-primary-container-opacity-008);
-    --background-focus: var(--m3-state-layers-on-primary-container-opacity-012);
+    width: 100%;
+    height: 100%;
+    background: var(--state-color);
+    border-radius: inherit;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      m3-motion.timing-standard(background),
+      m3-motion.timing-standard(opacity)
+    ;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &:hover    &__state { opacity: 0.08 }
+  &:focus    &__state,
+  &:active   &__state { opacity: 0.12 }
+  &:disabled &__state { background: var(--state-color-disabled); opacity: 0.12 }
+
+  &__content {
     display: flex;
     flex: 1 0 0;
     width: 100%;
     height: 100%;
     padding: 16px;
+    align-items: center;
+    align-self: stretch;
+    justify-content: center;
     gap: 12px;
-    background: transparent;
     border-radius: inherit;
+    overflow: hidden;
+    position: relative;
     transition:
       m3-motion.timing-standard(padding),
-      m3-motion.timing-standard(gap),
-      m3-motion.timing-standard(background)
+      m3-motion.timing-standard(gap)
     ;
   }
 
-  &:hover    &__state { background: var(--background-hover); }
-  &:focus    &__state { background: var(--background-focus); }
-  &:active   &__state,
-  &:disabled &__state { background: transparent; }
+  &_sm &__content { padding: 8px;  gap: 6px; }
+  &_lg &__content { padding: 30px; gap: 18px; }
 
-  &_secondary &__state {
-    --background-hover: var(--m3-state-layers-on-secondary-container-opacity-008);
-    --background-focus: var(--m3-state-layers-on-secondary-container-opacity-012);
-  }
+  &_has-leading-icon        &__content { padding-right: 20px; }
+  &_has-leading-icon#{&}_sm &__content { padding-right: 10px; }
+  &_has-leading-icon#{&}_lg &__content { padding-right: 37.5px; }
 
-  &_surface &__state {
-    --background-hover: var(--m3-state-layers-primary-opacity-008);
-    --background-focus: var(--m3-state-layers-primary-opacity-012);
-  }
-
-  &_tertiary &__state {
-    --background-hover: var(--m3-state-layers-on-tertiary-container-opacity-008);
-    --background-focus: var(--m3-state-layers-on-tertiary-container-opacity-012);
-  }
-
-  &_sm &__state {
-    padding: 8px;
-    gap: 6px;
-  }
-
-  &_lg &__state {
-    padding: 30px;
-    gap: 18px;
-  }
-
-  &_has-leading-icon        &__state { padding-right: 20px; }
-  &_has-leading-icon#{&}_sm &__state { padding-right: 10px; }
-  &_has-leading-icon#{&}_lg &__state { padding-right: 37.5px; }
-
-  &_has-trailing-icon        &__state { padding-left: 20px; }
-  &_has-trailing-icon#{&}_sm &__state { padding-left: 10px; }
-  &_has-trailing-icon#{&}_lg &__state { padding-left: 37.5px; }
+  &_has-trailing-icon        &__content { padding-left: 20px; }
+  &_has-trailing-icon#{&}_sm &__content { padding-left: 10px; }
+  &_has-trailing-icon#{&}_lg &__content { padding-left: 37.5px; }
 
   &__icon {
-    @include m3-shape.square(24px);
-    --m3-icon-size: 24px;
     display: inline-flex;
+    @include m3-shape.square(var(--m3-icon-size));
     transition:
       m3-motion.timing-standard(width),
       m3-motion.timing-standard(height)
     ;
-  }
 
-  &__icon > * {
-    @include m3-shape.square(100%);
-    transition: m3-motion.timing-standard(font-size);
-  }
-
-  &_lg &__icon {
-    @include m3-shape.square(36px);
-    --m3-icon-size: 36px;
+    & > * {
+      @include m3-shape.square(100%);
+      transition: m3-motion.timing-standard(font-size);
+    }
   }
 
   &__text {
