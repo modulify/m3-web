@@ -110,10 +110,6 @@ $m3-elevation-light-5: 0 4px 4px 0   rgba(0, 0, 0, 0.30), 0 8px 12px 6px rgba(0,
   /** Tertiary container */
   --m3-sys-tertiary-container: #{$m3-sys-light-tertiary-container};
   --m3-sys-on-tertiary-container: #{$m3-sys-light-on-tertiary-container};
-  --m3-state-layers-on-tertiary-container-opacity-008: #{rgba($m3-sys-light-on-tertiary-container, 0.08)};
-  --m3-state-layers-on-tertiary-container-opacity-012: #{rgba($m3-sys-light-on-tertiary-container, 0.12)};
-  --m3-state-layers-on-tertiary-container-opacity-016: #{rgba($m3-sys-light-on-tertiary-container, 0.16)};
-  --m3-state-layers-on-tertiary-container-opacity-020: #{rgba($m3-sys-light-on-tertiary-container, 0.20)};
 
   /** Elevation */
   --m3-elevation-1: #{$m3-elevation-light-1};
