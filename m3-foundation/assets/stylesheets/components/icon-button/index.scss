@@ -128,7 +128,7 @@
   }
 
   &:hover    &__state { opacity: 0.08 }
-  &:focus    &__state { opacity: 0.12 }
+  &:focus    &__state,
   &:active   &__state { opacity: 0.12 }
   &:disabled &__state { background: var(--state-color-disabled); opacity: 0.12 }
 
