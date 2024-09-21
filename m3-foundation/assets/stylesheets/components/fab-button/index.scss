@@ -3,20 +3,23 @@
 @use '../../basics/typography' as m3-typography;
 
 .m3-fab-button {
+  --background-color:     var(--m3-sys-primary-container);
+  --content-color:        var(--m3-sys-on-primary-container);
+  --state-color:          var(--content-color);
+  --state-color-disabled: var(--m3-sys-on-surface);
+
   --m3-icon-size: 24px;
-  --m3-ripple-color: var(--m3-sys-on-primary-container);
+  --m3-ripple-color: var(--content-color);
   --m3-ripple-effect-duration: 0.75s;
   --m3-ripple-opacity: 0.2;
-  --state-color: var(--m3-sys-on-primary-container);
-  --state-color-disabled: var(--m3-sys-on-surface);
 
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
-  background: var(--m3-sys-primary-container);
+  background: var(--background-color);
   border-radius: 16px;
   box-shadow: var(--m3-elevation-3);
-  color: var(--m3-sys-on-primary-container);
+  color: var(--content-color);
   text-decoration: none;
   outline: none;
   overflow: hidden;
@@ -37,28 +40,23 @@
   }
 
   &:disabled {
+    box-shadow: var(--m3-elevation-3);
     cursor: default;
   }
 
   &_secondary {
-    --m3-ripple-color: var(--m3-sys-on-secondary-container);
-    --state-color: var(--m3-sys-on-secondary-container);
-    background: var(--m3-sys-secondary-container);
-    color: var(--m3-sys-on-secondary-container);
+    --background-color: var(--m3-sys-secondary-container);
+    --content-color:    var(--m3-sys-on-secondary-container);
   }
 
   &_surface {
-    --m3-ripple-color: var(--m3-sys-primary);
-    --state-color: var(--m3-sys-primary);
-    background: var(--m3-sys-surface-container-high);
-    color: var(--m3-sys-primary);
+    --background-color: var(--m3-sys-surface-container-high);
+    --content-color:    var(--m3-sys-primary);
   }
 
   &_tertiary {
-    --m3-ripple-color: var(--m3-sys-on-tertiary-container);
-    --state-color: var(--m3-sys-on-tertiary-container);
-    background: var(--m3-sys-tertiary-container);
-    color: var(--m3-sys-on-tertiary-container);
+    --background-color: var(--m3-sys-tertiary-container);
+    --content-color:    var(--m3-sys-on-tertiary-container);
   }
 
   &_sm { border-radius: 12px; }
@@ -75,13 +73,13 @@
     border-radius: inherit;
     overflow: hidden;
     opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
     transition:
       m3-motion.timing-standard(background),
       m3-motion.timing-standard(opacity)
     ;
-    position: absolute;
-    top: 0;
-    left: 0;
   }
 
   &:hover    &__state { opacity: 0.08 }
@@ -95,12 +93,12 @@
     width: 100%;
     height: 100%;
     padding: 16px;
+    border-radius: inherit;
+    overflow: hidden;
     align-items: center;
     align-self: stretch;
     justify-content: center;
     gap: 12px;
-    border-radius: inherit;
-    overflow: hidden;
     position: relative;
     transition:
       m3-motion.timing-standard(padding),
@@ -144,8 +142,7 @@
     @include m3-typography.title-large;
   }
 
-  &:disabled &__icon,
-  &:disabled &__text {
+  &:disabled &__content {
     opacity: 0.38;
   }
 }
