@@ -60,9 +60,6 @@ $m3-elevation-dark-5: 0 4px 4px 0 rgba(0, 0, 0, 0.30), 0 8px 12px 6px rgba(0, 0,
   /** Error */
   --m3-sys-error: #{$m3-sys-dark-error};
   --m3-sys-on-error: #{$m3-sys-dark-on-error};
-  --m3-state-layers-error-opacity-008: #{rgba($m3-sys-dark-error, 0.08)};
-  --m3-state-layers-error-opacity-012: #{rgba($m3-sys-dark-error, 0.12)};
-  --m3-state-layers-error-opacity-020: #{rgba($m3-sys-dark-error, 0.20)};
 
   /** Surface */
   --m3-sys-surface: #{$m3-sys-dark-surface};
