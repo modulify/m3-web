@@ -1,14 +1,21 @@
 @use "../../basics/motion" as m3-motion;
 
 .m3-icon-button {
-  --m3-ripple-color: var(--m3-state-layers-primary-opacity-020);
+  --background-color: transparent;
+  --content-color: var(--m3-sys-on-surface-variant);
+  --state-color: var(--m3-sys-on-surface-variant);
+  --state-color-disabled: transparent;
+
+  --m3-ripple-color: var(--m3-sys-on-surface-variant);
   --m3-ripple-effect-duration: #{m3-motion.duration('extra-long1')};
+  --m3-ripple-opacity: 0.2;
+
   display: inline-block;
   width: 40px;
   height: 40px;
-  background: transparent;
+  background: var(--background-color);
   border-radius: 50%;
-  color: var(--m3-sys-on-surface-variant);
+  color: var(--content-color);
   font-size: 0;
   overflow: hidden;
   transition:
@@ -17,135 +24,128 @@
   ;
   position: relative;
 
-  &_toggleable#{&}_selected {
-    color: var(--m3-sys-primary);
-  }
-
-  &_filled:not(:disabled):not(&_toggleable),
-  &_filled:not(:disabled)#{&}_toggleable#{&}_selected {
-    background: var(--m3-sys-primary);
-    color: var(--m3-sys-on-primary);
-  }
-
-  &_filled#{&}_toggleable:not(:disabled) {
-    background: var(--m3-sys-surface-container-highest);
-    color: var(--m3-sys-primary);
-  }
-
-  &_filled:disabled {
-    background: var(--m3-state-layers-on-surface-opacity-012);
-  }
-
-  &_tonal {
-    color: var(--m3-sys-on-secondary-container);
-  }
-
-  &_tonal:not(&_toggleable),
-  &_tonal#{&}_toggleable#{&}_selected {
-    background: var(--m3-sys-secondary-container);
-  }
-
-  &_tonal#{&}_toggleable {
-    background: var(--m3-sys-surface-container-highest);
-  }
-
-  &_tonal:disabled {
-    background: var(--m3-state-layers-on-surface-opacity-012);
-  }
-
-  &_outlined {
-    border: 1px solid var(--m3-sys-outline);
-  }
-
-  &_outlined:disabled {
-    border-color: var(--m3-state-layers-on-surface-opacity-012);
-  }
-
-  &_outlined#{&}_toggleable {
-    color: var(--m3-sys-on-surface-variant);
-  }
-
-  &_outlined#{&}_toggleable#{&}_selected {
-    background: var(--m3-sys-inverse-surface);
-    border: none;
-    color: var(--m3-sys-inverse-on-surface);
-  }
-
-  &_outlined#{&}_toggleable#{&}_selected:disabled {
-    background: var(--m3-state-layers-on-surface-opacity-012);
-    color: var(--m3-sys-on-surface);
-  }
-
   &:disabled {
+    background: transparent;
     color: var(--m3-sys-on-surface);
     cursor: default;
   }
 
+  &_toggleable#{&}_selected {
+    --m3-ripple-color: var(--m3-sys-primary);
+    --content-color: var(--m3-sys-primary);
+  }
+
+  &_filled {
+    --m3-ripple-color:      var(--m3-sys-on-primary);
+    --background-color:     var(--m3-sys-primary);
+    --content-color:        var(--m3-sys-on-primary);
+    --state-color:          var(--m3-sys-on-primary);
+    --state-color-disabled: var(--m3-sys-on-surface);
+  }
+
+  &_filled#{&}_toggleable {
+    --m3-ripple-color:  var(--m3-sys-on-secondary-container);
+    --background-color: var(--m3-sys-surface-container-highest);
+    --content-color:    var(--m3-sys-primary);
+  }
+
+  &_filled#{&}_toggleable#{&}_selected {
+    --m3-ripple-color:  var(--m3-sys-on-primary);
+    --background-color: var(--m3-sys-primary);
+    --content-color:    var(--m3-sys-on-primary);
+  }
+
+  &_outlined {
+    &::before {
+      content: ' ';
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--m3-sys-outline);
+      border-radius: inherit;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    &:disabled::before {
+      border-color: var(--m3-sys-on-surface);
+      opacity: 0.12;
+    }
+  }
+
+  &_outlined#{&}_toggleable {
+    --content-color: var(--m3-sys-on-surface-variant);
+  }
+
+  &_outlined#{&}_toggleable#{&}_selected {
+    --m3-ripple-color:      var(--m3-sys-inverse-on-surface);
+    --background-color:     var(--m3-sys-inverse-surface);
+    --content-color:        var(--m3-sys-inverse-on-surface);
+    --state-color:          var(--m3-sys-inverse-on-surface);
+    --state-color-disabled: var(--m3-sys-on-surface);
+
+    &::before {
+      opacity: 0;
+    }
+  }
+
+  &_tonal {
+    --m3-ripple-color:      var(--m3-sys-on-secondary-container);
+    --background-color:     var(--m3-sys-secondary-container);
+    --content-color:        var(--m3-sys-on-secondary-container);
+    --state-color:          var(--m3-sys-on-secondary-container);
+    --state-color-disabled: var(--m3-sys-on-surface);
+  }
+
+  &_tonal#{&}_toggleable {
+    --m3-ripple-color:  var(--m3-sys-on-secondary-container);
+    --background-color: var(--m3-sys-surface-container-highest);
+    --content-color:    var(--m3-sys-on-secondary-container);
+    --state-color:      var(--m3-sys-on-surface-variant);
+  }
+
+  &_tonal#{&}_toggleable#{&}_selected {
+    --m3-ripple-color:  var(--m3-sys-on-secondary-container);
+    --background-color: var(--m3-sys-secondary-container);
+    --content-color:    var(--m3-sys-on-secondary-container);
+    --state-color:      var(--m3-sys-on-secondary-container);
+  }
+
   &__state {
+    width: 100%;
+    height: 100%;
+    background: var(--state-color);
+    border-radius: inherit;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      m3-motion.timing-standard(background),
+      m3-motion.timing-standard(opacity)
+    ;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &:hover    &__state { opacity: 0.08 }
+  &:focus    &__state { opacity: 0.12 }
+  &:active   &__state { opacity: 0.12 }
+  &:disabled &__state { background: var(--state-color-disabled); opacity: 0.12 }
+
+  &__content {
     display: flex;
     width: 100%;
     height: 100%;
     padding: 8px;
-    justify-content: center;
-    align-items: center;
     background: transparent;
-    border-radius: 50%;
+    border-radius: inherit;
+    align-items: center;
+    justify-content: center;
   }
 
-  &:not(:disabled):hover  &__state { background: var(--m3-state-layers-on-surface-variant-opacity-008); }
-  &:not(:disabled):focus  &__state { background: var(--m3-state-layers-on-surface-variant-opacity-012); }
-  &:not(:disabled):active &__state { background: var(--m3-state-layers-on-surface-variant-opacity-020); }
-
-  &:disabled &__state {
+  &:disabled &__content {
     opacity: 0.38;
   }
-
-  &_filled:not(:disabled):hover  &__state { background: var(--m3-state-layers-on-primary-opacity-008); }
-  &_filled:not(:disabled):focus  &__state { background: var(--m3-state-layers-on-primary-opacity-012); }
-  &_filled:not(:disabled):active &__state { background: var(--m3-state-layers-on-primary-opacity-020); }
-
-  &_tonal:not(&_toggleable):not(:disabled):hover           &__state,
-  &_tonal#{&}_toggleable#{&}_selected:not(:disabled):hover &__state {
-    background: var(--m3-state-layers-on-secondary-container-opacity-008);
-  }
-
-  &_tonal:not(&_toggleable):not(:disabled):focus            &__state,
-  &_tonal#{&}_toggleable#{&}_selected:not(:disabled):focus  &__state {
-    background: var(--m3-state-layers-on-secondary-container-opacity-012);
-  }
-
-  &_tonal:not(&_toggleable):not(:disabled):active           &__state,
-  &_tonal#{&}_toggleable#{&}_selected:not(:disabled):active &__state {
-    background: var(--m3-state-layers-on-secondary-container-opacity-020);
-  }
-
-  &_tonal#{&}_toggleable:not(:disabled):hover  &__state {
-    background: var(--m3-state-layers-on-surface-variant-opacity-008);
-  }
-  &_tonal#{&}_toggleable:not(:disabled):focus  &__state {
-    background: var(--m3-state-layers-on-surface-variant-opacity-012);
-  }
-  &_tonal#{&}_toggleable:not(:disabled):active &__state {
-    background: var(--m3-state-layers-on-surface-variant-opacity-020);
-  }
-
-  &_outlined#{&}_toggleable#{&}_selected:not(:disabled):hover &__state {
-    background: var(--m3-state-layers-inverse-on-surface-opacity-008);
-  }
-  &_outlined#{&}_toggleable#{&}_selected:not(:disabled):focus  &__state {
-    background: var(--m3-state-layers-inverse-on-surface-opacity-012);
-  }
-  &_outlined#{&}_toggleable#{&}_selected:not(:disabled):active &__state {
-    background: var(--m3-state-layers-inverse-on-surface-opacity-020);
-  }
-
-  &_toggleable              { --m3-ripple-color: var(--m3-state-layers-on-surface-variant-opacity-020); }
-  &_toggleable#{&}_selected { --m3-ripple-color: var(--m3-state-layers-primary-opacity-020); }
-
-  &_filled { --m3-ripple-color: var(--m3-state-layers-on-primary-opacity-020); }
-  &_tonal  { --m3-ripple-color: var(--m3-state-layers-on-secondary-container-opacity-020); }
-
-  &_outlined#{&}_toggleable#{&}_selected { --m3-ripple-color: var(--m3-state-layers-inverse-on-surface-opacity-020); }
 
   svg {
     width: 100%;

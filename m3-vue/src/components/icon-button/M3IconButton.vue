@@ -12,15 +12,16 @@
         v-bind="$attrs"
     >
         <M3Ripple :owner="ref(root)" />
-        <span class="m3-icon-button__state">
+        <span class="m3-icon-button__state" />
+        <span class="m3-icon-button__content">
             <slot />
         </span>
     </button>
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue'
 import type { Appearance } from '@modulify/m3-foundation/types/components/icon-button'
+import type { PropType } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'
 

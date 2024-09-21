@@ -83,7 +83,8 @@ const M3IconButton: ForwardRefRenderFunction<
       {...attrs}
     >
       <M3Ripple ref={ripple} owner={rippleTarget} />
-      <span className="m3-icon-button__state">
+      <span className="m3-icon-button__state" />
+      <span className="m3-icon-button__content">
         <M3IconAppearance.Provider value={toggleable && selected ? 'filled' : 'outlined'}>
           {children}
         </M3IconAppearance.Provider>
