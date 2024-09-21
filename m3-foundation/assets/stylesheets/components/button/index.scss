@@ -60,6 +60,8 @@
   }
 
   &_outlined {
+    --state-color-disabled: transparent;
+
     &::before {
       content: ' ';
       width: 100%;
@@ -78,6 +80,10 @@
       border-color: var(--m3-sys-on-surface);
       opacity: 0.12;
     }
+  }
+
+  &_text {
+    --state-color-disabled: transparent;
   }
 
   &_tonal {
