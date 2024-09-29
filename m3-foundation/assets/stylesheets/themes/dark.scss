@@ -21,6 +21,8 @@ $m3-sys-dark-surface-container:         $m3-palette-neutral-12;
 $m3-sys-dark-surface-container-high:    $m3-palette-neutral-17;
 $m3-sys-dark-surface-container-highest: $m3-palette-neutral-22;
 $m3-sys-dark-on-surface:         $m3-palette-neutral-90;
+
+$m3-sys-dark-surface-variant: $m3-palette-neutral-variant-30;
 $m3-sys-dark-on-surface-variant: $m3-palette-neutral-variant-80;
 
 // Inverse surface
@@ -48,8 +50,6 @@ $m3-elevation-dark-5: 0 4px 4px 0 rgba(0, 0, 0, 0.30), 0 8px 12px 6px rgba(0, 0,
   --m3-sys-primary-container: #{$m3-sys-dark-primary-container};
   --m3-sys-on-primary: #{$m3-sys-dark-on-primary};
   --m3-sys-on-primary-container: #{$m3-sys-dark-on-primary-container};
-  --m3-state-layers-primary-opacity-008: #{rgba($m3-sys-dark-primary, 0.08)};
-  --m3-state-layers-primary-opacity-012: #{rgba($m3-sys-dark-primary, 0.12)};
 
   /** Outline */
   --m3-sys-outline: #{$m3-sys-dark-outline};
@@ -66,10 +66,12 @@ $m3-elevation-dark-5: 0 4px 4px 0 rgba(0, 0, 0, 0.30), 0 8px 12px 6px rgba(0, 0,
   --m3-sys-surface-container-high: #{$m3-sys-dark-surface-container-high};
   --m3-sys-surface-container-highest: #{$m3-sys-dark-surface-container-highest};
   --m3-sys-on-surface: #{$m3-sys-dark-on-surface};
-  --m3-sys-on-surface-variant: #{$m3-sys-dark-on-surface-variant};
   --m3-state-layers-on-surface-opacity-008: #{rgba($m3-sys-dark-on-surface, 0.08)};
   --m3-state-layers-on-surface-opacity-012: #{rgba($m3-sys-dark-on-surface, 0.12)};
   --m3-state-layers-on-surface-opacity-020: #{rgba($m3-sys-dark-on-surface, 0.20)};
+
+  --m3-sys-surface-variant: #{$m3-sys-dark-surface-variant};
+  --m3-sys-on-surface-variant: #{$m3-sys-dark-on-surface-variant};
 
   /** Inverse surface */
   --m3-sys-inverse-surface: #{$m3-sys-dark-inverse-surface};

@@ -2,37 +2,61 @@
 @use "../../basics/shape" as m3-shape;
 
 .m3-switch {
-  @include m3-shape.reset-box-sizing;
+  --state-color: var(--m3-sys-on-surface);
+  --track-background-color: var(--m3-sys-surface-container-highest);
+  --track-border-color: var(--m3-sys-outline);
 
   display: flex;
   width: 52px;
   height: 32px;
+  padding: 2px;
   flex-shrink: 0;
   align-items: center;
-  background: var(--m3-sys-surface-container-highest);
-  border: 2px solid var(--m3-sys-outline);
   border-radius: 100px;
   cursor: pointer;
-  transition:
-    m3-motion.timing-standard(background-color),
-    m3-motion.timing-standard(border-color)
-  ;
   position: relative;
 
+  @include m3-shape.reset-box-sizing;
+
+  &::before {
+    content: ' ';
+    width: 100%;
+    height: 100%;
+    background: var(--track-background-color);
+    border: 2px solid var(--track-border-color);
+    border-radius: inherit;
+    opacity: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition:
+      m3-motion.timing-standard(background-color),
+      m3-motion.timing-standard(border-color),
+      m3-motion.timing-standard(opacity)
+    ;
+  }
+
   &_checked {
-    background: var(--m3-sys-primary);
-    border-color: transparent;
+    --state-color: var(--m3-sys-primary);
+    --track-background-color: var(--m3-sys-primary);
+
+    &::before {
+      border-color: transparent;
+    }
   }
 
   &_disabled {
-    background: var(--m3-state-layers-surface-variant-opacity-012);
-    border-color: var(--m3-state-layers-on-surface-opacity-012);
+    --track-background-color: var(--m3-sys-surface-variant);
+    --track-border-color: var(--m3-sys-on-surface);
     cursor: default;
+
+    &::before {
+      opacity: 0.12;
+    }
   }
 
   &_disabled#{&}_checked {
-    background: var(--m3-state-layers-on-surface-opacity-012);
-    border-color: transparent;
+    --track-background-color: var(--m3-sys-on-surface);
   }
 
   &__input {
@@ -64,17 +88,23 @@
   &__state {
     display: inline-flex;
     @include m3-shape.circle(40px);
-    background: var(--m3-state-layers-on-surface-opacity-008);
     animation: m3-motion.timing-standard(m3-animation-zoom-out);
     animation-fill-mode: forwards;
     transition: m3-motion.timing-standard(background-color);
     position: absolute;
     left: -6px;
     top: -6px;
-  }
 
-  &_checked &__state {
-    background: var(--m3-state-layers-primary-opacity-008);
+    &::before {
+      content: ' ';
+      width: 100%;
+      height: 100%;
+      background: var(--state-color);
+      border-radius: inherit;
+      opacity: 0;
+      position: absolute;
+      transition: m3-motion.timing-standard(opacity);
+    }
   }
 
   &:not(&_disabled) &__input:hover ~ &__handle &__state,
@@ -83,13 +113,8 @@
     animation-fill-mode: forwards;
   }
 
-  &__input:focus ~ &__handle &__state {
-    background: var(--m3-state-layers-on-surface-opacity-012);
-  }
-
-  &_checked:not(&_disabled) &__input:focus ~ &__handle &__state {
-    background: var(--m3-state-layers-primary-opacity-012);
-  }
+  &__input:hover ~ &__handle &__state::before { opacity: 0.08; }
+  &__input:focus ~ &__handle &__state::before { opacity: 0.12; }
 
   &__checkmark {
     --background: var(--m3-sys-outline);
