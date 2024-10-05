@@ -97,6 +97,7 @@
 
   &__outline {
     display: flex;
+    border-radius: inherit;
     position: absolute;
     left: 0;
     top: 0;
@@ -138,8 +139,9 @@
 
   &__outline-leading {
     width: 16px;
-    border-right: none;
-    border-radius: $m3-text-field-border-radius 0 0 $m3-text-field-border-radius;
+    border-inline-end: none;
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
     transition:
       m3-motion.timing-standard(border, 'short2'),
       m3-motion.timing-standard(width)
@@ -189,8 +191,9 @@
 
   &__outline-trailing {
     flex-grow: 1;
-    border-left: none;
-    border-radius: 0 $m3-text-field-border-radius $m3-text-field-border-radius 0;
+    border-inline-start: none;
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
     transition: m3-motion.timing-standard(border, 'short2');
   }
 
@@ -199,13 +202,13 @@
     flex-grow: 1;
     padding: 4px 16px;
     background: transparent;
-    border-radius: $m3-text-field-border-radius $m3-text-field-border-radius 0 0;
+    border-radius: inherit;
     transition: m3-motion.timing-standard(background-color);
     position: relative;
   }
 
   &_outlined &__content {
-    border-radius: $m3-text-field-border-radius;
+    border-radius: inherit;
   }
 
   &_multiline &__content { padding-right: 4px };
@@ -231,7 +234,7 @@
 
   &:not(&_outlined) &__label {
     position: absolute;
-    left: 16px;
+    inset-inline-start: 16px;
     top: 16px; // 50% - 12px
   }
 
