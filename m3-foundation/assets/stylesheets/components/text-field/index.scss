@@ -53,7 +53,7 @@
 
   textarea {
     min-height: 48px;
-    padding-right: 12px;
+    padding-inline-end: 12px;
     resize: vertical;
   }
 
@@ -158,13 +158,11 @@
   }
 
   &__outline-notch {
-    padding-top: 16px;
-    padding-bottom: 16px;
+    padding-block: 16px;
     border-left: none;
     border-right: none;
     transition:
-      m3-motion.timing-standard(padding-left),
-      m3-motion.timing-standard(padding-right),
+      m3-motion.timing-standard(padding-inline),
       m3-motion.timing-standard(border, 'short2')
     ;
     position: relative;
@@ -179,8 +177,7 @@
   &_focused &__outline-notch {
     border-top-color: transparent !important;
     border-top-width: 1px;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-inline: 4px;
   }
 
   &_filled &__outline-notch &__label,
@@ -211,10 +208,10 @@
     border-radius: inherit;
   }
 
-  &_multiline &__content { padding-right: 4px };
+  &_multiline &__content { padding-inline-end: 4px };
 
-  &_has-leading  &__content { padding-left: 0; }
-  &_has-trailing &__content { padding-right: 0; }
+  &_has-leading  &__content { padding-inline-start: 0; }
+  &_has-trailing &__content { padding-inline-end: 0; }
 
   &:not(&_outlined):not(&_disabled):not(&_readonly):hover &__content::before {
     content: ' ';
