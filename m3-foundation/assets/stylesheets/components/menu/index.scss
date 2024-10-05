@@ -28,31 +28,45 @@
   overflow: hidden;
   position: relative;
 
-  &__state {
-    --background: transparent;
-
+  &__content {
     display: flex;
     height: 56px;
     padding: 8px 12px;
-    background: var(--background);
+    background: transparent;
     align-items: center;
     align-self: stretch;
     gap: 12px;
   }
 
-  &:hover &__state,
-  &:focus &__state {
-    --background: var(--m3-state-layers-on-surface-opacity-008);
-  }
-
-  &_selected &__state {
+  &_selected &__content {
     background: var(--m3-sys-surface-container-highest);
   }
 
-  &:disabled &__state,
-  &_disabled &__state {
-    background: transparent;
+  &:disabled &__content,
+  &_disabled &__content {
     opacity: 0.38;
+  }
+
+  &__state {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--m3-sys-on-surface);
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &:hover &__state,
+  &:focus &__state {
+    opacity: 0.08;
+  }
+
+  &:disabled &__state,
+  &_disabled &__state,
+  &_selected &__state {
+    background: transparent;
   }
 
   &__icon {
@@ -64,7 +78,7 @@
     flex-shrink: 0;
   }
 
-  &__content {
+  &__body {
     @include m3-typography.body-large;
 
     display: flex;
@@ -72,6 +86,5 @@
     align-items: flex-start;
     flex: 1 0 0;
     color: var(--m3-sys-on-surface);
-    text-align: left;
   }
 }

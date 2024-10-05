@@ -12,7 +12,8 @@
     >
         <M3Ripple ref="ripple" :owner="ref(rootElement)" />
 
-        <span class="m3-menu-item__state">
+        <span class="m3-menu-item__state" />
+        <span class="m3-menu-item__content">
             <span
                 v-if="'leading' in $slots"
                 class="m3-menu-item__icon"
@@ -20,7 +21,7 @@
                 <slot name="leading" />
             </span>
 
-            <span class="m3-menu-item__content">
+            <span class="m3-menu-item__body">
                 <slot />
             </span>
 
