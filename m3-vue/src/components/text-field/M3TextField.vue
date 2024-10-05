@@ -3,6 +3,7 @@
         :class="{
             'm3-text-field': true,
             'm3-text-field_outlined': outlined,
+            'm3-text-field_multiline': multiline,
             'm3-text-field_has-leading': 'leading-icon' in $slots,
             'm3-text-field_has-trailing': 'trailing-icon' in $slots,
             'm3-text-field_filled': ('' + value).length,
@@ -47,7 +48,7 @@
             <slot name="label">{{ label }}</slot>
         </label>
 
-        <div class="m3-text-field__state">
+        <div class="m3-text-field__content">
             <div
                 v-if="'leading-icon' in $slots"
                 class="m3-text-field__icon"

@@ -53,6 +53,7 @@
 
   textarea {
     min-height: 48px;
+    padding-right: 12px;
     resize: vertical;
   }
 
@@ -193,27 +194,38 @@
     transition: m3-motion.timing-standard(border, 'short2');
   }
 
-  &__state {
+  &__content {
     display: flex;
     flex-grow: 1;
     padding: 4px 16px;
     background: transparent;
     border-radius: $m3-text-field-border-radius $m3-text-field-border-radius 0 0;
     transition: m3-motion.timing-standard(background-color);
+    position: relative;
   }
 
-  &_outlined &__state {
+  &_outlined &__content {
     border-radius: $m3-text-field-border-radius;
   }
 
-  &_has-leading  &__state { padding-left: 0; }
-  &_has-trailing &__state { padding-right: 0; }
+  &_multiline &__content { padding-right: 4px };
 
-  &:not(&_outlined):not(&_disabled):not(&_readonly):hover &__state {
-    background: var(--m3-state-layers-on-surface-opacity-008);
+  &_has-leading  &__content { padding-left: 0; }
+  &_has-trailing &__content { padding-right: 0; }
+
+  &:not(&_outlined):not(&_disabled):not(&_readonly):hover &__content::before {
+    content: ' ';
+    width: 100%;
+    height: 100%;
+    background: var(--m3-sys-on-surface);
+    border-radius: inherit;
+    opacity: 0.08;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
-  &_disabled &__state {
+  &_disabled &__content {
     opacity: 0.38;
   }
 
