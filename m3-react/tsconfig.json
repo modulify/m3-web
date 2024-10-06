@@ -10,7 +10,8 @@
       "~types/*": ["./types/*"]
     },
     "resolveJsonModule": true,
-    "target": "ES2017"
+    "target": "ES2017",
+    "types": ["vitest/globals"]
   },
   "include": [
     "shims-*.d.ts",
@@ -18,6 +19,6 @@
     "src/**/*.tsx",
     "storybook/**/*.ts",
     "storybook/**/*.tsx",
-    "tests/**/*.ts"
+    "tests/**/*.tsx"
   ]
 }
