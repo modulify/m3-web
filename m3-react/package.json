@@ -13,6 +13,7 @@
   "module": "dist/m3-react.esm.js",
   "scripts": {
     "build": "vite build",
+    "test": "vitest --run",
     "lint": "eslint --ext .js,.jsx,.mjs,.ts,.tsx src storybook tests types",
     "storybook": "storybook dev -c storybook -p 6006 --no-open",
     "storybook:build": "storybook build -c storybook"
@@ -43,6 +44,9 @@
     "@storybook/react-vite": "^8.3.0",
     "@storybook/test": "^8.3.0",
     "@storybook/theming": "^8.3.0",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
     "@types/lodash.isequal": "^4.5.8",
     "@types/node": "^18.15.3",
     "@types/react": "^18.2.67",
@@ -58,6 +62,7 @@
     "eslint-plugin-storybook": "^0.8.0",
     "eslint-plugin-unused-imports": "^3.1.0",
     "flag-icons": "^7.2.0",
+    "jsdom": "^25.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-transition-group": "^4.4.5",
@@ -69,7 +74,8 @@
     "typescript": "^5.4.2",
     "uuid": "^9.0.1",
     "vite": "^5.2.2",
-    "vite-plugin-svgr": "^4.2.0"
+    "vite-plugin-svgr": "^4.2.0",
+    "vitest": "^2.1.1"
   },
   "contributors": [
     "Zaitsev Kirill <zaytsev.cmath10@gmail.com>"
