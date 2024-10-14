@@ -2,6 +2,8 @@ yarnPath: .yarn/releases/yarn-4.1.0.cjs
 
 nodeLinker: node-modules
 
+nmHoistingLimits: workspaces
+
 cacheFolder: "./.yarn/cache"
 
 enableGlobalCache: false
