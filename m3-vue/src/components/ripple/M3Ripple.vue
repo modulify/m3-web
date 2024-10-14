@@ -48,11 +48,11 @@ const rememberKey = (event: KeyboardEvent) => {
 const activate = (event: KeyboardEvent | MouseEvent) => {
   active.value = false
 
-  if (props.owner.value === null) {
+  const el = props.owner.value
+  if (el === null) {
     return
   }
 
-  const el = props.owner.value
   const rect = el.getBoundingClientRect()
   const center = props.centered || lastKey === 'Space'
 
@@ -84,6 +84,9 @@ watch(() => props.owner.value, (curr, prev) => {
 
 onBeforeUnmount(() => {
   const el = props.owner.value
+  if (el === null) {
+    return
+  }
 
   el.removeEventListener('click', activate)
   el.removeEventListener('keyup', rememberKey)
