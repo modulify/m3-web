@@ -1,20 +1,20 @@
 {
   "name": "@modulify/m3-vue",
-  "license": "ISC",
   "description": "Material design components for vue",
+  "license": "ISC",
+  "version": "0.0.0",
   "keywords": [
-    "material",
     "components",
+    "material",
+    "material design",
     "vue"
   ],
+  "main": "dist/m3-vue.common.js",
+  "module": "dist/m3-vue.esm.js",
   "scripts": {
-    "build": "vite build",
+    "build": "./node_modules/.bin/vite build",
     "test": "vitest --run",
     "lint": "eslint --ext .js,.mjs,.ts,.vue src storybook tests types",
-    "release": "standard-version",
-    "release:minor": "standard-version --release-as minor",
-    "release:patch": "standard-version --release-as patch",
-    "release:major": "standard-version --release-as major",
     "storybook": "storybook dev -c storybook -p 6006 --no-open",
     "storybook:build": "storybook build -c storybook"
   },
