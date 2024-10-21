@@ -1,11 +1,5 @@
 import { ForwardRefRenderFunction } from 'react'
 
-import {
-  describe,
-  expect,
-  test,
-} from 'vitest'
-
 import { act, render } from '@testing-library/react'
 
 import {
