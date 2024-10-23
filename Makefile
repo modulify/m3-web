@@ -48,15 +48,23 @@ eslint: node_modules ## Runs eslint
 .PHONY: test
 test: node_modules ## Runs autotests
 	$(TARGET_HEADER)
+
+ifdef cli
+	@echo "${YARN} test ${cli}"
+	$(YARN) test $(cli)
+else
+	@echo "${YARN} test"
 	$(YARN) test
+endif
 
 .PHONY: test-coverage
 test-coverage: node_modules ## Runs autotests with --coverage
 	$(TARGET_HEADER)
-ifdef reporter
-	$(YARN) test --coverage --coverageReporters=$(reporter)
+	
+ifdef cli
+	$(YARN) test --coverage $(cli)
 else
-	$(YARN) test --coverage --coverageReporters=text
+	$(YARN) test --coverage
 endif
 
 .PHONY: help

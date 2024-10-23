@@ -1,21 +1,29 @@
 {
   "name": "@modulify/m3-vue",
-  "license": "ISC",
+  "type": "module",
   "description": "Material design components for vue",
+  "license": "ISC",
+  "version": "0.0.0",
   "keywords": [
-    "material",
     "components",
+    "material",
+    "material design",
     "vue"
   ],
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./dist/m3-vue.cjs",
+      "import": "./dist/m3-vue.mjs",
+      "default": "./dist/m3-vue.mjs"
+    }
+  },
   "scripts": {
-    "build": "vite build",
+    "build": "./node_modules/.bin/vite build",
     "lint": "eslint --ext .js,.mjs,.ts,.vue src storybook tests types",
-    "release": "standard-version",
-    "release:minor": "standard-version --release-as minor",
-    "release:patch": "standard-version --release-as patch",
-    "release:major": "standard-version --release-as major",
     "storybook": "storybook dev -c storybook -p 6006 --no-open",
-    "storybook:build": "storybook build -c storybook"
+    "storybook:build": "storybook build -c storybook",
+    "test": "vitest run"
   },
   "dependencies": {
     "@floating-ui/core": "^1.6.0",
@@ -40,6 +48,9 @@
     "@storybook/theming": "^8.3.0",
     "@storybook/vue3": "^8.3.0",
     "@storybook/vue3-vite": "^8.3.0",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@testing-library/vue": "^8.1.0",
     "@types/lodash.isequal": "^4.5.8",
     "@types/node": "^18.15.3",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
@@ -62,6 +73,7 @@
     "uuid": "^9.0.1",
     "vite": "^5.1.4",
     "vite-svg-loader": "^5.1.0",
+    "vitest": "^2.1.3",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"
   },
