@@ -1,5 +1,6 @@
 {
   "name": "@modulify/m3-react",
+  "type": "module",
   "description": "Material design components for React",
   "license": "ISC",
   "version": "0.0.0",
@@ -9,15 +10,20 @@
     "material design",
     "react"
   ],
-  "main": "dist/m3-react.common.js",
-  "module": "dist/m3-react.esm.js",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./dist/m3-react.cjs",
+      "import": "./dist/m3-react.mjs",
+      "default": "./dist/m3-react.mjs"
+    }
+  },
   "scripts": {
     "build": "vite build",
-    "test": "vitest run",
-    "coverage": "vitest run --coverage",
     "lint": "eslint --ext .js,.jsx,.mjs,.ts,.tsx src storybook tests types",
     "storybook": "storybook dev -c storybook -p 6006 --no-open",
-    "storybook:build": "storybook build -c storybook"
+    "storybook:build": "storybook build -c storybook",
+    "test": "vitest run"
   },
   "dependencies": {
     "@floating-ui/core": "^1.6.0",
@@ -56,7 +62,6 @@
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "@vitest/coverage-v8": "^2.1.3",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-json": "^3.1.0",
@@ -64,7 +69,6 @@
     "eslint-plugin-storybook": "^0.8.0",
     "eslint-plugin-unused-imports": "^3.1.0",
     "flag-icons": "^7.2.0",
-    "jsdom": "^25.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-transition-group": "^4.4.5",
