@@ -16,9 +16,9 @@ export default defineConfig({
       formats: ['es', 'cjs'],
       entry: path.resolve(__dirname, './src/index.ts'),
       fileName: (format) => `m3-vue.${{
-        es: 'esm',
-        cjs: 'common',
-      }[format]}.js`,
+        es: 'mjs',
+        cjs: 'cjs',
+      }[format]}`,
     },
     minify: false,
     rollupOptions: {
