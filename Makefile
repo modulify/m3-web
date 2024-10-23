@@ -60,10 +60,11 @@ endif
 .PHONY: test-coverage
 test-coverage: node_modules ## Runs autotests with --coverage
 	$(TARGET_HEADER)
-ifdef reporter
-	$(YARN) test --coverage --reporters=$(reporter)
+	
+ifdef cli
+	$(YARN) test --coverage $(cli)
 else
-	$(YARN) test --coverage --reporters=default
+	$(YARN) test --coverage
 endif
 
 .PHONY: help
