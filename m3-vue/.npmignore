@@ -3,8 +3,8 @@ src
 storybook
 tests
 
-.eslintrc.js
 .gitignore
+eslint.config.js
 shims-*.d.ts
 tsconfig.json
 

@@ -148,17 +148,19 @@ const M3NavigationTab: ForwardRefRenderFunction<
               id={labelIdForDrawer}
               aria-hidden={!inDrawer}
               className="m3-navigation-tab__label"
-              children={slots.label ?? label}
-            />
+            >
+              {slots.label ?? label}
+            </span>
           ) : null}
 
           {hasSlot('badge') ? (
             <span
               aria-hidden={!inDrawer}
               className="m3-navigation-tab__badge-label"
-              children={slots.badge}
               role="status"
-            />
+            >
+              {slots.badge}
+            </span>
           ) : null}
         </span>
       </button>
@@ -168,8 +170,9 @@ const M3NavigationTab: ForwardRefRenderFunction<
           id={labelIdForRail}
           aria-hidden={inDrawer}
           className="m3-navigation-tab__label"
-          children={slots.label ?? label}
-        />
+        >
+          {slots.label ?? label}
+        </div>
       ) : null}
 
       {hasSlot('badge') || badged ? (
@@ -179,8 +182,9 @@ const M3NavigationTab: ForwardRefRenderFunction<
             'm3-navigation-tab__badge': true,
             'm3-navigation-tab__badge_labelled': !!slots.badge,
           })}
-          children={slots.badge}
-        />
+        >
+          {slots.badge}
+        </M3Badge>
       ) : null}
     </div>
   )

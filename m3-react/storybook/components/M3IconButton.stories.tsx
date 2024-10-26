@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 
-import { useRecord } from '@/hooks';
+import { useRecord } from '@/hooks'
 
 const meta: Meta<typeof M3IconButton> = {
   title: 'Components/M3IconButton',

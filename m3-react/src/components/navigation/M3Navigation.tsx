@@ -139,7 +139,7 @@ const M3Navigation: FC<M3NavigationProps> = ({
 
   useEffect(() => {
     state.appearance = expanded ? 'drawer' : appearance
-  }, [appearance, expanded]);
+  }, [appearance, expanded])
 
   return createPortal(
     <>

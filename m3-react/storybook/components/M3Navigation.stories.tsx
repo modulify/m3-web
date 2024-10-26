@@ -1,16 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { useState } from 'react'
-
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-
 import {
   M3Navigation,
   M3NavigationSection,
   M3NavigationTab,
 } from '@/components/navigation'
+
+import { useState } from 'react'
 
 const meta = {
   title: 'Components/M3Navigation',
@@ -53,22 +52,41 @@ const meta = {
           </M3FabButton>
         </M3Navigation.Top>
 
-        <M3Navigation.Header children={'Mail'} />
+        <M3Navigation.Header>
+          Mail
+        </M3Navigation.Header>
 
         <M3NavigationTab label="Inbox" active>
           <M3Icon name="inbox" />
-          <M3NavigationTab.Badge children={24} />
+          <M3NavigationTab.Badge>
+            24
+          </M3NavigationTab.Badge>
         </M3NavigationTab>
 
-        <M3NavigationTab label="Outbox" children={<M3Icon name="send" />} />
-        <M3NavigationTab label="Favorites" children={<M3Icon name="favorite" />} />
-        <M3NavigationTab label="Trash" children={<M3Icon name="delete" />} />
+        <M3NavigationTab label="Outbox">
+          <M3Icon name="send" />
+        </M3NavigationTab>
+
+        <M3NavigationTab label="Favorites">
+          <M3Icon name="favorite" />
+        </M3NavigationTab>
+
+        <M3NavigationTab label="Trash">
+          <M3Icon name="delete" />
+        </M3NavigationTab>
 
         <M3NavigationSection>
-          <M3NavigationSection.Header children={'Personal folders'} />
+          <M3NavigationSection.Header>
+            Personal folders
+          </M3NavigationSection.Header>
 
-          <M3NavigationTab label="Family" children={<M3Icon name="folder" />} />
-          <M3NavigationTab label="Wedding" children={<M3Icon name="folder" />} />
+          <M3NavigationTab label="Family">
+            <M3Icon name="folder" />
+          </M3NavigationTab>
+
+          <M3NavigationTab label="Wedding">
+            <M3Icon name="folder" />
+          </M3NavigationTab>
         </M3NavigationSection>
       </M3Navigation>
     )

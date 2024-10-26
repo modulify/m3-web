@@ -99,7 +99,7 @@ const M3Card: FC<M3CardProps> = ({
   const headingEl = slots.heading
     ? headingId ? slots.heading : augment(slots.heading, { id: _id + '-heading' })
     : heading.length
-      ? <Heading id={_id + '-heading'} children={heading} />
+      ? <Heading id={_id + '-heading'}>{heading}</Heading>
       : null
 
   const aria = !('aria-label' in attrs) && !hasSlot('content') && hasHeading ? {
@@ -137,7 +137,7 @@ const M3Card: FC<M3CardProps> = ({
           {hasHeading || hasSubheading ? (
             <div className="m3-card__head">
               {headingEl}
-              {slots.subheading ?? (subheading.length ? <Subheading children={subheading} /> : null) }
+              {slots.subheading ?? (subheading.length ? <Subheading>{subheading}</Subheading> : null) }
             </div>
           ) : null}
           {content}

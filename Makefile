@@ -30,6 +30,7 @@ node_modules: package.json yarn.lock ## Installs dependencies
 	$(TARGET_HEADER)
 	$(YARN) install
 	@touch node_modules || true
+	@echo ""
 
 .PHONY: build
 build: node_modules ## Creates a dist catalogue with library build
@@ -43,7 +44,7 @@ husky: node_modules ## Adds husky git hooks with commit content checks
 .PHONY: eslint
 eslint: node_modules ## Runs eslint
 	$(TARGET_HEADER)
-	$(YARN) lint
+	$(YARN) eslint
 
 .PHONY: test
 test: node_modules ## Runs autotests

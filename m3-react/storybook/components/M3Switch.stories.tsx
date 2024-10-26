@@ -4,15 +4,23 @@ import { M3Switch } from '@/components/switch'
 
 import makeId from '@/utils/id'
 import { useMemo } from 'react'
-import { useRecord, useWatch } from '@/hooks';
+import { useRecord, useWatch } from '@/hooks'
 
-const M3SwitchWithLabel = ({ children = 'M3Switch', checked = false, disabled = false }) => {
+const M3SwitchWithLabel = ({
+  children = 'M3Switch',
+  checked = false,
+  disabled = false,
+}: {
+  children?: string
+  checked?: boolean
+  disabled?: boolean
+}) => {
   const id = useMemo(() => makeId('m3-switch'), [])
   const state = useRecord({
     checked,
   }, ['checked'])
 
-  useWatch(checked, checked => state.checked = checked);
+  useWatch(checked, checked => state.checked = checked)
 
   return (
     <div className="flex-row">
@@ -27,7 +35,7 @@ const M3SwitchWithLabel = ({ children = 'M3Switch', checked = false, disabled = 
         onToggle={() => state.checked = !state.checked}
       />
     </div>
-  );
+  )
 }
 
 const meta = {
@@ -51,7 +59,7 @@ const meta = {
       <M3SwitchWithLabel checked={checked} disabled={disabled}>
         Airplane mode
       </M3SwitchWithLabel>
-    );
+    )
   },
 
   parameters: {
