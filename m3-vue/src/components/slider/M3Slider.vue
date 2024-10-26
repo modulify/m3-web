@@ -217,7 +217,7 @@ const dragging = reactive({
 })
 
 const percentageOf = (value: number) => {
-  return 100 * Math.abs(restrict(value, [props.min, props.max]) / (props.max - props.min));
+  return 100 * Math.abs(restrict(value, [props.min, props.max]) / (props.max - props.min))
 }
 
 const percentage = computed(() => {
@@ -268,9 +268,9 @@ const nearest = (value: number) => {
       prev += props.step
     }
 
-    const next = prev + props.step;
+    const next = prev + props.step
 
-    return distance(value, prev) < distance(value, next) ? prev : next;
+    return distance(value, prev) < distance(value, next) ? prev : next
   }
 
   return value
@@ -338,7 +338,7 @@ const getEventValue = (event: MouseEvent | TouchEvent) => {
 }
 
 const stepFor = (leap: boolean) => {
-  const step = distance(props.min, props.max) / 100;
+  const step = distance(props.min, props.max) / 100
   return props.step > 0 ? props.step : leap ? 10 * step : step
 }
 const nextFor = (value: number, stepOrLeap: number | boolean = false) => {

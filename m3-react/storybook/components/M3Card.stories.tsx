@@ -28,8 +28,8 @@ const meta = {
       <M3Card.Media>
         <img alt="" src="/assets/image-80x80.png"/>
       </M3Card.Media>
-      <M3Card.Heading children="Header" />
-      <M3Card.Subheading children="Subhead" />
+      <M3Card.Heading>Header</M3Card.Heading>
+      <M3Card.Subheading>Subhead</M3Card.Subheading>
     </M3Card>
   ),
 
@@ -70,14 +70,24 @@ export const Portrait: Story = {
         <img alt="" src="/assets/image-720x376.png" />
       </M3Card.Media>
 
-      <M3Card.Heading children={'Title'} />
-      <M3Card.Subheading children={'Subhead'} />
+      <M3Card.Heading>
+        Title
+      </M3Card.Heading>
+
+      <M3Card.Subheading>
+        Subhead
+      </M3Card.Subheading>
 
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', width: '100%' }}>
-        <M3Button children={'Enabled'} appearance="outlined" />
-        <M3Button children={'Enabled'} />
+        <M3Button appearance="outlined">
+          Enabled
+        </M3Button>
+
+        <M3Button>
+          Enabled
+        </M3Button>
       </div>
     </M3Card>
   ),

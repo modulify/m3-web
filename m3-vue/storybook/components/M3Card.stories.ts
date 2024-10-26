@@ -60,7 +60,6 @@ type Story = StoryObj<typeof meta>
 export const Landscape: Story = {}
 
 export const LandscapeWithoutMedia: Story = {
-  // eslint-disable-next-line max-lines-per-function
   render: (args: unknown) => ({
     components: {
       M3Button,

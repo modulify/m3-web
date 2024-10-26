@@ -1,9 +1,12 @@
-import React from 'react'
+import type {
+  FC,
+  HTMLAttributes,
+} from 'react'
 
 import { distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
-const Header: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+const Header: FC<HTMLAttributes<HTMLElement>> = ({
   className = '',
   children = [],
   ...attrs
@@ -13,7 +16,7 @@ const Header: React.FC<React.HTMLAttributes<HTMLElement>> = ({
   </div>
 )
 
-const M3NavigationSection: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+const M3NavigationSection: FC<HTMLAttributes<HTMLElement>> = ({
   role = 'group',
   className = '',
   children,

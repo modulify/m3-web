@@ -19,13 +19,13 @@ type None = Record<string, never>
 type Root = ComponentPublicInstance | HTMLElement | null
 
 function componentExists(name) {
-  const instance = getCurrentInstance();
+  const instance = getCurrentInstance()
 
   if (!instance) {
-    throw new Error('componentExists must be called within a setup function');
+    throw new Error('componentExists must be called within a setup function')
   }
 
-  return !!instance.appContext.components[name];
+  return !!instance.appContext.components[name]
 }
 
 const resolveLinkComponent = () => {

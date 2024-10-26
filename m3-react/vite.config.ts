@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import path from 'node:path'
+import { resolve } from 'node:path'
 
 import common from './vite.config.common'
 import {
@@ -14,7 +14,7 @@ export default defineConfig({
     lib: {
       name: '@modulify/m3-react',
       formats: ['es', 'cjs'],
-      entry: path.resolve(__dirname, './src/index.ts'),
+      entry: resolve(__dirname, './src/index.ts'),
       fileName: (format) => `m3-react.${{
         es: 'mjs',
         cjs: 'cjs',

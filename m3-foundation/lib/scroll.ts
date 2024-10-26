@@ -56,6 +56,7 @@ export const syncSlider = (
   return enabled
 }
 
+// eslint-disable-next-line max-lines-per-function
 export const createRail = (el: HTMLElement, options: {
   horizontal?: boolean
   disabled?: boolean
@@ -68,6 +69,7 @@ export const createRail = (el: HTMLElement, options: {
 
   let dragging = false
   let horizontal = options.horizontal ?? false
+  // eslint-disable-next-line prefer-const
   let disabled = options.disabled ?? false
 
   const slider = el.querySelector<HTMLElement>('.m3-scroll-rail__slider')

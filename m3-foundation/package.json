@@ -8,32 +8,35 @@
     "CSS",
     "material",
     "material design",
+    "scaffolding",
     "styles"
   ],
   "scripts": {
-    "build": "vite build",
-    "lint": "eslint --ext .js,.mjs,.ts lib tests types"
+    "build": "echo \"No build available yet\"",
+    "eslint": "eslint ./lib ./types"
   },
   "dependencies": {
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
     "@types/lodash.isequal": "^4.5.8",
-    "@types/node": "^18.15.3",
-    "@typescript-eslint/eslint-plugin": "^6.11.0",
-    "@typescript-eslint/parser": "^6.11.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-json": "^3.1.0",
-    "eslint-plugin-unused-imports": "^3.1.0",
+    "@types/node": "^20.17.1",
+    "@typescript-eslint/eslint-plugin": "^8.11.0",
+    "@typescript-eslint/parser": "^8.11.0",
+    "eslint": "^9.13.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "globals": "^15.11.0",
     "husky": "^9.0.11",
     "sass": "^1.72.0",
     "standard-version": "^9.5.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.2",
-    "typescript": "^5.4.2",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.11.0",
     "uuid": "^9.0.1",
-    "vite": "^5.2.2"
+    "vite": "^5.4.10"
   },
   "contributors": [
     "Zaitsev Kirill <zaytsev.cmath10@gmail.com>"
