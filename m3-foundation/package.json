@@ -16,6 +16,7 @@
     "eslint": "eslint ./lib ./types"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.6.3",
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {

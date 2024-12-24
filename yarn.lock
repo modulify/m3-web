@@ -1397,6 +1397,7 @@ __metadata:
   resolution: "@modulify/m3-foundation@workspace:m3-foundation"
   dependencies:
     "@eslint/js": "npm:^9.13.0"
+    "@floating-ui/dom": "npm:^1.6.3"
     "@types/lodash.isequal": "npm:^4.5.8"
     "@types/node": "npm:^20.17.1"
     "@typescript-eslint/eslint-plugin": "npm:^8.11.0"

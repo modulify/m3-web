@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 20.x, 22.x ]
+        node-version: [ 22.x ]
 
     steps:
       - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
@@ -23,6 +23,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Yarn configuration
+        run: make .yarnrc.yml
+
       - name: Cache dependencies
         id: cache-deps
         uses: actions/cache@v4
@@ -32,11 +35,46 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-node-${{ matrix.node-version }}-yarn-
 
-      - name: Prepare
-        run: cp .yarnrc.yml.dist .yarnrc.yml
-
       - name: Install dependencies
         run: yarn install
 
       - name: Run eslint
         run: yarn eslint
+
+  tests:
+    needs: eslint
+
+    timeout-minutes: 60
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 22.x ]
+
+    steps:
+      - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Yarn configuration
+        run: make .yarnrc.yml
+
+      - name: Cache dependencies
+        id: cache-deps
+        uses: actions/cache@v4
+        with:
+          path: .yarn
+          key: ${{ runner.OS }}-node-${{ matrix.node-version }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-${{ matrix.node-version }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run tests
+        run: yarn test
