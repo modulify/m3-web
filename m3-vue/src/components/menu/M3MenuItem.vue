@@ -77,6 +77,6 @@ defineProps({
 })
 
 const root = ref<InstanceType<(typeof M3Link)> | null>(null)
-const rootElement = computed(() => root.value?.getElement() ?? null)
+const rootElement = computed(() => root.value?.el() ?? null)
 const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
 </script>

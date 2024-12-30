@@ -9,7 +9,7 @@
     >
         <input
             :id="id"
-            ref="input"
+            ref="control"
             :name="name"
             :aria-checked="checked ? 'true' : 'false'"
             :aria-disabled="disabled ? 'true' : 'false'"
@@ -41,6 +41,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { Interactable } from '@modulify/m3-foundation'
 import type { PropType } from 'vue'
 
 import {
@@ -89,17 +90,14 @@ const emitUpdate = (value: boolean) => {
   emit('update:checked', value)
 }
 
-const input = ref<HTMLInputElement | null>(null)
-
-const click = () => input.value?.click()
-const focus = () => input.value?.focus()
-const blur = () => input.value?.blur()
+const control = ref<HTMLInputElement | null>(null)
+const click = () => control.value?.click()
 
 defineExpose({
   click,
-  focus,
-  blur,
-})
+  focus: () => control.value?.focus(),
+  blur: () => control.value?.blur(),
+} satisfies Interactable)
 
 let dragging = false
 let startX = 0
