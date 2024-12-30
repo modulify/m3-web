@@ -1,13 +1,13 @@
-import React from 'react'
+import type { FC, HTMLAttributes } from 'react'
 
 import { isEmptyNode } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
-export interface M3BadgeProps extends React.HTMLAttributes<HTMLElement> {
+export interface M3BadgeProps extends HTMLAttributes<HTMLElement> {
   label?: string;
 }
 
-const M3Badge: React.FC<M3BadgeProps> = ({
+const M3Badge: FC<M3BadgeProps> = ({
   label = '',
   className = '',
   children = null,

@@ -1,4 +1,4 @@
-import type { FloatingOptions } from '@modulify/m3-foundation/types/components/popper'
+import type { FloatingOptions } from '../../types/components/popper'
 import type { Middleware } from '@floating-ui/dom'
 
 import {

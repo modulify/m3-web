@@ -21,7 +21,7 @@
                 'aria-labelledby': id + '-label',
             } : {}),
         }"
-        role="textbox"
+        role="grid"
         @click="focus"
     >
         <div v-if="outlined" class="m3-text-field__outline">

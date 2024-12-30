@@ -49,11 +49,13 @@ import {
   isNull,
   isNumeric,
   isString,
-  oneOf,
+  Or,
 } from '@modulify/m3-foundation/lib/predicates'
 
 import {
   isBoundary,
+  isDelay,
+  isPlacement,
 } from '@modulify/m3-foundation/lib/popper/predicates'
 
 defineProps({
@@ -69,6 +71,7 @@ defineProps({
 
   placement: {
     type: String as PropType<Placement>,
+    validator: isPlacement,
     default: 'bottom',
   },
 
@@ -97,7 +100,7 @@ defineProps({
 
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
-    validator: oneOf(isString, isHTMLElement),
+    validator: Or(isString, isHTMLElement),
     default: 'body',
   },
 
@@ -108,13 +111,13 @@ defineProps({
 
   delay: {
     type: [Number, String, Object] as PropType<number | string | Delay>,
-    validator: (value: number | string | Delay) => typeof value === 'object' || !isNaN(Number(value)),
+    validator: isDelay,
     default: () => ({ hide: 200 }),
   },
 
   detachTimeout: {
     type: null as unknown as PropType<number | string | null>,
-    validator: oneOf(isNull, isNumeric),
+    validator: Or(isNull, isNumeric),
     default: 5000,
   },
 

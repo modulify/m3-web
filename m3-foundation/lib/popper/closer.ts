@@ -1,7 +1,7 @@
 import type {
   CloserEvent,
   CloserTarget,
-} from '@modulify/m3-foundation/types/components/popper'
+} from '../../types/components/popper'
 
 export const onClick = (event: CloserEvent) => {
   const el = event.currentTarget as CloserTarget

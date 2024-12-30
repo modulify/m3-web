@@ -1,4 +1,4 @@
-import type { Delay } from '@modulify/m3-foundation/types/components/popper'
+import type { Delay } from '../../types/components/popper'
 
 export const normalizeDelay = (delay: number | string | Delay): {
   show: number;

@@ -30,7 +30,7 @@
                 <span
                     v-if="('label' in $slots || label.length > 0)"
                     :id="labelIdForDrawer"
-                    :aria-hidden="!inDrawer ? 'true' : 'false'"
+                    :aria-hidden="inDrawer ? 'false' : 'true'"
                     class="m3-navigation-tab__label"
                 >
                     <slot name="label">{{ label }}</slot>
@@ -38,7 +38,7 @@
 
                 <span
                     v-if="'badge' in $slots"
-                    :aria-hidden="!inDrawer ? 'true' : 'false'"
+                    :aria-hidden="inDrawer ? 'false' : 'true'"
                     class="m3-navigation-tab__badge-label"
                     role="status"
                 >
@@ -86,7 +86,9 @@ import {
   inject,
   ref,
 } from 'vue'
+
 import makeId from '@/utils/id'
+
 import { provideM3IconAppearance } from '@/components/icon/injections'
 import { useBreakpoint } from '@/composables/breakpoint'
 

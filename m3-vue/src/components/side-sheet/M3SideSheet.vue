@@ -65,11 +65,18 @@
 import { M3IconButton } from '@/components/icon-button'
 import { M3ScrollRail } from '@/components/scroll-rail'
 
+import {
+  isId,
+  isUndefined,
+  Or,
+} from '@modulify/m3-foundation/lib/predicates'
+
 import makeId from '@/utils/id'
 
 defineProps({
   id: {
     type: String,
+    validator: Or(isId, isUndefined),
     default: () => makeId('m3-side-sheet'),
   },
 
