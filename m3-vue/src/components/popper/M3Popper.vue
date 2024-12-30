@@ -34,7 +34,7 @@ import type {
   Delay,
   OverflowBehavior,
   Trigger,
-  TriggerOptions,
+  TriggerSchema,
 } from '@modulify/m3-foundation/types/components/popper'
 
 import { Listener } from '@modulify/m3-foundation/lib/popper'
@@ -63,13 +63,13 @@ import {
   isHTMLElement,
   isNull,
   isNumeric,
-  isShape,
   isString,
-  oneOf,
+  Or,
 } from '@modulify/m3-foundation/lib/predicates'
 
 import {
   isBoundary,
+  isDelay,
   isOverflowBehavior,
   isTriggerOptions,
 } from '@modulify/m3-foundation/lib/popper/predicates'
@@ -83,13 +83,13 @@ const props = defineProps({
   },
 
   targetTriggers: {
-    type: [Array, Object] as PropType<Trigger[] | TriggerOptions>,
+    type: [Array, Object] as PropType<Trigger[] | TriggerSchema>,
     validator: isTriggerOptions,
     default: (): Trigger[] => ['click'],
   },
 
   popperTriggers: {
-    type: [Array, Object] as PropType<Trigger[] | TriggerOptions>,
+    type: [Array, Object] as PropType<Trigger[] | TriggerSchema>,
     validator: isTriggerOptions,
     default: (): Trigger[] => [],
   },
@@ -122,7 +122,7 @@ const props = defineProps({
 
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
-    validator: oneOf(isString, isHTMLElement),
+    validator: Or(isString, isHTMLElement),
     default: 'body',
   },
 
@@ -146,10 +146,7 @@ const props = defineProps({
 
   delay: {
     type: [Number, String, Object] as PropType<number | string | Delay>,
-    validator: oneOf(isNumeric, isShape({
-      show: isNumeric,
-      hide: isNumeric,
-    })),
+    validator: isDelay,
     default: 0,
   },
 
@@ -160,7 +157,7 @@ const props = defineProps({
 
   detachTimeout: {
     type: null as unknown as PropType<null | number | string>,
-    validator: oneOf(isNull, isNumeric),
+    validator: Or(isNull, isNumeric),
     default: 5000,
   },
 })

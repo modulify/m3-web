@@ -4,15 +4,17 @@ import type {
   Strategy,
 } from '@floating-ui/dom'
 
-export type OverflowBehavior = 'flip' | 'shift' | 'hide'
-
 export type Delay = {
   show?: number | string;
   hide?: number | string;
 }
 
+export type OverflowBehavior = 'flip' | 'shift' | 'hide'
+
+export type { Placement }
+
 export type Trigger = 'hover' | 'focus' | 'click' | 'touch'
-export type TriggerOptions = {
+export type TriggerSchema = {
   show?: Trigger[],
   hide?: Trigger[],
 }
@@ -31,8 +33,8 @@ export type FloatingOptions = {
 }
 
 export type ListeningOptions = {
-  targetTriggers?: Trigger[] | TriggerOptions;
-  popperTriggers?: Trigger[] | TriggerOptions;
+  targetTriggers?: Trigger[] | TriggerSchema;
+  popperTriggers?: Trigger[] | TriggerSchema;
   hideOnMissClick?: boolean;
 }
 

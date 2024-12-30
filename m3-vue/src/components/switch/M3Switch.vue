@@ -48,12 +48,18 @@ import {
   ref,
 } from 'vue'
 
+import {
+  isId,
+  isUndefined,
+  Or,
+} from '@modulify/m3-foundation/lib/predicates'
+
 import makeId from '@/utils/id'
 
 const props = defineProps({
   id: {
     type: null as unknown as PropType<string | undefined>,
-    validator: (id: unknown) => id === undefined || typeof id === 'string' && id.length > 0 && /^[A-Za-z]/.test(id),
+    validator: Or(isId, isUndefined),
     default: () => makeId('m3-switch'),
   },
 

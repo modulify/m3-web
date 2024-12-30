@@ -47,6 +47,12 @@ import {
   ref,
 } from 'vue'
 
+import {
+  Or,
+  isString,
+  isUndefined,
+} from '@modulify/m3-foundation/lib/predicates'
+
 defineProps({
   to: {
     type: null as unknown as PropType<RouteLocationRaw>,
@@ -55,7 +61,7 @@ defineProps({
 
   href: {
     type: null as unknown as PropType<string | undefined>,
-    validator: (href: unknown) => typeof href === 'string' || typeof href === 'undefined',
+    validator: Or(isString, isUndefined),
     default: undefined,
   },
 

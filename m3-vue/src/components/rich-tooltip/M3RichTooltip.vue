@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import type {PropType, Ref} from 'vue'
+import type { PropType, Ref } from 'vue'
 
 import type {
   Boundary,
@@ -51,7 +51,7 @@ import type {
   Delay,
   OverflowBehavior,
   Trigger,
-  TriggerOptions,
+  TriggerSchema,
 } from '@modulify/m3-foundation/types/components/popper'
 
 import { M3Popper } from '@/components/popper'
@@ -61,12 +61,14 @@ import {
   isNull,
   isNumeric,
   isString,
-  oneOf,
+  Or,
 } from '@modulify/m3-foundation/lib/predicates'
 
 import {
   isBoundary,
+  isDelay,
   isOverflowBehavior,
+  isPlacement,
   isTriggerOptions,
 } from '@modulify/m3-foundation/lib/popper/predicates'
 
@@ -77,13 +79,13 @@ defineProps({
   },
 
   targetTriggers: {
-    type: [Array, Object] as PropType<Trigger[] | TriggerOptions>,
+    type: [Array, Object] as PropType<Trigger[] | TriggerSchema>,
     validator: isTriggerOptions,
     default: () => ['click'],
   },
 
   popperTriggers: {
-    type: [Array, Object] as PropType<Trigger[] | TriggerOptions>,
+    type: [Array, Object] as PropType<Trigger[] | TriggerSchema>,
     validator: isTriggerOptions,
     default: () => [],
   },
@@ -100,6 +102,7 @@ defineProps({
 
   placement: {
     type: String as PropType<Placement>,
+    validator: isPlacement,
     default: 'bottom' as Placement,
   },
 
@@ -129,7 +132,7 @@ defineProps({
 
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
-    validator: oneOf(isString, isHTMLElement),
+    validator: Or(isString, isHTMLElement),
     default: 'body',
   },
 
@@ -139,14 +142,14 @@ defineProps({
   },
 
   delay: {
-    type: [Number, String, Object] as PropType<number | string  |Delay>,
-    validator: (value: number | string | Delay) => typeof value === 'object' || isNumeric(value),
+    type: [Number, String, Object] as PropType<number | string | Delay>,
+    validator: isDelay,
     default: () => ({ hide: 150 }),
   },
 
   detachTimeout: {
     type: null as unknown as PropType<number | string | null>,
-    validator: oneOf(isNull, isNumeric),
+    validator: Or(isNull, isNumeric),
     default: 5000,
   },
 

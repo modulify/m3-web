@@ -4,7 +4,7 @@ import type {
   Delay,
   OverflowBehavior,
   Trigger,
-  TriggerOptions,
+  TriggerSchema,
 } from '@modulify/m3-foundation/types/components/popper'
 
 import type {
@@ -17,8 +17,8 @@ type HideReason = 'generic' | 'by-closer' | 'by-miss-click'
 
 export interface M3PopperProps extends HTMLAttributes<HTMLElement> {
   target: Element | null;
-  targetTriggers?: Trigger[] | TriggerOptions;
-  popperTriggers?: Trigger[] | TriggerOptions;
+  targetTriggers?: Trigger[] | TriggerSchema;
+  popperTriggers?: Trigger[] | TriggerSchema;
   shown?: boolean;
   hideOnMissClick?: boolean;
   placement?: Placement;
