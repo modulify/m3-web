@@ -1,3 +1,4 @@
+import type { Interactable } from '@modulify/m3-foundation'
 import type { PropType, VNode } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
@@ -50,13 +51,14 @@ export default defineComponent({
   // eslint-disable-next-line max-lines-per-function
   setup (props, { attrs, expose, slots }) {
     const root = ref<InstanceType<(typeof M3Link)> | null>(null)
-    const rootElement = computed(() => root.value?.getElement() ?? null)
+    const rootElement = computed(() => root.value?.el() ?? null)
     const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
 
     expose({
+      click: () => root.value?.click(),
       focus: () => root.value?.focus(),
       blur: () => root.value?.blur(),
-    })
+    } satisfies Interactable)
 
     const onKeyup = (event: KeyboardEvent) => {
       if (event.code === 'Enter') {

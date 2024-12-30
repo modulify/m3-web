@@ -5,15 +5,18 @@ import type {
   Ref,
 } from 'vue'
 
-import type { RouteLocationRaw } from 'vue-router'
-
 import {
+  computed,
   defineComponent,
   getCurrentInstance,
   h,
   ref,
   resolveComponent,
 } from 'vue'
+
+import type { Interactable } from '@modulify/m3-foundation'
+
+import type { RouteLocationRaw } from 'vue-router'
 
 type None = Record<string, never>
 type Root = ComponentPublicInstance | HTMLElement | null
@@ -49,7 +52,17 @@ const toElement = (ref: Ref<Root>) => {
   return null
 }
 
-export default defineComponent({
+export type M3LinkProps = {
+  type?: HTMLButtonElement['type'];
+  to?: RouteLocationRaw;
+  href?: string;
+}
+
+export interface M3LinkMethods extends Interactable {
+  el (): HTMLElement | null;
+}
+
+const M3Link = defineComponent({
   name: 'M3Link',
 
   props: {
@@ -71,12 +84,14 @@ export default defineComponent({
 
   setup (props, { attrs, slots, expose }) {
     const root = ref<Root>(null)
+    const el = computed(() => toElement(root))
 
     expose({
-      getElement: () => toElement(root),
-      focus: () => toElement(root)?.focus(),
-      blur: () => toElement(root)?.blur(),
-    })
+      el: () => el.value,
+      click: () => el.value?.click(),
+      focus: () => el.value?.focus(),
+      blur: () => el.value?.blur(),
+    } satisfies M3LinkMethods)
 
     const LinkComponent = resolveLinkComponent()
 
@@ -92,13 +107,6 @@ export default defineComponent({
         ref: root,
       }, slots)
   },
-}) as DefineComponent<{
-  type?: HTMLButtonElement['type'];
-  to?: RouteLocationRaw;
-  href?: string;
-}, None, None, None, {
-  getElement (): HTMLElement | null;
-  getChildren (): HTMLCollection;
-  focus (): void;
-  blur (): void;
-}>
+}) as DefineComponent<M3LinkProps, None, None, None, M3LinkMethods>
+
+export default M3Link

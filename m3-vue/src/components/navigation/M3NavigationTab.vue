@@ -130,7 +130,7 @@ const emit = defineEmits(['navigate'])
 const appearance = inject<Ref<Appearance>>(M3NavigationAppearance, ref('auto'))
 const breakpoint = useBreakpoint()
 const button = ref<(typeof M3Link) | null>(null)
-const buttonElement = computed(() => button.value?.getElement())
+const buttonElement = computed(() => button.value?.el())
 
 const inDrawer = computed(() => breakpoint.value.ge('large') || appearance.value === 'drawer')
 
