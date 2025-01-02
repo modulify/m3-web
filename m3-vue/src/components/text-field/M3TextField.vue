@@ -18,7 +18,7 @@
                 'aria-label' in $attrs ||
                 'aria-labelledby' in $attrs
             ) && (label.length || 'label' in $slots) ? {
-                'aria-labelledby': id + '-label',
+                'aria-labelledby': _id + '-label',
             } : {}),
         }"
         role="grid"
@@ -29,8 +29,8 @@
             <div class="m3-text-field__outline-notch">
                 <label
                     v-if="label.length || 'label' in $slots"
-                    :id="id + '-label'"
-                    :for="id"
+                    :id="_id + '-label'"
+                    :for="_id"
                     class="m3-text-field__label"
                 >
                     <slot name="label">{{ label }}</slot>
@@ -41,8 +41,8 @@
 
         <label
             v-else-if="label.length || 'label' in $slots"
-            :id="id + '-label'"
-            :for="id"
+            :id="_id + '-label'"
+            :for="_id"
             class="m3-text-field__label"
         >
             <slot name="label">{{ label }}</slot>
@@ -59,8 +59,9 @@
 
             <textarea
                 v-if="multiline"
-                :id="id"
-                ref="inputElement"
+                :id="_id"
+                ref="_input"
+                :name="name"
                 :value="value"
                 :placeholder="placeholder"
                 :disabled="disabled"
@@ -74,9 +75,10 @@
 
             <input
                 v-else
-                :id="id"
-                ref="inputElement"
-                :type="inputType"
+                :id="_id"
+                ref="_input"
+                :type="_type"
+                :name="name"
                 :value="value"
                 :placeholder="placeholder"
                 :disabled="disabled"
@@ -102,18 +104,28 @@
 </template>
 
 <script lang="ts" setup>
+import type { Focusable } from '@modulify/m3-foundation'
+import type { PropType } from 'vue'
+
 import {
   computed,
   onMounted,
   ref,
 } from 'vue'
 
-import makeId from '@/utils/id'
+import {
+  isId,
+  isUndefined,
+  Or,
+} from '@modulify/m3-foundation/lib/predicates'
+
+import useId from '@/composables/id'
 
 const props = defineProps({
   id: {
-    type: String,
-    default: () => makeId('m3-text-field'),
+    type: null as unknown as PropType<string | undefined>,
+    validator: Or(isId, isUndefined),
+    default: undefined,
   },
 
   type: {
@@ -128,6 +140,11 @@ const props = defineProps({
       'url',
     ].includes(type),
     default: 'text',
+  },
+
+  name: {
+    type: null as unknown as PropType<string | undefined>,
+    default: undefined,
   },
 
   value: {
@@ -181,18 +198,20 @@ const emit = defineEmits([
   'change',
   'update:value',
 ])
-const inputType = computed(() => props.type === 'number' ? 'text' : props.type)
-const inputElement = ref<HTMLInputElement | HTMLTextAreaElement | null>(null)
+
+const _id = useId('m3-text-field', computed(() => props.id))
+const _type = computed(() => props.type === 'number' ? 'text' : props.type)
+const _input = ref<HTMLInputElement | HTMLTextAreaElement | null>(null)
 
 const focused = ref(false)
 
-const focus = () => inputElement.value?.focus()
-const blur = () => inputElement.value?.blur()
+const focus = () => _input.value?.focus()
+const blur = () => _input.value?.blur()
 
 defineExpose({
   focus,
   blur,
-})
+} satisfies Focusable)
 
 const onInput = (event: Event) => {
   const target = event.target as HTMLInputElement | HTMLTextAreaElement
@@ -223,7 +242,7 @@ const onBlur = () => {
 }
 
 onMounted(() => {
-  const input = inputElement?.value
+  const input = _input?.value
   if (input) {
     const value = String(props.value)
     if (value.length) {

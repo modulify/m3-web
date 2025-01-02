@@ -14,7 +14,7 @@ import {
   resolveComponent,
 } from 'vue'
 
-import type { Interactable } from '@modulify/m3-foundation'
+import type { Interactive } from '@modulify/m3-foundation'
 
 import type { RouteLocationRaw } from 'vue-router'
 
@@ -58,7 +58,7 @@ export type M3LinkProps = {
   href?: string;
 }
 
-export interface M3LinkMethods extends Interactable {
+export interface M3LinkMethods extends Interactive {
   el (): HTMLElement | null;
 }
 

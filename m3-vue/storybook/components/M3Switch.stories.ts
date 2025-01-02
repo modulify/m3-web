@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { M3Switch } from '@/components/switch'
 import { ref } from 'vue'
 
-import makeId from '@/utils/id'
+import useId from '@/composables/id'
 
 const meta = {
   title: 'Components/M3Switch',
@@ -25,24 +25,22 @@ const meta = {
       M3Switch,
     },
 
-    setup () {
-      return {
-        id: makeId('m3-switch'),
-        args,
-        checked: ref(false),
-      }
-    },
+    setup: () => ({
+      id: useId('m3-switch'),
+      args,
+      checked: ref(false),
+    }),
 
     template: `
-        <div class="flex-row">
-            <label :for="id" class="mr-6">Airplane mode</label>
+      <div class="flex-row">
+          <label :for="id" class="mr-6">Airplane mode</label>
 
-            <M3Switch
-                :id="id"
-                v-model:checked="checked"
-                v-bind="args"
-            />
-        </div>
+          <M3Switch
+              :id="id"
+              v-model:checked="checked"
+              v-bind="args"
+          />
+      </div>
     `,
   }),
 

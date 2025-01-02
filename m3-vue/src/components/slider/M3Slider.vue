@@ -15,7 +15,7 @@
             <div class="m3-slider__scale">
                 <div
                     :ref="addNotch"
-                    :aria-label="min"
+                    :aria-label="String(min)"
                     class="m3-slider__notch"
                     style="--percentage: 0%"
                     role="button"
@@ -28,7 +28,7 @@
                     v-for="(p, i) in steps"
                     :ref="addNotch"
                     :key="p"
-                    :aria-label="p"
+                    :aria-label="String(p)"
                     :style="`--percentage: ${percentageOf(p)}%;`"
                     class="m3-slider__notch"
                     role="button"
@@ -39,7 +39,7 @@
 
                 <div
                     :ref="addNotch"
-                    :aria-label="max"
+                    :aria-label="String(max)"
                     class="m3-slider__notch"
                     style="--percentage: 100%"
                     role="button"
@@ -485,7 +485,7 @@ const inRange = (value: number, [min, max]: [number, number]) => {
   return min <= value && value <= max
 }
 
-const toGap = ({ left, right }: DOMRect) => [left, right]
+const toGap = ({ left, right }: DOMRect): [number, number] => [left, right]
 
 const updateNotches = () => {
   const _active = fillerActive.value?.getBoundingClientRect()
@@ -529,9 +529,9 @@ watch(() => props.disabled, (disabled) => {
 onMounted(() => {
   updateNotches()
 
-  const fillerActiveObserver = new ResizeObserver(() => updateNotches())
-  const handleMaxObserver = new ResizeObserver(() => updateNotches())
-  const handleMinObserver = new ResizeObserver(() => updateNotches())
+  const fillerActiveObserver = new ResizeObserver(() => requestAnimationFrame(updateNotches))
+  const handleMaxObserver = new ResizeObserver(() => requestAnimationFrame(updateNotches))
+  const handleMinObserver = new ResizeObserver(() => requestAnimationFrame(updateNotches))
 
   fillerActiveObserver.observe(fillerActive.value as HTMLElement)
   handleMaxObserver.observe(handleMax.value as HTMLElement)

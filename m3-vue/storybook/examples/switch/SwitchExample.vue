@@ -16,8 +16,8 @@
 <script lang="ts" setup>
 import { M3Switch } from '@/components/switch'
 
-import makeId from '@/utils/id'
 import { ref } from 'vue'
+import useId from '@/composables/id'
 
 defineProps({
   label: {
@@ -31,6 +31,6 @@ defineProps({
   },
 })
 
-const id = makeId('m3-switch')
+const id = useId('m3-switch')
 const checked = ref(false)
 </script>

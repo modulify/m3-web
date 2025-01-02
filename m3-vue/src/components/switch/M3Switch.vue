@@ -8,8 +8,8 @@
         v-bind="$attrs"
     >
         <input
-            :id="id"
-            ref="control"
+            :id="_id"
+            ref="_input"
             :name="name"
             :aria-checked="checked ? 'true' : 'false'"
             :aria-disabled="disabled ? 'true' : 'false'"
@@ -41,10 +41,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { Interactable } from '@modulify/m3-foundation'
+import type { Interactive } from '@modulify/m3-foundation'
 import type { PropType } from 'vue'
 
 import {
+  computed,
   onBeforeUnmount,
   ref,
 } from 'vue'
@@ -55,13 +56,13 @@ import {
   Or,
 } from '@modulify/m3-foundation/lib/predicates'
 
-import makeId from '@/utils/id'
+import useId from '@/composables/id'
 
 const props = defineProps({
   id: {
     type: null as unknown as PropType<string | undefined>,
     validator: Or(isId, isUndefined),
-    default: () => makeId('m3-switch'),
+    default: undefined,
   },
 
   name: {
@@ -90,14 +91,16 @@ const emitUpdate = (value: boolean) => {
   emit('update:checked', value)
 }
 
-const control = ref<HTMLInputElement | null>(null)
-const click = () => control.value?.click()
+const _id = useId('m3-switch', computed(() => props.id))
+const _input = ref<HTMLInputElement | null>(null)
+
+const click = () => _input.value?.click()
 
 defineExpose({
   click,
-  focus: () => control.value?.focus(),
-  blur: () => control.value?.blur(),
-} satisfies Interactable)
+  focus: () => _input.value?.focus(),
+  blur: () => _input.value?.blur(),
+} satisfies Interactive)
 
 let dragging = false
 let startX = 0

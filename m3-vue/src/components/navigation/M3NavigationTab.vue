@@ -1,6 +1,6 @@
 <template>
     <div
-        :id="id"
+        :id="_id"
         :class="{
             ['m3-navigation-tab']: true,
             ['m3-navigation-tab_in-' + appearance]: true,
@@ -72,8 +72,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { Ref } from 'vue'
 import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
+
+import type {
+  PropType,
+  Ref,
+} from 'vue'
 
 import { M3Badge } from '@/components/badge'
 import { M3Link } from '@/components/link'
@@ -87,15 +91,21 @@ import {
   ref,
 } from 'vue'
 
-import makeId from '@/utils/id'
+import {
+  isId,
+  isUndefined,
+  Or,
+} from '@modulify/m3-foundation/lib/predicates'
 
 import { provideM3IconAppearance } from '@/components/icon/injections'
 import { useBreakpoint } from '@/composables/breakpoint'
+import useId from '@/composables/id'
 
 const props = defineProps({
   id: {
-    type: String,
-    default: () => makeId('m3-navigation-item'),
+    type: null as unknown as PropType<string | undefined>,
+    validator: Or(isId, isUndefined),
+    default: undefined,
   },
 
   href: {
@@ -127,6 +137,8 @@ const props = defineProps({
 
 const emit = defineEmits(['navigate'])
 
+const _id = useId('m3-navigation-item', computed(() => props.id))
+
 const appearance = inject<Ref<Appearance>>(M3NavigationAppearance, ref('auto'))
 const breakpoint = useBreakpoint()
 const button = ref<(typeof M3Link) | null>(null)
@@ -134,8 +146,8 @@ const buttonElement = computed(() => button.value?.el())
 
 const inDrawer = computed(() => breakpoint.value.ge('large') || appearance.value === 'drawer')
 
-const labelIdForDrawer = computed(() => props.id + '-label-for-drawer')
-const labelIdForRail = computed(() => props.id + '-label-for-rail')
+const labelIdForDrawer = computed(() => _id.value + '-label-for-drawer')
+const labelIdForRail = computed(() => _id.value + '-label-for-rail')
 const labelId = computed(() => inDrawer.value ? labelIdForDrawer.value : labelIdForRail.value)
 
 provideM3IconAppearance(() => props.active ? 'filled' : 'outlined')

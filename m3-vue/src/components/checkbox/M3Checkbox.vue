@@ -13,11 +13,11 @@
         <M3Ripple :owner="ref(root)" />
 
         <input
-            :id="id"
-            ref="input"
+            :id="_id"
+            ref="_input"
             :aria-checked="checked ? 'true' : 'false'"
             :aria-invalid="invalid ? 'true' : 'false'"
-            :name="name"
+            :name="_name"
             :value="value"
             :checked="checked"
             :disabled="disabled"
@@ -35,6 +35,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { Interactive } from '@modulify/m3-foundation'
 import type { PropType } from 'vue'
 
 import IconCheckmark from '@modulify/m3-foundation/assets/sprites/checkbox/checkmark.svg'
@@ -53,7 +54,7 @@ import {
   Or,
 } from '@modulify/m3-foundation/lib/predicates'
 
-import makeId from '@/utils/id'
+import useId from '@/composables/id'
 
 const props = defineProps({
   id: {
@@ -63,8 +64,8 @@ const props = defineProps({
   },
 
   name: {
-    type: String,
-    default: () => makeId('m3-checkbox'),
+    type: null as unknown as PropType<string | undefined>,
+    default: undefined,
   },
 
   model: {
@@ -116,17 +117,16 @@ const emit = defineEmits([
 ])
 
 const root = ref<HTMLElement | null>(null)
-const input = ref<HTMLInputElement | null>(null)
 
-const click = () => input.value?.click()
-const focus = () => input.value?.focus()
-const blur = () => input.value?.blur()
+const _id = useId('m3-checkbox', computed(() => props.id))
+const _name = computed(() => props.name ?? _id.value)
+const _input = ref<HTMLInputElement | null>(null)
 
 defineExpose({
-  click,
-  focus,
-  blur,
-})
+  click: () => _input.value?.click(),
+  focus: () => _input.value?.focus(),
+  blur: () => _input.value?.blur(),
+} satisfies Interactive)
 
 const equals = (a: unknown, b: unknown) => props.equalsFn.call(null, a, b)
 const contains = (array: unknown[], value: unknown) => array.some(v => equals(v, value))
@@ -148,8 +148,7 @@ const calculate = (checked: boolean) => {
 }
 
 const onChange = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  const value = calculate(input.checked)
+  const value = calculate((event.target as HTMLInputElement).checked)
 
   emit('change', value)
   emit('update:model', value)

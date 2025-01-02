@@ -1,4 +1,4 @@
-import type { Interactable } from '@modulify/m3-foundation'
+import type { Interactive } from '@modulify/m3-foundation'
 import type { PropType, VNode } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
@@ -58,7 +58,7 @@ export default defineComponent({
       click: () => root.value?.click(),
       focus: () => root.value?.focus(),
       blur: () => root.value?.blur(),
-    } satisfies Interactable)
+    } satisfies Interactive)
 
     const onKeyup = (event: KeyboardEvent) => {
       if (event.code === 'Enter') {

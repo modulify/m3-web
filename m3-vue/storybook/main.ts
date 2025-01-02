@@ -39,7 +39,10 @@ const config: StorybookConfig = {
     './**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   viteFinal: async (config) => {
-    config.server.hmr.clientPort = 80
+    if (config.server && typeof config.server.hmr === 'object') {
+      config.server.hmr.clientPort = 80
+    }
+
     return config
   },
 }
