@@ -1,7 +1,7 @@
 <template>
     <div
         ref="root"
-        :aria-controls="id + '-menu'"
+        :aria-controls="_id + '-menu'"
         :aria-expanded="expanded ? 'true' : 'false'"
         :aria-disabled="disabled ? 'true' : 'false'"
         :aria-readonly="readonly ? 'true' : 'false'"
@@ -13,7 +13,7 @@
         role="combobox"
     >
         <M3TextField
-            :id="id"
+            :id="_id"
             :value="text"
             :label="label"
             :placeholder="placeholder"
@@ -35,15 +35,13 @@
         </M3TextField>
 
         <M3Menu
-            :id="id + '-menu'"
+            :id="_id + '-menu'"
             v-model:shown="shouldBeExpanded"
             :target="ref(root)"
             :placement="placement"
             :aria-hidden="expanded ? 'false' : 'true'"
             :disabled="disabled || readonly"
-            :style="{
-                width: rootWidth + 'px',
-            }"
+            :style="{ width: rootWidth + 'px' }"
             role="listbox"
             @shown="expanded = true"
             @hide="expanded = false"
@@ -98,7 +96,13 @@ import {
   ref,
 } from 'vue'
 
-import makeId from '@/utils/id'
+import {
+  isId,
+  isUndefined,
+  Or,
+} from '@modulify/m3-foundation/lib/predicates'
+
+import useId from '@/composables/id'
 
 type Maybe<T> = T | null
 
@@ -109,8 +113,9 @@ interface Option {
 
 const props = defineProps({
   id: {
-    type: String,
-    default: () => makeId('m3-select'),
+    type: null as unknown as PropType<string | undefined>,
+    validator: Or(isId, isUndefined),
+    default: undefined,
   },
 
   value: {
@@ -168,6 +173,8 @@ const emit = defineEmits([
   'update:value',
 ])
 
+const _id = useId('m3-select', computed(() => props.id))
+
 const root = ref<HTMLElement | null>(null)
 const rootWidth = ref(0)
 
@@ -183,19 +190,39 @@ const pick = (option: Option) => {
   shouldBeExpanded.value = false
 }
 
-let observer: ResizeObserver | null = null
+let resizeObserver: ResizeObserver | null = null
+let resizeUpdateId: number | null = null
 
-onMounted(() => {
-  observer = new ResizeObserver(([entry]) => {
+const requestResizeUpdate = (entry: ResizeObserverEntry) => {
+  requestAnimationFrame(() => {
     rootWidth.value = entry.contentRect.width
   })
-  observer.observe(root.value as HTMLElement)
+}
+
+const cancelResizeUpdate = () => {
+  if (resizeUpdateId) {
+    cancelAnimationFrame(resizeUpdateId)
+    resizeUpdateId = null
+  }
+}
+
+onMounted(() => {
+  resizeObserver = new ResizeObserver(([entry]) => {
+    cancelResizeUpdate()
+    requestResizeUpdate(entry)
+  })
+  resizeObserver.observe(root.value as HTMLElement)
 
   rootWidth.value = root.value?.offsetWidth ?? 0
 })
 
 onBeforeUnmount(() => {
-  observer?.disconnect()
-  observer = null
+  resizeObserver?.disconnect()
+  resizeObserver = null
+
+  if (resizeUpdateId) {
+    cancelAnimationFrame(resizeUpdateId)
+    resizeUpdateId = null
+  }
 })
 </script>

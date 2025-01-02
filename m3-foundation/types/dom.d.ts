@@ -7,4 +7,4 @@ export interface Focusable {
   blur (): void;
 }
 
-export interface Interactable extends Clickable, Focusable {}
+export interface Interactive extends Clickable, Focusable {}

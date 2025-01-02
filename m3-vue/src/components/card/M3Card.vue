@@ -1,6 +1,6 @@
 <template>
     <section
-        :id="id"
+        :id="_id"
         :class="{
             ['m3-card']: true,
             ['m3-card_' + appearance]: true,
@@ -11,7 +11,7 @@
             role: 'region',
             ...(interactive ? { tabindex: 0 } : {}),
             ...(!('aria-label' in $attrs) && !('content' in $slots) && ('heading' in $slots || heading.length) ? {
-                'aria-labelledby': id + '-heading',
+                'aria-labelledby': _id + '-heading',
             } : {}),
             ...$attrs,
         }"
@@ -37,7 +37,7 @@
                 >
                     <div
                         v-if="'heading' in $slots || heading.length"
-                        :id="id + '-heading'"
+                        :id="_id + '-heading'"
                         class="m3-card__heading"
                     >
                         <slot name="heading">
@@ -59,19 +59,26 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue'
 import type { Appearance } from '@modulify/m3-foundation/types/components/card'
+import type { PropType } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-import makeId from '@/utils/id'
+import {
+  isId,
+  isUndefined,
+  Or,
+} from '@modulify/m3-foundation/lib/predicates'
 
-defineProps({
+import useId from '@/composables/id'
+
+const props = defineProps({
   id: {
-    type: String,
-    default: () => makeId('m3-card'),
+    type: null as unknown as PropType<string | undefined>,
+    validator: Or(isId, isUndefined),
+    default: undefined,
   },
 
   appearance: {
@@ -99,6 +106,8 @@ defineProps({
     default: false,
   },
 })
+
+const _id = useId('m3-card', computed(() => props.id))
 
 const state = ref<HTMLElement | null>(null)
 const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)

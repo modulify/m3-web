@@ -11,7 +11,7 @@
         <Transition name="m3-transition-slide-right">
             <div
                 v-show="shown"
-                :id="id"
+                :id="_id"
                 :class="{
                     'm3-side-sheet': true,
                     'm3-side-sheet_docked': docked,
@@ -20,7 +20,7 @@
                 v-bind="{
                     ...$attrs,
                     ...('aria-label' in $attrs || 'aria-labelledby' in $attrs ? {} : {
-                        'aria-labelledby': id + '-title',
+                        'aria-labelledby': _id + '-title',
                     }),
                 }"
             >
@@ -34,7 +34,7 @@
                         <slot name="affordance" />
                     </div>
 
-                    <div :id="id + '-title'" class="m3-side-sheet__title">
+                    <div :id="_id + '-title'" class="m3-side-sheet__title">
                         <slot name="title" />
                     </div>
 
@@ -65,19 +65,21 @@
 import { M3IconButton } from '@/components/icon-button'
 import { M3ScrollRail } from '@/components/scroll-rail'
 
+import { computed } from 'vue'
+
 import {
   isId,
   isUndefined,
   Or,
 } from '@modulify/m3-foundation/lib/predicates'
 
-import makeId from '@/utils/id'
+import useId from '@/composables/id'
 
-defineProps({
+const props = defineProps({
   id: {
     type: String,
     validator: Or(isId, isUndefined),
-    default: () => makeId('m3-side-sheet'),
+    default: undefined,
   },
 
   shown: {
@@ -92,4 +94,6 @@ defineProps({
 })
 
 const emit = defineEmits(['update:shown'])
+
+const _id = useId('m3-side-sheet', computed(() => props.id))
 </script>

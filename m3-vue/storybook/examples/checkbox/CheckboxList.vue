@@ -58,7 +58,7 @@ import type { PropType } from 'vue'
 import { M3Checkbox } from '@/components/checkbox'
 
 import { ref } from 'vue'
-import makeId from '@/utils/id'
+import useId from '@/composables/id'
 
 interface Option {
   label: string;
@@ -76,7 +76,7 @@ defineProps({
   },
 })
 
-const id = makeId('m3-checkbox-example')
+const id = useId('m3-checkbox-example')
 
 const model = ref<string[]>([])
 
