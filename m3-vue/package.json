@@ -61,7 +61,7 @@
     "@typescript-eslint/parser": "^8.11.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/compiler-sfc": "^3.5.13",
-    "@vue/language-server": "^2.0.19",
+    "@vue/language-server": "^2.2.0",
     "eslint": "^9.13.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-unused-imports": "^4.1.4",
