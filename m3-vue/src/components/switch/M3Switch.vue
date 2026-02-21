@@ -103,6 +103,7 @@ defineExpose({
 } satisfies Interactive)
 
 let dragging = false
+let clickSuppressed = false
 let startX = 0
 
 const getEventX = (event: MouseEvent | TouchEvent) => {
@@ -116,6 +117,10 @@ const onMove = (event: MouseEvent | TouchEvent) => {
 
   dragging = Math.abs(shiftX) > DRAG_THRESHOLD
 
+  if (dragging) {
+    clickSuppressed = true
+  }
+
   if (shiftX > DRAG_THRESHOLD && !props.checked) {
     emitUpdate(true)
   } else if (shiftX < -1 * DRAG_THRESHOLD && props.checked) {
@@ -124,11 +129,15 @@ const onMove = (event: MouseEvent | TouchEvent) => {
 }
 
 const stopMouseListening = () => {
+  dragging = false
+
   window.removeEventListener('mousemove', onMove)
   window.removeEventListener('mouseup', stopMouseListening)
 }
 
 const onMouseDown = (event: MouseEvent) => {
+  dragging = false
+  clickSuppressed = false
   startX = getEventX(event)
 
   window.addEventListener('mousemove', onMove)
@@ -149,6 +158,8 @@ const stopTouchListening = () => {
 }
 
 const onTouchStart = (event: TouchEvent) => {
+  dragging = false
+  clickSuppressed = false
   startX = getEventX(event)
 
   window.addEventListener('touchmove', onMove)
@@ -157,9 +168,10 @@ const onTouchStart = (event: TouchEvent) => {
 }
 
 const onClick = (event: Event) => {
-  if (dragging) {
+  if (clickSuppressed) {
     event.preventDefault()
-    dragging = false
+    event.stopPropagation()
+    clickSuppressed = false
   }
 }
 
