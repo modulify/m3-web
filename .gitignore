@@ -10,6 +10,7 @@
 
 coverage/
 dist/
+dist-storybook/
 node_modules/
 
 .pnp.cjs

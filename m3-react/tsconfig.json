@@ -3,6 +3,12 @@
     "baseUrl": "./",
     "esModuleInterop": true,
     "jsx": "react-jsx",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2017",
+      "esnext.disposable"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {

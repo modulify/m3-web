@@ -24,7 +24,7 @@
   "devDependencies": {
     "@eslint/js": "^9.13.0",
     "@types/lodash.isequal": "^4.5.8",
-    "@types/node": "^20.17.1",
+    "@types/node": "^25.3.0",
     "@typescript-eslint/eslint-plugin": "^8.11.0",
     "@typescript-eslint/parser": "^8.11.0",
     "eslint": "^9.13.0",
@@ -36,10 +36,10 @@
     "standard-version": "^9.5.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.2",
-    "typescript": "~5.5.4",
+    "typescript": "~5.9.3",
     "typescript-eslint": "^8.11.0",
     "uuid": "^9.0.1",
-    "vite": "^5.4.21"
+    "vite": "^7.3.1"
   },
   "contributors": [
     "Zaitsev Kirill <zaytsev.cmath10@gmail.com>"
