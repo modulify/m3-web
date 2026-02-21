@@ -1,10 +1,13 @@
-import { Unstyled } from '@storybook/addon-docs/blocks'
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
 
 import Inline from './Inline'
 import { defineComponent, h, ref } from 'vue'
+import * as M3TextFieldStories from './M3TextField.stories'
 
 import { M3Icon } from '@/components/icon'
 import { M3TextField } from '@/components/text-field'
+
+<Meta of={M3TextFieldStories} />
 
 <Unstyled>
 # Text fields
