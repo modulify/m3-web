@@ -120,7 +120,6 @@ export default [
       'vue/new-line-between-multi-line-property': 'error',
       'vue/no-child-content': 'error',
       'vue/no-empty-component-block': 'error',
-      'vue/no-invalid-model-keys': 'error',
       'vue/no-lone-template': 'error',
       'vue/no-multi-spaces': 'error',
       'vue/no-mutating-props': 'error',
