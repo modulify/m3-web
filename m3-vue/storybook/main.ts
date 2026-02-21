@@ -19,6 +19,7 @@ const config: StorybookConfig = {
     '@storybook/addon-themes',
   ],
   core: {
+    disableWhatsNewNotifications: true,
     builder: {
       name: '@storybook/builder-vite',
       options: {
@@ -29,6 +30,9 @@ const config: StorybookConfig = {
   framework: {
     name: '@storybook/vue3-vite',
     options: {},
+  },
+  features: {
+    sidebarOnboardingChecklist: false,
   },
   staticDirs: [
     { from: './assets', to: '/assets' },
