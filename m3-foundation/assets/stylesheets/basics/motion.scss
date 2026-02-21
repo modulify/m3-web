@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 // Duration
 
 // Short durations
@@ -50,8 +52,8 @@ $m3-sys-motion-duration-map: (
 );
 
 @function duration($type) {
-  @if map-has-key($m3-sys-motion-duration-map, $type) {
-    @return map-get($m3-sys-motion-duration-map, $type);
+  @if map.has-key($m3-sys-motion-duration-map, $type) {
+    @return map.get($m3-sys-motion-duration-map, $type);
   } @else {
     @warn "Unknown duration `#{$type}`.";
     @return null;
@@ -80,8 +82,8 @@ $m3-sys-motion-easing-map: (
 );
 
 @function easing($key) {
-  @if map-has-key($m3-sys-motion-easing-map, $key) {
-    @return map-get($m3-sys-motion-easing-map, $key);
+  @if map.has-key($m3-sys-motion-easing-map, $key) {
+    @return map.get($m3-sys-motion-easing-map, $key);
   } @else {
     @warn "Unknown key `#{$key}` in easing map.";
     @return null;

@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 $m3-screen-medium: 600px;
 $m3-screen-expanded: 840px;
 $m3-screen-large: 1200px;
@@ -20,16 +22,16 @@ $screen-max: (
 );
 
 @function get-screen-min ($keyOrValue) {
-  @if map-has-key($screen-min, $keyOrValue) {
-    @return map-get($screen-min, $keyOrValue);
+  @if map.has-key($screen-min, $keyOrValue) {
+    @return map.get($screen-min, $keyOrValue);
   } @else {
     @return $keyOrValue;
   }
 }
 
 @function get-screen-max ($keyOrValue) {
-  @if map-has-key($screen-max, $keyOrValue) {
-    @return map-get($screen-max, $keyOrValue);
+  @if map.has-key($screen-max, $keyOrValue) {
+    @return map.get($screen-max, $keyOrValue);
   } @else {
     @return $keyOrValue;
   }

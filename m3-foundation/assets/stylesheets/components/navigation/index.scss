@@ -3,7 +3,7 @@
 @use '../../basics/shape' as m3-shape;
 @use '../../basics/typography' as m3-typography;
 
-@import './variables';
+@use './variables' as *;
 
 @mixin m3-navigation-drawer {
   width: $m3-navigation-drawer-width;

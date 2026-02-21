@@ -1,4 +1,4 @@
-@import "../basics/palette";
+@use '../basics/palette' as *;
 
 // Primary
 $m3-sys-light-primary:           $m3-palette-primary-40;

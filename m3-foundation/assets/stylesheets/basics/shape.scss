@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 $m3-sys-shape-corner-extra-small: 4px;
 $m3-sys-shape-corner-small: 8px;
 $m3-sys-shape-corner-medium: 12px;
@@ -11,8 +13,8 @@ $m3-sys-shape-corner-map: (
 );
 
 @function get-corner($keyOrValue) {
-  @if map-has-key($m3-sys-shape-corner-map, $keyOrValue) {
-    @return map-get($m3-sys-shape-corner-map, $keyOrValue);
+  @if map.has-key($m3-sys-shape-corner-map, $keyOrValue) {
+    @return map.get($m3-sys-shape-corner-map, $keyOrValue);
   } @else {
     @return $keyOrValue;
   }

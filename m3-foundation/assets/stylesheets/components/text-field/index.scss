@@ -1,7 +1,7 @@
 @use '../../basics/motion' as m3-motion;
 @use '../../basics/typography' as m3-typography;
 
-@import './variables.scss';
+@use './variables' as *;
 
 .m3-text-field {
   display: inline-flex;
