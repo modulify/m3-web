@@ -66,6 +66,7 @@ const M3Switch: ForwardRefRenderFunction<
   const state = useRecord({
     checked,
     dragging: false,
+    clickSuppressed: false,
   }, ['checked'])
 
   useWatch(checked, checked => state.checked = checked)
@@ -89,6 +90,10 @@ const M3Switch: ForwardRefRenderFunction<
 
       state.dragging = Math.abs(shiftX) > DRAG_THRESHOLD
 
+      if (state.dragging) {
+        state.clickSuppressed = true
+      }
+
       if (shiftX > DRAG_THRESHOLD && !state.checked) {
         toggle(true)
       } else if (shiftX < -1 * DRAG_THRESHOLD && state.checked) {
@@ -104,6 +109,8 @@ const M3Switch: ForwardRefRenderFunction<
     }
 
     const onMouseDown = (event: MouseEvent) => {
+      state.dragging = false
+      state.clickSuppressed = false
       startX = getEventX(event)
 
       window.addEventListener('mousemove', onMove)
@@ -124,6 +131,8 @@ const M3Switch: ForwardRefRenderFunction<
     }
 
     const onTouchStart = (event: TouchEvent) => {
+      state.dragging = false
+      state.clickSuppressed = false
       startX = getEventX(event)
 
       window.addEventListener('touchmove', onMove)
@@ -132,9 +141,10 @@ const M3Switch: ForwardRefRenderFunction<
     }
 
     const onClick = (event: Event) => {
-      if (state.dragging) {
+      if (state.clickSuppressed) {
         event.preventDefault()
-        state.dragging = false
+        event.stopPropagation()
+        state.clickSuppressed = false
       }
     }
 
