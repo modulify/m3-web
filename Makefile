@@ -46,6 +46,26 @@ eslint: node_modules ## Runs eslint
 	$(TARGET_HEADER)
 	$(YARN) eslint
 
+.PHONY: tsc
+tsc: node_modules ## Runs type checks in all workspaces
+	$(TARGET_HEADER)
+	$(YARN) tsc
+
+.PHONY: tsc-foundation
+tsc-foundation: node_modules ## Runs type checks in @modulify/m3-foundation
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-foundation tsc
+
+.PHONY: tsc-react
+tsc-react: node_modules ## Runs type checks in @modulify/m3-react
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-react tsc
+
+.PHONY: tsc-vue
+tsc-vue: node_modules ## Runs type checks in @modulify/m3-vue
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-vue tsc
+
 .PHONY: test
 test: node_modules ## Runs autotests
 	$(TARGET_HEADER)

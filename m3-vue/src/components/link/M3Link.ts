@@ -1,6 +1,5 @@
 import type {
   ComponentPublicInstance,
-  DefineComponent,
   PropType,
   Ref,
 } from 'vue'
@@ -18,10 +17,9 @@ import type { Interactive } from '@modulify/m3-foundation'
 
 import type { RouteLocationRaw } from 'vue-router'
 
-type None = Record<string, never>
 type Root = ComponentPublicInstance | HTMLElement | null
 
-function componentExists(name) {
+function componentExists (name: string) {
   const instance = getCurrentInstance()
 
   if (!instance) {
@@ -61,6 +59,8 @@ export type M3LinkProps = {
 export interface M3LinkMethods extends Interactive {
   el (): HTMLElement | null;
 }
+
+export type M3LinkInstance = ComponentPublicInstance & M3LinkMethods
 
 const M3Link = defineComponent({
   name: 'M3Link',
@@ -107,6 +107,6 @@ const M3Link = defineComponent({
         ref: root,
       }, slots)
   },
-}) as DefineComponent<M3LinkProps, None, None, None, M3LinkMethods>
+})
 
 export default M3Link

@@ -13,15 +13,16 @@
   ],
   "scripts": {
     "build": "echo \"No build available yet\"",
-    "eslint": "eslint ./lib ./types"
+    "eslint": "eslint ./lib ./types",
+    "tsc": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.3",
+    "@modulify/validator": "^0.1.0",
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
-    "@modulify/validator": "^0.1.0",
     "@types/lodash.isequal": "^4.5.8",
     "@types/node": "^20.17.1",
     "@typescript-eslint/eslint-plugin": "^8.11.0",

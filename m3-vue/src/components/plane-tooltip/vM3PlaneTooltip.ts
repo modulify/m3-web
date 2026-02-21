@@ -7,18 +7,18 @@ import type {
 
 import type { Definition } from './types'
 
-import M3PlaneTooltipCollector from './M3PlaneTooltipCollector'
+import M3PlaneTooltipCollector, { type M3PlaneTooltipCollectorMethods } from './M3PlaneTooltipCollector'
 
 import { createApp } from 'vue'
 
 let app: App | null = null
-let vm: InstanceType<typeof M3PlaneTooltipCollector> | null = null
+let vm: M3PlaneTooltipCollectorMethods | null = null
 
 // getCurrentInstance().appContext.app
 const init = () => {
   if (app === null && typeof document !== 'undefined') {
     app = createApp(M3PlaneTooltipCollector)
-    vm = app.mount(document.createElement('div')) as InstanceType<typeof M3PlaneTooltipCollector>
+    vm = app.mount(document.createElement('div')) as unknown as M3PlaneTooltipCollectorMethods
   }
 }
 

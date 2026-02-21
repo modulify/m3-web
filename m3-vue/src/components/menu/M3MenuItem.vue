@@ -39,7 +39,7 @@
 import type { PropType } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
-import { M3Link } from '@/components/link'
+import { M3Link, type M3LinkInstance } from '@/components/link'
 import { M3Ripple } from '@/components/ripple'
 
 import {
@@ -76,7 +76,7 @@ defineProps({
   },
 })
 
-const root = ref<InstanceType<(typeof M3Link)> | null>(null)
+const root = ref<M3LinkInstance | null>(null)
 const rootElement = computed(() => root.value?.el() ?? null)
 const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
 </script>

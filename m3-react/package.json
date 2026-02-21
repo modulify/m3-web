@@ -25,7 +25,8 @@
     "eslint": "eslint ./src ./storybook ./tests ./types",
     "storybook": "storybook dev -c storybook -p 6006 --no-open",
     "storybook:build": "storybook build -c storybook",
-    "test": "vitest run"
+    "test": "vitest run",
+    "tsc": "tsc --noEmit -p tsconfig.tsc.json"
   },
   "dependencies": {
     "@floating-ui/core": "^1.6.0",
