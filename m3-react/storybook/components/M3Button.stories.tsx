@@ -8,6 +8,8 @@ import { M3Icon } from '@/components/icon'
 import * as values from '@/components/button/values'
 
 const meta: Meta<typeof M3Button> = {
+  title: 'Components/M3Button',
+
   component: M3Button,
 
   argTypes: {

@@ -25,6 +25,16 @@ export type {
 } from '@/components/icon-button'
 
 export type {
+  M3LinkMethods,
+  M3LinkProps,
+} from '@/components/link'
+
+export type {
+  M3MenuItemProps,
+  M3MenuProps,
+} from '@/components/menu'
+
+export type {
   M3NavigationProps,
   M3NavigationTabMethods,
   M3NavigationTabProps,
@@ -56,6 +66,16 @@ export type {
   M3SwitchProps,
 } from '@/components/switch'
 
+export type {
+  M3SideSheetProps,
+} from '@/components/side-sheet'
+
+export type {
+  M3TextFieldMethods,
+  M3TextFieldProps,
+  M3TextFieldSupportTextProps,
+} from '@/components/text-field'
+
 export {
   M3Button,
 } from '@/components/button'
@@ -80,6 +100,15 @@ export {
 export {
   M3IconButton,
 } from '@/components/icon-button'
+
+export {
+  M3Link,
+} from '@/components/link'
+
+export {
+  M3Menu,
+  M3MenuItem,
+} from '@/components/menu'
 
 export {
   M3Navigation,
@@ -107,7 +136,16 @@ export {
 } from '@/components/scroll-rail'
 
 export {
+  M3SideSheet,
+} from '@/components/side-sheet'
+
+export {
   M3Switch,
   M3SwitchScope,
   useM3SwitchScope,
 } from '@/components/switch'
+
+export {
+  M3TextField,
+  M3TextFieldSupportText,
+} from '@/components/text-field'
