@@ -1,23 +1,22 @@
 import type { StorybookConfig } from '@storybook/vue3-vite'
 
-import { join, dirname } from 'path'
+const DEFAULT_ALLOWED_HOSTS = [
+  'localhost',
+  '127.0.0.1',
+]
 
-/**
- * This function is used to resolve the absolute path of a package.
- * It is needed in projects that use Yarn PnP or are set up within a monorepo.
- */
-function getAbsolutePath (value: string): string {
-  return dirname(require.resolve(join(value, 'package.json')))
-}
+const envAllowedHosts = (process.env.STORYBOOK_ALLOWED_HOSTS ?? '')
+  .split(',')
+  .map(host => host.trim())
+  .filter(Boolean)
 
 const config: StorybookConfig = {
   addons: [
-    getAbsolutePath('@chromatic-com/storybook'),
-    getAbsolutePath('@storybook/addon-a11y'),
-    getAbsolutePath('@storybook/addon-essentials'),
-    getAbsolutePath('@storybook/addon-interactions'),
-    getAbsolutePath('@storybook/addon-links'),
-    getAbsolutePath('@storybook/addon-themes'),
+    '@chromatic-com/storybook',
+    '@storybook/addon-a11y',
+    '@storybook/addon-docs',
+    '@storybook/addon-links',
+    '@storybook/addon-themes',
   ],
   core: {
     builder: {
@@ -28,7 +27,7 @@ const config: StorybookConfig = {
     },
   },
   framework: {
-    name: getAbsolutePath('@storybook/vue3-vite'),
+    name: '@storybook/vue3-vite',
     options: {},
   },
   staticDirs: [
@@ -39,7 +38,17 @@ const config: StorybookConfig = {
     './**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   viteFinal: async (config) => {
-    if (config.server && typeof config.server.hmr === 'object') {
+    config.server ??= {}
+
+    if (config.server.allowedHosts !== true) {
+      config.server.allowedHosts = [
+        ...(config.server.allowedHosts ?? []),
+        ...DEFAULT_ALLOWED_HOSTS,
+        ...envAllowedHosts,
+      ]
+    }
+
+    if (typeof config.server.hmr === 'object') {
       config.server.hmr.clientPort = 80
     }
 

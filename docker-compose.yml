@@ -1,6 +1,6 @@
 services:
   node: &node
-    image: node:20
+    image: node:24
     user: node
     volumes:
       - ./:/project
@@ -10,6 +10,8 @@ services:
     <<: *node
     command: 'yarn storybook'
     working_dir: /project/m3-react
+    environment:
+      STORYBOOK_ALLOWED_HOSTS: '.modulify.test'
     labels:
       traefik.port: 6006
       traefik.enable: 'true'
@@ -22,6 +24,8 @@ services:
     <<: *node
     command: 'yarn storybook'
     working_dir: /project/m3-vue
+    environment:
+      STORYBOOK_ALLOWED_HOSTS: '.modulify.test'
     labels:
       traefik.port: 6006
       traefik.enable: 'true'
