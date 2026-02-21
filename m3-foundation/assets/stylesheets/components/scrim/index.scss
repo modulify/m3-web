@@ -1,4 +1,4 @@
-@import "../../basics/palette";
+@use '../../basics/palette' as *;
 
 .m3-scrim {
   display: flex;

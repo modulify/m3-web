@@ -1,5 +1,5 @@
-@import 'dark';
-@import 'light';
+@use 'dark' as *;
+@use 'light' as *;
 
 :root {
   @include m3-theme-light;
