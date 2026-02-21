@@ -1,11 +1,9 @@
-import type { Predicate } from '@modulify/validator/types'
-
 import {
   isArray,
   isString,
 } from '@modulify/validator/predicates'
 
-export type { Predicate }
+export type Predicate<T = unknown> = (value: unknown) => value is T
 
 export {
   isArray,

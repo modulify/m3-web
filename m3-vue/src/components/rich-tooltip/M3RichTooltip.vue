@@ -81,13 +81,13 @@ defineProps({
   targetTriggers: {
     type: [Array, Object] as PropType<Trigger[] | TriggerSchema>,
     validator: isTriggerOptions,
-    default: () => ['click'],
+    default: (): Trigger[] => ['click'],
   },
 
   popperTriggers: {
     type: [Array, Object] as PropType<Trigger[] | TriggerSchema>,
     validator: isTriggerOptions,
-    default: () => [],
+    default: (): Trigger[] => [],
   },
 
   shown: {

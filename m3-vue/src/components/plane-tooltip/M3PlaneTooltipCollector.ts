@@ -6,10 +6,9 @@ import { defineComponent, h, ref } from 'vue'
 import render from '@/utils/render'
 import { useCollection } from './collection'
 
-type None = Record<string, never>
 type Methods = ReturnType<typeof useCollection>
 
-export default defineComponent<None, None, None, None, Methods>({
+const M3PlaneTooltipCollector = defineComponent({
   name: 'M3PlaneTooltipCollector',
 
   setup (_, { expose }) {
@@ -32,3 +31,7 @@ export default defineComponent<None, None, None, None, Methods>({
     })
   },
 })
+
+export type M3PlaneTooltipCollectorMethods = Methods
+
+export default M3PlaneTooltipCollector

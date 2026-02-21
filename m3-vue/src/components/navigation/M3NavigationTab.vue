@@ -80,7 +80,7 @@ import type {
 } from 'vue'
 
 import { M3Badge } from '@/components/badge'
-import { M3Link } from '@/components/link'
+import { M3Link, type M3LinkInstance } from '@/components/link'
 import { M3Ripple } from '@/components/ripple'
 
 import { M3NavigationAppearance } from './injections'
@@ -141,7 +141,7 @@ const _id = useId('m3-navigation-item', computed(() => props.id))
 
 const appearance = inject<Ref<Appearance>>(M3NavigationAppearance, ref('auto'))
 const breakpoint = useBreakpoint()
-const button = ref<(typeof M3Link) | null>(null)
+const button = ref<M3LinkInstance | null>(null)
 const buttonElement = computed(() => button.value?.el())
 
 const inDrawer = computed(() => breakpoint.value.ge('large') || appearance.value === 'drawer')

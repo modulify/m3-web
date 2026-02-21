@@ -12,7 +12,11 @@
     "build": "yarn workspaces foreach -W run build",
     "commitlint": "commitlint --edit",
     "eslint": "yarn workspaces foreach -W run eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "tsc": "yarn workspaces foreach -W run tsc",
+    "tsc:foundation": "yarn workspace @modulify/m3-foundation tsc",
+    "tsc:react": "yarn workspace @modulify/m3-react tsc",
+    "tsc:vue": "yarn workspace @modulify/m3-vue tsc"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
