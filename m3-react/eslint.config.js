@@ -88,6 +88,7 @@ export default [
       //'unused-imports/no-unused-imports': 'error',
 
       'react/react-in-jsx-scope': 'off',
+      'storybook/no-renderer-packages': 'off',
     },
     settings: {
       'import/parsers': {
