@@ -143,3 +143,5 @@ Global examples: eslint rule updates, shared dependency updates, repository-leve
 `skills/yarn-lock-conflict-resolution/SKILL.md`.
 - For coverage deficit analysis and recovery strategy, use the local skill:
 `skills/coverage-recovery/SKILL.md`.
+- For documentation creation or edits under `docs/` with locale parity, use the local skill:
+`skills/docs-parity/SKILL.md`.
