@@ -62,6 +62,17 @@ export type {
 } from '@/components/scroll-rail'
 
 export type {
+  M3SelectOption,
+  M3SelectProps,
+} from '@/components/select'
+
+export type {
+  M3SliderProps,
+  M3SliderType,
+  M3SliderValue,
+} from '@/components/slider'
+
+export type {
   M3SwitchMethods,
   M3SwitchProps,
 } from '@/components/switch'
@@ -138,6 +149,14 @@ export {
 export {
   M3SideSheet,
 } from '@/components/side-sheet'
+
+export {
+  M3Select,
+} from '@/components/select'
+
+export {
+  M3Slider,
+} from '@/components/slider'
 
 export {
   M3Switch,
