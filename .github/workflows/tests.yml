@@ -107,8 +107,8 @@ jobs:
       - name: Run merged coverage
         if: matrix.node-version == '24.x'
         run: |
-          rm -rf coverage .nyc_output
-          mkdir -p coverage/.parts .nyc_output
+          rm -rf coverage .nyc_output artifacts
+          mkdir -p coverage/.parts .nyc_output artifacts
           yarn test --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.reportsDirectory=coverage/unit
           yarn test:e2e:coverage
           cp coverage/unit/coverage-final.json coverage/.parts/unit.json
@@ -118,6 +118,14 @@ jobs:
           yarn nyc report
           yarn nyc report --reporter=json-summary >/dev/null
           yarn node --experimental-strip-types scripts/show-total-coverage.ts
+
+      - name: Upload Playwright/Vitest artifacts on failure
+        if: failure() && matrix.node-version == '24.x'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-vitest-artifacts-node-24
+          path: artifacts
+          if-no-files-found: ignore
 
       - name: Upload merged coverage artifacts
         if: matrix.node-version == '24.x' && github.event_name == 'push' && github.ref == 'refs/heads/main'

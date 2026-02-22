@@ -134,7 +134,7 @@ endif
 .PHONY: test-coverage
 test-coverage: node_modules ## Runs merged coverage for unit and Playwright e2e tests
 	$(TARGET_HEADER)
-	@rm -rf coverage $(NYC_OUTPUT_DIR)
+	@rm -rf coverage $(NYC_OUTPUT_DIR) artifacts
 	@mkdir -p $(COVERAGE_PARTS_DIR) $(NYC_OUTPUT_DIR)
 	$(YARN) test --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.reportsDirectory=$(COVERAGE_UNIT_DIR)
 	$(YARN_PLAYWRIGHT) test:e2e:coverage
