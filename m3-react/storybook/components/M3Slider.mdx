@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/addon-docs/blocks'
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
 import * as M3SliderStories from './M3Slider.stories'
 
 <Meta of={M3SliderStories} />
@@ -6,3 +6,21 @@ import * as M3SliderStories from './M3Slider.stories'
 # M3Slider
 
 Sliders let users make selections from a range of values
+
+## Accessibility semantics
+
+- Each slider handle must have an accessible name (`ariaHandle`, `ariaHandleMin`, `ariaHandleMax`).
+- Keep numeric ranges and steps predictable and documented for users.
+- Support keyboard adjustments (Arrow, Home, End) for all handles.
+
+## Demo
+
+<Canvas of={M3SliderStories.Single} />
+<Canvas of={M3SliderStories.Range} />
+
+## Resources
+
+- [M3 Sliders overview](https://m3.material.io/components/sliders/overview)
+- [M3 Sliders guidelines](https://m3.material.io/components/sliders/guidelines)
+- [WAI-ARIA APG: Slider Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/slider/)
+- [WAI-ARIA APG: Multi-Thumb Slider Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/)

@@ -9,9 +9,11 @@ import * as M3CheckboxStories from './M3Checkbox.stories'
 
 Checkboxes let users select one or more items from a list, or turn an item on or off
 
-[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+## Accessibility semantics
 
-[Guidelines](https://m3.material.io/components/checkbox/guidelines)
+- Every checkbox needs a visible text label.
+- Group related checkboxes under a shared group label (`fieldset/legend` or `aria-labelledby`).
+- Use indeterminate state only for partial parent-selection states.
 
 ### Regular list
 
@@ -50,3 +52,10 @@ Checkboxes let users select one or more items from a list, or turn an item on or
     }]}
   />
 </Unstyled>
+
+## Resources
+
+- [M3 Checkbox overview](https://m3.material.io/components/checkbox/overview)
+- [M3 Checkbox guidelines](https://m3.material.io/components/checkbox/guidelines)
+- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+- [WAI-ARIA APG: Checkbox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/)

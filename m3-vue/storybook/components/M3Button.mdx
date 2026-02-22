@@ -9,6 +9,12 @@ import * as M3ButtonStories from './M3Button.stories'
 
 Common buttons prompt most actions in a UI
 
+## Accessibility semantics
+
+- Use a clear text label for action buttons.
+- For icon-only actions, provide `aria-label`.
+- Keep disabled actions unavailable through the `disabled` state.
+
 <p style={{ display: 'flex', gap: '16px' }}>
   <Inline tag={'span'} is={M3Button} label={'Edit'} />
   <Inline tag={'span'} is={M3Button} label={'Edit'} appearance={'elevated'} />
@@ -24,3 +30,9 @@ Common buttons prompt most actions in a UI
   <Inline tag={'span'} is={M3Button} icon={'edit'} label={'Edit'} appearance={'text'} />
   <Inline tag={'span'} is={M3Button} icon={'edit'} label={'Edit'} appearance={'tonal'} />
 </p>
+
+## Resources
+
+- [M3 Buttons overview](https://m3.material.io/components/buttons/overview)
+- [M3 Buttons guidelines](https://m3.material.io/components/buttons/guidelines)
+- [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)

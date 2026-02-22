@@ -9,17 +9,23 @@
     <M3Dialog
         v-model:opened="opened"
         role="dialog"
-        aria-live="assertive"
+        aria-modal="true"
+        aria-labelledby="dialog-confirmation-title"
+        aria-describedby="dialog-confirmation-description"
     >
         <template #icon>
             <M3Icon name="delete" appearance="outlined" />
         </template>
 
         <template #header>
-            <h3>Permanently delete?</h3>
+            <h3 id="dialog-confirmation-title">
+                Permanently delete?
+            </h3>
         </template>
 
-        Deleting the selected messages will also remove them from all synced devices.
+        <p id="dialog-confirmation-description">
+            Deleting the selected messages will also remove them from all synced devices.
+        </p>
 
         <template #footer>
             <M3Button

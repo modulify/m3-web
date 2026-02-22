@@ -8,14 +8,15 @@ import { useTarget } from '@/hooks'
 
 const DeleteTooltip: FC = () => {
   const [target, setTarget] = useTarget()
+  const tooltipId = 'delete-tooltip-description'
 
   return (
     <>
-      <M3Button effects={[setTarget]}>
+      <M3Button effects={[setTarget]} aria-describedby={tooltipId}>
         Delete
       </M3Button>
 
-      <M3RichTooltip target={target} hideOnMissClick={true}>
+      <M3RichTooltip id={tooltipId} target={target} hideOnMissClick={true}>
         <M3RichTooltip.Heading>
           Deleting item
         </M3RichTooltip.Heading>

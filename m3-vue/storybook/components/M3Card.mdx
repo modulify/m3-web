@@ -12,7 +12,11 @@ import { defineComponent, h } from 'vue'
 
 Cards display content and actions about a single subject
 
-[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+## Accessibility semantics
+
+- Use non-interactive cards as plain content containers.
+- For interactive cards, expose actions with semantic controls (`button` / `link`).
+- Keep a clear heading hierarchy inside cards for screen reader navigation.
 
 <Inline is={defineComponent({
   render: () => h('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '16px' } }, [
@@ -20,3 +24,10 @@ Cards display content and actions about a single subject
     h(LiveMusic2),
   ]),
 })} />
+
+## Resources
+
+- [M3 Cards overview](https://m3.material.io/components/cards/overview)
+- [M3 Cards guidelines](https://m3.material.io/components/cards/guidelines)
+- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+- [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)

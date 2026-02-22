@@ -5,8 +5,23 @@ import DialogConfirmation from '../examples/dialog/DialogConfirmation.vue'
 
 # Dialogs
 
+Dialogs communicate important information and block the underlying interface until the user responds.
+
+## Accessibility semantics
+
+- Set `role="dialog"` (or `alertdialog` for urgent confirmations).
+- Provide `aria-modal="true"` for modal flows.
+- Connect title and description with `aria-labelledby` and `aria-describedby`.
+- Keep focus inside the dialog while it is opened.
+
 <Unstyled>
   <div className="mb-3">
     <Inline is={DialogConfirmation} />
   </div>
 </Unstyled>
+
+## Resources
+
+- [M3 Dialogs overview](https://m3.material.io/components/dialogs/overview)
+- [M3 Dialogs guidelines](https://m3.material.io/components/dialogs/guidelines)
+- [WAI-ARIA APG: Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)

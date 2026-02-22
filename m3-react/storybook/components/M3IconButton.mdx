@@ -10,11 +10,30 @@ import * as M3IconButtonStories from './M3IconButton.stories'
 
 Icon buttons help people take minor actions with one tap
 
-[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+## Accessibility semantics
+
+- Icon-only controls must include an accessible name (`aria-label`).
+- Toggleable icon buttons should expose state with `aria-pressed`.
+- Use icon buttons for minor actions, not for primary destructive actions.
 
 <Unstyled>
   <p style={{ display: 'flex', gap: '16px' }}>
-    <M3IconButton appearance="filled"><M3Icon name="favorite" /></M3IconButton>
-    <M3IconButton appearance="filled" toggleable={true}><M3Icon name="favorite" /></M3IconButton>
+    <M3IconButton appearance="filled" aria-label="Mark as favorite"><M3Icon name="favorite" /></M3IconButton>
+    <M3IconButton
+      appearance="filled"
+      toggleable={true}
+      selected={true}
+      aria-label="Toggle favorite"
+      aria-pressed="true"
+    >
+      <M3Icon name="favorite" />
+    </M3IconButton>
   </p>
 </Unstyled>
+
+## Resources
+
+- [M3 Icon Buttons overview](https://m3.material.io/components/icon-buttons/overview)
+- [M3 Icon Buttons guidelines](https://m3.material.io/components/icon-buttons/guidelines)
+- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+- [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
