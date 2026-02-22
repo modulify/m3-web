@@ -12,9 +12,11 @@
     "build": "yarn workspaces foreach -W run build",
     "commitlint": "commitlint --edit",
     "eslint": "yarn workspaces foreach -W run eslint",
-    "test:storybook-a11y": "yarn workspace @modulify/m3-react test:storybook-a11y && yarn workspace @modulify/m3-vue test:storybook-a11y",
+    "test:e2e": "yarn workspace @modulify/m3-react vitest run --config vitest.config.e2e.ts && yarn workspace @modulify/m3-vue vitest run --config vitest.config.e2e.ts",
+    "test:smoke": "yarn workspace @modulify/m3-react test:smoke && yarn workspace @modulify/m3-vue test:smoke",
     "test": "vitest run",
     "tsc": "yarn workspaces foreach -W run tsc",
+    "tsc:e2e": "tsc -p tsconfig.e2e.json --skipLibCheck",
     "tsc:foundation": "yarn workspace @modulify/m3-foundation tsc",
     "tsc:react": "yarn workspace @modulify/m3-react tsc",
     "tsc:vue": "yarn workspace @modulify/m3-vue tsc"
@@ -22,10 +24,13 @@
   "devDependencies": {
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
+    "@vitest/browser": "^4.0.18",
+    "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-istanbul": "^4.0.18",
     "@vitest/ui": "4.0.18",
     "canvas": "^3.2.1",
     "jsdom": "^28.1.0",
+    "playwright": "^1.55.0",
     "typescript": "~5.9.3",
     "vitest": "^4.0.18"
   },

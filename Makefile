@@ -1,5 +1,6 @@
 TARGET_HEADER=@echo -e '===== \e[34m' $@ '\e[0m'
 YARN=@docker-compose run --rm node yarn
+YARN_PLAYWRIGHT=@docker-compose run --rm playwright yarn
 
 .PHONY: up
 up: ## Starts storybook
@@ -53,13 +54,29 @@ storybook-build-test-vue: node_modules ## Builds Storybook in --test mode for @m
 	$(TARGET_HEADER)
 	$(YARN) workspace @modulify/m3-vue storybook:build --test --quiet
 
-.PHONY: storybook-accessibility-smoke
-storybook-accessibility-smoke: node_modules ## Runs Storybook accessibility smoke tests for all UI workspaces
+.PHONY: test-smoke
+test-smoke: node_modules ## Runs smoke tests for all UI workspaces
 	$(TARGET_HEADER)
-	$(YARN) test:storybook-a11y
+	$(YARN) test:smoke
 
-.PHONY: storybook-a11y-smoke
-storybook-a11y-smoke: storybook-accessibility-smoke ## Alias for storybook-accessibility-smoke
+.PHONY: docker-runtime-parity
+docker-runtime-parity: ## Checks Node/Yarn parity across docker services (node, storybook, playwright)
+	$(TARGET_HEADER)
+	@expected_node="$$(docker-compose run --rm node node --version | tail -n 1 | tr -d '\r')"; \
+	expected_yarn="$$(docker-compose run --rm node yarn --version | tail -n 1 | tr -d '\r')"; \
+	for service in node storybook-react storybook-vue playwright; do \
+		node_version="$$(docker-compose run --rm $$service node --version | tail -n 1 | tr -d '\r')"; \
+		yarn_version="$$(docker-compose run --rm $$service yarn --version | tail -n 1 | tr -d '\r')"; \
+		if [ "$$node_version" != "$$expected_node" ]; then \
+			echo "Node mismatch in $$service: $$node_version (expected $$expected_node)"; \
+			exit 1; \
+		fi; \
+		if [ "$$yarn_version" != "$$expected_yarn" ]; then \
+			echo "Yarn mismatch in $$service: $$yarn_version (expected $$expected_yarn)"; \
+			exit 1; \
+		fi; \
+		echo "$$service: node=$$node_version yarn=$$yarn_version"; \
+	done
 
 .PHONY: husky
 husky: node_modules ## Adds husky git hooks with commit content checks
@@ -90,6 +107,11 @@ tsc-vue: node_modules ## Runs type checks in @modulify/m3-vue
 	$(TARGET_HEADER)
 	$(YARN) workspace @modulify/m3-vue tsc
 
+.PHONY: tsc-e2e
+tsc-e2e: node_modules ## Runs type checks for Playwright Vitest configs
+	$(TARGET_HEADER)
+	$(YARN) exec tsc -p tsconfig.e2e.json --skipLibCheck
+
 .PHONY: test
 test: node_modules ## Runs autotests
 	$(TARGET_HEADER)
@@ -105,12 +127,52 @@ endif
 .PHONY: test-coverage
 test-coverage: node_modules ## Runs autotests with --coverage
 	$(TARGET_HEADER)
-	
+
 ifdef cli
 	$(YARN) test --coverage $(cli)
 else
 	$(YARN) test --coverage
 endif
+
+.PHONY: test-e2e
+test-e2e: node_modules ## Runs Playwright-based e2e tests (Vitest browser mode)
+	$(TARGET_HEADER)
+
+ifdef cli
+	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-react test:e2e $(cli)
+	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-vue test:e2e $(cli)
+else
+	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-react test:e2e
+	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-vue test:e2e
+endif
+
+.PHONY: test-e2e-react
+test-e2e-react: node_modules ## Runs Playwright-based e2e tests for @modulify/m3-react
+	$(TARGET_HEADER)
+
+ifdef cli
+	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-react test:e2e $(cli)
+else
+	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-react test:e2e
+endif
+
+.PHONY: test-e2e-vue
+test-e2e-vue: node_modules ## Runs Playwright-based e2e tests for @modulify/m3-vue
+	$(TARGET_HEADER)
+
+ifdef cli
+	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-vue test:e2e $(cli)
+else
+	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-vue test:e2e
+endif
+
+.PHONY: test-e2e-stop
+test-e2e-stop: ## Stops stuck Playwright E2E host processes and run containers
+	$(TARGET_HEADER)
+	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-react test:e2e" || true
+	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-vue test:e2e" || true
+	@pkill -TERM -f "make test-e2e" || true
+	@docker ps -q --filter "name=m3-web-playwright-run" | xargs -r docker rm -f
 
 .PHONY: help
 help: ## Calls recipes list

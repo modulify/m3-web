@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "noEmit": true
+  },
+  "include": [
+    "vitest.config.e2e.ts",
+    "m3-react/vitest.config.e2e.ts",
+    "m3-vue/vitest.config.e2e.ts"
+  ]
+}
