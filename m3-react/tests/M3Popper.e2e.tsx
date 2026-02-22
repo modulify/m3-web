@@ -40,8 +40,11 @@ const waitForPopper = async () => {
 
 describe('m3-react/popper e2e', () => {
   let target: HTMLButtonElement | null = null
+  let unmount: null | (() => void) = null
 
   afterEach(() => {
+    unmount?.()
+    unmount = null
     target?.remove()
     target = null
     vi.restoreAllMocks()
@@ -53,7 +56,7 @@ describe('m3-react/popper e2e', () => {
 
     const popperRef = createRef<M3PopperMethods>()
 
-    render(
+    const mounted = render(
       <M3Popper
         ref={popperRef}
         target={target}
@@ -69,6 +72,7 @@ describe('m3-react/popper e2e', () => {
         </div>
       </M3Popper>
     )
+    unmount = mounted.unmount
 
     const popper = await waitForPopper()
 
@@ -91,7 +95,7 @@ describe('m3-react/popper e2e', () => {
 
     const popperRef = createRef<M3PopperMethods>()
 
-    render(
+    const mounted = render(
       <M3Popper
         ref={popperRef}
         target={target}
@@ -107,6 +111,7 @@ describe('m3-react/popper e2e', () => {
         </div>
       </M3Popper>
     )
+    unmount = mounted.unmount
 
     const popper = await waitForPopper()
 
