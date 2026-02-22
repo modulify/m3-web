@@ -1,0 +1,31 @@
+name: Setup Node and Yarn Dependencies
+description: Configures Node.js, prepares Yarn config, restores cache, and installs dependencies.
+
+inputs:
+  node-version:
+    description: Node.js version to use.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Yarn configuration
+      shell: bash
+      run: make .yarnrc.yml
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: .yarn
+        key: ${{ runner.OS }}-node-${{ inputs.node-version }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.OS }}-node-${{ inputs.node-version }}-yarn-
+
+    - name: Install dependencies
+      shell: bash
+      run: yarn install
