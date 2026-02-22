@@ -31,3 +31,16 @@ make eslint
 ```bash
 make test
 ```
+
+## Storybook Test Build
+```bash
+make storybook-build-test
+```
+
+## Storybook A11y Smoke
+```bash
+make storybook-accessibility-smoke
+```
+
+## TSConfig Layering
+See `docs/tsconfig-layering.md`.

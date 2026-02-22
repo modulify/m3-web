@@ -37,6 +37,30 @@ build: node_modules ## Creates a dist catalogue with library build
 	$(TARGET_HEADER)
 	$(YARN) build
 
+.PHONY: storybook-build-test
+storybook-build-test: node_modules ## Builds Storybook in --test mode for all UI workspaces
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-react storybook:build --test --quiet
+	$(YARN) workspace @modulify/m3-vue storybook:build --test --quiet
+
+.PHONY: storybook-build-test-react
+storybook-build-test-react: node_modules ## Builds Storybook in --test mode for @modulify/m3-react
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-react storybook:build --test --quiet
+
+.PHONY: storybook-build-test-vue
+storybook-build-test-vue: node_modules ## Builds Storybook in --test mode for @modulify/m3-vue
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-vue storybook:build --test --quiet
+
+.PHONY: storybook-accessibility-smoke
+storybook-accessibility-smoke: node_modules ## Runs Storybook accessibility smoke tests for all UI workspaces
+	$(TARGET_HEADER)
+	$(YARN) test:storybook-a11y
+
+.PHONY: storybook-a11y-smoke
+storybook-a11y-smoke: storybook-accessibility-smoke ## Alias for storybook-accessibility-smoke
+
 .PHONY: husky
 husky: node_modules ## Adds husky git hooks with commit content checks
 	@docker-compose run --rm node npx husky init

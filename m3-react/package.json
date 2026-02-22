@@ -25,6 +25,7 @@
     "eslint": "eslint ./src ./storybook ./tests ./types",
     "storybook": "storybook dev -c storybook -p 6006 --no-open",
     "storybook:build": "storybook build -c storybook -o dist-storybook",
+    "test:storybook-a11y": "VITEST_STORYBOOK=false vitest run tests/StorybookA11ySmoke.test.tsx",
     "test": "vitest run",
     "tsc": "tsc --noEmit -p tsconfig.tsc.json"
   },
