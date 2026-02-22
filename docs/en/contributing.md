@@ -23,7 +23,7 @@ make test
 - `make eslint`: run lint checks.
 - `make test`: run unit/integration tests.
 - `make storybook-build-test`: build Storybook in `--test` mode for React and Vue.
-- `make storybook-accessibility-smoke`: run Storybook accessibility smoke tests.
+- `make test-smoke`: run smoke tests.
 - `yarn tsc`: run package-level type checks for all workspaces.
 
 ## Quality Gates (CI)

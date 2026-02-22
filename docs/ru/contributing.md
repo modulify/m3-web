@@ -23,7 +23,7 @@ make test
 - `make eslint`: прогнать линтер.
 - `make test`: прогнать unit/integration тесты.
 - `make storybook-build-test`: собрать Storybook в `--test` режиме для React и Vue.
-- `make storybook-accessibility-smoke`: прогнать Storybook accessibility smoke-тесты.
+- `make test-smoke`: прогнать smoke-тесты.
 - `yarn tsc`: прогнать package-level typecheck по workspace-конфигациям.
 
 ## Quality Gates (CI)

@@ -1,10 +1,15 @@
+x-node-image: &node_image node:24
+
+x-node-common: &node_common
+  user: node
+  volumes:
+    - ./:/project
+  working_dir: /project
+
 services:
   node: &node
-    image: node:24
-    user: node
-    volumes:
-      - ./:/project
-    working_dir: /project
+    <<: *node_common
+    image: *node_image
 
   storybook-react:
     <<: *node
@@ -33,3 +38,17 @@ services:
       traefik.http.routers.m3-vue-modulify.priority: 1
       traefik.http.routers.m3-vue-modulify.service: m3-vue-modulify
       traefik.http.services.m3-vue-modulify.loadbalancer.server.port: '6006'
+
+  playwright:
+    <<: *node_common
+    build:
+      context: .
+      dockerfile: docker/playwright/Dockerfile
+      args:
+        NODE_IMAGE: *node_image
+    environment:
+      PLAYWRIGHT_BROWSERS_PATH: '/ms-playwright'
+      CI: 'true'
+    shm_size: '1gb'
+    ipc: host
+    init: true
