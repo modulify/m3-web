@@ -39,6 +39,11 @@ type RenderCodeBlockProps = {
   restProps: Omit<MdxPreBlockProps, 'children' | 'className'>
 }
 
+type ResolvedLanguages = {
+  badgeLanguage: string | null
+  codeLanguage: string | null
+}
+
 const AUTO_DETECT_MAX_LENGTH = 5000
 const CODE_BLOCK_CLASS = 'm3-docs-code-block'
 const COPY_BUTTON_CLASS = 'm3-docs-code-copy'
@@ -309,6 +314,19 @@ function resolveCodePayload (children: ReactNode, className?: string): CodePaylo
   }
 }
 
+function resolveRenderedLanguages (payload: CodePayload, highlight: HighlightPayload): ResolvedLanguages {
+  const codeLanguage = highlight.language || payload.highlightLanguage
+  const badgeLanguage =
+    payload.badgeLanguage ||
+    resolveBadgeLanguage(codeLanguage) ||
+    inferBadgeLanguageFromSource(payload.source)
+
+  return {
+    badgeLanguage,
+    codeLanguage,
+  }
+}
+
 function useCopyState (source: string): { copied: boolean; onCopy: () => void } {
   const [copied, setCopied] = React.useState(false)
   const resetTimerRef = React.useRef<number | null>(null)
@@ -412,20 +430,19 @@ export function MdxCodePreBlock (props: MdxPreBlockProps): React.ReactElement {
     [payload.highlightLanguage, payload.source]
   )
   const { copied, onCopy } = useCopyState(payload.source)
-  const resolvedCodeLanguage = highlight.language || payload.highlightLanguage
-  const resolvedBadgeLanguage =
-    payload.badgeLanguage ||
-    resolveBadgeLanguage(resolvedCodeLanguage) ||
-    inferBadgeLanguageFromSource(payload.source)
+  const languages = React.useMemo(
+    () => resolveRenderedLanguages(payload, highlight),
+    [payload, highlight]
+  )
 
   if (payload.source.trim() === '') {
     return React.createElement('pre', { className, ...restProps }, children)
   }
 
   return renderCodeBlock({
-    badgeLanguage: resolvedBadgeLanguage,
+    badgeLanguage: languages.badgeLanguage,
     className,
-    codeLanguage: resolvedCodeLanguage,
+    codeLanguage: languages.codeLanguage,
     copied,
     html: highlight.html || escapeHtml(payload.source),
     onCopy,
