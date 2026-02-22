@@ -19,3 +19,4 @@ node_modules/
 .pnp.loader.mjs
 .yarnrc.yml
 *storybook.log
+.env
