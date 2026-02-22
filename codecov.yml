@@ -1,0 +1,16 @@
+codecov:
+  require_ci_to_pass: true
+
+coverage:
+  precision: 2
+  round: down
+  status:
+    project:
+      combined:
+        target: 73%
+        threshold: 0%
+        flags:
+          - combined
+    patch: off
+
+comment: false
