@@ -59,24 +59,10 @@ test-smoke: node_modules ## Runs smoke tests for all UI workspaces
 	$(TARGET_HEADER)
 	$(YARN) test:smoke
 
-.PHONY: docker-runtime-parity
-docker-runtime-parity: ## Checks Node/Yarn parity across docker services (node, storybook, playwright)
+.PHONY: test-runtime-parity
+test-runtime-parity: ## Checks Node/Yarn parity across docker services (node, storybook, playwright)
 	$(TARGET_HEADER)
-	@expected_node="$$(docker-compose run --rm node node --version | tail -n 1 | tr -d '\r')"; \
-	expected_yarn="$$(docker-compose run --rm node yarn --version | tail -n 1 | tr -d '\r')"; \
-	for service in node storybook-react storybook-vue playwright; do \
-		node_version="$$(docker-compose run --rm $$service node --version | tail -n 1 | tr -d '\r')"; \
-		yarn_version="$$(docker-compose run --rm $$service yarn --version | tail -n 1 | tr -d '\r')"; \
-		if [ "$$node_version" != "$$expected_node" ]; then \
-			echo "Node mismatch in $$service: $$node_version (expected $$expected_node)"; \
-			exit 1; \
-		fi; \
-		if [ "$$yarn_version" != "$$expected_yarn" ]; then \
-			echo "Yarn mismatch in $$service: $$yarn_version (expected $$expected_yarn)"; \
-			exit 1; \
-		fi; \
-		echo "$$service: node=$$node_version yarn=$$yarn_version"; \
-	done
+	./runtime-parity.test.sh
 
 .PHONY: husky
 husky: node_modules ## Adds husky git hooks with commit content checks
