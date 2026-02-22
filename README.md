@@ -17,3 +17,4 @@ The project builds a shared UI foundation for two platforms (`React` and `Vue`) 
 ## Participating
 
 Contribution docs: `docs/en/index.md`
+Acknowledgements: `ACKNOWLEDGEMENTS.md`
