@@ -12,6 +12,26 @@
             color: var(--m3-sys-on-surface) !important;
         }
 
+        :where(ul:not(.sb-anchor, .sb-unstyled, .sb-unstyled ul)) {
+            color: var(--m3-sys-on-surface) !important;
+        }
+
+        :where(ol:not(.sb-anchor, .sb-unstyled, .sb-unstyled ol)) {
+            color: var(--m3-sys-on-surface) !important;
+        }
+
+        :where(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)) {
+            color: var(--m3-sys-on-surface) !important;
+        }
+
+        :where(code:not(.hljs, .hljs *)) {
+            border-radius: 8px;
+            background: var(--m3-sys-surface-container-highest) !important;
+            color: var(--m3-sys-on-surface) !important;
+            font-size: 0.875em;
+            padding: 0.125em 0.5em;
+        }
+
         :where(h2:not(.sb-anchor, .sb-unstyled, .sb-unstyled h2)) {
             border-color: var(--m3-state-layers-on-surface-opacity-020) !important;
         }
@@ -23,5 +43,17 @@
                 opacity: 0.8;
             }
         }
+    }
+
+    :where(.sbdocs-content ul, .sbdocs-content ol, .sbdocs-content li) {
+        color: var(--m3-sys-on-surface) !important;
+    }
+
+    :where(.sbdocs-content code:not(.hljs, .hljs *)) {
+        border-radius: 8px;
+        background: var(--m3-sys-surface-container-highest) !important;
+        color: var(--m3-sys-on-surface) !important;
+        font-size: 0.875em;
+        padding: 0.125em 0.5em;
     }
 </style>
