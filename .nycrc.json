@@ -1,0 +1,13 @@
+{
+  "all": false,
+  "cache": false,
+  "check-coverage": false,
+  "temp-dir": ".nyc_output",
+  "report-dir": "coverage",
+  "reporter": [
+    "text",
+    "text-summary",
+    "html",
+    "lcovonly"
+  ]
+}

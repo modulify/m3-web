@@ -9,6 +9,7 @@
 !.yarnrc.yml.dist
 
 coverage/
+.nyc_output/
 dist/
 dist-storybook/
 node_modules/
