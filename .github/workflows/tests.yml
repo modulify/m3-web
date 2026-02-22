@@ -75,8 +75,8 @@ jobs:
       - name: Build Vue Storybook
         run: yarn workspace @modulify/m3-vue storybook:build --test --quiet
 
-      - name: Run React Storybook a11y smoke tests
-        run: yarn workspace @modulify/m3-react test:storybook-a11y
+      - name: Run React Storybook smoke tests
+        run: yarn workspace @modulify/m3-react test:smoke
 
-      - name: Run Vue Storybook a11y smoke tests
-        run: yarn workspace @modulify/m3-vue test:storybook-a11y
+      - name: Run Vue Storybook smoke tests
+        run: yarn workspace @modulify/m3-vue test:smoke
