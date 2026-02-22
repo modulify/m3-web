@@ -15,6 +15,14 @@
   files include code covered by eslint rules (for example `*.js`, `*.ts`,
   and similar source files). Do not run `make eslint` for markdown-only
   changes (for example `*.md`).
+- When working on files under `drafts/`, keep documentation mixed-format:
+  narrative context in `*.md` plus machine-readable `*.yaml` sidecars for
+  structured entities (for example tokens, decisions, boundaries, variation
+  axes, invariants, confidence, and source references).
+- For `drafts/` work, create and update these YAML sidecars proactively
+  without requiring explicit user confirmation.
+- For `drafts/` work, automatically maintain links from the main draft
+  markdown file to related YAML sidecars.
 - Getter/helper functions must be side-effect free. Side effects are allowed
   only by prior agreement and only when there are strong, explicit reasons.
 
