@@ -1,4 +1,5 @@
 TARGET_HEADER=@echo -e '===== \e[34m' $@ '\e[0m'
+TARGET_OK=@echo -e '\e[32mOK\e[0m'
 YARN=@docker-compose run --rm node yarn
 YARN_PLAYWRIGHT=@docker-compose run --rm playwright yarn
 COVERAGE_PARTS_DIR=coverage/.parts
@@ -167,6 +168,49 @@ test-e2e-stop: ## Stops stuck Playwright E2E host processes and run containers
 	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-react test:[e]2e" || true
 	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-vue test:[e]2e" || true
 	@docker ps -q --filter "name=m3-web-playwright-run" | xargs -r docker rm -f
+
+.PHONY: ci-actionlint
+ci-actionlint: ## Lints GitHub Actions workflows locally (actionlint binary or docker image)
+	$(TARGET_HEADER)
+	@if command -v actionlint >/dev/null 2>&1; then \
+		actionlint; \
+	elif command -v docker >/dev/null 2>&1; then \
+		docker run --rm -v "$$(pwd):/repo" -w /repo rhysd/actionlint:latest; \
+	else \
+		echo "actionlint is not installed and docker is unavailable"; \
+		exit 1; \
+	fi
+	$(TARGET_OK)
+
+.PHONY: ci-act-plan
+ci-act-plan: ## Shows act execution plan for tests workflow without running jobs
+	$(TARGET_HEADER)
+	@if command -v act >/dev/null 2>&1; then \
+		act -P ubuntu-latest=catthehacker/ubuntu:act-latest -n pull_request -W .github/workflows/tests.yml; \
+	elif command -v docker >/dev/null 2>&1; then \
+		docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$$(pwd):/repo" -w /repo alpine:3.20 sh -lc "apk add --no-cache curl tar >/dev/null && curl -fsSL https://github.com/nektos/act/releases/download/v0.2.84/act_Linux_x86_64.tar.gz | tar -xz -C /tmp && /tmp/act -P ubuntu-latest=catthehacker/ubuntu:act-latest -n pull_request -W .github/workflows/tests.yml"; \
+	else \
+		echo "act is not installed and docker is unavailable"; \
+		exit 1; \
+	fi
+	$(TARGET_OK)
+
+.PHONY: ci-act-tests
+ci-act-tests: ## Runs tests workflow locally via act (pr-check, eslint, tests, storybook-tests)
+	$(TARGET_HEADER)
+	@if command -v act >/dev/null 2>&1; then \
+		act -P ubuntu-latest=catthehacker/ubuntu:act-latest pull_request -W .github/workflows/tests.yml -j pr-check -j eslint -j tests -j storybook-tests; \
+	elif command -v docker >/dev/null 2>&1; then \
+		docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$$(pwd):/repo" -w /repo alpine:3.20 sh -lc "apk add --no-cache curl tar >/dev/null && curl -fsSL https://github.com/nektos/act/releases/download/v0.2.84/act_Linux_x86_64.tar.gz | tar -xz -C /tmp && /tmp/act -P ubuntu-latest=catthehacker/ubuntu:act-latest pull_request -W .github/workflows/tests.yml -j pr-check -j eslint -j tests -j storybook-tests"; \
+	else \
+		echo "act is not installed and docker is unavailable"; \
+		exit 1; \
+	fi
+	$(TARGET_OK)
+
+.PHONY: ci-check
+ci-check: ci-actionlint ci-act-plan ## Validates CI workflow config and prints local act plan
+	$(TARGET_OK)
 
 .PHONY: help
 help: ## Calls recipes list
