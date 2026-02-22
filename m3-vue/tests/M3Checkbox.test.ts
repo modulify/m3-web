@@ -10,11 +10,11 @@ describe('m3-vue/checkbox', () => {
   test('reflects aria state and emits scalar values', async () => {
     const view = render(M3Checkbox, {
       props: {
-        model: false,
+        model: 'no',
         trueValue: 'yes',
         falseValue: 'no',
         invalid: true,
-      },
+      } as Record<string, unknown>,
     })
 
     const input = screen.getByRole('checkbox') as HTMLInputElement
