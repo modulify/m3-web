@@ -19,6 +19,7 @@ export default mergeConfig(viteConfig, defineConfig({
   test: {
     name: 'm3-react-e2e',
     globals: true,
+    attachmentsDir: join(__artifacts, 'playwright', 'attachments'),
     include: [
       'tests/**/*.e2e.tsx',
     ],
