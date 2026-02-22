@@ -18,13 +18,13 @@ This repository uses separate TypeScript configs for editor-time DX and package-
 - Exclude `storybook` and `tests`.
 - Reset `types` to `[]` to avoid pulling test-only globals into package checks.
 
-## Which commands use which config
+## Which Commands Use Which Config
 
 - `yarn workspace @modulify/m3-react tsc` -> `m3-react/tsconfig.tsc.json`
 - `yarn workspace @modulify/m3-vue tsc` -> `m3-vue/tsconfig.tsc.json`
 - `yarn tsc` (root) -> runs workspace `tsc` scripts above.
 
-## Rules of thumb
+## Rules of Thumb
 
 - If the goal is package correctness in CI/release, change `tsconfig.tsc.json`.
 - If the goal is local editor/test/storybook experience, change workspace `tsconfig.json`.

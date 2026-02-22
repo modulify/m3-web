@@ -1,46 +1,17 @@
 # m3-web
 
-## Create yarn configuration
+`m3-web` is a monorepo for a Material Design 3 component library for web.
+The project builds a shared UI foundation for two platforms (`React` and `Vue`) with a focus on:
+- consistent public API across platforms,
+- verifiable quality (lint, tests, Storybook),
+- practical engineering readiness for reuse and publishing.
 
-```bash
-make .yarnrc.yml
-```
+## Repository Contents
 
-## Installation
+- `m3-foundation`: shared styles, tokens, and base utilities.
+- `m3-react`: React component implementation.
+- `m3-vue`: Vue component implementation.
 
-```bash
-make node_modules
-```
+## Participating
 
-## Launch
-```bash
-make up
-```
-
-## Build
-```bash
-make build
-```
-
-## eslint
-```bash
-make eslint
-```
-
-## Tests
-```bash
-make test
-```
-
-## Storybook Test Build
-```bash
-make storybook-build-test
-```
-
-## Storybook A11y Smoke
-```bash
-make storybook-accessibility-smoke
-```
-
-## TSConfig Layering
-See `docs/tsconfig-layering.md`.
+Contribution docs: `docs/en/index.md`
