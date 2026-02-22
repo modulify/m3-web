@@ -59,6 +59,7 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
   overflow = [],
   delay = 0,
   disabled = false,
+  animated = false,
   detachTimeout = 5000,
   onShow = () => {},
   onHide = (_: HideReason) => {},
@@ -103,7 +104,53 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
   useWatch(onDispose, onDispose => handlers.onDispose = onDispose)
 
   const targetRef = useRef(target)
+  const positionerRef = useRef<HTMLDivElement | null>(null)
   const popperRef = useRef<HTMLDivElement | null>(null)
+
+  const applyAnimationSide = useCallback((side: 'top' | 'bottom' | 'left' | 'right') => {
+    if (!popperRef.current) {
+      return
+    }
+
+    const style = popperRef.current.style
+
+    if (side === 'top') {
+      style.setProperty('--m3-popper-origin-x', 'center')
+      style.setProperty('--m3-popper-origin-y', 'bottom')
+      style.setProperty('--m3-popper-enter-x', '0px')
+      style.setProperty('--m3-popper-enter-y', '-2px')
+      style.setProperty('--m3-popper-scale-x-hidden', '0.995')
+      style.setProperty('--m3-popper-scale-y-hidden', '0.72')
+      return
+    }
+
+    if (side === 'left') {
+      style.setProperty('--m3-popper-origin-x', 'right')
+      style.setProperty('--m3-popper-origin-y', 'center')
+      style.setProperty('--m3-popper-enter-x', '-2px')
+      style.setProperty('--m3-popper-enter-y', '0px')
+      style.setProperty('--m3-popper-scale-x-hidden', '0.72')
+      style.setProperty('--m3-popper-scale-y-hidden', '0.995')
+      return
+    }
+
+    if (side === 'right') {
+      style.setProperty('--m3-popper-origin-x', 'left')
+      style.setProperty('--m3-popper-origin-y', 'center')
+      style.setProperty('--m3-popper-enter-x', '2px')
+      style.setProperty('--m3-popper-enter-y', '0px')
+      style.setProperty('--m3-popper-scale-x-hidden', '0.72')
+      style.setProperty('--m3-popper-scale-y-hidden', '0.995')
+      return
+    }
+
+    style.setProperty('--m3-popper-origin-x', 'center')
+    style.setProperty('--m3-popper-origin-y', 'top')
+    style.setProperty('--m3-popper-enter-x', '0px')
+    style.setProperty('--m3-popper-enter-y', '2px')
+    style.setProperty('--m3-popper-scale-x-hidden', '0.995')
+    style.setProperty('--m3-popper-scale-y-hidden', '0.72')
+  }, [])
 
   const positioning = useMemo(() => ({
     placement,
@@ -122,18 +169,26 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
   ])
 
   const adjustDo = useCallback(async () => {
-    if (targetRef.current && popperRef.current && !state.disposed) {
-      await computePosition(popperRef.current, targetRef.current, {
+    if (targetRef.current && positionerRef.current && !state.disposed) {
+      const result = await computePosition(positionerRef.current, targetRef.current, {
         ...positioning,
         onReferenceHidden: hide,
       })
+
+      if (animated) {
+        applyAnimationSide(result.side)
+      }
     }
-  }, [positioning])
+  }, [
+    animated,
+    applyAnimationSide,
+    positioning,
+  ])
 
   const [
     adjustOn,
     adjustOff,
-  ] = useAutoAdjust(targetRef, popperRef, adjustDo)
+  ] = useAutoAdjust(targetRef, positionerRef, adjustDo)
 
   const adjust = useRecord({
     do: adjustDo,
@@ -185,7 +240,7 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
     }
   }, [])
 
-  const contains = useCallback((el: Element | null): boolean => popperRef.current?.contains(el) ?? false, [])
+  const contains = useCallback((el: Element | null): boolean => positionerRef.current?.contains(el) ?? false, [])
 
   const show = useCallback((immediately = false) => {
     if (state.disposed) {
@@ -253,8 +308,8 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
         listening.target.start(targetRef.current, targetTriggers)
       }
 
-      if (popperRef.current) {
-        listening.popper.start(popperRef.current, popperTriggers)
+      if (positionerRef.current) {
+        listening.popper.start(positionerRef.current, popperTriggers)
       }
     } else {
       state.disposed = true
@@ -328,6 +383,17 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
     }
   })
 
+  useWatch(animated, animated => {
+    if (!animated && popperRef.current) {
+      popperRef.current.style.removeProperty('--m3-popper-origin-x')
+      popperRef.current.style.removeProperty('--m3-popper-origin-y')
+      popperRef.current.style.removeProperty('--m3-popper-enter-x')
+      popperRef.current.style.removeProperty('--m3-popper-enter-y')
+      popperRef.current.style.removeProperty('--m3-popper-scale-x-hidden')
+      popperRef.current.style.removeProperty('--m3-popper-scale-y-hidden')
+    }
+  })
+
   useEffect(() => {
     const onGlobalClick = (event: CloserEvent) => onGlobalTap(event)
     const onGlobalTouch = (event: CloserEvent) => onGlobalTap(event, true)
@@ -358,14 +424,20 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
 
   return state.attached ? createPortal(
     <div
-      ref={popperRef}
-      className={toClassName([className, {
-        'm3-popper': true,
-        'm3-popper_shown': state.shown,
-      }])}
-      {...attrs}
+      ref={positionerRef}
+      className="m3-popper-positioner"
     >
-      {children}
+      <div
+        ref={popperRef}
+        className={toClassName([className, {
+          'm3-popper': true,
+          'm3-popper_animated': animated,
+          'm3-popper_shown': state.shown,
+        }])}
+        {...attrs}
+      >
+        {children}
+      </div>
     </div>,
     (typeof container === 'string' ? document.querySelector(container) : container) ?? document.body
   ) : null

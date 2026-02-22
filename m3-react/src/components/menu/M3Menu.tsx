@@ -43,6 +43,7 @@ const M3Menu: FC<M3MenuProps> = ({
     offsetCrossAxis={offsetCrossAxis}
     delay={delay}
     disabled={disabled}
+    animated={true}
     detachTimeout={detachTimeout}
     className={toClassName(['m3-menu', className])}
     hideOnMissClick={true}

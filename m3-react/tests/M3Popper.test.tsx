@@ -22,10 +22,14 @@ const rect = (x: number, y: number, width: number, height: number): DOMRect => (
 
 const waitForPopper = async () => {
   await waitFor(() => {
+    expect(document.body.querySelector('.m3-popper-positioner')).not.toBeNull()
     expect(document.body.querySelector('.m3-popper')).not.toBeNull()
   })
 
-  return document.body.querySelector('.m3-popper') as HTMLElement
+  return {
+    positioner: document.body.querySelector('.m3-popper-positioner') as HTMLElement,
+    popper: document.body.querySelector('.m3-popper') as HTMLElement,
+  }
 }
 
 describe('m3-react/popper', () => {
@@ -79,7 +83,7 @@ describe('m3-react/popper', () => {
 
     fireEvent.focus(target)
 
-    const popper = await waitForPopper()
+    const { popper } = await waitForPopper()
     await waitFor(() => {
       expect(popper.classList.contains('m3-popper_shown')).toBe(true)
     })
@@ -107,7 +111,7 @@ describe('m3-react/popper', () => {
     )
     unmount = mounted.unmount
 
-    const popper = await waitForPopper()
+    const { popper } = await waitForPopper()
     await waitFor(() => {
       expect(popper.classList.contains('m3-popper_shown')).toBe(true)
     })
@@ -142,7 +146,10 @@ describe('m3-react/popper', () => {
     )
     unmount = mounted.unmount
 
-    const popper = await waitForPopper()
+    const {
+      popper,
+      positioner,
+    } = await waitForPopper()
 
     vi.spyOn(target, 'getBoundingClientRect').mockReturnValue(rect(-10000, -10000, 40, 20))
 
@@ -151,7 +158,7 @@ describe('m3-react/popper', () => {
     })
 
     await waitFor(() => {
-      expect(popper.style.position).toBe('absolute')
+      expect(positioner.style.position).toBe('absolute')
       expect(popper.classList.contains('m3-popper_shown')).toBe(false)
     })
   })
