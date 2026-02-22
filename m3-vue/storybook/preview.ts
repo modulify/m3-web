@@ -7,6 +7,14 @@ import './stylesheets/utils.scss'
 
 import { withThemeByClassName } from '@storybook/addon-themes'
 import { addons } from 'storybook/preview-api'
+import { MdxCodeBlock, MdxCodePreBlock } from './utils/mdxCodeBlock'
+
+type DocsParameter = NonNullable<NonNullable<Preview['parameters']>['docs']> & {
+  components?: {
+    code: typeof MdxCodeBlock
+    pre: typeof MdxCodePreBlock
+  }
+}
 
 const themeClassByName = {
   light: 'm3-theme-light',
@@ -14,6 +22,16 @@ const themeClassByName = {
 } as const
 
 const themeClasses = Object.values(themeClassByName)
+
+const docsParameter: DocsParameter = {
+  components: {
+    code: MdxCodeBlock,
+    pre: MdxCodePreBlock,
+  },
+  source: {
+    language: 'text',
+  },
+}
 
 const applyThemeClass = (themeName?: unknown): void => {
   const rootElement = document.documentElement
@@ -93,6 +111,7 @@ export default {
       },
     },
     backgrounds: { disable: true },
+    docs: docsParameter,
     controls: {
       matchers: {
         color: /(background|color)$/i,

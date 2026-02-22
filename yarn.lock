@@ -1666,6 +1666,7 @@ __metadata:
     eslint-plugin-unused-imports: "npm:^4.4.1"
     flag-icons: "npm:^7.5.0"
     globals: "npm:^17.3.0"
+    highlight.js: "npm:^11.11.1"
     jsdom: "npm:^28.1.0"
     lodash.isequal: "npm:^4.5.0"
     playwright: "npm:^1.55.0"
@@ -1726,6 +1727,7 @@ __metadata:
     eslint-plugin-vue: "npm:^10.8.0"
     flag-icons: "npm:^7.5.0"
     globals: "npm:^17.3.0"
+    highlight.js: "npm:^11.11.1"
     jsdom: "npm:^28.1.0"
     lodash.isequal: "npm:^4.5.0"
     playwright: "npm:^1.55.0"
@@ -7353,6 +7355,13 @@ __metadata:
   bin:
     he: bin/he
   checksum: 10c0/a27d478befe3c8192f006cdd0639a66798979dfa6e2125c6ac582a19a5ebfec62ad83e8382e6036170d873f46e4536a7e795bf8b95bf7c247f4cc0825ccc8c17
+  languageName: node
+  linkType: hard
+
+"highlight.js@npm:^11.11.1":
+  version: 11.11.1
+  resolution: "highlight.js@npm:11.11.1"
+  checksum: 10c0/40f53ac19dac079891fcefd5bd8a21cf2e8931fd47da5bd1dca73b7e4375c1defed0636fc39120c639b9c44119b7d110f7f0c15aa899557a5a1c8910f3c0144c
   languageName: node
   linkType: hard
 
