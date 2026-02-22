@@ -100,14 +100,24 @@ export default {
       },
     },
     options: {
-      storySort: (a, b) => {
-        return a.id.endsWith('docs') && !b.id.endsWith('docs')
-          ? -1
-          : !a.id.endsWith('docs') && b.id.endsWith('docs')
-            ? 1
-            : a.id === b.id
-              ? 0
-              : a.id.localeCompare(b.id, undefined, { numeric: true })
+      storySort: (left, right) => {
+        const withFallback = (story, key) => typeof story[key] === 'string' ? story[key] : ''
+        const normalize = (entry) => entry && typeof entry === 'object' ? entry : {}
+        const docsRank = (story) => {
+          const id = withFallback(story, 'id')
+          const name = withFallback(story, 'name').toLowerCase()
+          return story.type === 'docs' || name === 'docs' || id.endsWith('--docs') || id.endsWith('-docs')
+            ? 0
+            : 1
+        }
+
+        const a = normalize(left)
+        const b = normalize(right)
+
+        return withFallback(a, 'title').localeCompare(withFallback(b, 'title'), undefined, { numeric: true }) ||
+          docsRank(a) - docsRank(b) ||
+          withFallback(a, 'name').localeCompare(withFallback(b, 'name'), undefined, { numeric: true }) ||
+          withFallback(a, 'id').localeCompare(withFallback(b, 'id'), undefined, { numeric: true })
       },
     },
   },
