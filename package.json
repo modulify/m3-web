@@ -40,6 +40,9 @@
     "typescript": "~5.9.3",
     "vitest": "^4.0.18"
   },
+  "contributors": [
+    "Tatyana Komolyh <tatyana.comolyh@gmail.com>"
+  ],
   "packageManager": "yarn@4.6.0",
   "husky": {
     "hooks": {
