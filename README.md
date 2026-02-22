@@ -1,5 +1,7 @@
 # m3-web
 
+[![codecov](https://codecov.io/gh/modulify/m3-web/graph/badge.svg?branch=main)](https://codecov.io/gh/modulify/m3-web)
+
 `m3-web` is a monorepo for a Material Design 3 component library for web.
 The project builds a shared UI foundation for two platforms (`React` and `Vue`) with a focus on:
 - consistent public API across platforms,

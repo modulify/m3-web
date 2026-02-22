@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 22.x ]
+        node-version: [ 22.x, 24.x ]
 
     steps:
       - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
@@ -29,13 +29,13 @@ jobs:
   tests:
     needs: eslint
 
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [ 22.x ]
+        node-version: [ 22.x, 24.x ]
 
     steps:
       - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
@@ -47,7 +47,58 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Run tests
+        if: matrix.node-version != '24.x'
         run: yarn test
+
+      - name: Run merged coverage
+        if: matrix.node-version == '24.x'
+        run: |
+          rm -rf coverage .nyc_output
+          mkdir -p coverage/.parts .nyc_output
+          yarn test --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.reportsDirectory=coverage/unit
+          yarn test:e2e:coverage
+          cp coverage/unit/coverage-final.json coverage/.parts/unit.json
+          cp coverage/e2e-react/coverage-final.json coverage/.parts/e2e-react.json
+          cp coverage/e2e-vue/coverage-final.json coverage/.parts/e2e-vue.json
+          yarn nyc merge coverage/.parts .nyc_output/coverage-final.json >/dev/null
+          yarn nyc report
+          yarn nyc report --reporter=json-summary >/dev/null
+          yarn node --experimental-strip-types scripts/show-total-coverage.ts
+
+      - name: Upload merged coverage artifacts
+        if: matrix.node-version == '24.x' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-node-24
+          path: |
+            coverage/lcov.info
+            coverage/coverage-summary.json
+          if-no-files-found: error
+
+  codecov:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
+        uses: actions/checkout@v4
+
+      - name: Download merged coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-node-24
+          path: coverage
+
+      - name: Upload merged coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage/lcov.info
+          flags: combined
+          name: combined-coverage
+          fail_ci_if_error: true
+          verbose: true
 
   storybook-tests:
     needs: eslint
@@ -58,7 +109,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 22.x ]
+        node-version: [ 22.x, 24.x ]
 
     steps:
       - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
