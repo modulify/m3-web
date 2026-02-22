@@ -1,6 +1,11 @@
 TARGET_HEADER=@echo -e '===== \e[34m' $@ '\e[0m'
 YARN=@docker-compose run --rm node yarn
 YARN_PLAYWRIGHT=@docker-compose run --rm playwright yarn
+COVERAGE_PARTS_DIR=coverage/.parts
+COVERAGE_UNIT_DIR=coverage/unit
+COVERAGE_E2E_REACT_DIR=coverage/e2e-react
+COVERAGE_E2E_VUE_DIR=coverage/e2e-vue
+NYC_OUTPUT_DIR=.nyc_output
 
 .PHONY: up
 up: ## Starts storybook
@@ -111,25 +116,28 @@ else
 endif
 
 .PHONY: test-coverage
-test-coverage: node_modules ## Runs autotests with --coverage
+test-coverage: node_modules ## Runs merged coverage for unit and Playwright e2e tests
 	$(TARGET_HEADER)
-
-ifdef cli
-	$(YARN) test --coverage $(cli)
-else
-	$(YARN) test --coverage
-endif
+	@rm -rf coverage $(NYC_OUTPUT_DIR)
+	@mkdir -p $(COVERAGE_PARTS_DIR) $(NYC_OUTPUT_DIR)
+	$(YARN) test --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.reportsDirectory=$(COVERAGE_UNIT_DIR)
+	$(YARN_PLAYWRIGHT) test:e2e:coverage
+	@cp $(COVERAGE_UNIT_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/unit.json
+	@cp $(COVERAGE_E2E_REACT_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/e2e-react.json
+	@cp $(COVERAGE_E2E_VUE_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/e2e-vue.json
+	@$(YARN) nyc merge $(COVERAGE_PARTS_DIR) $(NYC_OUTPUT_DIR)/coverage-final.json >/dev/null
+	$(YARN) nyc report
+	@$(YARN) nyc report --reporter=json-summary >/dev/null
+	@$(YARN) node --experimental-strip-types scripts/show-total-coverage.ts
 
 .PHONY: test-e2e
 test-e2e: node_modules ## Runs Playwright-based e2e tests (Vitest browser mode)
 	$(TARGET_HEADER)
 
 ifdef cli
-	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-react test:e2e $(cli)
-	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-vue test:e2e $(cli)
+	@$(YARN_PLAYWRIGHT) test:e2e $(cli)
 else
-	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-react test:e2e
-	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-vue test:e2e
+	@$(YARN_PLAYWRIGHT) test:e2e
 endif
 
 .PHONY: test-e2e-react
@@ -155,9 +163,9 @@ endif
 .PHONY: test-e2e-stop
 test-e2e-stop: ## Stops stuck Playwright E2E host processes and run containers
 	$(TARGET_HEADER)
-	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-react test:e2e" || true
-	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-vue test:e2e" || true
-	@pkill -TERM -f "make test-e2e" || true
+	@pkill -TERM -f "docker-compose run --rm playwright yarn test:[e]2e" || true
+	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-react test:[e]2e" || true
+	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-vue test:[e]2e" || true
 	@docker ps -q --filter "name=m3-web-playwright-run" | xargs -r docker rm -f
 
 .PHONY: help
