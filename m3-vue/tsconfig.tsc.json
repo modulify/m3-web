@@ -2,9 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "moduleResolution": "bundler",
-    "types": [
-      "vitest/globals"
-    ]
+    "types": []
   },
   "include": [
     "shims-*.d.ts",
