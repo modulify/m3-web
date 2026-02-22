@@ -7,7 +7,7 @@ coverage:
   status:
     project:
       combined:
-        target: 73%
+        target: 80%
         threshold: 0%
         flags:
           - combined

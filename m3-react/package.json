@@ -29,7 +29,8 @@
     "test:e2e": "vitest run --config vitest.config.e2e.ts",
     "test:e2e:coverage": "vitest run --config vitest.config.e2e.ts --coverage --coverage.provider=istanbul --coverage.reporter=json",
     "test": "vitest run",
-    "tsc": "tsc --noEmit -p tsconfig.tsc.json"
+    "tsc": "tsc --noEmit -p tsconfig.tsc.json",
+    "tsc:tests": "tsc --noEmit -p tsconfig.tests.json --skipLibCheck"
   },
   "dependencies": {
     "@floating-ui/core": "^1.7.4",

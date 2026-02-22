@@ -99,6 +99,21 @@ tsc-vue: node_modules ## Runs type checks in @modulify/m3-vue
 	$(TARGET_HEADER)
 	$(YARN) workspace @modulify/m3-vue tsc
 
+.PHONY: tsc-tests
+tsc-tests: node_modules ## Runs type checks for tests in all UI workspaces
+	$(TARGET_HEADER)
+	$(YARN) tsc:tests
+
+.PHONY: tsc-tests-react
+tsc-tests-react: node_modules ## Runs type checks for tests in @modulify/m3-react
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-react tsc:tests
+
+.PHONY: tsc-tests-vue
+tsc-tests-vue: node_modules ## Runs type checks for tests in @modulify/m3-vue
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-vue tsc:tests
+
 .PHONY: tsc-e2e
 tsc-e2e: node_modules ## Runs type checks for Playwright Vitest configs
 	$(TARGET_HEADER)

@@ -21,6 +21,7 @@
     "test:smoke": "yarn workspace @modulify/m3-react test:smoke && yarn workspace @modulify/m3-vue test:smoke",
     "test": "vitest run",
     "tsc": "yarn workspaces foreach -W run tsc",
+    "tsc:tests": "yarn workspace @modulify/m3-react tsc:tests && yarn workspace @modulify/m3-vue tsc:tests",
     "tsc:e2e": "tsc -p tsconfig.e2e.json --skipLibCheck",
     "tsc:foundation": "yarn workspace @modulify/m3-foundation tsc",
     "tsc:react": "yarn workspace @modulify/m3-react tsc",

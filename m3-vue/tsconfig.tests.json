@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler"
+  },
+  "include": [
+    "shims-*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "tests/**/*.ts"
+  ],
+  "exclude": [
+    "storybook"
+  ]
+}
