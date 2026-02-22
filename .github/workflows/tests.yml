@@ -1,13 +1,59 @@
 name: Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  pr-check:
+    runs-on: ubuntu-latest
+
+    outputs:
+      has_open_pr: ${{ steps.detect.outputs.has_open_pr }}
+
+    steps:
+      - name: Detect open pull request for current branch
+        id: detect
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [[ "${{ github.event_name }}" != "push" || "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "has_open_pr=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          branch="${GITHUB_REF#refs/heads/}"
+          head="${GITHUB_REPOSITORY_OWNER}:${branch}"
+          api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls"
+
+          count="$(
+            curl -fsSL \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              --get "${api_url}" \
+              --data-urlencode "state=open" \
+              --data-urlencode "head=${head}" \
+              --data-urlencode "per_page=1" \
+            | python3 -c 'import json,sys; print(len(json.load(sys.stdin)))'
+          )"
+
+          if [[ "${count}" -gt 0 ]]; then
+            echo "has_open_pr=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_open_pr=false" >> "$GITHUB_OUTPUT"
+          fi
+
   eslint:
+    needs: pr-check
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main' || needs.pr-check.outputs.has_open_pr != 'true'
     runs-on: ubuntu-latest
 
     strategy:
@@ -49,6 +95,10 @@ jobs:
       - name: Run tests
         if: matrix.node-version != '24.x'
         run: yarn test
+
+      - name: Install Playwright Chromium
+        if: matrix.node-version == '24.x'
+        run: yarn playwright install --with-deps chromium
 
       - name: Run merged coverage
         if: matrix.node-version == '24.x'
