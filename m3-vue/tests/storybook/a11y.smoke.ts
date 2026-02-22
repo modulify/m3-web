@@ -4,7 +4,7 @@ import {
   setProjectAnnotations,
 } from '@storybook/vue3'
 
-import preview from '../storybook/preview'
+import preview from '../../storybook/preview'
 
 if (typeof globalThis.ResizeObserver === 'undefined') {
   class ResizeObserverMock {
@@ -24,7 +24,7 @@ const projectAnnotations = setProjectAnnotations([
   preview,
 ])
 
-const storyModules = import.meta.glob('../storybook/components/*.stories.ts', {
+const storyModules = import.meta.glob('../../storybook/components/*.stories.ts', {
   eager: true,
 })
 
@@ -32,12 +32,14 @@ type RunnableStory = {
   run: () => Promise<unknown>
 }
 
+type ComposableStoriesModule = Parameters<typeof composeStories>[0]
+
 const stories = Object.entries(storyModules).flatMap(([modulePath, moduleExports]) => {
-  const composedStories = composeStories(moduleExports as Record<string, unknown>, projectAnnotations)
+  const composedStories = composeStories(moduleExports as ComposableStoriesModule, projectAnnotations)
 
   return Object.entries(composedStories).map(([storyName, story]) => ({
     id: `${modulePath}:${storyName}`,
-    story: story as RunnableStory,
+    story: story as unknown as RunnableStory,
   }))
 })
 
