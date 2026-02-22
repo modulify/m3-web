@@ -20,3 +20,4 @@ node_modules/
 .yarnrc.yml
 *storybook.log
 .env
+drafts/
