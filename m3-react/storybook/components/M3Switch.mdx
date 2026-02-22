@@ -15,6 +15,14 @@ import * as M3SwitchStories from './M3Switch.stories'
   * Make sure the switch’s selection (on or off) is visible at a glance
 </Unstyled>
 
+## Accessibility semantics
+
+<Unstyled>
+  * Keep a visible label next to each switch control.
+  * Expose checked state via `role="switch"` and `aria-checked`.
+  * Use switches for immediate on/off state changes, not for multi-choice selections.
+</Unstyled>
+
 ### Demo
 
 <Unstyled>
@@ -24,9 +32,11 @@ import * as M3SwitchStories from './M3Switch.stories'
   </div>
 </Unstyled>
 
-### Resources
+## Resources
 
 <Unstyled>
   * [Guidelines](https://m3.material.io/components/switch/guidelines)
+  * [M3 Switch overview](https://m3.material.io/components/switch/overview)
   * [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+  * [WAI-ARIA APG: Switch Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/switch/)
 </Unstyled>

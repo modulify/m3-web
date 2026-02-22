@@ -10,11 +10,13 @@ import * as M3FabButtonStories from './M3FabButton.stories'
 
 Floating action buttons (FABs) help people take primary actions
 
-[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+## Accessibility semantics
+
+- Icon-only FABs require an accessible name via `aria-label`.
+- Keep FAB usage focused on the primary action on a given surface.
+- Extended FABs should keep a short visible label.
 
 ### Standard FABs
-
-[Guidelines](https://m3.material.io/components/floating-action-button/guidelines)
 
 <Unstyled>
   <p style={{ display: 'flex', gap: '16px' }}>
@@ -27,8 +29,6 @@ Floating action buttons (FABs) help people take primary actions
 
 ### Extended FABs
 
-[Guidelines](https://m3.material.io/components/extended-fab/guidelines)
-
 <Unstyled>
   <p style={{ display: 'flex', gap: '16px' }}>
     <M3FabButton variant={'surface'}><M3Icon name={'edit'} /> New task</M3FabButton>
@@ -37,3 +37,12 @@ Floating action buttons (FABs) help people take primary actions
     <M3FabButton variant={'tertiary'}><M3Icon name={'edit'} /> New task</M3FabButton>
   </p>
 </Unstyled>
+
+## Resources
+
+- [M3 FAB overview](https://m3.material.io/components/floating-action-button/overview)
+- [M3 FAB guidelines](https://m3.material.io/components/floating-action-button/guidelines)
+- [M3 Extended FAB overview](https://m3.material.io/components/extended-fab/overview)
+- [M3 Extended FAB guidelines](https://m3.material.io/components/extended-fab/guidelines)
+- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+- [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)

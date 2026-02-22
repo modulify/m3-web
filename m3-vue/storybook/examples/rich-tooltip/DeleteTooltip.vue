@@ -1,10 +1,10 @@
 <template>
     <span ref="target" :style="{ display: 'inline-block' }">
-        <M3Button>
+        <M3Button :aria-describedby="tooltipId">
             Delete
         </M3Button>
 
-        <M3RichTooltip :target="() => target" hide-on-miss-click>
+        <M3RichTooltip :id="tooltipId" :target="() => target" hide-on-miss-click>
             <template #heading>
                 Deleting item
             </template>
@@ -33,4 +33,5 @@ import { vM3PopperCloser } from '@/components/popper'
 import { ref } from 'vue'
 
 const target = ref<HTMLElement | null>(null)
+const tooltipId = 'delete-tooltip-description'
 </script>

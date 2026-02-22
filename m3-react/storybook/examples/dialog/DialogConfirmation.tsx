@@ -8,6 +8,8 @@ import { useState } from 'react'
 
 const DialogConfirmation: FC = () => {
   const [opened, setOpened] = useState(false)
+  const dialogTitleId = 'dialog-confirmation-title'
+  const dialogDescriptionId = 'dialog-confirmation-description'
 
   return (
     <>
@@ -21,7 +23,9 @@ const DialogConfirmation: FC = () => {
       <M3Dialog
         opened={opened}
         role="dialog"
-        aria-live="assertive"
+        aria-modal="true"
+        aria-labelledby={dialogTitleId}
+        aria-describedby={dialogDescriptionId}
         onToggle={setOpened}
       >
         <M3Dialog.Icon>
@@ -29,10 +33,12 @@ const DialogConfirmation: FC = () => {
         </M3Dialog.Icon>
 
         <M3Dialog.Header>
-          <h3>Permanently delete?</h3>
+          <h3 id={dialogTitleId}>Permanently delete?</h3>
         </M3Dialog.Header>
 
-        Deleting the selected messages will also remove them from all synced devices.
+        <p id={dialogDescriptionId}>
+          Deleting the selected messages will also remove them from all synced devices.
+        </p>
 
         <M3Dialog.Footer>
           <M3Button

@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/addon-docs/blocks'
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
 import * as M3SelectStories from './M3Select.stories'
 
 <Meta of={M3SelectStories} />
@@ -6,3 +6,21 @@ import * as M3SelectStories from './M3Select.stories'
 # M3Select
 
 Text field augmented with dropdown menu
+
+## Accessibility semantics
+
+- `M3Select` exposes combobox semantics with a listbox popup and option items.
+- Provide a visible label through `label` or an explicit aria-label/aria-labelledby strategy.
+- Keep option labels unique and meaningful for screen readers.
+
+## Demo
+
+<Canvas of={M3SelectStories.Standard} />
+<Canvas of={M3SelectStories.WithIcons} />
+
+## Resources
+
+- [M3 Menus overview](https://m3.material.io/components/menus/overview)
+- [M3 Menus guidelines](https://m3.material.io/components/menus/guidelines)
+- [WAI-ARIA APG: Combobox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)
+- [WAI-ARIA APG: Listbox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/)

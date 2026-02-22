@@ -14,7 +14,11 @@ import { M3TextField } from '@/components/text-field'
 
 Text fields let users enter text into a UI
 
-[Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+## Accessibility semantics
+
+- Provide a persistent text label (`label` prop or explicit aria-labelledby).
+- Use `aria-invalid` together with helper/support text for validation feedback.
+- For long-form input, prefer multiline mode (`textarea`) with the same labeling strategy.
 
 <Inline tag={'p'} is={defineComponent({
   setup () {
@@ -76,3 +80,10 @@ Outlined text field:
   },
 })} />
 </Unstyled>
+
+## Resources
+
+- [M3 Text Fields overview](https://m3.material.io/components/text-fields/overview)
+- [M3 Text Fields guidelines](https://m3.material.io/components/text-fields/guidelines)
+- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+- [WAI Tutorials: Form Labels](https://www.w3.org/WAI/tutorials/forms/labels/)

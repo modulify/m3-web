@@ -4,8 +4,22 @@ import DeleteTooltip from '../examples/rich-tooltip/DeleteTooltip'
 
 # Rich tooltip
 
+Rich tooltips provide contextual, supplementary information near a trigger element.
+
+## Accessibility semantics
+
+- Link trigger and tooltip with `aria-describedby`.
+- Keep tooltip text concise and task-relevant.
+- Avoid using tooltips as the only way to convey critical information.
+
 <Unstyled>
   <div className="m3-panel m3-panel_elevated-1 my-4" style={{ maxWidth: '360px' }}>
     <DeleteTooltip />
   </div>
 </Unstyled>
+
+## Resources
+
+- [M3 Tooltips overview](https://m3.material.io/components/tooltips/overview)
+- [M3 Tooltips guidelines](https://m3.material.io/components/tooltips/guidelines)
+- [WAI-ARIA APG: Tooltip Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)
