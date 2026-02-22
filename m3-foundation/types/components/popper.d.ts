@@ -47,6 +47,7 @@ export type ShowingOptions = {
   shown?: boolean;
   container?: Element | string;
   disabled?: boolean;
+  animated?: boolean;
 }
 
 export type PopperOptions = FloatingOptions

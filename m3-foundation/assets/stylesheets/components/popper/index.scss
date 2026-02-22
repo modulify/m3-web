@@ -1,22 +1,77 @@
 @use "../../basics/motion" as m3-motion;
 
-.m3-popper {
-  visibility: hidden;
-  opacity: 0;
-  transition:
-    m3-motion.timing-standard-decelerate(opacity),
-    m3-motion.timing-standard-decelerate(visibility)
-  ;
+.m3-popper-positioner {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.m3-popper {
+  --m3-popper-enter-duration: #{m3-motion.duration('short4')};
+  --m3-popper-exit-duration: #{m3-motion.duration('short2')};
+  --m3-popper-opacity-enter-duration: #{m3-motion.duration('short2')};
+  --m3-popper-opacity-exit-duration: #{m3-motion.duration('short2')};
+  --m3-popper-enter-easing: #{m3-motion.easing('standard-decelerate')};
+  --m3-popper-exit-easing: #{m3-motion.easing('standard-accelerate')};
+  --m3-popper-enter-x: 0px;
+  --m3-popper-enter-y: 0px;
+  --m3-popper-origin-x: center;
+  --m3-popper-origin-y: top;
+  --m3-popper-scale-x-hidden: 0.96;
+  --m3-popper-scale-y-hidden: 0.96;
+
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--m3-popper-opacity-exit-duration) var(--m3-popper-exit-easing),
+    visibility 0s linear var(--m3-popper-exit-duration)
+  ;
+
+  &_animated {
+    transform-origin: var(--m3-popper-origin-x) var(--m3-popper-origin-y);
+    transform: translate(var(--m3-popper-enter-x), var(--m3-popper-enter-y)) scale(var(--m3-popper-scale-x-hidden), var(--m3-popper-scale-y-hidden));
+    will-change: opacity, transform;
+    transition:
+      opacity var(--m3-popper-opacity-exit-duration) var(--m3-popper-exit-easing),
+      transform var(--m3-popper-exit-duration) var(--m3-popper-exit-easing),
+      visibility 0s linear var(--m3-popper-exit-duration)
+    ;
+  }
+
+  &_animated#{&}_shown {
+    transform: translate(0, 0) scale(1);
+    transition:
+      opacity var(--m3-popper-opacity-enter-duration) var(--m3-popper-enter-easing),
+      transform var(--m3-popper-enter-duration) var(--m3-popper-enter-easing),
+      visibility 0s linear 0ms
+    ;
+  }
 
   &_shown {
     visibility: visible;
     opacity: 1;
     transition:
-      m3-motion.timing-standard-accelerate(opacity),
-      m3-motion.timing-standard-accelerate(visibility)
+      opacity var(--m3-popper-opacity-enter-duration) var(--m3-popper-enter-easing),
+      visibility 0s linear 0ms
     ;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-popper {
+    &_animated {
+      transform: translate(0, 0) scale(1);
+      transition:
+        opacity 0ms linear,
+        visibility 0s linear 0ms
+      ;
+    }
+
+    &_animated#{&}_shown {
+      transition:
+        opacity 0ms linear,
+        visibility 0s linear 0ms
+      ;
+    }
   }
 }

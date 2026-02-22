@@ -12,6 +12,7 @@
         :offset-cross-axis="offsetCrossAxis"
         :delay="delay"
         :disabled="disabled"
+        animated
         :detach-timeout="detachTimeout"
         v-bind="$attrs"
         class="m3-menu"

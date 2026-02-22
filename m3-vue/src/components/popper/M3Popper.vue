@@ -4,15 +4,21 @@
         :to="container"
     >
         <div
-            ref="popper"
-            :class="{
-                'm3-popper': true,
-                'm3-popper_shown': state.shown,
-            }"
-            v-bind="$attrs"
-            @transitionend="state.shown ? $emit('shown') : $emit('hidden')"
+            ref="positioner"
+            class="m3-popper-positioner"
         >
-            <slot />
+            <div
+                ref="popper"
+                :class="{
+                    'm3-popper': true,
+                    'm3-popper_animated': animated,
+                    'm3-popper_shown': state.shown,
+                }"
+                v-bind="$attrs"
+                @transitionend="state.shown ? $emit('shown') : $emit('hidden')"
+            >
+                <slot />
+            </div>
         </div>
     </Teleport>
 </template>
@@ -155,6 +161,11 @@ const props = defineProps({
     default: false,
   },
 
+  animated: {
+    type: Boolean,
+    default: false,
+  },
+
   detachTimeout: {
     type: null as unknown as PropType<null | number | string>,
     validator: Or(isNull, isNumeric),
@@ -174,6 +185,7 @@ const emit = defineEmits([
 ])
 
 const target = computed(() => typeof props.target === 'function' ? props.target() : props.target?.value)
+const positioner = ref<HTMLElement | null>(null)
 const popper = ref<HTMLElement | null>(null)
 
 const positioning = computed(() => ({
@@ -197,21 +209,75 @@ const state = reactive({
 
 const delay = computed(() => normalizeDelay(props.delay))
 
+const animationBySide = {
+  top: {
+    originX: 'center',
+    originY: 'bottom',
+    enterX: '0px',
+    enterY: '-2px',
+    scaleX: '0.995',
+    scaleY: '0.72',
+  },
+  bottom: {
+    originX: 'center',
+    originY: 'top',
+    enterX: '0px',
+    enterY: '2px',
+    scaleX: '0.995',
+    scaleY: '0.72',
+  },
+  left: {
+    originX: 'right',
+    originY: 'center',
+    enterX: '-2px',
+    enterY: '0px',
+    scaleX: '0.72',
+    scaleY: '0.995',
+  },
+  right: {
+    originX: 'left',
+    originY: 'center',
+    enterX: '2px',
+    enterY: '0px',
+    scaleX: '0.72',
+    scaleY: '0.995',
+  },
+} as const
+
+const applyAnimationSide = (side: 'top' | 'bottom' | 'left' | 'right') => {
+  const style = popper.value?.style
+  if (!style) {
+    return
+  }
+
+  const preset = animationBySide[side]
+  style.setProperty('--m3-popper-origin-x', preset.originX)
+  style.setProperty('--m3-popper-origin-y', preset.originY)
+  style.setProperty('--m3-popper-enter-x', preset.enterX)
+  style.setProperty('--m3-popper-enter-y', preset.enterY)
+  style.setProperty('--m3-popper-scale-x-hidden', preset.scaleX)
+  style.setProperty('--m3-popper-scale-y-hidden', preset.scaleY)
+}
+
 const adjust = async () => {
-  if (target.value && popper.value && !state.disposed) {
-    await computePosition(popper.value, target.value, {
+  if (target.value && positioner.value && !state.disposed) {
+    const result = await computePosition(positioner.value, target.value, {
       ...positioning.value,
       onReferenceHidden: hide,
     })
+
+    if (props.animated) {
+      applyAnimationSide(result.side)
+    }
   }
 }
 
-const contains = (el: Element | null): boolean => popper.value?.contains(el) ?? false
+const contains = (el: Element | null): boolean => positioner.value?.contains(el) ?? false
 
 const {
   autoAdjustOn,
   autoAdjustOff,
-} = useAutoUpdate(target, popper, adjust)
+} = useAutoUpdate(target, positioner, adjust)
 
 const showingScheduler = new Scheduler()
 const detachScheduler = new Scheduler()
@@ -332,8 +398,8 @@ const initialize = (disposed = false): void => {
       targetListener.start(target.value, props.targetTriggers)
     }
 
-    if (popper.value) {
-      popperListener.start(popper.value, props.popperTriggers)
+    if (positioner.value) {
+      popperListener.start(positioner.value, props.popperTriggers)
     }
   } else {
     state.disposed = true
@@ -397,6 +463,17 @@ watch(() => props.disabled, disabled => {
     if (props.shown) {
       show()
     }
+  }
+})
+
+watch(() => props.animated, animated => {
+  if (!animated && popper.value) {
+    popper.value.style.removeProperty('--m3-popper-origin-x')
+    popper.value.style.removeProperty('--m3-popper-origin-y')
+    popper.value.style.removeProperty('--m3-popper-enter-x')
+    popper.value.style.removeProperty('--m3-popper-enter-y')
+    popper.value.style.removeProperty('--m3-popper-scale-x-hidden')
+    popper.value.style.removeProperty('--m3-popper-scale-y-hidden')
   }
 })
 

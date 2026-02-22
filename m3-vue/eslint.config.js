@@ -161,5 +161,19 @@ export default [
       'max-lines-per-function': 'off',
     },
   },
+  {
+    files: [
+      '**/*.e2e.ts',
+      '**/*.e2e.tsx',
+      '**/*.e2e.test.ts',
+      '**/*.e2e.test.tsx',
+      '**/*.smote.ts',
+      '**/*.smoke.ts',
+    ],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+    },
+  },
   { ignores: ['dist/*'] },
 ]

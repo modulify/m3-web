@@ -30,6 +30,7 @@ export interface M3PopperProps extends HTMLAttributes<HTMLElement> {
   overflow?: OverflowBehavior[]
   delay?: number | string | Delay;
   disabled?: boolean;
+  animated?: boolean;
   detachTimeout?: null | number | string;
   onShow?: () => void;
   onHide?: (reason: HideReason) => void;

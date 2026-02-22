@@ -16,6 +16,8 @@ import {
   vM3PopperCloser,
 } from '@/components/popper'
 
+type PopperSide = 'top' | 'bottom' | 'left' | 'right'
+
 const rect = (x: number, y: number, width: number, height: number): DOMRect => (
   DOMRect.fromRect({
     x,
@@ -25,10 +27,10 @@ const rect = (x: number, y: number, width: number, height: number): DOMRect => (
   })
 )
 
-const parseTransform = (popper: HTMLElement) => {
-  const match = popper.style.transform.match(/translate3d\(([-\d.]+)px,\s*([-\d.]+)px,\s*0px\)/)
+const parseTransform = (positioner: HTMLElement) => {
+  const match = positioner.style.transform.match(/translate3d\(([-\d.]+)px,\s*([-\d.]+)px,\s*0px\)/)
   if (!match) {
-    throw new Error(`Unexpected transform: ${popper.style.transform}`)
+    throw new Error(`Unexpected transform: ${positioner.style.transform}`)
   }
 
   return {
@@ -37,9 +39,54 @@ const parseTransform = (popper: HTMLElement) => {
   }
 }
 
-const expectY = (popper: HTMLElement, expectedY: number) => {
-  const { y } = parseTransform(popper)
+const expectY = (positioner: HTMLElement, expectedY: number) => {
+  const { y } = parseTransform(positioner)
   expect(y).toBe(expectedY)
+}
+
+const expectAnimationSide = (popper: HTMLElement, side: PopperSide) => {
+  const expected = {
+    top: {
+      originX: 'center',
+      originY: 'bottom',
+      enterX: '0px',
+      enterY: '-2px',
+      scaleX: '0.995',
+      scaleY: '0.72',
+    },
+    bottom: {
+      originX: 'center',
+      originY: 'top',
+      enterX: '0px',
+      enterY: '2px',
+      scaleX: '0.995',
+      scaleY: '0.72',
+    },
+    left: {
+      originX: 'right',
+      originY: 'center',
+      enterX: '-2px',
+      enterY: '0px',
+      scaleX: '0.72',
+      scaleY: '0.995',
+    },
+    right: {
+      originX: 'left',
+      originY: 'center',
+      enterX: '2px',
+      enterY: '0px',
+      scaleX: '0.72',
+      scaleY: '0.995',
+    },
+  }[side]
+
+  expect(popper.classList.contains('m3-popper_animated')).toBe(true)
+  expect(popper.style.getPropertyValue('--m3-popper-origin-x')).toBe(expected.originX)
+  expect(popper.style.getPropertyValue('--m3-popper-origin-y')).toBe(expected.originY)
+  expect(popper.style.getPropertyValue('--m3-popper-enter-x')).toBe(expected.enterX)
+  expect(popper.style.getPropertyValue('--m3-popper-enter-y')).toBe(expected.enterY)
+  expect(popper.style.getPropertyValue('--m3-popper-scale-x-hidden')).toBe(expected.scaleX)
+  expect(popper.style.getPropertyValue('--m3-popper-scale-y-hidden')).toBe(expected.scaleY)
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
@@ -62,14 +109,20 @@ const waitFor = async (assertion: () => void, timeoutMs = 1200) => {
 }
 
 const waitForPopper = async () => {
+  let positioner: HTMLElement | null = null
   let popper: HTMLElement | null = null
 
   await waitFor(() => {
+    positioner = document.body.querySelector('.m3-popper-positioner') as HTMLElement | null
     popper = document.body.querySelector('.m3-popper') as HTMLElement | null
+    expect(positioner).not.toBeNull()
     expect(popper).not.toBeNull()
   })
 
-  return popper as HTMLElement
+  return {
+    positioner: positioner as HTMLElement,
+    popper: popper as HTMLElement,
+  }
 }
 
 type MountResult = {
@@ -139,10 +192,10 @@ const createTarget = () => {
 }
 
 const setupGeometryCase = async (target: HTMLButtonElement) => {
-  const popper = await waitForPopper()
+  const elements = await waitForPopper()
 
   vi.spyOn(target, 'getBoundingClientRect').mockReturnValue(rect(100, 50, 40, 20))
-  return popper
+  return elements
 }
 
 const waitForShown = async (popper: HTMLElement, shown: boolean) => {
@@ -151,7 +204,6 @@ const waitForShown = async (popper: HTMLElement, shown: boolean) => {
   })
 }
 
-// eslint-disable-next-line max-lines-per-function
 describe('m3-vue/popper e2e', () => {
   let target: HTMLButtonElement | null = null
   let mounted: MountResult | null = null
@@ -178,19 +230,30 @@ describe('m3-vue/popper e2e', () => {
     vi.restoreAllMocks()
   })
   test('applies bottom placement geometry with main axis offset', async () => {
-    const popper = await setupGeometryCase(target as HTMLButtonElement)
+    const {
+      popper,
+      positioner,
+    } = await setupGeometryCase(target as HTMLButtonElement)
 
     await (mounted as MountResult).setProps({
       offsetMainAxis: 10,
     })
 
     await waitFor(() => {
-      expectY(popper, 80)
-      expect(popper.style.position).toBe('absolute')
+      expectY(positioner, 80)
+      expect(positioner.style.position).toBe('absolute')
+      expect(popper.classList.contains('m3-popper_animated')).toBe(false)
+      expect(popper.style.getPropertyValue('--m3-popper-enter-x')).toBe('')
+      expect(popper.style.getPropertyValue('--m3-popper-enter-y')).toBe('')
+      expect(popper.style.getPropertyValue('--m3-popper-scale-x-hidden')).toBe('')
+      expect(popper.style.getPropertyValue('--m3-popper-scale-y-hidden')).toBe('')
     })
   })
   test('applies cross axis offset for bottom placement', async () => {
-    const popper = await setupGeometryCase(target as HTMLButtonElement)
+    const {
+      popper,
+      positioner,
+    } = await setupGeometryCase(target as HTMLButtonElement)
 
     await (mounted as MountResult).setProps({
       offsetCrossAxis: 0,
@@ -198,8 +261,8 @@ describe('m3-vue/popper e2e', () => {
 
     let x0 = 0
     await waitFor(() => {
-      x0 = parseTransform(popper).x
-      expectY(popper, 70)
+      x0 = parseTransform(positioner).x
+      expectY(positioner, 70)
     })
 
     await (mounted as MountResult).setProps({
@@ -207,56 +270,66 @@ describe('m3-vue/popper e2e', () => {
     })
 
     await waitFor(() => {
-      const { x, y } = parseTransform(popper)
+      const { x, y } = parseTransform(positioner)
       expect(y).toBe(70)
       expect(Math.round(x - x0)).toBe(7)
-      expect(popper.style.position).toBe('absolute')
+      expect(positioner.style.position).toBe('absolute')
     })
   })
 
   test('changes geometry when placement switches from bottom to right', async () => {
-    const popper = await setupGeometryCase(target as HTMLButtonElement)
+    const {
+      popper,
+      positioner,
+    } = await setupGeometryCase(target as HTMLButtonElement)
 
     await (mounted as MountResult).setProps({
       placement: 'bottom',
       offsetMainAxis: 0,
       offsetCrossAxis: 0,
+      animated: true,
     })
 
     let bottomX = 0
     let bottomY = 0
     await waitFor(() => {
-      const point = parseTransform(popper)
+      const point = parseTransform(positioner)
       bottomX = point.x
       bottomY = point.y
+      expectAnimationSide(popper, 'bottom')
     })
 
     await (mounted as MountResult).setProps({
       placement: 'right',
       offsetMainAxis: 0,
       offsetCrossAxis: 0,
+      animated: true,
     })
 
     await waitFor(() => {
-      const point = parseTransform(popper)
+      const point = parseTransform(positioner)
       expect(point.x).toBeGreaterThan(bottomX)
       expect(point.y).not.toBe(bottomY)
-      expect(popper.style.position).toBe('absolute')
+      expectAnimationSide(popper, 'right')
     })
   })
 
   test('applies main axis offset delta for top placement', async () => {
-    const popper = await setupGeometryCase(target as HTMLButtonElement)
+    const {
+      popper,
+      positioner,
+    } = await setupGeometryCase(target as HTMLButtonElement)
 
     await (mounted as MountResult).setProps({
       placement: 'top',
       offsetMainAxis: 0,
       offsetCrossAxis: 0,
+      animated: true,
     })
 
     let y0 = 0
     await waitFor(() => {
-      y0 = parseTransform(popper).y
+      y0 = parseTransform(positioner).y
     })
 
     await (mounted as MountResult).setProps({
@@ -266,9 +339,52 @@ describe('m3-vue/popper e2e', () => {
     })
 
     await waitFor(() => {
-      const { y } = parseTransform(popper)
+      const { y } = parseTransform(positioner)
       expect(Math.round(Math.abs(y - y0))).toBe(10)
-      expect(popper.style.position).toBe('absolute')
+      expect(positioner.style.position).toBe('absolute')
+      expectAnimationSide(popper, 'top')
+    })
+  })
+
+  test('updates animation direction after flip when bottom placement has no space', async () => {
+    const { popper } = await setupGeometryCase(target as HTMLButtonElement)
+
+    await (mounted as MountResult).setProps({
+      placement: 'bottom',
+      overflow: ['flip'],
+      offsetMainAxis: 0,
+      offsetCrossAxis: 0,
+      animated: true,
+    })
+
+    vi.spyOn(target as HTMLButtonElement, 'getBoundingClientRect').mockReturnValue(rect(100, window.innerHeight - 12, 40, 20))
+
+    await (mounted as MountResult).setProps({
+      placement: 'bottom',
+      overflow: ['flip'],
+      offsetMainAxis: 0,
+      offsetCrossAxis: 0,
+      animated: true,
+    })
+
+    await waitFor(() => {
+      expectAnimationSide(popper, 'top')
+    })
+  })
+
+  test('applies animation vectors for left placement', async () => {
+    const { popper } = await setupGeometryCase(target as HTMLButtonElement)
+
+    await (mounted as MountResult).setProps({
+      placement: 'left',
+      overflow: [],
+      offsetMainAxis: 0,
+      offsetCrossAxis: 0,
+      animated: true,
+    })
+
+    await waitFor(() => {
+      expectAnimationSide(popper, 'left')
     })
   })
 
@@ -280,7 +396,7 @@ describe('m3-vue/popper e2e', () => {
       }, 'Close'), [[vM3PopperCloser]]),
     })
 
-    const popper = await waitForPopper()
+    const { popper } = await waitForPopper()
     await waitForShown(popper, true)
 
     const button = document.body.querySelector('[data-testid="closer-button"]') as HTMLButtonElement
@@ -300,7 +416,7 @@ describe('m3-vue/popper e2e', () => {
       }, 'Menu item'), [[vM3PopperCloser, true, undefined, { all: true }]]),
     })
 
-    const popper = await waitForPopper()
+    const { popper } = await waitForPopper()
     await waitForShown(popper, true)
 
     const menuItem = document.body.querySelector('[data-testid="menu-item-closer"]') as HTMLDivElement
@@ -319,7 +435,7 @@ describe('m3-vue/popper e2e', () => {
       }, 'No close'), [[vM3PopperCloser, false]]),
     })
 
-    const popper = await waitForPopper()
+    const { popper } = await waitForPopper()
     await waitForShown(popper, true)
 
     const button = document.body.querySelector('[data-testid="disabled-closer-button"]') as HTMLButtonElement
