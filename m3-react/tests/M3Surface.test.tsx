@@ -98,7 +98,7 @@ describe('m3-react/surface', () => {
 
     let surface = screen.getByRole('region')
 
-    expect(surface.classList.contains('m3-surface_role-surface-container-high')).toBe(true)
+    expect(surface.classList.contains('m3-surface_container-high')).toBe(true)
 
     rerender(
       <M3Surface elevation={3} variant="surface-bright" />
@@ -106,7 +106,7 @@ describe('m3-react/surface', () => {
 
     surface = screen.getByRole('region')
 
-    expect(surface.classList.contains('m3-surface_role-surface-bright')).toBe(true)
-    expect(surface.classList.contains('m3-surface_role-surface-container-high')).toBe(false)
+    expect(surface.classList.contains('m3-surface_bright')).toBe(true)
+    expect(surface.classList.contains('m3-surface_container-high')).toBe(false)
   })
 })

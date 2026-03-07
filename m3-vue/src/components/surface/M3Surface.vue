@@ -279,6 +279,14 @@ const resolvedVariant = computed<Exclude<SurfaceVariant, 'auto'>>(() => {
   }
 })
 
+const variantClassName = computed(() => {
+  if (resolvedVariant.value === 'surface') {
+    return null
+  }
+
+  return `m3-surface_${resolvedVariant.value.replace(/^surface-/, '')}`
+})
+
 const resolvedSizeStyle = computed(() => {
   const width = isDefined(props.width)
     ? toLength(props.width, 'auto')
@@ -359,7 +367,7 @@ const surfaceAttrs = computed(() => {
 const surfaceClass = computed(() => ({
   'm3-surface': true,
   'm3-surface_modal': isModal.value,
-  [`m3-surface_role-${resolvedVariant.value}`]: true,
+  [variantClassName.value || '']: Boolean(variantClassName.value),
   [`m3-surface_anchor-${props.anchor}`]: true,
   [`m3-surface_elevation-${props.elevation}`]: true,
 }))

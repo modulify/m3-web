@@ -114,7 +114,7 @@ describe('m3-vue/surface e2e', () => {
     staticRoles.forEach((role) => {
       const block = document.querySelector(`[data-testid="static-role-${role}"]`) as HTMLElement | null
       expect(block).not.toBeNull()
-      expect(block?.classList.contains(`m3-surface_role-${role}`)).toBe(true)
+      expect(block?.classList.contains(`m3-surface_${role.replace(/^surface-/, '')}`)).toBe(true)
     })
 
     const content = document.querySelector('[data-testid="sheet-layout-content"]') as HTMLElement
@@ -192,7 +192,8 @@ describe('m3-vue/surface e2e', () => {
     expect(afterRect.height).toBeGreaterThan(canvasRect.height - 44)
 
     const morphedSurface = document.querySelector('[data-testid="orchestrated-card-surface"]') as HTMLElement
-    expect(morphedSurface.classList.contains('m3-surface_role-surface')).toBe(true)
+    expect(morphedSurface.classList.contains('m3-surface')).toBe(true)
+    expect(morphedSurface.classList.contains('m3-surface_container')).toBe(false)
     expect(morphedSurface.style.borderTopLeftRadius).toBe('0px')
 
     await capture('scenario-b-card-after')

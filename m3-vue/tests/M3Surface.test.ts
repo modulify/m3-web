@@ -96,7 +96,7 @@ describe('m3-vue/experimental/surface', () => {
 
     let surface = screen.getByRole('region')
 
-    expect(surface.classList.contains('m3-surface_role-surface-container-high')).toBe(true)
+    expect(surface.classList.contains('m3-surface_container-high')).toBe(true)
 
     await view.rerender({
       elevation: 3,
@@ -105,7 +105,7 @@ describe('m3-vue/experimental/surface', () => {
 
     surface = screen.getByRole('region')
 
-    expect(surface.classList.contains('m3-surface_role-surface-bright')).toBe(true)
-    expect(surface.classList.contains('m3-surface_role-surface-container-high')).toBe(false)
+    expect(surface.classList.contains('m3-surface_bright')).toBe(true)
+    expect(surface.classList.contains('m3-surface_container-high')).toBe(false)
   })
 })
