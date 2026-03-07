@@ -1,0 +1,76 @@
+schema_version: 1
+updated_at: "2026-02-22"
+scope: "surface"
+status: "draft"
+
+layer_model:
+  - id: "base_content"
+    z_index_order: 0
+    purpose: "Main page content layer."
+  - id: "docked_surfaces"
+    z_index_order: 100
+    purpose: "Coplanar/standard surfaces sharing layout space."
+    examples:
+      - "standard_side_sheet"
+      - "standard_navigation_drawer"
+      - "persistent_bottom_sheet"
+  - id: "floating_non_modal"
+    z_index_order: 200
+    purpose: "Temporary non-modal floating surfaces."
+    examples:
+      - "menu"
+      - "popover_like_surface"
+  - id: "modal_scrim"
+    z_index_order: 300
+    purpose: "Input-blocking scrim behind modal surfaces."
+  - id: "modal_surfaces"
+    z_index_order: 400
+    purpose: "Modal surface stack."
+    examples:
+      - "dialog"
+      - "modal_bottom_sheet"
+      - "modal_navigation_drawer"
+      - "modal_side_sheet"
+  - id: "top_overlays"
+    z_index_order: 500
+    purpose: "Critical/system overlays that may appear above modal stack."
+
+orchestration_rules:
+  - id: "LR-001"
+    statement: "Every surface instance must belong to exactly one active layer at a time."
+  - id: "LR-002"
+    statement: "Entering modal mode must bind the surface to modal_surfaces and enforce modal_scrim policy."
+  - id: "LR-003"
+    statement: "Transition docked->modal requires explicit layer rebinding, not only geometry change."
+  - id: "LR-004"
+    statement: "Transient non-modal overlays tied to background content are dismissed when blocking modal state starts."
+  - id: "LR-005"
+    statement: "Focus ownership belongs to top item in modal_surfaces stack when stack is non-empty."
+
+stack_policy:
+  modal_stack:
+    mode: "lifo"
+    allow_multiple: true
+    default_on_new_modal: "push"
+    optional_same_task_policy: "replace_top"
+  transient_overlay_policy:
+    on_modal_entry:
+      background_attached: "dismiss"
+      modal_attached: "rebind_to_modal_context_if_supported"
+
+conflict_scenarios:
+  - id: "LC-001"
+    scenario: "docked_side_sheet_to_modal_dialog_while_modal_exists"
+    default_resolution:
+      - "push new modal dialog on modal stack"
+      - "set focus to new top modal"
+      - "keep scrim active"
+  - id: "LC-002"
+    scenario: "menu_open_request_while_modal_dialog_active"
+    default_resolution:
+      - "allow only if anchor belongs to top modal subtree"
+      - "otherwise reject_or_dismiss_request"
+  - id: "LC-003"
+    scenario: "viewport_shrinks_standard_to_modal"
+    default_resolution:
+      - "atomic switch: geometry update + layer rebind + focus/scrim update"

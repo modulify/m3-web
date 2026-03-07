@@ -1,0 +1,129 @@
+schema_version: 1
+updated_at: "2026-02-23"
+scope: "surface"
+status: "draft"
+
+definition:
+  id: "surface"
+  summary: "Generalized M3 surface container capable of geometry and modality transformations."
+
+defaults:
+  shape:
+    value: "rectangle"
+    corner_radius: "0"
+  size:
+    mode: "fill_available_space"
+  spacing:
+    margin: "none"
+    padding: "none"
+  placement_rules:
+    value: "not_imposed"
+  visual_hierarchy:
+    based_on:
+      - "m3_surface_roles"
+      - "m3_elevation"
+
+capabilities:
+  geometry:
+    width:
+      value: "resizable_range"
+      required: true
+    height:
+      value: "resizable_range"
+      required: true
+    corners:
+      all_sides_change: true
+      selected_sides_change: true
+  anchoring:
+    values: ["center", "anchor", "bottom", "start", "end"]
+  modality:
+    values: ["standard", "modal"]
+  transition_support:
+    reversible_morphs_preferred: true
+
+transform_scenarios:
+  - id: "TS-001"
+    from: "card"
+    to: "page_like_container"
+    required: true
+    notes:
+      - "Must respect reserved areas (top app bar, navigation regions)."
+  - id: "TS-002"
+    from: "side_sheet"
+    to: "modal_dialog"
+    required: true
+  - id: "TS-003"
+    from: "menu"
+    to: "modal_surface"
+    required: true
+    trigger_hint: "compact_viewport"
+  - id: "TS-004"
+    from: "standard_sheet_or_drawer"
+    to: "modal_sheet_or_drawer"
+    required: true
+  - id: "TS-005"
+    from: "standard_side_sheet"
+    to: "modal_side_sheet"
+    required: true
+    notes:
+      - "Prefer preserving side anchor continuity during docked->modal switch."
+
+boundaries:
+  includes:
+    - "container_geometry"
+    - "shape_elevation_surface_profile"
+    - "modality_scrim_focus"
+    - "container_motion_profile"
+  excludes:
+    - "business_logic_of_content"
+    - "domain_semantics_of_inner_widgets"
+    - "route_level_page_composition_as_a_whole"
+
+requirements:
+  - id: "SC-REQ-001"
+    kind: "functional"
+    priority: "must"
+    statement: "Surface container must be content-agnostic."
+  - id: "SC-REQ-002"
+    kind: "functional"
+    priority: "must"
+    statement: "Surface container must support morphing between key surface archetypes."
+  - id: "SC-REQ-003"
+    kind: "functional"
+    priority: "must"
+    statement: "Surface container must support modality switching with corresponding scrim/focus behavior."
+  - id: "SC-REQ-004"
+    kind: "functional"
+    priority: "must"
+    statement: "Surface container must support layout-aware constraints by viewport/window class."
+  - id: "SC-REQ-005"
+    kind: "non_functional"
+    priority: "must"
+    statement: "Geometry decisions must be deterministic."
+  - id: "SC-REQ-006"
+    kind: "non_functional"
+    priority: "must"
+    statement: "Key geometry and visual parameters must be tokenizable."
+  - id: "SC-REQ-007"
+    kind: "non_functional"
+    priority: "should"
+    statement: "Morph transitions should be reversible unless explicitly one-way by UX intent."
+  - id: "SC-REQ-008"
+    kind: "functional"
+    priority: "must"
+    statement: "Side-sheet profile must define preferred edge policy (end/right), fixed-width mode, and optional inset contract."
+  - id: "SC-REQ-009"
+    kind: "non_functional"
+    priority: "must"
+    statement: "Docked-to-modal side-sheet transition must preserve visual continuity (no teleport between states)."
+
+risks:
+  - id: "SC-RISK-001"
+    level: "high"
+    statement: "Overgeneralization may erase useful component-specific constraints."
+  - id: "SC-RISK-002"
+    level: "high"
+    statement: "Platform divergence (Compose/MDC/Web) may require explicit branching strategy."
+  - id: "SC-RISK-003"
+    level: "medium"
+    statement: "Missing direct side-sheet numeric redlines weakens confidence in unified geometry."

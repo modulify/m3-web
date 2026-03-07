@@ -1,0 +1,59 @@
+schema_version: 1
+updated_at: "2026-02-23"
+scope: "surface_panel_side_sheet_modal"
+status: "draft"
+
+sources:
+  - id: "SRC-001"
+    type: "guidance_excerpt_local_capture"
+    ref: "evidence/surface/panel/side-sheet-guidance.md"
+    derived_from:
+      - "https://m3.material.io/components/side-sheets/guidelines"
+    confidence: "medium"
+  - id: "SRC-002"
+    type: "runtime_page_data_metadata"
+    ref: "https://m3.material.io/page-data/ComponentsM3/5634981699387392.json"
+    confidence: "high"
+
+behavior_profile:
+  geometry:
+    width_mode: "fixed"
+    height_mode: "full_height_typical"
+    layout_region_dependency: true
+  placement:
+    edge: "end_or_right_preferred"
+    rationale: "avoid_conflict_with_left_navigation_components"
+    inset:
+      value: "16dp"
+      optional: true
+  modality:
+    variants:
+      - "standard"
+      - "modal"
+
+modalization_transition:
+  id: "SS-MODAL-001"
+  from: "standard_side_sheet"
+  to: "modal_side_sheet"
+  expectations:
+    - "no_teleport_visual_continuity"
+    - "elevation_ramp_during_transition"
+    - "pin_to_viewport_end_edge"
+    - "scrim_enters_while_modalization_happens"
+    - "layout_space_released_transactionally"
+  layer_binding:
+    from: "docked_surfaces"
+    to: "modal_surfaces"
+  focus_policy: "trap"
+
+constraints:
+  numeric_redlines_available: false
+  interpretation_policy: "treat_as_guidance_until_redlines_confirmed"
+
+links:
+  markdown:
+    - "evidence/surface/summary.md"
+    - "evidence/surface/panel/side-sheet-guidance.md"
+  yaml:
+    - "evidence/surface/panel/tokens.yaml"
+    - "evidence/surface/model/transitions.yaml"

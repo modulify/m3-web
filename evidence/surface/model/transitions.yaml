@@ -1,0 +1,143 @@
+schema_version: 1
+updated_at: "2026-02-23"
+scope: "surface"
+status: "draft"
+
+transitions:
+  - id: "TR-001"
+    from: "card"
+    to: "page_like_container"
+    triggers:
+      - "user_primary_action"
+      - "expand_details_flow"
+    preconditions:
+      - "container_can_expand_within_layout_constraints"
+    layer_actions:
+      from_layer: "base_content"
+      to_layer: "base_content"
+      notes:
+        - "No mandatory modalization."
+    focus_scrim:
+      focus_policy: "preserve_or_shift_to_expanded_container"
+      scrim: "none_by_default"
+    motion_profile: "container_expand"
+
+  - id: "TR-002"
+    from: "menu"
+    to: "modal_bottom_sheet"
+    triggers:
+      - "compact_viewport"
+      - "longer_labels_or_richer_actions"
+    preconditions:
+      - "menu_content_suitable_for_sheet_presentation"
+    layer_actions:
+      from_layer: "floating_non_modal"
+      to_layer: "modal_surfaces"
+      notes:
+        - "dismiss menu before modal sheet enter"
+    focus_scrim:
+      focus_policy: "contained_or_trap"
+      scrim: "required"
+    motion_profile: "menu_fade_out_then_sheet_slide_y_in"
+
+  - id: "TR-003"
+    from: "standard_side_sheet"
+    to: "modal_dialog"
+    triggers:
+      - "task_intent_becomes_blocking"
+      - "available_space_or_context_change"
+    preconditions:
+      - "dialog_variant_available_for_task"
+    layer_actions:
+      from_layer: "docked_surfaces"
+      to_layer: "modal_surfaces"
+      notes:
+        - "layer rebind is mandatory"
+        - "if modal exists: push by default, replace_top for same task group"
+    focus_scrim:
+      focus_policy: "trap"
+      scrim: "required"
+    motion_profile: "side_exit_x_then_dialog_enter_scale"
+
+  - id: "TR-004"
+    from: "standard_navigation_drawer"
+    to: "modal_navigation_drawer"
+    triggers:
+      - "window_class_to_compact"
+      - "layout_cannot_support_coplanar_drawer"
+    preconditions:
+      - "drawer_destinations_preserved"
+    layer_actions:
+      from_layer: "docked_surfaces"
+      to_layer: "modal_surfaces"
+      notes:
+        - "enable modal scrim and block background input"
+    focus_scrim:
+      focus_policy: "contained"
+      scrim: "required"
+    motion_profile: "slide_x_modal"
+
+  - id: "TR-005"
+    from: "modal_navigation_drawer"
+    to: "standard_navigation_drawer"
+    triggers:
+      - "window_class_to_medium_or_expanded"
+      - "layout_allows_coplanar_drawer"
+    preconditions:
+      - "space_for_content_plus_drawer"
+    layer_actions:
+      from_layer: "modal_surfaces"
+      to_layer: "docked_surfaces"
+      notes:
+        - "remove modal scrim after transition completes"
+    focus_scrim:
+      focus_policy: "return_to_content_or_drawer_context"
+      scrim: "disabled"
+    motion_profile: "slide_x_to_docked"
+
+  - id: "TR-006"
+    from: "modal_bottom_sheet"
+    to: "menu"
+    triggers:
+      - "window_class_to_non_compact"
+      - "action_set_simplified"
+    preconditions:
+      - "anchor_available"
+      - "menu_density_readable"
+    layer_actions:
+      from_layer: "modal_surfaces"
+      to_layer: "floating_non_modal"
+      notes:
+        - "drop scrim and return to non-modal interaction"
+    focus_scrim:
+      focus_policy: "anchor_context"
+      scrim: "disabled"
+    motion_profile: "sheet_exit_y_then_menu_fade_in"
+
+  - id: "TR-007"
+    from: "standard_side_sheet"
+    to: "modal_side_sheet"
+    triggers:
+      - "window_class_change_or_layout_compaction"
+      - "task_requires_blocking_focus"
+    preconditions:
+      - "side_sheet_content_remains_valid_in_modal_mode"
+    layer_actions:
+      from_layer: "docked_surfaces"
+      to_layer: "modal_surfaces"
+      notes:
+        - "keep side anchor continuity (prefer end/right edge)"
+        - "rebind to modal layer and release docked layout space as one transaction"
+        - "show modal scrim during transition"
+    focus_scrim:
+      focus_policy: "trap"
+      scrim: "required"
+    motion_profile: "raise_elevation_pin_end_scrim_in_layout_reflow"
+
+global_guards:
+  - id: "TG-001"
+    statement: "When modal stack is non-empty, background-attached menus cannot open."
+  - id: "TG-002"
+    statement: "Any transition changing modality must define explicit focus and scrim actions."
+  - id: "TG-003"
+    statement: "Layer rebind and geometry change should be executed as one transaction."
