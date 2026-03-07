@@ -11,27 +11,6 @@
   respond in that language.
 - If a message is mixed-language, reply in the dominant language unless the
   user specifies otherwise.
-- Run `make eslint` before handoff or commit preparation only when changed
-  files include code covered by eslint rules (for example `*.js`, `*.ts`,
-  and similar source files). Do not run `make eslint` for markdown-only
-  changes (for example `*.md`).
-- When working on files under `drafts/`, keep documentation mixed-format:
-  narrative context in `*.md` plus machine-readable `*.yaml` sidecars for
-  structured entities (for example tokens, decisions, boundaries, variation
-  axes, invariants, confidence, and source references).
-- For `drafts/` work, create and update these YAML sidecars proactively
-  without requiring explicit user confirmation.
-- For `drafts/` work, automatically maintain links from the main draft
-  markdown file to related YAML sidecars.
-- During experimental component development, do not modify current production
-  components in `src/components` unless explicitly requested.
-- For agent-driven experimental components, create and use `src/experiment`
-  directories at the same level as `src/components` inside each workspace.
-- Experimental implementation order is mandatory: implement in
-  `m3-vue/src/experiment` first; port to `m3-react/src/experiment` only after
-  the experiment is explicitly confirmed as successful.
-- Getter/helper functions must be side-effect free. Side effects are allowed
-  only by prior agreement and only when there are strong, explicit reasons.
 
 ## Reporting
 - Keep handoff reports natural and outcome-focused: describe what was done.
@@ -40,44 +19,10 @@
 - Always mention blockers, failed required checks, or other omissions that can
   affect correctness, safety, or reproducibility.
 
-## Experiment Workflow
-- Before starting any non-trivial experiment, explicitly ask the user for a
-  time budget/timeout for the run (for example 30, 60, 120 minutes).
-- Record experiment start immediately in `drafts/experiment.md` with:
-  start timestamp, agreed timeout, current goal, and planned checkpoints.
-- Keep a milestone log in `drafts/milestones.md`:
-  create an entry before validating each sub-hypothesis/side-hypothesis and
-  create a matching completion entry after validation with outcomes.
-- Log missing inputs in `drafts/milestones.md` as separate "missing" notes
-  (for example unavailable data, blocked tools/access, unclear acceptance
-  criteria, missing artifacts).
-- In experiment mode, escalations are forbidden by default.
-- Exception: escalations are allowed only after explicit user sanction for the
-  current experiment scope.
-- Before any sanctioned escalation phase, define and log an escalation window:
-  exact command set, start marker, and freeze condition.
-- When sanctioned, log `escalation-needed` before request and
-  `escalation-result` after execution in `drafts/milestones.md`.
-- Prefer one-shot privileged bootstrap (`make m3/experiment/bootstrap/evidence`)
-  over multiple incremental escalation requests.
-- During experiments, use `m3/experiment/*` wrappers only; avoid direct
-  `research-fetch-*` and `research-capture-*` calls to keep escalation scope
-  predictable.
-- If not sanctioned, log `escalation-blocked` and `missing`, then continue
-  with non-escalated steps only.
-- After escalation freeze is declared, do not issue new escalation requests.
-  If a required action would need escalation, log `escalation-blocked` +
-  `missing` and continue only with local/safe targets.
-- During experiments, periodically check elapsed time against the agreed
-  timeout and record time checks in `drafts/milestones.md`.
-- If timeout is reached or at risk, stop/slow down and ask the user whether to
-  extend, narrow scope, or finish with current findings to avoid open-ended
-  runs.
-
 ## Purpose
-This file defines practical instructions for working in the
-`modulify/m3-web` repository, with a focus on test execution and commit
-workflow.
+This file defines practical instructions for day-to-day work in the
+`modulify/m3-web` repository, with a focus on repository conventions,
+test execution, and standard local commands.
 
 ## Repository Structure
 - This project is a Yarn Workspaces monorepo.
@@ -87,23 +32,23 @@ workflow.
 - Vitest workspace targets are declared in `vitest.workspace.ts`:
   `m3-react`, `m3-vue`.
 
-## Local Environment Prerequisites
+## Architecture Rules
+- Getter/helper functions must be side-effect free. Side effects are allowed
+  only by prior agreement and only when there are strong, explicit reasons.
+- Tests inside a workspace must cover only code owned by that workspace. In
+  `m3-foundation`, `m3-react`, `m3-vue`, and any future workspace, do not add
+  tests for implementation that belongs to another workspace.
+- Cross-workspace imports must go through the target workspace package name as
+  declared in `package.json`. Relative or absolute filesystem imports into
+  another workspace are forbidden. For example,
+  `import type { Appearance } from '@modulify/m3-foundation/types/components/button'`
+  is allowed, but
+  `import type { Appearance } from '../../../m3-foundation/types/components/button'`
+  is not.
+
+## Local setup
 - Yarn version is `4.6.0` (see `packageManager` in `package.json`).
-- Local `.yarnrc.yml` is generated from `.yarnrc.yml.dist` using:
-```bash
-make .yarnrc.yml
-```
-- Install dependencies with:
-```bash
-make node_modules
-# or
-yarn install
-```
-
-## Running Tests
-
-### Local Path
-- Generate local Yarn config:
+- Generate local `.yarnrc.yml` from `.yarnrc.yml.dist`:
 ```bash
 make .yarnrc.yml
 ```
@@ -113,6 +58,10 @@ make node_modules
 # or
 yarn install
 ```
+
+## Running Tests
+
+### Local Path
 - Run all tests:
 ```bash
 make test
@@ -153,44 +102,37 @@ make help
 ```
 
 ## Important Project Rules
-- Commit messages follow Conventional Commits.
-- Commitlint configuration is in `.commitlintrc.json` with:
-  `header-max-length=200`, `body-max-line-length=200`,
-  `footer-max-line-length=200`, `subject-case=never`.
-- Getter/helper functions must be side-effect free. Side effects are allowed
-  only by prior agreement and only when there are strong, explicit reasons.
+- Before performing actions, analyze whether there is a suitable local skill
+  for the task and consult it for detailed instructions.
+- Before performing repeated or operational actions, inspect `make help` and
+  its output to see whether an existing recipe already covers the task.
+- If a suitable recipe exists, prefer it over ad hoc commands to reduce extra
+  work, keep workflows standardized, and avoid unnecessary escalations.
+- Run eslint before handoff or commit preparation only when changed files
+  include code covered by eslint rules (for example `*.js`, `*.ts`, and
+  similar source files). Do not run eslint for markdown-only changes.
+- Prefer running eslint with `--fix` when available so autofixable issues are
+  resolved automatically before manual follow-up.
 
-## Commit Workflow
-- Default commit message language is English (unless explicitly requested
-  otherwise).
-- Commit style is Conventional Commits.
-- Write commit subjects as historical facts (not intentions).
-- Start commit subject description with an uppercase letter.
-- Keep commit subject description concise.
-- Move long details to commit body; lists in body are allowed for enumerations.
-- Use past/perfective wording; prefer passive voice for changelog-friendly phrasing.
-Examples: `Added ...`, `Removed ...`, `Refactored ...`, `Fixed ...`.
-- Respect commitlint limits from `.commitlintrc.json`:
-  `header-max-length=200`, `body-max-line-length=200`,
-  `footer-max-line-length=200`.
-- For workspace commits, use scope equal to the workspace directory name:
-  `m3-foundation`, `m3-react`, `m3-vue`.
-- Split commits by logical change. Workspace-local changes should stay in
-  their workspace scope.
-- Changes in `yarn.lock` must always be committed separately from all other files.
-- Commit message for `yarn.lock`-only commit must be exactly:
-`chore: Updated yarn.lock`.
-- Exception for intentional dependency updates:
-if commit purpose is dependency update (`yarn up`, `yarn add`, `yarn remove`, etc.),
-after rebase conflict resolution rerun the original dependency command and recreate separate
-`chore: Updated yarn.lock` commit.
-- Exception: global workspace-level changes can be combined in one commit.
-Global examples: eslint rule updates, shared dependency updates, repository-level infra/config changes.
-- For commit tasks, use the local skill:
-`skills/commit-workflow/SKILL.md`.
-- For `yarn.lock` merge/rebase conflict resolution, use the local skill:
-`skills/yarn-lock-conflict-resolution/SKILL.md`.
-- For coverage deficit analysis and recovery strategy, use the local skill:
-`skills/coverage-recovery/SKILL.md`.
-- For documentation creation or edits under `docs/` with locale parity, use the local skill:
-`skills/docs-parity/SKILL.md`.
+## Skills
+The skills listed below are stored locally in this repository under `skills/`.
+
+If the context was compacted and you see `Context compacted`, reread any skill
+whose description below starts with `[reread]` after the colon before
+continuing.
+
+- `commit-workflow`: [reread] Use when creating or splitting git commits in
+  this repository. Reread it before every commit creation; it standardizes
+  commit grouping, Conventional Commits, workspace scopes, and commitlint
+  limits.
+- `coverage-recovery`: Use when coverage is below target or uncovered code must
+  be analyzed and closed without adding artificial tests.
+- `docs-parity`: Use when creating or editing files under `docs/`. Keeps
+  English-first edits, locale parity, and locale index updates aligned.
+- `exploration-workflow`: [reread] Use only when the user explicitly switches
+  the task into exploration mode: autonomous hypothesis-driven work on
+  uncertain functionality, with timeboxing, milestone logging, and tightly
+  controlled pre-agreed escalation windows, plus `drafts/current.yml` and a
+  dedicated `drafts/` activity directory for logs, facts, and artifact links.
+- `yarn-lock-conflict-resolution`: Use when resolving merge or rebase conflicts
+  in `yarn.lock` according to repository policy.
