@@ -23,6 +23,13 @@
   without requiring explicit user confirmation.
 - For `drafts/` work, automatically maintain links from the main draft
   markdown file to related YAML sidecars.
+- During experimental component development, do not modify current production
+  components in `src/components` unless explicitly requested.
+- For agent-driven experimental components, create and use `src/experiment`
+  directories at the same level as `src/components` inside each workspace.
+- Experimental implementation order is mandatory: implement in
+  `m3-vue/src/experiment` first; port to `m3-react/src/experiment` only after
+  the experiment is explicitly confirmed as successful.
 - Getter/helper functions must be side-effect free. Side effects are allowed
   only by prior agreement and only when there are strong, explicit reasons.
 
@@ -32,6 +39,40 @@
   running eslint for markdown-only changes) unless the user explicitly asks.
 - Always mention blockers, failed required checks, or other omissions that can
   affect correctness, safety, or reproducibility.
+
+## Experiment Workflow
+- Before starting any non-trivial experiment, explicitly ask the user for a
+  time budget/timeout for the run (for example 30, 60, 120 minutes).
+- Record experiment start immediately in `drafts/experiment.md` with:
+  start timestamp, agreed timeout, current goal, and planned checkpoints.
+- Keep a milestone log in `drafts/milestones.md`:
+  create an entry before validating each sub-hypothesis/side-hypothesis and
+  create a matching completion entry after validation with outcomes.
+- Log missing inputs in `drafts/milestones.md` as separate "missing" notes
+  (for example unavailable data, blocked tools/access, unclear acceptance
+  criteria, missing artifacts).
+- In experiment mode, escalations are forbidden by default.
+- Exception: escalations are allowed only after explicit user sanction for the
+  current experiment scope.
+- Before any sanctioned escalation phase, define and log an escalation window:
+  exact command set, start marker, and freeze condition.
+- When sanctioned, log `escalation-needed` before request and
+  `escalation-result` after execution in `drafts/milestones.md`.
+- Prefer one-shot privileged bootstrap (`make m3/experiment/bootstrap/evidence`)
+  over multiple incremental escalation requests.
+- During experiments, use `m3/experiment/*` wrappers only; avoid direct
+  `research-fetch-*` and `research-capture-*` calls to keep escalation scope
+  predictable.
+- If not sanctioned, log `escalation-blocked` and `missing`, then continue
+  with non-escalated steps only.
+- After escalation freeze is declared, do not issue new escalation requests.
+  If a required action would need escalation, log `escalation-blocked` +
+  `missing` and continue only with local/safe targets.
+- During experiments, periodically check elapsed time against the agreed
+  timeout and record time checks in `drafts/milestones.md`.
+- If timeout is reached or at risk, stop/slow down and ask the user whether to
+  extend, narrow scope, or finish with current findings to avoid open-ended
+  runs.
 
 ## Purpose
 This file defines practical instructions for working in the
