@@ -1,0 +1,76 @@
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/palette' as palette;
+@use '../../themes/dark' as dark;
+@use '../../themes/light' as light;
+
+.m3-surface {
+  --m3-surface-role-surface-bg: var(--m3-sys-surface, #{light.$m3-sys-light-surface});
+  --m3-surface-role-surface-dim-bg: var(--m3-sys-surface-container-highest, #{light.$m3-sys-light-surface-container-highest});
+  --m3-surface-role-surface-bright-bg: var(--m3-sys-surface-container-low, #{light.$m3-sys-light-surface-container-low});
+  --m3-surface-role-container-lowest-bg: var(--m3-sys-surface, #{palette.$m3-palette-neutral-100});
+  --m3-surface-role-container-low-bg: var(--m3-sys-surface-container-low, #{light.$m3-sys-light-surface-container-low});
+  --m3-surface-role-container-bg: var(--m3-sys-surface-container, #{light.$m3-sys-light-surface-container});
+  --m3-surface-role-container-high-bg: var(--m3-sys-surface-container-high, #{light.$m3-sys-light-surface-container-high});
+  --m3-surface-role-container-highest-bg: var(--m3-sys-surface-container-highest, #{light.$m3-sys-light-surface-container-highest});
+  --m3-surface-elevation-1: var(--m3-elevation-1, #{light.$m3-elevation-light-1});
+  --m3-surface-elevation-2: var(--m3-elevation-2, #{light.$m3-elevation-light-2});
+  --m3-surface-elevation-3: var(--m3-elevation-3, #{light.$m3-elevation-light-3});
+  --m3-surface-elevation-4: var(--m3-elevation-4, #{light.$m3-elevation-light-4});
+  --m3-surface-elevation-5: var(--m3-elevation-5, #{light.$m3-elevation-light-5});
+  --m3-surface-radius-transition-duration: #{m3-motion.duration('medium2')};
+
+  display: block;
+  isolation: isolate;
+  box-sizing: border-box;
+  transition:
+    border-top-left-radius var(--m3-surface-radius-transition-duration) #{m3-motion.easing('standard')},
+    border-top-right-radius var(--m3-surface-radius-transition-duration) #{m3-motion.easing('standard')},
+    border-bottom-right-radius var(--m3-surface-radius-transition-duration) #{m3-motion.easing('standard')},
+    border-bottom-left-radius var(--m3-surface-radius-transition-duration) #{m3-motion.easing('standard')};
+
+  &_modal {
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  &_role-surface {
+    background-color: var(--m3-surface-role-surface-bg);
+  }
+
+  &_role-surface-dim               { background-color: var(--m3-surface-role-surface-dim-bg); }
+  &_role-surface-bright            { background-color: var(--m3-surface-role-surface-bright-bg); }
+  &_role-surface-container-lowest  { background-color: var(--m3-surface-role-container-lowest-bg); }
+  &_role-surface-container-low     { background-color: var(--m3-surface-role-container-low-bg); }
+  &_role-surface-container         { background-color: var(--m3-surface-role-container-bg); }
+  &_role-surface-container-high    { background-color: var(--m3-surface-role-container-high-bg); }
+  &_role-surface-container-highest { background-color: var(--m3-surface-role-container-highest-bg); }
+
+  &_elevation-0 { box-shadow: none; }
+  &_elevation-1 { box-shadow: var(--m3-surface-elevation-1); }
+  &_elevation-2 { box-shadow: var(--m3-surface-elevation-2); }
+  &_elevation-3 { box-shadow: var(--m3-surface-elevation-3); }
+  &_elevation-4 { box-shadow: var(--m3-surface-elevation-4); }
+  &_elevation-5 { box-shadow: var(--m3-surface-elevation-5); }
+
+  &__scrim {
+    position: fixed;
+    inset: 0;
+    background: color-mix(in srgb, var(--m3-sys-shadow, #{palette.$m3-palette-neutral-0}) 38%, transparent);
+  }
+}
+
+html.m3-theme-dark .m3-surface {
+  --m3-surface-role-surface-bg: var(--m3-sys-surface, #{dark.$m3-sys-dark-surface});
+  --m3-surface-role-surface-dim-bg: var(--m3-sys-surface-container-highest, #{dark.$m3-sys-dark-surface-container-highest});
+  --m3-surface-role-surface-bright-bg: var(--m3-sys-surface-container-low, #{dark.$m3-sys-dark-surface-container-low});
+  --m3-surface-role-container-lowest-bg: var(--m3-sys-surface, #{dark.$m3-sys-dark-surface});
+  --m3-surface-role-container-low-bg: var(--m3-sys-surface-container-low, #{dark.$m3-sys-dark-surface-container-low});
+  --m3-surface-role-container-bg: var(--m3-sys-surface-container, #{dark.$m3-sys-dark-surface-container});
+  --m3-surface-role-container-high-bg: var(--m3-sys-surface-container-high, #{dark.$m3-sys-dark-surface-container-high});
+  --m3-surface-role-container-highest-bg: var(--m3-sys-surface-container-highest, #{dark.$m3-sys-dark-surface-container-highest});
+  --m3-surface-elevation-1: var(--m3-elevation-1, #{dark.$m3-elevation-dark-1});
+  --m3-surface-elevation-2: var(--m3-elevation-2, #{dark.$m3-elevation-dark-2});
+  --m3-surface-elevation-3: var(--m3-elevation-3, #{dark.$m3-elevation-dark-3});
+  --m3-surface-elevation-4: var(--m3-elevation-4, #{dark.$m3-elevation-dark-4});
+  --m3-surface-elevation-5: var(--m3-elevation-5, #{dark.$m3-elevation-dark-5});
+}
