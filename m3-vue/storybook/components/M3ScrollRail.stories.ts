@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
 import { M3ScrollRail } from '@/components/scroll-rail'
+import { M3Surface } from '@/components/surface'
 
 const meta = {
   title: 'Components/M3ScrollRail',
@@ -27,6 +28,7 @@ const meta = {
 
     components: {
       M3ScrollRail,
+      M3Surface,
     },
 
     setup () {
@@ -37,7 +39,14 @@ const meta = {
     },
 
     template: `
-        <div class="m3-panel m3-panel_elevated-1" style="padding: 4px;">
+        <M3Surface
+            :fill-width="false"
+            :fill-height="false"
+            :rounding="16"
+            :elevation="0"
+            variant="surface-container"
+            style="padding: 4px;"
+        >
             <div
                 class="m3-scroll-box m3-scroll-box_scroll-x m3-scroll-box_scroll-y"
                 style="max-width: 360px; max-height: 360px;"
@@ -50,7 +59,7 @@ const meta = {
                     </div>
                 </div>
             </div>
-        </div>
+        </M3Surface>
     `,
   }),
 

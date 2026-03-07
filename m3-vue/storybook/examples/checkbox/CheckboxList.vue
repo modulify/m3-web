@@ -1,5 +1,12 @@
 <template>
-    <div class="m3-panel m3-panel_elevated-1">
+    <M3Surface
+        :class="$style['panel']"
+        :fill-width="false"
+        :fill-height="false"
+        :rounding="16"
+        :elevation="0"
+        variant="surface-container"
+    >
         <template v-for="(o, i) in options" :key="id + '-option-' + i">
             <template v-if="'subordinates' in o">
                 <div :class="$style['line']">
@@ -49,13 +56,14 @@
                 </label>
             </div>
         </template>
-    </div>
+    </M3Surface>
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
 
 import { M3Checkbox } from '@/components/checkbox'
+import { M3Surface } from '@/components/surface'
 
 import { ref } from 'vue'
 import useId from '@/composables/id'
@@ -100,6 +108,11 @@ const toggle = (option: Required<OptionWithSubordinates>, checked: boolean) => {
 </script>
 
 <style module>
+.panel {
+    padding: 32px;
+    color: var(--m3-sys-on-surface);
+}
+
 .line {
     display: flex;
     align-items: center;
