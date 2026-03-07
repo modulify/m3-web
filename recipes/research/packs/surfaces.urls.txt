@@ -1,0 +1,9 @@
+# One URL per line. Empty lines and #comments are ignored.
+https://m3.material.io/components/dialogs/overview
+https://m3.material.io/components/menus/guidelines
+https://m3.material.io/components/bottom-sheets/guidelines
+https://m3.material.io/components/side-sheets/overview
+https://m3.material.io/components/side-sheets/guidelines
+https://m3.material.io/components/navigation-drawer/guidelines
+https://m3.material.io/styles/motion/transitions
+https://m3.material.io/foundations/layout/applying-layout

@@ -1,20 +1,32 @@
+.DEFAULT_GOAL := help
+
 TARGET_HEADER=@echo -e '===== \e[34m' $@ '\e[0m'
 TARGET_OK=@echo -e '\e[32mOK\e[0m'
 YARN=@docker-compose run --rm node yarn
 YARN_PLAYWRIGHT=@docker-compose run --rm playwright yarn
+PLAYWRIGHT_NODE=@docker-compose run --rm playwright node
+PLAYWRIGHT_NODE_CMD=$(patsubst @%,%,$(PLAYWRIGHT_NODE))
 COVERAGE_PARTS_DIR=coverage/.parts
 COVERAGE_UNIT_DIR=coverage/unit
 COVERAGE_E2E_REACT_DIR=coverage/e2e-react
 COVERAGE_E2E_VUE_DIR=coverage/e2e-vue
 NYC_OUTPUT_DIR=.nyc_output
+M3_FETCH_OUT_DIR?=/tmp/m3-fetch
+M3_UA?=m3-web-research/1.0
+M3_CAPTURE_OUT_DIR?=drafts/screenshots
+M3_RESEARCH_PACKS_DIR?=recipes/research/packs
+M3_DEFAULT_RESEARCH_PACK?=surfaces
+M3_EXPERIMENT_ROOT?=drafts/experiment
+M3_EXPERIMENT_URLS_DIR?=$(M3_EXPERIMENT_ROOT)/urls
+M3_EXPERIMENT_BOOTSTRAP_PROFILES?=compact medium expanded
 
 .PHONY: up
-up: ## Starts storybook
+up: ## [Dev][docker] Starts storybook
 	$(TARGET_HEADER)
 	docker-compose up -d
 
 .PHONY: restart
-restart: ## Restarts all docker services or a particular service, if argument "service" is specified (example: make restart service="storybook").
+restart: ## [Dev][docker] Restarts all docker services or a particular service, if argument "service" is specified (example: make restart service="storybook")
 	$(TARGET_HEADER)
 
 ifdef service
@@ -24,168 +36,24 @@ else
 endif
 
 .PHONY: stop
-stop: ## Stops all docker services
+stop: ## [Dev][docker] Stops all docker services
 	$(TARGET_HEADER)
 	docker-compose stop
 
-.PHONY: .yarnrc.yml
-.yarnrc.yml: ## Creates yarn configuration
-	@cp .yarnrc.yml.dist .yarnrc.yml
-
-.PHONY: node_modules
-node_modules: package.json yarn.lock ## Installs dependencies
-	$(TARGET_HEADER)
-	$(YARN) install
-	@touch node_modules || true
-	@echo ""
+include recipes/common.mk
 
 .PHONY: build
-build: node_modules ## Creates a dist catalogue with library build
+build: node_modules ## [Build][docker] Creates a dist catalogue with library build
 	$(TARGET_HEADER)
 	$(YARN) build
 
-.PHONY: storybook-build-test
-storybook-build-test: node_modules ## Builds Storybook in --test mode for all UI workspaces
-	$(TARGET_HEADER)
-	$(YARN) workspace @modulify/m3-react storybook:build --test --quiet
-	$(YARN) workspace @modulify/m3-vue storybook:build --test --quiet
-
-.PHONY: storybook-build-test-react
-storybook-build-test-react: node_modules ## Builds Storybook in --test mode for @modulify/m3-react
-	$(TARGET_HEADER)
-	$(YARN) workspace @modulify/m3-react storybook:build --test --quiet
-
-.PHONY: storybook-build-test-vue
-storybook-build-test-vue: node_modules ## Builds Storybook in --test mode for @modulify/m3-vue
-	$(TARGET_HEADER)
-	$(YARN) workspace @modulify/m3-vue storybook:build --test --quiet
-
-.PHONY: test-smoke
-test-smoke: node_modules ## Runs smoke tests for all UI workspaces
-	$(TARGET_HEADER)
-	$(YARN) test:smoke
-
-.PHONY: test-runtime-parity
-test-runtime-parity: ## Checks Node/Yarn parity across docker services (node, storybook, playwright)
-	$(TARGET_HEADER)
-	./runtime-parity.test.sh
-
-.PHONY: husky
-husky: node_modules ## Adds husky git hooks with commit content checks
-	@docker-compose run --rm node npx husky init
-
-.PHONY: eslint
-eslint: node_modules ## Runs eslint
-	$(TARGET_HEADER)
-	$(YARN) eslint
-
-.PHONY: tsc
-tsc: node_modules ## Runs type checks in all workspaces
-	$(TARGET_HEADER)
-	$(YARN) tsc
-
-.PHONY: tsc-foundation
-tsc-foundation: node_modules ## Runs type checks in @modulify/m3-foundation
-	$(TARGET_HEADER)
-	$(YARN) workspace @modulify/m3-foundation tsc
-
-.PHONY: tsc-react
-tsc-react: node_modules ## Runs type checks in @modulify/m3-react
-	$(TARGET_HEADER)
-	$(YARN) workspace @modulify/m3-react tsc
-
-.PHONY: tsc-vue
-tsc-vue: node_modules ## Runs type checks in @modulify/m3-vue
-	$(TARGET_HEADER)
-	$(YARN) workspace @modulify/m3-vue tsc
-
-.PHONY: tsc-tests
-tsc-tests: node_modules ## Runs type checks for tests in all UI workspaces
-	$(TARGET_HEADER)
-	$(YARN) tsc:tests
-
-.PHONY: tsc-tests-react
-tsc-tests-react: node_modules ## Runs type checks for tests in @modulify/m3-react
-	$(TARGET_HEADER)
-	$(YARN) workspace @modulify/m3-react tsc:tests
-
-.PHONY: tsc-tests-vue
-tsc-tests-vue: node_modules ## Runs type checks for tests in @modulify/m3-vue
-	$(TARGET_HEADER)
-	$(YARN) workspace @modulify/m3-vue tsc:tests
-
-.PHONY: tsc-e2e
-tsc-e2e: node_modules ## Runs type checks for Playwright Vitest configs
-	$(TARGET_HEADER)
-	$(YARN) exec tsc -p tsconfig.e2e.json --skipLibCheck
-
-.PHONY: test
-test: node_modules ## Runs autotests
-	$(TARGET_HEADER)
-
-ifdef cli
-	@echo "${YARN} test ${cli}"
-	$(YARN) test $(cli)
-else
-	@echo "${YARN} test"
-	$(YARN) test
-endif
-
-.PHONY: test-coverage
-test-coverage: node_modules ## Runs merged coverage for unit and Playwright e2e tests
-	$(TARGET_HEADER)
-	@rm -rf coverage $(NYC_OUTPUT_DIR) artifacts
-	@mkdir -p $(COVERAGE_PARTS_DIR) $(NYC_OUTPUT_DIR)
-	$(YARN) test --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.reportsDirectory=$(COVERAGE_UNIT_DIR)
-	$(YARN_PLAYWRIGHT) test:e2e:coverage
-	@cp $(COVERAGE_UNIT_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/unit.json
-	@cp $(COVERAGE_E2E_REACT_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/e2e-react.json
-	@cp $(COVERAGE_E2E_VUE_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/e2e-vue.json
-	@$(YARN) nyc merge $(COVERAGE_PARTS_DIR) $(NYC_OUTPUT_DIR)/coverage-final.json >/dev/null
-	$(YARN) nyc report
-	@$(YARN) nyc report --reporter=json-summary >/dev/null
-	@$(YARN) node --experimental-strip-types scripts/show-total-coverage.ts
-
-.PHONY: test-e2e
-test-e2e: node_modules ## Runs Playwright-based e2e tests (Vitest browser mode)
-	$(TARGET_HEADER)
-
-ifdef cli
-	@$(YARN_PLAYWRIGHT) test:e2e $(cli)
-else
-	@$(YARN_PLAYWRIGHT) test:e2e
-endif
-
-.PHONY: test-e2e-react
-test-e2e-react: node_modules ## Runs Playwright-based e2e tests for @modulify/m3-react
-	$(TARGET_HEADER)
-
-ifdef cli
-	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-react test:e2e $(cli)
-else
-	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-react test:e2e
-endif
-
-.PHONY: test-e2e-vue
-test-e2e-vue: node_modules ## Runs Playwright-based e2e tests for @modulify/m3-vue
-	$(TARGET_HEADER)
-
-ifdef cli
-	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-vue test:e2e $(cli)
-else
-	@$(YARN_PLAYWRIGHT) workspace @modulify/m3-vue test:e2e
-endif
-
-.PHONY: test-e2e-stop
-test-e2e-stop: ## Stops stuck Playwright E2E host processes and run containers
-	$(TARGET_HEADER)
-	@pkill -TERM -f "docker-compose run --rm playwright yarn test:[e]2e" || true
-	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-react test:[e]2e" || true
-	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-vue test:[e]2e" || true
-	@docker ps -q --filter "name=m3-web-playwright-run" | xargs -r docker rm -f
+include recipes/storybook.mk
+include recipes/lint.mk
+include recipes/tests.mk
+include recipes/research.mk
 
 .PHONY: ci-actionlint
-ci-actionlint: ## Lints GitHub Actions workflows locally (actionlint binary or docker image)
+ci-actionlint: ## [CI][docker][lint] Lints GitHub Actions workflows locally (actionlint binary or docker image)
 	$(TARGET_HEADER)
 	@if command -v actionlint >/dev/null 2>&1; then \
 		actionlint; \
@@ -198,7 +66,7 @@ ci-actionlint: ## Lints GitHub Actions workflows locally (actionlint binary or d
 	$(TARGET_OK)
 
 .PHONY: ci-act-plan
-ci-act-plan: ## Shows act execution plan for tests workflow without running jobs
+ci-act-plan: ## [CI][docker] Shows act execution plan for tests workflow without running jobs
 	$(TARGET_HEADER)
 	@if command -v act >/dev/null 2>&1; then \
 		act -P ubuntu-latest=catthehacker/ubuntu:act-latest -n pull_request -W .github/workflows/tests.yml; \
@@ -211,7 +79,7 @@ ci-act-plan: ## Shows act execution plan for tests workflow without running jobs
 	$(TARGET_OK)
 
 .PHONY: ci-act-tests
-ci-act-tests: ## Runs tests workflow locally via act (pr-check, eslint, tests, storybook-tests)
+ci-act-tests: ## [CI][docker][heavy][network] Runs tests workflow locally via act (pr-check, eslint, tests, storybook-tests)
 	$(TARGET_HEADER)
 	@if command -v act >/dev/null 2>&1; then \
 		act -P ubuntu-latest=catthehacker/ubuntu:act-latest pull_request -W .github/workflows/tests.yml -j pr-check -j eslint -j tests -j storybook-tests; \
@@ -224,13 +92,184 @@ ci-act-tests: ## Runs tests workflow locally via act (pr-check, eslint, tests, s
 	$(TARGET_OK)
 
 .PHONY: ci-check
-ci-check: ci-actionlint ci-act-plan ## Validates CI workflow config and prints local act plan
+ci-check: ci-actionlint ci-act-plan ## [CI][alias] Validates CI workflow config and prints local act plan
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/list
+m3/experiment/list: ## [Experiment][safe] Lists experiment-tagged recipes and their purpose
+	@$(MAKE) --no-print-directory help filter=experiment
+
+.PHONY: m3/experiment/list-escalation
+m3/experiment/list-escalation: ## [Experiment][safe] Lists recipes blocked in no-escalation experiment mode
+	@$(MAKE) --no-print-directory help filter='[escalated]'
+
+.PHONY: m3/experiment/list-safe
+m3/experiment/list-safe: ## [Experiment][safe] Lists local-only recipes safe in no-escalation mode
+	@$(MAKE) --no-print-directory help filter='[safe]'
+
+.PHONY: m3/experiment/init
+m3/experiment/init: ## [Experiment][safe] Creates an experiment run directory with standard subfolders
+	$(TARGET_HEADER)
+	@RUN_DIR="$(if $(run_dir),$(run_dir),$(M3_EXPERIMENT_ROOT)/runs/$$(date +%Y%m%d-%H%M%S))"; \
+	mkdir -p "$$RUN_DIR"/screenshots "$$RUN_DIR"/fetch "$$RUN_DIR"/notes; \
+	echo "$$RUN_DIR"
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/preflight
+m3/experiment/preflight: ## [Experiment][escalated][docker][network] Validates docker/playwright/network prerequisites for long runs
+	$(TARGET_HEADER)
+	@set -e; \
+	command -v jq >/dev/null; \
+	command -v rg >/dev/null; \
+	docker-compose ps >/dev/null; \
+	$(PLAYWRIGHT_NODE_CMD) -e "console.log('playwright node', process.version)"; \
+	curl -fLsS -A "$(M3_UA)" "https://m3.material.io/" -o /dev/null; \
+	echo "preflight:ok"
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/bootstrap
+m3/experiment/bootstrap: ## [Experiment][escalated][docker] One-shot setup: list recipes, init run dir, run preflight checks
+	$(TARGET_HEADER)
+	@$(MAKE) --no-print-directory m3/experiment/list
+	@$(MAKE) --no-print-directory m3/experiment/init $(if $(run_dir),run_dir="$(run_dir)",)
+	@$(MAKE) --no-print-directory m3/experiment/preflight
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/bootstrap/evidence
+# Example:
+#   make m3/experiment/bootstrap/evidence pack=surfaces profiles='compact medium expanded'
+m3/experiment/bootstrap/evidence: ## [Experiment][escalated][docker][network][heavy] One-shot privileged bootstrap: preflight + fetch + multi-profile capture
+	$(TARGET_HEADER)
+	@set -e; \
+	RUN_DIR="$(if $(run_dir),$(run_dir),$(M3_EXPERIMENT_ROOT)/runs/$$(date +%Y%m%d-%H%M%S))"; \
+	PACK="$(if $(pack),$(pack),$(M3_DEFAULT_RESEARCH_PACK))"; \
+	PROFILES="$(if $(profiles),$(profiles),$(M3_EXPERIMENT_BOOTSTRAP_PROFILES))"; \
+	$(MAKE) --no-print-directory m3/experiment/init run_dir="$$RUN_DIR"; \
+	$(MAKE) --no-print-directory m3/experiment/preflight; \
+	$(MAKE) --no-print-directory m3/experiment/fetch/pack pack="$$PACK" out_dir="$$RUN_DIR/fetch"; \
+	for profile in $$PROFILES; do \
+		$(MAKE) --no-print-directory m3/experiment/capture/pack \
+			pack="$$PACK" \
+			profile="$$profile" \
+			out_dir="$$RUN_DIR/screenshots/$${profile}-$${PACK}" \
+			wait_ms="$(if $(wait_ms),$(wait_ms),1200)" \
+			full_page="$(if $(full_page),$(full_page),true)"; \
+	done; \
+	echo "$$RUN_DIR"
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/capture/pack
+# Example:
+#   make m3/experiment/capture/pack pack=surfaces profile=compact
+#   make m3/experiment/capture/pack manifest=recipes/research/packs/surfaces.urls.txt profile=expanded
+m3/experiment/capture/pack: ## [Experiment][escalated][docker][playwright] Captures a research URL pack with viewport profile (compact|medium|expanded)
+	$(TARGET_HEADER)
+	@set -e; \
+	PROFILE="$(if $(profile),$(profile),expanded)"; \
+	PACK="$(if $(pack),$(pack),$(M3_DEFAULT_RESEARCH_PACK))"; \
+	MANIFEST="$(if $(manifest),$(manifest),$(M3_RESEARCH_PACKS_DIR)/$${PACK}.urls.txt)"; \
+	case "$$PROFILE" in \
+		compact) WIDTH=390; HEIGHT=844 ;; \
+		medium) WIDTH=840; HEIGHT=1080 ;; \
+		expanded) WIDTH=1440; HEIGHT=1024 ;; \
+		*) echo "unsupported profile: $$PROFILE (expected compact|medium|expanded)"; exit 2 ;; \
+	esac; \
+	OUT_DIR="$(if $(out_dir),$(out_dir),$(M3_EXPERIMENT_ROOT)/runs/$$(date +%Y%m%d-%H%M%S)/screenshots/$$PROFILE-$${PACK})"; \
+	$(MAKE) --no-print-directory research-capture-batch \
+		manifest="$$MANIFEST" \
+		out_dir="$$OUT_DIR" \
+		width="$$WIDTH" \
+		height="$$HEIGHT" \
+		wait_ms="$(if $(wait_ms),$(wait_ms),1200)" \
+		full_page="$(if $(full_page),$(full_page),true)"; \
+	echo "$$OUT_DIR"
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/capture/urls-file
+m3/experiment/capture/urls-file: ## [Experiment][escalated][docker][playwright] Captures URLs from a file with viewport profile (compact|medium|expanded)
+	$(TARGET_HEADER)
+	@if [ -z "$(in)" ]; then echo "usage: make m3/experiment/capture/urls-file in=$(M3_EXPERIMENT_URLS_DIR)/<pack>.txt [profile=compact|medium|expanded] [out_dir=...]"; exit 2; fi
+	@set -e; \
+	PROFILE="$(if $(profile),$(profile),expanded)"; \
+	case "$$PROFILE" in \
+		compact) WIDTH=390; HEIGHT=844 ;; \
+		medium) WIDTH=840; HEIGHT=1080 ;; \
+		expanded) WIDTH=1440; HEIGHT=1024 ;; \
+		*) echo "unsupported profile: $$PROFILE (expected compact|medium|expanded)"; exit 2 ;; \
+	esac; \
+	OUT_DIR="$(if $(out_dir),$(out_dir),$(M3_EXPERIMENT_ROOT)/runs/$$(date +%Y%m%d-%H%M%S)/screenshots/$$PROFILE)"; \
+	$(MAKE) --no-print-directory research-capture-batch \
+		in="$(in)" \
+		out_dir="$$OUT_DIR" \
+		width="$$WIDTH" \
+		height="$$HEIGHT" \
+		wait_ms="$(if $(wait_ms),$(wait_ms),1200)" \
+		full_page="$(if $(full_page),$(full_page),true)" \
+		$(if $(wait_selector),wait_selector="$(wait_selector)",); \
+	echo "$$OUT_DIR"
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/fetch/pack
+# Example:
+#   make m3/experiment/fetch/pack pack=surfaces out_dir=drafts/experiment/run-1/fetch
+#   make m3/experiment/fetch/pack manifest=recipes/research/packs/surfaces.page-data.tsv
+m3/experiment/fetch/pack: ## [Experiment][escalated][network][fetch] Fetches a research page-data pack into an experiment run directory
+	$(TARGET_HEADER)
+	@set -e; \
+	PACK="$(if $(pack),$(pack),$(M3_DEFAULT_RESEARCH_PACK))"; \
+	MANIFEST="$(if $(manifest),$(manifest),$(M3_RESEARCH_PACKS_DIR)/$${PACK}.page-data.tsv)"; \
+	OUT_DIR="$(if $(out_dir),$(out_dir),$(M3_EXPERIMENT_ROOT)/runs/$$(date +%Y%m%d-%H%M%S)/fetch)"; \
+	mkdir -p "$$OUT_DIR"; \
+	$(MAKE) --no-print-directory research-fetch-batch format=json manifest="$$MANIFEST" out_dir="$$OUT_DIR"; \
+	echo "$$OUT_DIR"
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/urls-template
+# Example:
+#   make m3/experiment/urls-template pack=surfaces
+#   make m3/experiment/urls-template manifest=recipes/research/packs/surfaces.urls.txt out=drafts/experiment/urls/custom.txt
+m3/experiment/urls-template: ## [Experiment][safe] Creates a starter URL list for batch captures from a research pack
+	$(TARGET_HEADER)
+	@set -e; \
+	PACK="$(if $(pack),$(pack),$(M3_DEFAULT_RESEARCH_PACK))"; \
+	MANIFEST="$(if $(manifest),$(manifest),$(M3_RESEARCH_PACKS_DIR)/$${PACK}.urls.txt)"; \
+	OUT="$(if $(out),$(out),$(M3_EXPERIMENT_URLS_DIR)/$${PACK}.txt)"; \
+	mkdir -p "$$(dirname "$$OUT")"; \
+	cp "$$MANIFEST" "$$OUT"; \
+	echo "$$OUT"
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/manifest
+m3/experiment/manifest: ## [Experiment][safe] Prints recommended order for a long experiment run
+	$(TARGET_HEADER)
+	@printf '%s\n' \
+		"1) make m3/experiment/list && make m3/experiment/list-escalation" \
+		"2) (if sanctioned) make m3/experiment/bootstrap/evidence [pack=surfaces] [run_dir=...] [profiles='compact medium expanded']" \
+		"3) switch to no-escalation mode and keep only local analysis" \
+		"4) make m3/experiment/analyze/local-summary run_dir=..." \
+		"5) continue milestones/decisions based on local artifacts"
+	$(TARGET_OK)
+
+.PHONY: m3/experiment/analyze/local-summary
+m3/experiment/analyze/local-summary: ## [Experiment][safe] Prints local artifact summary for a completed/ongoing run (no escalation)
+	$(TARGET_HEADER)
+	@if [ -z "$(run_dir)" ]; then echo "usage: make m3/experiment/analyze/local-summary run_dir=drafts/experiment/runs/<id>"; exit 2; fi
+	@set -e; \
+	FETCH_DIR="$(run_dir)/fetch"; \
+	SCREEN_DIR="$(run_dir)/screenshots"; \
+	FETCH_COUNT=$$(find "$$FETCH_DIR" -maxdepth 1 -type f -name '*.json' 2>/dev/null | wc -l); \
+	echo "fetch_json=$$FETCH_COUNT"; \
+	find "$$SCREEN_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort | while IFS= read -r dir; do \
+		name="$$(basename "$$dir")"; \
+		META_COUNT=$$(find "$$dir" -maxdepth 1 -type f -name '*.meta.json' 2>/dev/null | wc -l); \
+		PNG_COUNT=$$(find "$$dir" -maxdepth 1 -type f -name '*.png' 2>/dev/null | wc -l); \
+		echo "$$name: png=$$PNG_COUNT meta=$$META_COUNT"; \
+	done
 	$(TARGET_OK)
 
 .PHONY: help
-help: ## Calls recipes list
-	@cat $(MAKEFILE_LIST) | grep -e "^[-a-zA-Z_\.]*: *.*## *" | awk '\
-            BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+help: ## [General] Shows grouped command help
+	@HELP_FILTER="$(value filter)" HELP_SHOW_INTERNAL="$(value show_internal)" ./recipes/help.sh $(MAKEFILE_LIST)
 
 # Colors
 $(call computable,CC_BLACK,$(shell tput -Txterm setaf 0 2>/dev/null))
