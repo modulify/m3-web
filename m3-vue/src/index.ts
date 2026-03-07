@@ -79,6 +79,10 @@ export {
 } from '@/components/side-sheet'
 
 export {
+  M3Surface,
+} from '@/components/surface'
+
+export {
   M3Slider,
 } from '@/components/slider'
 

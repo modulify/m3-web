@@ -1,6 +1,6 @@
 <template>
     <Teleport v-if="isModal" :to="teleportTo">
-        <Transition name="m3-transition-fade">
+        <Transition v-if="scrim" name="m3-transition-fade">
             <div
                 v-show="shown"
                 :style="{ zIndex: zIndex - 1 }"
@@ -36,6 +36,12 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
+import type {
+  Anchor as SurfaceAnchor,
+  Length as SurfaceLength,
+  Mode as SurfaceMode,
+  Variant as SurfaceVariant,
+} from '@modulify/m3-foundation/types/components/surface'
 
 import {
   computed,
@@ -47,39 +53,13 @@ import {
   isUndefined,
   Or,
 } from '@modulify/m3-foundation/lib/predicates'
+import { m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
 
 import useId from '@/composables/id'
 
 defineOptions({
   inheritAttrs: false,
 })
-
-type Length = string | number
-
-type SurfaceMode = 'standard' | 'modal'
-
-type SurfaceRole =
-  | 'auto'
-  | 'surface'
-  | 'surface-dim'
-  | 'surface-bright'
-  | 'surface-container-lowest'
-  | 'surface-container-low'
-  | 'surface-container'
-  | 'surface-container-high'
-  | 'surface-container-highest'
-
-type Anchor =
-  | 'none'
-  | 'center'
-  | 'start'
-  | 'end'
-  | 'top'
-  | 'bottom'
-  | 'top-start'
-  | 'top-end'
-  | 'bottom-start'
-  | 'bottom-end'
 
 type AnchorStyleFactory = (inset: {
   top: string,
@@ -88,7 +68,7 @@ type AnchorStyleFactory = (inset: {
   left: string,
 }) => Record<string, string>
 
-const MODAL_ANCHOR_STYLE: Record<Anchor, AnchorStyleFactory> = {
+const MODAL_ANCHOR_STYLE: Record<SurfaceAnchor, AnchorStyleFactory> = {
   none: ({ top, right, bottom, left }) => ({ top, right, bottom, left }),
   center: () => ({
     top: '50%',
@@ -134,14 +114,19 @@ const props = defineProps({
     default: 'body',
   },
 
+  scrim: {
+    type: Boolean,
+    default: true,
+  },
+
   elevation: {
     type: Number,
     default: 0,
     validator: (value: number) => Number.isInteger(value) && value >= 0 && value <= 5,
   },
 
-  surfaceRole: {
-    type: String as PropType<SurfaceRole>,
+  variant: {
+    type: String as PropType<SurfaceVariant>,
     default: 'auto',
   },
 
@@ -156,82 +141,82 @@ const props = defineProps({
   },
 
   width: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   height: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   minWidth: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   maxWidth: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   minHeight: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   maxHeight: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   rounding: {
-    type: null as unknown as PropType<Length>,
+    type: null as unknown as PropType<SurfaceLength>,
     default: 0,
   },
 
   roundingTopLeft: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   roundingTopRight: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   roundingBottomRight: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   roundingBottomLeft: {
-    type: null as unknown as PropType<Length | null>,
+    type: null as unknown as PropType<SurfaceLength | null>,
     default: null,
   },
 
   anchor: {
-    type: String as PropType<Anchor>,
+    type: String as PropType<SurfaceAnchor>,
     default: 'none',
   },
 
   insetTop: {
-    type: null as unknown as PropType<Length>,
+    type: null as unknown as PropType<SurfaceLength>,
     default: 0,
   },
 
   insetRight: {
-    type: null as unknown as PropType<Length>,
+    type: null as unknown as PropType<SurfaceLength>,
     default: 0,
   },
 
   insetBottom: {
-    type: null as unknown as PropType<Length>,
+    type: null as unknown as PropType<SurfaceLength>,
     default: 0,
   },
 
   insetLeft: {
-    type: null as unknown as PropType<Length>,
+    type: null as unknown as PropType<SurfaceLength>,
     default: 0,
   },
 
@@ -247,7 +232,7 @@ const props = defineProps({
 
   transitionTiming: {
     type: String,
-    default: 'cubic-bezier(0.2, 0, 0, 1)',
+    default: m3MotionEasings.standard,
   },
 
   overflow: {
@@ -263,7 +248,7 @@ const emit = defineEmits([
 
 const attrs = useAttrs()
 
-function toLength(value: Length | null | undefined, fallback: string): string {
+function toLength(value: SurfaceLength | null | undefined, fallback: string): string {
   if (value == null) {
     return fallback
   }
@@ -281,8 +266,8 @@ const _id = useId('m3-surface', computed(() => props.id))
 
 const isModal = computed(() => props.mode === 'modal')
 
-const resolvedRole = computed<Exclude<SurfaceRole, 'auto'>>(() => {
-  if (props.surfaceRole !== 'auto') return props.surfaceRole
+const resolvedVariant = computed<Exclude<SurfaceVariant, 'auto'>>(() => {
+  if (props.variant !== 'auto') return props.variant
 
   switch (props.elevation) {
     case 0: return 'surface'
@@ -349,7 +334,6 @@ const transition = computed(() => {
     `max-width ${duration} ${props.transitionTiming}`,
     `min-height ${duration} ${props.transitionTiming}`,
     `max-height ${duration} ${props.transitionTiming}`,
-    `border-radius ${duration} ${props.transitionTiming}`,
     `top ${duration} ${props.transitionTiming}`,
     `right ${duration} ${props.transitionTiming}`,
     `bottom ${duration} ${props.transitionTiming}`,
@@ -375,7 +359,7 @@ const surfaceAttrs = computed(() => {
 const surfaceClass = computed(() => ({
   'm3-surface': true,
   'm3-surface_modal': isModal.value,
-  [`m3-surface_role-${resolvedRole.value}`]: true,
+  [`m3-surface_role-${resolvedVariant.value}`]: true,
   [`m3-surface_anchor-${props.anchor}`]: true,
   [`m3-surface_elevation-${props.elevation}`]: true,
 }))
@@ -385,6 +369,7 @@ const surfaceStyle = computed(() => {
     ...resolvedSizeStyle.value,
     ...cornerRadiusStyle.value,
     ...anchorStyle.value,
+    '--m3-surface-radius-transition-duration': `${props.transitionMs}ms`,
     overflow: props.overflow,
     transition: transition.value,
     position: isModal.value ? 'fixed' : 'relative',
@@ -397,75 +382,3 @@ function onScrimClick() {
   emit('dismiss')
 }
 </script>
-
-<style scoped lang="scss">
-@use '../../../m3-foundation/assets/stylesheets/basics/palette' as palette;
-@use '../../../m3-foundation/assets/stylesheets/themes/dark' as dark;
-@use '../../../m3-foundation/assets/stylesheets/themes/light' as light;
-
-.m3-surface {
-  --m3-surface-role-surface-bg: var(--m3-sys-surface, #{light.$m3-sys-light-surface});
-  --m3-surface-role-surface-dim-bg: var(--m3-sys-surface-container-highest, #{light.$m3-sys-light-surface-container-highest});
-  --m3-surface-role-surface-bright-bg: var(--m3-sys-surface-container-low, #{light.$m3-sys-light-surface-container-low});
-  --m3-surface-role-container-lowest-bg: var(--m3-sys-surface, #{palette.$m3-palette-neutral-100});
-  --m3-surface-role-container-low-bg: var(--m3-sys-surface-container-low, #{light.$m3-sys-light-surface-container-low});
-  --m3-surface-role-container-bg: var(--m3-sys-surface-container, #{light.$m3-sys-light-surface-container});
-  --m3-surface-role-container-high-bg: var(--m3-sys-surface-container-high, #{light.$m3-sys-light-surface-container-high});
-  --m3-surface-role-container-highest-bg: var(--m3-sys-surface-container-highest, #{light.$m3-sys-light-surface-container-highest});
-  --m3-surface-elevation-1: var(--m3-elevation-1, #{light.$m3-elevation-light-1});
-  --m3-surface-elevation-2: var(--m3-elevation-2, #{light.$m3-elevation-light-2});
-  --m3-surface-elevation-3: var(--m3-elevation-3, #{light.$m3-elevation-light-3});
-  --m3-surface-elevation-4: var(--m3-elevation-4, #{light.$m3-elevation-light-4});
-  --m3-surface-elevation-5: var(--m3-elevation-5, #{light.$m3-elevation-light-5});
-
-  display: block;
-  isolation: isolate;
-  box-sizing: border-box;
-
-  &_modal {
-    max-width: 100vw;
-    max-height: 100vh;
-  }
-
-  &_role-surface {
-    background-color: var(--m3-surface-role-surface-bg);
-  }
-
-  &_role-surface-dim               { background-color: var(--m3-surface-role-surface-dim-bg); }
-  &_role-surface-bright            { background-color: var(--m3-surface-role-surface-bright-bg); }
-  &_role-surface-container-lowest  { background-color: var(--m3-surface-role-container-lowest-bg); }
-  &_role-surface-container-low     { background-color: var(--m3-surface-role-container-low-bg); }
-  &_role-surface-container         { background-color: var(--m3-surface-role-container-bg); }
-  &_role-surface-container-high    { background-color: var(--m3-surface-role-container-high-bg); }
-  &_role-surface-container-highest { background-color: var(--m3-surface-role-container-highest-bg); }
-
-  &_elevation-0 { box-shadow: none; }
-  &_elevation-1 { box-shadow: var(--m3-surface-elevation-1); }
-  &_elevation-2 { box-shadow: var(--m3-surface-elevation-2); }
-  &_elevation-3 { box-shadow: var(--m3-surface-elevation-3); }
-  &_elevation-4 { box-shadow: var(--m3-surface-elevation-4); }
-  &_elevation-5 { box-shadow: var(--m3-surface-elevation-5); }
-
-  &__scrim {
-    position: fixed;
-    inset: 0;
-    background: color-mix(in srgb, var(--m3-sys-shadow, #{palette.$m3-palette-neutral-0}) 38%, transparent);
-  }
-}
-
-:global(html.m3-theme-dark) .m3-surface {
-  --m3-surface-role-surface-bg: var(--m3-sys-surface, #{dark.$m3-sys-dark-surface});
-  --m3-surface-role-surface-dim-bg: var(--m3-sys-surface-container-highest, #{dark.$m3-sys-dark-surface-container-highest});
-  --m3-surface-role-surface-bright-bg: var(--m3-sys-surface-container-low, #{dark.$m3-sys-dark-surface-container-low});
-  --m3-surface-role-container-lowest-bg: var(--m3-sys-surface, #{dark.$m3-sys-dark-surface});
-  --m3-surface-role-container-low-bg: var(--m3-sys-surface-container-low, #{dark.$m3-sys-dark-surface-container-low});
-  --m3-surface-role-container-bg: var(--m3-sys-surface-container, #{dark.$m3-sys-dark-surface-container});
-  --m3-surface-role-container-high-bg: var(--m3-sys-surface-container-high, #{dark.$m3-sys-dark-surface-container-high});
-  --m3-surface-role-container-highest-bg: var(--m3-sys-surface-container-highest, #{dark.$m3-sys-dark-surface-container-highest});
-  --m3-surface-elevation-1: var(--m3-elevation-1, #{dark.$m3-elevation-dark-1});
-  --m3-surface-elevation-2: var(--m3-elevation-2, #{dark.$m3-elevation-dark-2});
-  --m3-surface-elevation-3: var(--m3-elevation-3, #{dark.$m3-elevation-dark-3});
-  --m3-surface-elevation-4: var(--m3-elevation-4, #{dark.$m3-elevation-dark-4});
-  --m3-surface-elevation-5: var(--m3-elevation-5, #{dark.$m3-elevation-dark-5});
-}
-</style>

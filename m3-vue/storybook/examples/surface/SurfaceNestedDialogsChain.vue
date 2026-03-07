@@ -7,7 +7,7 @@
             class="surface-dialog-chain__topbar"
             :fill-height="false"
             :height="72"
-            surface-role="surface-container"
+            variant="surface-container"
             :elevation="0"
         >
             <div class="surface-dialog-chain__topbar-content">
@@ -72,7 +72,7 @@
                     :fill-height="false"
                     :height="124"
                     :rounding="20"
-                    surface-role="surface-container-lowest"
+                    variant="surface-container-lowest"
                     :elevation="0"
                 >
                     <h3>Workspace</h3>
@@ -82,7 +82,7 @@
                 <M3Surface
                     class="surface-dialog-chain__canvas"
                     :rounding="20"
-                    surface-role="surface-container-low"
+                    variant="surface-container-low"
                     :elevation="0"
                 >
                     <h4>Background content</h4>
@@ -113,7 +113,7 @@
                 :transition-ms="DIALOG_TRANSITION_MS"
                 :transition-timing="DIALOG_TRANSITION_EASING"
                 :z-index="dialogZIndex(level)"
-                surface-role="surface-container-highest"
+                variant="surface-container-highest"
                 :elevation="dialogElevation(level)"
                 overflow="visible"
                 :style="dialogInlineStyle(level)"
@@ -166,16 +166,20 @@ import {
   M3Navigation,
   M3NavigationTab,
 } from '@/components/navigation'
-import M3Surface from '@/experimental/M3Surface.vue'
+import M3Surface from '@/components/surface/M3Surface.vue'
 
 import {
   computed,
   nextTick,
   ref,
 } from 'vue'
+import {
+  m3MotionDurations,
+  m3MotionEasings,
+} from '@modulify/m3-foundation/lib/motion'
 
-const DIALOG_TRANSITION_MS = 300
-const DIALOG_TRANSITION_EASING = 'cubic-bezier(0.2, 0, 0, 1)'
+const DIALOG_TRANSITION_MS = m3MotionDurations.medium2
+const DIALOG_TRANSITION_EASING = m3MotionEasings.standard
 const DIALOG_ENTRY_OFFSET_PX = 24
 const DIALOG_Z_INDEX_BASE = 560
 const DIALOG_Z_INDEX_STEP = 40

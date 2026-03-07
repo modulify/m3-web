@@ -9,7 +9,7 @@
             class="surface-side-sheet-window__topbar"
             :fill-height="false"
             :height="72"
-            surface-role="surface-container"
+            variant="surface-container"
             :elevation="0"
         >
             <div class="surface-side-sheet-window__topbar-content">
@@ -84,7 +84,7 @@
                     :fill-height="false"
                     :height="120"
                     :rounding="20"
-                    surface-role="surface-container-lowest"
+                    variant="surface-container-lowest"
                     :elevation="0"
                 >
                     <h3>Workspace surfaces</h3>
@@ -105,7 +105,7 @@
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            surface-role="surface-container-lowest"
+                            variant="surface-container-lowest"
                             :elevation="0"
                         >
                             <strong>surface-container-lowest</strong>
@@ -117,7 +117,7 @@
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            surface-role="surface-container-low"
+                            variant="surface-container-low"
                             :elevation="1"
                         >
                             <strong>surface-container-low</strong>
@@ -129,7 +129,7 @@
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            surface-role="surface-container-high"
+                            variant="surface-container-high"
                             :elevation="3"
                         >
                             <strong>surface-container-high</strong>
@@ -141,7 +141,7 @@
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            surface-role="surface-dim"
+                            variant="surface-dim"
                             :elevation="0"
                         >
                             <strong>surface-dim</strong>
@@ -171,7 +171,7 @@
                         :transition-ms="panelTransitionMs"
                         :transition-timing="panelTransitionTiming"
                         :z-index="520"
-                        :surface-role="panelSurfaceRole"
+                        :variant="panelSurfaceRole"
                         :elevation="panelElevation"
                         :style="panelInlineStyle"
                         overflow="auto"
@@ -303,7 +303,7 @@ import {
 } from '@/components/navigation'
 import { M3Select } from '@/components/select'
 import { M3TextField } from '@/components/text-field'
-import M3Surface from '@/experimental/M3Surface.vue'
+import M3Surface from '@/components/surface/M3Surface.vue'
 
 import {
   computed,
@@ -313,6 +313,10 @@ import {
   reactive,
   ref,
 } from 'vue'
+import {
+  m3MotionDurations,
+  m3MotionEasings,
+} from '@modulify/m3-foundation/lib/motion'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360
@@ -327,10 +331,10 @@ const WINDOW_WIDTH_STEP = 8
 const MODAL_INSET_TOP = 0
 const MODAL_INSET_BOTTOM = 0
 const MODAL_INSET_END = 0
-const PANEL_TRANSITION_MS = 300
-const PANEL_TRANSITION_EASING = 'cubic-bezier(0.2, 0, 0, 1)'
-const SCRIM_FADE_MS = 500
-const DIALOG_HIDE_MS = 500
+const PANEL_TRANSITION_MS = m3MotionDurations.medium4
+const PANEL_TRANSITION_EASING = m3MotionEasings.standard
+const SCRIM_FADE_MS = m3MotionDurations.long2
+const DIALOG_HIDE_MS = m3MotionDurations.long2
 
 const navExpanded = ref(false)
 const activeNavTab = ref<'inbox' | 'boards' | 'archive' | 'lab'>('inbox')
