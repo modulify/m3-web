@@ -1,5 +1,12 @@
 include recipes/common.mk
 
+YARN_PLAYWRIGHT=@docker-compose run --rm playwright yarn
+COVERAGE_PARTS_DIR=coverage/.parts
+COVERAGE_UNIT_DIR=coverage/unit
+COVERAGE_E2E_REACT_DIR=coverage/e2e-react
+COVERAGE_E2E_VUE_DIR=coverage/e2e-vue
+NYC_OUTPUT_DIR=.nyc_output
+
 .PHONY: test-smoke
 test-smoke: node_modules ## [Tests][docker][smoke] Runs smoke tests for all UI workspaces
 	$(TARGET_HEADER)

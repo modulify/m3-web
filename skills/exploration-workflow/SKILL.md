@@ -138,11 +138,19 @@ Minimal example:
 
 ## Repository Conventions
 - Prefer repository exploration helpers where they exist.
-  At the moment, this includes `m3/experiment/*` Makefile targets.
+  At the moment, this includes `exploration-init`, `exploration-preflight-*`,
+  `exploration-prepare-batch`, `exploration-bootstrap`, and
+  `exploration-summarize`.
+- Use `make exploration-init slug=<short-slug>` as the quickest way to prepare
+  the initial activity directory skeleton under `drafts/explorations/`.
+  This helper only creates directories and draft files; it does not start
+  exploration mode and must not replace the explicit start sequence from this skill.
 - Direct `research-*` commands are allowed only when they are listed in the current escalation window.
 - Prefer one-shot privileged bootstrap:
-  `make m3/experiment/bootstrap/evidence`
-- Treat literal `m3/experiment/*` target names as the current repository command interface for exploration runs until the namespace is renamed in-repo.
+  `make exploration-bootstrap activity_dir=drafts/explorations/<id>`
+- After the escalation window is closed, prefer local synthesis via:
+  `make exploration-summarize activity_dir=drafts/explorations/<id>`
+- Treat `exploration-*` target names as the current repository command interface for exploration support flows.
 - During exploration-driven component development, do not modify current production
   components in `src/components` unless explicitly requested.
 - For agent-driven exploratory components, create and use `src/experimental`
@@ -185,6 +193,8 @@ Examples:
 Use a clear distinct name, for example:
 - `drafts/explorations/20260307-2015-surface-layer/`
 - `drafts/explorations/20260307-2015-dialog-parity/`
+To scaffold this quickly before filling in the run state, you may use:
+- `make exploration-init slug=surface-layer`
 
 7. Initialize `drafts/current.yml`.
 Write at least:

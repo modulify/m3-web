@@ -5,6 +5,8 @@ description: Use this skill when creating git commits in this repository. It sta
 
 # Commit Workflow
 
+Reread this skill immediately before preparing or creating any commit in this repository.
+
 ## When To Use
 Use this skill when the user asks to:
 - create one or more commits;
