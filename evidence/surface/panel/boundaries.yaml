@@ -1,0 +1,74 @@
+schema_version: 1
+updated_at: "2026-02-23"
+scope: "surface_panel"
+
+family:
+  id: "surface_panel"
+  working_name: "Surface panel"
+  purpose: "Generalized temporary or edge-anchored surface container family."
+
+includes:
+  - id: "dialog"
+    role: "centered modal surface"
+    covered: true
+  - id: "menu"
+    role: "anchor-based temporary surface"
+    covered: true
+  - id: "bottom_sheet"
+    role: "bottom edge-anchored surface"
+    covered: true
+  - id: "side_sheet"
+    role: "side edge-anchored surface"
+    covered: true
+  - id: "navigation_drawer"
+    role: "navigation-specialized side surface"
+    covered: true
+
+excludes:
+  - id: "card"
+    reason: "Static containment surface, not a temporary layer surface."
+  - id: "route_level_page_layout"
+    reason: "Page-level composition, outside panel lifecycle."
+  - id: "app_bar_and_navigation_rail"
+    reason: "Different semantics and lifecycle."
+
+variation_axes:
+  - name: "placement"
+    values: ["center", "bottom", "start", "end", "anchor"]
+  - name: "modality"
+    values: ["standard", "modal"]
+  - name: "layout_interaction"
+    values: ["overlay", "coplanar"]
+  - name: "dismiss_model"
+    values: ["outside_click", "back", "swipe_or_drag"]
+  - name: "scrim"
+    values: ["none", "required"]
+  - name: "focus_policy"
+    values: ["none", "contained", "trap"]
+  - name: "motion_profile"
+    values: ["fade_scale", "slide_y", "slide_x"]
+  - name: "edge_inset_policy"
+    values: ["none", "inset_16dp_optional"]
+
+invariants:
+  - "surface_role: container color layer must be explicit."
+  - "shape_profile: radius family must be tokenized."
+  - "elevation_profile: base and state deltas must be tokenized."
+  - "size_constraints: min/max constraints must be explicit."
+  - "edge_policy: side surfaces must define preferred edge and inset policy."
+  - "accessibility_behavior: focus, keyboard/back and dismiss semantics must be explicit."
+
+known_limits:
+  - id: "side_sheet_numeric_geometry_unresolved"
+    severity: "high"
+    detail: "No direct numeric side-sheet redline/spec table available in accessible runtime payload."
+    impact: "Side-sheet geometry cannot be promoted to final baseline yet."
+
+evidence_refs:
+  - "evidence/surface/panel/side-sheet-guidance.md"
+  - "https://m3.material.io/page-data/ComponentsM3/5634981699387392.json"
+  - "https://m3.material.io/components/side-sheets/overview"
+  - "https://m3.material.io/components/side-sheets/specs"
+  - "https://m3.material.io/components/side-sheets/guidelines"
+  - "https://m3.material.io/components/side-sheets/accessibility"
+  - "https://m3.material.io/components/sheets-side"

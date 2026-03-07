@@ -1,0 +1,17 @@
+schema_version: 1
+package: "surface_fetch_baseline"
+updated_at: "2026-02-23"
+source_run: "EXP-2026-02-22-longrun-001"
+source_path: "drafts/experiment/runs/EXP-2026-02-22-longrun-001/fetch"
+notes:
+  - "This fetch set was selected as the canonical preserved baseline."
+  - "Equivalent fetch sets existed in other drafts runs and were byte-identical."
+files:
+  - "bottom-sheets.json"
+  - "dialogs.json"
+  - "layout-applying.json"
+  - "menus.json"
+  - "motion-easing-duration.json"
+  - "motion-transitions.json"
+  - "navigation-drawer.json"
+  - "side-sheets.json"

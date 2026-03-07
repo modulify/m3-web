@@ -1,0 +1,79 @@
+schema_version: 1
+updated_at: "2026-02-23"
+scope: "surface_panel"
+
+decisions:
+  - id: "DL-001"
+    date: "2026-02-22"
+    topic: "bottom_sheet_elevation"
+    context:
+      compose_value: "1dp"
+      mdc_android_value: "3dp"
+    decision: "keep_platform_specific_tokens"
+    outcome:
+      - "surface.bottom_sheet.container.elevation@android_compose = 1dp"
+      - "surface.bottom_sheet.container.elevation@android_mdc = 3dp"
+    rationale: "Forced unification would introduce visible drift in at least one implementation branch."
+    revisit_trigger:
+      - "Direct M3 side/spec runtime tables become available and conflict model changes."
+    status: "active"
+
+  - id: "DL-002"
+    date: "2026-02-22"
+    topic: "navigation_drawer_width"
+    context:
+      compose_values:
+        min: "240dp"
+        max: "360dp"
+      mdc_android_value:
+        max: "280dp"
+    decision: "keep_platform_specific_tokens"
+    outcome:
+      - "surface.navigation_drawer.container.width.min@android_compose = 240dp"
+      - "surface.navigation_drawer.container.width.max@android_compose = 360dp"
+      - "surface.navigation_drawer.container.width.max@android_mdc = 280dp"
+    rationale: "Width is layout-critical; premature normalization risks adaptive layout regressions."
+    revisit_trigger:
+      - "Interactive M3/Figma redlines confirm a unified canonical width model."
+    status: "active"
+
+  - id: "DL-003"
+    date: "2026-02-22"
+    topic: "side_sheet_geometry"
+    context:
+      runtime_page_data:
+        components_m3_document_id: "5634981699387392"
+        endpoint: "https://m3.material.io/page-data/ComponentsM3/5634981699387392.json"
+        payload_observation: "overview metadata present, numeric spec/redline tables absent, platform blocks empty"
+      legacy_route_check:
+        route: "/components/sheets-side"
+        document_id: "5696654316666880"
+        page_data_result: "404 for tested Components and ComponentsM3 variants"
+    decision: "keep_side_sheet_tokens_in_inference_status"
+    outcome:
+      - "Do not promote side-sheet geometry to final baseline."
+      - "Keep side-sheet geometry as inference-only working hypotheses."
+    rationale: "No machine-readable primary source with numeric geometry values is currently available."
+    revisit_trigger:
+      - "Interactive redlines become accessible in M3/Figma."
+      - "Runtime payload starts exposing side-sheet numeric tables."
+    status: "active"
+
+  - id: "DL-004"
+    date: "2026-02-23"
+    topic: "side_sheet_placement_and_inset_guidance"
+    context:
+      local_guidance_excerpt: "evidence/surface/panel/side-sheet-guidance.md"
+      extracted_rules:
+        - "fixed width"
+        - "typically full-height"
+        - "preferred edge: end/right"
+        - "optional inset: 16dp"
+    decision: "record_as_guidance_constraints_without_promoting_to_numeric_baseline"
+    outcome:
+      - "Added structured side-sheet guidance tokens and modal profile sidecar."
+      - "Kept numeric side-sheet geometry in inference status."
+    rationale: "Guidance text is actionable for behavior policy, but it is not a full redline table."
+    revisit_trigger:
+      - "Live redlines/spec tables confirm or adjust edge/inset policy."
+    status: "active"

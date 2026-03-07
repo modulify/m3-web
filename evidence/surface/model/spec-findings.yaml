@@ -1,0 +1,178 @@
+schema_version: 1
+updated_at: "2026-02-23"
+scope: "surface"
+status: "draft"
+
+method_limits:
+  - "M3 live pages are JS-driven in CLI context; direct body parsing is limited."
+  - "Primary extraction channels used: runtime page-data payloads and official indexed snippets."
+
+findings:
+  - id: "WF-001"
+    topic: "menu_is_temporary_surface"
+    confidence: "high"
+    evidence_type: "page_data_markdown"
+    statement: "Menus are described as a temporary surface for a list of choices."
+    sources:
+      - "https://m3.material.io/page-data/ComponentsM3/4984542628413440.json"
+    extracted_from:
+      file: "/tmp/m3_page_menus_latest.md"
+
+  - id: "WF-002"
+    topic: "standard_bottom_sheet_coplanar"
+    confidence: "high"
+    evidence_type: "page_data_markdown"
+    statement: "Standard bottom sheet co-exists with main UI and allows simultaneous interaction."
+    sources:
+      - "https://m3.material.io/page-data/ComponentsM3/5317529291587584.json"
+    extracted_from:
+      file: "/tmp/m3_page_bottom_sheets_latest.md"
+
+  - id: "WF-003"
+    topic: "modal_bottom_sheet_blocks_background"
+    confidence: "high"
+    evidence_type: "page_data_markdown"
+    statement: "Modal bottom sheet blocks interaction with rest of screen and is modal."
+    sources:
+      - "https://m3.material.io/page-data/ComponentsM3/5317529291587584.json"
+    extracted_from:
+      file: "/tmp/m3_page_bottom_sheets_latest.md"
+
+  - id: "WF-004"
+    topic: "modal_bottom_sheet_as_alt_to_menu_dialog"
+    confidence: "high"
+    evidence_type: "page_data_markdown"
+    statement: "Modal bottom sheet is presented as an alternative to inline menus and simple dialogs on mobile."
+    sources:
+      - "https://m3.material.io/page-data/ComponentsM3/5317529291587584.json"
+    extracted_from:
+      file: "/tmp/m3_page_bottom_sheets_latest.md"
+
+  - id: "WF-005"
+    topic: "modal_bottom_sheet_dismiss_behavior"
+    confidence: "high"
+    evidence_type: "page_data_markdown"
+    statement: "Tapping outside modal bottom sheet dismisses it; drag-down dismissal is supported."
+    sources:
+      - "https://m3.material.io/page-data/ComponentsM3/5317529291587584.json"
+    extracted_from:
+      file: "/tmp/m3_page_bottom_sheets_latest.md"
+
+  - id: "WF-006"
+    topic: "standard_navigation_drawer_coplanar"
+    confidence: "high"
+    evidence_type: "page_data_markdown"
+    statement: "Standard navigation drawer allows interaction with both content and drawer simultaneously."
+    sources:
+      - "https://m3.material.io/page-data/ComponentsM3/5584597953544192.json"
+    extracted_from:
+      file: "/tmp/m3_navigation_drawer_mdc_android.md"
+
+  - id: "WF-007"
+    topic: "modal_navigation_drawer_scrim"
+    confidence: "high"
+    evidence_type: "page_data_markdown"
+    statement: "Modal navigation drawer blocks background interaction with scrim and is elevated over app UI."
+    sources:
+      - "https://m3.material.io/page-data/ComponentsM3/5584597953544192.json"
+    extracted_from:
+      file: "/tmp/m3_navigation_drawer_mdc_android.md"
+
+  - id: "WF-008"
+    topic: "side_sheet_semantics"
+    confidence: "high"
+    evidence_type: "page_data_metadata"
+    statement: "Side sheets are supplementary/secondary content anchored to side; standard and modal variants are present."
+    sources:
+      - "https://m3.material.io/page-data/ComponentsM3/5634981699387392.json"
+
+  - id: "WF-009"
+    topic: "layout_uses_window_size_classes"
+    confidence: "high"
+    evidence_type: "page_data_metadata"
+    statement: "Applying layout guidance is tied to window size classes."
+    sources:
+      - "https://m3.material.io/page-data/GuidelinesM3/6396979944620032.json"
+
+  - id: "WF-010"
+    topic: "menu_to_bottom_sheet_compact"
+    confidence: "medium"
+    evidence_type: "official_search_snippet"
+    statement: "Menus guidance snippet indicates adapting menus into bottom sheets on compact windows."
+    sources:
+      - "https://m3.material.io/components/menus/guidelines"
+    snippet_files:
+      - "/tmp/m3_search_side_sheet_specs.json"
+      - "/tmp/m3_search_sheet_width.json"
+
+  - id: "WF-011"
+    topic: "side_sheet_fixed_width_full_height"
+    confidence: "medium"
+    evidence_type: "official_search_snippet"
+    statement: "Side sheets guidance snippet indicates fixed width and typical full-height behavior."
+    sources:
+      - "https://m3.material.io/components/side-sheets/guidelines"
+    snippet_files:
+      - "/tmp/m3_search_side_sheet_specs.json"
+
+  - id: "WF-012"
+    topic: "bottom_vs_side_sheet_content_adaptation"
+    confidence: "medium"
+    evidence_type: "official_search_snippet"
+    statement: "Bottom sheets guidance snippet indicates similar content may move to side sheet on desktop."
+    sources:
+      - "https://m3.material.io/components/bottom-sheets/guidelines"
+    snippet_files:
+      - "/tmp/m3_search_side_sheet.json"
+
+  - id: "WF-013"
+    topic: "coplanar_side_sheet_transition_pattern"
+    confidence: "medium"
+    evidence_type: "official_search_snippet"
+    statement: "Transitions snippet mentions dedicated enter/exit transition for coplanar side sheet."
+    sources:
+      - "https://m3.material.io/styles/motion/transitions"
+    snippet_files:
+      - "/tmp/m3_search_side_sheet.json"
+
+  - id: "WF-014"
+    topic: "large_window_third_pane_side_sheet"
+    confidence: "medium"
+    evidence_type: "official_search_snippet"
+    statement: "Applying layout snippets mention standard side sheet as a third pane on extra-large windows."
+    sources:
+      - "https://m3.material.io/foundations/layout/applying-layout/large-extra-large"
+      - "https://m3.material.io/foundations/layout/applying-layout"
+    snippet_files:
+      - "/tmp/m3_search_side_sheet.json"
+      - "/tmp/m3_search_sheet_width.json"
+
+  - id: "WF-015"
+    topic: "side_sheet_dimensions_depend_on_layout_regions"
+    confidence: "medium"
+    evidence_type: "guidance_excerpt_local_capture"
+    statement: "Side sheet dimensions are tied to how the app layout is subdivided into UI regions."
+    sources:
+      - "https://m3.material.io/components/side-sheets/guidelines"
+    extracted_from:
+      file: "evidence/surface/panel/side-sheet-guidance.md"
+
+  - id: "WF-016"
+    topic: "side_sheet_preferred_right_edge"
+    confidence: "medium"
+    evidence_type: "guidance_excerpt_local_capture"
+    statement: "Side sheets are placed on screen edge, usually on the right side to avoid interference with left-edge navigation."
+    sources:
+      - "https://m3.material.io/components/side-sheets/guidelines"
+    extracted_from:
+      file: "evidence/surface/panel/side-sheet-guidance.md"
+
+  - id: "WF-017"
+    topic: "side_sheet_optional_inset_16dp"
+    confidence: "medium"
+    evidence_type: "guidance_excerpt_local_capture"
+    statement: "Side sheets may be slightly inset by 16dp as an optional geometry mode."
+    sources:
+      - "https://m3.material.io/components/side-sheets/guidelines"
+    extracted_from:
+      file: "evidence/surface/panel/side-sheet-guidance.md"
