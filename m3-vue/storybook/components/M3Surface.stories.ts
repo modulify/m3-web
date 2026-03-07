@@ -3,7 +3,7 @@ import type {
   StoryObj,
 } from '@storybook/vue3'
 
-import M3Surface from '@/experimental/M3Surface.vue'
+import M3Surface from '@/components/surface/M3Surface.vue'
 
 import SurfaceCardPageMorph from '../examples/surface/SurfaceCardPageMorph.vue'
 import SurfaceNestedDialogsChain from '../examples/surface/SurfaceNestedDialogsChain.vue'

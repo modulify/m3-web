@@ -8,7 +8,7 @@
             class="surface-card-page__topbar"
             :fill-height="false"
             :height="72"
-            surface-role="surface-container"
+            variant="surface-container"
             :elevation="0"
         >
             <div class="surface-card-page__topbar-content">
@@ -83,7 +83,7 @@
                     :fill-height="false"
                     :height="120"
                     :rounding="20"
-                    surface-role="surface-container-lowest"
+                    variant="surface-container-lowest"
                     :elevation="0"
                 >
                     <h3>Card-to-page transition playground</h3>
@@ -112,7 +112,7 @@
                             :fill-height="false"
                             :height="184"
                             :rounding="16"
-                            surface-role="surface-container-low"
+                            variant="surface-container-low"
                             :elevation="1"
                         >
                             <strong>Static card A</strong>
@@ -124,7 +124,7 @@
                             :fill-height="false"
                             :height="184"
                             :rounding="16"
-                            surface-role="surface-container"
+                            variant="surface-container"
                             :elevation="2"
                         >
                             <strong>Static card B</strong>
@@ -149,8 +149,8 @@
                                 :fill-height="true"
                                 :rounding="expanded ? 0 : 24"
                                 :transition-ms="TRANSITION_MS"
-                                transition-timing="cubic-bezier(0.2, 0, 0, 1)"
-                                :surface-role="expanded ? 'surface' : 'surface-container-low'"
+                                :transition-timing="TRANSITION_EASING"
+                                :variant="expanded ? 'surface' : 'surface-container-low'"
                                 :elevation="expanded ? 0 : 1"
                                 overflow="auto"
                                 data-testid="surface-card-morph"
@@ -166,7 +166,7 @@
                                     :fill-height="false"
                                     :height="120"
                                     :rounding="14"
-                                    :surface-role="expanded ? 'surface-container-low' : 'surface-container-high'"
+                                    :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
                                     :elevation="expanded ? 1 : 3"
                                 >
                                     Nested surface demonstrates composability in both states.
@@ -188,7 +188,7 @@ import {
   M3Navigation,
   M3NavigationTab,
 } from '@/components/navigation'
-import M3Surface from '@/experimental/M3Surface.vue'
+import M3Surface from '@/components/surface/M3Surface.vue'
 
 import {
   computed,
@@ -196,13 +196,18 @@ import {
   onMounted,
   ref,
 } from 'vue'
+import {
+  m3MotionDurations,
+  m3MotionEasings,
+} from '@modulify/m3-foundation/lib/motion'
 
 const expanded = ref(false)
 const busy = ref(false)
 const navExpanded = ref(false)
 const backgroundCollapsed = ref(false)
 const activeNavTab = ref<'files' | 'timeline' | 'tasks' | 'analytics'>('files')
-const TRANSITION_MS = 340
+const TRANSITION_MS = m3MotionDurations.medium3
+const TRANSITION_EASING = m3MotionEasings.standard
 
 const canvas = ref<HTMLElement | null>(null)
 const originSlot = ref<HTMLElement | null>(null)
@@ -352,7 +357,9 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '@modulify/m3-foundation/assets/stylesheets/basics/motion' as m3-motion;
+
 .surface-card-page {
     --surface-scene-bg-0: var(--m3-sys-surface, var(--md-sys-color-surface, #fef7ff));
     --surface-scene-bg-1: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
@@ -479,10 +486,10 @@ onMounted(() => {
 .surface-card-page__overlay-wrap {
     position: absolute;
     transition:
-        top 340ms cubic-bezier(0.2, 0, 0, 1),
-        left 340ms cubic-bezier(0.2, 0, 0, 1),
-        width 340ms cubic-bezier(0.2, 0, 0, 1),
-        height 340ms cubic-bezier(0.2, 0, 0, 1);
+        top #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
+        left #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
+        width #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
+        height #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')};
 }
 
 .surface-card-page__morph-surface {

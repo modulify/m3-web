@@ -4,7 +4,7 @@
             class="surface-side-sheet__topbar"
             :fill-height="false"
             :height="72"
-            surface-role="surface-container"
+            variant="surface-container"
             :elevation="0"
         >
             <div class="surface-side-sheet__topbar-content">
@@ -82,7 +82,7 @@
                     :fill-height="false"
                     :height="120"
                     :rounding="20"
-                    surface-role="surface-container-lowest"
+                    variant="surface-container-lowest"
                     :elevation="0"
                 >
                     <h3>Workspace surfaces</h3>
@@ -99,7 +99,7 @@
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            surface-role="surface-container-lowest"
+                            variant="surface-container-lowest"
                             :elevation="0"
                         >
                             <strong>surface-container-lowest</strong>
@@ -111,7 +111,7 @@
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            surface-role="surface-container-low"
+                            variant="surface-container-low"
                             :elevation="1"
                         >
                             <strong>surface-container-low</strong>
@@ -123,7 +123,7 @@
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            surface-role="surface-container-high"
+                            variant="surface-container-high"
                             :elevation="3"
                         >
                             <strong>surface-container-high</strong>
@@ -135,7 +135,7 @@
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            surface-role="surface-dim"
+                            variant="surface-dim"
                             :elevation="0"
                         >
                             <strong>surface-dim</strong>
@@ -155,7 +155,7 @@
                             :fill-width="true"
                             :fill-height="true"
                             :rounding="0"
-                            surface-role="surface-container-low"
+                            variant="surface-container-low"
                             :elevation="0"
                             overflow="auto"
                         >
@@ -187,7 +187,7 @@
                         :transition-ms="PANEL_TRANSITION_MS"
                         :transition-timing="PANEL_TRANSITION_EASING"
                         :z-index="520"
-                        :surface-role="modalRole"
+                        :variant="modalRole"
                         :elevation="modalElevation"
                         overflow="auto"
                         @dismiss="closeModalFromPanel"
@@ -228,7 +228,7 @@ import {
   M3Navigation,
   M3NavigationTab,
 } from '@/components/navigation'
-import M3Surface from '@/experimental/M3Surface.vue'
+import M3Surface from '@/components/surface/M3Surface.vue'
 
 import {
   onBeforeUnmount,
@@ -236,6 +236,10 @@ import {
   nextTick,
   ref,
 } from 'vue'
+import {
+  m3MotionDurations,
+  m3MotionEasings,
+} from '@modulify/m3-foundation/lib/motion'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360
@@ -245,9 +249,9 @@ const SIDE_SHEET_WIDTH_STEP = 4
 const MODAL_INSET_TOP = 0
 const MODAL_INSET_BOTTOM = 0
 const MODAL_INSET_END = 0
-const PANEL_TRANSITION_MS = 300
-const PANEL_TRANSITION_EASING = 'cubic-bezier(0.2, 0, 0, 1)'
-const SCRIM_FADE_MS = 500
+const PANEL_TRANSITION_MS = m3MotionDurations.medium2
+const PANEL_TRANSITION_EASING = m3MotionEasings.standard
+const SCRIM_FADE_MS = m3MotionDurations.long2
 
 const navExpanded = ref(false)
 const activeNavTab = ref<'inbox' | 'boards' | 'archive' | 'lab'>('inbox')
@@ -441,7 +445,9 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '@modulify/m3-foundation/assets/stylesheets/basics/motion' as m3-motion;
+
 .surface-side-sheet {
     --surface-scene-bg-0: var(--m3-sys-surface, var(--md-sys-color-surface, #fef7ff));
     --surface-scene-bg-1: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
@@ -451,8 +457,8 @@ onBeforeUnmount(() => {
     --surface-shadow-color: color-mix(in srgb, var(--m3-sys-shadow, #000000) 22%, transparent);
     --surface-layout-bg: var(--m3-sys-surface-container, var(--md-sys-color-surface-container, #f3edf7));
     --surface-grid-bg: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
-    --surface-panel-transition-ms: 300ms;
-    --surface-panel-transition-easing: cubic-bezier(0.2, 0, 0, 1);
+    --surface-panel-transition-ms: #{m3-motion.duration('medium2')};
+    --surface-panel-transition-easing: #{m3-motion.easing('standard')};
     min-height: 100vh;
     background:
         radial-gradient(circle at 8% 0%, var(--surface-accent-a), transparent 42%),

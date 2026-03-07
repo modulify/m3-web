@@ -4,7 +4,7 @@ import {
   screen,
 } from '@testing-library/vue'
 
-import M3Surface from '@/experimental/M3Surface.vue'
+import M3Surface from '@/components/surface/M3Surface.vue'
 
 describe('m3-vue/experimental/surface', () => {
   test('applies deterministic default contract', () => {
@@ -100,7 +100,7 @@ describe('m3-vue/experimental/surface', () => {
 
     await view.rerender({
       elevation: 3,
-      surfaceRole: 'surface-bright',
+      variant: 'surface-bright',
     })
 
     surface = screen.getByRole('region')
