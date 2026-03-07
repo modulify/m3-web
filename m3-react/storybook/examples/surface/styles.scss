@@ -1,0 +1,628 @@
+@use '@modulify/m3-foundation/assets/stylesheets/basics/motion' as m3-motion;
+
+.surface-card-page {
+  --surface-scene-bg-0: var(--m3-sys-surface, var(--md-sys-color-surface, #fef7ff));
+  --surface-scene-bg-1: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
+  --surface-accent-a: rgba(103, 80, 164, 0.14);
+  --surface-accent-b: rgba(96, 125, 139, 0.16);
+  --surface-border: var(--m3-sys-outline-variant, rgba(73, 69, 79, 0.2));
+  --surface-shadow: var(--m3-elevation-1, 0 2px 6px rgba(0, 0, 0, 0.14));
+  --surface-canvas-bg: var(--m3-sys-surface-container-low, var(--m3-sys-surface, #fef7ff));
+  --surface-origin-slot: color-mix(in srgb, var(--m3-sys-primary, #6750a4) 12%, transparent);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 14% 4%, var(--surface-accent-a), transparent 38%),
+    radial-gradient(circle at 90% 8%, var(--surface-accent-b), transparent 38%),
+    linear-gradient(180deg, var(--surface-scene-bg-0) 0%, var(--surface-scene-bg-1) 100%);
+  color: var(--m3-sys-on-surface, var(--md-sys-color-on-surface, #1d1b20));
+}
+
+html.m3-theme-dark .surface-card-page {
+  --surface-accent-a: rgba(208, 188, 255, 0.18);
+  --surface-accent-b: rgba(128, 203, 196, 0.16);
+}
+
+.surface-card-page__topbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.surface-card-page__topbar-content strong {
+  display: block;
+  font: 700 15px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-card-page__topbar-content p {
+  margin: 4px 0 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+  opacity: 0.8;
+}
+
+.surface-card-page__body {
+  display: flex;
+  height: calc(100vh - 72px);
+  padding-left: var(--m3-navigation-rail-width, 80px);
+}
+
+@media (min-width: 1200px) {
+  .surface-card-page__body {
+    padding-left: var(--m3-navigation-drawer-width, 360px);
+  }
+}
+
+.surface-card-page__nav.m3-navigation {
+  top: 72px;
+  height: calc(100vh - 72px);
+}
+
+.surface-card-page__workspace {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.surface-card-page__topbar {
+  padding: 16px;
+}
+
+.surface-card-page__header-card {
+  padding: 18px;
+}
+
+.surface-card-page__header-card h3 {
+  margin: 0 0 8px;
+  font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-card-page__header-card p {
+  margin: 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-card-page__canvas {
+  flex: 1 1 auto;
+  position: relative;
+  min-height: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--surface-canvas-bg);
+  box-shadow: 0 14px 28px var(--surface-shadow);
+}
+
+.surface-card-page__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px;
+}
+
+.surface-card-page__grid > .surface-card-page__grid-card {
+  padding: 16px;
+}
+
+.surface-card-page__grid p {
+  margin: 6px 0 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-card-page__origin-slot {
+  border-radius: 24px;
+  border: 1px dashed var(--surface-border);
+  background: var(--surface-origin-slot);
+}
+
+.surface-card-page__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.surface-card-page__overlay-wrap {
+  position: absolute;
+  transition:
+    top #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
+    left #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
+    width #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
+    height #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')};
+}
+
+.surface-card-page__morph-surface {
+  pointer-events: auto;
+}
+
+.surface-card-page__morph-surface_compact {
+  padding: 20px;
+}
+
+.surface-card-page__morph-surface_expanded {
+  padding: 28px;
+}
+
+.surface-card-page__morph-nested {
+  padding: 14px;
+}
+
+.surface-card-page__morph-surface h3 {
+  margin: 0 0 8px;
+  font: 700 18px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-card-page__morph-surface p {
+  margin: 0 0 12px;
+  font: 400 13px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif;
+  max-width: 70ch;
+}
+
+.surface-dialog-chain {
+  --surface-scene-bg-0: var(--m3-sys-surface, var(--md-sys-color-surface, #fef7ff));
+  --surface-scene-bg-1: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
+  --surface-accent-a: color-mix(in srgb, var(--m3-sys-primary, var(--md-sys-color-primary, #6750a4)) 18%, transparent);
+  --surface-accent-b: color-mix(in srgb, var(--m3-sys-secondary, var(--md-sys-color-secondary, #625b71)) 16%, transparent);
+  --surface-layout-bg: var(--m3-sys-surface-container, var(--md-sys-color-surface-container, #f3edf7));
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 8% 0%, var(--surface-accent-a), transparent 42%),
+    radial-gradient(circle at 92% 0%, var(--surface-accent-b), transparent 44%),
+    linear-gradient(180deg, var(--surface-scene-bg-0) 0%, var(--surface-scene-bg-1) 100%);
+  color: var(--m3-sys-on-surface, var(--md-sys-color-on-surface, #1d1b20));
+}
+
+.surface-dialog-chain__topbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.surface-dialog-chain__topbar-content strong {
+  display: block;
+  font: 700 15px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-dialog-chain__topbar-content p {
+  margin: 4px 0 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+  opacity: 0.82;
+}
+
+.surface-dialog-chain__body {
+  display: flex;
+  height: calc(100vh - 72px);
+  padding-left: var(--m3-navigation-rail-width, 80px);
+}
+
+.surface-dialog-chain__nav.m3-navigation {
+  top: 72px;
+  height: calc(100vh - 72px);
+}
+
+.surface-dialog-chain__workspace {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.surface-dialog-chain__topbar {
+  padding: 16px;
+}
+
+.surface-dialog-chain__workspace-intro {
+  padding: 20px;
+}
+
+.surface-dialog-chain__workspace h3,
+.surface-dialog-chain__workspace h4 {
+  margin: 0 0 8px;
+  font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-dialog-chain__workspace p {
+  margin: 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-dialog-chain__canvas {
+  flex: 1 1 auto;
+  min-height: 220px;
+  padding: 18px;
+  background: var(--surface-layout-bg);
+}
+
+.surface-dialog-chain__dialog {
+  overflow: visible;
+}
+
+.surface-dialog-chain__dialog_level-1 {
+  padding: 24px;
+}
+
+.surface-dialog-chain__dialog_level-2 {
+  padding: 22px;
+}
+
+.surface-dialog-chain__dialog_level-3 {
+  padding: 20px;
+}
+
+.surface-dialog-chain__dialog_level-4 {
+  padding: 18px;
+}
+
+.surface-dialog-chain__dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.surface-dialog-chain__dialog-head h3 {
+  margin: 0;
+  font: 700 18px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-dialog-chain__dialog p {
+  margin: 8px 0 0;
+  font: 400 13px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-dialog-chain__dialog-actions {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.surface-side-sheet {
+  --surface-scene-bg-0: var(--m3-sys-surface, var(--md-sys-color-surface, #fef7ff));
+  --surface-scene-bg-1: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
+  --surface-accent-a: color-mix(in srgb, var(--m3-sys-primary, var(--md-sys-color-primary, #6750a4)) 18%, transparent);
+  --surface-accent-b: color-mix(in srgb, var(--m3-sys-secondary, var(--md-sys-color-secondary, #625b71)) 16%, transparent);
+  --surface-border: var(--m3-sys-outline-variant, var(--md-sys-color-outline-variant, rgba(73, 69, 79, 0.2)));
+  --surface-shadow-color: color-mix(in srgb, var(--m3-sys-shadow, #000000) 22%, transparent);
+  --surface-layout-bg: var(--m3-sys-surface-container, var(--md-sys-color-surface-container, #f3edf7));
+  --surface-grid-bg: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
+  --surface-panel-transition-ms: #{m3-motion.duration('medium2')};
+  --surface-panel-transition-easing: #{m3-motion.easing('standard')};
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 8% 0%, var(--surface-accent-a), transparent 42%),
+    radial-gradient(circle at 92% 0%, var(--surface-accent-b), transparent 44%),
+    linear-gradient(180deg, var(--surface-scene-bg-0) 0%, var(--surface-scene-bg-1) 100%);
+  color: var(--m3-sys-on-surface, var(--md-sys-color-on-surface, #1d1b20));
+}
+
+.surface-side-sheet__topbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.surface-side-sheet__topbar-content strong {
+  display: block;
+  font: 700 15px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet__topbar-content p {
+  margin: 4px 0 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+  opacity: 0.82;
+}
+
+.surface-side-sheet__body {
+  display: flex;
+  height: calc(100vh - 72px);
+  padding-left: var(--m3-navigation-rail-width, 80px);
+}
+
+@media (min-width: 1200px) {
+  .surface-side-sheet__body {
+    padding-left: var(--m3-navigation-drawer-width, 360px);
+  }
+}
+
+.surface-side-sheet__nav.m3-navigation {
+  top: 72px;
+  height: calc(100vh - 72px);
+}
+
+.surface-side-sheet__workspace {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.surface-side-sheet__topbar {
+  padding: 16px;
+}
+
+.surface-side-sheet__header-card {
+  padding: 18px;
+}
+
+.surface-side-sheet__header-card h3 {
+  margin: 0 0 8px;
+  font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet__header-card p {
+  margin: 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet__layout {
+  min-height: 440px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--surface-layout-bg);
+  box-shadow: 0 14px 28px var(--surface-shadow-color);
+}
+
+.surface-side-sheet__content-grid {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: min-content;
+  gap: 12px;
+  padding: 14px;
+  align-content: flex-start;
+  align-items: start;
+  background: var(--surface-grid-bg);
+}
+
+.surface-side-sheet__content-grid > .surface-side-sheet__grid-surface {
+  padding: 18px;
+}
+
+.surface-side-sheet__content-grid p {
+  margin: 6px 0 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet__docked-host {
+  flex: 0 0 auto;
+  min-width: 0;
+  overflow: hidden;
+  border-left: 1px solid var(--surface-border);
+  transition: width var(--surface-panel-transition-ms) var(--surface-panel-transition-easing);
+}
+
+.surface-side-sheet__sheet h3 {
+  margin: 0 0 8px;
+  font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet__sheet {
+  padding: 20px;
+}
+
+.surface-side-sheet__sheet_modal {
+  padding: 24px;
+}
+
+.surface-side-sheet__modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.surface-side-sheet__modal-close {
+  flex: 0 0 auto;
+}
+
+.surface-side-sheet__sheet p {
+  margin: 0 0 8px;
+  font: 400 13px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet__sheet .surface-side-sheet__meta {
+  margin-top: 14px;
+  font: 600 11px/1.2 'Trebuchet MS', 'Segoe UI', sans-serif;
+  letter-spacing: 0.04em;
+  opacity: 0.76;
+  text-transform: uppercase;
+}
+
+.surface-side-sheet-window {
+  --surface-scene-bg-0: var(--m3-sys-surface, var(--md-sys-color-surface, #fef7ff));
+  --surface-scene-bg-1: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
+  --surface-accent-a: color-mix(in srgb, var(--m3-sys-primary, var(--md-sys-color-primary, #6750a4)) 18%, transparent);
+  --surface-accent-b: color-mix(in srgb, var(--m3-sys-secondary, var(--md-sys-color-secondary, #625b71)) 16%, transparent);
+  --surface-shadow-color: color-mix(in srgb, var(--m3-sys-shadow, #000000) 22%, transparent);
+  --surface-layout-bg: var(--m3-sys-surface-container, var(--md-sys-color-surface-container, #f3edf7));
+  --surface-grid-bg: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 8% 0%, var(--surface-accent-a), transparent 42%),
+    radial-gradient(circle at 92% 0%, var(--surface-accent-b), transparent 44%),
+    linear-gradient(180deg, var(--surface-scene-bg-0) 0%, var(--surface-scene-bg-1) 100%);
+  color: var(--m3-sys-on-surface, var(--md-sys-color-on-surface, #1d1b20));
+}
+
+.surface-side-sheet-window__topbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.surface-side-sheet-window__topbar-content strong {
+  display: block;
+  font: 700 15px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet-window__topbar-content p {
+  margin: 4px 0 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+  opacity: 0.82;
+}
+
+.surface-side-sheet-window__body {
+  display: flex;
+  height: calc(100vh - 72px);
+  padding-left: var(--m3-navigation-rail-width, 80px);
+}
+
+@media (min-width: 1200px) {
+  .surface-side-sheet-window__body {
+    padding-left: var(--m3-navigation-drawer-width, 360px);
+  }
+}
+
+.surface-side-sheet-window__nav.m3-navigation {
+  top: 72px;
+  height: calc(100vh - 72px);
+}
+
+.surface-side-sheet-window__workspace {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.surface-side-sheet-window__topbar {
+  padding: 16px;
+}
+
+.surface-side-sheet-window__header-card {
+  padding: 18px;
+}
+
+.surface-side-sheet-window__header-card h3 {
+  margin: 0 0 8px;
+  font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet-window__header-card p {
+  margin: 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet-window__layout {
+  min-height: 440px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--surface-layout-bg);
+  box-shadow: 0 14px 28px var(--surface-shadow-color);
+}
+
+.surface-side-sheet-window__content-grid {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: min-content;
+  gap: 12px;
+  padding: 14px;
+  align-content: flex-start;
+  align-items: start;
+  background: var(--surface-grid-bg);
+}
+
+.surface-side-sheet-window__content-grid > .surface-side-sheet-window__grid-surface {
+  padding: 18px;
+}
+
+.surface-side-sheet-window__content-grid p {
+  margin: 6px 0 0;
+  font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet-window__modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.surface-side-sheet-window__sheet_sheet {
+  padding: 24px;
+}
+
+.surface-side-sheet-window__sheet_window {
+  padding: 20px;
+}
+
+.surface-side-sheet-window__modal-header h3 {
+  margin: 0;
+  font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet-window__modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.surface-side-sheet-window__modal-action {
+  flex: 0 0 auto;
+}
+
+.surface-side-sheet-window__sheet p {
+  margin: 8px 0 0;
+  font: 400 13px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+.surface-side-sheet-window__panel-content {
+  min-height: 0;
+}
+
+.surface-side-sheet-window__form {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.surface-side-sheet-window__form_window {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.surface-side-sheet-window__field {
+  display: grid;
+  gap: 6px;
+}
+
+.surface-side-sheet-window__field_wide {
+  grid-column: 1 / -1;
+}
+
+.surface-side-sheet-window__field .m3-text-field,
+.surface-side-sheet-window__field .m3-select {
+  width: 100%;
+}
+
+.surface-side-sheet-window__field_wide .m3-text-field textarea {
+  min-height: 120px;
+}
+
+.surface-side-sheet-window__form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.surface-side-sheet-window__form-actions_window {
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+}

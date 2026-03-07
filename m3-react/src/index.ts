@@ -82,6 +82,13 @@ export type {
 } from '@/components/side-sheet'
 
 export type {
+  M3SurfaceAnchor,
+  M3SurfaceMode,
+  M3SurfaceProps,
+  M3SurfaceVariant,
+} from '@/components/surface'
+
+export type {
   M3TextFieldMethods,
   M3TextFieldProps,
   M3TextFieldSupportTextProps,
@@ -149,6 +156,10 @@ export {
 export {
   M3SideSheet,
 } from '@/components/side-sheet'
+
+export {
+  M3Surface,
+} from '@/components/surface'
 
 export {
   M3Select,
