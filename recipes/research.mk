@@ -1,3 +1,5 @@
+M3_FETCH_OUT_DIR?=/tmp/m3-fetch
+
 # Example:
 #   make research-fetch url='https://m3.material.io/'
 #   make research-fetch format=json collection=ComponentsM3 document=5634981699387392
@@ -71,7 +73,7 @@ research-capture: ## [Research][docker][playwright][capture] Captures screenshot
 
 # Example:
 #   make research-capture-batch manifest=recipes/research/packs/surfaces.urls.txt out_dir=drafts/screenshots/surfaces
-#   make research-capture-batch in=drafts/experiment/urls/surfaces.txt out_dir=drafts/screenshots/custom
+#   make research-capture-batch in=drafts/explorations/20260307-2015-surface-layer/inputs/surfaces.urls.txt out_dir=drafts/screenshots/custom
 # Input format:
 #   One URL per line; empty lines and #comments are ignored.
 .PHONY: research-capture-batch
