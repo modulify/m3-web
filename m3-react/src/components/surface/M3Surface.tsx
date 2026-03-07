@@ -111,6 +111,14 @@ const getResolvedVariant = (variant: SurfaceVariant, elevation: number): Exclude
   }
 }
 
+const getVariantClassName = (variant: Exclude<SurfaceVariant, 'auto'>): string | null => {
+  if (variant === 'surface') {
+    return null
+  }
+
+  return `m3-surface_${variant.replace(/^surface-/, '')}`
+}
+
 const M3Surface: FC<M3SurfaceProps> = ({
   id,
   tag = 'section',
@@ -152,6 +160,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
   const _id = useId(id, 'm3-surface')
   const isModal = mode === 'modal'
   const resolvedVariant = getResolvedVariant(variant, elevation)
+  const variantClassName = getVariantClassName(resolvedVariant)
   const SurfaceTag = tag
 
   const resolvedSizeStyle: CSSProperties = {
@@ -206,7 +215,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
   const surfaceClassName = toClassName([className, {
     'm3-surface': true,
     'm3-surface_modal': isModal,
-    [`m3-surface_role-${resolvedVariant}`]: true,
+    [variantClassName || '']: Boolean(variantClassName),
     [`m3-surface_anchor-${anchor}`]: true,
     [`m3-surface_elevation-${elevation}`]: true,
   }])
