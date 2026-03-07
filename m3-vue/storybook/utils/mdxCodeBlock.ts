@@ -53,7 +53,7 @@ const COPY_SUCCESS_TEXT = 'Copied'
 const COPY_TEXT = 'Copy code'
 const LANGUAGE_BADGE_CLASS = 'm3-docs-code-language'
 const LANGUAGE_PREFIXES = ['language-', 'lang-']
-const PANEL_CLASS = 'm3-panel m3-panel_elevated-1'
+const PANEL_CLASS = 'm3-surface m3-surface_role-surface-container m3-surface_elevation-0'
 const NON_SPECIFIC_LANGUAGES = new Set(['plain', 'plaintext', 'text', 'txt'])
 
 const HIGHLIGHT_LANGUAGE_ALIASES: Record<string, string> = {
