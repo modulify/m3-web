@@ -1,0 +1,42 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import * as M3SideSheetStories from './M3SideSheet.stories'
+
+<Meta of={M3SideSheetStories} />
+
+# Side Sheets
+
+Side sheets extend `M3Surface` into a right-edge panel with dedicated header, scrollable content area, and optional footer actions.
+
+## Accessibility semantics
+
+- Use a clear title so the sheet can expose `aria-labelledby`.
+- Keep close affordances discoverable through the close button and, in modal mode, the scrim.
+- Reserve footer actions for final or high-signal decisions.
+
+## Stories
+
+- [Standard](?path=/story/components-m3sidesheet--standard)
+- [Docked](?path=/story/components-m3sidesheet--docked)
+
+## Code example
+
+```html
+<M3SideSheet :shown="opened" @update:shown="opened = $event">
+    <template #title>Filters</template>
+    <template #close-icon>
+        <M3Icon name="close" />
+    </template>
+
+    <p class="m-4">Choose filters and apply changes.</p>
+
+    <template #footer>
+        <div class="p-4">Footer actions</div>
+    </template>
+</M3SideSheet>
+```
+
+## Resources
+
+- [M3 Side sheets overview](https://m3.material.io/components/navigation-drawer/overview)
+- [M3 Side sheets guidelines](https://m3.material.io/components/navigation-drawer/guidelines)
+- [WAI-ARIA APG: Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)

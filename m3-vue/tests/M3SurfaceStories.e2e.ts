@@ -149,7 +149,7 @@ describe('m3-vue/surface stories e2e', () => {
     mounted = mountStory(SurfaceSideSheetMorph)
 
     await waitFor(() => {
-      expect(document.querySelector('[data-testid="surface-morph-docked-sheet"]')).not.toBeNull()
+      expect(document.querySelector('[data-testid="surface-morph-sheet"][data-panel-mode="docked"]')).not.toBeNull()
     })
 
     const root = query<HTMLElement>('[data-testid="surface-morph-root"]')
@@ -164,7 +164,7 @@ describe('m3-vue/surface stories e2e', () => {
 
     await waitFor(() => {
       expect(root.getAttribute('data-sheet-modal')).toBe('true')
-      expect(document.querySelector('[data-testid="surface-morph-modal-sheet"]')).not.toBeNull()
+      expect(document.querySelector('[data-testid="surface-morph-sheet"][data-panel-mode="modal"]')).not.toBeNull()
       expect(document.querySelector('.m3-surface__scrim')).not.toBeNull()
     })
 
@@ -181,8 +181,8 @@ describe('m3-vue/surface stories e2e', () => {
 
     await waitFor(() => {
       expect(root.getAttribute('data-sheet-modal')).toBe('false')
-      expect(document.querySelector('[data-testid="surface-morph-docked-sheet"]')).not.toBeNull()
-      expect(document.querySelector('[data-testid="surface-morph-modal-sheet"]')).toBeNull()
+      expect(document.querySelector('[data-testid="surface-morph-sheet"][data-panel-mode="docked"]')).not.toBeNull()
+      expect(document.querySelector('[data-testid="surface-morph-sheet"][data-panel-mode="modal"]')).toBeNull()
     }, 2200)
 
     await delay(340)
@@ -227,7 +227,8 @@ describe('m3-vue/surface stories e2e', () => {
       expect(document.querySelector('[data-testid="surface-card-grid"]')).toBeNull()
     }, 2200)
 
-    const expandedRect = overlayWrap.getBoundingClientRect()
+    const expandedOverlayWrap = query<HTMLElement>('[data-testid="surface-card-overlay-wrap"]')
+    const expandedRect = expandedOverlayWrap.getBoundingClientRect()
     const canvasRect = canvas.getBoundingClientRect()
     expect(expandedRect.width).toBeGreaterThan(canvasRect.width - 6)
     expect(expandedRect.height).toBeGreaterThan(canvasRect.height - 6)
@@ -254,7 +255,8 @@ describe('m3-vue/surface stories e2e', () => {
     }, 2200)
 
     const originAfter = query<HTMLElement>('[data-testid="surface-card-origin"]').getBoundingClientRect()
-    const collapsedRect = overlayWrap.getBoundingClientRect()
+    const collapsedOverlayWrap = query<HTMLElement>('[data-testid="surface-card-overlay-wrap"]')
+    const collapsedRect = collapsedOverlayWrap.getBoundingClientRect()
 
     expect(Math.abs(collapsedRect.width - originAfter.width)).toBeLessThan(12)
     expect(Math.abs(collapsedRect.height - originAfter.height)).toBeLessThan(12)
@@ -330,6 +332,10 @@ describe('m3-vue/surface stories e2e', () => {
 
       expect(amplitude).toBeGreaterThan(40)
       expect(rightDeltas.some(delta => delta > 0.2)).toBe(true)
+
+      await waitFor(() => {
+        expect(query<HTMLButtonElement>('[data-testid="surface-window-toggle-mode"]').disabled).toBe(false)
+      }, 1200)
     }
 
     await openAndSampleSheetEntry()

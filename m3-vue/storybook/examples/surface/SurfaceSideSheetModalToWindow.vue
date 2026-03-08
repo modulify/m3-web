@@ -5,7 +5,7 @@
         :data-panel-mounted="modalMounted ? 'true' : 'false'"
         data-testid="surface-window-root"
     >
-        <M3Surface
+        <M3SurfacePanel
             class="surface-side-sheet-window__topbar"
             :fill-height="false"
             :height="72"
@@ -27,7 +27,7 @@
                     {{ modalMounted ? 'Modal panel is open' : 'Show modal side sheet' }}
                 </M3Button>
             </div>
-        </M3Surface>
+        </M3SurfacePanel>
 
         <M3Navigation
             v-model:expanded="navExpanded"
@@ -79,7 +79,7 @@
 
         <div class="surface-side-sheet-window__body">
             <div class="surface-side-sheet-window__workspace">
-                <M3Surface
+                <M3SurfacePanel
                     class="surface-side-sheet-window__header-card"
                     :fill-height="false"
                     :height="120"
@@ -89,7 +89,7 @@
                 >
                     <h3>Workspace surfaces</h3>
                     <p>Background layout stays in flow while the modal panel morphs between side-sheet and window geometries.</p>
-                </M3Surface>
+                </M3SurfacePanel>
 
                 <div
                     ref="layoutRoot"
@@ -100,7 +100,7 @@
                         class="surface-side-sheet-window__content-grid"
                         data-testid="surface-window-content-grid"
                     >
-                        <M3Surface
+                        <M3SurfacePanel
                             class="surface-side-sheet-window__grid-surface"
                             :fill-height="false"
                             :height="136"
@@ -110,9 +110,9 @@
                         >
                             <strong>surface-container-lowest</strong>
                             <p>Read-heavy content block in the page flow.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
 
-                        <M3Surface
+                        <M3SurfacePanel
                             class="surface-side-sheet-window__grid-surface"
                             :fill-height="false"
                             :height="136"
@@ -122,9 +122,9 @@
                         >
                             <strong>surface-container-low</strong>
                             <p>Secondary block with mild emphasis.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
 
-                        <M3Surface
+                        <M3SurfacePanel
                             class="surface-side-sheet-window__grid-surface"
                             :fill-height="false"
                             :height="136"
@@ -134,9 +134,9 @@
                         >
                             <strong>surface-container-high</strong>
                             <p>Contextual utility content.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
 
-                        <M3Surface
+                        <M3SurfacePanel
                             class="surface-side-sheet-window__grid-surface"
                             :fill-height="false"
                             :height="136"
@@ -146,7 +146,7 @@
                         >
                             <strong>surface-dim</strong>
                             <p>Low-brightness complementary content.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
                     </main>
 
                     <M3Surface
@@ -303,7 +303,15 @@ import {
 } from '@/components/navigation'
 import { M3Select } from '@/components/select'
 import { M3TextField } from '@/components/text-field'
-import M3Surface from '@/components/surface/M3Surface.vue'
+import {
+  M3Surface,
+  M3SurfacePanel,
+} from '@/components/surface'
+import {
+  clamp,
+  raf,
+  wait,
+} from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import {
   computed,
@@ -313,6 +321,7 @@ import {
   reactive,
   ref,
 } from 'vue'
+import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
 import {
   m3MotionDurations,
   m3MotionEasings,
@@ -335,6 +344,9 @@ const PANEL_TRANSITION_MS = m3MotionDurations.medium4
 const PANEL_TRANSITION_EASING = m3MotionEasings.standard
 const SCRIM_FADE_MS = m3MotionDurations.long2
 const DIALOG_HIDE_MS = m3MotionDurations.long2
+const HIDDEN_SURFACE_DESCRIPTOR = getSurfaceStateDescriptor('hidden')
+const MODAL_SIDE_SHEET_DESCRIPTOR = getSurfaceStateDescriptor('modal_side_sheet')
+const MODAL_DIALOG_DESCRIPTOR = getSurfaceStateDescriptor('modal_dialog_window')
 
 const navExpanded = ref(false)
 const activeNavTab = ref<'inbox' | 'boards' | 'archive' | 'lab'>('inbox')
@@ -342,8 +354,8 @@ const sideSheetWidth = ref(320)
 const windowWidth = ref(720)
 
 const modalInsetRight = ref(-(sideSheetWidth.value + 12))
-const modalRadiusLeft = ref(0)
-const modalElevationBase = ref(0)
+const modalRadiusLeft = ref(HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft)
+const modalElevationBase = ref(HIDDEN_SURFACE_DESCRIPTOR.elevation)
 
 const modalMounted = ref(false)
 const modalVisible = ref(false)
@@ -383,15 +395,21 @@ const priorityOptions = [{
   value: 'high',
 }]
 
-const panelAnchor = computed(() => panelAsWindow.value ? 'center' : 'end')
+const panelAnchor = computed(() => panelAsWindow.value ? MODAL_DIALOG_DESCRIPTOR.anchor : MODAL_SIDE_SHEET_DESCRIPTOR.anchor)
 const panelWidth = computed(() => panelAsWindow.value ? windowWidth.value : sideSheetWidth.value)
 const panelInsetRight = computed(() => panelAsWindow.value ? 0 : modalInsetRight.value)
-const panelRoundingTopLeft = computed(() => panelAsWindow.value ? 28 : modalRadiusLeft.value)
-const panelRoundingBottomLeft = computed(() => panelAsWindow.value ? 28 : modalRadiusLeft.value)
-const panelRoundingTopRight = computed(() => panelAsWindow.value ? 28 : 0)
-const panelRoundingBottomRight = computed(() => panelAsWindow.value ? 28 : 0)
-const panelSurfaceRole = computed(() => panelAsWindow.value ? 'surface-container-highest' : 'surface-container-high')
-const panelElevation = computed(() => panelAsWindow.value ? Math.max(2, modalElevationBase.value) : modalElevationBase.value)
+const panelRoundingTopLeft = computed(() => panelAsWindow.value ? MODAL_DIALOG_DESCRIPTOR.rounding.topLeft : modalRadiusLeft.value)
+const panelRoundingBottomLeft = computed(() => panelAsWindow.value ? MODAL_DIALOG_DESCRIPTOR.rounding.bottomLeft : modalRadiusLeft.value)
+const panelRoundingTopRight = computed(() => panelAsWindow.value
+  ? MODAL_DIALOG_DESCRIPTOR.rounding.topRight
+  : MODAL_SIDE_SHEET_DESCRIPTOR.rounding.topRight)
+const panelRoundingBottomRight = computed(() => panelAsWindow.value
+  ? MODAL_DIALOG_DESCRIPTOR.rounding.bottomRight
+  : MODAL_SIDE_SHEET_DESCRIPTOR.rounding.bottomRight)
+const panelSurfaceRole = computed(() => panelAsWindow.value ? MODAL_DIALOG_DESCRIPTOR.variant : MODAL_SIDE_SHEET_DESCRIPTOR.variant)
+const panelElevation = computed(() => panelAsWindow.value
+  ? Math.max(MODAL_DIALOG_DESCRIPTOR.elevation, modalElevationBase.value)
+  : modalElevationBase.value)
 const panelTransitionMs = computed(() => {
   if (panelAsWindow.value && windowClosing.value) {
     return DIALOG_HIDE_MS
@@ -410,22 +428,6 @@ const panelInlineStyle = computed(() => {
     transform: 'translate(-50%, calc(-50% - 24px))',
   }
 })
-
-function wait(ms: number) {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), ms)
-  })
-}
-
-function raf() {
-  return new Promise<void>((resolve) => {
-    requestAnimationFrame(() => resolve())
-  })
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value))
-}
 
 function hiddenInsetRight() {
   return -(sideSheetWidth.value + 12)
@@ -463,8 +465,8 @@ async function openModal() {
   windowClosing.value = false
   syncDimensions()
 
-  modalRadiusLeft.value = 0
-  modalElevationBase.value = 0
+  modalRadiusLeft.value = HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft
+  modalElevationBase.value = HIDDEN_SURFACE_DESCRIPTOR.elevation
   modalInsetRight.value = hiddenInsetRight()
   modalMounted.value = true
 
@@ -477,8 +479,8 @@ async function openModal() {
   await raf()
 
   modalInsetRight.value = MODAL_INSET_END
-  modalRadiusLeft.value = 28
-  modalElevationBase.value = 1
+  modalRadiusLeft.value = MODAL_SIDE_SHEET_DESCRIPTOR.rounding.topLeft
+  modalElevationBase.value = MODAL_SIDE_SHEET_DESCRIPTOR.elevation
   await wait(PANEL_TRANSITION_MS)
   transitioning.value = false
 }
@@ -532,16 +534,16 @@ async function closeWindowModal() {
   modalMounted.value = false
 
   modalInsetRight.value = hiddenInsetRight()
-  modalRadiusLeft.value = 0
-  modalElevationBase.value = 0
+  modalRadiusLeft.value = HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft
+  modalElevationBase.value = HIDDEN_SURFACE_DESCRIPTOR.elevation
   windowClosing.value = false
   panelAsWindow.value = false
 }
 
 async function closeSideSheetModal() {
   modalInsetRight.value = hiddenInsetRight()
-  modalRadiusLeft.value = 0
-  modalElevationBase.value = 0
+  modalRadiusLeft.value = HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft
+  modalElevationBase.value = HIDDEN_SURFACE_DESCRIPTOR.elevation
   await wait(PANEL_TRANSITION_MS)
 
   modalVisible.value = false

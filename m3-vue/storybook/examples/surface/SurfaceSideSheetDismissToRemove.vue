@@ -225,6 +225,11 @@ import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 import {
+  clamp,
+  raf,
+  wait,
+} from '@modulify/m3-foundation/lib/surface/orchestration'
+import {
   M3Navigation,
   M3NavigationTab,
 } from '@/components/navigation'
@@ -271,22 +276,6 @@ const modalRole = ref<'surface-container-low' | 'surface-container-high'>('surfa
 const transitioning = ref(false)
 const dockedHost = ref<HTMLElement | null>(null)
 const layoutRoot = ref<HTMLElement | null>(null)
-
-function wait(ms: number) {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), ms)
-  })
-}
-
-function raf() {
-  return new Promise<void>((resolve) => {
-    requestAnimationFrame(() => resolve())
-  })
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value))
-}
 
 function hiddenInsetRight() {
   return -(modalWidth.value + 12)

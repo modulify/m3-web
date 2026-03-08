@@ -80,6 +80,7 @@ export {
 
 export {
   M3Surface,
+  M3SurfacePanel,
 } from '@/components/surface'
 
 export {

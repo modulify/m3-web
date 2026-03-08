@@ -4,7 +4,7 @@
         :data-card-expanded="expanded ? 'true' : 'false'"
         data-testid="surface-card-page-root"
     >
-        <M3Surface
+        <M3SurfacePanel
             class="surface-card-page__topbar"
             :fill-height="false"
             :height="72"
@@ -26,7 +26,7 @@
                     {{ expanded ? 'Return to card state' : 'Expand card to page state' }}
                 </M3Button>
             </div>
-        </M3Surface>
+        </M3SurfacePanel>
 
         <M3Navigation
             v-model:expanded="navExpanded"
@@ -78,7 +78,7 @@
 
         <div class="surface-card-page__body">
             <div class="surface-card-page__workspace">
-                <M3Surface
+                <M3SurfacePanel
                     class="surface-card-page__header-card"
                     :fill-height="false"
                     :height="120"
@@ -88,7 +88,7 @@
                 >
                     <h3>Card-to-page transition playground</h3>
                     <p>Original slot remains reserved while the morphing surface overlays the page area.</p>
-                </M3Surface>
+                </M3SurfacePanel>
 
                 <div
                     ref="canvas"
@@ -103,11 +103,54 @@
                         <div
                             ref="originSlot"
                             class="surface-card-page__origin-slot"
-                            :style="{ minHeight: `${originHeight}px` }"
+                            :class="{ 'surface-card-page__origin-slot_filled': !overlayActive }"
+                            :style="overlayActive ? { minHeight: `${originHeight}px` } : undefined"
                             data-testid="surface-card-origin"
-                        />
+                        >
+                            <div
+                                v-if="!overlayActive"
+                                class="surface-card-page__overlay-wrap surface-card-page__overlay-wrap_inline"
+                                :style="compactWrapStyle"
+                                data-testid="surface-card-overlay-wrap"
+                            >
+                                <M3SurfacePanel
+                                    :class="[
+                                        'surface-card-page__morph-surface',
+                                        expanded
+                                            ? 'surface-card-page__morph-surface_expanded'
+                                            : 'surface-card-page__morph-surface_compact',
+                                    ]"
+                                    :fill-width="true"
+                                    :fill-height="overlayActive"
+                                    :rounding="expanded ? 0 : 24"
+                                    :transition-ms="TRANSITION_MS"
+                                    :transition-timing="TRANSITION_EASING"
+                                    :variant="expanded ? 'surface' : 'surface-container-low'"
+                                    :elevation="expanded ? 0 : 1"
+                                    overflow="auto"
+                                    data-testid="surface-card-morph"
+                                >
+                                    <h3>Morph target surface</h3>
+                                    <p>
+                                        In compact mode this surface behaves like a card. In expanded mode it replaces the
+                                        page work area while keeping top bar and rail reserved.
+                                    </p>
 
-                        <M3Surface
+                                    <M3SurfacePanel
+                                        class="surface-card-page__morph-nested"
+                                        :fill-height="false"
+                                        :height="120"
+                                        :rounding="14"
+                                        :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
+                                        :elevation="expanded ? 1 : 3"
+                                    >
+                                        Nested surface demonstrates composability in both states.
+                                    </M3SurfacePanel>
+                                </M3SurfacePanel>
+                            </div>
+                        </div>
+
+                        <M3SurfacePanel
                             class="surface-card-page__grid-card"
                             :fill-height="false"
                             :height="184"
@@ -117,9 +160,9 @@
                         >
                             <strong>Static card A</strong>
                             <p>Background content remains in flow.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
 
-                        <M3Surface
+                        <M3SurfacePanel
                             class="surface-card-page__grid-card"
                             :fill-height="false"
                             :height="184"
@@ -129,16 +172,19 @@
                         >
                             <strong>Static card B</strong>
                             <p>Independent surface in the same scene.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
                     </div>
 
-                    <div class="surface-card-page__overlay">
+                    <div
+                        v-if="overlayActive"
+                        class="surface-card-page__overlay"
+                    >
                         <div
                             class="surface-card-page__overlay-wrap"
                             :style="overlayStyle"
                             data-testid="surface-card-overlay-wrap"
                         >
-                            <M3Surface
+                            <M3SurfacePanel
                                 :class="[
                                     'surface-card-page__morph-surface',
                                     expanded
@@ -146,7 +192,7 @@
                                         : 'surface-card-page__morph-surface_compact',
                                 ]"
                                 :fill-width="true"
-                                :fill-height="true"
+                                :fill-height="overlayActive"
                                 :rounding="expanded ? 0 : 24"
                                 :transition-ms="TRANSITION_MS"
                                 :transition-timing="TRANSITION_EASING"
@@ -161,7 +207,7 @@
                                     page work area while keeping top bar and rail reserved.
                                 </p>
 
-                                <M3Surface
+                                <M3SurfacePanel
                                     class="surface-card-page__morph-nested"
                                     :fill-height="false"
                                     :height="120"
@@ -170,8 +216,8 @@
                                     :elevation="expanded ? 1 : 3"
                                 >
                                     Nested surface demonstrates composability in both states.
-                                </M3Surface>
-                            </M3Surface>
+                                </M3SurfacePanel>
+                            </M3SurfacePanel>
                         </div>
                     </div>
                 </div>
@@ -188,173 +234,39 @@ import {
   M3Navigation,
   M3NavigationTab,
 } from '@/components/navigation'
-import M3Surface from '@/components/surface/M3Surface.vue'
-
 import {
-  computed,
-  nextTick,
-  onMounted,
-  ref,
-} from 'vue'
+  M3SurfacePanel,
+} from '@/components/surface'
+import { useSurfaceCardPageMorph } from '@/components/surface/orchestration/useSurfaceCardPageMorph'
+
 import {
   m3MotionDurations,
   m3MotionEasings,
 } from '@modulify/m3-foundation/lib/motion'
+import {
+  computed,
+  ref,
+} from 'vue'
 
-const expanded = ref(false)
-const busy = ref(false)
 const navExpanded = ref(false)
-const backgroundCollapsed = ref(false)
 const activeNavTab = ref<'files' | 'timeline' | 'tasks' | 'analytics'>('files')
 const TRANSITION_MS = m3MotionDurations.medium3
 const TRANSITION_EASING = m3MotionEasings.standard
 
-const canvas = ref<HTMLElement | null>(null)
-const originSlot = ref<HTMLElement | null>(null)
-const originHeight = ref(220)
-
-const motion = ref({
-  top: 16,
-  left: 16,
-  width: 320,
-  height: 220,
-})
-
-const overlayStyle = computed(() => ({
-  top: `${motion.value.top}px`,
-  left: `${motion.value.left}px`,
-  width: `${motion.value.width}px`,
-  height: `${motion.value.height}px`,
+const {
+  expanded,
+  busy,
+  backgroundCollapsed,
+  originHeight,
+  overlayStyle,
+  canvas,
+  originSlot,
+  toggleCardMode,
+} = useSurfaceCardPageMorph(TRANSITION_MS)
+const overlayActive = computed(() => busy.value || expanded.value)
+const compactWrapStyle = computed(() => ({
+  width: '100%',
 }))
-
-function wait(ms: number) {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), ms)
-  })
-}
-
-function raf() {
-  return new Promise<void>((resolve) => {
-    requestAnimationFrame(() => resolve())
-  })
-}
-
-function measureOrigin() {
-  if (!canvas.value || !originSlot.value) {
-    return null
-  }
-
-  const canvasRect = canvas.value.getBoundingClientRect()
-  const originRect = originSlot.value.getBoundingClientRect()
-
-  return {
-    top: originRect.top - canvasRect.top,
-    left: originRect.left - canvasRect.left,
-    width: originRect.width,
-    height: originRect.height,
-  }
-}
-
-function measureExpanded() {
-  if (!canvas.value) {
-    return null
-  }
-
-  const canvasRect = canvas.value.getBoundingClientRect()
-
-  return {
-    top: 0,
-    left: 0,
-    width: canvasRect.width,
-    height: canvasRect.height,
-  }
-}
-
-async function initMotion() {
-  await nextTick()
-  await raf()
-
-  const origin = measureOrigin()
-  if (!origin) {
-    return
-  }
-
-  motion.value = origin
-  originHeight.value = origin.height
-}
-
-async function expandCard() {
-  backgroundCollapsed.value = false
-
-  const origin = measureOrigin()
-  if (origin) {
-    motion.value = origin
-    originHeight.value = origin.height
-  }
-
-  expanded.value = true
-  await nextTick()
-  await raf()
-
-  const full = measureExpanded()
-  if (!full) {
-    return
-  }
-
-  motion.value = full
-  await wait(TRANSITION_MS)
-  backgroundCollapsed.value = true
-}
-
-async function collapseCard() {
-  if (backgroundCollapsed.value) {
-    backgroundCollapsed.value = false
-    await nextTick()
-    await raf()
-  }
-
-  const full = measureExpanded()
-  if (full) {
-    motion.value = full
-  }
-
-  const origin = measureOrigin()
-  if (origin) {
-    originHeight.value = origin.height
-  }
-
-  expanded.value = false
-  await nextTick()
-  await raf()
-
-  if (!origin) {
-    return
-  }
-
-  motion.value = origin
-  await wait(TRANSITION_MS)
-}
-
-async function toggleCardMode() {
-  if (busy.value) {
-    return
-  }
-
-  busy.value = true
-
-  if (expanded.value) {
-    await collapseCard()
-    busy.value = false
-    return
-  }
-
-  await expandCard()
-  busy.value = false
-}
-
-onMounted(() => {
-  initMotion()
-})
 </script>
 
 <style lang="scss" scoped>
@@ -477,6 +389,11 @@ onMounted(() => {
     background: var(--surface-origin-slot);
 }
 
+.surface-card-page__origin-slot_filled {
+    border-color: transparent;
+    background: transparent;
+}
+
 .surface-card-page__overlay {
     position: absolute;
     inset: 0;
@@ -490,6 +407,15 @@ onMounted(() => {
         left #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
         width #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
         height #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')};
+}
+
+.surface-card-page__overlay-wrap_inline {
+    position: relative;
+    transition: none;
+}
+
+.surface-card-page__overlay-wrap_inline > .surface-card-page__morph-surface {
+    box-sizing: border-box;
 }
 
 .surface-card-page__morph-surface {

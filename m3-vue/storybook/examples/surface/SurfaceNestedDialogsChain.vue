@@ -163,6 +163,10 @@ import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 import {
+  raf,
+  wait,
+} from '@modulify/m3-foundation/lib/surface/orchestration'
+import {
   M3Navigation,
   M3NavigationTab,
 } from '@/components/navigation'
@@ -228,18 +232,6 @@ const topDialogLevel = computed(() => {
 
   return -1
 })
-
-function wait(ms: number) {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), ms)
-  })
-}
-
-function raf() {
-  return new Promise<void>((resolve) => {
-    requestAnimationFrame(() => resolve())
-  })
-}
 
 function hasNextDialog(level: number) {
   return level < dialogChain.length - 1
