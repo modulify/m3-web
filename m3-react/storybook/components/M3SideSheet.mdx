@@ -22,12 +22,12 @@ This follows the Material 3 distinction between temporary supporting surfaces an
 
 ### Content anatomy
 
-`M3SideSheet` gives you dedicated slots for:
+`M3SideSheet` gives you dedicated composition slots:
 
-- `title`
-- `close-icon`
+- `M3SideSheet.Title`
+- `M3SideSheet.CloseIcon`
 - default body content
-- `footer`
+- `M3SideSheet.Footer`
 
 The header and footer stay structurally distinct from the scrollable content region, so actions and dismiss affordances remain discoverable while the body changes.
 
@@ -59,21 +59,21 @@ In modal mode, users should be able to close the sheet from the close icon and b
 
 ## Code example
 
-```html
-<M3SideSheet :shown="opened" @update:shown="opened = $event">
-  <template #title>
+```tsx
+<M3SideSheet shown={shown} onToggle={setShown}>
+  <M3SideSheet.Title>
     Filters
-  </template>
+  </M3SideSheet.Title>
 
-  <template #close-icon>
+  <M3SideSheet.CloseIcon>
     <M3Icon name="close" />
-  </template>
+  </M3SideSheet.CloseIcon>
 
-  <p class="m-4">Choose filters and apply changes.</p>
+  <p className="m-4">Choose filters and apply changes.</p>
 
-  <template #footer>
-    <div class="p-4">Footer actions</div>
-  </template>
+  <M3SideSheet.Footer>
+    <div className="p-4">Footer actions</div>
+  </M3SideSheet.Footer>
 </M3SideSheet>
 ```
 

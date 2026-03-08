@@ -7,9 +7,64 @@ import * as M3SurfaceStories from './M3Surface.stories'
 
 Use `M3SurfacePanel` for static decorative surfaces such as cards, docs wrappers, and nested surface blocks. Reserve `M3Surface` for modal behavior and richer container orchestration.
 
+## API
+
+### Surface roles
+
+This workspace separates two responsibilities that are often mixed in product code:
+
+- `M3SurfacePanel` for local, in-flow containers
+- `M3Surface` for modal positioning, scrim management, anchoring, and richer surface choreography
+
+This mirrors Material 3 guidance, where the same visual surface language is reused across cards, dialogs, side sheets, and other temporary containers, but the interaction model changes by context.
+
+### Variant and elevation model
+
+Use `variant` when the surface role is explicit. Use `auto` only when you intentionally want elevation to resolve the surface tone automatically. The orchestration stories in this package mostly choose explicit variants, because transitions between states should keep semantics stable while only geometry and modality change.
+
+### Modal behavior
+
+`M3Surface` handles:
+
+- modal teleporting
+- scrim fade
+- anchor positioning
+- rounded-corner transitions
+- size and inset transitions for morph scenarios
+
+The component does not prescribe content anatomy. Dialogs, side sheets, and custom orchestrated surfaces build that structure on top.
+
+## Story guide
+
 - [Side Sheet Docked To Modal](?path=/story/components-m3surface--side-sheet-docked-to-modal)
+  Shows how a docked layout participant becomes a modal overlay and returns to the reserved host without snapping.
 - [Card Replacing Page](?path=/story/components-m3surface--card-replacing-page)
+  Demonstrates a compact card expanding into a page-like work area while preserving reserved layout zones.
 - [Side Sheet Modal Dismiss Removes Surface](?path=/story/components-m3surface--side-sheet-modal-dismiss-removes-surface)
+  Covers the branch where modal dismissal removes the feature surface instead of restoring a docked state.
 - [Side Sheet Always Modal Toggle](?path=/story/components-m3surface--side-sheet-always-modal-toggle)
+  Keeps the same surface always modal and focuses only on repeated entry and dismissal.
 - [Side Sheet Modal To Window](?path=/story/components-m3surface--side-sheet-modal-to-window)
+  Morphs a right-edge modal sheet into a centered dialog window while keeping one modal surface vocabulary.
 - [Nested Dialogs Chain](?path=/story/components-m3surface--nested-dialogs-chain)
+  Demonstrates layered modal surfaces, topmost scrim ownership, and per-layer enter/exit motion.
+
+## Usage guidance
+
+### Prefer the narrowest abstraction
+
+Reach for `M3SurfacePanel` when the surface only needs tone, radius, elevation, and local sizing. Move to `M3Surface` only when the container becomes modal, anchored, or transition-driven.
+
+### Keep state names explicit
+
+The orchestration examples work best when you model stable states such as `docked`, `modal-sheet`, or `window`, and then derive geometry and motion from those states rather than from ad hoc booleans.
+
+### Match motion to target geometry
+
+When morphing between surfaces, animate toward a measured target rectangle or target inset set. This prevents the “overlay shrinks somewhere else, then snaps” failure mode that surface transitions are especially sensitive to.
+
+## Resources
+
+- [M3 Cards overview](https://m3.material.io/components/cards/overview)
+- [M3 Dialogs overview](https://m3.material.io/components/dialogs/overview)
+- [M3 Side sheets overview](https://m3.material.io/components/side-sheets/overview)
