@@ -67,6 +67,38 @@ The orchestration examples work best when you model stable states such as `docke
 
 When morphing between surfaces, animate toward a measured target rectangle or target inset set. This prevents the “overlay shrinks somewhere else, then snaps” failure mode that surface transitions are especially sensitive to.
 
+## Content anatomy
+
+### Dialog-like surface
+
+- headline or short title that explains the decision
+- compact supporting copy that clarifies consequences
+- primary and secondary actions grouped near the end of the reading flow
+
+### Side-sheet surface
+
+- header with title and optional affordance action
+- scrollable supporting content or form body
+- footer actions anchored at the bottom when the sheet remains open during editing
+
+The `Inspector Side Sheet` story shows this anatomy with the standard `m3-side-sheet__header`, `m3-side-sheet__content`, and `m3-side-sheet__footer` structure layered on top of `M3Surface`.
+
+## Do / don't
+
+### Do
+
+- keep supporting surfaces narrowly scoped to one nearby task
+- preserve surrounding context for side sheets and supporting panels
+- align action placement with the surface role, such as bottom-aligned footer actions for longer sheets
+- use explicit stable states when one surface can morph into another
+
+### Don’t
+
+- replace a full workflow with a side sheet if the user needs a primary destination
+- overload modal surfaces with dense navigation or unrelated secondary tools
+- let transition targets drift away from the final resting geometry
+- hide critical task instructions only inside a temporary supporting surface
+
 ## Resources
 
 - [M3 Cards overview](https://m3.material.io/components/cards/overview)

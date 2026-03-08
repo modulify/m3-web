@@ -52,36 +52,49 @@
             :elevation="2"
             variant="surface-container-high"
             overflow="auto"
-            class="surface-inspector-sheet__sheet"
+            class="m3-side-sheet surface-inspector-sheet__sheet"
             @update:shown="opened = $event"
             @dismiss="opened = false"
         >
-            <h3>Release inspector</h3>
-            <p>Use the side sheet for supporting edits that should not replace the dashboard context.</p>
+            <header class="m3-side-sheet__header">
+                <div class="m3-side-sheet__title">
+                    Release inspector
+                </div>
 
-            <div class="surface-inspector-sheet__form">
-                <M3TextField
-                    v-model:value="owner"
-                    label="Owner email"
-                    outlined
-                />
+                <div class="m3-side-sheet__affordance">
+                    <M3IconButton appearance="text" @click="opened = false">
+                        <M3Icon name="close" />
+                    </M3IconButton>
+                </div>
+            </header>
 
-                <M3Select
-                    v-model:value="priority"
-                    label="Priority"
-                    :options="priorityOptions"
-                    outlined
-                />
+            <div class="m3-side-sheet__content">
+                <div class="surface-inspector-sheet__form">
+                    <p>Use the side sheet for supporting edits that should not replace the dashboard context.</p>
 
-                <M3TextField
-                    v-model:value="notes"
-                    label="Notes"
-                    outlined
-                    multiline
-                />
+                    <M3TextField
+                        v-model:value="owner"
+                        label="Owner email"
+                        outlined
+                    />
+
+                    <M3Select
+                        v-model:value="priority"
+                        label="Priority"
+                        :options="priorityOptions"
+                        outlined
+                    />
+
+                    <M3TextField
+                        v-model:value="notes"
+                        label="Notes"
+                        outlined
+                        multiline
+                    />
+                </div>
             </div>
 
-            <div class="surface-inspector-sheet__actions">
+            <footer class="m3-side-sheet__footer surface-inspector-sheet__actions">
                 <M3Button appearance="text" @click="opened = false">
                     Dismiss
                 </M3Button>
@@ -89,13 +102,15 @@
                 <M3Button appearance="filled" @click="opened = false">
                     Save changes
                 </M3Button>
-            </div>
+            </footer>
         </M3Surface>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { M3Button } from '@/components/button'
+import { M3Icon } from '@/components/icon'
+import { M3IconButton } from '@/components/icon-button'
 import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
@@ -166,20 +181,14 @@ const priorityOptions = [{
     margin: 0 0 8px;
 }
 
-.surface-inspector-sheet__sheet {
-    padding: 20px;
-}
-
 .surface-inspector-sheet__form {
     display: grid;
     gap: 12px;
-    margin-top: 16px;
+    width: 100%;
+    padding: 0 24px 24px;
 }
 
 .surface-inspector-sheet__actions {
-    display: flex;
     justify-content: flex-end;
-    gap: 12px;
-    margin-top: 16px;
 }
 </style>
