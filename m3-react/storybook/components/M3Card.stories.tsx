@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import type { CSSProperties } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Card } from '@/components/card'
@@ -91,4 +92,27 @@ export const Portrait: Story = {
       </div>
     </M3Card>
   ),
+}
+
+export const AppearanceMatrix: Story = {
+  render: () => {
+    const row = {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '16px',
+      alignItems: 'flex-start',
+    } satisfies CSSProperties
+
+    return (
+      <div style={row}>
+        {(['filled', 'elevated', 'outlined'] as const).map(appearance => (
+          <M3Card key={appearance} appearance={appearance} style={{ width: '220px' }}>
+            <M3Card.Heading>{appearance}</M3Card.Heading>
+            <M3Card.Subheading>Card emphasis</M3Card.Subheading>
+            Supporting text for the current card style.
+          </M3Card>
+        ))}
+      </div>
+    )
+  },
 }

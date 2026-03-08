@@ -112,3 +112,43 @@ export const NavigationRail: Story = {
     appearance: 'rail',
   },
 }
+
+export const ModalNavigationDrawer: Story = {
+  render: (args) => {
+    const [expanded, setExpanded] = useState(true)
+
+    return (
+      <M3Navigation
+        expanded={expanded}
+        onToggle={setExpanded}
+        {...args}
+      >
+        <M3Navigation.Top>
+          <M3IconButton aria-label="Close menu" onClick={() => setExpanded(false)}>
+            <M3Icon name="menu" />
+          </M3IconButton>
+        </M3Navigation.Top>
+
+        <M3Navigation.Header>
+          Mail
+        </M3Navigation.Header>
+
+        <M3NavigationTab label="Inbox" active>
+          <M3Icon name="inbox" />
+        </M3NavigationTab>
+
+        <M3NavigationTab label="Drafts">
+          <M3Icon name="mail" />
+        </M3NavigationTab>
+
+        <M3NavigationTab label="Trash">
+          <M3Icon name="delete" />
+        </M3NavigationTab>
+      </M3Navigation>
+    )
+  },
+
+  args: {
+    appearance: 'drawer',
+  },
+}
