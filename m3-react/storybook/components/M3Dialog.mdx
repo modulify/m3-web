@@ -1,9 +1,34 @@
 import { Unstyled } from '@storybook/addon-docs/blocks'
+
 import DialogConfirmation from '../examples/dialog/DialogConfirmation'
 
 # Dialogs
 
 Dialogs communicate important information and block the underlying interface until the user responds.
+
+## API
+
+### When to use
+
+Use `M3Dialog` for short, interruptive decisions that need an explicit user choice before the page can continue. In Material 3 terms this maps best to confirmation, acknowledgement, and blocking task flows rather than to long-form editing or navigation.
+
+### Structure
+
+`M3Dialog` keeps the same content anatomy across React and Vue:
+
+- `M3Dialog.Icon` for a leading visual cue
+- `M3Dialog.Header` for the title area
+- default content for supporting text or compact form controls
+- `M3Dialog.Footer` for high-signal actions
+
+The component now renders on top of `M3Surface`, so dialog presentation and motion are aligned with the same modal surface vocabulary used by side sheets and orchestration stories.
+
+### Behavior in this implementation
+
+- Non-fullscreen dialogs open as centered modal surfaces with a scrim.
+- Fullscreen dialogs remove the scrim and expand to the viewport.
+- The surface enters with a short fade plus a slight upward settle, matching the modal choreography used in the nested-surface stories.
+- Dialog content stays mounted briefly during exit so the leave animation can finish before unmount.
 
 ## Accessibility semantics
 
@@ -11,12 +36,67 @@ Dialogs communicate important information and block the underlying interface unt
 - Provide `aria-modal="true"` for modal flows.
 - Connect title and description with `aria-labelledby` and `aria-describedby`.
 - Keep focus inside the dialog while it is opened.
+- Keep action labels explicit and outcome-oriented.
 
 <Unstyled>
   <div className="mb-3">
     <DialogConfirmation />
   </div>
 </Unstyled>
+
+## Usage guidance
+
+### Content density
+
+Prefer one short title, one supporting message, and one clear primary action. If the flow starts needing dense forms, multiple scrolling regions, or navigation-like exploration, a side sheet or dedicated page usually communicates the state change more clearly.
+
+### Actions
+
+- Use the footer for the final decision point.
+- Keep destructive actions explicit in both label and placement.
+- Prefer a dismissive secondary action such as `Cancel` over relying on scrim click alone.
+
+### Fullscreen mode
+
+Use `fullscreen` only when the task needs the full viewport or when compact dialog proportions would constrain readability. This mode still keeps dialog semantics, but visually behaves closer to a temporary task surface than to a small confirmation window.
+
+## Code example
+
+```tsx
+const dialogTitleId = 'dialog-confirmation-title'
+const dialogDescriptionId = 'dialog-confirmation-description'
+
+<M3Dialog
+  opened={opened}
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby={dialogTitleId}
+  aria-describedby={dialogDescriptionId}
+  onToggle={setOpened}
+>
+  <M3Dialog.Icon>
+    <M3Icon name="delete" appearance="outlined" />
+  </M3Dialog.Icon>
+
+  <M3Dialog.Header>
+    <h3 id={dialogTitleId}>Permanently delete?</h3>
+  </M3Dialog.Header>
+
+  <p id={dialogDescriptionId}>
+    Deleting the selected messages will also remove them from all synced devices.
+  </p>
+
+  <M3Dialog.Footer>
+    <M3Button appearance="text" onClick={() => setOpened(false)}>
+      Cancel
+    </M3Button>
+
+    <M3Button appearance="tonal" onClick={() => setOpened(false)}>
+      Delete
+    </M3Button>
+  </M3Dialog.Footer>
+</M3Dialog>
+```
 
 ## Resources
 
