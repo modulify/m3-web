@@ -4,7 +4,7 @@
         :data-sheet-modal="sideSheetModal ? 'true' : 'false'"
         data-testid="surface-morph-root"
     >
-        <M3Surface
+        <M3SurfacePanel
             class="surface-side-sheet__topbar"
             :fill-height="false"
             :height="72"
@@ -26,7 +26,7 @@
                     {{ sideSheetModal ? 'Switch to docked sheet' : 'Switch to modal sheet' }}
                 </M3Button>
             </div>
-        </M3Surface>
+        </M3SurfacePanel>
 
         <M3Navigation
             v-model:expanded="navExpanded"
@@ -78,7 +78,7 @@
 
         <div class="surface-side-sheet__body">
             <div class="surface-side-sheet__workspace">
-                <M3Surface
+                <M3SurfacePanel
                     class="surface-side-sheet__header-card"
                     :fill-height="false"
                     :height="120"
@@ -88,7 +88,7 @@
                 >
                     <h3>Workspace surfaces</h3>
                     <p>Static blocks keep flow while side-sheet changes modality.</p>
-                </M3Surface>
+                </M3SurfacePanel>
 
                 <div
                     ref="layoutRoot"
@@ -99,7 +99,7 @@
                         class="surface-side-sheet__content-grid"
                         data-testid="surface-morph-content-grid"
                     >
-                        <M3Surface
+                        <M3SurfacePanel
                             class="surface-side-sheet__grid-surface"
                             :fill-height="false"
                             :height="136"
@@ -109,9 +109,9 @@
                         >
                             <strong>surface-container-lowest</strong>
                             <p>Read-heavy content block in the page flow.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
 
-                        <M3Surface
+                        <M3SurfacePanel
                             class="surface-side-sheet__grid-surface"
                             :fill-height="false"
                             :height="136"
@@ -121,9 +121,9 @@
                         >
                             <strong>surface-container-low</strong>
                             <p>Secondary block with mild emphasis.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
 
-                        <M3Surface
+                        <M3SurfacePanel
                             class="surface-side-sheet__grid-surface"
                             :fill-height="false"
                             :height="136"
@@ -133,9 +133,9 @@
                         >
                             <strong>surface-container-high</strong>
                             <p>Contextual utility content.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
 
-                        <M3Surface
+                        <M3SurfacePanel
                             class="surface-side-sheet__grid-surface"
                             :fill-height="false"
                             :height="136"
@@ -145,81 +145,68 @@
                         >
                             <strong>surface-dim</strong>
                             <p>Low-brightness complementary content.</p>
-                        </M3Surface>
+                        </M3SurfacePanel>
                     </main>
 
                     <div
                         ref="dockedHost"
                         class="surface-side-sheet__docked-host"
-                        :style="{ width: `${sideSheetDockedWidth}px` }"
+                        :style="dockedHostStyle"
                         data-testid="surface-morph-docked-host"
                     >
-                        <M3Surface
-                            v-if="!sideSheetModal"
-                            class="surface-side-sheet__sheet"
+                        <M3SurfacePanel
+                            v-if="dockedPanelShown"
+                            class="surface-side-sheet__sheet surface-side-sheet__sheet_docked"
                             :fill-width="true"
                             :fill-height="true"
-                            :rounding="0"
+                            overflow="auto"
                             variant="surface-container-low"
                             :elevation="0"
-                            overflow="auto"
-                            data-testid="surface-morph-docked-sheet"
+                            :style="dockedPanelStyle"
+                            data-testid="surface-morph-sheet"
+                            data-panel-mode="docked"
                         >
                             <h3>Docked side sheet</h3>
-                            <p>Coplanar layout participant with fixed width per layout region.</p>
+                            <p>Coplanar layout participant with adaptive CSS width inside the layout host.</p>
                             <p>Main content remains interactive.</p>
                             <p class="surface-side-sheet__meta">
-                                Fixed width: {{ sideSheetWidth }}px
+                                Adaptive width: {{ sideSheetWidth }}px
                             </p>
-                        </M3Surface>
+                        </M3SurfacePanel>
                     </div>
 
                     <M3Surface
                         v-if="modalShown"
                         class="surface-side-sheet__sheet surface-side-sheet__sheet_modal"
                         mode="modal"
-                        :shown="modalVisible"
-                        anchor="end"
-                        :fill-width="false"
-                        :fill-height="false"
-                        :width="modalWidth"
-                        :inset-top="modalInsetTop"
-                        :inset-right="modalInsetRight"
-                        :inset-bottom="modalInsetBottom"
-                        :rounding-top-left="modalRadiusLeft"
-                        :rounding-bottom-left="modalRadiusLeft"
-                        :rounding-top-right="0"
-                        :rounding-bottom-right="0"
-                        :transition-ms="modalTransitionMs"
+                        v-bind="modalPanelProps"
                         :transition-timing="PANEL_TRANSITION_EASING"
-                        :z-index="520"
-                        :variant="modalRole"
-                        :elevation="modalElevation"
-                        overflow="auto"
-                        data-testid="surface-morph-modal-sheet"
+                        data-testid="surface-morph-sheet"
+                        data-panel-mode="modal"
                         @dismiss="closeModalFromPanel"
                     >
-                        <div class="surface-side-sheet__modal-header">
-                            <h3>Modal side sheet</h3>
+                        <template v-if="sideSheetModal">
+                            <div class="surface-side-sheet__modal-header">
+                                <h3>Modal side sheet</h3>
 
-                            <M3IconButton
-                                v-if="sideSheetModal"
-                                class="surface-side-sheet__modal-close"
-                                appearance="standard"
-                                aria-label="Close modal side sheet"
-                                :disabled="transitioning"
-                                data-testid="surface-morph-close"
-                                @click="closeModalFromPanel"
-                            >
-                                <M3Icon name="close" />
-                            </M3IconButton>
-                        </div>
+                                <M3IconButton
+                                    class="surface-side-sheet__modal-close"
+                                    appearance="standard"
+                                    aria-label="Close modal side sheet"
+                                    :disabled="transitioning"
+                                    data-testid="surface-morph-close"
+                                    @click="closeModalFromPanel"
+                                >
+                                    <M3Icon name="close" />
+                                </M3IconButton>
+                            </div>
 
-                        <p>Layer rebind: docked layer to modal layer.</p>
-                        <p>Anchored to end/right edge with full-height modal surface.</p>
-                        <p class="surface-side-sheet__meta">
-                            Fixed width: {{ modalWidth }}px
-                        </p>
+                            <p>Layer rebind: docked layer to modal layer.</p>
+                            <p>Stable modal state stays in overlay, while docked state remains layout-driven.</p>
+                            <p class="surface-side-sheet__meta">
+                                Measured transition width: {{ modalPanelProps.width }}px
+                            </p>
+                        </template>
                     </M3Surface>
                 </div>
             </div>
@@ -235,247 +222,33 @@ import {
   M3Navigation,
   M3NavigationTab,
 } from '@/components/navigation'
-import M3Surface from '@/components/surface/M3Surface.vue'
-
 import {
-  onBeforeUnmount,
-  onMounted,
-  nextTick,
-  ref,
-} from 'vue'
-import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
+  M3Surface,
+  M3SurfacePanel,
+} from '@/components/surface'
+import { useSurfaceSideSheetMorph } from '@/components/surface/orchestration/useSurfaceSideSheetMorph'
 
-const SIDE_SHEET_WIDTH_MIN = 280
-const SIDE_SHEET_WIDTH_MAX = 360
-const SIDE_SHEET_WIDTH_RATIO = 0.32
-const SIDE_SHEET_WIDTH_STEP = 4
+import { m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+import { ref } from 'vue'
 
-const MODAL_INSET_TOP = 0
-const MODAL_INSET_BOTTOM = 0
-const MODAL_INSET_END = 0
-const PANEL_TRANSITION_MS = m3MotionDurations.medium2
-const PANEL_VERTICAL_EXPAND_MS = 120
 const PANEL_TRANSITION_EASING = m3MotionEasings.standard
 
 const navExpanded = ref(false)
 const activeNavTab = ref<'inbox' | 'boards' | 'archive' | 'lab'>('inbox')
-const sideSheetModal = ref(false)
-const sideSheetWidth = ref(320)
-const sideSheetDockedWidth = ref(sideSheetWidth.value)
-const modalShown = ref(false)
-const modalVisible = ref(false)
-const modalWidth = ref(sideSheetWidth.value)
-const modalInsetTop = ref(MODAL_INSET_TOP)
-const modalInsetRight = ref(-(sideSheetWidth.value + 12))
-const modalInsetBottom = ref(MODAL_INSET_BOTTOM)
-const modalRadiusLeft = ref(0)
-const modalElevation = ref(0)
-const modalRole = ref<'surface-container-low' | 'surface-container-high'>('surface-container-low')
-const modalTransitionMs = ref(PANEL_TRANSITION_MS)
-const transitioning = ref(false)
-const dockedHost = ref<HTMLElement | null>(null)
-const layoutRoot = ref<HTMLElement | null>(null)
-
-function wait(ms: number) {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), ms)
-  })
-}
-
-function raf() {
-  return new Promise<void>((resolve) => {
-    requestAnimationFrame(() => resolve())
-  })
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value))
-}
-
-function hiddenInsetRight() {
-  return -(modalWidth.value + 12)
-}
-
-function resolveSheetWidthFromLayout() {
-  const layoutWidth = Math.round(layoutRoot.value?.getBoundingClientRect().width ?? window.innerWidth)
-  const estimated = Math.round((layoutWidth * SIDE_SHEET_WIDTH_RATIO) / SIDE_SHEET_WIDTH_STEP) * SIDE_SHEET_WIDTH_STEP
-
-  return clamp(estimated, SIDE_SHEET_WIDTH_MIN, SIDE_SHEET_WIDTH_MAX)
-}
-
-function syncFixedWidth() {
-  const nextWidth = resolveSheetWidthFromLayout()
-
-  sideSheetWidth.value = nextWidth
-  modalWidth.value = nextWidth
-
-  if (!sideSheetModal.value) {
-    sideSheetDockedWidth.value = nextWidth
-    modalInsetRight.value = hiddenInsetRight()
-  }
-}
-
-function measureDockedGeometry() {
-  const host = dockedHost.value
-  if (!host) {
-    return null
-  }
-
-  const rect = host.getBoundingClientRect()
-
-  return {
-    width: Math.round(rect.width),
-    insetTop: Math.round(rect.top),
-    insetRight: Math.round(window.innerWidth - rect.right),
-    insetBottom: Math.round(window.innerHeight - rect.bottom),
-  }
-}
-
-function setModalGeometryFromDocked() {
-  const docked = measureDockedGeometry()
-
-  modalWidth.value = docked?.width ?? sideSheetWidth.value
-  modalInsetTop.value = docked?.insetTop ?? MODAL_INSET_TOP
-  modalInsetRight.value = docked?.insetRight ?? MODAL_INSET_END
-  modalInsetBottom.value = docked?.insetBottom ?? MODAL_INSET_BOTTOM
-}
-
-function setModalGeometryTarget() {
-  modalWidth.value = sideSheetWidth.value
-  modalInsetTop.value = MODAL_INSET_TOP
-  modalInsetRight.value = MODAL_INSET_END
-  modalInsetBottom.value = MODAL_INSET_BOTTOM
-}
-
-async function expandModalToViewportHeight() {
-  // Delay vertical expansion so the morph starts with an X-axis transition.
-  modalTransitionMs.value = PANEL_VERTICAL_EXPAND_MS
-  await nextTick()
-  await raf()
-  setModalGeometryTarget()
-  await wait(PANEL_VERTICAL_EXPAND_MS)
-  modalTransitionMs.value = PANEL_TRANSITION_MS
-}
-
-function resolveDockedTargetGeometry() {
-  const layout = layoutRoot.value?.getBoundingClientRect()
-  if (!layout) {
-    return {
-      width: sideSheetWidth.value,
-      insetTop: MODAL_INSET_TOP,
-      insetRight: MODAL_INSET_END,
-      insetBottom: MODAL_INSET_BOTTOM,
-    }
-  }
-
-  return {
-    width: sideSheetWidth.value,
-    insetTop: Math.round(layout.top),
-    insetRight: Math.round(window.innerWidth - layout.right),
-    insetBottom: Math.round(window.innerHeight - layout.bottom),
-  }
-}
-
-async function switchDockedToModal() {
-  syncFixedWidth()
-  setModalGeometryFromDocked()
-
-  modalTransitionMs.value = PANEL_TRANSITION_MS
-  modalRadiusLeft.value = 0
-  modalElevation.value = 0
-  modalRole.value = 'surface-container-low'
-  modalVisible.value = false
-  modalShown.value = true
-
-  await nextTick()
-  await raf()
-
-  modalVisible.value = true
-  await nextTick()
-  await raf()
-
-  sideSheetModal.value = true
-  sideSheetDockedWidth.value = 0
-  modalWidth.value = sideSheetWidth.value
-  modalInsetRight.value = MODAL_INSET_END
-  modalRadiusLeft.value = 28
-  modalElevation.value = 1
-  modalRole.value = 'surface-container-high'
-  await wait(PANEL_TRANSITION_MS)
-
-  await expandModalToViewportHeight()
-}
-
-async function switchModalToDocked() {
-  syncFixedWidth()
-  const dockedTarget = resolveDockedTargetGeometry()
-
-  modalTransitionMs.value = PANEL_TRANSITION_MS
-  modalElevation.value = 0
-  modalRole.value = 'surface-container-low'
-  modalRadiusLeft.value = 0
-
-  // Start returning flow slot first, then morph modal panel into that geometry.
-  sideSheetDockedWidth.value = sideSheetWidth.value
-  modalWidth.value = dockedTarget.width
-  modalInsetTop.value = dockedTarget.insetTop
-  modalInsetRight.value = dockedTarget.insetRight
-  modalInsetBottom.value = dockedTarget.insetBottom
-
-  await wait(PANEL_TRANSITION_MS)
-
-  // Swap to docked instance at the end position without extra hide animation.
-  sideSheetModal.value = false
-  modalVisible.value = false
-  modalShown.value = false
-
-  modalInsetTop.value = MODAL_INSET_TOP
-  modalInsetRight.value = hiddenInsetRight()
-  modalInsetBottom.value = MODAL_INSET_BOTTOM
-}
-
-async function toggleSideSheetMode() {
-  if (transitioning.value) {
-    return
-  }
-
-  transitioning.value = true
-
-  if (!sideSheetModal.value) {
-    await switchDockedToModal()
-    transitioning.value = false
-    return
-  }
-
-  await switchModalToDocked()
-  transitioning.value = false
-}
-
-async function closeModalFromPanel() {
-  if (!sideSheetModal.value || transitioning.value) {
-    return
-  }
-
-  transitioning.value = true
-  await switchModalToDocked()
-  transitioning.value = false
-}
-
-function onResize() {
-  syncFixedWidth()
-}
-
-onMounted(() => {
-  syncFixedWidth()
-  window.addEventListener('resize', onResize, { passive: true })
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', onResize)
-})
+const {
+  sideSheetModal,
+  sideSheetWidth,
+  modalShown,
+  dockedPanelShown,
+  transitioning,
+  dockedHost,
+  layoutRoot,
+  dockedHostStyle,
+  dockedPanelStyle,
+  modalPanelProps,
+  toggleSideSheetMode,
+  closeModalFromPanel,
+} = useSurfaceSideSheetMorph()
 </script>
 
 <style lang="scss" scoped>
@@ -596,16 +369,24 @@ onBeforeUnmount(() => {
 .surface-side-sheet__docked-host {
     flex: 0 0 auto;
     min-width: 0;
+    display: flex;
     overflow: hidden;
     border-left: 1px solid var(--surface-border);
     transition: width var(--surface-panel-transition-ms) var(--surface-panel-transition-easing);
 }
 
+.surface-side-sheet__sheet_docked {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.surface-side-sheet__sheet h3,
 :global(.surface-side-sheet__sheet h3) {
     margin: 0 0 8px;
     font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
+.surface-side-sheet__sheet,
 :global(.surface-side-sheet__sheet) {
     padding: 20px;
 }
@@ -625,11 +406,13 @@ onBeforeUnmount(() => {
     flex: 0 0 auto;
 }
 
+.surface-side-sheet__sheet p,
 :global(.surface-side-sheet__sheet p) {
     margin: 0 0 8px;
     font: 400 13px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
+.surface-side-sheet__sheet .surface-side-sheet__meta,
 :global(.surface-side-sheet__sheet .surface-side-sheet__meta) {
     margin-top: 14px;
     font: 600 11px/1.2 'Trebuchet MS', 'Segoe UI', sans-serif;

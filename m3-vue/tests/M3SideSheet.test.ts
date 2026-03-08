@@ -40,6 +40,31 @@ describe('m3-vue/side-sheet', () => {
     expect(document.getElementById(labelId)?.textContent?.trim()).toBe('Panel title')
   })
 
+  test('keeps title in header and footer outside scroll content', async () => {
+    render(M3SideSheet, {
+      props: {
+        shown: true,
+      },
+      slots: {
+        title: 'Panel title',
+        default: 'Panel content',
+        footer: 'Footer actions',
+      },
+    })
+
+    await nextTick()
+
+    const title = screen.getByText('Panel title')
+    const content = screen.getByText('Panel content')
+    const footer = screen.getByText('Footer actions')
+
+    expect(title.closest('.m3-side-sheet__header')).not.toBeNull()
+    expect(title.closest('.m3-side-sheet__content')).toBeNull()
+    expect(content.closest('.m3-side-sheet__content')).not.toBeNull()
+    expect(footer.closest('.m3-side-sheet__footer')).not.toBeNull()
+    expect(footer.closest('.m3-side-sheet__content')).toBeNull()
+  })
+
   test('emits close request on scrim click when not docked', async () => {
     const view = render(M3SideSheet, {
       props: {
@@ -53,7 +78,7 @@ describe('m3-vue/side-sheet', () => {
 
     await nextTick()
 
-    const scrim = document.body.querySelector('.m3-scrim') as HTMLElement
+    const scrim = document.body.querySelector('.m3-surface__scrim') as HTMLElement
 
     await fireEvent.click(scrim)
 
