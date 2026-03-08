@@ -117,6 +117,11 @@ html.m3-theme-dark .surface-card-page {
   background: var(--surface-origin-slot);
 }
 
+.surface-card-page__origin-slot_filled {
+  border-color: transparent;
+  background: transparent;
+}
+
 .surface-card-page__overlay {
   position: absolute;
   inset: 0;
@@ -130,6 +135,15 @@ html.m3-theme-dark .surface-card-page {
     left #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
     width #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
     height #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')};
+}
+
+.surface-card-page__overlay-wrap_inline {
+  position: relative;
+  transition: none;
+}
+
+.surface-card-page__overlay-wrap_inline > .surface-card-page__morph-surface {
+  box-sizing: border-box;
 }
 
 .surface-card-page__morph-surface {
@@ -396,9 +410,15 @@ html.m3-theme-dark .surface-card-page {
 .surface-side-sheet__docked-host {
   flex: 0 0 auto;
   min-width: 0;
+  display: flex;
   overflow: hidden;
   border-left: 1px solid var(--surface-border);
   transition: width var(--surface-panel-transition-ms) var(--surface-panel-transition-easing);
+}
+
+.surface-side-sheet__sheet_docked {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .surface-side-sheet__sheet h3 {

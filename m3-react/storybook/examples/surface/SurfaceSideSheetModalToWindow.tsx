@@ -13,8 +13,18 @@ import {
   M3NavigationTab,
 } from '@/components/navigation'
 import { M3Select } from '@/components/select'
-import { M3Surface } from '@/components/surface'
+import {
+  M3Surface,
+  M3SurfacePanel,
+} from '@/components/surface'
+import { useStateRef } from '@/components/surface/orchestration/useStateRef'
+import {
+  clamp,
+  raf,
+  wait,
+} from '@modulify/m3-foundation/lib/surface/orchestration'
 import { M3TextField } from '@/components/text-field'
+import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
 import {
   m3MotionDurations,
   m3MotionEasings,
@@ -26,13 +36,6 @@ import {
 } from 'react'
 
 import { toClassName } from '@/utils/styling'
-
-import {
-  clamp,
-  raf,
-  useStateRef,
-  wait,
-} from './utils'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360
@@ -51,6 +54,9 @@ const PANEL_TRANSITION_MS = m3MotionDurations.medium4
 const PANEL_TRANSITION_EASING = m3MotionEasings.standard
 const SCRIM_FADE_MS = m3MotionDurations.long2
 const DIALOG_HIDE_MS = m3MotionDurations.long2
+const HIDDEN_SURFACE_DESCRIPTOR = getSurfaceStateDescriptor('hidden')
+const MODAL_SIDE_SHEET_DESCRIPTOR = getSurfaceStateDescriptor('modal_side_sheet')
+const MODAL_DIALOG_DESCRIPTOR = getSurfaceStateDescriptor('modal_dialog_window')
 
 type NavTab = 'inbox' | 'boards' | 'archive' | 'lab'
 type Priority = 'low' | 'normal' | 'high'
@@ -89,8 +95,8 @@ const SurfaceSideSheetModalToWindow: FC = () => {
   const [windowWidth, setWindowWidth] = useStateRef(720)
 
   const [modalInsetRight, setModalInsetRight] = useStateRef(-(sideSheetWidthRef.current + 12))
-  const [modalRadiusLeft, setModalRadiusLeft] = useStateRef(0)
-  const [modalElevationBase, setModalElevationBase] = useStateRef(0)
+  const [modalRadiusLeft, setModalRadiusLeft] = useStateRef(HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft)
+  const [modalElevationBase, setModalElevationBase] = useStateRef(HIDDEN_SURFACE_DESCRIPTOR.elevation)
 
   const [modalMounted, setModalMounted, modalMountedRef] = useStateRef(false)
   const [modalVisible, setModalVisible] = useStateRef(false)
@@ -101,15 +107,21 @@ const SurfaceSideSheetModalToWindow: FC = () => {
 
   const layoutRoot = useRef<HTMLDivElement | null>(null)
 
-  const panelAnchor = panelAsWindow ? 'center' : 'end'
+  const panelAnchor = panelAsWindow ? MODAL_DIALOG_DESCRIPTOR.anchor : MODAL_SIDE_SHEET_DESCRIPTOR.anchor
   const panelWidth = panelAsWindow ? windowWidth : sideSheetWidth
   const panelInsetRight = panelAsWindow ? 0 : modalInsetRight
-  const panelRoundingTopLeft = panelAsWindow ? 28 : modalRadiusLeft
-  const panelRoundingBottomLeft = panelAsWindow ? 28 : modalRadiusLeft
-  const panelRoundingTopRight = panelAsWindow ? 28 : 0
-  const panelRoundingBottomRight = panelAsWindow ? 28 : 0
-  const panelSurfaceRole = panelAsWindow ? 'surface-container-highest' : 'surface-container-high'
-  const panelElevation = panelAsWindow ? Math.max(2, modalElevationBase) : modalElevationBase
+  const panelRoundingTopLeft = panelAsWindow ? MODAL_DIALOG_DESCRIPTOR.rounding.topLeft : modalRadiusLeft
+  const panelRoundingBottomLeft = panelAsWindow ? MODAL_DIALOG_DESCRIPTOR.rounding.bottomLeft : modalRadiusLeft
+  const panelRoundingTopRight = panelAsWindow
+    ? MODAL_DIALOG_DESCRIPTOR.rounding.topRight
+    : MODAL_SIDE_SHEET_DESCRIPTOR.rounding.topRight
+  const panelRoundingBottomRight = panelAsWindow
+    ? MODAL_DIALOG_DESCRIPTOR.rounding.bottomRight
+    : MODAL_SIDE_SHEET_DESCRIPTOR.rounding.bottomRight
+  const panelSurfaceRole = panelAsWindow ? MODAL_DIALOG_DESCRIPTOR.variant : MODAL_SIDE_SHEET_DESCRIPTOR.variant
+  const panelElevation = panelAsWindow
+    ? Math.max(MODAL_DIALOG_DESCRIPTOR.elevation, modalElevationBase)
+    : modalElevationBase
   const panelTransitionMs = panelAsWindow && windowClosing
     ? DIALOG_HIDE_MS
     : PANEL_TRANSITION_MS
@@ -156,8 +168,8 @@ const SurfaceSideSheetModalToWindow: FC = () => {
     setWindowClosing(false)
     syncDimensions()
 
-    setModalRadiusLeft(0)
-    setModalElevationBase(0)
+    setModalRadiusLeft(HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft)
+    setModalElevationBase(HIDDEN_SURFACE_DESCRIPTOR.elevation)
     setModalInsetRight(hiddenInsetRight(sideSheetWidthRef.current))
     setModalMounted(true)
 
@@ -167,8 +179,8 @@ const SurfaceSideSheetModalToWindow: FC = () => {
     await raf()
 
     setModalInsetRight(MODAL_INSET_END)
-    setModalRadiusLeft(28)
-    setModalElevationBase(1)
+    setModalRadiusLeft(MODAL_SIDE_SHEET_DESCRIPTOR.rounding.topLeft)
+    setModalElevationBase(MODAL_SIDE_SHEET_DESCRIPTOR.elevation)
     await wait(PANEL_TRANSITION_MS)
     setTransitioning(false)
   }
@@ -201,16 +213,16 @@ const SurfaceSideSheetModalToWindow: FC = () => {
     setModalMounted(false)
 
     setModalInsetRight(hiddenInsetRight(sideSheetWidthRef.current))
-    setModalRadiusLeft(0)
-    setModalElevationBase(0)
+    setModalRadiusLeft(HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft)
+    setModalElevationBase(HIDDEN_SURFACE_DESCRIPTOR.elevation)
     setWindowClosing(false)
     setPanelAsWindow(false)
   }
 
   const closeSideSheetModal = async () => {
     setModalInsetRight(hiddenInsetRight(sideSheetWidthRef.current))
-    setModalRadiusLeft(0)
-    setModalElevationBase(0)
+    setModalRadiusLeft(HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft)
+    setModalElevationBase(HIDDEN_SURFACE_DESCRIPTOR.elevation)
     await wait(PANEL_TRANSITION_MS)
 
     setModalVisible(false)
@@ -259,7 +271,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
       data-panel-mounted={modalMounted ? 'true' : 'false'}
       data-testid="surface-window-root"
     >
-      <M3Surface
+      <M3SurfacePanel
         className="surface-side-sheet-window__topbar"
         fillHeight={false}
         height={72}
@@ -281,7 +293,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
             {modalMounted ? 'Modal panel is open' : 'Show modal side sheet'}
           </M3Button>
         </div>
-      </M3Surface>
+      </M3SurfacePanel>
 
       <M3Navigation
         expanded={navExpanded}
@@ -346,7 +358,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
 
       <div className="surface-side-sheet-window__body">
         <div className="surface-side-sheet-window__workspace">
-          <M3Surface
+          <M3SurfacePanel
             className="surface-side-sheet-window__header-card"
             fillHeight={false}
             height={120}
@@ -356,7 +368,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
           >
             <h3>Workspace surfaces</h3>
             <p>Background layout stays in flow while the modal panel morphs between side-sheet and window geometries.</p>
-          </M3Surface>
+          </M3SurfacePanel>
 
           <div
             ref={layoutRoot}
@@ -367,7 +379,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
               className="surface-side-sheet-window__content-grid"
               data-testid="surface-window-content-grid"
             >
-              <M3Surface
+              <M3SurfacePanel
                 className="surface-side-sheet-window__grid-surface"
                 fillHeight={false}
                 height={136}
@@ -377,9 +389,9 @@ const SurfaceSideSheetModalToWindow: FC = () => {
               >
                 <strong>surface-container-lowest</strong>
                 <p>Read-heavy content block in the page flow.</p>
-              </M3Surface>
+              </M3SurfacePanel>
 
-              <M3Surface
+              <M3SurfacePanel
                 className="surface-side-sheet-window__grid-surface"
                 fillHeight={false}
                 height={136}
@@ -389,9 +401,9 @@ const SurfaceSideSheetModalToWindow: FC = () => {
               >
                 <strong>surface-container-low</strong>
                 <p>Secondary block with mild emphasis.</p>
-              </M3Surface>
+              </M3SurfacePanel>
 
-              <M3Surface
+              <M3SurfacePanel
                 className="surface-side-sheet-window__grid-surface"
                 fillHeight={false}
                 height={136}
@@ -401,9 +413,9 @@ const SurfaceSideSheetModalToWindow: FC = () => {
               >
                 <strong>surface-container-high</strong>
                 <p>Contextual utility content.</p>
-              </M3Surface>
+              </M3SurfacePanel>
 
-              <M3Surface
+              <M3SurfacePanel
                 className="surface-side-sheet-window__grid-surface"
                 fillHeight={false}
                 height={136}
@@ -413,7 +425,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
               >
                 <strong>surface-dim</strong>
                 <p>Low-brightness complementary content.</p>
-              </M3Surface>
+              </M3SurfacePanel>
             </main>
 
             {modalMounted ? (
