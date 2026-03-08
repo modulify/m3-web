@@ -8,6 +8,12 @@ import {
   M3NavigationTab,
 } from '@/components/navigation'
 import { M3Surface } from '@/components/surface'
+import { useStateRef } from '@/components/surface/orchestration/useStateRef'
+import {
+  clamp,
+  raf,
+  wait,
+} from '@modulify/m3-foundation/lib/surface/orchestration'
 import {
   m3MotionDurations,
   m3MotionEasings,
@@ -17,13 +23,6 @@ import {
   useEffect,
   useRef,
 } from 'react'
-
-import {
-  clamp,
-  raf,
-  useStateRef,
-  wait,
-} from './utils'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360

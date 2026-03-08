@@ -12,16 +12,15 @@ import {
 } from '@/components/navigation'
 import { M3Surface } from '@/components/surface'
 import {
+  raf,
+  wait,
+} from '@modulify/m3-foundation/lib/surface/orchestration'
+import {
   m3MotionDurations,
   m3MotionEasings,
 } from '@modulify/m3-foundation/lib/motion'
+import { useStateRef } from '@/components/surface/orchestration/useStateRef'
 import { toClassName } from '@/utils/styling'
-
-import {
-  raf,
-  useStateRef,
-  wait,
-} from './utils'
 
 const DIALOG_TRANSITION_MS = m3MotionDurations.medium2
 const DIALOG_TRANSITION_EASING = m3MotionEasings.standard

@@ -84,6 +84,8 @@ export type {
 export type {
   M3SurfaceAnchor,
   M3SurfaceMode,
+  M3SurfacePanelProps,
+  M3SurfacePanelVariant,
   M3SurfaceProps,
   M3SurfaceVariant,
 } from '@/components/surface'
@@ -158,6 +160,7 @@ export {
 } from '@/components/side-sheet'
 
 export {
+  M3SurfacePanel,
   M3Surface,
 } from '@/components/surface'
 

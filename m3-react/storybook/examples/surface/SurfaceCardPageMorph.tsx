@@ -1,5 +1,4 @@
 import type {
-  CSSProperties,
   FC,
 } from 'react'
 
@@ -10,174 +9,75 @@ import {
   M3Navigation,
   M3NavigationTab,
 } from '@/components/navigation'
-import { M3Surface } from '@/components/surface'
+import { M3SurfacePanel } from '@/components/surface'
+import { useSurfaceCardPageMorph } from '@/components/surface/orchestration/useSurfaceCardPageMorph'
+import { useStateRef } from '@/components/surface/orchestration/useStateRef'
 import {
   m3MotionDurations,
   m3MotionEasings,
 } from '@modulify/m3-foundation/lib/motion'
 
-import {
-  useEffect,
-  useRef,
-} from 'react'
-
 import { toClassName } from '@/utils/styling'
-
-import {
-  raf,
-  useStateRef,
-  wait,
-} from './utils'
 
 const TRANSITION_MS = m3MotionDurations.medium3
 const TRANSITION_EASING = m3MotionEasings.standard
 
 type NavTab = 'files' | 'timeline' | 'tasks' | 'analytics'
 
-type Motion = {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-}
-
 const SurfaceCardPageMorph: FC = () => {
-  const [expanded, setExpanded, expandedRef] = useStateRef(false)
-  const [busy, setBusy, busyRef] = useStateRef(false)
   const [navExpanded, setNavExpanded] = useStateRef(false)
-  const [backgroundCollapsed, setBackgroundCollapsed] = useStateRef(false)
   const [activeNavTab, setActiveNavTab] = useStateRef<NavTab>('files')
-  const [originHeight, setOriginHeight] = useStateRef(220)
+  const {
+    expanded,
+    busy,
+    backgroundCollapsed,
+    originHeight,
+    overlayStyle,
+    canvasRef: canvas,
+    originSlotRef: originSlot,
+    toggleCardMode,
+  } = useSurfaceCardPageMorph(TRANSITION_MS)
+  const overlayActive = busy || expanded
+  const compactWrapStyle = {
+    width: '100%',
+  } as const
 
-  const [motion, setMotion] = useStateRef<Motion>({
-    top: 16,
-    left: 16,
-    width: 320,
-    height: 220,
-  })
+  const morphSurfaceNode = (
+    <M3SurfacePanel
+      className={toClassName([
+        'surface-card-page__morph-surface',
+        expanded
+          ? 'surface-card-page__morph-surface_expanded'
+          : 'surface-card-page__morph-surface_compact',
+      ])}
+      fillWidth={true}
+      fillHeight={overlayActive}
+      rounding={expanded ? 0 : 24}
+      transitionMs={TRANSITION_MS}
+      transitionTiming={TRANSITION_EASING}
+      variant={expanded ? 'surface' : 'surface-container-low'}
+      elevation={expanded ? 0 : 1}
+      overflow="auto"
+      data-testid="surface-card-morph"
+    >
+      <h3>Morph target surface</h3>
+      <p>
+        In compact mode this surface behaves like a card. In expanded mode it replaces the
+        page work area while keeping top bar and rail reserved.
+      </p>
 
-  const canvas = useRef<HTMLDivElement | null>(null)
-  const originSlot = useRef<HTMLDivElement | null>(null)
-
-  const overlayStyle: CSSProperties = {
-    top: `${motion.top}px`,
-    left: `${motion.left}px`,
-    width: `${motion.width}px`,
-    height: `${motion.height}px`,
-  }
-
-  const measureOrigin = (): Motion | null => {
-    if (!canvas.current || !originSlot.current) {
-      return null
-    }
-
-    const canvasRect = canvas.current.getBoundingClientRect()
-    const originRect = originSlot.current.getBoundingClientRect()
-
-    return {
-      top: originRect.top - canvasRect.top,
-      left: originRect.left - canvasRect.left,
-      width: originRect.width,
-      height: originRect.height,
-    }
-  }
-
-  const measureExpanded = (): Motion | null => {
-    if (!canvas.current) {
-      return null
-    }
-
-    const canvasRect = canvas.current.getBoundingClientRect()
-
-    return {
-      top: 0,
-      left: 0,
-      width: canvasRect.width,
-      height: canvasRect.height,
-    }
-  }
-
-  const initMotion = async () => {
-    await raf()
-
-    const origin = measureOrigin()
-    if (!origin) {
-      return
-    }
-
-    setMotion(origin)
-    setOriginHeight(origin.height)
-  }
-
-  const expandCard = async () => {
-    setBackgroundCollapsed(false)
-
-    const origin = measureOrigin()
-    if (origin) {
-      setMotion(origin)
-      setOriginHeight(origin.height)
-    }
-
-    setExpanded(true)
-    await raf()
-
-    const full = measureExpanded()
-    if (!full) {
-      return
-    }
-
-    setMotion(full)
-    await wait(TRANSITION_MS)
-    setBackgroundCollapsed(true)
-  }
-
-  const collapseCard = async () => {
-    if (backgroundCollapsed) {
-      setBackgroundCollapsed(false)
-      await raf()
-    }
-
-    const full = measureExpanded()
-    if (full) {
-      setMotion(full)
-    }
-
-    const origin = measureOrigin()
-    if (origin) {
-      setOriginHeight(origin.height)
-    }
-
-    setExpanded(false)
-    await raf()
-
-    if (!origin) {
-      return
-    }
-
-    setMotion(origin)
-    await wait(TRANSITION_MS)
-  }
-
-  const toggleCardMode = async () => {
-    if (busyRef.current) {
-      return
-    }
-
-    setBusy(true)
-
-    if (expandedRef.current) {
-      await collapseCard()
-      setBusy(false)
-      return
-    }
-
-    await expandCard()
-    setBusy(false)
-  }
-
-  useEffect(() => {
-    void initMotion()
-  }, [])
+      <M3SurfacePanel
+        className="surface-card-page__morph-nested"
+        fillHeight={false}
+        height={120}
+        rounding={14}
+        variant={expanded ? 'surface-container-low' : 'surface-container-high'}
+        elevation={expanded ? 1 : 3}
+      >
+        Nested surface demonstrates composability in both states.
+      </M3SurfacePanel>
+    </M3SurfacePanel>
+  )
 
   return (
     <div
@@ -185,7 +85,7 @@ const SurfaceCardPageMorph: FC = () => {
       data-card-expanded={expanded ? 'true' : 'false'}
       data-testid="surface-card-page-root"
     >
-      <M3Surface
+      <M3SurfacePanel
         className="surface-card-page__topbar"
         fillHeight={false}
         height={72}
@@ -207,7 +107,7 @@ const SurfaceCardPageMorph: FC = () => {
             {expanded ? 'Return to card state' : 'Expand card to page state'}
           </M3Button>
         </div>
-      </M3Surface>
+      </M3SurfacePanel>
 
       <M3Navigation
         expanded={navExpanded}
@@ -272,7 +172,7 @@ const SurfaceCardPageMorph: FC = () => {
 
       <div className="surface-card-page__body">
         <div className="surface-card-page__workspace">
-          <M3Surface
+          <M3SurfacePanel
             className="surface-card-page__header-card"
             fillHeight={false}
             height={120}
@@ -282,7 +182,7 @@ const SurfaceCardPageMorph: FC = () => {
           >
             <h3>Card-to-page transition playground</h3>
             <p>Original slot remains reserved while the morphing surface overlays the page area.</p>
-          </M3Surface>
+          </M3SurfacePanel>
 
           <div
             ref={canvas}
@@ -296,12 +196,27 @@ const SurfaceCardPageMorph: FC = () => {
               >
                 <div
                   ref={originSlot}
-                  className="surface-card-page__origin-slot"
-                  style={{ minHeight: `${originHeight}px` }}
+                  className={toClassName([
+                    'surface-card-page__origin-slot',
+                    {
+                      'surface-card-page__origin-slot_filled': !overlayActive,
+                    },
+                  ])}
+                  style={overlayActive ? { minHeight: `${originHeight}px` } : undefined}
                   data-testid="surface-card-origin"
-                />
+                >
+                  {!overlayActive ? (
+                    <div
+                      className="surface-card-page__overlay-wrap surface-card-page__overlay-wrap_inline"
+                      style={compactWrapStyle}
+                      data-testid="surface-card-overlay-wrap"
+                    >
+                      {morphSurfaceNode}
+                    </div>
+                  ) : null}
+                </div>
 
-                <M3Surface
+                <M3SurfacePanel
                   className="surface-card-page__grid-card"
                   fillHeight={false}
                   height={184}
@@ -311,9 +226,9 @@ const SurfaceCardPageMorph: FC = () => {
                 >
                   <strong>Static card A</strong>
                   <p>Background content remains in flow.</p>
-                </M3Surface>
+                </M3SurfacePanel>
 
-                <M3Surface
+                <M3SurfacePanel
                   className="surface-card-page__grid-card"
                   fillHeight={false}
                   height={184}
@@ -323,52 +238,21 @@ const SurfaceCardPageMorph: FC = () => {
                 >
                   <strong>Static card B</strong>
                   <p>Independent surface in the same scene.</p>
-                </M3Surface>
+                </M3SurfacePanel>
               </div>
             ) : null}
 
-            <div className="surface-card-page__overlay">
-              <div
-                className="surface-card-page__overlay-wrap"
-                style={overlayStyle}
-                data-testid="surface-card-overlay-wrap"
-              >
-                <M3Surface
-                  className={toClassName([
-                    'surface-card-page__morph-surface',
-                    expanded
-                      ? 'surface-card-page__morph-surface_expanded'
-                      : 'surface-card-page__morph-surface_compact',
-                  ])}
-                  fillWidth={true}
-                  fillHeight={true}
-                  rounding={expanded ? 0 : 24}
-                  transitionMs={TRANSITION_MS}
-                  transitionTiming={TRANSITION_EASING}
-                  variant={expanded ? 'surface' : 'surface-container-low'}
-                  elevation={expanded ? 0 : 1}
-                  overflow="auto"
-                  data-testid="surface-card-morph"
+            {overlayActive ? (
+              <div className="surface-card-page__overlay">
+                <div
+                  className="surface-card-page__overlay-wrap"
+                  style={overlayStyle}
+                  data-testid="surface-card-overlay-wrap"
                 >
-                  <h3>Morph target surface</h3>
-                  <p>
-                    In compact mode this surface behaves like a card. In expanded mode it replaces the
-                    page work area while keeping top bar and rail reserved.
-                  </p>
-
-                  <M3Surface
-                    className="surface-card-page__morph-nested"
-                    fillHeight={false}
-                    height={120}
-                    rounding={14}
-                    variant={expanded ? 'surface-container-low' : 'surface-container-high'}
-                    elevation={expanded ? 1 : 3}
-                  >
-                    Nested surface demonstrates composability in both states.
-                  </M3Surface>
-                </M3Surface>
+                  {morphSurfaceNode}
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
         </div>
       </div>
