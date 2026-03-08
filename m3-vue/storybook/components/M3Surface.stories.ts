@@ -6,11 +6,13 @@ import type {
 import M3Surface from '@/components/surface/M3Surface.vue'
 
 import SurfaceCardPageMorph from '../examples/surface/SurfaceCardPageMorph.vue'
+import SurfaceInspectorSheet from '../examples/surface/SurfaceInspectorSheet.vue'
 import SurfaceNestedDialogsChain from '../examples/surface/SurfaceNestedDialogsChain.vue'
 import SurfaceSideSheetAlwaysModal from '../examples/surface/SurfaceSideSheetAlwaysModal.vue'
 import SurfaceSideSheetDismissToRemove from '../examples/surface/SurfaceSideSheetDismissToRemove.vue'
 import SurfaceSideSheetModalToWindow from '../examples/surface/SurfaceSideSheetModalToWindow.vue'
 import SurfaceSideSheetMorph from '../examples/surface/SurfaceSideSheetMorph.vue'
+import SurfaceWorkspaceDialog from '../examples/surface/SurfaceWorkspaceDialog.vue'
 
 const meta = {
   title: 'Components/M3Surface',
@@ -93,6 +95,30 @@ export const NestedDialogsChain: Story = {
 
     template: `
         <SurfaceNestedDialogsChain />
+    `,
+  }),
+}
+
+export const WorkspaceModalDialog: Story = {
+  render: () => ({
+    components: {
+      SurfaceWorkspaceDialog,
+    },
+
+    template: `
+        <SurfaceWorkspaceDialog />
+    `,
+  }),
+}
+
+export const InspectorSideSheet: Story = {
+  render: () => ({
+    components: {
+      SurfaceInspectorSheet,
+    },
+
+    template: `
+        <SurfaceInspectorSheet />
     `,
   }),
 }

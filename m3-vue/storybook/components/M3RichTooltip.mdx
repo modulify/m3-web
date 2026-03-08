@@ -1,7 +1,7 @@
-import { Unstyled } from '@storybook/addon-docs/blocks'
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import * as M3RichTooltipStories from './M3RichTooltip.stories'
 
-import Inline from './Inline'
-import DeleteTooltip from '../examples/rich-tooltip/DeleteTooltip.vue'
+<Meta of={M3RichTooltipStories} />
 
 # Rich tooltip
 
@@ -31,14 +31,17 @@ The tooltip should remain attached to its trigger context and disappear when the
 - Keep tooltip text concise and task-relevant.
 - Avoid using tooltips as the only way to convey critical information.
 
-<Unstyled>
-  <div
-    className="m3-surface m3-surface_container m3-surface_elevation-0 my-4"
-    style={{ maxWidth: '360px', padding: '32px', borderRadius: '16px', color: 'var(--m3-sys-on-surface)' }}
-  >
-    <Inline is={DeleteTooltip} />
-  </div>
-</Unstyled>
+## Story guide
+
+- [Destructive Action](?path=/story/components-m3richtooltip--destructive-action)
+- [Bulk Selection](?path=/story/components-m3richtooltip--bulk-selection)
+- [Shortcut Hint](?path=/story/components-m3richtooltip--shortcut-hint)
+
+## Demo
+
+<Canvas of={M3RichTooltipStories.DestructiveAction} />
+<Canvas of={M3RichTooltipStories.BulkSelection} />
+<Canvas of={M3RichTooltipStories.ShortcutHint} />
 
 ## Usage guidance
 
