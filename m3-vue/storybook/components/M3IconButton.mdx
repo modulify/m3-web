@@ -8,9 +8,23 @@ import { M3IconButton } from '@/components/icon-button'
 
 <Meta of={M3IconButtonStories} />
 
-# M3IconButton
+# Icon buttons
 
-Icon buttons help people take minor actions with one tap
+Icon buttons surface compact, frequent actions without introducing the visual weight of a full text button. They work best for toolbar actions, trailing row actions, and repeated local controls.
+
+## API
+
+### When to use
+
+Use `M3IconButton` for secondary or utility actions where the icon metaphor is well established. If the action is high-stakes or not obvious from the icon alone, a text button is usually clearer.
+
+### Appearances
+
+Material 3 distinguishes icon buttons by fill and emphasis. This implementation covers `standard`, `filled`, `tonal`, and `outlined`, which map well to common local-action hierarchies.
+
+### Toggleable state
+
+When `toggleable` is enabled, the button should represent an on/off state such as favorite, pin, mute, or bookmark. In that mode, use selection styling together with `aria-pressed`.
 
 ## Accessibility semantics
 
@@ -37,14 +51,42 @@ Icon buttons help people take minor actions with one tap
         'aria-label': 'Toggle favorite',
         'aria-pressed': selected.value ? 'true' : 'false',
         onClick: () => selected.value = !selected.value,
-      }, icon)
+      }, icon),
     ]
   },
 })} />
+
+## Story guide
+
+- [Standard](?path=/story/components-m3iconbutton--standard)
+- [Toggleable](?path=/story/components-m3iconbutton--toggleable)
+
+## Usage guidance
+
+### Keep hit targets generous
+
+Even when the visual icon is small, the interactive target should remain comfortable for pointer and touch use. Material 3 icon buttons depend on this spacing to feel intentional rather than fiddly.
+
+### Use toggles only for persistent state
+
+If the action simply opens a menu or triggers a one-off command, do not model it as selected. Reserve toggle state for something the user can inspect later.
+
+## Code example
+
+```html
+<M3IconButton
+  appearance="tonal"
+  :toggleable="true"
+  :selected="selected"
+  aria-label="Toggle favorite"
+  :aria-pressed="selected"
+>
+  <M3Icon name="favorite" />
+</M3IconButton>
+```
 
 ## Resources
 
 - [M3 Icon Buttons overview](https://m3.material.io/components/icon-buttons/overview)
 - [M3 Icon Buttons guidelines](https://m3.material.io/components/icon-buttons/guidelines)
-- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
 - [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)

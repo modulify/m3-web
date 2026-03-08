@@ -5,7 +5,25 @@ import DeleteTooltip from '../examples/rich-tooltip/DeleteTooltip.vue'
 
 # Rich tooltip
 
-Rich tooltips provide contextual, supplementary information near a trigger element.
+Rich tooltips provide contextual, supplementary information near a trigger element. Compared with plain tooltips, they support a slightly denser content payload while still staying lightweight and non-blocking.
+
+## API
+
+### When to use
+
+Use a rich tooltip for brief supporting information, shortcuts, or action consequences that help the user decide without forcing them into a dialog. If the content becomes critical or requires interaction-heavy confirmation, move to a larger surface.
+
+### Content limits
+
+Rich tooltips should stay short, contextual, and secondary:
+
+- one clear heading or intent
+- one compact supporting explanation
+- optional lightweight action or shortcut hint
+
+### Behavior
+
+The tooltip should remain attached to its trigger context and disappear when the user leaves that context. It should not become the only place where essential task information lives.
 
 ## Accessibility semantics
 
@@ -21,6 +39,16 @@ Rich tooltips provide contextual, supplementary information near a trigger eleme
     <Inline is={DeleteTooltip} />
   </div>
 </Unstyled>
+
+## Usage guidance
+
+### Avoid hidden requirements
+
+If the user must know the message to complete the task safely, do not hide it behind a tooltip. Surface it directly in the layout.
+
+### Keep interaction lightweight
+
+Rich tooltips can contain more than plain text, but they should still feel like supplementary context, not a mini dialog.
 
 ## Resources
 

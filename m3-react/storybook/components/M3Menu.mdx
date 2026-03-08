@@ -1,0 +1,52 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import * as M3MenuStories from './M3Menu.stories'
+
+<Meta of={M3MenuStories} />
+
+# Menus
+
+Menus present a short list of actions or choices anchored to a trigger. Material 3 menus are lightweight, contextual, and best for options that belong to the current place in the interface.
+
+## API
+
+### When to use
+
+Use `M3Menu` for contextual actions, quick choices, and anchored command lists. If the content becomes long, descriptive, or form-like, prefer a side sheet or dialog.
+
+### Anchoring
+
+Menus should open from a clearly related trigger and preserve that relationship visually. The current implementation uses an explicit `target` element to keep positioning tied to the invoking control.
+
+### Selection
+
+Selected rows can communicate the current choice inside the menu, but the menu itself should still remain compact and easy to scan.
+
+## Accessibility semantics
+
+- Connect the trigger and popup with menu-button semantics.
+- Keep item labels concise and action-oriented.
+- Return focus to the trigger when the menu closes.
+
+## Story guide
+
+- [Standard](?path=/story/components-m3menu--standard)
+
+## Demo
+
+<Canvas of={M3MenuStories.Standard} />
+
+## Usage guidance
+
+### Keep menus short
+
+If users need to scroll, compare dense descriptions, or understand complex consequences, the control has probably outgrown the menu pattern.
+
+### Prefer clear verbs
+
+Menu items work best when each row starts with a distinct action or state label. Repetitive prefixes make scanning slower.
+
+## Resources
+
+- [M3 Menus overview](https://m3.material.io/components/menus/overview)
+- [M3 Menus guidelines](https://m3.material.io/components/menus/guidelines)
+- [WAI-ARIA APG: Menu Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/)

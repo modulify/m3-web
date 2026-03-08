@@ -7,36 +7,49 @@ import * as M3SwitchStories from './M3Switch.stories'
 
 # Switch
 
-<Unstyled>
-  Switches toggle the selection of an item on or off
+Switches communicate an immediate on/off state. They are best for settings and independent toggles where users expect the state to change as soon as they interact.
 
-  * Use switches (not radio buttons) if the items in a list can be independently controlled
-  * Switches are the best way to let users adjust settings
-  * Make sure the switch’s selection (on or off) is visible at a glance
-</Unstyled>
+## API
+
+### When to use
+
+Use `M3Switch` for binary system or preference settings such as Wi-Fi, notifications, or sync. If the choice needs confirmation or belongs to a form submitted later, a checkbox may communicate intent more clearly.
+
+### Immediate behavior
+
+Material 3 switches imply direct state change. The control should reflect the new state right away and the surrounding UI should treat it as active unless the flow explicitly communicates pending sync or save.
 
 ## Accessibility semantics
 
-<Unstyled>
-  * Keep a visible label next to each switch control.
-  * Expose checked state via `role="switch"` and `aria-checked`.
-  * Use switches for immediate on/off state changes, not for multi-choice selections.
-</Unstyled>
+- Keep a visible label next to each switch control.
+- Expose checked state via `role="switch"` and `aria-checked`.
+- Use switches for immediate on/off state changes, not for multi-choice selections.
 
 ### Demo
 
 <Unstyled>
-  <div className="m3-panel m3-panel_elevated-1 my-4" style={{maxWidth: '360px'}}>
+  <div className="m3-panel m3-panel_elevated-1 my-4" style={{ maxWidth: '360px' }}>
     <SwitchExample label="Wi-Fi" className="mb-4" />
     <SwitchExample label="Bluetooth" />
   </div>
 </Unstyled>
 
+## Story guide
+
+- [Standard Switch](?path=/story/components-m3switch--standard-switch)
+
+## Usage guidance
+
+### Write labels as current setting names
+
+Prefer labels like "Wi-Fi" or "Auto-update" over imperative wording like "Enable Wi-Fi." The state of the switch already communicates on/off.
+
+### Avoid switches for irreversible or risky actions
+
+If toggling the control can delete data or trigger destructive side effects, use a safer pattern with clearer confirmation.
+
 ## Resources
 
-<Unstyled>
-  * [Guidelines](https://m3.material.io/components/switch/guidelines)
-  * [M3 Switch overview](https://m3.material.io/components/switch/overview)
-  * [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
-  * [WAI-ARIA APG: Switch Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/switch/)
-</Unstyled>
+- [M3 Switch overview](https://m3.material.io/components/switch/overview)
+- [M3 Switch guidelines](https://m3.material.io/components/switch/guidelines)
+- [WAI-ARIA APG: Switch Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/switch/)

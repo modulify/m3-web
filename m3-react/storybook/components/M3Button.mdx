@@ -8,7 +8,25 @@ import * as M3ButtonStories from './M3Button.stories'
 
 # Buttons
 
-Common buttons prompt most actions in a UI
+Buttons communicate available actions and establish hierarchy on a surface. Material 3 distinguishes buttons primarily by emphasis, not by feature set.
+
+## API
+
+### When to use
+
+Use `M3Button` for explicit actions such as save, submit, share, or continue. Prefer buttons over links when the result changes UI state or triggers an in-app operation.
+
+### Appearances
+
+- `filled` for the primary action in a region
+- `elevated` when the action should stand out on low-emphasis surfaces
+- `tonal` for prominent but secondary emphasis
+- `outlined` for lower-emphasis alternatives
+- `text` for lightweight supporting actions
+
+### Icons and labels
+
+Leading icons help scanning when the metaphor is widely understood. Keep the text label explicit even when an icon is present, so the action remains readable without relying on symbol recognition alone.
 
 ## Accessibility semantics
 
@@ -34,12 +52,27 @@ Common buttons prompt most actions in a UI
   </p>
 </Unstyled>
 
+## Story guide
+
+- [With Text Only](?path=/story/components-m3button--with-text-only)
+- [With Leading Icon](?path=/story/components-m3button--with-leading-icon)
+
+## Usage guidance
+
+### Keep hierarchy local
+
+Each region should usually have one highest-emphasis action. If everything is filled, users lose the sense of priority that Material 3 buttons are designed to communicate.
+
+### Disable carefully
+
+Use `disabled` only when the action is genuinely unavailable. If the action is available but risky, keep it enabled and explain the consequence instead of hiding the path forward.
+
 ## Code example
 
 ```tsx
 export const EditButton = () => (
-  <M3Button appearance={'tonal'}>
-    <M3Icon name={'edit'} /> Edit
+  <M3Button appearance="tonal">
+    <M3Icon name="edit" /> Edit
   </M3Button>
 )
 ```

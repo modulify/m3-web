@@ -5,7 +5,21 @@ import * as M3NavigationStories from './M3Navigation.stories'
 
 # Navigation
 
-Navigation components help users move between top-level destinations.
+Navigation components help users move between top-level destinations. Material 3 splits navigation patterns by available space and permanence, not only by visual style.
+
+## API
+
+### When to use
+
+Use `M3Navigation` for app-level destinations that users may revisit repeatedly during the session. Keep these destinations stable and semantically distinct from local page tabs or in-content filters.
+
+### Navigation forms
+
+- navigation drawer for broad destination sets and more descriptive labels
+- navigation rail for medium and large layouts where a vertical persistent control fits the shell
+- navigation bar for compact layouts and a small number of top-level destinations
+
+The current stories focus on drawer and rail, which are the forms implemented in this workspace today.
 
 ## Accessibility semantics
 
@@ -13,11 +27,24 @@ Navigation components help users move between top-level destinations.
 - Keep destination labels concise and unique.
 - Expose active destination state consistently in routed integrations.
 
+## Story guide
+
+- [Navigation Drawer](?path=/story/components-m3navigation--navigation-drawer)
+- [Navigation Rail](?path=/story/components-m3navigation--navigation-rail)
+
+## Usage guidance
+
+### Keep destination sets small and stable
+
+Top-level navigation should not behave like a task-specific filter group. If items appear and disappear unpredictably, users lose the mental map that navigation is supposed to provide.
+
+### Match pattern to layout
+
+Use drawer or rail based on screen width, information density, and shell persistence. Do not switch patterns arbitrarily if the content model itself has not changed.
+
 ## Resources
 
 - [M3 Navigation bar overview](https://m3.material.io/components/navigation-bar/overview)
 - [M3 Navigation rail overview](https://m3.material.io/components/navigation-rail/overview)
 - [M3 Navigation drawer overview](https://m3.material.io/components/navigation-drawer/overview)
-- [Storybook: NavigationDrawer](?path=/story/components-m3navigation--navigation-drawer)
-- [Storybook: NavigationRail](?path=/story/components-m3navigation--navigation-rail)
 - [WAI-ARIA APG: Landmark Regions](https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/)
