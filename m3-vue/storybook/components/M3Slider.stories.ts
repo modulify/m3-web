@@ -82,3 +82,21 @@ export const Range: Story = {
     type: 'range',
   },
 }
+
+export const DiscreteSingle: Story = {
+  args: {
+    type: 'single',
+    step: 10,
+    ariaHandle: {
+      label: 'Volume',
+    },
+    ariaHandleMax: {},
+  },
+}
+
+export const DisabledRange: Story = {
+  args: {
+    type: 'range',
+    disabled: true,
+  },
+}

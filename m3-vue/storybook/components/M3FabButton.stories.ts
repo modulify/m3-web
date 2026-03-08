@@ -81,3 +81,72 @@ export const Extended: Story = {
     `,
   }),
 }
+
+export const VariantMatrix: Story = {
+  // eslint-disable-next-line max-lines-per-function
+  render: () => ({
+    components: {
+      M3FabButton,
+      M3Icon,
+    },
+
+    setup () {
+      return {
+        variants,
+      }
+    },
+
+    template: `
+        <div style="display: grid; gap: 16px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+                <M3FabButton
+                    v-for="variant in variants"
+                    :key="'icon-' + variant"
+                    :variant="variant"
+                    :aria-label="variant"
+                >
+                    <M3Icon name="edit" />
+                </M3FabButton>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+                <M3FabButton
+                    v-for="variant in variants"
+                    :key="'text-' + variant"
+                    :variant="variant"
+                >
+                    <M3Icon name="edit" /> New task
+                </M3FabButton>
+            </div>
+        </div>
+    `,
+  }),
+}
+
+export const SizeMatrix: Story = {
+  render: () => ({
+    components: {
+      M3FabButton,
+      M3Icon,
+    },
+
+    setup () {
+      return {
+        sizes,
+      }
+    },
+
+    template: `
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+            <M3FabButton
+                v-for="size in sizes"
+                :key="size"
+                :size="size"
+                :aria-label="size"
+            >
+                <M3Icon name="edit" />
+            </M3FabButton>
+        </div>
+    `,
+  }),
+}

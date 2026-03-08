@@ -124,3 +124,19 @@ export const WithIcons: Story = {
 
   render: (args) => <M3SelectWithIconsStory {...args} />,
 }
+
+export const Outlined: Story = {
+  args: {
+    label: 'Choose',
+    outlined: true,
+    placeholder: 'Select an option',
+  },
+}
+
+export const Invalid: Story = {
+  args: {
+    label: 'Choose',
+    invalid: true,
+    placeholder: 'Required',
+  },
+}

@@ -130,3 +130,19 @@ export const WithIcons: Story = {
     `,
   }),
 }
+
+export const Outlined: Story = {
+  args: {
+    label: 'Choose',
+    outlined: true,
+    placeholder: 'Select an option',
+  },
+}
+
+export const Invalid: Story = {
+  args: {
+    label: 'Choose',
+    invalid: true,
+    placeholder: 'Required',
+  },
+}

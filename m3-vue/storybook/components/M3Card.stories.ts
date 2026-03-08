@@ -132,3 +132,39 @@ export const Portrait: Story = {
     `,
   }),
 }
+
+export const AppearanceMatrix: Story = {
+  // eslint-disable-next-line max-lines-per-function
+  render: () => ({
+    components: {
+      M3Card,
+    },
+
+    setup () {
+      return {
+        appearances: ['filled', 'elevated', 'outlined'],
+      }
+    },
+
+    template: `
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start;">
+            <M3Card
+                v-for="appearance in appearances"
+                :key="appearance"
+                :appearance="appearance"
+                style="width: 220px;"
+            >
+                <template #heading>
+                    {{ appearance }}
+                </template>
+
+                <template #subheading>
+                    Card emphasis
+                </template>
+
+                Supporting text for the current card style.
+            </M3Card>
+        </div>
+    `,
+  }),
+}

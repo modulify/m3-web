@@ -135,3 +135,60 @@ export const NavigationRail: Story = {
     appearance: 'rail',
   },
 }
+
+export const ModalNavigationDrawer: Story = {
+  // eslint-disable-next-line max-lines-per-function
+  render: (args: unknown) => ({
+    name: 'M3ModalNavigationDrawerStory',
+
+    components: {
+      M3Icon,
+      M3IconButton,
+      M3Navigation,
+      M3NavigationTab,
+    },
+
+    setup () {
+      return {
+        args,
+        expanded: ref(true),
+      }
+    },
+
+    template: `
+        <M3Navigation
+            v-model:expanded="expanded"
+            v-bind="args"
+        >
+            <template #top>
+                <M3IconButton
+                    aria-label="Close menu"
+                    @click="expanded = false"
+                >
+                    <M3Icon name="menu" />
+                </M3IconButton>
+            </template>
+
+            <template #header>
+                Mail
+            </template>
+
+            <M3NavigationTab label="Inbox" active>
+                <M3Icon name="inbox" />
+            </M3NavigationTab>
+
+            <M3NavigationTab label="Drafts">
+                <M3Icon name="mail" />
+            </M3NavigationTab>
+
+            <M3NavigationTab label="Trash">
+                <M3Icon name="delete" />
+            </M3NavigationTab>
+        </M3Navigation>
+    `,
+  }),
+
+  args: {
+    appearance: 'drawer',
+  },
+}
