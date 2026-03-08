@@ -1,7 +1,121 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+
 <style>
+    :root {
+        --m3-storybook-font-family: 'Roboto', 'Noto Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+        --m3-storybook-body-large-size: 16px;
+        --m3-storybook-body-large-line-height: 24px;
+        --m3-storybook-body-large-letter-spacing: 0.5px;
+        --m3-storybook-body-medium-size: 14px;
+        --m3-storybook-body-medium-line-height: 20px;
+        --m3-storybook-body-medium-letter-spacing: 0.25px;
+        --m3-storybook-title-large-size: 22px;
+        --m3-storybook-title-large-line-height: 28px;
+        --m3-storybook-title-medium-size: 16px;
+        --m3-storybook-title-medium-line-height: 24px;
+        --m3-storybook-title-medium-letter-spacing: 0.15px;
+        --m3-storybook-title-small-size: 14px;
+        --m3-storybook-title-small-line-height: 20px;
+        --m3-storybook-headline-large-size: 32px;
+        --m3-storybook-headline-large-line-height: 40px;
+        --m3-storybook-headline-medium-size: 28px;
+        --m3-storybook-headline-medium-line-height: 36px;
+        --m3-storybook-headline-small-size: 24px;
+        --m3-storybook-headline-small-line-height: 32px;
+    }
+
+    html,
     body {
         background: var(--m3-sys-surface);
         color: var(--m3-sys-on-surface);
+        font-family: var(--m3-storybook-font-family);
+    }
+
+    :where(
+        #storybook-root,
+        #storybook-docs,
+        .sb-wrapper,
+        .sb-heading,
+        .sbdocs,
+        .sbdocs-wrapper,
+        .sbdocs-content,
+        .sbdocs-title,
+        .sbdocs-subtitle,
+        .sbdocs-p,
+        .sb-bar,
+        .docblock-argstable,
+        .docblock-icongallery,
+        .docs-story
+    ) {
+        font-family: var(--m3-storybook-font-family) !important;
+    }
+
+    :where(.sb-wrapper, .sbdocs, .sbdocs-wrapper, .sbdocs-content) {
+        font-size: var(--m3-storybook-body-large-size);
+        line-height: var(--m3-storybook-body-large-line-height);
+        letter-spacing: var(--m3-storybook-body-large-letter-spacing);
+    }
+
+    :where(.sbdocs-content, .sbdocs-wrapper) {
+        max-width: 1000px;
+        margin-inline: auto;
+        width: 100%;
+    }
+
+    :where(.sbdocs-content p, .sbdocs-content li, .sbdocs-content td, .sbdocs-content th, .sbdocs-content blockquote) {
+        font-family: var(--m3-storybook-font-family) !important;
+        font-size: var(--m3-storybook-body-large-size) !important;
+        line-height: var(--m3-storybook-body-large-line-height) !important;
+        letter-spacing: var(--m3-storybook-body-large-letter-spacing) !important;
+    }
+
+    :where(.sbdocs-content h1, .sbdocs-title) {
+        font-family: var(--m3-storybook-font-family) !important;
+        font-size: var(--m3-storybook-headline-large-size) !important;
+        line-height: var(--m3-storybook-headline-large-line-height) !important;
+        font-weight: 400 !important;
+        letter-spacing: 0 !important;
+    }
+
+    :where(.sbdocs-content h2) {
+        font-family: var(--m3-storybook-font-family) !important;
+        font-size: var(--m3-storybook-headline-medium-size) !important;
+        line-height: var(--m3-storybook-headline-medium-line-height) !important;
+        font-weight: 400 !important;
+        letter-spacing: 0 !important;
+    }
+
+    :where(.sbdocs-content h3) {
+        font-family: var(--m3-storybook-font-family) !important;
+        font-size: var(--m3-storybook-headline-small-size) !important;
+        line-height: var(--m3-storybook-headline-small-line-height) !important;
+        font-weight: 400 !important;
+        letter-spacing: 0 !important;
+    }
+
+    :where(.sbdocs-content h4, .sbdocs-subtitle) {
+        font-family: var(--m3-storybook-font-family) !important;
+        font-size: var(--m3-storybook-title-large-size) !important;
+        line-height: var(--m3-storybook-title-large-line-height) !important;
+        font-weight: 400 !important;
+        letter-spacing: 0 !important;
+    }
+
+    :where(.sbdocs-content h5, .sbdocs-content h6, .sb-heading) {
+        font-family: var(--m3-storybook-font-family) !important;
+        font-size: var(--m3-storybook-title-medium-size) !important;
+        line-height: var(--m3-storybook-title-medium-line-height) !important;
+        font-weight: 500 !important;
+        letter-spacing: var(--m3-storybook-title-medium-letter-spacing) !important;
+    }
+
+    :where(.sbdocs-content figcaption, .sbdocs-caption) {
+        font-family: var(--m3-storybook-font-family) !important;
+        font-size: var(--m3-storybook-body-medium-size) !important;
+        line-height: var(--m3-storybook-body-medium-line-height) !important;
+        letter-spacing: var(--m3-storybook-body-medium-letter-spacing) !important;
     }
 
     [class*=css] {

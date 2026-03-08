@@ -1,5 +1,7 @@
 import { create } from 'storybook/theming'
 
+const fontBase = '\'Roboto\', \'Noto Sans\', \'Segoe UI\', -apple-system, BlinkMacSystemFont, Arial, sans-serif'
+
 export default create({
   appBg: '#141218',
   appBorderColor: '#49454F',
@@ -12,7 +14,7 @@ export default create({
   barTextColor: 'hsl(220, 100%, 89%)',
   brandTitle: '<span class="s-m3-logo"><img src="/assets/logo.png" alt="" width="42px" height="42px" /> m3-react</span>',
   colorPrimary: 'hsl(220, 55%, 25%)',
-  fontBase: '\'Roboto\', sans-serif',
+  fontBase,
   fontCode: 'monospace',
   inputBorderRadius: 4,
   textColor: '#E6E0E9',
