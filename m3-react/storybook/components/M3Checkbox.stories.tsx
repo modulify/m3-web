@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { M3Checkbox } from '@/components/checkbox'
+import CheckboxList from '../examples/checkbox/CheckboxList'
 
 import { useState } from 'react'
 import { useId } from '@/hooks'
@@ -58,3 +59,24 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Standard: Story = {}
+
+export const NestedSelection: Story = {
+  render: () => (
+    <CheckboxList
+      options={[{
+        label: 'Notifications',
+        value: 'notifications',
+        subordinates: [{
+          label: 'Email',
+          value: 'email',
+        }, {
+          label: 'Push',
+          value: 'push',
+        }, {
+          label: 'SMS',
+          value: 'sms',
+        }],
+      }]}
+    />
+  ),
+}

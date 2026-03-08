@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
 import { M3Checkbox } from '@/components/checkbox'
+import CheckboxList from '../examples/checkbox/CheckboxList.vue'
 import { ref } from 'vue'
 
 import useId from '@/composables/id'
@@ -48,3 +49,30 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Standard: Story = {}
+
+export const NestedSelection: Story = {
+  render: () => ({
+    components: {
+      CheckboxList,
+    },
+
+    template: `
+      <CheckboxList
+          :options="[{
+              label: 'Notifications',
+              value: 'notifications',
+              subordinates: [{
+                  label: 'Email',
+                  value: 'email',
+              }, {
+                  label: 'Push',
+                  value: 'push',
+              }, {
+                  label: 'SMS',
+                  value: 'sms',
+              }],
+          }]"
+      />
+    `,
+  }),
+}
