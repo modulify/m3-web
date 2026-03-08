@@ -53,6 +53,28 @@ If the user must know the message to complete the task safely, do not hide it be
 
 Rich tooltips can contain more than plain text, but they should still feel like supplementary context, not a mini dialog.
 
+## Content anatomy
+
+- short title or intent cue that helps users scan quickly
+- one supporting sentence that explains the consequence, shortcut, or background
+- optional trailing hint such as a keyboard shortcut or low-friction action
+
+The stories in this workspace keep the payload deliberately compact so the tooltip stays tethered to the trigger instead of competing with nearby layout.
+
+## Do / don't
+
+### Do
+
+- keep the message tightly tied to the hovered or focused trigger
+- prefer consequence framing for risky actions and hint framing for shortcuts
+- keep the tooltip short enough to read without shifting task focus
+
+### Don’t
+
+- move essential validation, permissions, or policy copy only into a tooltip
+- stack multiple paragraphs or full form controls inside the surface
+- use a rich tooltip when the user needs blocking confirmation or multi-step input
+
 ## Resources
 
 - [M3 Tooltips overview](https://m3.material.io/components/tooltips/overview)

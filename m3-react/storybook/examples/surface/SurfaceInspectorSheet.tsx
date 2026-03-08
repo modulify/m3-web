@@ -5,6 +5,8 @@ import type {
 import type { M3SelectOption } from '@/components/select'
 
 import { M3Button } from '@/components/button'
+import { M3Icon } from '@/components/icon'
+import { M3IconButton } from '@/components/icon-button'
 import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
@@ -96,37 +98,50 @@ const SurfaceInspectorSheet: FC = () => {
         overflow="auto"
         onToggle={setOpened}
         onDismiss={() => setOpened(false)}
-        style={{ padding: '20px' }}
+        className="m3-side-sheet surface-inspector-sheet__sheet"
       >
-        <h3 style={{ margin: '0 0 12px' }}>Release inspector</h3>
-        <p style={{ margin: '0 0 16px' }}>Use the side sheet for supporting edits that should not replace the dashboard context.</p>
+        <header className="m3-side-sheet__header">
+          <div className="m3-side-sheet__title">Release inspector</div>
 
-        <div style={{ display: 'grid', gap: '12px' }}>
-          <M3TextField
-            value={owner}
-            label="Owner email"
-            outlined={true}
-            onUpdate={setOwner}
-          />
+          <div className="m3-side-sheet__affordance">
+            <M3IconButton appearance="text" onClick={() => setOpened(false)}>
+              <M3Icon name="close" />
+            </M3IconButton>
+          </div>
+        </header>
 
-          <M3Select<Priority>
-            value={priority}
-            label="Priority"
-            options={priorityOptions}
-            outlined={true}
-            onUpdate={setPriority}
-          />
+        <div className="m3-side-sheet__content">
+          <div style={{ display: 'grid', gap: '16px', width: '100%', padding: '0 24px 24px' }}>
+            <p style={{ margin: 0 }}>Use the side sheet for supporting edits that should not replace the dashboard context.</p>
 
-          <M3TextField
-            value={notes}
-            label="Notes"
-            outlined={true}
-            multiline={true}
-            onUpdate={setNotes}
-          />
+            <div style={{ display: 'grid', gap: '12px' }}>
+              <M3TextField
+                value={owner}
+                label="Owner email"
+                outlined={true}
+                onUpdate={setOwner}
+              />
+
+              <M3Select<Priority>
+                value={priority}
+                label="Priority"
+                options={priorityOptions}
+                outlined={true}
+                onUpdate={setPriority}
+              />
+
+              <M3TextField
+                value={notes}
+                label="Notes"
+                outlined={true}
+                multiline={true}
+                onUpdate={setNotes}
+              />
+            </div>
+          </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '16px' }}>
+        <footer className="m3-side-sheet__footer" style={{ justifyContent: 'flex-end' }}>
           <M3Button appearance="text" onClick={() => setOpened(false)}>
             Dismiss
           </M3Button>
@@ -134,7 +149,7 @@ const SurfaceInspectorSheet: FC = () => {
           <M3Button appearance="filled" onClick={() => setOpened(false)}>
             Save changes
           </M3Button>
-        </div>
+        </footer>
       </M3Surface>
     </div>
   )
