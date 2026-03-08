@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import React from 'react'
+import type { CSSProperties } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
@@ -44,10 +45,66 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const WithTextOnly: Story = {}
+
 export const WithLeadingIcon: Story = {
   render: (args) => (
     <M3Button {...args}>
       <M3Icon name="share" /> Share
     </M3Button>
   ),
+}
+
+export const AppearanceMatrix: Story = {
+  render: () => {
+    const stack = {
+      display: 'grid',
+      gap: '16px',
+    } satisfies CSSProperties
+
+    const row = {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '16px',
+    } satisfies CSSProperties
+
+    return (
+      <div style={stack}>
+        <div style={row}>
+          {values.appearances.map(appearance => (
+            <M3Button key={appearance} appearance={appearance}>
+              Share
+            </M3Button>
+          ))}
+        </div>
+
+        <div style={row}>
+          {values.appearances.map(appearance => (
+            <M3Button key={appearance} appearance={appearance}>
+              <M3Icon name="share" /> Share
+            </M3Button>
+          ))}
+        </div>
+      </div>
+    )
+  },
+}
+
+export const DisabledStates: Story = {
+  render: () => {
+    const row = {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '16px',
+    } satisfies CSSProperties
+
+    return (
+      <div style={row}>
+        {values.appearances.map(appearance => (
+          <M3Button key={appearance} appearance={appearance} disabled={true}>
+            Share
+          </M3Button>
+        ))}
+      </div>
+    )
+  },
 }

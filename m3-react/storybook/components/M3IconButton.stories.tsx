@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import type { CSSProperties } from 'react'
 
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
@@ -71,5 +72,47 @@ export const Toggleable: Story = {
     }
 
     return <M3IconButtonToggleable />
+  },
+}
+
+export const AppearanceMatrix: Story = {
+  render: () => {
+    const row = {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '16px',
+    } satisfies CSSProperties
+
+    const stack = {
+      display: 'grid',
+      gap: '16px',
+    } satisfies CSSProperties
+
+    const appearances = ['standard', 'filled', 'tonal', 'outlined'] as const
+
+    return (
+      <div style={stack}>
+        <div style={row}>
+          {appearances.map(appearance => (
+            <M3IconButton key={appearance} appearance={appearance} aria-label={appearance}>
+              <M3Icon name="favorite" />
+            </M3IconButton>
+          ))}
+        </div>
+
+        <div style={row}>
+          {appearances.map(appearance => (
+            <M3IconButton
+              key={appearance}
+              appearance={appearance}
+              aria-label={appearance + '-disabled'}
+              disabled={true}
+            >
+              <M3Icon name="favorite" />
+            </M3IconButton>
+          ))}
+        </div>
+      </div>
+    )
   },
 }

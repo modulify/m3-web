@@ -90,3 +90,46 @@ export const Toggleable: Story = {
     `,
   }),
 }
+
+export const AppearanceMatrix: Story = {
+  // eslint-disable-next-line max-lines-per-function
+  render: () => ({
+    components: {
+      M3Icon,
+      M3IconButton,
+    },
+
+    setup () {
+      return {
+        appearances: ['standard', 'filled', 'tonal', 'outlined'],
+      }
+    },
+
+    template: `
+        <div style="display: grid; gap: 16px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+                <M3IconButton
+                    v-for="appearance in appearances"
+                    :key="appearance"
+                    :appearance="appearance"
+                    :aria-label="appearance"
+                >
+                    <M3Icon name="favorite" />
+                </M3IconButton>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+                <M3IconButton
+                    v-for="appearance in appearances"
+                    :key="appearance + '-disabled'"
+                    :appearance="appearance"
+                    :aria-label="appearance + '-disabled'"
+                    disabled
+                >
+                    <M3Icon name="favorite" />
+                </M3IconButton>
+            </div>
+        </div>
+    `,
+  }),
+}
