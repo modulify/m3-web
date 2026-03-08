@@ -1,0 +1,56 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import * as M3LinkStories from './M3Link.stories'
+
+<Meta of={M3LinkStories} />
+
+# Link
+
+`M3Link` is a semantic primitive that renders either a button-like control or an anchor, depending on whether navigation is involved. In this workspace it is intentionally low-level and acts as a base for richer controls.
+
+## API
+
+### When to use
+
+Use `M3Link` when you need a semantic clickable primitive that may resolve to `<button>` or `<a>` without rewriting the surrounding presentation logic. It is especially useful for custom controls that share styling but differ in navigation semantics.
+
+### Primitive role
+
+Material 3 does not define a dedicated standalone "link primitive" page. Instead, links appear inside buttons, cards, navigation items, and other patterns. This component fills that implementation-level gap while still following Material 3 guidance for the patterns built on top of it.
+
+### Rendering model
+
+- renders as `<button>` when the action is in-app and no `href` is provided
+- renders as `<a>` when navigation is the intended behavior
+
+## Accessibility semantics
+
+- Use button semantics for state-changing actions.
+- Use anchor semantics for navigation to another resource or location.
+- Keep visible labels descriptive enough to make sense out of context.
+
+## Story guide
+
+- [Primitive Shape](?path=/story/components-m3link--primitive-shape)
+- [As Base For Custom Controls](?path=/story/components-m3link--as-base-for-custom-controls)
+
+## Demo
+
+<Canvas of={M3LinkStories.PrimitiveShape} />
+<Canvas of={M3LinkStories.AsBaseForCustomControls} />
+
+## Usage guidance
+
+### Choose semantics first
+
+Do not decide between anchor and button based only on visual appearance. Choose based on whether the result is navigation or an action.
+
+### Build presentation on top
+
+Because `M3Link` is intentionally primitive, treat it as a foundation for custom controls rather than as a full visual component by itself.
+
+## Resources
+
+- [M3 Buttons overview](https://m3.material.io/components/buttons/overview)
+- [M3 Cards overview](https://m3.material.io/components/cards/overview)
+- [M3 Navigation drawer overview](https://m3.material.io/components/navigation-drawer/overview)
+- [MDN: Links vs. buttons](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Links_and_navigation)

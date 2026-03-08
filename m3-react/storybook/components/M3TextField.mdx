@@ -5,10 +5,28 @@ import * as M3TextFieldStories from './M3TextField.stories'
 
 <Meta of={M3TextFieldStories} />
 
-<Unstyled>
 # Text fields
 
-Text fields let users enter text into a UI.
+Text fields capture short or medium-length textual input. Material 3 uses them as a flexible foundation for plain entry, assisted entry, password input, and multiline editing.
+
+## API
+
+### When to use
+
+Use `M3TextField` for direct text entry, searchable fields, passwords, and compact multiline notes. If the value must come from a predefined list, prefer `M3Select` or autocomplete patterns instead of asking users to type and validate manually.
+
+### Common forms
+
+This workspace supports several Material 3 text-field patterns:
+
+- filled and outlined presentation
+- leading icons
+- password fields
+- multiline input
+
+### Support text and validation
+
+Labels, support text, and validation messages should work together. The field alone rarely communicates enough context for successful data entry.
 
 ## Accessibility semantics
 
@@ -16,12 +34,38 @@ Text fields let users enter text into a UI.
 - Use `aria-invalid` together with helper/support text for validation feedback.
 - For long-form input, prefer multiline mode (`textarea`) with the same labeling strategy.
 
-<TextFieldExamples />
+<Unstyled>
+  <TextFieldExamples />
 </Unstyled>
+
+## Story guide
+
+- [Text Field](?path=/story/components-m3textfield--text-field)
+- [Password Field](?path=/story/components-m3textfield--password-field)
+
+## Usage guidance
+
+### Keep labels persistent
+
+A placeholder is not a replacement for a label. Users need the field purpose to stay visible while typing and when returning to the form later.
+
+### Match type to expected content
+
+Use semantic input types like `email`, `tel`, or `password` whenever possible so browsers and assistive technologies can help users enter data correctly.
+
+## Code example
+
+```tsx
+<M3TextField
+  value={value}
+  label="Email"
+  type="email"
+  onUpdate={setValue}
+/>
+```
 
 ## Resources
 
-- [M3 Text Fields overview](https://m3.material.io/components/text-fields/overview)
-- [M3 Text Fields guidelines](https://m3.material.io/components/text-fields/guidelines)
-- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
+- [M3 Text fields overview](https://m3.material.io/components/text-fields/overview)
+- [M3 Text fields guidelines](https://m3.material.io/components/text-fields/guidelines)
 - [WAI Tutorials: Form Labels](https://www.w3.org/WAI/tutorials/forms/labels/)

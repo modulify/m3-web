@@ -3,9 +3,27 @@ import * as M3SelectStories from './M3Select.stories'
 
 <Meta of={M3SelectStories} />
 
-# M3Select
+# Select
 
-Text field augmented with dropdown menu
+`M3Select` combines text-field presentation with a menu-backed option picker. It fits cases where the current value should stay visible in the form while the available choices open in an anchored list.
+
+## API
+
+### When to use
+
+Use `M3Select` when users must choose one option from a structured list and the current choice should remain visible as field content. If freeform input is allowed, use a text field or autocomplete pattern instead.
+
+### Composition
+
+This implementation follows a hybrid pattern:
+
+- field-like trigger for label, outline, support text, and current value
+- listbox-style option popup for selection
+- optional leading content for selected value and option rows
+
+### Leading visuals
+
+The `WithIcons` story demonstrates a useful Material 3 pattern for country, account, or category pickers where a compact visual cue speeds up recognition without replacing the text label.
 
 ## Accessibility semantics
 
@@ -13,13 +31,43 @@ Text field augmented with dropdown menu
 - Provide a visible label through `label` or an explicit aria-label/aria-labelledby strategy.
 - Keep option labels unique and meaningful for screen readers.
 
+## Story guide
+
+- [Standard](?path=/story/components-m3select--standard)
+- [With Icons](?path=/story/components-m3select--with-icons)
+
 ## Demo
 
 <Canvas of={M3SelectStories.Standard} />
 <Canvas of={M3SelectStories.WithIcons} />
 
+## Usage guidance
+
+### Prefer stable option labels
+
+Because the chosen option is mirrored back into the field, label wording should stay concise and unambiguous. Long, repetitive labels make the closed state harder to scan.
+
+### Keep menus manageable
+
+If the option set becomes very large, consider search or autocomplete instead of a pure select interaction.
+
+## Code example
+
+```tsx
+<M3Select<number>
+  value={value}
+  label="Choose"
+  options={[
+    { label: 'Option 1', value: 1 },
+    { label: 'Option 2', value: 2 },
+  ]}
+  onUpdate={setValue}
+/>
+```
+
 ## Resources
 
+- [M3 Text fields overview](https://m3.material.io/components/text-fields/overview)
 - [M3 Menus overview](https://m3.material.io/components/menus/overview)
 - [M3 Menus guidelines](https://m3.material.io/components/menus/guidelines)
 - [WAI-ARIA APG: Combobox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)

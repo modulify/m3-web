@@ -1,0 +1,52 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import * as M3ScrollRailStories from './M3ScrollRail.stories'
+
+<Meta of={M3ScrollRailStories} />
+
+# Scroll rails
+
+`M3ScrollRail` is a supporting primitive for scrollable surfaces. It exposes the available scroll axis more clearly than relying on default browser chrome alone, especially inside custom containers.
+
+## API
+
+### When to use
+
+Use `M3ScrollRail` inside bounded regions such as drawers, side sheets, data panels, or media trays when the interface needs a clearer scroll affordance than the platform default provides.
+
+### Orientation
+
+The component can render vertical and horizontal rails. The combined story demonstrates both axes in one container, which is useful for wide content inside a constrained viewport.
+
+### Scope
+
+Material 3 does not publish a dedicated scroll-rail component page. In this workspace, the primitive supports scrollable M3 surfaces such as side sheets, drawers, and long content panes.
+
+## Accessibility semantics
+
+- Keep the scrollable region itself labelled when its purpose is not obvious from nearby context.
+- Avoid trapping keyboard users in custom scroll containers.
+- Preserve readable focus order inside the scrolling content.
+
+## Story guide
+
+- [Both](?path=/story/components-m3scrollrail--both)
+
+## Demo
+
+<Canvas of={M3ScrollRailStories.Both} />
+
+## Usage guidance
+
+### Use rails to reinforce, not replace, structure
+
+The scroll container still needs clear dimensions and hierarchy. A rail cannot compensate for a surface whose content model is already confusing.
+
+### Avoid nested scroll regions unless necessary
+
+Nested scrolling is hard to discover and harder to control with keyboard or touch input. Prefer one dominant scroll region when possible.
+
+## Resources
+
+- [M3 Side sheets overview](https://m3.material.io/components/side-sheets/overview)
+- [M3 Navigation drawer overview](https://m3.material.io/components/navigation-drawer/overview)
+- [M3 Menus overview](https://m3.material.io/components/menus/overview)

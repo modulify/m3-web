@@ -10,7 +10,26 @@ import { defineComponent, h } from 'vue'
 
 # Cards
 
-Cards display content and actions about a single subject
+Cards group related content and actions into a single container. In Material 3 they work best when they stay focused on one subject, one decision, or one compact summary.
+
+## API
+
+### When to use
+
+Use `M3Card` when content should feel grouped but still remain embedded in the page flow. If the interaction becomes blocking or needs a scrim, move to `M3Dialog` or `M3Surface`.
+
+### Anatomy
+
+Typical card structure in this workspace includes:
+
+- media or leading visual
+- heading and optional subheading
+- supporting content
+- optional trailing or footer actions
+
+### Appearances
+
+Material 3 cards rely on tone and outline treatment to signal emphasis. This implementation exposes `filled`, `elevated`, and `outlined`, which cover the main hierarchy levels from the official card guidance.
 
 ## Accessibility semantics
 
@@ -25,9 +44,44 @@ Cards display content and actions about a single subject
   ]),
 })} />
 
+## Story guide
+
+- [Landscape](?path=/story/components-m3card--landscape)
+- [Landscape Without Media](?path=/story/components-m3card--landscape-without-media)
+- [Portrait](?path=/story/components-m3card--portrait)
+
+## Usage guidance
+
+### Keep cards focused
+
+Avoid turning a card into a mini page. Once it needs long forms, deep navigation, or persistent editing controls, a larger surface usually communicates the task more clearly.
+
+### Separate container click from inner actions
+
+If the whole card is interactive, nested actions should remain semantically distinct and visually predictable. Competing click targets inside one card quickly become ambiguous.
+
+## Code example
+
+```html
+<M3Card appearance="filled">
+  <template #media>
+    <img alt="" src="/assets/image-720x376.png">
+  </template>
+
+  <template #heading>
+    Title
+  </template>
+
+  <template #subheading>
+    Subhead
+  </template>
+
+  Supporting text
+</M3Card>
+```
+
 ## Resources
 
 - [M3 Cards overview](https://m3.material.io/components/cards/overview)
 - [M3 Cards guidelines](https://m3.material.io/components/cards/guidelines)
-- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
 - [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)

@@ -8,7 +8,24 @@ import * as M3FabButtonStories from './M3FabButton.stories'
 
 # Floating action buttons
 
-Floating action buttons (FABs) help people take primary actions
+Floating action buttons emphasize the highest-priority action on a surface. Material 3 treats FABs as strong directional cues, so they work best when the page has one clear "next thing to do."
+
+## API
+
+### When to use
+
+Use `M3FabButton` for the primary action of a screen or large section, especially when that action should remain easy to reach while content scrolls.
+
+### Standard vs extended
+
+- standard FAB for compact icon-first actions
+- extended FAB when the action benefits from a visible label
+
+The extended form is usually easier to scan when the action is not universally obvious from the icon alone.
+
+### Variants
+
+This implementation exposes Material 3 tonal variants such as `surface`, `primary`, `secondary`, and `tertiary`, which let the FAB stay prominent without always defaulting to the same tone.
 
 ## Accessibility semantics
 
@@ -38,11 +55,33 @@ Floating action buttons (FABs) help people take primary actions
   </p>
 </Unstyled>
 
+## Story guide
+
+- [Standard](?path=/story/components-m3fabbutton--standard)
+- [Extended](?path=/story/components-m3fabbutton--extended)
+
+## Usage guidance
+
+### One FAB per context
+
+Most surfaces should have at most one FAB. Multiple competing FABs dilute the main-action pattern that Material 3 is trying to reinforce.
+
+### Prefer extended when the icon is ambiguous
+
+If users need to stop and decode the icon, show the label. The slight increase in width is usually worth the clarity.
+
+## Code example
+
+```tsx
+<M3FabButton>
+  <M3Icon name="add" /> New task
+</M3FabButton>
+```
+
 ## Resources
 
 - [M3 FAB overview](https://m3.material.io/components/floating-action-button/overview)
 - [M3 FAB guidelines](https://m3.material.io/components/floating-action-button/guidelines)
 - [M3 Extended FAB overview](https://m3.material.io/components/extended-fab/overview)
 - [M3 Extended FAB guidelines](https://m3.material.io/components/extended-fab/guidelines)
-- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
 - [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)

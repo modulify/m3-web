@@ -7,7 +7,25 @@ import * as M3CheckboxStories from './M3Checkbox.stories'
 
 # Checkboxes
 
-Checkboxes let users select one or more items from a list, or turn an item on or off
+Checkboxes let users select one or more options independently. They also support parent-child selection patterns where a parent reflects the aggregate state of subordinate items.
+
+## API
+
+### When to use
+
+Use `M3Checkbox` when multiple items can be selected at the same time, or when a single option behaves like a boolean choice inside a form. If the user must pick exactly one option, prefer radios instead.
+
+### Selection model
+
+This implementation supports both simple boolean selection and array-backed multi-select models. It also supports `indeterminate` for aggregate parent rows, which matches the Material 3 guidance for nested selection patterns.
+
+### Nested selection
+
+In nested lists, the parent checkbox should summarize descendant state:
+
+- checked when all descendants are selected
+- indeterminate when some descendants are selected
+- unchecked when none are selected
 
 ## Accessibility semantics
 
@@ -53,9 +71,22 @@ Checkboxes let users select one or more items from a list, or turn an item on or
   />
 </Unstyled>
 
+## Story guide
+
+- [Standard](?path=/story/components-m3checkbox--standard)
+
+## Usage guidance
+
+### Keep labels explicit
+
+Checkbox labels should describe the resulting state, not the control itself. "Email receipts" is clearer than "Enable."
+
+### Use indeterminate only as summary state
+
+Do not present `indeterminate` as a user-selectable third state. It should only communicate partial selection across descendants.
+
 ## Resources
 
 - [M3 Checkbox overview](https://m3.material.io/components/checkbox/overview)
 - [M3 Checkbox guidelines](https://m3.material.io/components/checkbox/guidelines)
-- [Design Kit (Figma)](https://www.figma.com/community/file/1035203688168086460)
 - [WAI-ARIA APG: Checkbox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/)

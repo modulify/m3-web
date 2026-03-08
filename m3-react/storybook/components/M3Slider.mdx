@@ -3,9 +3,24 @@ import * as M3SliderStories from './M3Slider.stories'
 
 <Meta of={M3SliderStories} />
 
-# M3Slider
+# Sliders
 
-Sliders let users make selections from a range of values
+Sliders let users select a value or bounded range with direct manipulation. Material 3 treats them as a good fit for continuous or near-continuous scales where people benefit from seeing relative position.
+
+## API
+
+### When to use
+
+Use `M3Slider` for ranges such as volume, intensity, zoom, or budget bounds. If users need precise text entry or long discrete lists, a text field or select is often clearer.
+
+### Single vs range
+
+- single slider for one value
+- range slider when users define lower and upper bounds together
+
+### Range communication
+
+Range sliders work best when both handles affect the same conceptual value space and when users can understand the minimum and maximum without extra explanation.
 
 ## Accessibility semantics
 
@@ -13,10 +28,25 @@ Sliders let users make selections from a range of values
 - Keep numeric ranges and steps predictable and documented for users.
 - Support keyboard adjustments (Arrow, Home, End) for all handles.
 
+## Story guide
+
+- [Single](?path=/story/components-m3slider--single)
+- [Range](?path=/story/components-m3slider--range)
+
 ## Demo
 
 <Canvas of={M3SliderStories.Single} />
 <Canvas of={M3SliderStories.Range} />
+
+## Usage guidance
+
+### Make scale meaning explicit
+
+Users should understand what the endpoints represent before they drag. Labels, units, or support text usually matter more than the slider control itself.
+
+### Avoid sliders for exact data entry
+
+If the task depends on precise numeric values, provide an exact-input companion or use a different control entirely.
 
 ## Resources
 
