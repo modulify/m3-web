@@ -1,6 +1,7 @@
-import { Unstyled } from '@storybook/addon-docs/blocks'
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import * as M3RichTooltipStories from './M3RichTooltip.stories'
 
-import DeleteTooltip from '../examples/rich-tooltip/DeleteTooltip'
+<Meta of={M3RichTooltipStories} />
 
 # Rich tooltip
 
@@ -30,11 +31,17 @@ The tooltip should remain attached to its trigger context and disappear when the
 - Keep tooltip text concise and task-relevant.
 - Avoid using tooltips as the only way to convey critical information.
 
-<Unstyled>
-  <div className="m3-panel m3-panel_elevated-1 my-4" style={{ maxWidth: '360px' }}>
-    <DeleteTooltip />
-  </div>
-</Unstyled>
+## Story guide
+
+- [Destructive Action](?path=/story/components-m3richtooltip--destructive-action)
+- [Bulk Selection](?path=/story/components-m3richtooltip--bulk-selection)
+- [Shortcut Hint](?path=/story/components-m3richtooltip--shortcut-hint)
+
+## Demo
+
+<Canvas of={M3RichTooltipStories.DestructiveAction} />
+<Canvas of={M3RichTooltipStories.BulkSelection} />
+<Canvas of={M3RichTooltipStories.ShortcutHint} />
 
 ## Usage guidance
 
