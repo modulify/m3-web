@@ -7,6 +7,7 @@ import './stylesheets/utils.scss'
 
 import { withThemeByClassName } from '@storybook/addon-themes'
 import { addons } from 'storybook/preview-api'
+import theme from './theme'
 import { MdxCodeBlock, MdxCodePreBlock } from './utils/mdxCodeBlock'
 
 type DocsParameter = NonNullable<NonNullable<Preview['parameters']>['docs']> & {
@@ -31,6 +32,7 @@ const docsParameter: DocsParameter = {
   source: {
     language: 'text',
   },
+  theme,
 }
 
 const applyThemeClass = (themeName?: unknown): void => {
