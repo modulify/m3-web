@@ -2,8 +2,7 @@ import type { Preview, VueRenderer } from '@storybook/vue3'
 
 import '@modulify/m3-foundation/assets/stylesheets/normalize.scss'
 import '@modulify/m3-foundation/assets/stylesheets/index.scss'
-
-import './stylesheets/utils.scss'
+import '@modulify/m3-foundation/assets/stylesheets/storybook/utils.scss'
 
 import { withThemeByClassName } from '@storybook/addon-themes'
 import { addons } from 'storybook/preview-api'

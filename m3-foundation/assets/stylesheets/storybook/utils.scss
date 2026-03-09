@@ -1,0 +1,171 @@
+@use 'sass:map';
+
+$m3-storybook-base-space: 8px;
+$m3-storybook-multipliers: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10;
+$m3-storybook-grid-columns: 12;
+$m3-storybook-breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+$m3-storybook-container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px,
+);
+
+.d-block { display: block !important; }
+.d-inline { display: inline !important; }
+.d-inline-block { display: inline-block !important; }
+.d-none { display: none !important; }
+.d-flex { display: flex !important; }
+
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+
+.flex-container {
+  @extend .d-flex;
+  @extend .flex-wrap;
+}
+
+.flex-row {
+  @extend .d-flex;
+  align-items: center;
+}
+
+.h-100 {
+  height: 100% !important;
+}
+
+.mw-100 {
+  max-width: 100% !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.mt-auto, .my-auto, .m-auto { margin-top: auto !important; }
+.mb-auto, .my-auto, .m-auto { margin-bottom: auto !important; }
+.ml-auto, .mx-auto, .m-auto { margin-left: auto !important; }
+.mr-auto, .mx-auto, .m-auto { margin-right: auto !important; }
+
+.mt-0, .my-0, .m-0 { margin-top: 0 !important; }
+.mb-0, .my-0, .m-0 { margin-bottom: 0 !important; }
+.ml-0, .mx-0, .m-0 { margin-left: 0 !important; }
+.mr-0, .mx-0, .m-0 { margin-right: 0 !important; }
+
+.pt-0, .py-0, .p-0 { padding-top: 0 !important; }
+.pb-0, .py-0, .p-0 { padding-bottom: 0 !important; }
+.pl-0, .px-0, .p-0 { padding-left: 0 !important; }
+.pr-0, .px-0, .p-0 { padding-right: 0 !important; }
+
+@each $value in $m3-storybook-multipliers {
+  .mt-#{$value}, .my-#{$value}, .m-#{$value} { margin-top:    0.5 * $value * $m3-storybook-base-space !important; }
+  .mb-#{$value}, .my-#{$value}, .m-#{$value} { margin-bottom: 0.5 * $value * $m3-storybook-base-space !important; }
+  .ml-#{$value}, .mx-#{$value}, .m-#{$value} { margin-left:   0.5 * $value * $m3-storybook-base-space !important; }
+  .mr-#{$value}, .mx-#{$value}, .m-#{$value} { margin-right:  0.5 * $value * $m3-storybook-base-space !important; }
+
+  .mt-n#{$value}, .my-n#{$value}, .m-n#{$value} { margin-top:    -0.5 * $value * $m3-storybook-base-space !important; }
+  .mb-n#{$value}, .my-n#{$value}, .m-n#{$value} { margin-bottom: -0.5 * $value * $m3-storybook-base-space !important; }
+  .ml-n#{$value}, .mx-n#{$value}, .m-n#{$value} { margin-left:   -0.5 * $value * $m3-storybook-base-space !important; }
+  .mr-n#{$value}, .mx-n#{$value}, .m-n#{$value} { margin-right:  -0.5 * $value * $m3-storybook-base-space !important; }
+
+  .pt-#{$value}, .py-#{$value}, .p-#{$value} { padding-top:    0.5 * $value * $m3-storybook-base-space !important; }
+  .pb-#{$value}, .py-#{$value}, .p-#{$value} { padding-bottom: 0.5 * $value * $m3-storybook-base-space !important; }
+  .pl-#{$value}, .px-#{$value}, .p-#{$value} { padding-left:   0.5 * $value * $m3-storybook-base-space !important; }
+  .pr-#{$value}, .px-#{$value}, .p-#{$value} { padding-right:  0.5 * $value * $m3-storybook-base-space !important; }
+}
+
+.sb-container,
+.sb-container-fluid {
+  width: 100%;
+  padding-inline: 12px;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+.sb-container {
+  max-width: 100%;
+}
+
+@each $breakpoint, $max-width in $m3-storybook-container-max-widths {
+  @media (min-width: map.get($m3-storybook-breakpoints, $breakpoint)) {
+    .sb-container {
+      max-width: $max-width;
+    }
+  }
+}
+
+.sb-row {
+  --sb-gutter-x: 24px;
+  --sb-gutter-y: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--sb-gutter-y));
+  margin-inline: calc(-0.5 * var(--sb-gutter-x));
+}
+
+.sb-row > * {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-inline: calc(var(--sb-gutter-x) * 0.5);
+  margin-top: var(--sb-gutter-y);
+  box-sizing: border-box;
+}
+
+.sb-col {
+  flex: 1 0 0%;
+}
+
+@for $column from 1 through $m3-storybook-grid-columns {
+  .sb-col-#{$column} {
+    flex: 0 0 auto;
+    width: calc(100% * #{$column} / #{$m3-storybook-grid-columns});
+  }
+}
+
+@each $breakpoint, $width in $m3-storybook-breakpoints {
+  @media (min-width: $width) {
+    .sb-col-#{$breakpoint} {
+      flex: 1 0 0%;
+    }
+
+    @for $column from 1 through $m3-storybook-grid-columns {
+      .sb-col-#{$breakpoint}-#{$column} {
+        flex: 0 0 auto;
+        width: calc(100% * #{$column} / #{$m3-storybook-grid-columns});
+      }
+    }
+  }
+}
+
+.sb-g-0,
+.sb-gx-0 {
+  --sb-gutter-x: 0px;
+}
+
+.sb-g-0,
+.sb-gy-0 {
+  --sb-gutter-y: 0px;
+}
+
+@each $value in $m3-storybook-multipliers {
+  $space: 0.5 * $value * $m3-storybook-base-space;
+
+  .sb-g-#{$value},
+  .sb-gx-#{$value} {
+    --sb-gutter-x: #{$space};
+  }
+
+  .sb-g-#{$value},
+  .sb-gy-#{$value} {
+    --sb-gutter-y: #{$space};
+  }
+}
