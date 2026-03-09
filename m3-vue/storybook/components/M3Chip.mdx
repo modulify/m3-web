@@ -1,0 +1,75 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import Inline from './Inline'
+import ChipShowcase from '../examples/chip/ChipShowcase.vue'
+import * as M3ChipStories from './M3Chip.stories'
+
+<Meta of={M3ChipStories} />
+
+# Chips
+
+Chips help people enter information, make selections, filter content, or trigger actions. Material 3 distinguishes four chip types: assist, filter, input, and suggestion.
+
+## API
+
+### When to use
+
+Use `M3Chip` for compact, contextual actions or selections that should stay visible inside the surrounding content. If the action needs stronger emphasis or more copy, prefer buttons.
+
+### Variants
+
+- `assist` for quick contextual actions such as "Remind later"
+- `filter` for toggleable filters that stay visible as active constraints
+- `input` for entered entities or tokens that can usually be removed
+- `suggestion` for lightweight recommendations that help users continue a flow
+
+### Selection and dismissal
+
+This implementation keeps `filter` chips controlled through `selected` and `update:selected`. Input chips can expose a separate dismiss affordance through `dismissible` and `dismiss`.
+
+## Accessibility semantics
+
+- There is no special ARIA chip role here; the primary surface uses native button semantics.
+- Filter chips expose toggle state through `aria-pressed`.
+- If a chip exposes a remove affordance, the trailing dismiss button should keep an explicit accessible label.
+- Chip labels should stay short and scannable because they are often read in dense horizontal clusters.
+
+### Variant panel
+
+<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+  <Inline is={ChipShowcase} mode="matrix" />
+</div>
+
+### Filter set
+
+<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+  <Inline is={ChipShowcase} mode="filters" />
+</div>
+
+### Input tokens
+
+<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+  <Inline is={ChipShowcase} mode="inputs" />
+</div>
+
+## Story guide
+
+- [Standard](?path=/story/components-m3chip--standard)
+- [Variant Matrix](?path=/story/components-m3chip--variant-matrix)
+- [Filter Set](?path=/story/components-m3chip--filter-set)
+- [Input Tokens](?path=/story/components-m3chip--input-tokens)
+
+## Usage guidance
+
+### Keep chip copy brief
+
+Chips work best with short labels that can be scanned in rows. If the label turns into a sentence, the interaction usually wants a button or list row instead.
+
+### Match semantics to intent
+
+Use assist and suggestion chips as action affordances. Use filter chips only when the selected state matters. Use input chips when the item itself becomes part of the current form or scope.
+
+## Resources
+
+- [M3 Chips overview](https://m3.material.io/components/chips/overview)
+- [M3 Chips guidelines](https://m3.material.io/components/chips/guidelines)
+- [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)

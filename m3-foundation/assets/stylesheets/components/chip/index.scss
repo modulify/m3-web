@@ -1,0 +1,215 @@
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/typography' as m3-typography;
+
+.m3-chip {
+  --m3-icon-size: 18px;
+  --m3-ripple-color: var(--m3-sys-on-surface-variant);
+  --m3-ripple-opacity: 0.16;
+  --chip-container-color: transparent;
+  --chip-outline-color: var(--m3-sys-outline);
+  --chip-label-color: var(--m3-sys-on-surface);
+  --chip-state-color: var(--m3-sys-on-surface);
+  --chip-shadow: none;
+
+  display: inline-flex;
+  align-items: stretch;
+  min-height: 32px;
+  max-width: 100%;
+  border-radius: 8px;
+  background: var(--chip-container-color);
+  box-shadow: var(--chip-shadow);
+  position: relative;
+  overflow: hidden;
+  vertical-align: middle;
+  transition:
+    m3-motion.timing-standard(background-color),
+    m3-motion.timing-standard(box-shadow)
+  ;
+
+  &,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  &::before {
+    content: ' ';
+    border: 1px solid var(--chip-outline-color);
+    border-radius: inherit;
+    position: absolute;
+    inset: 0;
+    transition: m3-motion.timing-standard(border-color);
+    pointer-events: none;
+  }
+
+  &_assist {
+    --m3-ripple-color: var(--m3-sys-primary);
+    --chip-state-color: var(--m3-sys-primary);
+  }
+
+  &_filter {
+    --m3-ripple-color: var(--m3-sys-on-surface);
+    --chip-state-color: var(--m3-sys-on-surface);
+  }
+
+  &_filter#{&}_selected {
+    --m3-ripple-color: var(--m3-sys-on-secondary-container);
+    --chip-container-color: var(--m3-sys-secondary-container);
+    --chip-outline-color: transparent;
+    --chip-label-color: var(--m3-sys-on-secondary-container);
+    --chip-state-color: var(--m3-sys-on-secondary-container);
+  }
+
+  &_input {
+    --chip-container-color: var(--m3-sys-surface-container-low);
+    --chip-label-color: var(--m3-sys-on-surface);
+    --chip-state-color: var(--m3-sys-on-surface);
+  }
+
+  &_suggestion {
+    --chip-container-color: var(--m3-sys-surface-container-lowest);
+    --chip-label-color: var(--m3-sys-on-surface);
+    --chip-state-color: var(--m3-sys-on-surface);
+    --chip-shadow: var(--m3-elevation-1);
+  }
+
+  &_dismissible &__action {
+    padding-right: 10px;
+  }
+
+  &__action,
+  &__dismiss {
+    @include m3-typography.label-large;
+
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    margin: 0;
+    outline: none;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  &__action {
+    min-height: 32px;
+    min-width: 0;
+    padding: 0 16px;
+    color: var(--chip-label-color);
+    flex: 1 1 auto;
+    border-radius: inherit;
+  }
+
+  &_has-leading-icon &__action,
+  &_has-checkmark &__action {
+    padding-left: 12px;
+  }
+
+  &_has-trailing-icon &__action {
+    padding-right: 12px;
+  }
+
+  &__dismiss {
+    width: 32px;
+    min-height: 32px;
+    justify-content: center;
+    color: var(--chip-label-color);
+    flex: 0 0 32px;
+    border-radius: 0 8px 8px 0;
+  }
+
+  &_dismissible &__action {
+    border-radius: 8px 0 0 8px;
+  }
+
+  &_dismissible &__dismiss::before {
+    content: ' ';
+    width: 1px;
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    background: color-mix(in srgb, var(--chip-outline-color) 60%, transparent);
+  }
+
+  &__state {
+    width: 100%;
+    height: 100%;
+    background: var(--chip-state-color);
+    border-radius: inherit;
+    overflow: hidden;
+    opacity: 0;
+    position: absolute;
+    inset: 0;
+    transition:
+      m3-motion.timing-standard(background-color),
+      m3-motion.timing-standard(opacity)
+    ;
+    pointer-events: none;
+  }
+
+  &__content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__icon,
+  &__label {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__icon {
+    flex: 0 0 auto;
+  }
+
+  &__label {
+    min-width: 0;
+    padding-top: 1px;
+    white-space: nowrap;
+  }
+
+  &__action:hover &__state,
+  &__dismiss:hover &__state {
+    opacity: 0.08;
+  }
+
+  &__action:focus-visible &__state,
+  &__dismiss:focus-visible &__state,
+  &__action:active &__state,
+  &__dismiss:active &__state {
+    opacity: 0.12;
+  }
+
+  &_disabled {
+    --m3-ripple-opacity: 0;
+    --chip-container-color: color-mix(in srgb, var(--chip-container-color) 100%, transparent);
+    --chip-outline-color: color-mix(in srgb, var(--m3-sys-on-surface) 12%, transparent);
+    --chip-label-color: color-mix(in srgb, var(--m3-sys-on-surface) 38%, transparent);
+    --chip-state-color: transparent;
+    --chip-shadow: none;
+  }
+
+  &_disabled &__action,
+  &_disabled &__dismiss {
+    cursor: default;
+  }
+
+  &_disabled &__dismiss::before {
+    background: color-mix(in srgb, var(--m3-sys-on-surface) 12%, transparent);
+  }
+
+  &_disabled &__state {
+    opacity: 0;
+  }
+}
