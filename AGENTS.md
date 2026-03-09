@@ -108,6 +108,16 @@ make help
   its output to see whether an existing recipe already covers the task.
 - If a suitable recipe exists, prefer it over ad hoc commands to reduce extra
   work, keep workflows standardized, and avoid unnecessary escalations.
+- The project includes a Playwright container and make recipes for screenshot
+  capture; use them when visual analysis of Storybook pages, component states,
+  or other UI behavior is helpful.
+- The project also includes runtime-analysis research recipes for DOM, styles,
+  layout metrics, a11y snapshots, traces, network/performance logs, token
+  diffs, and screenshot matrices; use them to reduce uncertainty and to
+  understand what is going wrong before guessing at visual or runtime issues.
+  Read `docs/en/runtime-analysis-recipes.md` first when the task involves
+  visual regressions, layout ambiguity, token/theme uncertainty, unclear
+  animation behavior, or other runtime issues where these recipes may help.
 - Run eslint before handoff or commit preparation only when changed files
   include code covered by eslint rules (for example `*.js`, `*.ts`, and
   similar source files). Do not run eslint for markdown-only changes.

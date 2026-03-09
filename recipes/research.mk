@@ -90,3 +90,221 @@ research-capture-batch: ## [Research][docker][playwright][capture] Captures scre
 		$(if $(full_page),--full-page "$(full_page)",) \
 		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
 	$(TARGET_OK)
+
+.PHONY: research-dom-snapshot
+research-dom-snapshot: ## [Research][docker][playwright][inspect] Saves outerHTML/text snapshot for a page selector
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action dom-snapshot \
+		--url "$(url)" \
+		$(if $(selector),--selector "$(selector)",) \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-style-dump
+research-style-dump: ## [Research][docker][playwright][inspect] Saves computed styles and CSS variables for a selector
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action style-dump \
+		--url "$(url)" \
+		$(if $(selector),--selector "$(selector)",) \
+		$(if $(props),--props "$(props)",) \
+		$(if $(var_prefixes),--var-prefixes "$(var_prefixes)",) \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-layout-metrics
+research-layout-metrics: ## [Research][docker][playwright][inspect] Saves bounding boxes and layout metrics for selectors
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action layout-metrics \
+		--url "$(url)" \
+		$(if $(selector),--selector "$(selector)",) \
+		$(if $(selectors),--selectors "$(selectors)",) \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-a11y-snapshot
+research-a11y-snapshot: ## [Research][docker][playwright][a11y] Saves Playwright accessibility snapshot for a page or selector
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action a11y-snapshot \
+		--url "$(url)" \
+		$(if $(selector),--selector "$(selector)",) \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-console-capture
+research-console-capture: ## [Research][docker][playwright][inspect] Saves console messages, page errors, and failed requests
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action console-capture \
+		--url "$(url)" \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-trace
+research-trace: ## [Research][docker][playwright][trace] Saves Playwright trace for a page and optional interaction
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action trace \
+		--url "$(url)" \
+		$(if $(action_selector),--action-selector "$(action_selector)",) \
+		$(if $(interaction),--interaction "$(interaction)",) \
+		$(if $(post_action_wait_ms),--post-action-wait-ms "$(post_action_wait_ms)",) \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-network-log
+research-network-log: ## [Research][docker][playwright][inspect] Saves request/response timeline for a page load
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action network-log \
+		--url "$(url)" \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-perf-marks
+research-perf-marks: ## [Research][docker][playwright][inspect] Saves Performance API entries for a page
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action perf-marks \
+		--url "$(url)" \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-token-diff
+research-token-diff: ## [Research][docker][playwright][inspect] Compares computed CSS custom properties between two selectors
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action token-diff \
+		--url "$(url)" \
+		$(if $(selector),--selector "$(selector)",) \
+		$(if $(compare_selector),--compare-selector "$(compare_selector)",) \
+		$(if $(var_prefixes),--var-prefixes "$(var_prefixes)",) \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-motion-sample
+research-motion-sample: ## [Research][docker][playwright][capture] Captures a timed frame sequence for page motion and optional interaction
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action motion-sample \
+		--url "$(url)" \
+		$(if $(action_selector),--action-selector "$(action_selector)",) \
+		$(if $(interaction),--interaction "$(interaction)",) \
+		$(if $(count),--count "$(count)",) \
+		$(if $(interval_ms),--interval-ms "$(interval_ms)",) \
+		$(if $(full_page),--full-page "$(full_page)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(width),--width "$(width)",) \
+		$(if $(height),--height "$(height)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-capture-diff
+research-capture-diff: ## [Research][docker][inspect][capture] Creates image diffs for two screenshots or two screenshot directories
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-capture-diff.mjs \
+		--left "$(left)" \
+		--right "$(right)" \
+		$(if $(out),--out "$(out)",) \
+		$(if $(summary),--summary "$(summary)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(threshold),--threshold "$(threshold)",)
+	$(TARGET_OK)
+
+.PHONY: research-capture-matrix
+research-capture-matrix: ## [Research][docker][playwright][capture] Captures URL or Storybook matrices across themes, globals, args, and viewports
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-capture-matrix.mjs \
+		$(if $(url),--url "$(url)",) \
+		$(if $(base_url),--base-url "$(base_url)",) \
+		$(if $(story_id),--story-id "$(story_id)",) \
+		$(if $(globals),--globals "$(globals)",) \
+		$(if $(globals_sets),--globals-sets "$(globals_sets)",) \
+		$(if $(args),--args "$(args)",) \
+		$(if $(args_sets),--args-sets "$(args_sets)",) \
+		$(if $(themes),--themes "$(themes)",) \
+		$(if $(viewports),--viewports "$(viewports)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",) \
+		$(if $(full_page),--full-page "$(full_page)",)
+	$(TARGET_OK)
+
+.PHONY: research-story-props
+research-story-props: ## [Research][docker][playwright][capture] Captures Storybook story matrices for args/globals/theme combinations
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-capture-matrix.mjs \
+		$(if $(base_url),--base-url "$(base_url)",) \
+		--story-id "$(story_id)" \
+		$(if $(globals),--globals "$(globals)",) \
+		$(if $(globals_sets),--globals-sets "$(globals_sets)",) \
+		$(if $(args),--args "$(args)",) \
+		$(if $(args_sets),--args-sets "$(args_sets)",) \
+		$(if $(themes),--themes "$(themes)",) \
+		$(if $(viewports),--viewports "$(viewports)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",) \
+		$(if $(full_page),--full-page "$(full_page)",)
+	$(TARGET_OK)
