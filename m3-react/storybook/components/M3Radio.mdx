@@ -1,0 +1,70 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
+
+import RadioGroup from '../examples/radio/RadioGroup'
+import * as M3RadioStories from './M3Radio.stories'
+
+<Meta of={M3RadioStories} />
+
+# Radio buttons
+
+Radio buttons let users choose exactly one option from a related set. Unlike checkboxes, they are not meant for independent multi-selection or parent-child aggregate states.
+
+## API
+
+### When to use
+
+Use `M3Radio` when the user must choose one option from a small, visible list. If multiple options can be selected together, prefer `M3Checkbox`.
+
+### Selection model
+
+This implementation treats each radio as a single-value option. A radio is checked when `model` equals `value`, and selecting it emits that `value`.
+
+### Grouping
+
+For native keyboard and form semantics, related radios should share the same `name`. Wrap related options in a `fieldset` with a visible `legend` whenever possible.
+
+## Accessibility semantics
+
+- Every radio needs a visible text label.
+- Related radios should be grouped under a shared label.
+- Use `name` consistently across one group so browser navigation behaves predictably.
+- Mark the group or options invalid only when the selection is required and unresolved.
+
+### Preference group
+
+<Unstyled className="m3-panel m3-panel_elevated-1">
+  <RadioGroup
+    legend="Theme preference"
+    options={[{
+      label: 'System',
+      value: 'system',
+    }, {
+      label: 'Light',
+      value: 'light',
+    }, {
+      label: 'Dark',
+      value: 'dark',
+    }]}
+  />
+</Unstyled>
+
+## Story guide
+
+- [Standard](?path=/story/components-m3radio--standard)
+- [Preference Group](?path=/story/components-m3radio--preference-group)
+- [Invalid Group](?path=/story/components-m3radio--invalid-group)
+
+## Usage guidance
+
+### Keep option sets short and explicit
+
+Radio groups work best when all options are visible at once and labels are mutually exclusive.
+
+### Do not use radios for toggles
+
+If the choice is simply on/off, prefer a switch or checkbox. Radios communicate one-of-many selection.
+
+## Resources
+
+- [M3 Radio button overview](https://m3.material.io/components/radio-button/overview)
+- [WAI-ARIA APG: Radio Group Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/)
