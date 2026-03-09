@@ -47,6 +47,11 @@ export type {
 } from '@/components/popper'
 
 export type {
+  M3RadioMethods,
+  M3RadioProps,
+} from '@/components/radio'
+
+export type {
   M3RichTooltipMethods,
   M3RichTooltipProps,
 } from '@/components/rich-tooltip'
@@ -142,6 +147,10 @@ export {
   M3Popper,
   useM3PopperCloserEffect,
 } from '@/components/popper'
+
+export {
+  M3Radio,
+} from '@/components/radio'
 
 export {
   M3RichTooltip,

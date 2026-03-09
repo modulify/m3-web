@@ -1,0 +1,142 @@
+@use "../../basics/motion" as m3-motion;
+@use "../../basics/shape" as m3-shape;
+
+.m3-radio {
+  --state-color: var(--m3-sys-primary);
+  --outline-color: var(--m3-sys-on-surface-variant);
+  --dot-scale: 0;
+
+  --m3-ripple-color: var(--m3-sys-primary);
+  --m3-ripple-effect-duration: 0.75s;
+  --m3-ripple-opacity: 0.2;
+
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+
+  @include m3-shape.reset-box-sizing;
+
+  &_checked {
+    --outline-color: var(--state-color);
+    --dot-scale: 1;
+  }
+
+  &_invalid {
+    --state-color: var(--m3-sys-error);
+    --outline-color: var(--m3-sys-error);
+    --m3-ripple-color: var(--m3-sys-error);
+  }
+
+  &__input {
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    cursor: inherit;
+    outline: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    z-index: 1;
+  }
+
+  &__icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    z-index: 0;
+
+    &::before,
+    &::after {
+      content: ' ';
+      display: inline-block;
+      position: absolute;
+      border-radius: 50%;
+      transition:
+        m3-motion.timing-standard(background-color),
+        m3-motion.timing-standard(border-color),
+        m3-motion.timing-standard(transform)
+      ;
+    }
+
+    &::before {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--outline-color);
+      left: 2px;
+      top: 2px;
+      box-sizing: border-box;
+    }
+
+    &::after {
+      width: 10px;
+      height: 10px;
+      left: 7px;
+      top: 7px;
+      background-color: var(--state-color);
+      transform: scale(var(--dot-scale));
+    }
+  }
+
+  &__state {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    opacity: 0;
+    overflow: hidden;
+    animation: m3-motion.timing-standard(m3-animation-zoom-out);
+    animation-fill-mode: forwards;
+    z-index: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    &::before {
+      content: ' ';
+      width: 100%;
+      height: 100%;
+      background: var(--state-color);
+      border-radius: inherit;
+      opacity: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      transition: m3-motion.timing-standard(opacity);
+    }
+  }
+
+  &__input:hover ~ &__state,
+  &__input:focus ~ &__state {
+    animation: m3-motion.timing-standard(m3-animation-zoom-in);
+    animation-fill-mode: forwards;
+  }
+
+  &__input:hover ~ &__state::before { opacity: 0.08; }
+  &__input:focus ~ &__state::before { opacity: 0.12; }
+
+  &_disabled {
+    cursor: default;
+  }
+
+  &_disabled &__icon::before {
+    border-color: color-mix(in srgb, var(--outline-color) 38%, transparent);
+  }
+
+  &_checked#{&}_disabled &__icon::after {
+    background-color: color-mix(in srgb, var(--state-color) 38%, transparent);
+  }
+
+  &_disabled &__state::before {
+    background: transparent;
+  }
+}

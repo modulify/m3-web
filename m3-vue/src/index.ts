@@ -59,6 +59,10 @@ export {
 } from '@/components/popper'
 
 export {
+  M3Radio,
+} from '@/components/radio'
+
+export {
   M3RichTooltip,
 } from '@/components/rich-tooltip'
 
