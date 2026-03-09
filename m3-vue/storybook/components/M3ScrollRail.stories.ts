@@ -22,7 +22,6 @@ const meta = {
     disabled: false,
   },
 
-  // eslint-disable-next-line max-lines-per-function
   render: (args: unknown) => ({
     name: 'M3ScrollRailStory',
 

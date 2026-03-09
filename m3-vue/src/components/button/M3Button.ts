@@ -48,7 +48,6 @@ export default defineComponent({
     },
   },
 
-  // eslint-disable-next-line max-lines-per-function
   setup (props, { attrs, expose, slots }) {
     const root = ref<M3LinkInstance | null>(null)
     const rootElement = computed(() => root.value?.el() ?? null)
