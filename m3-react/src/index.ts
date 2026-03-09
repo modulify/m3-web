@@ -16,6 +16,11 @@ export type {
 } from '@/components/checkbox'
 
 export type {
+  M3ChipMethods,
+  M3ChipProps,
+} from '@/components/chip'
+
+export type {
   M3IconProps,
 } from '@/components/icon'
 
@@ -112,6 +117,10 @@ export {
 export {
   M3Checkbox,
 } from '@/components/checkbox'
+
+export {
+  M3Chip,
+} from '@/components/chip'
 
 export {
   M3FabButton,

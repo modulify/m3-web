@@ -18,6 +18,10 @@ export {
 } from '@/components/checkbox'
 
 export {
+  M3Chip,
+} from '@/components/chip'
+
+export {
   M3FabButton,
 } from '@/components/fab-button'
 
