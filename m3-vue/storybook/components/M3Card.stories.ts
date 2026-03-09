@@ -92,7 +92,6 @@ export const LandscapeWithoutMedia: Story = {
 }
 
 export const Portrait: Story = {
-  // eslint-disable-next-line max-lines-per-function
   render: (args: unknown) => ({
     components: {
       M3Button,
@@ -134,7 +133,6 @@ export const Portrait: Story = {
 }
 
 export const AppearanceMatrix: Story = {
-  // eslint-disable-next-line max-lines-per-function
   render: () => ({
     components: {
       M3Card,

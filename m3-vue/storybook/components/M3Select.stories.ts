@@ -29,7 +29,6 @@ const meta = {
     },
   },
 
-  // eslint-disable-next-line max-lines-per-function
   render: (args: unknown) => ({
     name: 'M3SelectStory',
 
@@ -83,7 +82,6 @@ export const WithIcons: Story = {
     label: 'Country',
   },
 
-  // eslint-disable-next-line max-lines-per-function
   render: (args: unknown) => ({
     name: 'M3SelectStory',
 

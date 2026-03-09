@@ -53,7 +53,7 @@ export default [
         SwitchCase: 1,
       }],
       'linebreak-style': [2, 'unix'],
-      'max-lines-per-function': ['error', 30],
+      'max-lines-per-function': ['error', 50],
       'max-nested-callbacks': ['error', 3],
       'no-console': 'off',
       'no-constant-condition': 'off',

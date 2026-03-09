@@ -137,7 +137,6 @@ export const NavigationRail: Story = {
 }
 
 export const ModalNavigationDrawer: Story = {
-  // eslint-disable-next-line max-lines-per-function
   render: (args: unknown) => ({
     name: 'M3ModalNavigationDrawerStory',
 
