@@ -11,7 +11,10 @@ import {
   m3MotionEasings,
 } from '@modulify/m3-foundation/lib/motion'
 import { M3Surface } from '@/components/surface'
-import { distinct } from '@/utils/content'
+import {
+  defineSlot,
+  distinct,
+} from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export interface M3DialogProps extends HTMLAttributes<HTMLElement> {
@@ -30,7 +33,7 @@ const DIALOG_Z_INDEX = 1000
 const DIALOG_TRANSITION_MS = m3MotionDurations.medium2
 const DIALOG_TRANSITION_TIMING = m3MotionEasings.standard
 
-const Icon: FC<HTMLAttributes<HTMLElement>> = ({
+const Icon: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Dialog.Icon', ({
   className = '',
   children = [],
   ...attrs
@@ -38,9 +41,9 @@ const Icon: FC<HTMLAttributes<HTMLElement>> = ({
   <div className={toClassName(['m3-dialog__icon', className])} {...attrs}>
     {children}
   </div>
-)
+))
 
-const Header: FC<HTMLAttributes<HTMLElement>> = ({
+const Header: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Dialog.Header', ({
   className = '',
   children = [],
   ...attrs
@@ -48,9 +51,9 @@ const Header: FC<HTMLAttributes<HTMLElement>> = ({
   <header className={toClassName(['m3-dialog__header', className])} {...attrs}>
     {children}
   </header>
-)
+))
 
-const Footer: FC<HTMLAttributes<HTMLElement>> = ({
+const Footer: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Dialog.Footer', ({
   className = '',
   children = [],
   ...attrs
@@ -58,7 +61,7 @@ const Footer: FC<HTMLAttributes<HTMLElement>> = ({
   <footer className={toClassName(['m3-dialog__footer', className])} {...attrs}>
     {children}
   </footer>
-)
+))
 
 const M3Dialog: FC<M3DialogProps> = ({
   opened = false,

@@ -31,7 +31,10 @@ import {
 } from '@/hooks'
 
 import { compose } from '@/utils/events'
-import { distinct } from '@/utils/content'
+import {
+  defineSlot,
+  distinct,
+} from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 import { useM3NavigationAppearance } from './M3NavigationAppearance'
 
@@ -47,7 +50,7 @@ export interface M3NavigationTabProps extends HTMLAttributes<HTMLElement> {
 
 export interface M3NavigationTabMethods extends Clickable, Focusable {}
 
-const Icon: FC<HTMLAttributes<HTMLElement>> = ({
+const Icon: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3NavigationTab.Icon', ({
   className = '',
   children = [],
   ...attrs
@@ -55,10 +58,10 @@ const Icon: FC<HTMLAttributes<HTMLElement>> = ({
   <span className={toClassName(['m3-navigation-tab__icon', className])} {...attrs}>
     {children}
   </span>
-)
+))
 
-const Label: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const Badge: FC<{ children: ReactNode }> = props => <>{props.children}</>
+const Label: FC<{ children: ReactNode }> = defineSlot('M3NavigationTab.Label', props => <>{props.children}</>)
+const Badge: FC<{ children: ReactNode }> = defineSlot('M3NavigationTab.Badge', props => <>{props.children}</>)
 
 const M3NavigationTab: ForwardRefRenderFunction<
   M3NavigationTabMethods,

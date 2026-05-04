@@ -27,7 +27,10 @@ import {
   useId,
 } from '@/hooks'
 
-import { distinct } from '@/utils/content'
+import {
+  defineSlot,
+  distinct,
+} from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export type M3SelectOption<Value = unknown> = {
@@ -68,9 +71,9 @@ const CaretIcon: FC<SVGAttributes<SVGSVGElement>> = (attrs) => (
   </svg>
 )
 
-const Leading: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const OptionLeading: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const OptionContent: FC<{ children: ReactNode }> = props => <>{props.children}</>
+const Leading: FC<{ children: ReactNode }> = defineSlot('M3Select.Leading', props => <>{props.children}</>)
+const OptionLeading: FC<{ children: ReactNode }> = defineSlot('M3Select.OptionLeading', props => <>{props.children}</>)
+const OptionContent: FC<{ children: ReactNode }> = defineSlot('M3Select.OptionContent', props => <>{props.children}</>)
 
 const asRenderProp = <Context,>(value: unknown): null | ((context: Context) => ReactNode) => {
   return typeof value === 'function' ? value as (context: Context) => ReactNode : null

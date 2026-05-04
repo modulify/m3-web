@@ -19,14 +19,17 @@ import {
   useRef,
 } from 'react'
 
-import { distinct } from '@/utils/content'
+import {
+  defineSlot,
+  distinct,
+} from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export interface M3RichTooltipProps extends M3PopperProps {}
 export interface M3RichTooltipMethods extends M3PopperMethods {}
 
-const Heading: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const Footer: FC<{ children: ReactNode }> = props => <>{props.children}</>
+const Heading: FC<{ children: ReactNode }> = defineSlot('M3RichTooltip.Heading', props => <>{props.children}</>)
+const Footer: FC<{ children: ReactNode }> = defineSlot('M3RichTooltip.Footer', props => <>{props.children}</>)
 
 const M3RichTooltip: ForwardRefRenderFunction<
   M3RichTooltipMethods,

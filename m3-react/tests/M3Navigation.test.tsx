@@ -42,6 +42,38 @@ describe('m3-react/navigation', () => {
     expect(onToggle).toHaveBeenCalledWith(false)
   })
 
+  test('renders slots and repeated sections from fragments', () => {
+    render(
+      <M3Navigation expanded={true}>
+        <>
+          <M3Navigation.Top>Top from fragment</M3Navigation.Top>
+          <>
+            <M3Navigation.Header>Header from nested fragment</M3Navigation.Header>
+          </>
+        </>
+
+        <M3NavigationTab label="Home" />
+
+        <>
+          <M3NavigationSection>
+            <M3NavigationSection.Header>First section</M3NavigationSection.Header>
+            <M3NavigationTab label="Settings" />
+          </M3NavigationSection>
+
+          <M3NavigationSection>
+            <M3NavigationSection.Header>Second section</M3NavigationSection.Header>
+            <M3NavigationTab label="Help" />
+          </M3NavigationSection>
+        </>
+      </M3Navigation>
+    )
+
+    expect(screen.getByText('Top from fragment')).not.toBeNull()
+    expect(screen.getByText('Header from nested fragment')).not.toBeNull()
+    expect(screen.getByText('First section')).not.toBeNull()
+    expect(screen.getByText('Second section')).not.toBeNull()
+  })
+
   test('requests collapsing in auto mode after resize to large breakpoint', () => {
     const onToggle = vi.fn()
     const initialWidth = window.innerWidth

@@ -3,10 +3,13 @@ import type {
   HTMLAttributes,
 } from 'react'
 
-import { distinct } from '@/utils/content'
+import {
+  defineSlot,
+  distinct,
+} from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
-const Header: FC<HTMLAttributes<HTMLElement>> = ({
+const Header: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3NavigationSection.Header', ({
   className = '',
   children = [],
   ...attrs
@@ -14,7 +17,7 @@ const Header: FC<HTMLAttributes<HTMLElement>> = ({
   <div className={toClassName(['m3-navigation__section-header', className])} {...attrs}>
     {children}
   </div>
-)
+))
 
 const M3NavigationSection: FC<HTMLAttributes<HTMLElement>> = ({
   role = 'group',

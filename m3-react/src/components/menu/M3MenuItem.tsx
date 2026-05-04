@@ -18,7 +18,10 @@ import {
 } from 'react'
 
 import { compose } from '@/utils/events'
-import { distinct } from '@/utils/content'
+import {
+  defineSlot,
+  distinct,
+} from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export interface M3MenuItemProps extends HTMLAttributes<HTMLElement> {
@@ -27,8 +30,8 @@ export interface M3MenuItemProps extends HTMLAttributes<HTMLElement> {
   disabled?: boolean;
 }
 
-const Leading: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const Trailing: FC<{ children: ReactNode }> = props => <>{props.children}</>
+const Leading: FC<{ children: ReactNode }> = defineSlot('M3MenuItem.Leading', props => <>{props.children}</>)
+const Trailing: FC<{ children: ReactNode }> = defineSlot('M3MenuItem.Trailing', props => <>{props.children}</>)
 
 const M3MenuItem: FC<M3MenuItemProps> = ({
   href,

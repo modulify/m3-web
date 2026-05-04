@@ -16,7 +16,10 @@ import {
 import { useMemo } from 'react'
 import { useTransition } from 'react-transition-state'
 
-import { distinct } from '@/utils/content'
+import {
+  defineSlot,
+  distinct,
+} from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export interface M3SideSheetProps extends Omit<
@@ -38,10 +41,10 @@ export interface M3SideSheetProps extends Omit<
   onDismiss?: () => void;
 }
 
-const Affordance: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const Title: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const CloseIcon: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const Footer: FC<{ children: ReactNode }> = props => <>{props.children}</>
+const Affordance: FC<{ children: ReactNode }> = defineSlot('M3SideSheet.Affordance', props => <>{props.children}</>)
+const Title: FC<{ children: ReactNode }> = defineSlot('M3SideSheet.Title', props => <>{props.children}</>)
+const CloseIcon: FC<{ children: ReactNode }> = defineSlot('M3SideSheet.CloseIcon', props => <>{props.children}</>)
+const Footer: FC<{ children: ReactNode }> = defineSlot('M3SideSheet.Footer', props => <>{props.children}</>)
 
 const DOCKED_WIDTH = 256
 const MODAL_MIN_WIDTH = 320
