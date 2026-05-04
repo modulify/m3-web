@@ -48,6 +48,7 @@ export default [
         imports: 'always-multiline',
         objects: 'always-multiline',
       }],
+      'complexity': 'off',
       'indent': ['error', 2, {
         ignoreComments: true,
         SwitchCase: 1,
