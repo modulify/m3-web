@@ -21,6 +21,7 @@ import {
 import { compose } from '@/utils/events'
 import {
   augment,
+  defineSlot,
   distinct,
 } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
@@ -33,9 +34,9 @@ export interface M3CardProps extends HTMLAttributes<HTMLElement> {
   landscape?: boolean;
 }
 
-const Content: FC<{ children: ReactNode }> = props => <>{props.children}</>
+const Content: FC<{ children: ReactNode }> = defineSlot('M3Card.Content', props => <>{props.children}</>)
 
-const Media: FC<HTMLAttributes<HTMLElement>> = ({
+const Media: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Card.Media', ({
   className = '',
   children = [],
   ...attrs
@@ -43,9 +44,9 @@ const Media: FC<HTMLAttributes<HTMLElement>> = ({
   <div className={toClassName(['m3-card__media', className])} {...attrs}>
     {children}
   </div>
-)
+))
 
-const Heading: FC<HTMLAttributes<HTMLElement>> = ({
+const Heading: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Card.Heading', ({
   className = '',
   children = [],
   ...attrs
@@ -53,9 +54,9 @@ const Heading: FC<HTMLAttributes<HTMLElement>> = ({
   <div className={toClassName(['m3-card__heading', className])} {...attrs}>
     {children}
   </div>
-)
+))
 
-const Subheading: FC<HTMLAttributes<HTMLElement>> = ({
+const Subheading: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Card.Subheading', ({
   className = '',
   children = [],
   ...attrs
@@ -63,7 +64,7 @@ const Subheading: FC<HTMLAttributes<HTMLElement>> = ({
   <div className={toClassName(['m3-card__subheading', className])} {...attrs}>
     {children}
   </div>
-)
+))
 
 const M3Card: FC<M3CardProps> = ({
   id,

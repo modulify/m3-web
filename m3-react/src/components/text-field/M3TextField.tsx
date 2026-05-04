@@ -22,7 +22,10 @@ import {
 } from '@/hooks'
 
 import { compose } from '@/utils/events'
-import { distinct } from '@/utils/content'
+import {
+  defineSlot,
+  distinct,
+} from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 type TextFieldType =
@@ -56,9 +59,9 @@ export interface M3TextFieldProps extends RootAttrs {
 
 export interface M3TextFieldMethods extends Focusable {}
 
-const Label: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const LeadingIcon: FC<{ children: ReactNode }> = props => <>{props.children}</>
-const TrailingIcon: FC<{ children: ReactNode }> = props => <>{props.children}</>
+const Label: FC<{ children: ReactNode }> = defineSlot('M3TextField.Label', props => <>{props.children}</>)
+const LeadingIcon: FC<{ children: ReactNode }> = defineSlot('M3TextField.LeadingIcon', props => <>{props.children}</>)
+const TrailingIcon: FC<{ children: ReactNode }> = defineSlot('M3TextField.TrailingIcon', props => <>{props.children}</>)
 
 const M3TextField: ForwardRefRenderFunction<
   M3TextFieldMethods,

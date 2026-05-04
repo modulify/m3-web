@@ -15,8 +15,6 @@ import M3NavigationAppearance from '@/components/navigation/M3NavigationAppearan
 import M3NavigationSection from './M3NavigationSection'
 
 import {
-  Children,
-  isValidElement,
   useEffect,
   useMemo,
 } from 'react'
@@ -30,6 +28,10 @@ import {
 } from '@/hooks'
 
 import { compose } from '@/utils/events'
+import {
+  defineSlot,
+  distinct,
+} from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export interface M3NavigationProps extends HTMLAttributes<HTMLElement> {
@@ -39,7 +41,7 @@ export interface M3NavigationProps extends HTMLAttributes<HTMLElement> {
   onToggle?: (expanded: boolean) => void;
 }
 
-const Top: FC<HTMLAttributes<HTMLElement>> = ({
+const Top: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Navigation.Top', ({
   className = '',
   children = [],
   ...attrs
@@ -47,9 +49,9 @@ const Top: FC<HTMLAttributes<HTMLElement>> = ({
   <div className={toClassName(['m3-navigation__top', className])} {...attrs}>
     {children}
   </div>
-)
+))
 
-const Header: FC<HTMLAttributes<HTMLElement>> = ({
+const Header: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Navigation.Header', ({
   className = '',
   children = [],
   ...attrs
@@ -57,9 +59,9 @@ const Header: FC<HTMLAttributes<HTMLElement>> = ({
   <div className={toClassName(['m3-navigation__header', className])} {...attrs}>
     {children}
   </div>
-)
+))
 
-const Subheader: FC<HTMLAttributes<HTMLElement>> = ({
+const Subheader: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Navigation.Subheader', ({
   className = '',
   children = [],
   ...attrs
@@ -67,37 +69,7 @@ const Subheader: FC<HTMLAttributes<HTMLElement>> = ({
   <M3NavigationSection.Header className={className} {...attrs}>
     {children}
   </M3NavigationSection.Header>
-)
-
-const distinct = (children: ReactNode) => {
-  let top: ReactNode = null
-  let header: ReactNode = null
-  let subheader: ReactNode = null
-
-  const content: ReactNode[] = []
-  const sections: ReactNode[] = []
-
-  Children.forEach(children, child => {
-    if (isValidElement(child)) {
-      switch (child.type) {
-        case Top:
-          top = child; break
-        case Header:
-          header = child; break
-        case Subheader:
-          subheader = child; break
-        case M3NavigationSection:
-          sections.push(child); break
-        default:
-          content.push(child)
-      }
-    } else {
-      content.push(child)
-    }
-  })
-
-  return { top, header, subheader, content, sections }
-}
+))
 
 const M3Navigation: FC<M3NavigationProps> = ({
   appearance = 'auto',
@@ -116,7 +88,16 @@ const M3Navigation: FC<M3NavigationProps> = ({
     transitioning: expanded,
   }, ['appearance', 'transitioning'])
 
-  const slots = useMemo(() => distinct(children), [children])
+  const parsed = useMemo(() => distinct(children, {
+    slots: {
+      top: Top,
+      header: Header,
+      subheader: Subheader,
+    },
+    collections: {
+      sections: M3NavigationSection,
+    },
+  }), [children])
 
   const handlers = useRecord({
     onToggle,
@@ -174,14 +155,14 @@ const M3Navigation: FC<M3NavigationProps> = ({
         }, onTransitionEnd)}
         {...attrs}
       >
-        {slots.top}
-        {slots.header}
+        {parsed.slots.top}
+        {parsed.slots.header}
         <M3NavigationAppearance.Provider value={state.appearance}>
           <M3NavigationSection>
-            {slots.subheader}
-            {slots.content}
+            {parsed.slots.subheader}
+            {parsed.content}
           </M3NavigationSection>
-          {slots.sections}
+          {parsed.collections.sections}
         </M3NavigationAppearance.Provider>
       </nav>
     </>,

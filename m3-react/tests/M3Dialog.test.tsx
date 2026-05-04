@@ -115,6 +115,28 @@ describe('m3-react/dialog', () => {
     expect(screen.getByTestId('content-node')).not.toBeNull()
   })
 
+  test('does not render content wrapper for empty conditional children', async () => {
+    render(
+      <M3Dialog opened={true}>
+        {false}
+        {null}
+        {undefined}
+        {''}
+        <>
+          <M3Dialog.Header>
+            <h2>Only header</h2>
+          </M3Dialog.Header>
+        </>
+      </M3Dialog>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByText('Only header')).not.toBeNull()
+    })
+
+    expect(document.body.querySelector('.m3-dialog__content')).toBeNull()
+  })
+
   test('forwards dialog attributes and keeps default modal role', async () => {
     render(
       <M3Dialog
