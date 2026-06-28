@@ -20,7 +20,19 @@ version_for() {
   service="$1"
   binary="$2"
 
-  compose run --rm "$service" "$binary" --version | awk 'END { print }' | tr -d '\r'
+  if ! output="$(compose run --rm "$service" "$binary" --version 2>&1)"; then
+    echo "$output" >&2
+    exit 1
+  fi
+
+  version="$(printf '%s\n' "$output" | awk 'END { print }' | tr -d '\r')"
+
+  if [ -z "$version" ]; then
+    echo "Error: empty $binary version for $service." >&2
+    exit 1
+  fi
+
+  printf '%s\n' "$version"
 }
 
 expected_node="$(version_for node node)"

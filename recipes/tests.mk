@@ -1,6 +1,6 @@
 include recipes/common.mk
 
-YARN_PLAYWRIGHT=@docker-compose run --rm playwright yarn
+YARN_PLAYWRIGHT=@$(DOCKER_COMPOSE) run --rm playwright yarn
 COVERAGE_PARTS_DIR=coverage/.parts
 COVERAGE_UNIT_DIR=coverage/unit
 COVERAGE_E2E_REACT_DIR=coverage/e2e-react
@@ -77,7 +77,7 @@ endif
 .PHONY: test-e2e-stop
 test-e2e-stop: ## [Tests][local][cleanup] Stops stuck Playwright E2E host processes and run containers
 	$(TARGET_HEADER)
-	@pkill -TERM -f "docker-compose run --rm playwright yarn test:[e]2e" || true
-	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-react test:[e]2e" || true
-	@pkill -TERM -f "docker-compose run --rm playwright yarn workspace @modulify/m3-vue test:[e]2e" || true
+	@pkill -TERM -f "$(DOCKER_COMPOSE) run --rm playwright yarn test:[e]2e" || true
+	@pkill -TERM -f "$(DOCKER_COMPOSE) run --rm playwright yarn workspace @modulify/m3-react test:[e]2e" || true
+	@pkill -TERM -f "$(DOCKER_COMPOSE) run --rm playwright yarn workspace @modulify/m3-vue test:[e]2e" || true
 	@docker ps -q --filter "name=m3-web-playwright-run" | xargs -r docker rm -f
