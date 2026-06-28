@@ -125,7 +125,7 @@ make help
   resolved automatically before manual follow-up.
 
 ## Skills
-The skills listed below are stored locally in this repository under `skills/`.
+The skills listed below are stored locally in this repository under `.agents/skills/`.
 
 If the context was compacted and you see `Context compacted`, reread any skill
 whose description below starts with `[reread]` after the colon before
