@@ -39,7 +39,7 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.56.0",
     "uuid": "^14.0.1",
-    "vite": "^7.3.6"
+    "vite": "^8.1.0"
   },
   "contributors": [
     "Zaitsev Kirill <zaytsev.cmath10@gmail.com>"
