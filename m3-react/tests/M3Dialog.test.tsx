@@ -179,8 +179,11 @@ describe('m3-react/dialog', () => {
 
     expect(screen.getByText('Dialog body')).not.toBeNull()
 
+    await act(async () => {})
+
     await act(async () => {
-      vi.advanceTimersByTime(300)
+      vi.runAllTimers()
+      await Promise.resolve()
     })
 
     expect(screen.queryByText('Dialog body')).toBeNull()

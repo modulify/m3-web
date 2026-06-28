@@ -23,7 +23,7 @@ usage() {
 		"  --wait-selector CSS    optional selector to wait for before capture"
 }
 
-node_cmd_string="${PLAYWRIGHT_NODE_CMD:-docker-compose run --rm playwright node}"
+node_cmd_string="${PLAYWRIGHT_NODE_CMD:-docker compose run --rm playwright node}"
 read -r -a node_cmd <<< "$node_cmd_string"
 
 urls=()

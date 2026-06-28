@@ -2,29 +2,30 @@
 
 TARGET_HEADER=@echo -e '===== \e[34m' $@ '\e[0m'
 TARGET_OK=@echo -e '\e[32mOK\e[0m'
-YARN=@docker-compose run --rm node yarn
-PLAYWRIGHT_NODE_CMD=docker-compose run --rm playwright node
+DOCKER_COMPOSE ?= docker compose
+YARN=@$(DOCKER_COMPOSE) run --rm node yarn
+PLAYWRIGHT_NODE_CMD=$(DOCKER_COMPOSE) run --rm playwright node
 M3_UA?=m3-web-research/1.0
 
 .PHONY: up
 up: ## [Dev][docker] Starts storybook
 	$(TARGET_HEADER)
-	docker-compose up -d
+	$(DOCKER_COMPOSE) up -d
 
 .PHONY: restart
 restart: ## [Dev][docker] Restarts all docker services or a particular service, if argument "service" is specified (example: make restart service="storybook")
 	$(TARGET_HEADER)
 
 ifdef service
-	yes | docker-compose rm -s -v $(service) && docker-compose up -d $(service)
+	yes | $(DOCKER_COMPOSE) rm -s -v $(service) && $(DOCKER_COMPOSE) up -d $(service)
 else
-	docker-compose stop && docker-compose up -d
+	$(DOCKER_COMPOSE) stop && $(DOCKER_COMPOSE) up -d
 endif
 
 .PHONY: stop
 stop: ## [Dev][docker] Stops all docker services
 	$(TARGET_HEADER)
-	docker-compose stop
+	$(DOCKER_COMPOSE) stop
 
 include recipes/common.mk
 

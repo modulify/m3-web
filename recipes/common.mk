@@ -14,6 +14,6 @@ node_modules: package.json yarn.lock ## [Setup][docker][heavy] Installs dependen
 
 .PHONY: husky
 husky: node_modules ## [Setup][docker][git] Adds husky git hooks with commit content checks
-	@docker-compose run --rm node npx husky init
+	@$(DOCKER_COMPOSE) run --rm node npx husky init
 
 endif

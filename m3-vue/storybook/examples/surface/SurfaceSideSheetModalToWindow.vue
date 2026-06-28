@@ -354,8 +354,8 @@ const sideSheetWidth = ref(320)
 const windowWidth = ref(720)
 
 const modalInsetRight = ref(-(sideSheetWidth.value + 12))
-const modalRadiusLeft = ref(HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft)
-const modalElevationBase = ref(HIDDEN_SURFACE_DESCRIPTOR.elevation)
+const modalRadiusLeft = ref<number>(HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft)
+const modalElevationBase = ref<number>(HIDDEN_SURFACE_DESCRIPTOR.elevation)
 
 const modalMounted = ref(false)
 const modalVisible = ref(false)

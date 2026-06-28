@@ -23,10 +23,10 @@ exploration-preflight-local: ## [Exploration][safe] Validates required local CLI
 	$(TARGET_OK)
 
 .PHONY: exploration-preflight-docker
-exploration-preflight-docker: ## [Exploration][escalated][docker] Validates docker-compose and Playwright runtime prerequisites
+exploration-preflight-docker: ## [Exploration][escalated][docker] Validates Docker Compose and Playwright runtime prerequisites
 	$(TARGET_HEADER)
 	@set -e; \
-	docker-compose ps >/dev/null; \
+	$(DOCKER_COMPOSE) ps >/dev/null; \
 	$(PLAYWRIGHT_NODE_CMD) -e "console.log('playwright node', process.version)"; \
 	echo "preflight-docker:ok"
 	$(TARGET_OK)
