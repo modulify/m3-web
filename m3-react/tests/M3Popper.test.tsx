@@ -116,8 +116,12 @@ describe('m3-react/popper', () => {
       expect(popper.classList.contains('m3-popper_shown')).toBe(true)
     })
 
-    document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
-    document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await act(async () => {
+      await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 0)))
+    })
+
+    fireEvent.mouseDown(document.body)
+    fireEvent.click(document.body)
 
     await waitFor(() => {
       expect(popper.classList.contains('m3-popper_shown')).toBe(false)
