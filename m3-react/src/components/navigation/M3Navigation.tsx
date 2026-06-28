@@ -1,7 +1,6 @@
 import type {
   FC,
   HTMLAttributes,
-  ReactNode,
 } from 'react'
 
 import type {
@@ -21,18 +20,17 @@ import {
 
 import { createPortal } from 'react-dom'
 
-import {
-  useBreakpoint,
-  useRecord,
-  useWatch,
-} from '@/hooks'
-
 import { compose } from '@/utils/events'
 import {
   defineSlot,
   distinct,
 } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
+import {
+  useBreakpoint,
+  useRecord,
+  useWatch,
+} from '@/hooks'
 
 export interface M3NavigationProps extends HTMLAttributes<HTMLElement> {
   appearance?: Appearance;
