@@ -3,12 +3,18 @@ import type { StorybookConfig } from '@storybook/react-vite'
 const DEFAULT_ALLOWED_HOSTS = [
   'localhost',
   '127.0.0.1',
+  '.modulify.test',
 ]
 
 const envAllowedHosts = (process.env.STORYBOOK_ALLOWED_HOSTS ?? '')
   .split(',')
   .map(host => host.trim())
   .filter(Boolean)
+
+const allowedHosts = Array.from(new Set([
+  ...DEFAULT_ALLOWED_HOSTS,
+  ...envAllowedHosts,
+]))
 
 const config: StorybookConfig = {
   addons: [
@@ -19,6 +25,7 @@ const config: StorybookConfig = {
     '@storybook/addon-themes',
   ],
   core: {
+    allowedHosts,
     disableWhatsNewNotifications: true,
     builder: {
       name: '@storybook/builder-vite',
@@ -47,8 +54,7 @@ const config: StorybookConfig = {
     if (config.server.allowedHosts !== true) {
       config.server.allowedHosts = [
         ...(config.server.allowedHosts ?? []),
-        ...DEFAULT_ALLOWED_HOSTS,
-        ...envAllowedHosts,
+        ...allowedHosts,
       ]
     }
 
