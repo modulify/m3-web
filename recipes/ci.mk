@@ -1,3 +1,5 @@
+ACT_VERSION ?= v0.2.89
+
 .PHONY: ci-actionlint
 ci-actionlint: ## [CI][docker][lint] Lints GitHub Actions workflows locally (actionlint binary or docker image)
 	$(TARGET_HEADER)
@@ -17,7 +19,7 @@ ci-act-plan: ## [CI][docker] Shows act execution plan for tests workflow without
 	@if command -v act >/dev/null 2>&1; then \
 		act -P ubuntu-latest=catthehacker/ubuntu:act-latest -n pull_request -W .github/workflows/tests.yml; \
 	elif command -v docker >/dev/null 2>&1; then \
-		docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$$(pwd):/repo" -w /repo alpine:3.20 sh -lc "apk add --no-cache curl tar >/dev/null && curl -fsSL https://github.com/nektos/act/releases/download/v0.2.84/act_Linux_x86_64.tar.gz | tar -xz -C /tmp && /tmp/act -P ubuntu-latest=catthehacker/ubuntu:act-latest -n pull_request -W .github/workflows/tests.yml"; \
+		docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$$(pwd):/repo" -w /repo alpine:3.20 sh -lc "apk add --no-cache curl tar >/dev/null && curl -fsSL https://github.com/nektos/act/releases/download/$(ACT_VERSION)/act_Linux_x86_64.tar.gz | tar -xz -C /tmp && /tmp/act -P ubuntu-latest=catthehacker/ubuntu:act-latest -n pull_request -W .github/workflows/tests.yml"; \
 	else \
 		echo "act is not installed and docker is unavailable"; \
 		exit 1; \
@@ -30,7 +32,7 @@ ci-act-tests: ## [CI][docker][heavy][network] Runs tests workflow locally via ac
 	@if command -v act >/dev/null 2>&1; then \
 		act -P ubuntu-latest=catthehacker/ubuntu:act-latest pull_request -W .github/workflows/tests.yml -j pr-check -j eslint -j tests -j storybook-tests; \
 	elif command -v docker >/dev/null 2>&1; then \
-		docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$$(pwd):/repo" -w /repo alpine:3.20 sh -lc "apk add --no-cache curl tar >/dev/null && curl -fsSL https://github.com/nektos/act/releases/download/v0.2.84/act_Linux_x86_64.tar.gz | tar -xz -C /tmp && /tmp/act -P ubuntu-latest=catthehacker/ubuntu:act-latest pull_request -W .github/workflows/tests.yml -j pr-check -j eslint -j tests -j storybook-tests"; \
+		docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$$(pwd):/repo" -w /repo alpine:3.20 sh -lc "apk add --no-cache curl tar >/dev/null && curl -fsSL https://github.com/nektos/act/releases/download/$(ACT_VERSION)/act_Linux_x86_64.tar.gz | tar -xz -C /tmp && /tmp/act -P ubuntu-latest=catthehacker/ubuntu:act-latest pull_request -W .github/workflows/tests.yml -j pr-check -j eslint -j tests -j storybook-tests"; \
 	else \
 		echo "act is not installed and docker is unavailable"; \
 		exit 1; \
