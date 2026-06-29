@@ -11,6 +11,12 @@
     "scaffolding",
     "styles"
   ],
+  "files": [
+    "assets",
+    "index.d.ts",
+    "lib",
+    "types"
+  ],
   "scripts": {
     "build": "echo \"No build available yet\"",
     "eslint": "eslint ./lib ./types",
