@@ -120,14 +120,17 @@ export default {
       },
     },
     options: {
-      storySort: (a, b) => {
-        return a.id.endsWith('docs') && !b.id.endsWith('docs')
+      storySort: (a = { id: '' }, b = { id: '' }) => {
+        const aId = a?.id ?? ''
+        const bId = b?.id ?? ''
+
+        return aId.endsWith('docs') && !bId.endsWith('docs')
           ? -1
-          : !a.id.endsWith('docs') && b.id.endsWith('docs')
+          : !aId.endsWith('docs') && bId.endsWith('docs')
             ? 1
-            : a.id === b.id
+            : aId === bId
               ? 0
-              : a.id.localeCompare(b.id, undefined, { numeric: true })
+              : aId.localeCompare(bId, undefined, { numeric: true })
       },
     },
   },
@@ -138,4 +141,4 @@ export default {
     }),
   ],
   tags: ['autodocs'],
-} as Preview
+} satisfies Preview

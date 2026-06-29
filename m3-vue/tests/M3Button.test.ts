@@ -9,6 +9,20 @@ import {
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 
+const getElement = (container: ParentNode, selector: string): Element => {
+  const element = container.querySelector(selector)
+
+  expect(element).not.toBeNull()
+
+  return element as Element
+}
+
+const getChildNode = (node: ChildNode | null): ChildNode => {
+  expect(node).not.toBeNull()
+
+  return node as ChildNode
+}
+
 describe('m3-vue/button', () => {
   test('text node is wrapped', () => {
     const { container } = render(M3Button, {
@@ -17,9 +31,8 @@ describe('m3-vue/button', () => {
       },
     })
 
-    const text = container.querySelector('.m3-button__text')
+    const text = getElement(container, '.m3-button__text')
 
-    expect(text).not.toBeNull()
     expect(text.innerHTML).toEqual('Some text')
   })
 
@@ -30,9 +43,8 @@ describe('m3-vue/button', () => {
       },
     })
 
-    const icon = container.querySelector('.m3-button__icon > .m3-icon')
+    const icon = getElement(container, '.m3-button__icon > .m3-icon')
 
-    expect(icon).not.toBeNull()
     expect(icon.innerHTML).toEqual('edit')
   })
     
@@ -46,14 +58,12 @@ describe('m3-vue/button', () => {
       },
     })
 
-    const icon = container.querySelector('.m3-button__icon > .m3-icon')
+    const icon = getElement(container, '.m3-button__icon > .m3-icon')
 
-    expect(icon).not.toBeNull()
     expect(icon.innerHTML).toEqual('edit')
 
-    const text = container.querySelector('.m3-button__text')
+    const text = getElement(container, '.m3-button__text')
 
-    expect(text).not.toBeNull()
     expect(text.innerHTML.trim()).toEqual('Some text')
   })
 
@@ -69,9 +79,8 @@ describe('m3-vue/button', () => {
       },
     })
 
-    const text = container.querySelector(`.m3-button__text ${tag}`)
+    const text = getElement(container, `.m3-button__text ${tag}`)
 
-    expect(text).not.toBeNull()
     expect(text.innerHTML.trim()).toEqual('Some text')
   })
 
@@ -87,18 +96,16 @@ describe('m3-vue/button', () => {
       },
     })
 
-    const icon = container.querySelector('.m3-button__icon > .m3-icon')
+    const icon = getElement(container, '.m3-button__icon > .m3-icon')
 
-    expect(icon).not.toBeNull()
     expect(icon.innerHTML).toEqual('edit')
 
     isIcon.value = false
 
     await nextTick()
 
-    const text = container.querySelector('.m3-button__text')
+    const text = getElement(container, '.m3-button__text')
 
-    expect(text).not.toBeNull()
     expect(text.innerHTML).toEqual('Some text')
   })
 
@@ -114,24 +121,23 @@ describe('m3-vue/button', () => {
       },
     })
 
-    const contentBefore = container.querySelector('.m3-button__content')
+    const contentBefore = getElement(container, '.m3-button__content')
 
     expect(contentBefore.childElementCount).toEqual(2)
 
-    const icon = container.querySelector('.m3-icon')
+    const icon = getElement(container, '.m3-icon')
 
-    expect(icon).not.toBeNull()
     expect(icon.innerHTML).toEqual('edit')
-    expect(contentBefore.lastChild.textContent).toEqual('Some text')
+    expect(getChildNode(contentBefore.lastChild).textContent).toEqual('Some text')
 
     iconExist.value = false
 
     await nextTick()
 
-    const contentAfter = container.querySelector('.m3-button__content')
+    const contentAfter = getElement(container, '.m3-button__content')
 
     expect(contentAfter.childElementCount).toEqual(1)
-    expect(contentAfter.firstChild.textContent).toEqual('Some text')
+    expect(getChildNode(contentAfter.firstChild).textContent).toEqual('Some text')
   })
 
   test('button is link when passed prop href', () => {
@@ -140,7 +146,7 @@ describe('m3-vue/button', () => {
       props: { href },
     })
 
-    const a = container.querySelector('.m3-button')
+    const a = getElement(container, '.m3-button')
 
     expect(a.tagName).toBe('A')
     expect(a.getAttribute('href')).toBe(href)

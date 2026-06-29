@@ -48,17 +48,20 @@ export type ExtractRequired<S extends Shape<object>> = ExtractType<ShapeRequired
 export type ExtractOptional<S extends Shape<object>> = Partial<ExtractType<ShapeOptional<S>>>
 
 type TypeOf<S extends Shape<object>> = ExtractRequired<S> & ExtractOptional<S>
+type ShapeKey<S extends Shape<object>> = Extract<keyof S, string>
+type ShapeConfig = [Predicate<unknown>, boolean] | Predicate<unknown>
 
 export const isShape = <S extends Shape<object>>(shape: S) => {
-  const properties = Object.keys(shape)
+  const properties = Object.keys(shape) as ShapeKey<S>[]
+  const shapeConfig = shape as Record<ShapeKey<S>, ShapeConfig>
 
   return (value: unknown): value is TypeOf<S> => typeof value === 'object' && value !== null && properties.every(p => {
-    const config = shape[p]
+    const config = shapeConfig[p]
     const [predicate, required] = isArray(config) ? config : [config, false]
     if (!(p in value)) {
       return !required
     }
 
-    return predicate(value[p])
+    return predicate((value as Record<ShapeKey<S>, unknown>)[p])
   })
 }

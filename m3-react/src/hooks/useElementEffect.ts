@@ -13,7 +13,7 @@ const compose = <T extends Element>(el: T, effect: ElementEffect<T> | ElementEff
   return () => _destructors.forEach(d => d())
 }
 
-export default <T extends Element>(ref: MutableRefObject<T>, effect: ElementEffect<T> | ElementEffect<T>[]) => {
+export default <T extends Element>(ref: MutableRefObject<T | null>, effect: ElementEffect<T> | ElementEffect<T>[]) => {
   return useEffect(() => {
     return ref.current
       ? compose(ref.current, effect)

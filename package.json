@@ -38,8 +38,12 @@
     "jsdom": "^29.1.1",
     "nyc": "^18.0.0",
     "playwright": "^1.61.1",
-    "typescript": "~5.9.3",
+    "typescript": "~6.0.3",
     "vitest": "^4.1.9"
+  },
+  "resolutions": {
+    "@typescript-eslint/utils@npm:^8.48.0": "npm:8.62.0",
+    "typescript@npm:^5.9.3": "npm:6.0.3"
   },
   "contributors": [
     "Tatyana Komolyh <tatyana.comolyh@gmail.com>"

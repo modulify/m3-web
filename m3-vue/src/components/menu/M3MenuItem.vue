@@ -8,7 +8,7 @@
             'm3-menu-item_selected': selected,
             'm3-menu-item_disabled': disabled,
         }"
-        @keyup.enter="event => ripple?.activate(event)"
+        @keyup.enter="onKeyUp"
     >
         <M3Ripple ref="ripple" :owner="ref(rootElement)" />
 
@@ -79,4 +79,6 @@ defineProps({
 const root = ref<M3LinkInstance | null>(null)
 const rootElement = computed(() => root.value?.el() ?? null)
 const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
+
+const onKeyUp = (event: KeyboardEvent) => ripple.value?.activate(event)
 </script>

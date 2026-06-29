@@ -25,7 +25,7 @@ const M3Icon: FC<M3IconProps> = ({
   className = '',
   ...attrs
 }) => {
-  const appearanceInherited: Appearance = useContext(M3IconAppearance)
+  const appearanceInherited = useContext(M3IconAppearance)
   const appearanceActual: Appearance = appearanceInherited ?? appearance
 
   return (

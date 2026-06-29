@@ -120,24 +120,25 @@ export default {
       },
     },
     options: {
-      storySort: (left, right) => {
-        const withFallback = (story, key) => typeof story[key] === 'string' ? story[key] : ''
-        const normalize = (entry) => entry && typeof entry === 'object' ? entry : {}
-        const docsRank = (story) => {
-          const id = withFallback(story, 'id')
-          const name = withFallback(story, 'name').toLowerCase()
-          return story.type === 'docs' || name === 'docs' || id.endsWith('--docs') || id.endsWith('-docs')
-            ? 0
-            : 1
-        }
+      storySort: (
+        left = { id: '', name: '', title: '', type: '' },
+        right = { id: '', name: '', title: '', type: '' }
+      ) => {
+        const a = left || { id: '', name: '', title: '', type: '' }
+        const b = right || { id: '', name: '', title: '', type: '' }
+        const aTitle = typeof a.title === 'string' ? a.title : ''
+        const bTitle = typeof b.title === 'string' ? b.title : ''
+        const aId = typeof a.id === 'string' ? a.id : ''
+        const bId = typeof b.id === 'string' ? b.id : ''
+        const aName = typeof a.name === 'string' ? a.name : ''
+        const bName = typeof b.name === 'string' ? b.name : ''
+        const aDocsRank = a.type === 'docs' || aName.toLowerCase() === 'docs' || aId.endsWith('--docs') || aId.endsWith('-docs') ? 0 : 1
+        const bDocsRank = b.type === 'docs' || bName.toLowerCase() === 'docs' || bId.endsWith('--docs') || bId.endsWith('-docs') ? 0 : 1
 
-        const a = normalize(left)
-        const b = normalize(right)
-
-        return withFallback(a, 'title').localeCompare(withFallback(b, 'title'), undefined, { numeric: true }) ||
-          docsRank(a) - docsRank(b) ||
-          withFallback(a, 'name').localeCompare(withFallback(b, 'name'), undefined, { numeric: true }) ||
-          withFallback(a, 'id').localeCompare(withFallback(b, 'id'), undefined, { numeric: true })
+        return aTitle.localeCompare(bTitle, undefined, { numeric: true }) ||
+          aDocsRank - bDocsRank ||
+          aName.localeCompare(bName, undefined, { numeric: true }) ||
+          aId.localeCompare(bId, undefined, { numeric: true })
       },
     },
   },
@@ -147,4 +148,4 @@ export default {
       defaultTheme: 'light',
     }),
   ],
-} as Preview
+} satisfies Preview

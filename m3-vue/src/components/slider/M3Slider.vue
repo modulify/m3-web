@@ -199,7 +199,7 @@ const ariaOptionsToAttrs = (options: AriaOptions): {
   }
 }
 
-const restrict = (value: number, [min, max]) => Math.max(Math.min(max, value), min)
+const restrict = (value: number, [min, max]: [number, number]) => Math.max(Math.min(max, value), min)
 
 const current = computed(() => {
   if (Array.isArray(props.value)) {
@@ -240,8 +240,8 @@ const keys = {
   space: false,
 }
 
-const addNotch = (el: HTMLElement) => {
-  if (!notches.value.includes(el)) {
+const addNotch = (el: unknown) => {
+  if (el instanceof HTMLElement && !notches.value.includes(el)) {
     notches.value.push(el)
   }
 }
@@ -334,7 +334,7 @@ const getEventShare = (event: MouseEvent | TouchEvent) => {
 }
 
 const getEventValue = (event: MouseEvent | TouchEvent) => {
-  return nearest(props.min + (props.max - props.min) * getEventShare(event))
+  return nearest(props.min + (props.max - props.min) * (getEventShare(event) ?? 0))
 }
 
 const stepFor = (leap: boolean) => {

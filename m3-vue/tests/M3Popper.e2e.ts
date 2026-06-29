@@ -119,9 +119,15 @@ const waitForPopper = async () => {
     expect(popper).not.toBeNull()
   })
 
+  const getElement = (element: HTMLElement | null): HTMLElement => {
+    expect(element).not.toBeNull()
+
+    return element as HTMLElement
+  }
+
   return {
-    positioner: positioner as HTMLElement,
-    popper: popper as HTMLElement,
+    positioner: getElement(positioner),
+    popper: getElement(popper),
   }
 }
 
