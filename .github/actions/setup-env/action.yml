@@ -10,7 +10,7 @@ runs:
   using: composite
   steps:
     - name: Use Node.js ${{ inputs.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node-version }}
 
@@ -19,7 +19,7 @@ runs:
       run: make .yarnrc.yml
 
     - name: Cache dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: .yarn
         key: ${{ runner.OS }}-node-${{ inputs.node-version }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -29,3 +29,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: yarn install
+
+    - name: Fix PATH for workspace bins
+      shell: bash
+      run: echo "${{ github.workspace }}/node_modules/.bin" >> "$GITHUB_PATH"

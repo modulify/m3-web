@@ -51,9 +51,20 @@ jobs:
             echo "has_open_pr=false" >> "$GITHUB_OUTPUT"
           fi
 
-  eslint:
+  workflow-lint:
     needs: pr-check
     if: github.event_name != 'push' || github.ref == 'refs/heads/main' || needs.pr-check.outputs.has_open_pr != 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
+        uses: actions/checkout@v6
+
+      - name: Run actionlint
+        uses: devops-actions/actionlint@v0.1.10
+
+  eslint:
+    needs: workflow-lint
     runs-on: ubuntu-latest
 
     strategy:
@@ -62,7 +73,7 @@ jobs:
 
     steps:
       - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node and dependencies
         uses: ./.github/actions/setup-env
@@ -72,11 +83,8 @@ jobs:
       - name: Run eslint
         run: yarn eslint
 
-  tests:
+  build:
     needs: eslint
-
-    timeout-minutes: 90
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -85,7 +93,35 @@ jobs:
 
     steps:
       - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+
+      - name: Setup Node and dependencies
+        uses: ./.github/actions/setup-env
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Run package type checks
+        run: yarn tsc
+
+      - name: Run e2e config type checks
+        if: matrix.node-version == '24.x'
+        run: yarn tsc:e2e
+
+      - name: Build packages
+        run: yarn build
+
+  tests:
+    needs: build
+    timeout-minutes: 90
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 22.x, 24.x ]
+
+    steps:
+      - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
+        uses: actions/checkout@v6
 
       - name: Setup Node and dependencies
         uses: ./.github/actions/setup-env
@@ -104,6 +140,10 @@ jobs:
         if: matrix.node-version == '24.x'
         run: yarn playwright install --with-deps chromium
 
+      - name: Run e2e tests
+        if: matrix.node-version == '24.x'
+        run: yarn test:e2e
+
       - name: Run merged coverage
         if: matrix.node-version == '24.x'
         run: |
@@ -121,7 +161,7 @@ jobs:
 
       - name: Upload Playwright/Vitest artifacts on failure
         if: failure() && matrix.node-version == '24.x'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: playwright-vitest-artifacts-node-24
           path: artifacts
@@ -129,7 +169,7 @@ jobs:
 
       - name: Upload merged coverage artifacts
         if: matrix.node-version == '24.x' && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-node-24
           path: |
@@ -140,15 +180,14 @@ jobs:
   codecov:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: tests
-
     runs-on: ubuntu-latest
 
     steps:
       - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download merged coverage artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: coverage-node-24
           path: coverage
@@ -164,10 +203,8 @@ jobs:
           verbose: true
 
   storybook-tests:
-    needs: eslint
-
+    needs: build
     timeout-minutes: 60
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -176,7 +213,7 @@ jobs:
 
     steps:
       - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node and dependencies
         uses: ./.github/actions/setup-env

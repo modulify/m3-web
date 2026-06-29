@@ -1,0 +1,98 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        type: choice
+        options:
+          - 'alpha'
+          - 'beta'
+          - 'rc'
+          - 'none'
+        description: Prerelease type
+        default: 'none'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node and dependencies
+        uses: ./.github/actions/setup-env
+        with:
+          node-version: '24.x'
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Run package type checks
+        run: yarn tsc
+
+      - name: Run test type checks
+        run: yarn tsc:tests
+
+      - name: Run e2e config type checks
+        run: yarn tsc:e2e
+
+      - name: Run eslint
+        run: yarn eslint
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Install Playwright Chromium
+        run: yarn playwright install --with-deps chromium
+
+      - name: Run e2e tests
+        run: yarn test:e2e
+
+      - name: Build packages
+        run: yarn build
+
+      - name: Build React Storybook
+        run: yarn workspace @modulify/m3-react storybook:build --test --quiet
+
+      - name: Build Vue Storybook
+        run: yarn workspace @modulify/m3-vue storybook:build --test --quiet
+
+      - name: Run release [${{ inputs.prerelease }}]
+        if: ${{ inputs.prerelease != 'none' }}
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+        run: yarn release:${{ inputs.prerelease }}
+
+      - name: Ensure stable release is running from main
+        if: ${{ inputs.prerelease == 'none' }}
+        run: |
+          if [ "${{ github.ref_name }}" != "main" ]; then
+            echo "Stable release is allowed only from main. Current ref: ${{ github.ref_name }}"
+            exit 1
+          fi
+
+      - name: Run release
+        if: ${{ inputs.prerelease == 'none' }}
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+        run: yarn release
+
+      - name: Push current branch with tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: git push --follow-tags origin HEAD:${{ github.ref_name }}
+
+      - name: Publish packages to npm
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: yarn publish:packages
