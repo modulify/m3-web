@@ -33,8 +33,8 @@ const M3ScrollRail: ForwardRefRenderFunction<
   M3ScrollRailMethods,
   M3ScrollRailProps
 > = ({
-  horizontal,
-  disabled,
+  horizontal = false,
+  disabled = false,
   className = '',
   ...attrs
 }, ref) => {

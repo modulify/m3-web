@@ -142,7 +142,7 @@ const _id = useId('m3-navigation-item', computed(() => props.id))
 const appearance = inject<Ref<Appearance>>(M3NavigationAppearance, ref('auto'))
 const breakpoint = useBreakpoint()
 const button = ref<M3LinkInstance | null>(null)
-const buttonElement = computed(() => button.value?.el())
+const buttonElement = computed(() => button.value?.el() ?? null)
 
 const inDrawer = computed(() => breakpoint.value.ge('large') || appearance.value === 'drawer')
 

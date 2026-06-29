@@ -60,7 +60,7 @@ describe('m3-vue/navigation', () => {
     window.dispatchEvent(new Event('resize'))
     await nextTick()
 
-    expect(view.emitted()['update:expanded']?.some(([value]) => value === false)).toBe(true)
+    expect(view.emitted()['update:expanded']?.some(event => Array.isArray(event) && event[0] === false)).toBe(true)
 
     Object.defineProperty(window, 'innerWidth', {
       configurable: true,

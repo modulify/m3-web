@@ -1,4 +1,4 @@
 import makeId from '@/utils/id'
-import useFallback from '@/hooks/useFallback'
+import { useMemo } from 'react'
 
-export default <T extends string>(id: T, prefix: string) => useFallback(id, () => makeId(prefix))
+export default (id: string | null | undefined, prefix: string): string => useMemo(() => id ?? makeId(prefix), [id, prefix])

@@ -20,9 +20,10 @@ const CONFIG_KEYS = [
 ]
 const SLOT_ID = Symbol.for('@modulify/m3-react.slot')
 
-type SlotComponent = string | JSXElementConstructor<unknown>
 type DuplicateSlotPolicy = 'error' | 'ignore' | 'warn'
-type SlottedComponent = JSXElementConstructor<unknown> & {
+type AnyComponent = Exclude<ReactElement['type'], string>
+type SlotComponent = string | AnyComponent
+type SlottedComponent = AnyComponent & {
   [SLOT_ID]?: string;
 }
 
@@ -76,10 +77,10 @@ export const normalize = (children: ReactNode): [ReactNode, boolean][] => {
 
 export const augment = <
   Props = Record<string, unknown>,
-  Type extends string | JSXElementConstructor<unknown> = string | JSXElementConstructor<unknown>,
->(el: ReactElement<Props, Type>, props: Props) => cloneElement(el, { ...props })
+  Type extends string | AnyComponent = string | AnyComponent,
+>(el: ReactElement<Props, Type>, props: Props) => cloneElement(el, { ...props } as Partial<Props>)
 
-export const defineSlot = <Component extends JSXElementConstructor<unknown>>(
+export const defineSlot = <Component extends AnyComponent>(
   id: string,
   component: Component
 ): Component => {

@@ -34,7 +34,7 @@ export default <
         if (ref.current[property as K] !== value) {
           ref.current[property as K] = value
           if (property in dispatchers) {
-            dispatchers[property](value)
+            dispatchers[property as K](value)
           }
         }
         return true

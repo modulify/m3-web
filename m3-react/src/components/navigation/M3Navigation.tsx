@@ -134,7 +134,7 @@ const M3Navigation: FC<M3NavigationProps> = ({
       >
         <div
           className="m3-scrim"
-          style={!expanded && !state.transitioning ? { display: 'none' } : null}
+          style={!expanded && !state.transitioning ? { display: 'none' } : undefined}
           onClick={() => handlers.onToggle(false)}
         />
       </CSSTransition>

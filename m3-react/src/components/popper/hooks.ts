@@ -38,7 +38,7 @@ export const useAutoAdjust = (
 }, [adjust])
 
 export const useDelay = (delay: M3PopperProps['delay']) => {
-  const normalized = useMemo(() => normalizeDelay(delay), [delay])
+  const normalized = useMemo(() => normalizeDelay(delay ?? 0), [delay])
 
   return [
     useMemo(() => normalized.show, [normalized]),

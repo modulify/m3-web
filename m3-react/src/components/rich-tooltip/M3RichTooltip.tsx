@@ -49,7 +49,7 @@ const M3RichTooltip: ForwardRefRenderFunction<
   })
 
   useImperativeHandle(ref, () => ({
-    adjust: () => popper.current?.adjust(),
+    adjust: () => popper.current?.adjust() ?? Promise.resolve(),
     contains: (el: Element | null) => popper.current?.contains(el) ?? false,
     show: (immediately = false) => popper.current?.show(immediately),
     hide: (immediately = false, reason: 'generic') => popper.current?.hide(immediately, reason),
