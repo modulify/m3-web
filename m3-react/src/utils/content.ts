@@ -123,9 +123,7 @@ const isConfig = (value: Record<string, unknown>): boolean => {
 }
 
 const shouldWarn = (): boolean => {
-  const meta = import.meta as ImportMeta & { env?: { DEV?: boolean; MODE?: string } }
-
-  return meta.env?.DEV !== false && meta.env?.MODE !== 'production'
+  return import.meta.env.DEV
 }
 
 const handleDuplicateSlot = (name: string, policy: DuplicateSlotPolicy) => {
