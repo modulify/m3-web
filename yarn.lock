@@ -1893,7 +1893,7 @@ __metadata:
     eslint: "npm:^9.39.4"
     eslint-plugin-import: "npm:^2.32.0"
     eslint-plugin-unused-imports: "npm:^4.4.1"
-    eslint-plugin-vue: "npm:^10.8.0"
+    eslint-plugin-vue: "npm:^10.9.2"
     flag-icons: "npm:^7.5.0"
     globals: "npm:^17.3.0"
     highlight.js: "npm:^11.11.1"
@@ -6442,7 +6442,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^10.8.0":
+"eslint-plugin-vue@npm:^10.9.2":
   version: 10.9.2
   resolution: "eslint-plugin-vue@npm:10.9.2"
   dependencies:
