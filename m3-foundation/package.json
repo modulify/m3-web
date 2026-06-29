@@ -33,7 +33,6 @@
     "globals": "^17.3.0",
     "husky": "^9.1.7",
     "sass": "^1.97.3",
-    "standard-version": "^9.5.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "typescript": "~6.0.3",

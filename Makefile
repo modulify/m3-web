@@ -37,6 +37,7 @@ build: node_modules ## [Build][docker] Creates a dist catalogue with library bui
 include recipes/lint.mk
 include recipes/tests.mk
 include recipes/storybook.mk
+include recipes/release.mk
 include recipes/ci.mk
 include recipes/research.mk
 include recipes/exploration.mk
