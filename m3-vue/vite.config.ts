@@ -15,10 +15,7 @@ export default defineConfig({
       name: '@modulify/m3-vue',
       formats: ['es', 'cjs'],
       entry: resolve(__dirname, './src/index.ts'),
-      fileName: (format) => `m3-vue.${{
-        es: 'mjs',
-        cjs: 'cjs',
-      }[format]}`,
+      fileName: (format) => `m3-vue.${format === 'es' ? 'mjs' : format}`,
     },
     minify: false,
     rollupOptions: {

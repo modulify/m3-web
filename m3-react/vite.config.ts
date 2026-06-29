@@ -15,10 +15,7 @@ export default defineConfig({
       name: '@modulify/m3-react',
       formats: ['es', 'cjs'],
       entry: resolve(__dirname, './src/index.ts'),
-      fileName: (format) => `m3-react.${{
-        es: 'mjs',
-        cjs: 'cjs',
-      }[format]}`,
+      fileName: (format) => `m3-react.${format === 'es' ? 'mjs' : format}`,
     },
     minify: false,
     rollupOptions: {
