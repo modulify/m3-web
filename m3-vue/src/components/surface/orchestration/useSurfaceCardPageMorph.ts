@@ -170,11 +170,11 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
       scheduleSyncMotion()
     })
 
-    if (canvas.value && observer) {
+    if (canvas.value) {
       observer.observe(canvas.value)
     }
 
-    if (originSlot.value && observer) {
+    if (originSlot.value) {
       observer.observe(originSlot.value)
     }
   })
