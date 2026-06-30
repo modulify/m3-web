@@ -196,6 +196,46 @@ describe('m3-react/popper e2e', () => {
     })
   })
 
+  test('does not capture pointer events after hiding while still attached', async () => {
+    target = document.createElement('button')
+    document.body.append(target)
+
+    const popperRef = createRef<M3PopperMethods>()
+
+    const mounted = render(
+      <M3Popper
+        ref={popperRef}
+        target={target}
+        shown={true}
+        detachTimeout={null}
+      >
+        <button type="button">
+          Popper action
+        </button>
+      </M3Popper>
+    )
+    unmount = mounted.unmount
+
+    const { positioner, popper } = await waitForPopper()
+
+    await waitFor(() => {
+      expect(popper.classList.contains('m3-popper_shown')).toBe(true)
+      expect(getComputedStyle(positioner).pointerEvents).toBe('none')
+      expect(getComputedStyle(popper).pointerEvents).toBe('auto')
+    })
+
+    await act(async () => {
+      popperRef.current?.hide(true)
+    })
+
+    await waitFor(() => {
+      expect(document.body.contains(positioner)).toBe(true)
+      expect(popper.classList.contains('m3-popper_shown')).toBe(false)
+      expect(getComputedStyle(positioner).pointerEvents).toBe('none')
+      expect(getComputedStyle(popper).pointerEvents).toBe('none')
+    })
+  })
+
   test('changes geometry when placement switches from bottom to right', async () => {
     target = document.createElement('button')
     document.body.append(target)
