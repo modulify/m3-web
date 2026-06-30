@@ -91,7 +91,7 @@ export function useSurfaceSideSheetMorph(): UseSurfaceSideSheetMorphResult {
   const [modalRole, setModalRole] = useStateRef<ModalRole>(DOCKED_SIDE_SHEET_DESCRIPTOR.variant)
   const [modalTransitionMs, setModalTransitionMs] = useStateRef<number>(PANEL_TRANSITION_MS)
   const [transitioning, setTransitioning, transitioningRef] = useStateRef(false)
-  const [lastDockedGeometry, setLastDockedGeometry, lastDockedGeometryRef] = useStateRef<SurfaceGeometry | null>(null)
+  const [, setLastDockedGeometry, lastDockedGeometryRef] = useStateRef<SurfaceGeometry | null>(null)
 
   const dockedHostRef = useRef<HTMLDivElement | null>(null)
   const layoutRootRef = useRef<HTMLDivElement | null>(null)
