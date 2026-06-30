@@ -4,6 +4,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  pointer-events: none;
 }
 
 .m3-popper {
@@ -50,6 +51,7 @@
   &_shown {
     visibility: visible;
     opacity: 1;
+    pointer-events: auto;
     transition:
       opacity var(--m3-popper-opacity-enter-duration) var(--m3-popper-enter-easing),
       visibility 0s linear 0ms

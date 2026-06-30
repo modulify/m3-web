@@ -23,6 +23,9 @@ export default mergeConfig(viteConfig, defineConfig({
     include: [
       'tests/**/*.e2e.ts',
     ],
+    setupFiles: [
+      './tests/e2e.setup.ts',
+    ],
     browser: {
       enabled: true,
       provider: playwright({

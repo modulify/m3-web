@@ -283,6 +283,27 @@ describe('m3-vue/popper e2e', () => {
     })
   })
 
+  test('does not capture pointer events after hiding while still attached', async () => {
+    const { positioner, popper } = await waitForPopper()
+
+    await waitFor(() => {
+      expect(popper.classList.contains('m3-popper_shown')).toBe(true)
+      expect(getComputedStyle(positioner).pointerEvents).toBe('none')
+      expect(getComputedStyle(popper).pointerEvents).toBe('auto')
+    })
+
+    await (mounted as MountResult).setProps({
+      shown: false,
+    })
+
+    await waitFor(() => {
+      expect(document.body.contains(positioner)).toBe(true)
+      expect(popper.classList.contains('m3-popper_shown')).toBe(false)
+      expect(getComputedStyle(positioner).pointerEvents).toBe('none')
+      expect(getComputedStyle(popper).pointerEvents).toBe('none')
+    })
+  })
+
   test('changes geometry when placement switches from bottom to right', async () => {
     const {
       popper,
