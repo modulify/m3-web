@@ -372,7 +372,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
                 className="surface-side-sheet__docked-host"
                 style={{ width: `${sideSheetDockedWidth}px` }}
               >
-                {!sideSheetModal && !sheetRemoved ? (
+                {!sideSheetModal ? (
                   <M3Surface
                     className="surface-side-sheet__sheet"
                     fillWidth={true}
