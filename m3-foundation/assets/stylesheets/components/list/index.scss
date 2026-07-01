@@ -1,0 +1,139 @@
+@use '../../basics/shape' as m3-shape;
+@use '../../basics/typography' as m3-typography;
+
+.m3-list {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  max-width: 100%;
+  margin: 0;
+  padding: 8px 0;
+  background: var(--m3-list-container-color, var(--m3-sys-surface));
+  color: var(--m3-sys-on-surface);
+  list-style: none;
+}
+
+.m3-list-item {
+  --m3-list-item-supporting-lines: 1;
+  --m3-ripple-color: var(--m3-sys-primary);
+  --m3-ripple-opacity: 0.2;
+
+  display: block;
+  color: var(--m3-sys-on-surface);
+  list-style: none;
+  position: relative;
+
+  &__content {
+    display: flex;
+    width: 100%;
+    min-height: 56px;
+    padding: 8px 16px;
+    border: 0;
+    box-sizing: border-box;
+    align-items: center;
+    gap: 16px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+  }
+
+  &_multiline &__content {
+    min-height: 72px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  &_interactive &__content {
+    cursor: pointer;
+  }
+
+  &_selected &__content {
+    background: var(--m3-list-item-selected-container-color, var(--m3-sys-secondary-container));
+    color: var(--m3-list-item-selected-label-color, var(--m3-sys-on-secondary-container));
+  }
+
+  &_disabled &__content,
+  &__content:disabled {
+    cursor: default;
+    opacity: 0.38;
+  }
+
+  &__state {
+    width: 100%;
+    height: 100%;
+    background: var(--m3-sys-on-surface);
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &_interactive:hover &__state {
+    opacity: 0.08;
+  }
+
+  &_interactive:focus-within &__state {
+    opacity: 0.12;
+  }
+
+  &_disabled &__state {
+    background: transparent;
+  }
+
+  &__leading,
+  &__trailing {
+    @include m3-shape.square(24px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--m3-sys-on-surface-variant);
+    position: relative;
+  }
+
+  &_multiline &__leading,
+  &_multiline &__trailing {
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+
+  &__body {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  &__overline {
+    @include m3-typography.label-small;
+
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &__headline {
+    @include m3-typography.body-large;
+
+    color: currentColor;
+  }
+
+  &__supporting-text {
+    @include m3-typography.body-medium;
+
+    display: -webkit-box;
+    color: var(--m3-sys-on-surface-variant);
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--m3-list-item-supporting-lines);
+  }
+}
+
+.m3-list_divided .m3-list-item + .m3-list-item {
+  border-top: 1px solid var(--m3-sys-outline-variant);
+}

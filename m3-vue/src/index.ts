@@ -41,6 +41,11 @@ export {
 } from '@/components/link'
 
 export {
+  M3List,
+  M3ListItem,
+} from '@/components/list'
+
+export {
   M3Menu,
   M3MenuItem,
 } from '@/components/menu'

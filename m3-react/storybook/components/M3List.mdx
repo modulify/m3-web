@@ -1,0 +1,49 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import * as M3ListStories from './M3List.stories'
+
+<Meta of={M3ListStories} />
+
+# Lists
+
+Lists present related rows of text and optional visuals. Use them for settings, folders, messages, and other repeated information where each row should remain easy to scan.
+
+## API
+
+`M3List` renders the semantic list container. `M3ListItem` renders a row with optional leading and trailing content, overline text, headline text, and supporting text.
+
+Use plain children as the headline, or use `M3ListItem.Headline` when the headline needs explicit markup. `href`, `interactive`, or `onClick` make the row interactive.
+
+## Accessibility semantics
+
+- `M3List` uses native list semantics. Add `aria-label` or `aria-labelledby` when the list needs a programmatic name.
+- `M3ListItem` keeps row semantics on the list item and uses a native link or button for interactive rows.
+- Use `href` for navigation rows and `interactive`/`onClick` for in-place actions.
+- For selectable option lists, set the container and rows to the appropriate composite pattern yourself, such as `role="listbox"`, `role="option"`, and `aria-selected`.
+
+## Story guide
+
+- [Standard](?path=/story/components-m3list--standard)
+- [Supporting Text](?path=/story/components-m3list--supporting-text)
+- [Interactive Selection](?path=/story/components-m3list--interactive-selection)
+
+## Demo
+
+<Canvas of={M3ListStories.Standard} />
+<Canvas of={M3ListStories.SupportingText} />
+<Canvas of={M3ListStories.InteractiveSelection} />
+
+## Usage guidance
+
+### Keep row content structured
+
+Use overline and supporting text for secondary information instead of packing several unrelated fragments into the headline.
+
+### Use trailing content sparingly
+
+Trailing text and icons work best for concise metadata, status, or navigation affordances.
+
+## Resources
+
+- [M3 Lists overview](https://m3.material.io/components/lists/overview)
+- [M3 Lists guidelines](https://m3.material.io/components/lists/guidelines)
+- [WAI-ARIA: list role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/list_role)

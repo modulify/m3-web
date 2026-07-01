@@ -35,6 +35,11 @@ export type {
 } from '@/components/link'
 
 export type {
+  M3ListItemProps,
+  M3ListProps,
+} from '@/components/list'
+
+export type {
   M3MenuItemProps,
   M3MenuProps,
 } from '@/components/menu'
@@ -138,6 +143,11 @@ export {
 export {
   M3Link,
 } from '@/components/link'
+
+export {
+  M3List,
+  M3ListItem,
+} from '@/components/list'
 
 export {
   M3Menu,
