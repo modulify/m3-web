@@ -1,0 +1,295 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import Inline from '../components/Inline'
+import M3Button from '../examples/button/ButtonExample.vue'
+import * as LocalThemingStories from './LocalTheming.stories'
+
+<Meta of={LocalThemingStories} />
+
+# Theming
+
+Theming is a token contract, not a component override layer. A theme provides Material sys-tokens such as `--m3-sys-primary`, `--m3-sys-surface`, and `--m3-sys-on-surface`; components read those tokens and keep their API unchanged.
+
+This guide intentionally uses a custom azure-blue baseline theme in examples. It is not the standard Material default. The baseline is changed on purpose so local scope changes are easy to see against a recognizable non-purple primary color.
+
+## Theory
+
+### Theme layers
+
+The Storybook toolbar still switches the document between `m3-theme-light` and `m3-theme-dark`. The examples then add a guide-local baseline scope:
+
+```scss
+.m3-local-theme_showcase {
+  --m3-local-primary: #2d5fb8;
+  --m3-local-primary-container: #dbe5ff;
+  --m3-local-on-primary: #ffffff;
+  --m3-local-surface: #f8f9ff;
+  --m3-local-surface-container: #edf1fb;
+  --m3-local-on-surface: #181c24;
+}
+```
+
+That scope is deliberately local to this guide. A nested danger, warning, success, or brand scope can then override the same token set for a smaller module.
+
+### Local scope contract
+
+A local theme remaps selected `--m3-sys-*` tokens for descendants only. Components keep the same props; colors, surfaces, and state layers follow the nearest token scope.
+
+```scss
+.m3-local-theme {
+  --m3-sys-primary: var(--m3-local-primary);
+  --m3-sys-primary-container: var(--m3-local-primary-container);
+  --m3-sys-on-primary: var(--m3-local-on-primary);
+  --m3-sys-on-primary-container: var(--m3-local-on-primary-container);
+  --m3-sys-surface: var(--m3-local-surface);
+  --m3-sys-surface-container: var(--m3-local-surface-container);
+  --m3-sys-on-surface: var(--m3-local-on-surface);
+  --m3-state-layers-on-surface-opacity-008: color-mix(in srgb, var(--m3-local-on-surface) 8%, transparent);
+}
+```
+
+Use a modifier class to provide concrete values per global theme:
+
+```scss
+html.m3-theme-light .m3-local-theme_danger {
+  --m3-local-primary: #b42346;
+  --m3-local-primary-container: #ffd9e2;
+  --m3-local-on-primary: #ffffff;
+  --m3-local-surface: #fdf0f4;
+  --m3-local-surface-container: #fce9ef;
+  --m3-local-on-surface: #34111a;
+}
+```
+
+### Usage model
+
+Wrap the smallest module that needs the alternate token set.
+
+```html
+<section class="m3-local-theme m3-local-theme_danger">
+  <div class="theme-sample__panel">
+    <h3>Delete release</h3>
+    <p>This action permanently removes the prepared release draft.</p>
+    <M3Button appearance="filled">Delete release</M3Button>
+  </div>
+</section>
+```
+
+Reset a nested control only when it must return to the baseline scope inside a local module.
+
+```html
+<section class="m3-local-theme m3-local-theme_danger">
+  <M3Button appearance="filled">Delete release</M3Button>
+
+  <span class="m3-local-theme m3-local-theme_reset">
+    <M3Button appearance="text">Cancel</M3Button>
+  </span>
+</section>
+```
+
+## Abstract Examples
+
+These examples use simple layout geometry and `M3Button` actions so token relationships stay visible while the action control still follows the component contract.
+
+### Accent panel
+
+Use the local `primary` pair for the action and local surface roles for the surrounding geometry.
+
+```html
+<section class="m3-local-theme m3-local-theme_danger theme-sample">
+  <div class="theme-sample__panel">
+    <span class="theme-sample__label">Danger scope</span>
+    <h3>Delete release</h3>
+    <p>Primary action tokens recolor the action while surface tokens keep the panel coherent.</p>
+    <M3Button appearance="filled">Delete release</M3Button>
+  </div>
+</section>
+```
+
+```scss
+.theme-sample {
+  padding: 24px;
+  background: var(--m3-sys-surface);
+  color: var(--m3-sys-on-surface);
+}
+
+.theme-sample__panel {
+  padding: 20px;
+  border: 1px solid var(--m3-sys-outline-variant);
+  border-radius: 16px;
+  background: var(--m3-sys-surface-container-high);
+}
+
+.theme-sample__label {
+  color: var(--m3-sys-on-surface-variant);
+}
+```
+
+Visual result:
+
+<div
+  className="m3-local-theme m3-local-theme_danger"
+  style={{
+    padding: '24px',
+    borderRadius: '16px',
+    background: 'var(--m3-sys-surface)',
+    color: 'var(--m3-sys-on-surface)',
+  }}
+>
+  <div
+    style={{
+      padding: '20px',
+      border: '1px solid var(--m3-sys-outline-variant)',
+      borderRadius: '16px',
+      background: 'var(--m3-sys-surface-container-high)',
+    }}
+  >
+    <span style={{ color: 'var(--m3-sys-on-surface-variant)', fontSize: '12px' }}>
+      Danger scope
+    </span>
+    <h3 style={{ margin: '8px 0', color: 'var(--m3-sys-on-surface)' }}>Delete release</h3>
+    <p style={{ margin: '0 0 16px', color: 'var(--m3-sys-on-surface-variant)' }}>
+      Primary action tokens recolor the action while surface tokens keep the panel coherent.
+    </p>
+    <Inline tag={'span'} is={M3Button} label={'Delete release'} appearance={'filled'} />
+  </div>
+</div>
+
+### Surface ladder
+
+Use container tokens to show hierarchy inside one local scope. The ladder should read as related container tones, not unrelated brand colors.
+
+```html
+<section class="m3-local-theme m3-local-theme_warm-alert theme-sample">
+  <div class="theme-sample__tone theme-sample__tone_low">Low container</div>
+  <div class="theme-sample__tone theme-sample__tone_default">Default container</div>
+  <div class="theme-sample__tone theme-sample__tone_high">High container</div>
+  <div class="theme-sample__tone theme-sample__tone_highest">Highest container</div>
+</section>
+```
+
+```scss
+.theme-sample__tone {
+  padding: 16px;
+  border-radius: 12px;
+  color: var(--m3-sys-on-surface);
+}
+
+.theme-sample__tone_low { background: var(--m3-sys-surface-container-low); }
+.theme-sample__tone_default { background: var(--m3-sys-surface-container); }
+.theme-sample__tone_high { background: var(--m3-sys-surface-container-high); }
+.theme-sample__tone_highest { background: var(--m3-sys-surface-container-highest); }
+```
+
+Visual result:
+
+<div
+  className="m3-local-theme m3-local-theme_warm-alert"
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+    gap: '12px',
+    padding: '24px',
+    borderRadius: '16px',
+    background: 'var(--m3-sys-surface)',
+    color: 'var(--m3-sys-on-surface)',
+  }}
+>
+  <div style={{ padding: '16px', borderRadius: '12px', background: 'var(--m3-sys-surface-container-low)' }}>
+    Low container
+  </div>
+  <div style={{ padding: '16px', borderRadius: '12px', background: 'var(--m3-sys-surface-container)' }}>
+    Default container
+  </div>
+  <div style={{ padding: '16px', borderRadius: '12px', background: 'var(--m3-sys-surface-container-high)' }}>
+    High container
+  </div>
+  <div style={{ padding: '16px', borderRadius: '12px', background: 'var(--m3-sys-surface-container-highest)' }}>
+    Highest container
+  </div>
+</div>
+
+## Cookbook
+
+### Notification scopes
+
+Each notification draws a small token palette above the component. The left notification stays on the azure-blue guide theme; the right notification adds a local scope.
+
+<Canvas of={LocalThemingStories.DangerNotification} />
+<Canvas of={LocalThemingStories.WarmAlertNotification} />
+<Canvas of={LocalThemingStories.SuccessNotification} />
+<Canvas of={LocalThemingStories.BrandMutedNotification} />
+
+### List menu with a destructive action
+
+The list follows the azure-blue baseline. The release checklist item owns an icon action with a popper menu. Only the destructive menu item is wrapped in the danger scope, so `Delete list` uses danger `primary`, `on-surface`, and state-layer tokens while the rest of the menu remains in the main theme.
+
+<Canvas of={LocalThemingStories.ListWithDangerMenu} />
+
+## Token Reference
+
+### Primary action tokens
+
+- `--m3-sys-primary`: main accent color for filled primary controls, active marks, selected indicators, and high-emphasis affordances inside the local scope.
+- `--m3-sys-on-primary`: text and icon color placed on `primary`; it must preserve contrast for filled controls.
+- `--m3-sys-primary-container`: softer accent container for badges, labels, selected surfaces, and low-emphasis accent backgrounds.
+- `--m3-sys-on-primary-container`: text and icon color placed on `primary-container`.
+
+### Secondary container tokens
+
+- `--m3-sys-secondary-container`: tonal button and selected container background when the component uses secondary emphasis rather than the primary filled color.
+- `--m3-sys-on-secondary-container`: text, icon, and state-layer source color placed on `secondary-container`.
+
+### Surface tokens
+
+- `--m3-sys-surface`: default background color for the local scope. Use it for the page or module base where content is not inside a distinct container.
+- `--m3-sys-surface-container-low`: low-emphasis container color. Use it for subtle panels or container areas that should separate from `surface` without becoming prominent.
+- `--m3-sys-surface-container`: default container color. Use it for menus, tooltips, lists, and neutral component containers that need a clear contained surface.
+- `--m3-sys-surface-container-high`: high-emphasis container color. Use it for dialogs, prominent panels, and surfaces that need stronger separation in the local scope.
+- `--m3-sys-surface-container-highest`: highest-emphasis container color. Use it for the strongest neutral container or nested surfaces that must stand apart.
+- `--m3-sys-surface-variant`: alternate neutral-variant surface for components that intentionally use the neutral-variant family.
+- `--m3-sys-inverse-surface`: opposite-luminance surface for temporary high-contrast elements such as plain tooltips.
+- `--m3-sys-inverse-on-surface`: text and icon color placed on `inverse-surface`.
+
+The `surface-container-*` tokens form a tonal ladder. Choose them by container emphasis and visual hierarchy, not by hard-coded shadows.
+
+### Text and boundary tokens
+
+- `--m3-sys-on-surface`: primary text and icon color on local surfaces.
+- `--m3-sys-on-surface-variant`: secondary text, supporting text, subdued icons, labels, and metadata.
+- `--m3-sys-outline`: stronger boundary color for visible borders and focus-adjacent structure.
+- `--m3-sys-outline-variant`: quieter divider and low-emphasis border color.
+
+### State-layer tokens
+
+- `--m3-state-layers-on-surface-opacity-008`: hover layer for elements whose foreground is `on-surface`.
+- `--m3-state-layers-on-surface-opacity-012`: focus layer for elements whose foreground is `on-surface`.
+- `--m3-state-layers-on-surface-opacity-020`: pressed or stronger interaction layer for elements whose foreground is `on-surface`.
+- `--m3-state-layers-on-secondary-container-opacity-008`: hover layer for elements placed on `secondary-container`.
+- `--m3-state-layers-on-secondary-container-opacity-012`: focus layer for elements placed on `secondary-container`.
+- `--m3-state-layers-on-secondary-container-opacity-020`: pressed or stronger interaction layer for elements placed on `secondary-container`.
+
+State-layer tokens should be generated from the local foreground color, not copied from the global theme.
+
+## Story Guide
+
+- [Danger Notification](?path=/story/guides-theming--danger-notification)
+- [Warm Alert Notification](?path=/story/guides-theming--warm-alert-notification)
+- [Success Notification](?path=/story/guides-theming--success-notification)
+- [Brand Muted Notification](?path=/story/guides-theming--brand-muted-notification)
+- [List With Danger Menu](?path=/story/guides-theming--list-with-danger-menu)
+
+## Do / don't
+
+### Do
+
+- keep local scopes small and attached to a meaningful product module
+- define local values for light and dark themes together
+- draw state-layer tokens from the local foreground colors
+- test default, hovered, focused, selected, and disabled states inside the scope
+
+### Don’t
+
+- override component classes directly when a sys-token can express the change
+- use local theming to create unrelated visual systems inside one page
+- change only accent tokens while leaving surface and state-layer tokens global
+- nest reset scopes unless the inner control has a clear reason to return to baseline

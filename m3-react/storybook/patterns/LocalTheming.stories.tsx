@@ -8,7 +8,7 @@ import LocalThemeShowcase from '../examples/local-theme/LocalThemeShowcase'
 import '../examples/local-theme/styles.scss'
 
 const meta = {
-  title: 'Patterns/Local Theming',
+  title: 'Guides/Theming',
   parameters: {
     layout: 'fullscreen',
   },
@@ -18,22 +18,22 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const DangerActionScope: Story = {
+export const DangerNotification: Story = {
   render: () => <LocalThemeShowcase variant="danger" />,
 }
 
-export const WarmAlertScope: Story = {
+export const WarmAlertNotification: Story = {
   render: () => <LocalThemeShowcase variant="warm-alert" />,
 }
 
-export const SuccessScope: Story = {
+export const SuccessNotification: Story = {
   render: () => <LocalThemeShowcase variant="success" />,
 }
 
-export const BrandMutedScope: Story = {
+export const BrandMutedNotification: Story = {
   render: () => <LocalThemeShowcase variant="brand-muted" />,
 }
 
-export const NestedLocalScopes: Story = {
-  render: () => <LocalThemeShowcase variant="nested" />,
+export const ListWithDangerMenu: Story = {
+  render: () => <LocalThemeShowcase variant="list-menu" />,
 }
