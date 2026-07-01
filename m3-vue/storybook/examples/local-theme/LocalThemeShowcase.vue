@@ -1,307 +1,84 @@
 <template>
-    <div class="m3-local-theme-showcase">
+    <div class="m3-local-theme m3-local-theme_showcase m3-local-theme-showcase">
         <div class="sb-container-fluid px-6 py-6">
             <div class="m3-local-theme-showcase__intro mb-6">
                 <div class="m3-local-theme-showcase__eyebrow">
-                    Pattern
+                    Guide
                 </div>
                 <h1 class="m3-local-theme-showcase__headline">
-                    Local token scopes
+                    Theming with local token scopes
                 </h1>
                 <p class="m3-local-theme-showcase__copy">
-                    Local theming works by attaching a wrapper class that overrides a subset of the Material sys-tokens for descendants only.
+                    This guide intentionally uses an azure-blue baseline theme instead of the standard Material default, so local token changes are easier to compare.
                 </p>
             </div>
 
-            <div v-if="variant === 'danger'" class="sb-row sb-g-5">
-                <div v-for="card in dangerCards" :key="card.eyebrow" class="sb-col-12 sb-col-lg-6 d-flex">
+            <div v-if="currentNotification" class="m3-local-theme-showcase__comparison">
+                <div class="m3-local-theme-showcase__sample">
+                    <ColorStrip />
+
                     <M3SurfacePanel
-                        :class="['m3-local-theme-showcase__card', 'h-100', card.scopeClassName]"
+                        class="m3-local-theme-showcase__notification"
                         :fill-height="false"
-                        :rounding="28"
+                        :rounding="12"
                         variant="surface-container-high"
                         :elevation="1"
                     >
                         <div class="m3-local-theme-showcase__eyebrow">
-                            {{ card.eyebrow }}
+                            Azure-blue baseline
                         </div>
                         <h3 class="m3-local-theme-showcase__title">
-                            {{ card.title }}
+                            {{ currentNotification.title }}
                         </h3>
                         <p class="m3-local-theme-showcase__copy">
-                            {{ card.copy }}
+                            This notification inherits the guide baseline theme. It is intentionally azure blue, not the standard Material purple default.
                         </p>
 
-                        <div class="m3-local-theme-showcase__swatches">
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_surface" />
-                                <span>Surface</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_container" />
-                                <span>Container</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_accent" />
-                                <span>Accent</span>
-                            </div>
-                        </div>
-
                         <div class="m3-local-theme-showcase__actions">
-                            <span v-if="card.tertiaryAction && card.tertiaryScopeClassName" :class="card.tertiaryScopeClassName">
-                                <M3Button appearance="text">
-                                    {{ card.tertiaryAction }}
-                                </M3Button>
-                            </span>
-
-                            <M3Button v-else-if="card.tertiaryAction" appearance="text">
-                                {{ card.tertiaryAction }}
-                            </M3Button>
-
-                            <M3Button v-if="card.secondaryAction" appearance="tonal">
-                                {{ card.secondaryAction }}
+                            <M3Button v-if="currentNotification.secondaryAction" appearance="tonal">
+                                {{ currentNotification.secondaryAction }}
                             </M3Button>
 
                             <M3Button appearance="filled">
-                                {{ card.primaryAction }}
+                                {{ currentNotification.primaryAction }}
                             </M3Button>
                         </div>
                     </M3SurfacePanel>
                 </div>
-            </div>
 
-            <div v-if="variant === 'danger'" class="sb-row sb-g-5 mt-5">
-                <div v-for="card in dangerResetCards" :key="card.eyebrow" class="sb-col-12 sb-col-lg-6 d-flex">
+                <div :class="['m3-local-theme-showcase__sample', currentNotification.scopeClassName]">
+                    <ColorStrip />
+
                     <M3SurfacePanel
-                        :class="['m3-local-theme-showcase__card', 'h-100', card.scopeClassName]"
+                        class="m3-local-theme-showcase__notification"
                         :fill-height="false"
-                        :rounding="28"
+                        :rounding="12"
                         variant="surface-container-high"
                         :elevation="1"
                     >
                         <div class="m3-local-theme-showcase__eyebrow">
-                            {{ card.eyebrow }}
+                            {{ currentNotification.eyebrow }}
                         </div>
                         <h3 class="m3-local-theme-showcase__title">
-                            {{ card.title }}
+                            {{ currentNotification.title }}
                         </h3>
                         <p class="m3-local-theme-showcase__copy">
-                            {{ card.copy }}
+                            {{ currentNotification.copy }}
                         </p>
 
-                        <div class="m3-local-theme-showcase__swatches">
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_surface" />
-                                <span>Surface</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_container" />
-                                <span>Container</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_accent" />
-                                <span>Accent</span>
-                            </div>
-                        </div>
-
                         <div class="m3-local-theme-showcase__actions">
-                            <span v-if="card.tertiaryAction && card.tertiaryScopeClassName" :class="card.tertiaryScopeClassName">
+                            <span v-if="currentNotification.resetAction" class="m3-local-theme m3-local-theme_reset">
                                 <M3Button appearance="text">
-                                    {{ card.tertiaryAction }}
+                                    {{ currentNotification.resetAction }}
                                 </M3Button>
                             </span>
 
-                            <M3Button v-else-if="card.tertiaryAction" appearance="text">
-                                {{ card.tertiaryAction }}
-                            </M3Button>
-
-                            <M3Button v-if="card.secondaryAction" appearance="tonal">
-                                {{ card.secondaryAction }}
+                            <M3Button v-if="currentNotification.secondaryAction" appearance="tonal">
+                                {{ currentNotification.secondaryAction }}
                             </M3Button>
 
                             <M3Button appearance="filled">
-                                {{ card.primaryAction }}
-                            </M3Button>
-                        </div>
-                    </M3SurfacePanel>
-                </div>
-            </div>
-
-            <div v-else-if="variant === 'warm-alert'" class="sb-row sb-g-5">
-                <div v-for="card in warmCards" :key="card.eyebrow" class="sb-col-12 sb-col-lg-6 d-flex">
-                    <M3SurfacePanel
-                        :class="['m3-local-theme-showcase__card', 'h-100', card.scopeClassName]"
-                        :fill-height="false"
-                        :rounding="28"
-                        variant="surface-container-high"
-                        :elevation="1"
-                    >
-                        <div class="m3-local-theme-showcase__eyebrow">
-                            {{ card.eyebrow }}
-                        </div>
-                        <h3 class="m3-local-theme-showcase__title">
-                            {{ card.title }}
-                        </h3>
-                        <p class="m3-local-theme-showcase__copy">
-                            {{ card.copy }}
-                        </p>
-
-                        <div class="m3-local-theme-showcase__swatches">
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_surface" />
-                                <span>Surface</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_container" />
-                                <span>Container</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_accent" />
-                                <span>Accent</span>
-                            </div>
-                        </div>
-
-                        <div class="m3-local-theme-showcase__actions">
-                            <span v-if="card.tertiaryAction && card.tertiaryScopeClassName" :class="card.tertiaryScopeClassName">
-                                <M3Button appearance="text">
-                                    {{ card.tertiaryAction }}
-                                </M3Button>
-                            </span>
-
-                            <M3Button v-else-if="card.tertiaryAction" appearance="text">
-                                {{ card.tertiaryAction }}
-                            </M3Button>
-
-                            <M3Button v-if="card.secondaryAction" appearance="tonal">
-                                {{ card.secondaryAction }}
-                            </M3Button>
-
-                            <M3Button appearance="filled">
-                                {{ card.primaryAction }}
-                            </M3Button>
-                        </div>
-                    </M3SurfacePanel>
-                </div>
-            </div>
-
-            <div v-else-if="variant === 'success'" class="sb-row sb-g-5">
-                <div v-for="card in successCards" :key="card.eyebrow" class="sb-col-12 sb-col-lg-6 d-flex">
-                    <M3SurfacePanel
-                        :class="['m3-local-theme-showcase__card', 'h-100', card.scopeClassName]"
-                        :fill-height="false"
-                        :rounding="28"
-                        variant="surface-container-high"
-                        :elevation="1"
-                    >
-                        <div class="m3-local-theme-showcase__eyebrow">
-                            {{ card.eyebrow }}
-                        </div>
-                        <h3 class="m3-local-theme-showcase__title">
-                            {{ card.title }}
-                        </h3>
-                        <p class="m3-local-theme-showcase__copy">
-                            {{ card.copy }}
-                        </p>
-
-                        <div class="m3-local-theme-showcase__swatches">
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_surface" />
-                                <span>Surface</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_container" />
-                                <span>Container</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_accent" />
-                                <span>Accent</span>
-                            </div>
-                        </div>
-
-                        <div class="m3-local-theme-showcase__actions">
-                            <span v-if="card.tertiaryAction && card.tertiaryScopeClassName" :class="card.tertiaryScopeClassName">
-                                <M3Button appearance="text">
-                                    {{ card.tertiaryAction }}
-                                </M3Button>
-                            </span>
-
-                            <M3Button v-else-if="card.tertiaryAction" appearance="text">
-                                {{ card.tertiaryAction }}
-                            </M3Button>
-
-                            <M3Button v-if="card.secondaryAction" appearance="tonal">
-                                {{ card.secondaryAction }}
-                            </M3Button>
-
-                            <M3Button appearance="filled">
-                                {{ card.primaryAction }}
-                            </M3Button>
-                        </div>
-                    </M3SurfacePanel>
-                </div>
-            </div>
-
-            <div v-else-if="variant === 'brand-muted'" class="sb-row sb-g-5">
-                <div v-for="card in brandMutedCards" :key="card.eyebrow" class="sb-col-12 sb-col-lg-6 d-flex">
-                    <M3SurfacePanel
-                        :class="['m3-local-theme-showcase__card', 'h-100', card.scopeClassName]"
-                        :fill-height="false"
-                        :rounding="28"
-                        variant="surface-container-high"
-                        :elevation="1"
-                    >
-                        <div class="m3-local-theme-showcase__eyebrow">
-                            {{ card.eyebrow }}
-                        </div>
-                        <h3 class="m3-local-theme-showcase__title">
-                            {{ card.title }}
-                        </h3>
-                        <p class="m3-local-theme-showcase__copy">
-                            {{ card.copy }}
-                        </p>
-
-                        <div class="m3-local-theme-showcase__swatches">
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_surface" />
-                                <span>Surface</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_container" />
-                                <span>Container</span>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__swatch">
-                                <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_accent" />
-                                <span>Accent</span>
-                            </div>
-                        </div>
-
-                        <div class="m3-local-theme-showcase__actions">
-                            <span v-if="card.tertiaryAction && card.tertiaryScopeClassName" :class="card.tertiaryScopeClassName">
-                                <M3Button appearance="text">
-                                    {{ card.tertiaryAction }}
-                                </M3Button>
-                            </span>
-
-                            <M3Button v-else-if="card.tertiaryAction" appearance="text">
-                                {{ card.tertiaryAction }}
-                            </M3Button>
-
-                            <M3Button v-if="card.secondaryAction" appearance="tonal">
-                                {{ card.secondaryAction }}
-                            </M3Button>
-
-                            <M3Button appearance="filled">
-                                {{ card.primaryAction }}
+                                {{ currentNotification.primaryAction }}
                             </M3Button>
                         </div>
                     </M3SurfacePanel>
@@ -310,87 +87,86 @@
 
             <M3SurfacePanel
                 v-else
-                class="m3-local-theme-showcase__workspace"
+                class="m3-local-theme-showcase__cookbook"
                 :fill-height="false"
-                :rounding="32"
-                variant="surface-container-low"
+                :rounding="28"
+                variant="surface-container-high"
                 :elevation="0"
             >
                 <div class="m3-local-theme-showcase__workspace-header">
                     <div>
                         <div class="m3-local-theme-showcase__eyebrow">
-                            Nested local scopes
+                            Cookbook
                         </div>
-                        <h2 class="m3-local-theme-showcase__workspace-title">
-                            One page, multiple local accents
-                        </h2>
+                        <h3 class="m3-local-theme-showcase__title">
+                            List with a destructive menu action
+                        </h3>
                         <p class="m3-local-theme-showcase__copy">
-                            The surrounding workspace stays on the global theme while specific modules opt into local token overrides.
+                            The list inherits the azure-blue guide theme. The release checklist item owns an icon action with a popper menu, and only the delete menu item enters the local danger scope.
                         </p>
                     </div>
-
-                    <M3Button appearance="outlined">
-                        Publish overview
-                    </M3Button>
                 </div>
 
-                <div class="sb-row sb-g-5">
-                    <div v-for="card in nestedCards" :key="card.eyebrow" class="sb-col-12 sb-col-lg-6 d-flex">
-                        <M3SurfacePanel
-                            :class="['m3-local-theme-showcase__card', 'h-100', card.scopeClassName]"
-                            :fill-height="false"
-                            :rounding="28"
-                            variant="surface-container-high"
-                            :elevation="1"
+                <div ref="menuContainer" class="m3-local-theme-showcase__list-area">
+                    <M3List divided class="m3-local-theme-showcase__list">
+                        <M3ListItem
+                            lines="2"
+                            headline="Billing hold"
+                            supporting-text="Payment retry is waiting for a finance owner."
+                        />
+                        <M3ListItem
+                            lines="2"
+                            headline="Release checklist"
+                            supporting-text="Three items need review before publication."
                         >
-                            <div class="m3-local-theme-showcase__eyebrow">
-                                {{ card.eyebrow }}
-                            </div>
-                            <h3 class="m3-local-theme-showcase__title">
-                                {{ card.title }}
-                            </h3>
-                            <p class="m3-local-theme-showcase__copy">
-                                {{ card.copy }}
-                            </p>
+                            <template #trailing>
+                                <span class="m3-local-theme-showcase__menu-anchor">
+                                    <span ref="menuTarget">
+                                        <M3IconButton aria-label="Actions">
+                                            <M3Icon name="more_vert" />
+                                        </M3IconButton>
+                                    </span>
 
-                            <div class="m3-local-theme-showcase__swatches">
-                                <div class="m3-local-theme-showcase__swatch">
-                                    <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_surface" />
-                                    <span>Surface</span>
-                                </div>
+                                    <M3Menu
+                                        v-if="menuReady"
+                                        shown
+                                        :target="getMenuTarget"
+                                        class="m3-local-theme m3-local-theme_showcase m3-local-theme-showcase__menu"
+                                        placement="bottom-end"
+                                        :container="menuContainer"
+                                        strategy="absolute"
+                                        :offset-main-axis="8"
+                                    >
+                                        <M3MenuItem>
+                                            <template #leading>
+                                                <M3Icon name="edit" />
+                                            </template>
+                                            Rename list
+                                        </M3MenuItem>
 
-                                <div class="m3-local-theme-showcase__swatch">
-                                    <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_container" />
-                                    <span>Container</span>
-                                </div>
+                                        <M3MenuItem>
+                                            <template #leading>
+                                                <M3Icon name="archive" />
+                                            </template>
+                                            Archive
+                                        </M3MenuItem>
 
-                                <div class="m3-local-theme-showcase__swatch">
-                                    <span class="m3-local-theme-showcase__swatch-chip m3-local-theme-showcase__swatch-chip_accent" />
-                                    <span>Accent</span>
-                                </div>
-                            </div>
-
-                            <div class="m3-local-theme-showcase__actions">
-                                <span v-if="card.tertiaryAction && card.tertiaryScopeClassName" :class="card.tertiaryScopeClassName">
-                                    <M3Button appearance="text">
-                                        {{ card.tertiaryAction }}
-                                    </M3Button>
+                                        <M3MenuItem class="m3-local-theme m3-local-theme_danger">
+                                            <template #leading>
+                                                <M3Icon name="delete" />
+                                            </template>
+                                            Delete list
+                                        </M3MenuItem>
+                                    </M3Menu>
                                 </span>
-
-                                <M3Button v-else-if="card.tertiaryAction" appearance="text">
-                                    {{ card.tertiaryAction }}
-                                </M3Button>
-
-                                <M3Button v-if="card.secondaryAction" appearance="tonal">
-                                    {{ card.secondaryAction }}
-                                </M3Button>
-
-                                <M3Button appearance="filled">
-                                    {{ card.primaryAction }}
-                                </M3Button>
-                            </div>
-                        </M3SurfacePanel>
-                    </div>
+                            </template>
+                        </M3ListItem>
+                        <M3ListItem
+                            lines="2"
+                            headline="Access review"
+                            supporting-text="Two external collaborators still have access."
+                        />
+                    </M3List>
                 </div>
             </M3SurfacePanel>
         </div>
@@ -398,125 +174,117 @@
 </template>
 
 <script lang="ts" setup>
+import type { Component } from 'vue'
+
+import {
+  computed,
+  defineComponent,
+  h,
+  onMounted,
+  ref,
+} from 'vue'
+
 import { M3Button } from '@/components/button'
+import { M3Icon } from '@/components/icon'
+import { M3IconButton } from '@/components/icon-button'
+import { M3List, M3ListItem } from '@/components/list'
+import { M3Menu, M3MenuItem } from '@/components/menu'
 import { M3SurfacePanel } from '@/components/surface'
 
+type LocalThemeVariant = 'danger' | 'warm-alert' | 'success' | 'brand-muted' | 'list-menu'
+
+type Notification = {
+  eyebrow: string
+  title: string
+  copy: string
+  scopeClassName: string
+  primaryAction: string
+  secondaryAction?: string
+  resetAction?: string
+}
+
 const props = defineProps<{
-  variant: 'danger' | 'warm-alert' | 'success' | 'brand-muted' | 'nested'
+  variant: LocalThemeVariant
 }>()
 
 defineOptions({
   name: 'LocalThemeShowcase',
 })
 
-type ThemeCardProps = {
-  eyebrow: string
-  title: string
-  copy: string
-  scopeClassName?: string
-  primaryAction: string
-  secondaryAction?: string
-  tertiaryAction?: string
-  tertiaryScopeClassName?: string
+const ColorStrip: Component = defineComponent({
+  name: 'ColorStrip',
+
+  setup: () => () => h('div', {
+    'aria-label': 'Token sample',
+    class: 'm3-local-theme-showcase__palette',
+  }, [
+    h('span', { class: 'm3-local-theme-showcase__palette-item' }, [
+      h('span', { class: 'm3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_surface' }),
+      h('span', 'Surface'),
+    ]),
+    h('span', { class: 'm3-local-theme-showcase__palette-item' }, [
+      h('span', { class: 'm3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_container' }),
+      h('span', 'Container high'),
+    ]),
+    h('span', { class: 'm3-local-theme-showcase__palette-item' }, [
+      h('span', { class: 'm3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_primary' }),
+      h('span', 'Primary'),
+    ]),
+    h('span', { class: 'm3-local-theme-showcase__palette-item' }, [
+      h('span', { class: 'm3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_on-primary' }),
+      h('span', 'On primary'),
+    ]),
+  ]),
+})
+
+const notifications: Record<Exclude<LocalThemeVariant, 'list-menu'>, Notification> = {
+  danger: {
+    eyebrow: 'Danger scope',
+    title: 'Release deletion requested',
+    copy: 'The destructive notification keeps the same component API while primary actions, surfaces, and state layers shift into a local danger palette.',
+    scopeClassName: 'm3-local-theme m3-local-theme_danger',
+    primaryAction: 'Delete release',
+    secondaryAction: 'Review logs',
+    resetAction: 'Cancel',
+  },
+
+  'warm-alert': {
+    eyebrow: 'Warm alert scope',
+    title: 'Invoice retry scheduled',
+    copy: 'The warning notification uses warmer container tones for urgency without making every control destructive.',
+    scopeClassName: 'm3-local-theme m3-local-theme_warm-alert',
+    primaryAction: 'Resolve hold',
+    secondaryAction: 'View invoices',
+  },
+
+  success: {
+    eyebrow: 'Success scope',
+    title: 'Release published',
+    copy: 'The success scope moves the module into a green accent while preserving the same hierarchy and component behavior.',
+    scopeClassName: 'm3-local-theme m3-local-theme_success',
+    primaryAction: 'Share update',
+    secondaryAction: 'Review rollout',
+  },
+
+  'brand-muted': {
+    eyebrow: 'Brand-muted scope',
+    title: 'Guidelines updated',
+    copy: 'The muted brand scope keeps a product accent but lowers the visual pressure for editorial or secondary guidance.',
+    scopeClassName: 'm3-local-theme m3-local-theme_brand-muted',
+    primaryAction: 'Open guidelines',
+    secondaryAction: 'Download assets',
+  },
 }
 
-const dangerCards: ThemeCardProps[] = [{
-  eyebrow: 'Default scope',
-  title: 'Default destructive action',
-  copy: 'Without a local theme, the same controls stay on the global primary palette and neutral surface tokens.',
-  primaryAction: 'Delete release',
-  secondaryAction: 'Review logs',
-  tertiaryAction: 'Cancel',
-}, {
-  eyebrow: 'Danger scope',
-  title: 'Locally themed destructive action',
-  copy: 'A single wrapper class re-targets the same button and surface tokens to a red destructive palette with a warmer supporting surface.',
-  scopeClassName: 'm3-local-theme m3-local-theme--danger',
-  primaryAction: 'Delete release',
-  secondaryAction: 'Review logs',
-  tertiaryAction: 'Cancel',
-}]
+const menuTarget = ref<HTMLElement | null>(null)
+const menuContainer = ref<HTMLElement | null>(null)
+const menuReady = ref(false)
+const getMenuTarget = () => menuTarget.value
+const currentNotification = computed(() => props.variant === 'list-menu' ? null : notifications[props.variant])
 
-const warmCards: ThemeCardProps[] = [{
-  eyebrow: 'Default scope',
-  title: 'Billing reminder card',
-  copy: 'The neutral version uses the baseline surface hierarchy from the active global theme.',
-  primaryAction: 'Resolve hold',
-  secondaryAction: 'View invoices',
-  tertiaryAction: 'Dismiss',
-}, {
-  eyebrow: 'Warm alert scope',
-  title: 'Billing reminder card',
-  copy: 'The local alert class shifts the panel into a warmer family and retargets tonal and filled buttons without affecting the surrounding page.',
-  scopeClassName: 'm3-local-theme m3-local-theme--warm-alert',
-  primaryAction: 'Resolve hold',
-  secondaryAction: 'View invoices',
-  tertiaryAction: 'Dismiss',
-}]
-
-const dangerResetCards: ThemeCardProps[] = [{
-  eyebrow: 'Danger scope + reset action',
-  title: 'Locally themed destructive action',
-  copy: 'Nested reset scope restores the baseline global theme inside a danger module, so a single supporting action can fall back to the default button language.',
-  scopeClassName: 'm3-local-theme m3-local-theme--danger',
-  primaryAction: 'Delete release',
-  secondaryAction: 'Review logs',
-  tertiaryAction: 'Cancel',
-  tertiaryScopeClassName: 'm3-local-theme m3-local-theme--reset',
-}]
-
-const successCards: ThemeCardProps[] = [{
-  eyebrow: 'Default scope',
-  title: 'Post-release success state',
-  copy: 'The neutral version keeps the message on the global theme and does not distinguish celebratory follow-up actions.',
-  primaryAction: 'Share update',
-  secondaryAction: 'Review rollout',
-  tertiaryAction: 'Close',
-}, {
-  eyebrow: 'Success scope',
-  title: 'Post-release success state',
-  copy: 'The success class shifts the local module toward a green palette while keeping the same component API and surface hierarchy.',
-  scopeClassName: 'm3-local-theme m3-local-theme--success',
-  primaryAction: 'Share update',
-  secondaryAction: 'Review rollout',
-  tertiaryAction: 'Close',
-}]
-
-const brandMutedCards: ThemeCardProps[] = [{
-  eyebrow: 'Default scope',
-  title: 'Brand guidance callout',
-  copy: 'By default, the card inherits the main theme accent and reads as just another primary action area.',
-  primaryAction: 'Open guidelines',
-  secondaryAction: 'Download assets',
-  tertiaryAction: 'Later',
-}, {
-  eyebrow: 'Brand-muted scope',
-  title: 'Brand guidance callout',
-  copy: 'The muted brand class keeps a product-colored accent, but softens both controls and surfaces for secondary editorial emphasis.',
-  scopeClassName: 'm3-local-theme m3-local-theme--brand-muted',
-  primaryAction: 'Open guidelines',
-  secondaryAction: 'Download assets',
-  tertiaryAction: 'Later',
-}]
-
-const nestedCards: ThemeCardProps[] = [{
-  eyebrow: 'Warm alert scope',
-  title: 'Escalated billing hold',
-  copy: 'This card uses warmer surface tokens to feel urgent without collapsing into an all-red panel.',
-  scopeClassName: 'm3-local-theme m3-local-theme--warm-alert',
-  primaryAction: 'Resolve hold',
-  secondaryAction: 'Notify finance',
-}, {
-  eyebrow: 'Danger scope',
-  title: 'Delete workspace access',
-  copy: 'A narrower local scope can still switch buttons, supporting copy, and surface tones for destructive actions.',
-  scopeClassName: 'm3-local-theme m3-local-theme--danger',
-  primaryAction: 'Remove access',
-  secondaryAction: 'Review members',
-  tertiaryAction: 'Cancel',
-}]
-
-void props.variant
+onMounted(() => {
+  menuReady.value = true
+})
 </script>
 
 <style>
@@ -524,54 +292,36 @@ void props.variant
     min-height: 100vh;
     box-sizing: border-box;
     background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--m3-sys-primary) 10%, transparent), transparent 32%),
+        radial-gradient(circle at top left, color-mix(in srgb, var(--m3-sys-primary) 12%, transparent), transparent 34%),
         linear-gradient(180deg, var(--m3-sys-surface) 0%, var(--m3-sys-surface-container-low) 100%);
     color: var(--m3-sys-on-surface);
 }
 
 .m3-local-theme-showcase__intro {
-    max-width: 720px;
+    max-width: 760px;
 }
 
-.m3-local-theme-showcase__workspace {
-    padding: 24px;
+.m3-local-theme-showcase__intro > * + * {
+    margin-top: 12px;
 }
 
-.m3-local-theme-showcase__workspace > * + * {
-    margin-top: 24px;
+.m3-local-theme-showcase__intro .m3-local-theme-showcase__eyebrow {
+    margin-bottom: 12px;
 }
 
-.m3-local-theme-showcase__workspace-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    gap: 16px;
-}
-
-.m3-local-theme-showcase__workspace-header > :first-child {
-    min-width: 0;
-}
-
-.m3-local-theme-showcase__workspace-header > :first-child > * + * {
-    margin-top: 8px;
+.m3-local-theme-showcase__intro .m3-local-theme-showcase__eyebrow + * {
+    margin-top: 0;
 }
 
 .m3-local-theme-showcase__headline,
-.m3-local-theme-showcase__workspace-title,
 .m3-local-theme-showcase__title {
     margin: 0;
+    color: var(--m3-sys-on-surface);
 }
 
 .m3-local-theme-showcase__headline {
-    margin: 20px 0 8px;
     font-size: 32px;
     line-height: 40px;
-    font-weight: 400;
-}
-
-.m3-local-theme-showcase__workspace-title {
-    font-size: 24px;
-    line-height: 32px;
     font-weight: 400;
 }
 
@@ -596,80 +346,142 @@ void props.variant
 
 .m3-local-theme-showcase__copy {
     margin: 0;
-    max-width: 58ch;
+    max-width: 62ch;
     font-size: 16px;
     line-height: 24px;
     letter-spacing: 0.5px;
     color: var(--m3-sys-on-surface-variant);
 }
 
-.m3-local-theme-showcase__card {
-    min-height: 320px;
-    width: 100%;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+.m3-local-theme-showcase__comparison {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
 }
 
-.m3-local-theme-showcase__card > * + * {
-    margin-top: 16px;
+.m3-local-theme-showcase__sample {
+    min-width: 0;
 }
 
-.m3-local-theme.m3-local-theme-showcase__card {
-    outline: 1px solid color-mix(in srgb, var(--m3-sys-primary) 32%, transparent);
-    outline-offset: -1px;
+.m3-local-theme-showcase__sample > * + * {
+    margin-top: 12px;
 }
 
-.m3-local-theme-showcase__swatches {
+.m3-local-theme-showcase__palette {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
 }
 
-.m3-local-theme-showcase__swatch {
-    min-width: 88px;
+.m3-local-theme-showcase__palette-item {
+    min-width: 104px;
     border-radius: 16px;
     padding: 10px 12px;
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: var(--m3-sys-surface-container-low);
+    background: color-mix(in srgb, var(--m3-sys-surface-container-low) 82%, var(--m3-sys-surface));
     color: var(--m3-sys-on-surface-variant);
     font-size: 12px;
     line-height: 16px;
     letter-spacing: 0.5px;
+    box-shadow: inset 0 0 0 1px var(--m3-sys-outline-variant);
 }
 
-.m3-local-theme-showcase__swatch-chip {
+.m3-local-theme-showcase__palette-chip {
     width: 12px;
     height: 12px;
     border-radius: 999px;
     flex: 0 0 auto;
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--m3-sys-on-surface) 12%, transparent);
+    box-shadow: inset 0 0 0 1px var(--m3-sys-outline);
 }
 
-.m3-local-theme-showcase__swatch-chip_surface {
-    background: var(--m3-sys-surface-container);
+.m3-local-theme-showcase__palette-chip_surface {
+    background: var(--m3-sys-surface);
 }
 
-.m3-local-theme-showcase__swatch-chip_container {
-    background: var(--m3-sys-secondary-container);
+.m3-local-theme-showcase__palette-chip_container {
+    background: var(--m3-sys-surface-container-high);
 }
 
-.m3-local-theme-showcase__swatch-chip_accent {
+.m3-local-theme-showcase__palette-chip_primary {
     background: var(--m3-sys-primary);
 }
 
+.m3-local-theme-showcase__palette-chip_on-primary {
+    background: var(--m3-sys-on-primary);
+    box-shadow:
+        0 0 0 3px var(--m3-sys-primary),
+        inset 0 0 0 1px var(--m3-sys-outline);
+}
+
+.m3-local-theme-showcase__notification,
+.m3-local-theme-showcase__cookbook {
+    padding: 24px;
+}
+
+.m3-local-theme-showcase__notification > * + *,
+.m3-local-theme-showcase__cookbook > * + * {
+    margin-top: 16px;
+}
+
+.m3-local-theme-showcase__sample.m3-local-theme .m3-local-theme-showcase__notification {
+    outline: 1px solid color-mix(in srgb, var(--m3-sys-primary) 36%, transparent);
+    outline-offset: -1px;
+}
+
 .m3-local-theme-showcase__actions {
-    margin-top: auto;
-    padding-top: 24px;
+    padding-top: 8px;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
     row-gap: 8px;
     gap: 12px;
+}
+
+.m3-local-theme-showcase__workspace-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 20px;
+}
+
+.m3-local-theme-showcase__workspace-header > :first-child {
+    min-width: 0;
+}
+
+.m3-local-theme-showcase__workspace-header > :first-child > * + * {
+    margin-top: 8px;
+}
+
+.m3-local-theme-showcase__menu-anchor {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.m3-local-theme-showcase__menu-anchor .m3-menu {
+    min-width: 208px;
+}
+
+.m3-local-theme-showcase__menu .m3-menu-item__icon,
+.m3-local-theme-showcase__menu .m3-menu-item__icon .m3-icon {
+    color: var(--m3-sys-on-surface);
+}
+
+.m3-local-theme-showcase__list-area {
+    position: relative;
+    overflow: visible;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.m3-local-theme-showcase__list {
+    overflow: visible;
+    border: 1px solid var(--m3-sys-outline-variant);
+    border-radius: 20px;
+    background: var(--m3-sys-surface-container);
 }
 
 .m3-local-theme {
@@ -681,7 +493,7 @@ void props.variant
     --m3-sys-on-secondary-container: var(--m3-local-on-secondary-container);
     --m3-sys-surface: var(--m3-local-surface);
     --m3-sys-surface-container-low: var(--m3-local-surface-low);
-    --m3-sys-surface-container: var(--m3-local-surface);
+    --m3-sys-surface-container: var(--m3-local-surface-container);
     --m3-sys-surface-container-high: var(--m3-local-surface-high);
     --m3-sys-surface-container-highest: var(--m3-local-surface-highest);
     --m3-sys-on-surface: var(--m3-local-on-surface);
@@ -697,41 +509,45 @@ void props.variant
     color: var(--m3-sys-on-surface);
 }
 
-html.m3-theme-light .m3-local-theme--reset {
-    --m3-local-primary: #6750a4;
-    --m3-local-primary-container: #e9ddff;
+html.m3-theme-light .m3-local-theme_showcase,
+html.m3-theme-light .m3-local-theme_reset {
+    --m3-local-primary: #2d5fb8;
+    --m3-local-primary-container: #dbe5ff;
     --m3-local-on-primary: #ffffff;
-    --m3-local-on-primary-container: #22005d;
-    --m3-local-secondary-container: #e8def8;
-    --m3-local-on-secondary-container: #1e192b;
-    --m3-local-surface: #fdf8fd;
-    --m3-local-surface-low: #fef7ff;
-    --m3-local-surface-high: #ece6f0;
-    --m3-local-surface-highest: #e6e0e9;
-    --m3-local-on-surface: #1d1b20;
-    --m3-local-on-surface-variant: #49454f;
-    --m3-local-outline: #79747e;
-    --m3-local-outline-variant: #cac4d0;
+    --m3-local-on-primary-container: #001b47;
+    --m3-local-secondary-container: #dce3f3;
+    --m3-local-on-secondary-container: #24324a;
+    --m3-local-surface: #f8f9ff;
+    --m3-local-surface-low: #f3f6ff;
+    --m3-local-surface-container: #edf1fb;
+    --m3-local-surface-high: #e3e9f6;
+    --m3-local-surface-highest: #d7deed;
+    --m3-local-on-surface: #181c24;
+    --m3-local-on-surface-variant: #4c566b;
+    --m3-local-outline: #7b8498;
+    --m3-local-outline-variant: #c5ccda;
 }
 
-html.m3-theme-dark .m3-local-theme--reset {
-    --m3-local-primary: #cfbcff;
-    --m3-local-primary-container: #4f378a;
-    --m3-local-on-primary: #381e72;
-    --m3-local-on-primary-container: #e9ddff;
-    --m3-local-secondary-container: #4a4458;
-    --m3-local-on-secondary-container: #e8def8;
-    --m3-local-surface: #141218;
-    --m3-local-surface-low: #1d1b20;
-    --m3-local-surface-high: #2b2930;
-    --m3-local-surface-highest: #36343b;
-    --m3-local-on-surface: #e6e0e9;
-    --m3-local-on-surface-variant: #cac4d0;
-    --m3-local-outline: #938f99;
-    --m3-local-outline-variant: #49454f;
+html.m3-theme-dark .m3-local-theme_showcase,
+html.m3-theme-dark .m3-local-theme_reset {
+    --m3-local-primary: #b5c7ff;
+    --m3-local-primary-container: #24498f;
+    --m3-local-on-primary: #002d6d;
+    --m3-local-on-primary-container: #dbe5ff;
+    --m3-local-secondary-container: #3f4658;
+    --m3-local-on-secondary-container: #dce3f3;
+    --m3-local-surface: #151922;
+    --m3-local-surface-low: #10141d;
+    --m3-local-surface-container: #1d2330;
+    --m3-local-surface-high: #262c3a;
+    --m3-local-surface-highest: #313848;
+    --m3-local-on-surface: #e4e7f0;
+    --m3-local-on-surface-variant: #c4cad8;
+    --m3-local-outline: #8e97aa;
+    --m3-local-outline-variant: #464d60;
 }
 
-html.m3-theme-light .m3-local-theme--danger {
+html.m3-theme-light .m3-local-theme_danger {
     --m3-local-primary: #b42346;
     --m3-local-primary-container: #ffd9e2;
     --m3-local-on-primary: #ffffff;
@@ -740,6 +556,7 @@ html.m3-theme-light .m3-local-theme--danger {
     --m3-local-on-secondary-container: #5b1024;
     --m3-local-surface: #fdf0f4;
     --m3-local-surface-low: #fff8fa;
+    --m3-local-surface-container: #fce9ef;
     --m3-local-surface-high: #f8dfe7;
     --m3-local-surface-highest: #efc9d4;
     --m3-local-on-surface: #34111a;
@@ -748,7 +565,7 @@ html.m3-theme-light .m3-local-theme--danger {
     --m3-local-outline-variant: #dfb8c2;
 }
 
-html.m3-theme-dark .m3-local-theme--danger {
+html.m3-theme-dark .m3-local-theme_danger {
     --m3-local-primary: #ff9db8;
     --m3-local-primary-container: #7e263f;
     --m3-local-on-primary: #491323;
@@ -757,6 +574,7 @@ html.m3-theme-dark .m3-local-theme--danger {
     --m3-local-on-secondary-container: #f7dbe3;
     --m3-local-surface: #312129;
     --m3-local-surface-low: #2a1b22;
+    --m3-local-surface-container: #34242b;
     --m3-local-surface-high: #38252d;
     --m3-local-surface-highest: #46303a;
     --m3-local-on-surface: #f2dfe4;
@@ -765,7 +583,7 @@ html.m3-theme-dark .m3-local-theme--danger {
     --m3-local-outline-variant: #62424d;
 }
 
-html.m3-theme-light .m3-local-theme--warm-alert {
+html.m3-theme-light .m3-local-theme_warm-alert {
     --m3-local-primary: #8a4f00;
     --m3-local-primary-container: #ffddb8;
     --m3-local-on-primary: #ffffff;
@@ -774,6 +592,7 @@ html.m3-theme-light .m3-local-theme--warm-alert {
     --m3-local-on-secondary-container: #37281b;
     --m3-local-surface: #fef1e5;
     --m3-local-surface-low: #fff8f1;
+    --m3-local-surface-container: #fbead9;
     --m3-local-surface-high: #f8e1cc;
     --m3-local-surface-highest: #efd0b2;
     --m3-local-on-surface: #2f1b0d;
@@ -782,7 +601,7 @@ html.m3-theme-light .m3-local-theme--warm-alert {
     --m3-local-outline-variant: #dbc1ab;
 }
 
-html.m3-theme-dark .m3-local-theme--warm-alert {
+html.m3-theme-dark .m3-local-theme_warm-alert {
     --m3-local-primary: #f1be79;
     --m3-local-primary-container: #6d4d1e;
     --m3-local-on-primary: #3f2806;
@@ -791,6 +610,7 @@ html.m3-theme-dark .m3-local-theme--warm-alert {
     --m3-local-on-secondary-container: #f3e0d1;
     --m3-local-surface: #31261d;
     --m3-local-surface-low: #2a2018;
+    --m3-local-surface-container: #34291f;
     --m3-local-surface-high: #382b22;
     --m3-local-surface-highest: #46362a;
     --m3-local-on-surface: #efe0d2;
@@ -799,7 +619,7 @@ html.m3-theme-dark .m3-local-theme--warm-alert {
     --m3-local-outline-variant: #5f4937;
 }
 
-html.m3-theme-light .m3-local-theme--success {
+html.m3-theme-light .m3-local-theme_success {
     --m3-local-primary: #146c2e;
     --m3-local-primary-container: #c2efc8;
     --m3-local-on-primary: #ffffff;
@@ -808,6 +628,7 @@ html.m3-theme-light .m3-local-theme--success {
     --m3-local-on-secondary-container: #183723;
     --m3-local-surface: #eef8ee;
     --m3-local-surface-low: #f7fdf6;
+    --m3-local-surface-container: #e6f3e6;
     --m3-local-surface-high: #dcefdc;
     --m3-local-surface-highest: #c6dfc7;
     --m3-local-on-surface: #132017;
@@ -816,7 +637,7 @@ html.m3-theme-light .m3-local-theme--success {
     --m3-local-outline-variant: #bed4c0;
 }
 
-html.m3-theme-dark .m3-local-theme--success {
+html.m3-theme-dark .m3-local-theme_success {
     --m3-local-primary: #9ad7ac;
     --m3-local-primary-container: #245b37;
     --m3-local-on-primary: #112f1c;
@@ -825,6 +646,7 @@ html.m3-theme-dark .m3-local-theme--success {
     --m3-local-on-secondary-container: #dce9de;
     --m3-local-surface: #202924;
     --m3-local-surface-low: #1a231e;
+    --m3-local-surface-container: #232d27;
     --m3-local-surface-high: #27312c;
     --m3-local-surface-highest: #313d37;
     --m3-local-on-surface: #dce7de;
@@ -833,38 +655,40 @@ html.m3-theme-dark .m3-local-theme--success {
     --m3-local-outline-variant: #45594a;
 }
 
-html.m3-theme-light .m3-local-theme--brand-muted {
-    --m3-local-primary: #615b8f;
-    --m3-local-primary-container: #e7e0ff;
+html.m3-theme-light .m3-local-theme_brand-muted {
+    --m3-local-primary: #5b6683;
+    --m3-local-primary-container: #e2e7f2;
     --m3-local-on-primary: #ffffff;
-    --m3-local-on-primary-container: #1d1738;
-    --m3-local-secondary-container: #e1ddf1;
-    --m3-local-on-secondary-container: #302c45;
-    --m3-local-surface: #f3f1fa;
-    --m3-local-surface-low: #fbf8ff;
-    --m3-local-surface-high: #e5e1f1;
-    --m3-local-surface-highest: #d7d2e4;
-    --m3-local-on-surface: #1d1b28;
-    --m3-local-on-surface-variant: #555266;
-    --m3-local-outline: #868098;
-    --m3-local-outline-variant: #d1ccdf;
+    --m3-local-on-primary-container: #182235;
+    --m3-local-secondary-container: #e5e8ef;
+    --m3-local-on-secondary-container: #2d3443;
+    --m3-local-surface: #f6f7fb;
+    --m3-local-surface-low: #fbfbff;
+    --m3-local-surface-container: #f0f2f7;
+    --m3-local-surface-high: #e8ebf1;
+    --m3-local-surface-highest: #dde1e9;
+    --m3-local-on-surface: #1d2027;
+    --m3-local-on-surface-variant: #586170;
+    --m3-local-outline: #858d9c;
+    --m3-local-outline-variant: #cdd2dc;
 }
 
-html.m3-theme-dark .m3-local-theme--brand-muted {
-    --m3-local-primary: #b7c8e8;
-    --m3-local-primary-container: #44526c;
-    --m3-local-on-primary: #25324b;
-    --m3-local-on-primary-container: #e4e9f6;
-    --m3-local-secondary-container: #3b4558;
-    --m3-local-on-secondary-container: #e0e4ee;
-    --m3-local-surface: #232837;
-    --m3-local-surface-low: #1d2230;
-    --m3-local-surface-high: #2a3040;
-    --m3-local-surface-highest: #343c4d;
-    --m3-local-on-surface: #e2e6ef;
-    --m3-local-on-surface-variant: #c6cdd9;
-    --m3-local-outline: #909eb8;
-    --m3-local-outline-variant: #485162;
+html.m3-theme-dark .m3-local-theme_brand-muted {
+    --m3-local-primary: #c3cad8;
+    --m3-local-primary-container: #454d60;
+    --m3-local-on-primary: #2d3443;
+    --m3-local-on-primary-container: #e2e7f2;
+    --m3-local-secondary-container: #444a57;
+    --m3-local-on-secondary-container: #e5e8ef;
+    --m3-local-surface: #20232b;
+    --m3-local-surface-low: #1a1d25;
+    --m3-local-surface-container: #252933;
+    --m3-local-surface-high: #2d323d;
+    --m3-local-surface-highest: #383e4b;
+    --m3-local-on-surface: #e3e6ee;
+    --m3-local-on-surface-variant: #c6cbd6;
+    --m3-local-outline: #949ba8;
+    --m3-local-outline-variant: #4c5361;
 }
 
 @media (max-width: 720px) {

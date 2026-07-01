@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import LocalThemeShowcase from '../examples/local-theme/LocalThemeShowcase.vue'
 
 const meta = {
-  title: 'Patterns/Local Theming',
+  title: 'Guides/Theming',
 
   parameters: {
     layout: 'fullscreen',
@@ -14,7 +14,7 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const DangerActionScope: Story = {
+export const DangerNotification: Story = {
   render: () => ({
     components: {
       LocalThemeShowcase,
@@ -26,7 +26,7 @@ export const DangerActionScope: Story = {
   }),
 }
 
-export const WarmAlertScope: Story = {
+export const WarmAlertNotification: Story = {
   render: () => ({
     components: {
       LocalThemeShowcase,
@@ -38,7 +38,7 @@ export const WarmAlertScope: Story = {
   }),
 }
 
-export const SuccessScope: Story = {
+export const SuccessNotification: Story = {
   render: () => ({
     components: {
       LocalThemeShowcase,
@@ -50,7 +50,7 @@ export const SuccessScope: Story = {
   }),
 }
 
-export const BrandMutedScope: Story = {
+export const BrandMutedNotification: Story = {
   render: () => ({
     components: {
       LocalThemeShowcase,
@@ -62,14 +62,14 @@ export const BrandMutedScope: Story = {
   }),
 }
 
-export const NestedLocalScopes: Story = {
+export const ListWithDangerMenu: Story = {
   render: () => ({
     components: {
       LocalThemeShowcase,
     },
 
     template: `
-        <LocalThemeShowcase variant="nested" />
+        <LocalThemeShowcase variant="list-menu" />
     `,
   }),
 }
