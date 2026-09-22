@@ -16,6 +16,17 @@ export type {
 } from '@/components/checkbox'
 
 export type {
+  M3DatePickerDialogAppearance,
+  M3DatePickerDialogProps,
+  M3DatePickerDialogRangeProps,
+  M3DatePickerDialogSingleProps,
+  M3DatePickerFieldProps,
+  M3DatePickerProps,
+  M3DatePickerRangeProps,
+  M3DatePickerSingleProps,
+} from '@/components/date-picker'
+
+export type {
   M3ChipMethods,
   M3ChipProps,
 } from '@/components/chip'
@@ -122,6 +133,12 @@ export {
 export {
   M3Checkbox,
 } from '@/components/checkbox'
+
+export {
+  M3DatePicker,
+  M3DatePickerDialog,
+  M3DatePickerField,
+} from '@/components/date-picker'
 
 export {
   M3Chip,

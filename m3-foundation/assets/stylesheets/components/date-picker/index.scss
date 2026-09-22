@@ -1,0 +1,571 @@
+@use '../../basics/shape' as m3-shape;
+@use '../../basics/typography' as m3-typography;
+
+.m3-date-picker {
+  @include m3-shape.corner(28px);
+
+  width: 360px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--m3-sys-surface-container-high);
+  color: var(--m3-sys-on-surface);
+  box-sizing: border-box;
+
+  &__header {
+    min-height: 80px;
+    padding: 16px 24px 12px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__header-copy {
+    min-width: 0;
+  }
+
+  &__header-action {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+  }
+
+  &__label {
+    @include m3-typography.label-large;
+
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &__headline {
+    @include m3-typography.title-large;
+
+    margin-top: 8px;
+    color: var(--m3-sys-on-surface);
+  }
+
+  &_input {
+    width: 328px;
+    min-height: 218px;
+  }
+
+  &_input &__header {
+    min-height: 136px;
+    padding: 24px 24px 10px;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--m3-sys-outline-variant);
+    box-sizing: border-box;
+  }
+
+  &_input &__headline {
+    @include m3-typography.display-small;
+
+    margin-top: 36px;
+  }
+
+  &_input &__header-action {
+    align-self: flex-end;
+  }
+
+  &_input .m3-text-field {
+    width: 100%;
+  }
+
+  &__input-content {
+    padding: 10px 24px 16px;
+  }
+
+  &__input-fields {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  &_input-range &__input-fields {
+    gap: 12px;
+  }
+
+  &_navigation-inline &__header {
+    border-bottom: 1px solid var(--m3-sys-outline-variant);
+  }
+
+  &_docked {
+    @include m3-shape.corner(16px);
+  }
+
+  &_docked#{&}_weeks-4 &__month-viewport {
+    height: 252px;
+  }
+
+  &_docked#{&}_weeks-5 &__month-viewport {
+    height: 300px;
+  }
+
+  &_docked#{&}_weeks-6 &__month-viewport {
+    height: 348px;
+  }
+
+  &_docked .m3-year-picker_list {
+    height: 404px;
+  }
+
+  &__month-navigation {
+    height: 56px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    box-sizing: border-box;
+
+    &_picker {
+      justify-content: space-between;
+    }
+  }
+
+  &__navigation-group {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__navigation-control {
+    &_hidden {
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+
+  &__navigation-label {
+    @include m3-typography.label-large;
+
+    min-width: 48px;
+    padding: 10px 4px;
+    color: var(--m3-sys-on-surface);
+    text-align: center;
+    box-sizing: border-box;
+
+    &_disabled {
+      color: var(--m3-sys-on-surface-variant);
+      opacity: 0.38;
+    }
+  }
+
+  &__year-button.m3-button,
+  &__month-button.m3-button {
+    --m3-ripple-color: var(--m3-sys-on-surface-variant);
+    --state-color: var(--m3-sys-on-surface-variant);
+
+    color: var(--m3-sys-on-surface);
+  }
+
+  &__month-button .m3-button__content,
+  &__year-button .m3-button__content {
+    min-width: 72px;
+    padding-right: 8px;
+    padding-left: 8px;
+    gap: 4px;
+  }
+
+  &__year-button-icon {
+    transition: transform 150ms ease;
+
+    &_expanded {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__inline-navigation {
+    height: 56px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    box-sizing: border-box;
+
+    &_year-picker {
+      justify-content: flex-start;
+    }
+  }
+
+  &__inline-month-button.m3-button {
+    --m3-ripple-color: var(--m3-sys-on-surface-variant);
+    --state-color: var(--m3-sys-on-surface-variant);
+
+    color: var(--m3-sys-on-surface);
+  }
+
+  &__inline-month-button .m3-button__content {
+    padding-right: 8px;
+    padding-left: 8px;
+    gap: 4px;
+  }
+
+  &__inline-month-label {
+    @include m3-typography.label-large;
+
+    padding: 10px 8px;
+    color: var(--m3-sys-on-surface);
+
+    &_disabled {
+      color: var(--m3-sys-on-surface-variant);
+      opacity: 0.38;
+    }
+  }
+
+  &__inline-arrows {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__calendar {
+    &_swipeable {
+      touch-action: pan-y;
+      user-select: none;
+    }
+  }
+
+  &__mode-enter {
+    transform-origin: top center;
+    animation: m3-date-picker-mode-enter 180ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  &__month-viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &__month-track {
+    display: flex;
+    width: 300%;
+    transform: translateX(calc(-33.333333% + var(--m3-date-picker-slide-offset, 0px)));
+
+    &_animating {
+      transition: transform 200ms ease;
+    }
+  }
+
+  &__month-page {
+    flex: 0 0 33.333333%;
+  }
+
+  &__footer {
+    min-height: 56px;
+    padding: 4px 12px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    box-sizing: border-box;
+  }
+}
+
+.m3-date-picker-option {
+  @include m3-typography.label-large;
+
+  --m3-ripple-color: var(--m3-sys-on-surface);
+  --m3-ripple-opacity: 0.12;
+
+  border: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--m3-sys-on-surface-variant);
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+
+  &_circle {
+    @include m3-typography.body-large;
+
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    justify-self: center;
+    color: var(--m3-sys-on-surface);
+  }
+
+  &_pill {
+    width: 88px;
+    min-height: 40px;
+    border-radius: 999px;
+  }
+
+  .m3-ripple {
+    z-index: 1;
+  }
+
+  &__content {
+    z-index: 2;
+    position: relative;
+  }
+
+  &_in-range {
+    color: var(--m3-sys-on-secondary-container);
+  }
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: var(--m3-state-layers-on-surface-opacity-008);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--m3-sys-primary);
+    outline-offset: 2px;
+  }
+
+  &_outside {
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &_current {
+    box-shadow: inset 0 0 0 1px var(--m3-sys-primary);
+  }
+
+  &_selected,
+  &_selected:hover:not(:disabled),
+  &_selected:focus-visible:not(:disabled) {
+    --m3-ripple-color: var(--m3-sys-on-primary);
+
+    background: var(--m3-sys-primary);
+    color: var(--m3-sys-on-primary);
+  }
+
+  &_selected::after {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background: inherit;
+  }
+
+  &:disabled {
+    color: var(--m3-sys-on-surface);
+    cursor: default;
+    opacity: 0.38;
+  }
+}
+
+.m3-date-picker-list {
+  --m3-list-container-color: var(--m3-sys-surface-container-high);
+  --m3-list-item-selected-container-color: var(--m3-sys-surface-variant);
+  --m3-list-item-selected-label-color: var(--m3-sys-on-surface);
+
+  width: 100%;
+  padding: 8px 0;
+
+  &__check {
+    &_hidden {
+      visibility: hidden;
+    }
+  }
+}
+
+.m3-month-picker {
+  height: 348px;
+  padding: 16px 24px 24px;
+  box-sizing: border-box;
+
+  &_animating {
+    transform-origin: top center;
+    animation: m3-date-picker-mode-enter 180ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  &__grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__row {
+    height: 56px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    justify-items: center;
+  }
+
+  &_list {
+    height: 404px;
+    padding: 0;
+    overflow-y: auto;
+  }
+}
+
+.m3-year-picker {
+  height: 348px;
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  &_grid {
+    padding: 0 24px 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 56px;
+    align-items: center;
+    justify-items: center;
+  }
+
+  &_animating {
+    transform-origin: top center;
+    animation: m3-date-picker-mode-enter 180ms cubic-bezier(0.2, 0, 0, 1);
+  }
+}
+
+.m3-date-picker-dialog {
+  &.m3-dialog {
+    width: 360px;
+    overflow: hidden;
+  }
+
+  .m3-dialog__content {
+    padding: 0;
+  }
+
+  .m3-dialog__footer {
+    padding-top: 8px;
+  }
+
+  &_input .m3-dialog__footer {
+    padding: 0 24px 12px;
+  }
+
+  .m3-date-picker {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.m3-date-picker-field {
+  display: inline-flex;
+  flex-direction: column;
+
+  .m3-text-field {
+    width: 100%;
+  }
+
+  &__supporting-text {
+    @include m3-typography.body-small;
+
+    min-height: 20px;
+    padding: 4px 16px 0;
+    color: var(--m3-sys-on-surface-variant);
+    box-sizing: border-box;
+  }
+
+  &__popper {
+    border-radius: 16px;
+    box-shadow: var(--m3-elevation-3);
+    overflow: hidden;
+  }
+}
+
+.m3-day-picker {
+  display: block;
+
+  &__weekdays,
+  &__week {
+    display: grid;
+    grid-template-columns: repeat(7, 48px);
+    justify-content: center;
+  }
+
+  &__weekdays {
+    @include m3-typography.label-small;
+
+    padding: 0 12px;
+    color: var(--m3-sys-on-surface-variant);
+    text-align: center;
+  }
+
+  &__week {
+    min-height: 48px;
+    align-items: center;
+  }
+
+  &__weekday {
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__grid {
+    padding: 0 12px 12px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__day-cell {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    position: relative;
+
+    &_in-range::before {
+      content: '';
+      height: 40px;
+      display: block;
+      position: absolute;
+      top: 4px;
+      right: 0;
+      left: 0;
+      background: var(--m3-sys-secondary-container);
+    }
+
+    &_range-start::before {
+      left: 24px;
+    }
+
+    &_range-end::before {
+      right: 24px;
+    }
+
+    &_range-start#{&}_range-end::before {
+      display: none;
+    }
+  }
+}
+
+@keyframes m3-date-picker-mode-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-date-picker {
+    &__mode-enter {
+      animation: none;
+    }
+  }
+
+  .m3-month-picker {
+    &_animating {
+      animation: none;
+    }
+  }
+
+  .m3-year-picker {
+    &_animating {
+      animation: none;
+    }
+  }
+}

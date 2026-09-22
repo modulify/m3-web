@@ -1,0 +1,125 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import * as M3DatePickerStories from './M3DatePicker.stories'
+
+<Meta of={M3DatePickerStories} />
+
+# Date Picker
+
+Date pickers let people choose a single date from a calendar grid. `M3DatePicker` provides the calendar surface; docked field flows are composed with `M3DatePickerField`, and modal flows are composed with `M3DatePickerDialog`.
+
+## API
+
+`M3DatePicker` is controlled by `value` and emits the selected date or date range through `onChange`. Use `layout="docked"` for Material's compact anchored surface; the default `layout="modal"` keeps the dialog-oriented header and geometry.
+
+Compose docked actions with `M3DatePicker.Footer`. The picker owns the footer container and hides it while a month or year selection list is open.
+
+`M3DatePickerField` combines an `M3TextField`, a calendar icon button, and a docked popper. It keeps the date picker value as `Date | null`, accepts safe text-field props such as `id`, `name`, `label`, `placeholder`, `invalid`, `disabled`, `readonly`, and `outlined`, and normalizes typed dates to `MM/DD/YYYY`. Use the root `className`, `popperClassName`, and rich `supportingText` when a form needs local composition hooks without taking over date picker state.
+
+The docked field uses an outlined text field by default, opens the calendar in an elevated popup below the field, and keeps the popup interaction local to the form instead of interrupting the page with a modal dialog. A day click updates a local draft; Cancel discards it and OK commits it through `onChange`.
+
+`M3DatePickerDialog` wraps the same calendar surface in a modal shell. It keeps a draft value while the dialog is open and commits it through `onChange` only after the user presses OK. Use `appearance="input"` to start from Material's modal date input layout; when `switchable` is enabled, users can switch between calendar and text input modes.
+
+Use `firstDayOfWeek` to shift the grid start, `min`/`max` to disable dates outside an allowed range, and `availability` for custom date/year availability rules. Modal layouts keep a stable six-week grid. Docked layouts follow the M3 surface height for the visible month and render only the required four, five, or six rows.
+
+The selected `value` and navigation `cursor` are separate states. Month arrows, month selection, year selection, and swipe navigation move only the cursor; they do not call `onChange` until a day is selected. Use `cursor` and `onCursorChange` when the calendar position must be controlled by parent state.
+
+Use `navigation` to choose the navigation surface and `views` to declare the reachable `days`, `months`, and `years` states. The default `navigation="split"` stays outside the swipe track; `navigation="inline"` places the controls inside each swipable month page; `navigation="none"` hides them. Horizontal swipe between available months is always enabled on the calendar grid.
+
+In the docked layout, month and year controls open separate vertical selection lists. The active list keeps its control enabled, disables the other control, and returns to the day grid after selection.
+
+## Accessibility Semantics
+
+- The root uses `role="group"` and is named by `label`.
+- The days are exposed as a `grid` with one row per week.
+- Grid month and year pickers use `grid` semantics; docked vertical selectors use native `list` and `listitem` semantics through `M3List`.
+- Each day is a native button with `aria-selected`.
+- Disabled dates use native `disabled`.
+- The month/year button uses `aria-expanded` while year selection is open.
+- Modal flows use `M3DatePickerDialog`, which supplies dialog semantics through `M3Dialog`.
+
+## Story Guide
+
+- [Standard](?path=/story/components-m3datepicker--standard)
+- [Monday First](?path=/story/components-m3datepicker--monday-first)
+- [Restricted Range](?path=/story/components-m3datepicker--restricted-range)
+- [Availability](?path=/story/components-m3datepicker--availability)
+- [Range Selection](?path=/story/components-m3datepicker--range-selection)
+- [Controlled Cursor](?path=/story/components-m3datepicker--controlled-cursor)
+- [Without Navigation](?path=/story/components-m3datepicker--without-navigation)
+- [Without Year View](?path=/story/components-m3datepicker--without-year-view)
+- [Swipe Navigation](?path=/story/components-m3datepicker--swipe-navigation)
+- [Inline Navigation](?path=/story/components-m3datepicker--inline-navigation)
+- [Docked Field](?path=/story/components-m3datepicker--docked-field)
+- [Modal Composition](?path=/story/components-m3datepicker--modal-composition)
+- [Modal Date Input](?path=/story/components-m3datepicker--modal-date-input)
+
+## Demo
+
+<Canvas of={M3DatePickerStories.Standard} />
+<Canvas of={M3DatePickerStories.RestrictedRange} />
+<Canvas of={M3DatePickerStories.Availability} />
+<Canvas of={M3DatePickerStories.RangeSelection} />
+<Canvas of={M3DatePickerStories.ControlledCursor} />
+<Canvas of={M3DatePickerStories.DockedField} />
+<Canvas of={M3DatePickerStories.ModalDateInput} />
+<Canvas of={M3DatePickerStories.WithoutYearView} />
+
+## Usage Guidance
+
+Use the inline picker when the calendar is already the main task. Use modal composition when date selection interrupts a form or a compact workflow.
+
+Use the docked field when date selection is part of a form and the selected value must remain visible in the field.
+
+Keep range constraints visible through disabled dates instead of hiding days, so the month grid remains predictable.
+
+## Docked field example
+
+```tsx
+const [date, setDate] = useState<Date | null>(new Date(2026, 6, 10))
+
+<M3DatePickerField
+  value={date}
+  min={new Date(2026, 6, 3)}
+  max={new Date(2026, 6, 24)}
+  label="Trip date"
+  name="trip_date"
+  supportingText={<span>MM/DD/YYYY</span>}
+  className="trip-date"
+  popperClassName={['trip-date-popper', { 'trip-date-popper_open': true }]}
+  placeholder="MM/DD/YYYY"
+  onChange={setDate}
+/>
+```
+
+## Modal dialog example
+
+```tsx
+const [opened, setOpened] = useState(false)
+const [date, setDate] = useState<Date | null>(new Date(2026, 6, 10))
+
+<M3DatePickerDialog
+  opened={opened}
+  value={date}
+  label="Trip date"
+  onToggle={setOpened}
+  onChange={setDate}
+/>
+```
+
+## Modal date input example
+
+```tsx
+<M3DatePickerDialog
+  opened={opened}
+  appearance="input"
+  value={date}
+  label="Trip date"
+  onToggle={setOpened}
+  onChange={setDate}
+/>
+```
+
+## Resources
+
+- [M3 Date pickers overview](https://m3.material.io/components/date-pickers/overview)
+- [WAI-ARIA APG: Dialog Modal Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)

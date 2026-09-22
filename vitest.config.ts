@@ -6,6 +6,7 @@ import {
 export default defineConfig({
   test: {
     projects: [
+      './m3-foundation/vitest.config.ts',
       './m3-react/vitest.config.ts',
       './m3-vue/vitest.config.ts',
     ],
