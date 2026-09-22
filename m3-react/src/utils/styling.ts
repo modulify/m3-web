@@ -1,25 +1,33 @@
-type CSSClass = string
-type CSSClassRecord = Record<CSSClass, boolean>
-type CSSClassDeclaration = (CSSClass | CSSClassRecord)[]|CSSClassRecord
+export type CssClass = false | null | undefined | string | Record<string, unknown> | CssClass[]
 
-const filter = (classes: CSSClassRecord): CSSClass[] => Object.keys(classes).filter(k => classes[k])
+const isCssClassRecord = (value: CssClass): value is Record<string, unknown> => (
+  typeof value === 'object' &&
+  value !== null &&
+  !Array.isArray(value)
+)
 
-export const toClassNameList = (classes: CSSClassDeclaration): CSSClass[] => {
+const filter = (classes: Record<string, unknown>): string[] => Object.keys(classes).filter(key => classes[key])
+
+export const toClassNameList = (classes: CssClass): string[] => {
   const result: string[] = []
 
   if (Array.isArray(classes)) {
     classes.forEach(classes => {
       if (typeof classes === 'string') {
         result.push(classes)
-      } else {
+      } else if (Array.isArray(classes)) {
+        result.push(...toClassNameList(classes))
+      } else if (isCssClassRecord(classes)) {
         result.push(...filter(classes))
       }
     })
-  } else {
+  } else if (isCssClassRecord(classes)) {
     result.push(...filter(classes))
+  } else if (typeof classes === 'string') {
+    result.push(classes)
   }
 
   return result.filter(t => t.length > 0)
 }
 
-export const toClassName = (classes: CSSClassDeclaration) => toClassNameList(classes).join(' ')
+export const toClassName = (classes: CssClass) => toClassNameList(classes).join(' ')

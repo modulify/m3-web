@@ -18,6 +18,12 @@ export {
 } from '@/components/checkbox'
 
 export {
+  M3DatePicker,
+  M3DatePickerDialog,
+  M3DatePickerField,
+} from '@/components/date-picker'
+
+export {
   M3Chip,
 } from '@/components/chip'
 

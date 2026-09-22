@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "build": "echo \"No build available yet\"",
-    "eslint": "eslint ./lib ./types",
+    "eslint": "eslint ./lib ./types ./tests ./vitest.config.ts",
     "tsc": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
