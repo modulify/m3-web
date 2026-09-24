@@ -128,6 +128,11 @@ const props = defineProps({
     default: undefined,
   },
 
+  name: {
+    type: null as unknown as PropType<string | undefined>,
+    default: undefined,
+  },
+
   type: {
     type: String,
     validator: (type: string) => [
@@ -140,11 +145,6 @@ const props = defineProps({
       'url',
     ].includes(type),
     default: 'text',
-  },
-
-  name: {
-    type: null as unknown as PropType<string | undefined>,
-    default: undefined,
   },
 
   value: {

@@ -61,13 +61,13 @@ const M3Surface: FC<M3SurfaceProps> = ({
   insetLeft = 0,
   transitionMs = 220,
   zIndex = 400,
-  onToggle = (_: boolean) => {},
-  onDismiss = () => {},
   role,
   'aria-modal': ariaModal,
   className = '',
   style,
   children,
+  onToggle = (_: boolean) => {},
+  onDismiss = () => {},
   ...panelProps
 }) => {
   const isModal = mode === 'modal'

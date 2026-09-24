@@ -103,14 +103,14 @@ const props = defineProps({
     default: false,
   },
 
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-
   dismissLabel: {
     type: String,
     default: 'Remove',
+  },
+
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 })
 

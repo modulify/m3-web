@@ -148,14 +148,14 @@ const props = defineProps({
     default: null,
   },
 
-  max: {
-    type: Number,
-    default: 100,
-  },
-
   min: {
     type: Number,
     default: 0,
+  },
+
+  max: {
+    type: Number,
+    default: 100,
   },
 
   step: {
@@ -174,12 +174,12 @@ const props = defineProps({
     default: () => ({}),
   },
 
-  ariaHandleMax: {
+  ariaHandleMin: {
     type: Object as PropType<AriaOptions>,
     default: () => ({}),
   },
 
-  ariaHandleMin: {
+  ariaHandleMax: {
     type: Object as PropType<AriaOptions>,
     default: () => ({}),
   },
@@ -212,8 +212,8 @@ const current = computed(() => {
 })
 
 const dragging = reactive({
-  max: null as number | null,
   min: null as number | null,
+  max: null as number | null,
 })
 
 const percentageOf = (value: number) => {
@@ -224,8 +224,8 @@ const percentage = computed(() => {
   const [_min, _max] = current.value
 
   return {
-    max: dragging.max ?? percentageOf(_max),
     min: dragging.min ?? percentageOf(_min),
+    max: dragging.max ?? percentageOf(_max),
   }
 })
 

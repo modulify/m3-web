@@ -39,8 +39,8 @@ export interface M3PopperProps extends HTMLAttributes<HTMLElement> {
 }
 
 export interface M3PopperMethods {
-  adjust (): Promise<void>;
-  contains (el: Element | null): boolean;
   show (immediately?: boolean): void;
   hide (immediately?: boolean, reason?: HideReason): void;
+  adjust (): Promise<void>;
+  contains (el: Element | null): boolean;
 }

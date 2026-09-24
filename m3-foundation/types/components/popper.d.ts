@@ -23,13 +23,13 @@ export type TriggerHandler = (event: Event & { processedByM3Popper?: boolean }) 
 
 export type FloatingOptions = {
   placement?: Placement;
+  strategy?: Strategy;
+  boundary?: Boundary;
   /** number or numeric string (for templates) */
   offsetMainAxis?: number | string;
   /** number or numeric string (for templates) */
   offsetCrossAxis?: number | string;
   overflow?: OverflowBehavior[];
-  strategy?: Strategy;
-  boundary?: Boundary;
 }
 
 export type ListeningOptions = {

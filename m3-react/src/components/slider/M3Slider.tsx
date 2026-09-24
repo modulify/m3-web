@@ -29,13 +29,13 @@ export type M3SliderValue = number | [number, number] | null
 export interface M3SliderProps extends HTMLAttributes<HTMLElement> {
   type?: M3SliderType;
   value?: M3SliderValue;
-  max?: number;
   min?: number;
+  max?: number;
   step?: number;
   disabled?: boolean;
   ariaHandle?: AriaOptions;
-  ariaHandleMax?: AriaOptions;
   ariaHandleMin?: AriaOptions;
+  ariaHandleMax?: AriaOptions;
   onUpdate?: (value: number | [number, number]) => void;
 }
 
@@ -68,13 +68,13 @@ const getEventX = (event: globalThis.MouseEvent | globalThis.TouchEvent): number
 const M3Slider: FC<M3SliderProps> = ({
   type = 'single',
   value = null,
-  max = 100,
   min = 0,
+  max = 100,
   step = 0,
   disabled = false,
   ariaHandle = {},
-  ariaHandleMax = {},
   ariaHandleMin = {},
+  ariaHandleMax = {},
   className = '',
   onKeyDown = () => {},
   onKeyUp = () => {},
@@ -82,11 +82,11 @@ const M3Slider: FC<M3SliderProps> = ({
   ...attrs
 }) => {
   const [dragging, setDragging] = useState<{
-    max: number | null;
     min: number | null;
+    max: number | null;
   }>({
-    max: null,
     min: null,
+    max: null,
   })
   const [draggingHandle, setDraggingHandle] = useState<DraggingHandle | null>(null)
 
@@ -132,8 +132,8 @@ const M3Slider: FC<M3SliderProps> = ({
     const [valueMin, valueMax] = current
 
     return {
-      max: dragging.max ?? percentageOf(valueMax),
       min: dragging.min ?? percentageOf(valueMin),
+      max: dragging.max ?? percentageOf(valueMax),
     }
   }, [
     current,

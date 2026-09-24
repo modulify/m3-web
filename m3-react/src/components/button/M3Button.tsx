@@ -37,8 +37,8 @@ export interface M3ButtonProps extends HTMLAttributes<RootElement> {
   type?: HTMLButtonElement['type'];
   href?: string;
   appearance?: Appearance;
-  effects?: ElementEffect<RootElement>[];
   disabled?: boolean;
+  effects?: ElementEffect<RootElement>[];
 }
 
 export interface M3ButtonMethods extends Clickable, Focusable {}
@@ -50,8 +50,8 @@ const M3Button: ForwardRefRenderFunction<
   type = 'button',
   href = '',
   appearance = 'filled',
-  effects = [],
   disabled = false,
+  effects = [],
   className = '',
   children = [],
   onKeyUp = () => {},

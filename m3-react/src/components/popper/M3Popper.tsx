@@ -48,11 +48,9 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
   popperTriggers = [],
   shown = false,
   hideOnMissClick = false,
-  className = '',
-  children = [],
   placement = 'bottom',
   strategy = 'absolute',
-  boundary= 'clippingAncestors',
+  boundary = 'clippingAncestors',
   container,
   offsetMainAxis = 0,
   offsetCrossAxis = 0,
@@ -61,6 +59,8 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
   disabled = false,
   animated = false,
   detachTimeout = 5000,
+  className = '',
+  children = [],
   onShow = () => {},
   onHide = (_: HideReason) => {},
   onToggle = (_: boolean) => {},
@@ -284,10 +284,10 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
   }, [])
 
   useImperativeHandle(ref, () => ({
-    adjust: () => adjust.do(),
-    contains,
     show,
     hide,
+    adjust: () => adjust.do(),
+    contains,
   }))
 
   const listening = useListening([

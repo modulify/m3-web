@@ -123,11 +123,6 @@ const props = defineProps({
     default: null,
   },
 
-  label: {
-    type: String,
-    default: '',
-  },
-
   options: {
     type: Array as PropType<Option[]>,
     default: () => [],
@@ -138,9 +133,9 @@ const props = defineProps({
     default: (a: Maybe<T>, b: Maybe<T>) => a === b,
   },
 
-  invalid: {
-    type: Boolean,
-    default: false,
+  label: {
+    type: String,
+    default: '',
   },
 
   placeholder: {
@@ -148,9 +143,9 @@ const props = defineProps({
     default: '',
   },
 
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'bottom-start',
+  invalid: {
+    type: Boolean,
+    default: false,
   },
 
   disabled: {
@@ -166,6 +161,11 @@ const props = defineProps({
   outlined: {
     type: Boolean,
     default: false,
+  },
+
+  placement: {
+    type: String as PropType<Placement>,
+    default: 'bottom-start',
   },
 })
 

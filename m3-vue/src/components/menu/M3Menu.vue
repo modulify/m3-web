@@ -76,6 +76,23 @@ defineProps({
     default: 'bottom',
   },
 
+  strategy: {
+    type: String as PropType<Strategy>,
+    default: 'absolute',
+  },
+
+  boundary: {
+    type: null as unknown as PropType<Boundary>,
+    validator: isBoundary,
+    default: 'clippingAncestors',
+  },
+
+  container: {
+    type: null as unknown as PropType<string | HTMLElement>,
+    validator: Or(isString, isHTMLElement),
+    default: 'body',
+  },
+
   offsetMainAxis: {
     type: [Number, String],
     validator: isNumeric,
@@ -93,38 +110,21 @@ defineProps({
     default: (): OverflowBehavior[] => ['flip', 'shift', 'hide'],
   },
 
-  boundary: {
-    type: null as unknown as PropType<Boundary>,
-    validator: isBoundary,
-    default: 'clippingAncestors',
-  },
-
-  container: {
-    type: null as unknown as PropType<string | HTMLElement>,
-    validator: Or(isString, isHTMLElement),
-    default: 'body',
-  },
-
-  strategy: {
-    type: String as PropType<Strategy>,
-    default: 'absolute',
-  },
-
   delay: {
     type: [Number, String, Object] as PropType<number | string | Delay>,
     validator: isDelay,
     default: () => ({ hide: 200 }),
   },
 
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+
   detachTimeout: {
     type: null as unknown as PropType<number | string | null>,
     validator: Or(isNull, isNumeric),
     default: 5000,
-  },
-
-  disabled: {
-    type: Boolean,
-    default: false,
   },
 })
 

@@ -11,36 +11,36 @@ import { toClassName } from '@/utils/styling'
 export interface M3MenuProps extends M3PopperProps {}
 
 const M3Menu: FC<M3MenuProps> = ({
-  shown = false,
   target,
-  className = '',
-  children = [],
+  shown = false,
   placement = 'bottom',
-  overflow = ['flip', 'shift', 'hide'],
   strategy = 'absolute',
   boundary = 'clippingAncestors',
   container = 'body',
   offsetMainAxis = 0,
   offsetCrossAxis = 0,
+  overflow = ['flip', 'shift', 'hide'],
   delay = { hide: 200 },
   disabled = false,
   detachTimeout = 5000,
+  className = '',
+  children = [],
   onShow = () => {},
   onHide = (_reason) => {},
   onToggle = (_shown: boolean) => {},
   ...attrs
 }) => (
   <M3Popper
-    shown={shown}
     target={target}
+    shown={shown}
     targetTriggers={['click']}
     placement={placement}
-    overflow={overflow}
     strategy={strategy}
     boundary={boundary}
     container={container}
     offsetMainAxis={offsetMainAxis}
     offsetCrossAxis={offsetCrossAxis}
+    overflow={overflow}
     delay={delay}
     disabled={disabled}
     animated={true}

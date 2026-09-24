@@ -41,8 +41,8 @@ type RootAttrs = Omit<HTMLAttributes<HTMLElement>, 'onInput' | 'onChange'>
 
 export interface M3TextFieldProps extends RootAttrs {
   id?: string;
-  type?: TextFieldType;
   name?: string;
+  type?: TextFieldType;
   value?: string | number;
   label?: string;
   placeholder?: string;
@@ -68,8 +68,8 @@ const M3TextField: ForwardRefRenderFunction<
   M3TextFieldProps
 > = ({
   id,
-  type = 'text',
   name,
+  type = 'text',
   value = '',
   label = '',
   placeholder = '',

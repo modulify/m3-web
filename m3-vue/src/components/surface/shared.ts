@@ -41,8 +41,8 @@ export const surfacePanelProps = {
 
   elevation: {
     type: Number,
-    default: 0,
     validator: (value: number) => Number.isInteger(value) && value >= 0 && value <= 5,
+    default: 0,
   },
 
   variant: {
