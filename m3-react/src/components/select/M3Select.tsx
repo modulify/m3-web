@@ -40,22 +40,22 @@ export type M3SelectOption<Value = unknown> = {
 
 type SelectValue<Value> = Value | null
 type SlotContext<Value> = {
-  active: boolean;
   option: M3SelectOption<Value>;
+  active: boolean;
 }
 
 export interface M3SelectProps<Value = unknown> extends HTMLAttributes<HTMLElement> {
   id?: string;
   value?: SelectValue<Value>;
-  label?: string;
   options?: Array<M3SelectOption<Value>>;
   equalPredicate?: (a: SelectValue<Value>, b: SelectValue<Value>) => boolean;
-  invalid?: boolean;
+  label?: string;
   placeholder?: string;
-  placement?: Placement;
+  invalid?: boolean;
   disabled?: boolean;
   readonly?: boolean;
   outlined?: boolean;
+  placement?: Placement;
   onUpdate?: (value: Value) => void;
 }
 
@@ -93,15 +93,15 @@ const renderSlot = <Context,>(slot: ReactElement | null, context: Context): Reac
 const M3Select = <Value,>({
   id,
   value = null,
-  label = '',
   options = [],
   equalPredicate = (a, b) => a === b,
-  invalid = false,
+  label = '',
   placeholder = '',
-  placement = 'bottom-start',
+  invalid = false,
   disabled = false,
   readonly = false,
   outlined = false,
+  placement = 'bottom-start',
   className = '',
   children = [],
   onUpdate = (_: Value) => {},

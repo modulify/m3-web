@@ -35,10 +35,10 @@ const M3RichTooltip: ForwardRefRenderFunction<
   M3RichTooltipMethods,
   M3RichTooltipProps
 > = ({
-  className = '',
-  children = [],
   delay = { hide: 150 },
   overflow = ['flip', 'shift', 'hide'],
+  className = '',
+  children = [],
   ...props
 }, ref) => {
   const popper = useRef<M3PopperMethods | null> (null)
@@ -49,10 +49,10 @@ const M3RichTooltip: ForwardRefRenderFunction<
   })
 
   useImperativeHandle(ref, () => ({
-    adjust: () => popper.current?.adjust() ?? Promise.resolve(),
-    contains: (el: Element | null) => popper.current?.contains(el) ?? false,
     show: (immediately = false) => popper.current?.show(immediately),
     hide: (immediately = false, reason: 'generic') => popper.current?.hide(immediately, reason),
+    adjust: () => popper.current?.adjust() ?? Promise.resolve(),
+    contains: (el: Element | null) => popper.current?.contains(el) ?? false,
   }))
 
   return (
