@@ -1,42 +1,49 @@
-import type { ForwardRefRenderFunction } from 'react'
-import type { M3PopperMethods, M3PopperProps } from '@/components/popper'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { M3PopperExposed, M3PopperMethods, M3PopperProps } from '@/components/popper'
+import type { Ref } from 'react'
 
-import { forwardRef, useImperativeHandle, useRef } from 'react'
+import { useRef } from 'react'
 
 import { M3Popper } from '@/components/popper'
 
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
-export interface M3RichTooltipProps extends M3PopperProps {}
+export interface M3RichTooltipProps extends Omit<M3PopperProps, 'ref'> {
+  ref?: Ref<M3RichTooltipExposed>;
+}
+
+export interface M3RichTooltipExposed extends M3RichTooltipMethods, ElementReference<HTMLDivElement> {}
+
 export interface M3RichTooltipMethods extends M3PopperMethods {}
 
 const Heading = defineSlot('M3RichTooltip.Heading')
 const Footer = defineSlot('M3RichTooltip.Footer')
 
-const M3RichTooltip: ForwardRefRenderFunction<
-  M3RichTooltipMethods,
-  M3RichTooltipProps
-> = ({
+export default defineComponent(function M3RichTooltip({
+  ref: _ref,
   delay = { hide: 150 },
   overflow = ['flip', 'shift', 'hide'],
   className = '',
   children = [],
   ...props
-}, ref) => {
-  const popper = useRef<M3PopperMethods | null> (null)
+}: M3RichTooltipProps, { expose }: ComponentSetupContext<M3RichTooltipExposed>) {
+  const popper = useRef<M3PopperExposed | null> (null)
 
   const [slots, content] = distinct(children, {
     heading: Heading,
     footer: Footer,
   })
 
-  useImperativeHandle(ref, () => ({
+  expose({
+    get el () { return popper.current?.el ?? null },
     show: (immediately = false) => popper.current?.show(immediately),
     hide: (immediately = false, reason: 'generic') => popper.current?.hide(immediately, reason),
     adjust: () => popper.current?.adjust() ?? Promise.resolve(),
     contains: (el: Element | null) => popper.current?.contains(el) ?? false,
-  }))
+  })
 
   return (
     <M3Popper
@@ -62,9 +69,6 @@ const M3RichTooltip: ForwardRefRenderFunction<
       ) : null}
     </M3Popper>
   )
-}
-
-export default Object.assign(forwardRef(M3RichTooltip), {
-  Heading,
-  Footer,
+}, {
+  slots: { Heading, Footer },
 })

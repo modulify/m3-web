@@ -1,8 +1,10 @@
 export type {
+  M3MenuExposed,
   M3MenuProps,
 } from './M3Menu'
 
 export type {
+  M3MenuItemExposed,
   M3MenuItemProps,
 } from './M3MenuItem'
 

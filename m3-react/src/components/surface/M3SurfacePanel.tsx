@@ -1,14 +1,27 @@
-import type { FC } from 'react'
-import type { M3SurfacePanelProps, M3SurfacePanelVariant } from './shared'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { M3SurfacePanelOptions, M3SurfacePanelVariant } from './shared'
+import type { Ref } from 'react'
+
+import { useRef } from 'react'
+
+import defineComponent from '@/utils/component'
+import { useElementReference } from '@/hooks'
 
 import { getSurfacePanelClassName, getSurfacePanelStyle } from './shared'
 
 export type {
-  M3SurfacePanelProps,
   M3SurfacePanelVariant,
 }
 
-const M3SurfacePanel: FC<M3SurfacePanelProps> = ({
+export interface M3SurfacePanelProps extends M3SurfacePanelOptions {
+  ref?: Ref<M3SurfacePanelExposed>;
+}
+
+export interface M3SurfacePanelExposed extends ElementReference<HTMLElement> {}
+
+export default defineComponent(function M3SurfacePanel({
+  ref: _ref,
   id,
   tag = 'section',
   elevation = 0,
@@ -33,11 +46,16 @@ const M3SurfacePanel: FC<M3SurfacePanelProps> = ({
   style,
   children,
   ...attrs
-}) => {
-  const SurfaceTag = tag
+}: M3SurfacePanelProps, { expose }: ComponentSetupContext<M3SurfacePanelExposed>) {
+  const SurfaceTag = tag as 'div'
+  const root = useRef<HTMLElement | null>(null)
+  expose(useElementReference(root))
 
   return (
     <SurfaceTag
+      ref={(element) => {
+        root.current = element
+      }}
       id={id}
       className={getSurfacePanelClassName({
         className,
@@ -68,6 +86,4 @@ const M3SurfacePanel: FC<M3SurfacePanelProps> = ({
       {children}
     </SurfaceTag>
   )
-}
-
-export default M3SurfacePanel
+})

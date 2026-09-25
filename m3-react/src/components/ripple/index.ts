@@ -1,4 +1,5 @@
 export type {
+  M3RippleExposed,
   M3RippleMethods,
   M3RippleProps,
 } from './M3Ripple'

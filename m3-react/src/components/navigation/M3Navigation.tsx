@@ -2,7 +2,8 @@ import type {
   Alignment,
   Appearance,
 } from '@modulify/m3-foundation/types/components/navigation'
-import type { FC, HTMLAttributes } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { FC, HTMLAttributes, Ref } from 'react'
 
 import { CSSTransition } from 'react-transition-group'
 
@@ -12,17 +13,26 @@ import { useEffect, useMemo } from 'react'
 import M3NavigationAppearance from '@/components/navigation/M3NavigationAppearance'
 
 import { compose } from '@/utils/events'
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 import { useBreakpoint, useRecord, useWatch } from '@/hooks'
 
 import M3NavigationSection from './M3NavigationSection'
 
-export interface M3NavigationProps extends HTMLAttributes<HTMLElement> {
+export interface M3NavigationProps extends Omit<HTMLAttributes<HTMLElement>, 'onToggle'> {
+  ref?: Ref<M3NavigationExposed>;
   appearance?: Appearance;
   alignment?: Alignment;
   expanded?: boolean;
   onToggle?: (expanded: boolean) => void;
+}
+
+export interface M3NavigationExposed extends M3NavigationMethods {}
+
+export interface M3NavigationMethods {
+  expand (): void;
+  collapse (): void;
 }
 
 const Top: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Navigation.Top', ({
@@ -55,7 +65,8 @@ const Subheader: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Navigation.Subh
   </M3NavigationSection.Header>
 ))
 
-const M3Navigation: FC<M3NavigationProps> = ({
+export default defineComponent(function M3Navigation({
+  ref: _ref,
   appearance = 'auto',
   alignment = 'top',
   expanded = false,
@@ -64,7 +75,7 @@ const M3Navigation: FC<M3NavigationProps> = ({
   onToggle = (_: boolean) => {},
   onTransitionEnd = (_) => {},
   ...attrs
-}) => {
+}: M3NavigationProps, { expose }: ComponentSetupContext<M3NavigationExposed>) {
   const breakpoint = useBreakpoint()
 
   const state = useRecord({
@@ -88,6 +99,11 @@ const M3Navigation: FC<M3NavigationProps> = ({
   })
 
   useWatch(onToggle, onToggle => handlers.onToggle = onToggle)
+
+  expose({
+    expand: () => handlers.onToggle(true),
+    collapse: () => handlers.onToggle(false),
+  })
 
   useWatch(expanded, expanded => {
     if (expanded) {
@@ -152,10 +168,6 @@ const M3Navigation: FC<M3NavigationProps> = ({
     </>,
     document.body
   )
-}
-
-export default Object.assign(M3Navigation, {
-  Header,
-  Subheader,
-  Top,
+}, {
+  slots: { Header, Subheader, Top },
 })

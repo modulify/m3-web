@@ -1,9 +1,8 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/react'
+import type { M3NavigationExposed } from '@/components/navigation'
+
+import { act } from '@testing-library/react'
+import { createRef } from 'react'
+import { fireEvent, render, screen } from '@testing-library/react'
 
 import {
   M3Navigation,
@@ -12,6 +11,19 @@ import {
 } from '@/components/navigation'
 
 describe('m3-react/navigation', () => {
+  test('exposes expand and collapse requests', () => {
+    const ref = createRef<M3NavigationExposed>()
+    const onToggle = vi.fn()
+
+    render(<M3Navigation ref={ref} appearance="rail" onToggle={onToggle} />)
+
+    act(() => ref.current?.expand())
+    act(() => ref.current?.collapse())
+
+    expect(onToggle).toHaveBeenNthCalledWith(1, true)
+    expect(onToggle).toHaveBeenNthCalledWith(2, false)
+  })
+
   test('renders slots and closes by scrim click', () => {
     const onToggle = vi.fn()
 

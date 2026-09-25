@@ -1,26 +1,29 @@
-import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
-import type { ForwardedRef, HTMLAttributes } from 'react'
-import type { M3RippleMethods } from '@/components/ripple'
-import type { ReactElement, RefAttributes } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { HTMLAttributes } from 'react'
+import type { Interactable } from '@modulify/m3-foundation/types/dom'
+import type { M3RippleExposed } from '@/components/ripple'
+import type { Ref } from 'react'
 
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 
 import { M3Ripple } from '@/components/ripple'
 
+import defineComponent, { requireComponentSetupContext } from '@/utils/component'
 import { toClassName } from '@/utils/styling'
-import { useElementEffect, useId, useTarget } from '@/hooks'
+import {
+  useElementEffect,
+  useId,
+  useInteractable,
+  useTarget,
+} from '@/hooks'
 
 import IconCheckmark from './assets/checkmark.svg?react'
 import IconIndeterminate from './assets/indeterminate.svg?react'
 
 export interface M3CheckboxProps<Model = boolean, Value = unknown>
   extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
+  ref?: Ref<M3CheckboxExposed>;
   id?: string;
   model?: Model;
   value?: Value;
@@ -33,15 +36,14 @@ export interface M3CheckboxProps<Model = boolean, Value = unknown>
   onChange?: (value: Model) => void;
 }
 
-export interface M3CheckboxMethods extends Clickable, Focusable {}
+export interface M3CheckboxExposed extends M3CheckboxMethods, ElementReference<HTMLElement> {}
+
+export interface M3CheckboxMethods extends Interactable {}
 
 const isArray = Array.isArray
 
-type M3CheckboxComponent = <Model = boolean, Value = unknown>(
-  props: M3CheckboxProps<Model, Value> & RefAttributes<M3CheckboxMethods>
-) => ReactElement | null
-
-const M3Checkbox = <Model, Value>({
+export default defineComponent(function M3Checkbox<Model = boolean, Value = unknown>({
+  ref: _ref,
   id,
   model,
   value,
@@ -54,17 +56,15 @@ const M3Checkbox = <Model, Value>({
   className = '',
   onChange = (_: Model) => {},
   ...args
-}: M3CheckboxProps<Model, Value>, ref: ForwardedRef<M3CheckboxMethods>) => {
+}: M3CheckboxProps<Model, Value>, context?: ComponentSetupContext<M3CheckboxExposed>) {
+  const { expose } = requireComponentSetupContext(context)
   const root = useRef<HTMLElement | null>(null)
   const input = useRef<HTMLInputElement | null>(null)
-  const ripple = useRef<M3RippleMethods | null>(null)
+  const ripple = useRef<M3RippleExposed | null>(null)
   const [rippleTarget, setRippleTarget] = useTarget<HTMLElement>()
+  const interactable = useInteractable(root, input)
 
-  useImperativeHandle(ref, () => ({
-    click: () => input.current?.click(),
-    focus: () => input.current?.focus(),
-    blur: () => input.current?.blur(),
-  }))
+  expose(interactable)
 
   useElementEffect(root, setRippleTarget)
 
@@ -101,6 +101,7 @@ const M3Checkbox = <Model, Value>({
       <M3Ripple ref={ripple} owner={rippleTarget} />
 
       <input
+        ref={input}
         id={useId(id, 'm3-checkbox')}
         type="checkbox"
         aria-checked={checked}
@@ -123,6 +124,4 @@ const M3Checkbox = <Model, Value>({
       </span>
     </span>
   )
-}
-
-export default forwardRef(M3Checkbox) as M3CheckboxComponent
+}, { generic: true })

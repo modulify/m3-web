@@ -1,6 +1,7 @@
 <template>
     <div
         :id="_id"
+        ref="root"
         :class="{
             ['m3-navigation-tab']: true,
             ['m3-navigation-tab_in-' + appearance]: true,
@@ -73,6 +74,7 @@
 
 <script lang="ts" setup>
 import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import type { M3LinkInstance } from '@/components/link'
 import type { PropType, Ref } from 'vue'
 
@@ -131,7 +133,8 @@ const _id = useId('m3-navigation-item', computed(() => props.id))
 const appearance = inject<Ref<Appearance>>(M3NavigationAppearance, ref('auto'))
 const breakpoint = useBreakpoint()
 const button = ref<M3LinkInstance | null>(null)
-const buttonElement = computed(() => button.value?.el() ?? null)
+const root = ref<HTMLDivElement | null>(null)
+const buttonElement = computed(() => button.value?.el ?? null)
 
 const inDrawer = computed(() => breakpoint.value.ge('large') || appearance.value === 'drawer')
 
@@ -142,9 +145,11 @@ const labelId = computed(() => inDrawer.value ? labelIdForDrawer.value : labelId
 provideM3IconAppearance(() => props.active ? 'filled' : 'outlined')
 
 defineExpose({
+  get el () { return root.value },
+  click: () => button.value?.click(),
   focus: () => button.value?.focus(),
   blur: () => button.value?.blur(),
-})
+} satisfies ElementReference<HTMLDivElement> & Interactable)
 
 const onClick = (event: MouseEvent) => {
   if (props.prevent) {

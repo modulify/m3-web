@@ -1,4 +1,10 @@
-import type { CSSProperties, FC, HTMLAttributes } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type {
+  CSSProperties,
+  FC,
+  HTMLAttributes,
+  Ref,
+} from 'react'
 
 import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 import {
@@ -10,13 +16,22 @@ import {
 
 import { M3Surface } from '@/components/surface'
 
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
-export interface M3DialogProps extends HTMLAttributes<HTMLElement> {
+export interface M3DialogProps extends Omit<HTMLAttributes<HTMLElement>, 'onToggle'> {
+  ref?: Ref<M3DialogExposed>;
   opened?: boolean;
   fullscreen?: boolean;
   onToggle?: (expanded: boolean) => void;
+}
+
+export interface M3DialogExposed extends M3DialogMethods {}
+
+export interface M3DialogMethods {
+  open (): void;
+  close (): void;
 }
 
 const DIALOG_WIDTH = 312
@@ -59,7 +74,8 @@ const Footer: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Dialog.Footer', ({
   </footer>
 ))
 
-const M3Dialog: FC<M3DialogProps> = ({
+export default defineComponent(function M3Dialog({
+  ref: _ref,
   opened = false,
   fullscreen = false,
   className = '',
@@ -67,7 +83,12 @@ const M3Dialog: FC<M3DialogProps> = ({
   children = [],
   onToggle = (_: boolean) => {},
   ...attrs
-}) => {
+}: M3DialogProps, { expose }: ComponentSetupContext<M3DialogExposed>) {
+  expose({
+    open: () => onToggle(true),
+    close: () => onToggle(false),
+  })
+
   const [slots, content] = useMemo(() => distinct(children, {
     icon: Icon,
     header: Header,
@@ -183,10 +204,6 @@ const M3Dialog: FC<M3DialogProps> = ({
       {slots.footer}
     </M3Surface>
   )
-}
-
-export default Object.assign(M3Dialog, {
-  Icon,
-  Header,
-  Footer,
+}, {
+  slots: { Icon, Header, Footer },
 })

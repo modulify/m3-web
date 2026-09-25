@@ -1,4 +1,5 @@
 export type {
+  M3SliderExposed,
   M3SliderProps,
   M3SliderType,
   M3SliderValue,

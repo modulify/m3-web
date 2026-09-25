@@ -1,26 +1,23 @@
 import type { ButtonHTMLAttributes } from 'react'
-import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
-import type { ForwardRefRenderFunction } from 'react'
-import type { M3RippleMethods } from '@/components/ripple'
-import type { ReactNode } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { Interactable } from '@modulify/m3-foundation/types/dom'
+import type { M3RippleExposed } from '@/components/ripple'
+import type { ReactNode, Ref } from 'react'
 import type { Variant } from '@modulify/m3-foundation/types/components/chip'
 
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 
 import { M3Icon } from '@/components/icon'
 import { M3Ripple } from '@/components/ripple'
 
+import defineComponent from '@/utils/component'
 import { normalize } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useElementEffect, useTarget } from '@/hooks'
+import { useElementEffect, useInteractable, useTarget } from '@/hooks'
 
 export interface M3ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onToggle'> {
+  ref?: Ref<M3ChipExposed>;
   variant?: Variant;
   selected?: boolean;
   showCheckmark?: boolean;
@@ -30,9 +27,12 @@ export interface M3ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   onDismiss?: () => void;
 }
 
-export interface M3ChipMethods extends Clickable, Focusable {}
+export interface M3ChipExposed extends M3ChipMethods, ElementReference<HTMLSpanElement> {}
 
-const M3Chip: ForwardRefRenderFunction<M3ChipMethods, M3ChipProps> = ({
+export interface M3ChipMethods extends Interactable {}
+
+export default defineComponent(function M3Chip({
+  ref: _ref,
   type = 'button',
   variant = 'assist',
   selected = false,
@@ -48,23 +48,21 @@ const M3Chip: ForwardRefRenderFunction<M3ChipMethods, M3ChipProps> = ({
   onToggle = () => {},
   onDismiss,
   ...actionAttrs
-}, ref) => {
+}: M3ChipProps, { expose }: ComponentSetupContext<M3ChipExposed>) {
+  const root = useRef<HTMLSpanElement | null>(null)
   const action = useRef<HTMLButtonElement | null>(null)
   const dismiss = useRef<HTMLButtonElement | null>(null)
-  const actionRipple = useRef<M3RippleMethods | null>(null)
-  const dismissRipple = useRef<M3RippleMethods | null>(null)
+  const actionRipple = useRef<M3RippleExposed | null>(null)
+  const dismissRipple = useRef<M3RippleExposed | null>(null)
 
   const [actionRippleTarget, setActionRippleTarget] = useTarget<HTMLButtonElement>()
   const [dismissRippleTarget, setDismissRippleTarget] = useTarget<HTMLButtonElement>()
+  const interactable = useInteractable(root, action)
 
   useElementEffect(action, setActionRippleTarget)
   useElementEffect(dismiss, setDismissRippleTarget)
 
-  useImperativeHandle(ref, () => ({
-    click: () => action.current?.click(),
-    focus: () => action.current?.focus(),
-    blur: () => action.current?.blur(),
-  }))
+  expose(interactable)
 
   const content = useMemo(() => normalize(children), [children])
 
@@ -77,6 +75,7 @@ const M3Chip: ForwardRefRenderFunction<M3ChipMethods, M3ChipProps> = ({
 
   const renderItem = useCallback((child: ReactNode, isIcon: boolean, key: string) => (
     <span
+      ref={root}
       key={key}
       className={toClassName({
         'm3-chip__icon': isIcon,
@@ -164,6 +163,4 @@ const M3Chip: ForwardRefRenderFunction<M3ChipMethods, M3ChipProps> = ({
       ) : null}
     </span>
   )
-}
-
-export default forwardRef(M3Chip)
+})

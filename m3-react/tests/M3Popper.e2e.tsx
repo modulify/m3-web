@@ -1,4 +1,4 @@
-import type { M3PopperMethods } from '@/components/popper'
+import type { M3PopperExposed } from '@/components/popper'
 
 import { act } from '@testing-library/react'
 import { createRef } from 'react'
@@ -111,7 +111,7 @@ describe('m3-react/popper e2e', () => {
     target = document.createElement('button')
     document.body.append(target)
 
-    const popperRef = createRef<M3PopperMethods>()
+    const popperRef = createRef<M3PopperExposed>()
 
     const mounted = render(
       <M3Popper
@@ -155,7 +155,7 @@ describe('m3-react/popper e2e', () => {
     target = document.createElement('button')
     document.body.append(target)
 
-    const popperRef = createRef<M3PopperMethods>()
+    const popperRef = createRef<M3PopperExposed>()
 
     const mounted = render(
       <M3Popper
@@ -194,7 +194,7 @@ describe('m3-react/popper e2e', () => {
     target = document.createElement('button')
     document.body.append(target)
 
-    const popperRef = createRef<M3PopperMethods>()
+    const popperRef = createRef<M3PopperExposed>()
 
     const mounted = render(
       <M3Popper
@@ -234,7 +234,7 @@ describe('m3-react/popper e2e', () => {
     target = document.createElement('button')
     document.body.append(target)
 
-    const popperRef = createRef<M3PopperMethods>()
+    const popperRef = createRef<M3PopperExposed>()
 
     const mounted = render(
       <M3Popper
@@ -302,7 +302,7 @@ describe('m3-react/popper e2e', () => {
     target = document.createElement('button')
     document.body.append(target)
 
-    const popperRef = createRef<M3PopperMethods>()
+    const popperRef = createRef<M3PopperExposed>()
 
     const mounted = render(
       <M3Popper
@@ -365,7 +365,7 @@ describe('m3-react/popper e2e', () => {
     target = document.createElement('button')
     document.body.append(target)
 
-    const popperRef = createRef<M3PopperMethods>()
+    const popperRef = createRef<M3PopperExposed>()
 
     const mounted = render(
       <M3Popper
@@ -403,7 +403,7 @@ describe('m3-react/popper e2e', () => {
     target = document.createElement('button')
     document.body.append(target)
 
-    const popperRef = createRef<M3PopperMethods>()
+    const popperRef = createRef<M3PopperExposed>()
 
     const mounted = render(
       <M3Popper

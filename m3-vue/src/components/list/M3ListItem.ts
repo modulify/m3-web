@@ -1,4 +1,5 @@
 import type { ComputedRef } from 'vue'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { LineCount, Lines } from '@modulify/m3-foundation/types/components/list'
 import type { M3LinkInstance } from '@/components/link'
 import type { PropType, Ref } from 'vue'
@@ -61,7 +62,7 @@ const toElement = (root: Root) => {
     return root
   }
 
-  return root && 'el' in root ? root.el() : null
+  return root && 'el' in root ? root.el : null
 }
 
 const call = (handler: unknown, event: Event) => {
@@ -205,9 +206,11 @@ const renderListItem = (
   props: ListItemProps,
   state: ListItemState,
   attrs: CollectedAttrs,
+  root: Ref<HTMLLIElement | null>,
   container: VNode
 ) => h('li', {
   ...attrs.rootAttrs,
+  ref: root,
   class: [attrs.className, {
     'm3-list-item': true,
     'm3-list-item_multiline': state.lines > 1,
@@ -281,10 +284,15 @@ export default defineComponent({
     },
   },
 
-  setup (props, { attrs, slots }) {
+  setup (props, { attrs, expose, slots }) {
+    const listItem = ref<HTMLLIElement | null>(null)
     const root = ref<Root>(null)
     const rootElement = computed(() => toElement(root.value))
     const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
+
+    expose({
+      get el () { return listItem.value },
+    } satisfies ElementReference<HTMLLIElement>)
 
     const onKeyup = (event: KeyboardEvent, handler: unknown) => {
       if (event.code === 'Enter') {
@@ -303,6 +311,7 @@ export default defineComponent({
         props,
         state,
         $attrs,
+        listItem,
         renderContainer(
           props,
           state,

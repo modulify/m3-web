@@ -23,7 +23,7 @@ import { toClassName } from '@/utils/styling'
 
 export type M3SurfacePanelVariant = SurfaceVariant
 
-export interface M3SurfacePanelProps extends HTMLAttributes<HTMLElement> {
+export interface M3SurfacePanelOptions extends HTMLAttributes<HTMLElement> {
   id?: string;
   tag?: keyof HTMLElementTagNameMap;
   elevation?: number;
@@ -50,12 +50,12 @@ export const getSurfacePanelClassName = ({
   className = '',
   elevation = 0,
   variant = 'auto',
-}: Pick<M3SurfacePanelProps, 'className' | 'elevation' | 'variant'>): string => {
+}: Pick<M3SurfacePanelOptions, 'className' | 'elevation' | 'variant'>): string => {
   return toClassName([className, getSurfacePanelClassRecord(elevation, variant)])
 }
 
 export const getSurfacePanelStyle = (options: Pick<
-  M3SurfacePanelProps,
+  M3SurfacePanelOptions,
   | 'fillWidth'
   | 'fillHeight'
   | 'width'

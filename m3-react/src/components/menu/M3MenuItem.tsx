@@ -1,6 +1,9 @@
-import type { FC, HTMLAttributes } from 'react'
-import type { M3LinkMethods } from '@/components/link'
-import type { M3RippleMethods } from '@/components/ripple'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { HTMLAttributes } from 'react'
+import type { M3LinkExposed } from '@/components/link'
+import type { M3RippleExposed } from '@/components/ripple'
+import type { Ref } from 'react'
 
 import {
   useEffect,
@@ -13,19 +16,24 @@ import { M3Link } from '@/components/link'
 import { M3Ripple } from '@/components/ripple'
 
 import { compose } from '@/utils/events'
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export interface M3MenuItemProps extends HTMLAttributes<HTMLElement> {
+  ref?: Ref<M3MenuItemExposed>;
   href?: string;
   selected?: boolean;
   disabled?: boolean;
 }
 
+export interface M3MenuItemExposed extends ElementReference<HTMLElement> {}
+
 const Leading = defineSlot('M3MenuItem.Leading')
 const Trailing = defineSlot('M3MenuItem.Trailing')
 
-const M3MenuItem: FC<M3MenuItemProps> = ({
+export default defineComponent(function M3MenuItem({
+  ref: _ref,
   href,
   selected = false,
   disabled = false,
@@ -33,14 +41,18 @@ const M3MenuItem: FC<M3MenuItemProps> = ({
   children = [],
   onKeyUp = () => {},
   ...attrs
-}) => {
-  const root = useRef<M3LinkMethods | null>(null)
-  const ripple = useRef<M3RippleMethods | null>(null)
+}: M3MenuItemProps, { expose }: ComponentSetupContext<M3MenuItemExposed>) {
+  const root = useRef<M3LinkExposed | null>(null)
+  const ripple = useRef<M3RippleExposed | null>(null)
+
+  expose({
+    get el () { return root.current?.el ?? null },
+  })
 
   const [rippleTarget, setRippleTarget] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
-    setRippleTarget(root.current?.el() ?? null)
+    setRippleTarget(root.current?.el ?? null)
   }, [])
 
   const [slots, content] = useMemo(() => distinct(children, {
@@ -86,9 +98,6 @@ const M3MenuItem: FC<M3MenuItemProps> = ({
       </span>
     </M3Link>
   )
-}
-
-export default Object.assign(M3MenuItem, {
-  Leading,
-  Trailing,
+}, {
+  slots: { Leading, Trailing },
 })

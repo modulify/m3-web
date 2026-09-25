@@ -1,9 +1,7 @@
-import type {
-  CSSProperties,
-  FC,
-  HTMLAttributes,
-  KeyboardEvent as ReactKeyboardEvent,
-} from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { CSSProperties } from 'react'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, Ref } from 'react'
 
 import {
   useCallback,
@@ -14,8 +12,9 @@ import {
 } from 'react'
 
 import { compose } from '@/utils/events'
+import defineComponent from '@/utils/component'
 import { toClassName } from '@/utils/styling'
-import { useResizeObserver } from '@/hooks'
+import { useElementReference, useResizeObserver } from '@/hooks'
 
 type AriaOptions = {
   label?: string;
@@ -28,6 +27,7 @@ export type M3SliderType = 'single' | 'range'
 export type M3SliderValue = number | [number, number] | null
 
 export interface M3SliderProps extends HTMLAttributes<HTMLElement> {
+  ref?: Ref<M3SliderExposed>;
   type?: M3SliderType;
   value?: M3SliderValue;
   min?: number;
@@ -39,6 +39,8 @@ export interface M3SliderProps extends HTMLAttributes<HTMLElement> {
   ariaHandleMax?: AriaOptions;
   onUpdate?: (value: number | [number, number]) => void;
 }
+
+export interface M3SliderExposed extends ElementReference<HTMLDivElement> {}
 
 const ariaOptionsToAttrs = (options: AriaOptions): {
   'aria-label'?: string;
@@ -66,7 +68,8 @@ const getEventX = (event: globalThis.MouseEvent | globalThis.TouchEvent): number
   return 'clientX' in event ? event.clientX : event.touches[0].clientX
 }
 
-const M3Slider: FC<M3SliderProps> = ({
+export default defineComponent(function M3Slider({
+  ref: _ref,
   type = 'single',
   value = null,
   min = 0,
@@ -81,7 +84,9 @@ const M3Slider: FC<M3SliderProps> = ({
   onKeyUp = () => {},
   onUpdate = (_value) => {},
   ...attrs
-}) => {
+}: M3SliderProps, { expose }: ComponentSetupContext<M3SliderExposed>) {
+  const root = useRef<HTMLDivElement | null>(null)
+  expose(useElementReference(root))
   const [dragging, setDragging] = useState<{
     min: number | null;
     max: number | null;
@@ -588,6 +593,7 @@ const M3Slider: FC<M3SliderProps> = ({
 
   return (
     <div
+      ref={root}
       className={toClassName([className, {
         'm3-slider': true,
         'm3-slider_range': type === 'range',
@@ -721,6 +727,4 @@ const M3Slider: FC<M3SliderProps> = ({
       </div>
     </div>
   )
-}
-
-export default M3Slider
+})

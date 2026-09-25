@@ -1,5 +1,6 @@
 <template>
     <span
+        ref="root"
         :class="{
             'm3-switch': true,
             'm3-switch_checked': checked,
@@ -41,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Interactive } from '@modulify/m3-foundation/types/dom'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
 import { computed } from 'vue'
@@ -86,15 +87,17 @@ const emitUpdate = (value: boolean) => {
 }
 
 const _id = useId('m3-switch', computed(() => props.id))
+const root = ref<HTMLSpanElement | null>(null)
 const _input = ref<HTMLInputElement | null>(null)
 
 const click = () => _input.value?.click()
 
 defineExpose({
+  get el () { return root.value },
   click,
   focus: () => _input.value?.focus(),
   blur: () => _input.value?.blur(),
-} satisfies Interactive)
+} satisfies ElementReference<HTMLSpanElement> & Interactable)
 
 let dragging = false
 let clickSuppressed = false

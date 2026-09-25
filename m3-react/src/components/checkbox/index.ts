@@ -1,4 +1,5 @@
 export type {
+  M3CheckboxExposed,
   M3CheckboxMethods,
   M3CheckboxProps,
 } from './M3Checkbox'

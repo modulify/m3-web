@@ -1,33 +1,33 @@
-import type { Clickable } from '@modulify/m3-foundation/types/dom'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { FC } from 'react'
-import type { Focusable } from '@modulify/m3-foundation/types/dom'
-import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
-import type { M3RippleMethods } from '@/components/ripple'
+import type { HTMLAttributes } from 'react'
+import type { Interactable } from '@modulify/m3-foundation/types/dom'
+import type { M3RippleExposed } from '@/components/ripple'
+import type { Ref } from 'react'
 
-import {
-  forwardRef,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from 'react'
+import { useMemo, useRef } from 'react'
 
 import { M3Badge } from '@/components/badge'
 import { M3IconAppearance } from '@/components/icon'
 import { M3Ripple } from '@/components/ripple'
 
 import { compose } from '@/utils/events'
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 import {
   useBreakpoint,
   useElementEffect,
   useId,
+  useInteractable,
   useTarget,
 } from '@/hooks'
 
 import { useM3NavigationAppearance } from './M3NavigationAppearance'
 
 export interface M3NavigationTabProps extends HTMLAttributes<HTMLElement> {
+  ref?: Ref<M3NavigationTabExposed>;
   href?: string;
   label?: string;
   active?: boolean;
@@ -37,7 +37,9 @@ export interface M3NavigationTabProps extends HTMLAttributes<HTMLElement> {
   onNavigate?: () => void;
 }
 
-export interface M3NavigationTabMethods extends Clickable, Focusable {}
+export interface M3NavigationTabExposed extends M3NavigationTabMethods, ElementReference<HTMLDivElement> {}
+
+export interface M3NavigationTabMethods extends Interactable {}
 
 const Icon: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3NavigationTab.Icon', ({
   className = '',
@@ -52,10 +54,8 @@ const Icon: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3NavigationTab.Icon',
 const Label = defineSlot('M3NavigationTab.Label')
 const Badge = defineSlot('M3NavigationTab.Badge')
 
-const M3NavigationTab: ForwardRefRenderFunction<
-  M3NavigationTabMethods,
-  M3NavigationTabProps
-> = ({
+export default defineComponent(function M3NavigationTab({
+  ref: _ref,
   id,
   href,
   label = '',
@@ -66,10 +66,12 @@ const M3NavigationTab: ForwardRefRenderFunction<
   onKeyUp = () => {},
   onNavigate = () => {},
   ...attrs
-}, ref) => {
+}: M3NavigationTabProps, { expose }: ComponentSetupContext<M3NavigationTabExposed>) {
+  const root = useRef<HTMLDivElement | null>(null)
   const button = useRef<HTMLButtonElement | null>(null)
-  const ripple = useRef<M3RippleMethods | null>(null)
+  const ripple = useRef<M3RippleExposed | null>(null)
   const [rippleTarget, setRippleTarget] = useTarget<HTMLElement>()
+  const interactable = useInteractable(root, button)
 
   useElementEffect(button, setRippleTarget)
 
@@ -92,14 +94,11 @@ const M3NavigationTab: ForwardRefRenderFunction<
   const labelIdForRail = _id + '-label-for-rail'
   const labelId = inDrawer ? labelIdForDrawer : labelIdForRail
 
-  useImperativeHandle(ref, () => ({
-    click: () => button.current?.click(),
-    focus: () => button.current?.focus(),
-    blur: () => button.current?.blur(),
-  }))
+  expose(interactable)
 
   return (
     <div
+      ref={root}
       className={toClassName({
         ['m3-navigation-tab']: true,
         ['m3-navigation-tab_in-' + appearance]: true,
@@ -180,10 +179,6 @@ const M3NavigationTab: ForwardRefRenderFunction<
       ) : null}
     </div>
   )
-}
-
-export default Object.assign(forwardRef(M3NavigationTab), {
-  Badge,
-  Icon,
-  Label,
+}, {
+  slots: { Badge, Icon, Label },
 })

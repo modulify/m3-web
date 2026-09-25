@@ -1,3 +1,7 @@
+import type { M3SideSheetExposed } from '@/components/side-sheet'
+
+import { act } from '@testing-library/react'
+import { createRef } from 'react'
 import {
   fireEvent,
   render,
@@ -6,6 +10,7 @@ import {
 } from '@testing-library/react'
 
 import { M3Icon } from '@/components/icon'
+
 import { M3SideSheet } from '@/components/side-sheet'
 
 vi.mock('@/components/scroll-rail', () => ({
@@ -13,6 +18,19 @@ vi.mock('@/components/scroll-rail', () => ({
 }))
 
 describe('m3-react/side-sheet', () => {
+  test('exposes show and hide requests', () => {
+    const ref = createRef<M3SideSheetExposed>()
+    const onToggle = vi.fn()
+
+    render(<M3SideSheet ref={ref} onToggle={onToggle} />)
+
+    act(() => ref.current?.show())
+    act(() => ref.current?.hide())
+
+    expect(onToggle).toHaveBeenNthCalledWith(1, true)
+    expect(onToggle).toHaveBeenNthCalledWith(2, false)
+  })
+
   test('renders dialog and default aria-labelledby', () => {
     render(
       <M3SideSheet shown={true}>

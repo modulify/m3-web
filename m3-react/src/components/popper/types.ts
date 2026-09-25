@@ -1,8 +1,11 @@
 import type { Boundary } from '@floating-ui/dom'
 import type { Delay } from '@modulify/m3-foundation/types/components/popper'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { HTMLAttributes } from 'react'
 import type { OverflowBehavior } from '@modulify/m3-foundation/types/components/popper'
-import type { Placement, Strategy } from '@floating-ui/dom'
+import type { Placement } from '@floating-ui/dom'
+import type { Ref } from 'react'
+import type { Strategy } from '@floating-ui/dom'
 import type {
   Trigger,
   TriggerSchema,
@@ -10,7 +13,8 @@ import type {
 
 type HideReason = 'generic' | 'by-closer' | 'by-miss-click'
 
-export interface M3PopperProps extends HTMLAttributes<HTMLElement> {
+export interface M3PopperProps extends Omit<HTMLAttributes<HTMLElement>, 'onToggle'> {
+  ref?: Ref<M3PopperExposed>;
   target: Element | null;
   targetTriggers?: Trigger[] | TriggerSchema;
   popperTriggers?: Trigger[] | TriggerSchema;
@@ -32,6 +36,8 @@ export interface M3PopperProps extends HTMLAttributes<HTMLElement> {
   onToggle?: (shown: boolean) => void;
   onDispose?: () => void;
 }
+
+export interface M3PopperExposed extends M3PopperMethods, ElementReference<HTMLDivElement> {}
 
 export interface M3PopperMethods {
   show (immediately?: boolean): void;

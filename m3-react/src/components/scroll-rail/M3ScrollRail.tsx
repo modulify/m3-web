@@ -1,35 +1,34 @@
-import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { HTMLAttributes, Ref } from 'react'
 import type { ScrollRail } from '@modulify/m3-foundation/lib/scroll'
 
 import { createRail } from '@modulify/m3-foundation/lib/scroll'
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from 'react'
+import { useEffect, useRef } from 'react'
 
+import defineComponent from '@/utils/component'
 import { toClassName } from '@/utils/styling'
 import { useRecord, useWatch } from '@/hooks'
 
 export interface M3ScrollRailProps extends HTMLAttributes<HTMLElement> {
+  ref?: Ref<M3ScrollRailExposed>;
   horizontal?: boolean;
   disabled?: boolean;
 }
+
+export interface M3ScrollRailExposed extends M3ScrollRailMethods, ElementReference<HTMLDivElement> {}
 
 export interface M3ScrollRailMethods {
   sync (): void;
 }
 
-const M3ScrollRail: ForwardRefRenderFunction<
-  M3ScrollRailMethods,
-  M3ScrollRailProps
-> = ({
+export default defineComponent(function M3ScrollRail({
+  ref: _ref,
   horizontal = false,
   disabled = false,
   className = '',
   ...attrs
-}, ref) => {
+}: M3ScrollRailProps, { expose }: ComponentSetupContext<M3ScrollRailExposed>) {
   const root = useRef<HTMLDivElement | null>(null)
   const rail = useRef<ScrollRail | null>(null)
 
@@ -46,9 +45,10 @@ const M3ScrollRail: ForwardRefRenderFunction<
     if (rail.current) { rail.current.disabled = disabled }
   })
 
-  useImperativeHandle(ref, () => ({
+  expose({
+    get el () { return root.current },
     sync: () => rail.current?.sync(),
-  }))
+  })
 
   useEffect(() => {
     rail.current = createRail(root.current as HTMLElement, {
@@ -80,6 +80,4 @@ const M3ScrollRail: ForwardRefRenderFunction<
       <div className="m3-scroll-rail__slider" />
     </div>
   )
-}
-
-export default forwardRef(M3ScrollRail)
+})

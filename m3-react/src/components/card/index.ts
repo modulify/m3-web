@@ -1,4 +1,5 @@
 export type {
+  M3CardExposed,
   M3CardProps,
 } from './M3Card'
 

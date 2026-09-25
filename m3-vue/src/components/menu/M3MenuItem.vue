@@ -36,6 +36,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { M3LinkInstance } from '@/components/link'
 import type { PropType } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
@@ -71,8 +72,12 @@ defineProps({
 })
 
 const root = ref<M3LinkInstance | null>(null)
-const rootElement = computed(() => root.value?.el() ?? null)
+const rootElement = computed(() => root.value?.el ?? null)
 const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
+
+defineExpose({
+  get el () { return rootElement.value },
+} satisfies ElementReference<HTMLElement>)
 
 const onKeyUp = (event: KeyboardEvent) => ripple.value?.activate(event)
 </script>

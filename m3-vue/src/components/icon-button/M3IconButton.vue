@@ -21,6 +21,7 @@
 
 <script lang="ts" setup>
 import type { Appearance } from '@modulify/m3-foundation/types/components/icon-button'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
 import { ref } from 'vue'
@@ -60,9 +61,11 @@ const props = defineProps({
 const root = ref<HTMLElement | null>(null)
 
 defineExpose({
+  get el () { return root.value },
+  click: () => root.value?.click(),
   focus: () => root.value?.focus(),
   blur: () => root.value?.blur(),
-})
+} satisfies ElementReference<HTMLElement> & Interactable)
 
 provideM3IconAppearance(() => props.toggleable && props.selected ? 'filled' : 'outlined')
 </script>

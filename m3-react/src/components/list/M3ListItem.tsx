@@ -1,19 +1,19 @@
-import type {
-  CSSProperties,
-  FC,
-  HTMLAttributes,
-  KeyboardEventHandler,
-} from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { CSSProperties } from 'react'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { HTMLAttributes, KeyboardEventHandler } from 'react'
 import type { LineCount, Lines } from '@modulify/m3-foundation/types/components/list'
-import type { M3RippleMethods } from '@/components/ripple'
-import type { MouseEventHandler } from 'react'
+import type { M3RippleExposed } from '@/components/ripple'
+import type { MouseEventHandler, Ref } from 'react'
 
 import { useMemo, useRef, useState } from 'react'
 
 import { M3Ripple } from '@/components/ripple'
 
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
+import { useElementReference } from '@/hooks'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement
 type M3ListItemStyle = CSSProperties & {
@@ -21,6 +21,7 @@ type M3ListItemStyle = CSSProperties & {
 }
 
 export interface M3ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'onClick' | 'onKeyUp'> {
+  ref?: Ref<M3ListItemExposed>;
   type?: HTMLButtonElement['type'];
   href?: string;
   headline?: string;
@@ -33,6 +34,8 @@ export interface M3ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'on
   onClick?: MouseEventHandler<RootElement>;
   onKeyUp?: KeyboardEventHandler<RootElement>;
 }
+
+export interface M3ListItemExposed extends ElementReference<HTMLLIElement> {}
 
 const Leading = defineSlot('M3ListItem.Leading')
 const Overline = defineSlot('M3ListItem.Overline')
@@ -64,7 +67,8 @@ const normalizeLines = (lines: Lines | undefined, fallback: LineCount): LineCoun
 
 const getSupportingLines = (lines: LineCount) => lines === 3 ? 2 : 1
 
-const M3ListItem: FC<M3ListItemProps> = ({
+export default defineComponent(function M3ListItem({
+  ref: _ref,
   type = 'button',
   href = '',
   headline = '',
@@ -80,8 +84,10 @@ const M3ListItem: FC<M3ListItemProps> = ({
   onClick,
   onKeyUp,
   ...attrs
-}) => {
-  const ripple = useRef<M3RippleMethods | null>(null)
+}: M3ListItemProps, { expose }: ComponentSetupContext<M3ListItemExposed>) {
+  const root = useRef<HTMLLIElement | null>(null)
+  const ripple = useRef<M3RippleExposed | null>(null)
+  expose(useElementReference(root))
   const [rippleTarget, setRippleTarget] = useState<RootElement | null>(null)
 
   const [slots, content, hasSlot] = useMemo(() => distinct(children, {
@@ -176,6 +182,7 @@ const M3ListItem: FC<M3ListItemProps> = ({
 
   return (
     <li
+      ref={root}
       className={toClassName([className, {
         'm3-list-item': true,
         'm3-list-item_multiline': linesActual > 1,
@@ -214,12 +221,6 @@ const M3ListItem: FC<M3ListItemProps> = ({
         )}
     </li>
   )
-}
-
-export default Object.assign(M3ListItem, {
-  Headline,
-  Leading,
-  Overline,
-  SupportingText,
-  Trailing,
+}, {
+  slots: { Headline, Leading, Overline, SupportingText, Trailing },
 })

@@ -1,5 +1,6 @@
 <template>
     <section
+        ref="root"
         :class="{
             'm3-date-picker': true,
             'm3-date-picker_docked': layout === 'docked',
@@ -297,6 +298,7 @@ import type {
   CalendarDayRange,
   CalendarYearRange,
 } from '@modulify/m3-foundation/lib/calendar'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
 import { CalendarDay, clampCalendarMonth } from '@modulify/m3-foundation/lib/calendar'
@@ -512,7 +514,12 @@ const visibleWeeks = computed(() => getCalendarMonthWeeks(position.value, props.
   week => week.some(day => day.inSameMonth(position.value))
 ).length)
 const modeAnimating = shallowRef(false)
+const root = shallowRef<HTMLElement | null>(null)
 const calendar = shallowRef<HTMLElement | null>(null)
+
+defineExpose({
+  get el () { return root.value },
+} satisfies ElementReference<HTMLElement>)
 const dragOffset = shallowRef(0)
 const slideAnimating = shallowRef(false)
 const swipe = shallowRef<SwipeState | null>(null)

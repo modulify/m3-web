@@ -1,5 +1,5 @@
 import type { ComponentPublicInstance } from 'vue'
-import type { Interactive } from '@modulify/m3-foundation/types/dom'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import type { PropType, Ref } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
@@ -50,9 +50,7 @@ export type M3LinkProps = {
   href?: string;
 }
 
-export interface M3LinkMethods extends Interactive {
-  el (): HTMLElement | null;
-}
+export interface M3LinkMethods extends ElementReference<HTMLElement>, Interactable {}
 
 export type M3LinkInstance = ComponentPublicInstance & M3LinkMethods
 
@@ -81,7 +79,7 @@ const M3Link = defineComponent({
     const el = computed(() => toElement(root))
 
     expose({
-      el: () => el.value,
+      get el () { return el.value },
       click: () => el.value?.click(),
       focus: () => el.value?.focus(),
       blur: () => el.value?.blur(),

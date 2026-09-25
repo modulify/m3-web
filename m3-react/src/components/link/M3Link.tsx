@@ -1,31 +1,37 @@
-import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
-import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { HTMLAttributes } from 'react'
+import type { Interactable } from '@modulify/m3-foundation/types/dom'
+import type { Ref } from 'react'
 
-import { forwardRef, useImperativeHandle, useRef } from 'react'
+import { useRef } from 'react'
+
+import defineComponent from '@/utils/component'
+import { useInteractable } from '@/hooks'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement
 
 export interface M3LinkProps extends HTMLAttributes<RootElement> {
+  ref?: Ref<M3LinkExposed>;
   type?: HTMLButtonElement['type'];
   href?: string;
   target?: HTMLAnchorElement['target'];
   rel?: string;
 }
 
-export interface M3LinkMethods extends Clickable, Focusable {
-  el (): HTMLElement | null;
-}
+export interface M3LinkExposed extends M3LinkMethods, ElementReference<RootElement> {}
 
-const M3Link: ForwardRefRenderFunction<
-  M3LinkMethods,
-  M3LinkProps
-> = ({
+export interface M3LinkMethods extends Interactable {}
+
+export default defineComponent(function M3Link({
+  ref: _ref,
   type = 'button',
   href = '',
   children = [],
   ...attrs
-}, ref) => {
+}: M3LinkProps, { expose }: ComponentSetupContext<M3LinkExposed>) {
   const root = useRef<RootElement | null>(null)
+  const interactable = useInteractable(root)
 
   const setAnchor = (el: HTMLAnchorElement | null) => {
     root.current = el
@@ -35,12 +41,7 @@ const M3Link: ForwardRefRenderFunction<
     root.current = el
   }
 
-  useImperativeHandle(ref, () => ({
-    el: () => root.current,
-    click: () => root.current?.click(),
-    focus: () => root.current?.focus(),
-    blur: () => root.current?.blur(),
-  }))
+  expose(interactable)
 
   return href.length > 0
     ? (
@@ -61,6 +62,4 @@ const M3Link: ForwardRefRenderFunction<
         {children}
       </button>
     )
-}
-
-export default forwardRef(M3Link)
+})

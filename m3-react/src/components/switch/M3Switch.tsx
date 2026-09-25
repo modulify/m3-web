@@ -1,28 +1,38 @@
-import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
-import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { HTMLAttributes } from 'react'
+import type { Interactable } from '@modulify/m3-foundation/types/dom'
+import type { Ref } from 'react'
 
 import {
   Children,
-  forwardRef,
   useCallback,
   useEffect,
-  useImperativeHandle,
   useRef,
 } from 'react'
 
+import defineComponent from '@/utils/component'
 import { toClassName } from '@/utils/styling'
-import { useId, useRecord, useWatch } from '@/hooks'
+import {
+  useId,
+  useInteractable,
+  useRecord,
+  useWatch,
+} from '@/hooks'
 
 import M3SwitchScope from './M3SwitchScope'
 
-export interface M3SwitchProps extends HTMLAttributes<HTMLElement> {
+export interface M3SwitchProps extends Omit<HTMLAttributes<HTMLElement>, 'onToggle'> {
+  ref?: Ref<M3SwitchExposed>;
   name?: string;
   checked?: boolean;
   disabled?: boolean;
   onToggle?: (value: boolean) => void;
 }
 
-export interface M3SwitchMethods extends Clickable, Focusable {}
+export interface M3SwitchExposed extends M3SwitchMethods, ElementReference<HTMLSpanElement> {}
+
+export interface M3SwitchMethods extends Interactable {}
 
 const getEventX = (event: MouseEvent | TouchEvent) => 'clientX' in event
   ? event.clientX
@@ -30,10 +40,8 @@ const getEventX = (event: MouseEvent | TouchEvent) => 'clientX' in event
 
 const DRAG_THRESHOLD = 4
 
-const M3Switch: ForwardRefRenderFunction<
-  M3SwitchMethods,
-  M3SwitchProps
-> = ({
+export default defineComponent(function M3Switch({
+  ref: _ref,
   id,
   name,
   checked = false,
@@ -42,14 +50,12 @@ const M3Switch: ForwardRefRenderFunction<
   children ,
   onToggle = (_: boolean) => {},
   ...attrs
-}, ref) => {
+}: M3SwitchProps, { expose }: ComponentSetupContext<M3SwitchExposed>) {
+  const root = useRef<HTMLSpanElement | null>(null)
   const input = useRef<HTMLInputElement | null>(null)
+  const interactable = useInteractable(root, input)
 
-  useImperativeHandle(ref, () => ({
-    click: () => input.current?.click(),
-    focus: () => input.current?.focus(),
-    blur: () => input.current?.blur(),
-  }))
+  expose(interactable)
 
   const state = useRecord({
     checked,
@@ -153,6 +159,7 @@ const M3Switch: ForwardRefRenderFunction<
 
   return (
     <span
+      ref={root}
       className={toClassName([className, {
         'm3-switch': true,
         'm3-switch_checked': state.checked,
@@ -195,6 +202,4 @@ const M3Switch: ForwardRefRenderFunction<
       </span>
     </span>
   )
-}
-
-export default forwardRef(M3Switch)
+})

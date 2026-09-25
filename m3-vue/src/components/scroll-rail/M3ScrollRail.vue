@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { ScrollRail } from '@modulify/m3-foundation/lib/scroll'
 
 import { createRail } from '@modulify/m3-foundation/lib/scroll'
@@ -42,8 +43,9 @@ const dragging = ref(false)
 const enabled = ref(false)
 
 defineExpose({
+  get el () { return root.value },
   sync: () => rail.value?.sync(),
-})
+} satisfies ElementReference<HTMLElement> & { sync: () => void })
 
 watch(() => props.horizontal, horizontal => {
   if (rail.value) { rail.value.horizontal = horizontal }

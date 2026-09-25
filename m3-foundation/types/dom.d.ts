@@ -7,4 +7,8 @@ export interface Focusable {
   blur (): void;
 }
 
-export interface Interactive extends Clickable, Focusable {}
+export interface Interactable extends Clickable, Focusable {}
+
+export interface ElementReference<ElementType extends Element = HTMLElement> {
+  readonly el: ElementType | null;
+}

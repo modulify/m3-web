@@ -78,6 +78,7 @@
 </template>
 
 <script lang="ts" generic="T" setup>
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { M3SelectOption } from './types'
 import type { Placement } from '@floating-ui/dom'
 import type { PropType } from 'vue'
@@ -164,6 +165,10 @@ const _id = useId('m3-select', computed(() => props.id))
 
 const root = ref<HTMLElement | null>(null)
 const rootWidth = ref(0)
+
+defineExpose({
+  get el () { return root.value },
+} satisfies ElementReference<HTMLElement>)
 
 const expanded = ref(false)
 const shouldBeExpanded = ref(false)

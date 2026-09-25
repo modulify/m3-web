@@ -1,5 +1,6 @@
 <template>
     <div
+        ref="root"
         :class="{
             'm3-text-field': true,
             'm3-text-field_outlined': outlined,
@@ -104,7 +105,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Focusable } from '@modulify/m3-foundation/types/dom'
+import type { ElementReference, Focusable } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
 import { computed } from 'vue'
@@ -195,6 +196,7 @@ const emit = defineEmits([
 
 const _id = useId('m3-text-field', computed(() => props.id))
 const _type = computed(() => props.type === 'number' ? 'text' : props.type)
+const root = ref<HTMLDivElement | null>(null)
 const _input = ref<HTMLInputElement | HTMLTextAreaElement | null>(null)
 
 const focused = ref(false)
@@ -203,9 +205,10 @@ const focus = () => _input.value?.focus()
 const blur = () => _input.value?.blur()
 
 defineExpose({
+  get el () { return root.value },
   focus,
   blur,
-} satisfies Focusable)
+} satisfies ElementReference<HTMLDivElement> & Focusable)
 
 const onInput = (event: Event) => {
   const target = event.target as HTMLInputElement | HTMLTextAreaElement

@@ -1,6 +1,6 @@
-import type { FC } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
 import type { M3SurfaceProps } from '@/components/surface'
-import type { ReactNode } from 'react'
+import type { ReactNode, Ref } from 'react'
 
 import { useMemo } from 'react'
 import { useTransition } from 'react-transition-state'
@@ -11,6 +11,7 @@ import { M3IconButton } from '@/components/icon-button'
 import { M3ScrollRail } from '@/components/scroll-rail'
 import { M3Surface } from '@/components/surface'
 
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 import { useId } from '@/hooks'
@@ -26,12 +27,20 @@ export interface M3SideSheetProps extends Omit<
   | 'shown'
   | 'tag'
 > {
+  ref?: Ref<M3SideSheetExposed>;
   id?: string;
   shown?: boolean;
   docked?: boolean;
   children?: ReactNode | ReactNode[];
   onToggle?: (shown: boolean) => void;
   onDismiss?: () => void;
+}
+
+export interface M3SideSheetExposed extends M3SideSheetMethods {}
+
+export interface M3SideSheetMethods {
+  show (): void;
+  hide (): void;
 }
 
 const Affordance = defineSlot('M3SideSheet.Affordance')
@@ -46,7 +55,8 @@ const MODAL_RADIUS = 16
 const SIDE_SHEET_Z_INDEX = 1000
 const SIDE_SHEET_TRANSITION_MS = durations['extra-long2']
 
-const M3SideSheet: FC<M3SideSheetProps> = ({
+export default defineComponent(function M3SideSheet({
+  ref: _ref,
   id,
   shown = false,
   docked = false,
@@ -75,7 +85,7 @@ const M3SideSheet: FC<M3SideSheetProps> = ({
   onToggle = (_: boolean) => {},
   onDismiss = () => {},
   ...attrs
-}) => {
+}: M3SideSheetProps, { expose }: ComponentSetupContext<M3SideSheetExposed>) {
   const _id = useId(id, 'm3-side-sheet')
 
   const [slots, content] = useMemo(() => distinct(children, {
@@ -105,8 +115,10 @@ const M3SideSheet: FC<M3SideSheetProps> = ({
 
   toggle(shown)
 
-  const surfaceScrimShown = !docked && shown && transition.status !== 'preEnter'
-  const ariaModal = 'aria-modal' in attrs ? attrs['aria-modal'] : (docked ? 'false' : undefined)
+  expose({
+    show: () => onToggle(true),
+    hide: () => onToggle(false),
+  })
 
   if (typeof document === 'undefined') {
     return null
@@ -119,7 +131,7 @@ const M3SideSheet: FC<M3SideSheetProps> = ({
       shown={true}
       mode="modal"
       scrim={true}
-      scrimShown={surfaceScrimShown}
+      scrimShown={!docked && shown && transition.status !== 'preEnter'}
       anchor="end"
       fillWidth={fillWidth}
       fillHeight={fillHeight}
@@ -139,7 +151,7 @@ const M3SideSheet: FC<M3SideSheetProps> = ({
       elevation={elevation}
       variant={variant}
       role={role}
-      aria-modal={ariaModal}
+      aria-modal={'aria-modal' in attrs ? attrs['aria-modal'] : (docked ? 'false' : undefined)}
       zIndex={zIndex}
       className={toClassName([className, {
         'm3-side-sheet': true,
@@ -199,11 +211,6 @@ const M3SideSheet: FC<M3SideSheetProps> = ({
   return transition.isMounted
     ? surfaceNode
     : null
-}
-
-export default Object.assign(M3SideSheet, {
-  Affordance,
-  Title,
-  CloseIcon,
-  Footer,
+}, {
+  slots: { Affordance, Title, CloseIcon, Footer },
 })

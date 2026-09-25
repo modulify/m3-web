@@ -1,4 +1,5 @@
 export type {
+  M3ScrollRailExposed,
   M3ScrollRailMethods,
   M3ScrollRailProps,
 } from './M3ScrollRail'

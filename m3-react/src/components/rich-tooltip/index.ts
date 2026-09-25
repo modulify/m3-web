@@ -1,4 +1,5 @@
 export type {
+  M3RichTooltipExposed,
   M3RichTooltipMethods,
   M3RichTooltipProps,
 } from './M3RichTooltip'

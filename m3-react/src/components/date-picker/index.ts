@@ -6,10 +6,12 @@ export type {
 } from './M3DatePickerDialog'
 
 export type {
+  M3DatePickerFieldExposed,
   M3DatePickerFieldProps,
 } from './M3DatePickerField'
 
 export type {
+  M3DatePickerExposed,
   M3DatePickerNavigation,
   M3DatePickerLayout,
   M3DatePickerProps,

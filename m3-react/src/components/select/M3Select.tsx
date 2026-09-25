@@ -1,6 +1,13 @@
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { FC, HTMLAttributes } from 'react'
 import type { Placement } from '@floating-ui/dom'
-import type { ReactElement, ReactNode, SVGAttributes } from 'react'
+import type {
+  ReactElement,
+  ReactNode,
+  Ref,
+  SVGAttributes,
+} from 'react'
 
 import {
   useCallback,
@@ -14,9 +21,11 @@ import { M3Menu, M3MenuItem } from '@/components/menu'
 import { M3ScrollRail } from '@/components/scroll-rail'
 import { M3TextField } from '@/components/text-field'
 
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
+import { requireComponentSetupContext } from '@/utils/component'
 import { toClassName } from '@/utils/styling'
-import { useId, useResizeObserver } from '@/hooks'
+import { useElementReference, useId, useResizeObserver } from '@/hooks'
 
 export type M3SelectOption<Value = unknown> = {
   value: Value;
@@ -34,6 +43,7 @@ type SelectSlot = <Value>(props: {
 }) => ReactElement | null
 
 export interface M3SelectProps<Value = unknown> extends HTMLAttributes<HTMLElement> {
+  ref?: Ref<M3SelectExposed>;
   id?: string;
   value?: SelectValue<Value>;
   options?: Array<M3SelectOption<Value>>;
@@ -47,6 +57,8 @@ export interface M3SelectProps<Value = unknown> extends HTMLAttributes<HTMLEleme
   placement?: Placement;
   onUpdate?: (value: Value) => void;
 }
+
+export interface M3SelectExposed extends ElementReference<HTMLDivElement> {}
 
 const CaretIcon: FC<SVGAttributes<SVGSVGElement>> = (attrs) => (
   <svg
@@ -88,7 +100,8 @@ const renderSlot = <Context,>(slot: ReactElement | null, context: Context): Reac
   return renderProp ? renderProp(context) : child as ReactNode
 }
 
-const M3Select = <Value,>({
+export default defineComponent(function M3Select<Value = unknown>({
+  ref: _ref,
   id,
   value = null,
   options = [],
@@ -104,7 +117,8 @@ const M3Select = <Value,>({
   children = [],
   onUpdate = (_: Value) => {},
   ...attrs
-}: M3SelectProps<Value>) => {
+}: M3SelectProps<Value>, context?: ComponentSetupContext<M3SelectExposed>) {
+  const { expose } = requireComponentSetupContext(context)
   const _id = useId(id, 'm3-select')
 
   const [expanded, setExpanded] = useState(false)
@@ -112,6 +126,7 @@ const M3Select = <Value,>({
   const [rootWidth, setRootWidth] = useState(0)
 
   const root = useRef<HTMLDivElement | null>(null)
+  expose(useElementReference(root))
   const resizeUpdateId = useRef<number | null>(null)
 
   const [slots] = useMemo(() => distinct(children, {
@@ -245,10 +260,7 @@ const M3Select = <Value,>({
       </M3Menu>
     </div>
   )
-}
-
-export default Object.assign(M3Select, {
-  Leading,
-  OptionLeading,
-  OptionContent,
+}, {
+  generic: true,
+  slots: { Leading, OptionLeading, OptionContent },
 })
