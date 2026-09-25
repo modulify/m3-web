@@ -141,9 +141,10 @@ export default [
     },
   },
   {
-    files: ['**/*.test.ts'],
+    files: ['tests/**/*.{js,ts}'],
     rules: {
       'max-lines-per-function': 'off',
+      'no-magic-numbers': 'off',
     },
   },
   {
