@@ -158,9 +158,16 @@ export default [
     },
   },
   {
-    files: ['**/*.test.ts'],
+    files: ['storybook/**/*.stories.{js,jsx,ts,tsx}'],
+    rules: {
+      'no-magic-numbers': 'off',
+    },
+  },
+  {
+    files: ['tests/**/*.{js,jsx,ts,tsx}'],
     rules: {
       'max-lines-per-function': 'off',
+      'no-magic-numbers': 'off',
     },
   },
   {

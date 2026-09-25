@@ -209,9 +209,17 @@ export default [
     },
   },
   {
-    files: ['**/*.test.ts'],
+    files: ['storybook/**/*.stories.{js,ts,vue}'],
+    rules: {
+      'no-magic-numbers': 'off',
+    },
+  },
+  {
+    files: ['tests/**/*.{js,ts,vue}'],
     rules: {
       'max-lines-per-function': 'off',
+      'no-magic-numbers': 'off',
+      'vue/one-component-per-file': 'off',
     },
   },
   {
