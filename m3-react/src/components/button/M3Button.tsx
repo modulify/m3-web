@@ -1,27 +1,26 @@
 import type { Appearance } from '@modulify/m3-foundation/types/components/button'
-import type { Clickable } from '@modulify/m3-foundation/types/dom'
+import type { ComponentSetupContext } from '@/utils/component'
 import type { ElementEffect } from '@/hooks/useElementEffect'
-import type { Focusable } from '@modulify/m3-foundation/types/dom'
-import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
-import type { M3RippleMethods } from '@/components/ripple'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { HTMLAttributes } from 'react'
+import type { Interactable } from '@modulify/m3-foundation/types/dom'
+import type { M3RippleExposed } from '@/components/ripple'
+import type { Ref } from 'react'
 
-import {
-  forwardRef,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from 'react'
+import { useMemo, useRef } from 'react'
 
 import { M3Ripple } from '@/components/ripple'
 
 import { compose } from '@/utils/events'
+import defineComponent from '@/utils/component'
 import { normalize } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useElementEffect, useTarget } from '@/hooks'
+import { useElementEffect, useInteractable, useTarget } from '@/hooks'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement
 
 export interface M3ButtonProps extends HTMLAttributes<RootElement> {
+  ref?: Ref<M3ButtonExposed>;
   type?: HTMLButtonElement['type'];
   href?: string;
   appearance?: Appearance;
@@ -29,12 +28,12 @@ export interface M3ButtonProps extends HTMLAttributes<RootElement> {
   effects?: ElementEffect<RootElement>[];
 }
 
-export interface M3ButtonMethods extends Clickable, Focusable {}
+export interface M3ButtonExposed extends M3ButtonMethods, ElementReference<HTMLButtonElement> {}
 
-const M3Button: ForwardRefRenderFunction<
-  M3ButtonMethods,
-  M3ButtonProps
-> = ({
+export interface M3ButtonMethods extends Interactable {}
+
+export default defineComponent(function M3Button({
+  ref: _ref,
   type = 'button',
   href = '',
   appearance = 'filled',
@@ -44,17 +43,14 @@ const M3Button: ForwardRefRenderFunction<
   children = [],
   onKeyUp = () => {},
   ...attrs
-}, ref) => {
+}: M3ButtonProps, { expose }: ComponentSetupContext<M3ButtonExposed>) {
   const root = useRef<HTMLButtonElement | null>(null)
-  const ripple = useRef<M3RippleMethods | null>(null)
+  const ripple = useRef<M3RippleExposed | null>(null)
 
   const [rippleTarget, setRippleTarget] = useTarget<HTMLButtonElement>()
+  const interactable = useInteractable(root)
 
-  useImperativeHandle(ref, () => ({
-    click: () => root.current?.click(),
-    focus: () => root.current?.focus(),
-    blur: () => root.current?.blur(),
-  }))
+  expose(interactable)
 
   useElementEffect(root, effects)
   useElementEffect(root, setRippleTarget)
@@ -100,6 +96,4 @@ const M3Button: ForwardRefRenderFunction<
       </span>
     </button>
   )
-}
-
-export default forwardRef(M3Button)
+})

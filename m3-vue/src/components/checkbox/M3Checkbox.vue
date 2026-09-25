@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup generic="Model = boolean, Value = unknown">
-import type { Interactive } from '@modulify/m3-foundation/types/dom'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import type { M3CheckboxProps } from './types'
 
 import { computed } from 'vue'
@@ -67,10 +67,11 @@ const trueValue = computed((): Model => props.trueValue === undefined ? true as 
 const falseValue = computed((): Model => props.falseValue === undefined ? false as Model : props.falseValue)
 
 defineExpose({
+  get el () { return root.value },
   click: () => _input.value?.click(),
   focus: () => _input.value?.focus(),
   blur: () => _input.value?.blur(),
-} satisfies Interactive)
+} satisfies ElementReference<HTMLElement> & Interactable)
 
 const equals = (a: unknown, b: unknown) => props.equalsFn?.call(null, a, b) ?? a === b
 const contains = (array: unknown[], value: unknown) => array.some(v => equals(v, value))

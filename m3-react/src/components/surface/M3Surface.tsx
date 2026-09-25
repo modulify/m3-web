@@ -1,5 +1,5 @@
 import type { CSSProperties, FC } from 'react'
-import type { M3SurfacePanelProps, M3SurfacePanelVariant } from './shared'
+import type { M3SurfacePanelOptions, M3SurfacePanelVariant } from './shared'
 import type {
   Anchor as SurfaceAnchor,
   Length as SurfaceLength,
@@ -20,7 +20,7 @@ export type M3SurfaceMode = SurfaceMode
 export type M3SurfaceVariant = M3SurfacePanelVariant
 export type M3SurfaceAnchor = SurfaceAnchor
 
-export interface M3SurfaceProps extends M3SurfacePanelProps {
+export interface M3SurfaceProps extends Omit<M3SurfacePanelOptions, 'onToggle'> {
   shown?: boolean;
   mode?: M3SurfaceMode;
   teleportTo?: string;

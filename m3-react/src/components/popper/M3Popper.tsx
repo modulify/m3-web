@@ -1,22 +1,21 @@
 import type { CloserEvent } from '@modulify/m3-foundation/types/components/popper'
-import type { ForwardRefRenderFunction } from 'react'
-import type { M3PopperMethods, M3PopperProps } from './types'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { M3PopperExposed, M3PopperProps } from './types'
 
 import Scheduler from '@modulify/m3-foundation/lib/Scheduler'
 
 import { computePosition } from '@modulify/m3-foundation/lib/popper/floating'
 import { createPortal } from 'react-dom'
-import { forwardRef } from 'react'
 import {
   useCallback,
   useEffect,
-  useImperativeHandle,
   useMemo,
   useRef,
 } from 'react'
 
 import * as globalEvents from '@modulify/m3-foundation/lib/popper/globalEvents'
 
+import defineComponent from '@/utils/component'
 import { toClassName } from '@/utils/styling'
 import { useRecord, useWatch } from '@/hooks'
 
@@ -24,7 +23,8 @@ import { useAutoAdjust, useDelay, useListening } from './hooks'
 
 type HideReason = 'generic' | 'by-closer' | 'by-miss-click'
 
-const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
+export default defineComponent(function M3Popper({
+  ref: _ref,
   target,
   targetTriggers = ['click'],
   popperTriggers = [],
@@ -48,7 +48,7 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
   onToggle = (_: boolean) => {},
   onDispose = () => {},
   ...attrs
-}, ref) => {
+}: M3PopperProps, { expose }: ComponentSetupContext<M3PopperExposed>) {
   const [
     showDelay,
     hideDelay,
@@ -265,12 +265,13 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
     }
   }, [])
 
-  useImperativeHandle(ref, () => ({
+  expose({
+    get el () { return positionerRef.current },
     show,
     hide,
     adjust: () => adjust.do(),
     contains,
-  }))
+  })
 
   const listening = useListening([
     event => {
@@ -423,6 +424,4 @@ const M3Popper: ForwardRefRenderFunction<M3PopperMethods, M3PopperProps> = ({
     </div>,
     (typeof container === 'string' ? document.querySelector(container) : container) ?? document.body
   ) : null
-}
-
-export default forwardRef(M3Popper)
+})

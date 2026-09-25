@@ -1,4 +1,5 @@
 export type {
+  M3IconExposed,
   M3IconProps,
 } from './M3Icon'
 

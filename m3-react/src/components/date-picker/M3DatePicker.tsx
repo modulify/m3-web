@@ -3,13 +3,15 @@ import type {
   CalendarDayRange,
   CalendarYearRange,
 } from '@modulify/m3-foundation/lib/calendar'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { CSSProperties } from 'react'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type {
-  CSSProperties,
-  FC,
   HTMLAttributes,
   MouseEvent,
   PointerEvent,
   ReactNode,
+  Ref,
 } from 'react'
 
 import {
@@ -39,8 +41,10 @@ import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
+import { useElementReference } from '@/hooks'
 
 import M3DayPicker from './M3DayPicker'
 import M3MonthPicker from './M3MonthPicker'
@@ -63,6 +67,7 @@ const DEFAULT_DATE_PICKER_VIEWS: M3DatePickerView[] = Object.values(DATE_PICKER_
 const Footer = defineSlot('M3DatePicker.Footer')
 
 interface M3DatePickerBaseProps extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
+  ref?: Ref<M3DatePickerExposed>;
   cursor?: Date | null;
   min?: Date | null;
   max?: Date | null;
@@ -96,6 +101,8 @@ export interface M3DatePickerRangeProps extends M3DatePickerBaseProps {
 }
 
 export type M3DatePickerProps = M3DatePickerSingleProps | M3DatePickerRangeProps
+
+export interface M3DatePickerExposed extends ElementReference<HTMLElement> {}
 
 const SWIPE_ACTIVATION_THRESHOLD = 8
 const SWIPE_THRESHOLD = 48
@@ -169,7 +176,8 @@ interface CalendarMonthPage {
   key: string;
 }
 
-const M3DatePicker: FC<M3DatePickerProps> = ({
+export default defineComponent(function M3DatePicker({
+  ref: _ref,
   value = null,
   type = 'single',
 
@@ -195,7 +203,9 @@ const M3DatePicker: FC<M3DatePickerProps> = ({
   onChange,
   onCursorChange = () => {},
   ...attrs
-}) => {
+}: M3DatePickerProps, { expose }: ComponentSetupContext<M3DatePickerExposed>) {
+  const root = useRef<HTMLElement | null>(null)
+  expose(useElementReference(root))
   const [slots] = useMemo(() => distinct(children, {
     footer: Footer,
   }), [children])
@@ -568,6 +578,7 @@ const M3DatePicker: FC<M3DatePickerProps> = ({
 
   return (
     <section
+      ref={root}
       className={toClassName(['m3-date-picker', className, {
         'm3-date-picker_docked': layout === 'docked',
         'm3-date-picker_navigation-inline': navigation === 'inline',
@@ -864,8 +875,6 @@ const M3DatePicker: FC<M3DatePickerProps> = ({
       ) : null}
     </section>
   )
-}
-
-export default Object.assign(M3DatePicker, {
-  Footer,
+}, {
+  slots: { Footer },
 })

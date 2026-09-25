@@ -1,23 +1,26 @@
-import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
-import type { ForwardedRef, HTMLAttributes } from 'react'
-import type { M3RippleMethods } from '@/components/ripple'
-import type { ReactElement, RefAttributes } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { HTMLAttributes } from 'react'
+import type { Interactable } from '@modulify/m3-foundation/types/dom'
+import type { M3RippleExposed } from '@/components/ripple'
+import type { Ref } from 'react'
 
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 
 import { M3Ripple } from '@/components/ripple'
 
+import defineComponent, { requireComponentSetupContext } from '@/utils/component'
 import { toClassName } from '@/utils/styling'
-import { useElementEffect, useId, useTarget } from '@/hooks'
+import {
+  useElementEffect,
+  useId,
+  useInteractable,
+  useTarget,
+} from '@/hooks'
 
 export interface M3RadioProps<Value = boolean>
   extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
+  ref?: Ref<M3RadioExposed>;
   id?: string;
   name?: string;
   model?: Value;
@@ -28,13 +31,12 @@ export interface M3RadioProps<Value = boolean>
   onChange?: (value: Value) => void;
 }
 
-export interface M3RadioMethods extends Clickable, Focusable {}
+export interface M3RadioExposed extends M3RadioMethods, ElementReference<HTMLElement> {}
 
-type M3RadioComponent = <Value = boolean>(
-  props: M3RadioProps<Value> & RefAttributes<M3RadioMethods>
-) => ReactElement | null
+export interface M3RadioMethods extends Interactable {}
 
-const M3Radio = <Value,>({
+export default defineComponent(function M3Radio<Value = boolean>({
+  ref: _ref,
   id,
   name,
   model,
@@ -45,17 +47,15 @@ const M3Radio = <Value,>({
   className = '',
   onChange = (_: Value) => {},
   ...args
-}: M3RadioProps<Value>, ref: ForwardedRef<M3RadioMethods>) => {
+}: M3RadioProps<Value>, context?: ComponentSetupContext<M3RadioExposed>) {
+  const { expose } = requireComponentSetupContext(context)
   const root = useRef<HTMLElement | null>(null)
   const input = useRef<HTMLInputElement | null>(null)
-  const ripple = useRef<M3RippleMethods | null>(null)
+  const ripple = useRef<M3RippleExposed | null>(null)
   const [rippleTarget, setRippleTarget] = useTarget<HTMLElement>()
+  const interactable = useInteractable(root, input)
 
-  useImperativeHandle(ref, () => ({
-    click: () => input.current?.click(),
-    focus: () => input.current?.focus(),
-    blur: () => input.current?.blur(),
-  }))
+  expose(interactable)
 
   useElementEffect(root, setRippleTarget)
 
@@ -99,6 +99,4 @@ const M3Radio = <Value,>({
       <span aria-hidden={true} className="m3-radio__icon" />
     </span>
   )
-}
-
-export default forwardRef(M3Radio) as M3RadioComponent
+}, { generic: true })

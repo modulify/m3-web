@@ -1,4 +1,6 @@
 export type {
+  M3DialogExposed,
+  M3DialogMethods,
   M3DialogProps,
 } from './M3Dialog'
 

@@ -1,9 +1,11 @@
 export type {
+  M3TextFieldExposed,
   M3TextFieldMethods,
   M3TextFieldProps,
 } from './M3TextField'
 
 export type {
+  M3TextFieldSupportTextExposed,
   M3TextFieldSupportTextProps,
 } from './M3TextFieldSupportText'
 

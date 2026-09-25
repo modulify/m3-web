@@ -1,6 +1,7 @@
 <template>
     <section
         :id="_id"
+        ref="root"
         :class="{
             ['m3-card']: true,
             ['m3-card_' + appearance]: true,
@@ -60,6 +61,7 @@
 
 <script lang="ts" setup>
 import type { Appearance } from '@modulify/m3-foundation/types/components/card'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
 import { computed } from 'vue'
@@ -105,6 +107,11 @@ const props = defineProps({
 
 const _id = useId('m3-card', computed(() => props.id))
 
+const root = ref<HTMLElement | null>(null)
 const state = ref<HTMLElement | null>(null)
 const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
+
+defineExpose({
+  get el () { return root.value },
+} satisfies ElementReference<HTMLElement>)
 </script>

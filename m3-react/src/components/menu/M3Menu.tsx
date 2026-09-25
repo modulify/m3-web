@@ -1,13 +1,23 @@
-import type { FC } from 'react'
-import type { M3PopperProps } from '@/components/popper'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { M3PopperExposed, M3PopperProps } from '@/components/popper'
+import type { Ref } from 'react'
+
+import { useRef } from 'react'
 
 import { M3Popper } from '@/components/popper'
 
+import defineComponent from '@/utils/component'
 import { toClassName } from '@/utils/styling'
 
-export interface M3MenuProps extends M3PopperProps {}
+export interface M3MenuProps extends Omit<M3PopperProps, 'ref'> {
+  ref?: Ref<M3MenuExposed>;
+}
 
-const M3Menu: FC<M3MenuProps> = ({
+export interface M3MenuExposed extends ElementReference<HTMLDivElement> {}
+
+export default defineComponent(function M3Menu({
+  ref: _ref,
   target,
   shown = false,
   placement = 'bottom',
@@ -26,8 +36,15 @@ const M3Menu: FC<M3MenuProps> = ({
   onHide = (_reason) => {},
   onToggle = (_shown: boolean) => {},
   ...attrs
-}) => (
-  <M3Popper
+}: M3MenuProps, { expose }: ComponentSetupContext<M3MenuExposed>) {
+  const root = useRef<M3PopperExposed | null>(null)
+
+  expose({
+    get el () { return root.current?.el ?? null },
+  })
+
+  return <M3Popper
+    ref={root}
     target={target}
     shown={shown}
     targetTriggers={['click']}
@@ -51,6 +68,4 @@ const M3Menu: FC<M3MenuProps> = ({
   >
     {children}
   </M3Popper>
-)
-
-export default M3Menu
+})

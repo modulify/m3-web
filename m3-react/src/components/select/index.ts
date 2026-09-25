@@ -1,4 +1,5 @@
 export type {
+  M3SelectExposed,
   M3SelectProps,
   M3SelectOption,
 } from './M3Select'

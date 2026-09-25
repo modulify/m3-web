@@ -1,5 +1,6 @@
 <template>
     <M3Popper
+        ref="root"
         :shown="shown"
         :target="target"
         :target-triggers="['click']"
@@ -28,10 +29,10 @@
 
 <script lang="ts" setup>
 import type { Boundary } from '@floating-ui/dom'
-import type {
-  Delay,
-  OverflowBehavior,
-} from '@modulify/m3-foundation/types/components/popper'
+import type { Delay } from '@modulify/m3-foundation/types/components/popper'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { M3PopperInstance } from '@/components/popper'
+import type { OverflowBehavior } from '@modulify/m3-foundation/types/components/popper'
 import type { Placement } from '@floating-ui/dom'
 import type { PropType, Ref } from 'vue'
 import type { Strategy } from '@floating-ui/dom'
@@ -40,6 +41,8 @@ import { isBoundary, isDelay } from '@modulify/m3-foundation/lib/popper/predicat
 import { isHTMLElement, isNull, isNumeric } from '@modulify/m3-foundation/lib/predicates'
 import { isPlacement } from '@modulify/m3-foundation/lib/popper/predicates'
 import { isString, Or } from '@modulify/m3-foundation/lib/predicates'
+
+import { ref } from 'vue'
 
 import { M3Popper } from '@/components/popper'
 
@@ -111,6 +114,12 @@ defineProps({
     default: 5000,
   },
 })
+
+const root = ref<M3PopperInstance | null>(null)
+
+defineExpose({
+  get el () { return root.value?.el ?? null },
+} satisfies ElementReference<HTMLElement>)
 
 defineEmits([
   'shown',

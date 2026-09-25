@@ -1,4 +1,5 @@
 export type {
+  M3RadioExposed,
   M3RadioMethods,
   M3RadioProps,
 } from './M3Radio'

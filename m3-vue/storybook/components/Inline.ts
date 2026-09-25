@@ -1,9 +1,11 @@
 import type { Component } from 'vue'
 import type { ElementType, ReactNode } from 'react'
+import type { Root } from 'react-dom/client'
 
-import { createApp, h } from 'vue'
+import { createApp } from 'vue'
+import { createRoot } from 'react-dom/client'
+import { h } from 'vue'
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { v4 } from 'uuid'
 
 interface InlineProps {
@@ -37,14 +39,17 @@ const mountInlineApp = ({
   root,
 }: MountInlineAppOptions) => {
   const id = v4()
+  let reactRoot: Root | null = null
 
   const app = createApp({
     mounted () {
       if (children) {
-        ReactDOM.render(
-          React.createElement(React.Fragment, {}, children),
-          document.getElementById(id)
-        )
+        const container = document.getElementById(id)
+
+        if (container) {
+          reactRoot = createRoot(container)
+          reactRoot.render(React.createElement(React.Fragment, {}, children))
+        }
       }
     },
 
@@ -54,7 +59,10 @@ const mountInlineApp = ({
   app.config.idPrefix = appIdPrefix
   app.mount(root)
 
-  return () => app.unmount()
+  return () => {
+    reactRoot?.unmount()
+    app.unmount()
+  }
 }
 
 const Inline = ({ is, children, tag, ...props }: InlineProps) => {

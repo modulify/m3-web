@@ -234,6 +234,7 @@ import { createRef } from 'react'
 import { ref } from 'vue'
 
 import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import {
   durations,
   easing,
@@ -243,12 +244,29 @@ import {
 } from '@modulify/m3-foundation/lib/motion'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
+import { useClickable as useRootReactClickable } from '@modulify/m3-react'
+import { useElementReference as useRootReactElementReference } from '@modulify/m3-react'
+import { useFocusable as useRootReactFocusable } from '@modulify/m3-react'
+import { useInteractable as useRootReactInteractable } from '@modulify/m3-react'
 import { useMutationObserver as useRootReactMutationObserver } from '@modulify/m3-react'
 import { useResizeObserver as useRootReactResizeObserver } from '@modulify/m3-react'
-import { M3Button, type M3ButtonProps } from '@modulify/m3-react/components'
+import {
+  M3Button,
+  type M3ButtonExposed,
+  type M3ButtonMethods,
+  type M3ButtonProps,
+  type M3DialogExposed,
+  type M3LinkExposed,
+  type M3NavigationExposed,
+  type M3SideSheetExposed,
+} from '@modulify/m3-react/components'
 import {
   useBreakpoint as useReactBreakpoint,
+  useClickable as useReactClickable,
+  useElementReference as useReactElementReference,
+  useFocusable as useReactFocusable,
   useId as useReactId,
+  useInteractable as useReactInteractable,
   useMutationObserver as useReactMutationObserver,
   useResizeObserver as useReactResizeObserver,
 } from '@modulify/m3-react/hooks'
@@ -264,13 +282,20 @@ import {
   useResizeObserver as useVueResizeObserver,
 } from '@modulify/m3-vue/composables'
 
-const buttonProps: M3ButtonProps = { appearance: 'filled' }
+const buttonRef = createRef<M3ButtonExposed>()
+const dialogRef = createRef<M3DialogExposed>()
+const navigationRef = createRef<M3NavigationExposed>()
+const sideSheetRef = createRef<M3SideSheetExposed>()
+const buttonProps: M3ButtonProps = { appearance: 'filled', ref: buttonRef }
 const duration: M3MotionDuration = 'medium2'
 const easingName: M3MotionEasing = 'standard'
 const options: M3SelectOption<number>[] = [{ value: 1, label: 'One' }]
 const reactObserverTarget = createRef<HTMLDivElement>()
 const reactMutationObserverTargets: Parameters<typeof useReactMutationObserver>[0] = [reactObserverTarget]
 const reactResizeObserverTargets: Parameters<typeof useReactResizeObserver>[0] = [reactObserverTarget]
+const interactable: Interactable = {} as M3ButtonMethods
+const elementReference: ElementReference<HTMLButtonElement> = {} as M3ButtonExposed
+const linkElement: M3LinkExposed['el'] = null
 const vueObserverTarget = ref<HTMLDivElement | null>(null)
 const vueMutationObserverTargets: Parameters<typeof useVueMutationObserver>[0] = [vueObserverTarget]
 const vueResizeObserverTargets: Parameters<typeof useVueResizeObserver>[0] = [vueObserverTarget]
@@ -281,19 +306,34 @@ void [
   M3Select,
   RootM3Button,
   RootM3Select,
+  buttonRef,
   buttonProps,
+  dialogRef,
   duration,
   durations,
   easing,
   easingName,
+  elementReference,
+  interactable,
+  linkElement,
+  navigationRef,
   options,
   reactMutationObserverTargets,
   reactResizeObserverTargets,
+  sideSheetRef,
   useReactBreakpoint,
+  useReactClickable,
+  useReactElementReference,
+  useReactFocusable,
   useReactId,
+  useReactInteractable,
   useReactMutationObserver,
   useReactResizeObserver,
   useRootReactBreakpoint,
+  useRootReactClickable,
+  useRootReactElementReference,
+  useRootReactFocusable,
+  useRootReactInteractable,
   useRootReactMutationObserver,
   useRootReactResizeObserver,
   useRootVueBreakpoint,
@@ -316,12 +356,20 @@ import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
 import { durations, easing, timing } from '@modulify/m3-foundation/lib/motion'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
+import { useClickable as useRootReactClickable } from '@modulify/m3-react'
+import { useElementReference as useRootReactElementReference } from '@modulify/m3-react'
+import { useFocusable as useRootReactFocusable } from '@modulify/m3-react'
+import { useInteractable as useRootReactInteractable } from '@modulify/m3-react'
 import { useMutationObserver as useRootReactMutationObserver } from '@modulify/m3-react'
 import { useResizeObserver as useRootReactResizeObserver } from '@modulify/m3-react'
 import { M3Button } from '@modulify/m3-react/components'
 import {
   useBreakpoint as useReactBreakpoint,
+  useClickable as useReactClickable,
+  useElementReference as useReactElementReference,
+  useFocusable as useReactFocusable,
   useId as useReactId,
+  useInteractable as useReactInteractable,
   useMutationObserver as useReactMutationObserver,
   useResizeObserver as useReactResizeObserver,
 } from '@modulify/m3-react/hooks'
@@ -360,10 +408,18 @@ if (
   || !RootM3Button
   || !RootM3Select
   || !useReactBreakpoint
+  || !useReactClickable
+  || !useReactElementReference
+  || !useReactFocusable
   || !useReactId
+  || !useReactInteractable
   || !useReactMutationObserver
   || !useReactResizeObserver
   || !useRootReactBreakpoint
+  || !useRootReactClickable
+  || !useRootReactElementReference
+  || !useRootReactFocusable
+  || !useRootReactInteractable
   || !useRootReactMutationObserver
   || !useRootReactResizeObserver
   || !useRootVueBreakpoint
@@ -383,12 +439,20 @@ const { CalendarDay } = require('@modulify/m3-foundation/lib/calendar')
 const { durations, easing, timing } = require('@modulify/m3-foundation/lib/motion')
 const { M3Button: RootM3Button } = require('@modulify/m3-react')
 const { useBreakpoint: useRootReactBreakpoint } = require('@modulify/m3-react')
+const { useClickable: useRootReactClickable } = require('@modulify/m3-react')
+const { useElementReference: useRootReactElementReference } = require('@modulify/m3-react')
+const { useFocusable: useRootReactFocusable } = require('@modulify/m3-react')
+const { useInteractable: useRootReactInteractable } = require('@modulify/m3-react')
 const { useMutationObserver: useRootReactMutationObserver } = require('@modulify/m3-react')
 const { useResizeObserver: useRootReactResizeObserver } = require('@modulify/m3-react')
 const { M3Button } = require('@modulify/m3-react/components')
 const {
   useBreakpoint: useReactBreakpoint,
+  useClickable: useReactClickable,
+  useElementReference: useReactElementReference,
+  useFocusable: useReactFocusable,
   useId: useReactId,
+  useInteractable: useReactInteractable,
   useMutationObserver: useReactMutationObserver,
   useResizeObserver: useReactResizeObserver,
 } = require('@modulify/m3-react/hooks')
@@ -413,10 +477,18 @@ if (
   || !RootM3Button
   || !RootM3Select
   || !useReactBreakpoint
+  || !useReactClickable
+  || !useReactElementReference
+  || !useReactFocusable
   || !useReactId
+  || !useReactInteractable
   || !useReactMutationObserver
   || !useReactResizeObserver
   || !useRootReactBreakpoint
+  || !useRootReactClickable
+  || !useRootReactElementReference
+  || !useRootReactFocusable
+  || !useRootReactInteractable
   || !useRootReactMutationObserver
   || !useRootReactResizeObserver
   || !useRootVueBreakpoint

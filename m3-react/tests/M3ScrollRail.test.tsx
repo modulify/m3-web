@@ -86,14 +86,16 @@ describe('m3-react/scroll-rail', () => {
 
     createRailMock.mockReturnValue(rail)
 
-    const ref = createRef<{ sync: () => void }>()
+    const ref = createRef<M3ScrollRailExposed>()
 
-    render(<M3ScrollRail ref={ref} />)
+    const { container } = render(<M3ScrollRail ref={ref} />)
 
     act(() => {
       ref.current?.sync()
     })
 
     expect(rail.sync).toHaveBeenCalledTimes(1)
+    expect(ref.current?.el).toBe(container.firstElementChild)
   })
 })
+import type { M3ScrollRailExposed } from '@/components/scroll-rail'

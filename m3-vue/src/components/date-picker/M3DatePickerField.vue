@@ -90,6 +90,7 @@ import type {
   CalendarYearRange,
 } from '@modulify/m3-foundation/lib/calendar'
 import type { ClassValue as CssClass } from 'vue'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { Placement } from '@floating-ui/dom'
 import type { PropType } from 'vue'
 
@@ -226,6 +227,10 @@ const emit = defineEmits([
 ])
 
 const root = shallowRef<HTMLElement | null>(null)
+
+defineExpose({
+  get el () { return root.value },
+} satisfies ElementReference<HTMLElement>)
 const expanded = ref(false)
 const draftValue = ref<Date | null>(props.value)
 const inputValue = ref(formatCalendarDateInput(props.value))

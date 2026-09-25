@@ -5,6 +5,7 @@ export type {
   M3SurfaceVariant,
 } from './M3Surface'
 export type {
+  M3SurfacePanelExposed,
   M3SurfacePanelProps,
   M3SurfacePanelVariant,
 } from './M3SurfacePanel'

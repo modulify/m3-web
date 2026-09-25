@@ -1,4 +1,10 @@
-import type { FC, ReactElement, ReactNode } from 'react'
+import type {
+  ComponentProps,
+  FC,
+  JSX,
+  ReactElement,
+  ReactNode,
+} from 'react'
 
 import {
   Children,
@@ -19,7 +25,14 @@ const SLOT_ID = Symbol.for('@modulify/m3-react.slot')
 
 type DuplicateSlotPolicy = 'error' | 'ignore' | 'warn'
 type AnyComponent = Exclude<ReactElement['type'], string>
-type SlotComponent = string | AnyComponent
+type SlotComponent = keyof JSX.IntrinsicElements | AnyComponent
+type SlotComponents = Record<string, SlotComponent>
+type SlotElements<Components extends SlotComponents> = {
+  [Name in keyof Components]: ReactElement<ComponentProps<Components[Name]>, Components[Name]> | null;
+}
+type SlotElementCollections<Components extends SlotComponents> = {
+  [Name in keyof Components]: Array<ReactElement<ComponentProps<Components[Name]>, Components[Name]>>;
+}
 type SlottedComponent = AnyComponent & {
   [SLOT_ID]?: string;
 }
@@ -28,24 +41,24 @@ type DefaultSlotProps = {
 }
 
 export type DistinctConfig<
-  SlotName extends string = never,
-  CollectionName extends string = never,
+  Slots extends SlotComponents = Record<never, never>,
+  Collections extends SlotComponents = Record<never, never>,
 > = {
-  slots?: Record<SlotName, SlotComponent>;
-  collections?: Record<CollectionName, SlotComponent>;
+  slots?: Slots;
+  collections?: Collections;
   flattenFragments?: boolean;
   onDuplicateSlot?: DuplicateSlotPolicy;
 }
 
 export type DistinctResult<
-  SlotName extends string = never,
-  CollectionName extends string = never,
+  Slots extends SlotComponents = Record<never, never>,
+  Collections extends SlotComponents = Record<never, never>,
 > = {
-  slots: Record<SlotName, ReactElement | null>;
-  collections: Record<CollectionName, ReactElement[]>;
+  slots: SlotElements<Slots>;
+  collections: SlotElementCollections<Collections>;
   content: ReactNode[];
-  hasSlot: (name: SlotName) => boolean;
-  hasCollection: (name: CollectionName) => boolean;
+  hasSlot: (name: Extract<keyof Slots, string>) => boolean;
+  hasCollection: (name: Extract<keyof Collections, string>) => boolean;
 }
 
 export const isNil = (value: unknown): boolean => value === null || value === undefined
@@ -166,11 +179,14 @@ const flattenChildren = (children: ReactNode, flattenFragments: boolean): ReactN
 }
 
 const parseDistinct = <
-  SlotName extends string = never,
-  CollectionName extends string = never,
->(children: ReactNode, config: DistinctConfig<SlotName, CollectionName>): DistinctResult<SlotName, CollectionName> => {
-  const slots = config.slots ?? {} as Record<SlotName, SlotComponent>
-  const collections = config.collections ?? {} as Record<CollectionName, SlotComponent>
+  Slots extends SlotComponents = Record<never, never>,
+  Collections extends SlotComponents = Record<never, never>,
+>(children: ReactNode, config: DistinctConfig<Slots, Collections>): DistinctResult<Slots, Collections> => {
+  type SlotName = Extract<keyof Slots, string>
+  type CollectionName = Extract<keyof Collections, string>
+
+  const slots = config.slots ?? {} as Slots
+  const collections = config.collections ?? {} as Collections
   const slotNames = Object.keys(slots) as SlotName[]
   const collectionNames = Object.keys(collections) as CollectionName[]
   const namedSlots = createRecord(slotNames, () => null as ReactElement | null)
@@ -209,34 +225,33 @@ const parseDistinct = <
     content,
     hasSlot: name => !!namedSlots[name],
     hasCollection: name => namedCollections[name].length > 0,
-  }
+  } as DistinctResult<Slots, Collections>
 }
 
 export function distinct<
-  Name extends string,
-  Type extends SlotComponent = SlotComponent
->(children: ReactNode, map: Record<Name, Type>): [
-  Record<Name, ReactElement | null>,
+  Components extends SlotComponents,
+>(children: ReactNode, map: Components): [
+  SlotElements<Components>,
   ReactNode[],
-  (name: Name) => boolean
+  (name: Extract<keyof Components, string>) => boolean
 ]
 export function distinct<
-  SlotName extends string = never,
-  CollectionName extends string = never,
->(children: ReactNode, config: DistinctConfig<SlotName, CollectionName>): DistinctResult<SlotName, CollectionName>
+  Slots extends SlotComponents = Record<never, never>,
+  Collections extends SlotComponents = Record<never, never>,
+>(children: ReactNode, config: DistinctConfig<Slots, Collections>): DistinctResult<Slots, Collections>
 export function distinct<
-  SlotName extends string = never,
-  CollectionName extends string = never,
+  Slots extends SlotComponents = Record<never, never>,
+  Collections extends SlotComponents = Record<never, never>,
 >(
   children: ReactNode,
-  configOrMap: DistinctConfig<SlotName, CollectionName> | Record<SlotName, SlotComponent>
+  configOrMap: DistinctConfig<Slots, Collections> | Slots
 ) {
   if (isConfig(configOrMap)) {
-    return parseDistinct(children, configOrMap as DistinctConfig<SlotName, CollectionName>)
+    return parseDistinct(children, configOrMap as DistinctConfig<Slots, Collections>)
   }
 
   const result = parseDistinct(children, {
-    slots: configOrMap as Record<SlotName, SlotComponent>,
+    slots: configOrMap as Slots,
   })
 
   return [

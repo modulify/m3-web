@@ -25,11 +25,9 @@
 
 <script lang="ts" setup>
 import type { Boundary } from '@floating-ui/dom'
-import type {
-  CloserEvent,
-  Delay,
-  OverflowBehavior,
-} from '@modulify/m3-foundation/types/components/popper'
+import type { CloserEvent, Delay } from '@modulify/m3-foundation/types/components/popper'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { OverflowBehavior } from '@modulify/m3-foundation/types/components/popper'
 import type { Placement } from '@floating-ui/dom'
 import type { PropType, Ref } from 'vue'
 import type { Strategy } from '@floating-ui/dom'
@@ -327,10 +325,16 @@ const hide = (immediately = false, reason: 'generic' | 'by-closer' | 'by-miss-cl
 }
 
 defineExpose({
+  get el () { return positioner.value },
   adjust,
   contains,
   show,
   hide,
+} satisfies ElementReference<HTMLElement> & {
+  adjust: () => Promise<void>;
+  contains: (el: Element | null) => boolean;
+  show: (immediately?: boolean) => void;
+  hide: (immediately?: boolean, reason?: 'generic' | 'by-closer' | 'by-miss-click') => void;
 })
 
 const onGlobalTap = async (event: CloserEvent, touch = false) => {

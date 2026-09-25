@@ -34,12 +34,12 @@ type DatePickerDialogBaseProps = {
   onToggle?: (opened: boolean) => void;
 }
 
-export interface M3DatePickerDialogSingleProps extends Omit<M3DatePickerSingleProps, 'headerAction' | 'onChange'>, DatePickerDialogBaseProps {
+export interface M3DatePickerDialogSingleProps extends Omit<M3DatePickerSingleProps, 'headerAction' | 'onChange' | 'onToggle' | 'ref'>, DatePickerDialogBaseProps {
   type?: 'single';
   onChange?: (value: Date) => void;
 }
 
-export interface M3DatePickerDialogRangeProps extends Omit<M3DatePickerRangeProps, 'headerAction' | 'onChange'>, DatePickerDialogBaseProps {
+export interface M3DatePickerDialogRangeProps extends Omit<M3DatePickerRangeProps, 'headerAction' | 'onChange' | 'onToggle' | 'ref'>, DatePickerDialogBaseProps {
   type: 'range';
   onChange?: (value: [Date | null, Date | null]) => void;
 }

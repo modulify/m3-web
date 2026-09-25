@@ -1,4 +1,5 @@
 export type {
+  M3FabButtonExposed,
   M3FabButtonMethods,
   M3FabButtonProps,
 } from './M3FabButton'

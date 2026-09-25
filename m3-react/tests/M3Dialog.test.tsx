@@ -1,5 +1,8 @@
+import type { M3DialogExposed } from '@/components/dialog'
+
+import { act } from '@testing-library/react'
+import { createRef } from 'react'
 import {
-  act,
   fireEvent,
   render,
   screen,
@@ -11,6 +14,19 @@ import { M3Dialog } from '@/components/dialog'
 describe('m3-react/dialog', () => {
   afterEach(() => {
     vi.useRealTimers()
+  })
+
+  test('exposes open and close requests', () => {
+    const ref = createRef<M3DialogExposed>()
+    const onToggle = vi.fn()
+
+    render(<M3Dialog ref={ref} onToggle={onToggle} />)
+
+    act(() => ref.current?.open())
+    act(() => ref.current?.close())
+
+    expect(onToggle).toHaveBeenNthCalledWith(1, true)
+    expect(onToggle).toHaveBeenNthCalledWith(2, false)
   })
 
   test('content appears after opening', async () => {

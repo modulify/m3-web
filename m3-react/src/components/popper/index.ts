@@ -1,4 +1,5 @@
 export type {
+  M3PopperExposed,
   M3PopperMethods,
   M3PopperProps,
 } from './types'

@@ -1,4 +1,5 @@
 export type {
+  M3SwitchExposed,
   M3SwitchMethods,
   M3SwitchProps,
 } from './M3Switch'

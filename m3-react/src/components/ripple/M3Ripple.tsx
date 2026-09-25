@@ -1,30 +1,29 @@
-import type { ForwardRefRenderFunction } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { Ref } from 'react'
 
-import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
+import defineComponent from '@/utils/component'
 import { useRecord, useWatch } from '@/hooks'
 
 export interface M3RippleProps {
+  ref?: Ref<M3RippleExposed>;
   owner: HTMLElement | null;
   centered?: boolean;
 }
+
+export interface M3RippleExposed extends M3RippleMethods, ElementReference<HTMLSpanElement> {}
 
 export interface M3RippleMethods {
   activate: (event: KeyboardEvent | MouseEvent) => void;
 }
 
-const M3Ripple: ForwardRefRenderFunction<
-  M3RippleMethods,
-  M3RippleProps
-> = ({ owner, centered = false }, ref) => {
+export default defineComponent(function M3Ripple(
+  { ref: _ref, owner, centered = false }: M3RippleProps,
+  { expose }: ComponentSetupContext<M3RippleExposed>
+) {
   const root = useRef<HTMLSpanElement | null>(null)
-
   const state = useRecord({
     centered,
     owner,
@@ -71,9 +70,10 @@ const M3Ripple: ForwardRefRenderFunction<
     }
   }, [])
 
-  useImperativeHandle(ref, () => ({
+  expose({
+    get el () { return root.current },
     activate,
-  }))
+  })
 
   useEffect(() => {
     const rememberKey = (event: KeyboardEvent) => lastKey.current = event.code
@@ -96,6 +96,4 @@ const M3Ripple: ForwardRefRenderFunction<
     className="m3-ripple"
     style={{ display: 'none' }}
   />
-}
-
-export default forwardRef(M3Ripple)
+})

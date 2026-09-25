@@ -1,8 +1,16 @@
 export type {
+  M3NavigationExposed,
+  M3NavigationMethods,
   M3NavigationProps,
 } from './M3Navigation'
 
 export type {
+  M3NavigationSectionExposed,
+  M3NavigationSectionProps,
+} from './M3NavigationSection'
+
+export type {
+  M3NavigationTabExposed,
   M3NavigationTabMethods,
   M3NavigationTabProps,
 } from './M3NavigationTab'

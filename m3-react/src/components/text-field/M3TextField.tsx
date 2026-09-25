@@ -1,19 +1,19 @@
-import type { Focusable } from '@modulify/m3-foundation/types/dom'
-import type { FormEvent, ForwardRefRenderFunction, HTMLAttributes } from 'react'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference, Focusable } from '@modulify/m3-foundation/types/dom'
+import type { FormEvent, HTMLAttributes, Ref } from 'react'
 
 import {
-  forwardRef,
   useEffect,
-  useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from 'react'
 
 import { compose } from '@/utils/events'
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useId } from '@/hooks'
+import { useFocusable, useId } from '@/hooks'
 
 type TextFieldType =
   | 'email'
@@ -27,6 +27,7 @@ type TextFieldType =
 type RootAttrs = Omit<HTMLAttributes<HTMLElement>, 'onInput' | 'onChange'>
 
 export interface M3TextFieldProps extends RootAttrs {
+  ref?: Ref<M3TextFieldExposed>;
   id?: string;
   name?: string;
   type?: TextFieldType;
@@ -44,16 +45,16 @@ export interface M3TextFieldProps extends RootAttrs {
   onUpdate?: (value: string) => void;
 }
 
+export interface M3TextFieldExposed extends M3TextFieldMethods, ElementReference<HTMLDivElement> {}
+
 export interface M3TextFieldMethods extends Focusable {}
 
 const Label = defineSlot('M3TextField.Label')
 const LeadingIcon = defineSlot('M3TextField.LeadingIcon')
 const TrailingIcon = defineSlot('M3TextField.TrailingIcon')
 
-const M3TextField: ForwardRefRenderFunction<
-  M3TextFieldMethods,
-  M3TextFieldProps
-> = ({
+export default defineComponent(function M3TextField({
+  ref: _ref,
   id,
   name,
   type = 'text',
@@ -73,13 +74,15 @@ const M3TextField: ForwardRefRenderFunction<
   onUpdate = (_: string) => {},
   onClick = () => {},
   ...attrs
-}, ref) => {
+}: M3TextFieldProps, { expose }: ComponentSetupContext<M3TextFieldExposed>) {
   const [focused, setFocused] = useState(false)
 
   const _id = useId(id, 'm3-text-field')
   const _type = type === 'number' ? 'text' : type
 
+  const root = useRef<HTMLDivElement | null>(null)
   const input = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
+  const focusable = useFocusable(root, input)
   const setTextAreaRef = (el: HTMLTextAreaElement | null) => {
     input.current = el
   }
@@ -97,10 +100,7 @@ const M3TextField: ForwardRefRenderFunction<
 
   const focus = () => input.current?.focus()
 
-  useImperativeHandle(ref, () => ({
-    focus,
-    blur: () => input.current?.blur(),
-  }))
+  expose(focusable)
 
   useEffect(() => {
     const el = input.current
@@ -142,6 +142,7 @@ const M3TextField: ForwardRefRenderFunction<
 
   return (
     <div
+      ref={root}
       role="grid"
       className={toClassName([className, {
         'm3-text-field': true,
@@ -243,10 +244,6 @@ const M3TextField: ForwardRefRenderFunction<
       {outlined ? null : <div className="m3-text-field__underline" />}
     </div>
   )
-}
-
-export default Object.assign(forwardRef(M3TextField), {
-  Label,
-  LeadingIcon,
-  TrailingIcon,
+}, {
+  slots: { Label, LeadingIcon, TrailingIcon },
 })

@@ -1,4 +1,5 @@
 export type {
+  M3LinkExposed,
   M3LinkMethods,
   M3LinkProps,
 } from './M3Link'

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup generic="Value = boolean">
-import type { Interactive } from '@modulify/m3-foundation/types/dom'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import type { M3RadioProps } from './types'
 
 import { computed } from 'vue'
@@ -55,10 +55,11 @@ const _input = ref<HTMLInputElement | null>(null)
 const value = computed((): Value => props.value === undefined ? true as Value : props.value)
 
 defineExpose({
+  get el () { return root.value },
   click: () => _input.value?.click(),
   focus: () => _input.value?.focus(),
   blur: () => _input.value?.blur(),
-} satisfies Interactive)
+} satisfies ElementReference<HTMLElement> & Interactable)
 
 const equals = (a: Value | undefined, b: Value) => props.equalsFn?.call(null, a, b) ?? a === b
 const checked = computed(() => equals(props.model, value.value))

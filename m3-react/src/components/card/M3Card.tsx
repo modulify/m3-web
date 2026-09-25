@@ -1,6 +1,9 @@
 import type { Appearance } from '@modulify/m3-foundation/types/components/card'
+import type { ComponentSetupContext } from '@/utils/component'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { FC, HTMLAttributes } from 'react'
-import type { M3RippleMethods } from '@/components/ripple'
+import type { M3RippleExposed } from '@/components/ripple'
+import type { Ref } from 'react'
 
 import { useRef } from 'react'
 
@@ -8,17 +11,26 @@ import { M3Ripple } from '@/components/ripple'
 
 import { augment } from '@/utils/content'
 import { compose } from '@/utils/events'
+import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useElementEffect, useId, useTarget } from '@/hooks'
+import {
+  useElementEffect,
+  useElementReference,
+  useId,
+  useTarget,
+} from '@/hooks'
 
 export interface M3CardProps extends HTMLAttributes<HTMLElement> {
+  ref?: Ref<M3CardExposed>;
   appearance?: Appearance;
   heading?: string;
   subheading?: string;
   interactive?: boolean;
   landscape?: boolean;
 }
+
+export interface M3CardExposed extends ElementReference<HTMLElement> {}
 
 const Content = defineSlot('M3Card.Content')
 
@@ -52,7 +64,8 @@ const Subheading: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Card.Subheadin
   </div>
 ))
 
-const M3Card: FC<M3CardProps> = ({
+export default defineComponent(function M3Card({
+  ref: _ref,
   id,
   appearance = 'filled',
   heading = '',
@@ -64,11 +77,13 @@ const M3Card: FC<M3CardProps> = ({
   children = [],
   onClick = (_) => {},
   ...attrs
-}) => {
+}: M3CardProps, { expose }: ComponentSetupContext<M3CardExposed>) {
   const _id = useId(id ,'m3-card')
+  const root = useRef<HTMLElement | null>(null)
   const state = useRef<HTMLDivElement | null>(null)
-  const ripple = useRef<M3RippleMethods | null>(null)
+  const ripple = useRef<M3RippleExposed | null>(null)
   const [rippleTarget, setRippleTarget] = useTarget<HTMLDivElement>()
+  expose(useElementReference(root))
 
   const [slots, content, hasSlot] = distinct(children, {
     content: Content,
@@ -95,6 +110,7 @@ const M3Card: FC<M3CardProps> = ({
 
   return (
     <section
+      ref={root}
       className={toClassName([className, {
         ['m3-card']: true,
         ['m3-card_' + appearance]: true,
@@ -132,11 +148,6 @@ const M3Card: FC<M3CardProps> = ({
       </>)}
     </section>
   )
-}
-
-export default Object.assign(M3Card, {
-  Content,
-  Heading,
-  Media,
-  Subheading,
+}, {
+  slots: { Content, Heading, Media, Subheading },
 })

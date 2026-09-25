@@ -1,5 +1,6 @@
 <template>
     <span
+        ref="root"
         :class="rootClass"
         :style="rootStyle"
     >
@@ -55,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Interactive } from '@modulify/m3-foundation/types/dom'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import type { PropType, StyleValue } from 'vue'
 
 import {
@@ -151,6 +152,7 @@ const rootClass = computed(() => {
 const rootStyle = computed(() => attrs.style as StyleValue | undefined)
 
 const action = ref<HTMLButtonElement | null>(null)
+const root = ref<HTMLSpanElement | null>(null)
 const actionAttrs = computed(() => {
   const {
     class: _class,
@@ -200,8 +202,9 @@ const M3ChipContent = () => content.value.map(([node, isIcon], index) => h('span
 }, { ...node }))
 
 defineExpose({
+  get el () { return root.value },
   click: () => action.value?.click(),
   focus: () => action.value?.focus(),
   blur: () => action.value?.blur(),
-} satisfies Interactive)
+} satisfies ElementReference<HTMLSpanElement> & Interactable)
 </script>

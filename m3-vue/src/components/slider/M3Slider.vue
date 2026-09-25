@@ -1,5 +1,6 @@
 <template>
     <div
+        ref="root"
         :class="{
             'm3-slider': true,
             'm3-slider_range': type === 'range',
@@ -120,6 +121,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
 import {
@@ -231,7 +233,12 @@ const percentage = computed(() => {
   }
 })
 
+const root = ref<HTMLDivElement | null>(null)
 const track = ref<HTMLElement | null>(null)
+
+defineExpose({
+  get el () { return root.value },
+} satisfies ElementReference<HTMLDivElement>)
 const fillerActive = ref<HTMLElement | null>(null)
 const fillerMax = ref<HTMLElement | null>(null)
 const fillerMin = ref<HTMLElement | null>(null)

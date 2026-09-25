@@ -2,11 +2,12 @@ import type {
   CalendarAvailability,
   CalendarYearRange,
 } from '@modulify/m3-foundation/lib/calendar'
+import type { ComponentSetupContext } from '@/utils/component'
 import type { CssClass } from '@/utils/styling'
-import type { FC } from 'react'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { M3TextFieldProps } from '@/components/text-field'
 import type { Placement } from '@floating-ui/dom'
-import type { ReactNode } from 'react'
+import type { ReactNode, Ref } from 'react'
 
 import {
   CalendarDay,
@@ -25,6 +26,7 @@ import { M3IconButton } from '@/components/icon-button'
 import { M3Popper } from '@/components/popper'
 import { M3TextField } from '@/components/text-field'
 
+import defineComponent from '@/utils/component'
 import { toClassName } from '@/utils/styling'
 
 import M3DatePicker from './M3DatePicker'
@@ -37,11 +39,13 @@ type TextFieldProps = Omit<
   | 'onChange'
   | 'onInput'
   | 'onUpdate'
+  | 'ref'
   | 'type'
   | 'value'
 >
 
 export interface M3DatePickerFieldProps extends TextFieldProps {
+  ref?: Ref<M3DatePickerFieldExposed>;
   value?: Date | null;
   min?: Date | null;
   max?: Date | null;
@@ -57,7 +61,10 @@ export interface M3DatePickerFieldProps extends TextFieldProps {
   onChange?: (value: Date | null) => void;
 }
 
-const M3DatePickerField: FC<M3DatePickerFieldProps> = ({
+export interface M3DatePickerFieldExposed extends ElementReference<HTMLDivElement> {}
+
+export default defineComponent(function M3DatePickerField({
+  ref: _ref,
   value = null,
   min = null,
   max = null,
@@ -79,12 +86,16 @@ const M3DatePickerField: FC<M3DatePickerFieldProps> = ({
   className = '',
   onChange = () => {},
   ...fieldProps
-}) => {
+}: M3DatePickerFieldProps, { expose }: ComponentSetupContext<M3DatePickerFieldExposed>) {
   const [root, setRoot] = useState<HTMLDivElement | null>(null)
   const [expanded, setExpanded] = useState(false)
   const [draftValue, setDraftValue] = useState(value)
   const [inputValue, setInputValue] = useState(() => formatCalendarDateInput(value))
   const [inputInvalid, setInputInvalid] = useState(false)
+
+  expose({
+    get el () { return root },
+  })
 
   useEffect(() => {
     setInputValue(formatCalendarDateInput(value))
@@ -226,6 +237,4 @@ const M3DatePickerField: FC<M3DatePickerFieldProps> = ({
       </M3Popper>
     </div>
   )
-}
-
-export default M3DatePickerField
+})

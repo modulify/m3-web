@@ -2,6 +2,7 @@
     <component
         :is="tag"
         :id="id"
+        ref="root"
         :class="surfaceClass"
         :style="surfaceStyle"
         v-bind="attrs"
@@ -11,7 +12,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, useAttrs } from 'vue'
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+
+import { computed, ref, useAttrs } from 'vue'
 
 import { getSurfacePanelClass, getSurfacePanelStyle, surfacePanelProps } from './shared'
 
@@ -22,6 +25,11 @@ defineOptions({
 const props = defineProps(surfacePanelProps)
 
 const attrs = useAttrs()
+const root = ref<HTMLElement | null>(null)
+
+defineExpose({
+  get el () { return root.value },
+} satisfies ElementReference<HTMLElement>)
 
 const surfaceClass = computed(() => getSurfacePanelClass(props.elevation, props.variant))
 const surfaceStyle = computed(() => getSurfacePanelStyle({
