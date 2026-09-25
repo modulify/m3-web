@@ -113,7 +113,7 @@ import { onMounted } from 'vue'
 import { Or } from '@modulify/m3-foundation/lib/predicates'
 import { ref } from 'vue'
 
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 const props = defineProps({
   id: {

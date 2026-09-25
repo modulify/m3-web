@@ -88,7 +88,7 @@ import { onBeforeUnmount, onMounted } from 'vue'
 import { Or } from '@modulify/m3-foundation/lib/predicates'
 import { ref } from 'vue'
 
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 import { M3Menu, M3MenuItem } from '../menu'
 import { M3ScrollRail } from '../scroll-rail'

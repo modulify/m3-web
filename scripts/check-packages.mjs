@@ -234,11 +234,11 @@ import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
 import { M3Button, type M3ButtonProps } from '@modulify/m3-react/components'
-import { useBreakpoint as useReactBreakpoint } from '@modulify/m3-react/hooks'
+import { useBreakpoint as useReactBreakpoint, useId as useReactId } from '@modulify/m3-react/hooks'
 import { M3Select as RootM3Select } from '@modulify/m3-vue'
 import { useBreakpoint as useRootVueBreakpoint } from '@modulify/m3-vue'
 import { M3Select, type M3SelectOption } from '@modulify/m3-vue/components'
-import { useBreakpoint as useVueBreakpoint } from '@modulify/m3-vue/composables'
+import { useBreakpoint as useVueBreakpoint, useId as useVueId } from '@modulify/m3-vue/composables'
 
 const buttonProps: M3ButtonProps = { appearance: 'filled' }
 const options: M3SelectOption<number>[] = [{ value: 1, label: 'One' }]
@@ -252,9 +252,11 @@ void [
   buttonProps,
   options,
   useReactBreakpoint,
+  useReactId,
   useRootReactBreakpoint,
   useRootVueBreakpoint,
   useVueBreakpoint,
+  useVueId,
 ]
 `)
   writeFileSync(resolve(temporaryDirectory, 'consumer.mjs'), `
@@ -265,11 +267,11 @@ import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
 import { M3Button } from '@modulify/m3-react/components'
-import { useBreakpoint as useReactBreakpoint } from '@modulify/m3-react/hooks'
+import { useBreakpoint as useReactBreakpoint, useId as useReactId } from '@modulify/m3-react/hooks'
 import { M3Select as RootM3Select } from '@modulify/m3-vue'
 import { useBreakpoint as useRootVueBreakpoint } from '@modulify/m3-vue'
 import { M3Select } from '@modulify/m3-vue/components'
-import { useBreakpoint as useVueBreakpoint } from '@modulify/m3-vue/composables'
+import { useBreakpoint as useVueBreakpoint, useId as useVueId } from '@modulify/m3-vue/composables'
 
 await access(fileURLToPath(import.meta.resolve('@modulify/m3-foundation/styles.css')))
 
@@ -292,9 +294,11 @@ if (
   || !RootM3Button
   || !RootM3Select
   || !useReactBreakpoint
+  || !useReactId
   || !useRootReactBreakpoint
   || !useRootVueBreakpoint
   || !useVueBreakpoint
+  || !useVueId
 ) {
   throw new Error('Expected ESM package exports are unavailable')
 }
@@ -304,11 +308,11 @@ const { CalendarDay } = require('@modulify/m3-foundation/lib/calendar')
 const { M3Button: RootM3Button } = require('@modulify/m3-react')
 const { useBreakpoint: useRootReactBreakpoint } = require('@modulify/m3-react')
 const { M3Button } = require('@modulify/m3-react/components')
-const { useBreakpoint: useReactBreakpoint } = require('@modulify/m3-react/hooks')
+const { useBreakpoint: useReactBreakpoint, useId: useReactId } = require('@modulify/m3-react/hooks')
 const { M3Select: RootM3Select } = require('@modulify/m3-vue')
 const { useBreakpoint: useRootVueBreakpoint } = require('@modulify/m3-vue')
 const { M3Select } = require('@modulify/m3-vue/components')
-const { useBreakpoint: useVueBreakpoint } = require('@modulify/m3-vue/composables')
+const { useBreakpoint: useVueBreakpoint, useId: useVueId } = require('@modulify/m3-vue/composables')
 
 if (
   !CalendarDay
@@ -317,9 +321,11 @@ if (
   || !RootM3Button
   || !RootM3Select
   || !useReactBreakpoint
+  || !useReactId
   || !useRootReactBreakpoint
   || !useRootVueBreakpoint
   || !useVueBreakpoint
+  || !useVueId
 ) {
   throw new Error('Expected CommonJS package exports are unavailable')
 }

@@ -1,5 +1,3 @@
-/* eslint-disable vue/one-component-per-file */
-
 import type { Sprite } from '~types/components/icon'
 
 import {

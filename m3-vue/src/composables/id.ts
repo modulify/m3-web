@@ -1,9 +1,9 @@
 import type { Ref } from 'vue'
 
-import { computed, useId } from 'vue'
+import { computed, useId as useVueId } from 'vue'
 
-export default (name: string = 'm3-id', idRef: Ref<string | undefined> | undefined = undefined) => {
-  const fallback = name + '-' + useId()
+export const useId = (name: string = 'm3-id', idRef: Ref<string | undefined> | undefined = undefined) => {
+  const fallback = name + '-' + useVueId()
 
   return computed(() => idRef?.value ?? fallback)
 }

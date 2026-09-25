@@ -1,11 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { useMemo } from 'react'
-
 import { M3Switch } from '@/components/switch'
 
-import makeId from '@/utils/id'
-import { useRecord, useWatch } from '@/hooks'
+import { useId, useRecord, useWatch } from '@/hooks'
 
 const M3SwitchWithLabel = ({
   children = 'M3Switch',
@@ -16,7 +13,7 @@ const M3SwitchWithLabel = ({
   checked?: boolean
   disabled?: boolean
 }) => {
-  const id = useMemo(() => makeId('m3-switch'), [])
+  const id = useId(null, 'm3-switch')
   const state = useRecord({
     checked,
   }, ['checked'])

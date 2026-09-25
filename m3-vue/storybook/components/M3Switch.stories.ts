@@ -4,7 +4,7 @@ import { ref } from 'vue'
 
 import { M3Switch } from '@/components/switch'
 
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 const meta = {
   title: 'Components/M3Switch',

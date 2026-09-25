@@ -30,7 +30,7 @@ import { ref } from 'vue'
 
 import { M3Radio } from '@/components/radio'
 
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 export interface RadioOption {
   label: string;

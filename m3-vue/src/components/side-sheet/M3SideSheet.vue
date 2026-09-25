@@ -73,7 +73,7 @@ import { M3IconButton } from '@/components/icon-button'
 import { M3ScrollRail } from '@/components/scroll-rail'
 import { M3Surface } from '@/components/surface'
 
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 const DOCKED_Z_INDEX = 1000
 const SIDE_SHEET_TRANSITION_MS = m3MotionDurations['extra-long2']
