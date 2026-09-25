@@ -86,7 +86,7 @@ import { M3Ripple } from '@/components/ripple'
 
 import { provideM3IconAppearance } from '@/components/icon/injections'
 import { useBreakpoint } from '@/composables/breakpoint'
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 import { M3NavigationAppearance } from './injections'
 

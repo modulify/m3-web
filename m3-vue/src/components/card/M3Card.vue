@@ -68,7 +68,7 @@ import { ref } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'
 
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 const props = defineProps({
   id: {

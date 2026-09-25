@@ -78,7 +78,7 @@ import type {
 
 import { computed, useAttrs } from 'vue'
 
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 import { getModalAnchorStyle } from './shared'
 import M3SurfacePanel from './M3SurfacePanel.vue'

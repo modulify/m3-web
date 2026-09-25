@@ -44,7 +44,7 @@ import { ref } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'
 
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 import IconCheckmark from './assets/checkmark.svg'
 import IconIndeterminate from './assets/indeterminate.svg'

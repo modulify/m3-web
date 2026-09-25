@@ -67,7 +67,7 @@ import { ref } from 'vue'
 import { M3Checkbox } from '@/components/checkbox'
 import { M3Surface } from '@/components/surface'
 
-import useId from '@/composables/id'
+import { useId } from '@/composables/id'
 
 interface Option {
   label: string;

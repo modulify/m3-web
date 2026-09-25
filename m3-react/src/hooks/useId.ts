@@ -1,5 +1,7 @@
-import { useMemo } from 'react'
+import { useId as useReactId } from 'react'
 
-import makeId from '@/utils/id'
+export default (id: string | null | undefined, prefix: string): string => {
+  const fallback = prefix + '-' + useReactId()
 
-export default (id: string | null | undefined, prefix: string): string => useMemo(() => id ?? makeId(prefix), [id, prefix])
+  return id ?? fallback
+}
