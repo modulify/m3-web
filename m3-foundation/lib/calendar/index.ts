@@ -1,10 +1,13 @@
 export type CalendarDateInitiator = [] | [Date] | [number, number, number?]
+export type CalendarDateRange = [Date | null, Date | null]
 export interface CalendarDayData {
   readonly dayInMonth: number;
   readonly month: number;
   readonly year: number;
   readonly timestamp: number;
 }
+export type CalendarDayFormat = 'MMMM yyyy' | 'MMM' | 'yyyy' | 'd MMM yyyy'
+export type CalendarDayFormatter = (day: CalendarDay, format: CalendarDayFormat) => string
 export type CalendarDayOrNull = CalendarDay | null
 export type CalendarDayRange = [CalendarDayOrNull, CalendarDayOrNull]
 export type CalendarDayBounds = [CalendarDayOrNull, CalendarDayOrNull]
@@ -120,6 +123,51 @@ export class CalendarDay {
   toString(): string {
     return this._date.toString()
   }
+}
+
+export function createDayFormatter(locale: string): CalendarDayFormatter {
+  const formatters = {
+    'MMMM yyyy': new Intl.DateTimeFormat(locale, {
+      month: 'long',
+      year: 'numeric',
+    }),
+    'MMM': new Intl.DateTimeFormat(locale, {
+      month: 'short',
+    }),
+    'yyyy': new Intl.DateTimeFormat(locale, {
+      year: 'numeric',
+    }),
+    'd MMM yyyy': new Intl.DateTimeFormat(locale, {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }),
+  } satisfies Record<CalendarDayFormat, Intl.DateTimeFormat>
+
+  return (day, format) => formatters[format].format(day.date)
+}
+
+export function toCalendarDayRange(value: unknown): CalendarDayRange {
+  if (!Array.isArray(value)) {
+    return [null, null]
+  }
+
+  const [
+    start,
+    end,
+  ] = value
+
+  return [
+    start instanceof Date ? new CalendarDay(start) : null,
+    end instanceof Date ? new CalendarDay(end) : null,
+  ]
+}
+
+export function toCalendarDateRange(range: CalendarDayRange): CalendarDateRange {
+  return [
+    range[0]?.date ?? null,
+    range[1]?.date ?? null,
+  ]
 }
 
 export function formatCalendarDateInput(day: CalendarDay | Date | null): string {

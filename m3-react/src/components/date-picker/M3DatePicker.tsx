@@ -1,5 +1,6 @@
 import type {
   CalendarAvailability,
+  CalendarDateRange,
   CalendarDayRange,
   CalendarYearRange,
 } from '@modulify/m3-foundation/lib/calendar'
@@ -17,17 +18,20 @@ import type {
 import {
   CalendarDay,
   clampCalendarMonth,
+  createDayFormatter,
   getCalendarBounds,
   getCalendarMonthWeeks,
   getCalendarYears,
   getNextCalendarDayRange,
-  isNextCalendarMonthAvailable,
+  isNextCalendarMonthAvailable as isNextMonthAvailable,
   isNextCalendarYearAvailable,
-  isPreviousCalendarMonthAvailable,
+  isPreviousCalendarMonthAvailable as isPrevMonthAvailable,
   isPreviousCalendarYearAvailable,
   setCalendarMonthYear,
   shiftCalendarMonth,
   shiftCalendarYear,
+  toCalendarDateRange,
+  toCalendarDayRange,
 } from '@modulify/m3-foundation/lib/calendar'
 import {
   useEffect,
@@ -95,63 +99,39 @@ export interface M3DatePickerSingleProps extends M3DatePickerBaseProps {
 }
 
 export interface M3DatePickerRangeProps extends M3DatePickerBaseProps {
-  value?: [Date | null, Date | null] | null;
+  value?: CalendarDateRange | null;
   type: 'range';
-  onChange?: (value: [Date | null, Date | null]) => void;
+  onChange?: (value: CalendarDateRange) => void;
 }
 
 export type M3DatePickerProps = M3DatePickerSingleProps | M3DatePickerRangeProps
 
 export interface M3DatePickerExposed extends ElementReference<HTMLElement> {}
 
-const SWIPE_ACTIVATION_THRESHOLD = 8
-const SWIPE_THRESHOLD = 48
-const SLIDE_DURATION_MS = 200
-const MODE_TRANSITION_DURATION_MS = 180
-const INLINE_MODE_SWITCH_RIPPLE_DELAY_MS = 120
-const SLIDE_FALLBACK_WIDTH = 360
+const MONTH_SWIPE = {
+  activationThreshold: 8,
+  navigationThreshold: 48,
+  transitionDuration: 200,
+  fallbackWidth: 360,
+} as const
 
-const monthYearFormatter = (locale: string): Intl.DateTimeFormat => new Intl.DateTimeFormat(locale, {
-  month: 'long',
-  year: 'numeric',
-})
+const VIEW_TRANSITION = {
+  duration: 180,
+  inlineDelay: 120,
+} as const
 
-const monthFormatter = (locale: string): Intl.DateTimeFormat => new Intl.DateTimeFormat(locale, {
-  month: 'short',
-})
-
-const yearFormatter = (locale: string): Intl.DateTimeFormat => new Intl.DateTimeFormat(locale, {
-  year: 'numeric',
-})
-
-const selectedDateFormatter = (locale: string): Intl.DateTimeFormat => new Intl.DateTimeFormat(locale, {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-})
-
-const isDateRangeValue = (value: unknown): value is [Date | null, Date | null] => Array.isArray(value)
-
-const toSelectedRange = (value: unknown): CalendarDayRange => {
-  if (!isDateRangeValue(value)) {
-    return [null, null]
-  }
-
-  const [
-    start,
-    end,
-  ] = value
-
-  return [
-    start instanceof Date ? new CalendarDay(start) : null,
-    end instanceof Date ? new CalendarDay(end) : null,
-  ]
+interface MonthSwipeState {
+  pointerId: number;
+  x: number;
+  y: number;
+  active: boolean;
 }
 
-const toRangeValue = (range: CalendarDayRange): [Date | null, Date | null] => [
-  range[0]?.date ?? null,
-  range[1]?.date ?? null,
-]
+interface MonthPage {
+  month: CalendarDay;
+  active: boolean;
+  key: string;
+}
 
 const isInteractiveSwipeTarget = (target: EventTarget | null): boolean => (
   target instanceof Element
@@ -162,19 +142,6 @@ const isCalendarDaySwipeTarget = (target: EventTarget | null): boolean => (
   target instanceof Element
   && target.closest('.m3-date-picker-option') !== null
 )
-
-interface SwipeState {
-  pointerId: number;
-  x: number;
-  y: number;
-  active: boolean;
-}
-
-interface CalendarMonthPage {
-  month: CalendarDay;
-  active: boolean;
-  key: string;
-}
 
 export default defineComponent(function M3DatePicker({
   ref: _ref,
@@ -205,203 +172,171 @@ export default defineComponent(function M3DatePicker({
   ...attrs
 }: M3DatePickerProps, { expose }: ComponentSetupContext<M3DatePickerExposed>) {
   const root = useRef<HTMLElement | null>(null)
+  const calendar = useRef<HTMLDivElement | null>(null)
+  const yearPickerId = useId()
   expose(useElementReference(root))
+
   const [slots] = useMemo(() => distinct(children, {
     footer: Footer,
   }), [children])
-  const selectedDay = useMemo(() => type !== 'range' && value instanceof Date ? new CalendarDay(value) : null, [type, value])
-  const selectedRange = useMemo(() => type === 'range' ? toSelectedRange(value) : [null, null] as CalendarDayRange, [type, value])
-  const today = useMemo(() => new CalendarDay(), [])
-  const [cursorInternal, setCursorInternal] = useState(() => selectedDay ?? today)
-  const minDay = useMemo(() => min ? new CalendarDay(min) : null, [min])
-  const maxDay = useMemo(() => max ? new CalendarDay(max) : null, [max])
-  const bounds = useMemo(
-    () => getCalendarBounds(yearRange, minDay, maxDay),
-    [yearRange?.[0], yearRange?.[1], minDay?.timestamp, maxDay?.timestamp]
-  )
-  const cursorControlled = cursorProp !== undefined
-  const cursorSource = useMemo(
-    () => cursorProp instanceof Date ? new CalendarDay(cursorProp) : cursorInternal,
-    [cursorProp, cursorInternal.timestamp]
-  )
-  const cursor = useMemo(
-    () => clampCalendarMonth(cursorSource, bounds),
-    [cursorSource.timestamp, bounds[0]?.timestamp, bounds[1]?.timestamp]
-  )
-  const years = useMemo(
-    () => getCalendarYears(bounds),
-    [bounds[0]?.timestamp, bounds[1]?.timestamp]
-  )
-  const previousMonthAvailable = isPreviousCalendarMonthAvailable(cursor, bounds)
-  const nextMonthAvailable = isNextCalendarMonthAvailable(cursor, bounds)
-  const previousYearAvailable = isPreviousCalendarYearAvailable(cursor, bounds)
-  const nextYearAvailable = isNextCalendarYearAvailable(cursor, bounds)
-  const monthPages: CalendarMonthPage[] = useMemo(() => [
-    {
-      month: previousMonthAvailable
-        ? shiftCalendarMonth(cursor, -1, bounds)
-        : cursor,
-      active: false,
-      key: 'previous',
-    },
-    {
-      month: cursor,
-      active: true,
-      key: 'current',
-    },
-    {
-      month: nextMonthAvailable
-        ? shiftCalendarMonth(cursor, 1, bounds)
-        : cursor,
-      active: false,
-      key: 'next',
-    },
-  ], [
-    cursor.timestamp,
-    bounds[0]?.timestamp,
-    bounds[1]?.timestamp,
-    nextMonthAvailable,
-    previousMonthAvailable,
-  ])
-  const [calendarView, setCalendarViewState] = useState<M3DatePickerView>(DATE_PICKER_VIEW.DAYS)
-  const [modeAnimating, setModeAnimating] = useState(false)
-  const [dragOffset, setDragOffset] = useState(0)
-  const [slideAnimating, setSlideAnimating] = useState(false)
-  const yearPickerId = useId()
-  const calendar = useRef<HTMLDivElement | null>(null)
-  const swipe = useRef<SwipeState | null>(null)
-  const suppressClick = useRef(false)
-  const modeTimeout = useTimeout(() => setModeAnimating(false), MODE_TRANSITION_DURATION_MS)
-  const inlineModeSwitchTimeout = useTimeout(
-    (view: M3DatePickerView) => setCalendarView(view),
-    INLINE_MODE_SWITCH_RIPPLE_DELAY_MS
-  )
-  const slideTimeout = useTimeout((offset: number) => {
-    setSlideAnimating(false)
-    setDragOffset(0)
-    shiftMonth(offset)
-  }, SLIDE_DURATION_MS)
-  const suppressClickTimeout = useTimeout(() => suppressClick.current = false, SLIDE_DURATION_MS)
-  const settleSlideTimeout = useTimeout(() => setSlideAnimating(false), SLIDE_DURATION_MS)
-  const formatMonthYear = monthYearFormatter(locale)
-  const formatSelectedDate = selectedDateFormatter(locale)
-  const calendarLabel = formatMonthYear.format(cursor.date)
-  const monthLabel = monthFormatter(locale).format(cursor.date)
-  const yearLabel = yearFormatter(locale).format(cursor.date)
-  const monthPickerVisible = calendarView === DATE_PICKER_VIEW.MONTHS
-  const yearPickerVisible = calendarView === DATE_PICKER_VIEW.YEARS
-  const monthPickerAvailable = views.includes(DATE_PICKER_VIEW.MONTHS)
-  const yearPickerAvailable = views.includes(DATE_PICKER_VIEW.YEARS)
-  const pickerMenuVisible = monthPickerVisible || yearPickerVisible
-  const dockedPickerMenuVisible = layout === 'docked' && pickerMenuVisible
-  const visibleWeeks = getCalendarMonthWeeks(cursor, firstDayOfWeek).filter(
-    week => week.some(day => day.inSameMonth(cursor))
-  ).length
-  const selectedLabel = type === 'range'
-    ? [
-      selectedRange[0] ? formatSelectedDate.format(selectedRange[0].date) : 'Start date',
-      selectedRange[1] ? formatSelectedDate.format(selectedRange[1].date) : 'End date',
-    ].join(' - ')
-    : selectedDay
-      ? formatSelectedDate.format(selectedDay.date)
-      : 'No date selected'
 
-  const setCursor = (month: CalendarDay) => {
+  const today = useMemo(() => new CalendarDay(), [])
+  const formatDay = useMemo(() => createDayFormatter(locale), [locale])
+
+  const selectedDay = useMemo(() => type !== 'range' && value instanceof Date ? new CalendarDay(value) : null, [type, value])
+  const selectedRange = useMemo(() => type === 'range' ? toCalendarDayRange(value) : [null, null] as CalendarDayRange, [type, value])
+
+  const bounds = useMemo(
+    () => getCalendarBounds(
+      yearRange,
+      min ? new CalendarDay(min) : null,
+      max ? new CalendarDay(max) : null
+    ),
+    [yearRange?.[0], yearRange?.[1], min?.getTime(), max?.getTime()]
+  )
+
+  const [uncontrolledCursor, setUncontrolledCursor] = useState(
+    () => selectedDay ?? selectedRange[0] ?? selectedRange[1] ?? today
+  )
+  const isCursorControlled = cursorProp !== undefined
+  const displayedMonth = useMemo(
+    () => clampCalendarMonth(
+      cursorProp instanceof Date ? new CalendarDay(cursorProp) : uncontrolledCursor,
+      bounds
+    ),
+    [cursorProp?.getTime(), uncontrolledCursor.timestamp, bounds[0]?.timestamp, bounds[1]?.timestamp]
+  )
+
+  const canMoveToPreviousMonthFrom = (month: CalendarDay) => isPrevMonthAvailable(month, bounds)
+  const canMoveToNextMonthFrom = (month: CalendarDay) => isNextMonthAvailable(month, bounds)
+
+  const canMoveToPreviousMonth = canMoveToPreviousMonthFrom(displayedMonth)
+  const canMoveToNextMonth = canMoveToNextMonthFrom(displayedMonth)
+  const canMoveToPreviousYear = isPreviousCalendarYearAvailable(displayedMonth, bounds)
+  const canMoveToNextYear = isNextCalendarYearAvailable(displayedMonth, bounds)
+
+  const [activeView, setActiveView] = useState<M3DatePickerView>(DATE_PICKER_VIEW.DAYS)
+  const isMonthView = activeView === DATE_PICKER_VIEW.MONTHS
+  const isYearView = activeView === DATE_PICKER_VIEW.YEARS
+  const hasMonthView = views.includes(DATE_PICKER_VIEW.MONTHS)
+  const hasYearView = views.includes(DATE_PICKER_VIEW.YEARS)
+  const isPickerView = isMonthView || isYearView
+  const isDockedPickerView = layout === 'docked' && isPickerView
+  const [viewTransitioning, setViewTransitioning] = useState(false)
+  const viewTransitionEnd = useTimeout(
+    () => setViewTransitioning(false),
+    VIEW_TRANSITION.duration
+  )
+  const inlineViewSwitchTimeout = useTimeout(
+    (view: M3DatePickerView) => switchView(view),
+    VIEW_TRANSITION.inlineDelay
+  )
+
+  const monthSwipe = useRef<MonthSwipeState | null>(null)
+  const [monthDragOffset, setMonthDragOffset] = useState(0)
+  const [monthSliding, setMonthSliding] = useState(false)
+  const monthSlideEnd = useTimeout((offset: number) => {
+    setMonthSliding(false)
+    setMonthDragOffset(0)
+    moveCursorByMonth(offset)
+  }, MONTH_SWIPE.transitionDuration)
+  const monthSlideReset = useTimeout(
+    () => setMonthSliding(false),
+    MONTH_SWIPE.transitionDuration
+  )
+
+  const clickSuppressed = useRef(false)
+  const clickSuppressionEnd = useTimeout(
+    () => clickSuppressed.current = false,
+    MONTH_SWIPE.transitionDuration
+  )
+
+  const getMonthPages = (): MonthPage[] => {
+    return [
+      {
+        month: canMoveToPreviousMonth
+          ? shiftCalendarMonth(displayedMonth, -1, bounds)
+          : displayedMonth,
+        active: false,
+        key: 'previous',
+      },
+      {
+        month: displayedMonth,
+        active: true,
+        key: 'current',
+      },
+      {
+        month: canMoveToNextMonth
+          ? shiftCalendarMonth(displayedMonth, 1, bounds)
+          : displayedMonth,
+        active: false,
+        key: 'next',
+      },
+    ]
+  }
+
+  const updateCursor = (month: CalendarDay) => {
     const nextMonth = clampCalendarMonth(month, bounds)
 
-    if (!cursorControlled) {
-      setCursorInternal(nextMonth)
+    if (!isCursorControlled) {
+      setUncontrolledCursor(nextMonth)
     }
 
     onCursorChange(nextMonth.date)
   }
 
-  useEffect(() => {
-    if (cursorControlled) {
+  const moveCursorByMonth = (offset: number) => {
+    updateCursor(shiftCalendarMonth(displayedMonth, offset, bounds))
+  }
+
+  const moveCursorByYear = (offset: number) => {
+    updateCursor(shiftCalendarYear(displayedMonth, offset, bounds))
+  }
+
+  const switchView = (view: M3DatePickerView) => {
+    if (view === activeView) {
       return
     }
 
-    const selected = selectedDay ?? selectedRange[0] ?? selectedRange[1]
-
-    if (selected !== null) {
-      setCursorInternal(clampCalendarMonth(selected, bounds))
-    }
-  }, [
-    cursorControlled,
-    selectedDay?.timestamp,
-    selectedRange[0]?.timestamp,
-    selectedRange[1]?.timestamp,
-    bounds[0]?.timestamp,
-    bounds[1]?.timestamp,
-  ])
-
-  useEffect(() => {
-    if (!cursorControlled) {
-      setCursorInternal(month => clampCalendarMonth(month, bounds))
-    }
-  }, [cursorControlled, bounds[0]?.timestamp, bounds[1]?.timestamp])
-
-  useEffect(() => {
-    slideTimeout.cancel()
-    setSlideAnimating(false)
-    setDragOffset(0)
-  }, [cursor.timestamp, bounds[0]?.timestamp, bounds[1]?.timestamp])
-
-  const shiftMonth = (offset: number) => {
-    setCursor(shiftCalendarMonth(cursor, offset, bounds))
+    setActiveView(view)
+    setViewTransitioning(true)
+    viewTransitionEnd.schedule()
   }
 
-  const shiftYear = (offset: number) => {
-    setCursor(shiftCalendarYear(cursor, offset, bounds))
+  const scheduleInlineViewSwitch = (view: M3DatePickerView) => {
+    inlineViewSwitchTimeout.schedule(view)
   }
 
-  const setCalendarView = (view: M3DatePickerView) => {
-    if (view === calendarView) {
+  const startMonthSlide = (offset: number) => {
+    if (monthSliding) return
+
+    const canMove = offset > 0 ? canMoveToNextMonth : canMoveToPreviousMonth
+    const width = calendar.current?.getBoundingClientRect().width || MONTH_SWIPE.fallbackWidth
+
+    if (!canMove) {
+      setMonthDragOffset(0)
       return
     }
 
-    setModeAnimating(true)
-    setCalendarViewState(view)
-    modeTimeout.schedule()
-  }
-
-  const setInlineCalendarView = (view: M3DatePickerView) => {
-    inlineModeSwitchTimeout.schedule(view)
-  }
-
-  const animateMonthShift = (offset: number) => {
-    if (slideAnimating) {
-      return
-    }
-
-    const available = offset > 0 ? nextMonthAvailable : previousMonthAvailable
-    const width = calendar.current?.getBoundingClientRect().width || SLIDE_FALLBACK_WIDTH
-
-    if (!available) {
-      setDragOffset(0)
-      return
-    }
-
-    setSlideAnimating(true)
-    setDragOffset(offset > 0 ? -width : width)
-
-    slideTimeout.schedule(offset)
+    setMonthDragOffset(offset > 0 ? -width : width)
+    setMonthSliding(true)
+    monthSlideEnd.schedule(offset)
   }
 
   const selectMonth = (month: number) => {
-    setCursor(new CalendarDay(cursor.year, month, 1))
-    setCalendarView(DATE_PICKER_VIEW.DAYS)
+    updateCursor(new CalendarDay(displayedMonth.year, month, 1))
+    switchView(DATE_PICKER_VIEW.DAYS)
   }
 
   const selectYear = (year: number) => {
-    setCursor(setCalendarMonthYear(cursor, year, bounds))
-    setCalendarView(DATE_PICKER_VIEW.DAYS)
+    updateCursor(setCalendarMonthYear(displayedMonth, year, bounds))
+    switchView(DATE_PICKER_VIEW.DAYS)
   }
 
   const selectDay = (day: CalendarDay) => {
     if (type === 'range') {
       (onChange as M3DatePickerRangeProps['onChange'] | undefined)?.(
-        toRangeValue(getNextCalendarDayRange(selectedRange, day))
+        toCalendarDateRange(getNextCalendarDayRange(selectedRange, day))
       )
 
       return
@@ -410,10 +345,10 @@ export default defineComponent(function M3DatePicker({
     (onChange as M3DatePickerSingleProps['onChange'] | undefined)?.(day.date)
   }
 
-  const suppressNextClick = () => {
-    suppressClick.current = true
+  const suppressClickAfterSwipe = () => {
+    clickSuppressed.current = true
 
-    suppressClickTimeout.schedule()
+    clickSuppressionEnd.schedule()
   }
 
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
@@ -421,16 +356,16 @@ export default defineComponent(function M3DatePicker({
 
     if (
       disabled
-      || monthPickerVisible
-      || yearPickerVisible
-      || slideAnimating
+      || isMonthView
+      || isYearView
+      || monthSliding
       || event.button !== 0
       || (interactiveTarget && !isCalendarDaySwipeTarget(event.target))
     ) {
       return
     }
 
-    swipe.current = {
+    monthSwipe.current = {
       pointerId: event.pointerId,
       x: event.clientX,
       y: event.clientY,
@@ -443,88 +378,105 @@ export default defineComponent(function M3DatePicker({
   }
 
   const onPointerUp = (event: PointerEvent<HTMLDivElement>) => {
-    const activeSwipe = swipe.current
+    const activeSwipe = monthSwipe.current
+    if (activeSwipe === null || activeSwipe.pointerId !== event.pointerId) return
 
-    if (activeSwipe === null || activeSwipe.pointerId !== event.pointerId) {
-      return
-    }
-
-    swipe.current = null
+    monthSwipe.current = null
 
     const deltaX = event.clientX - activeSwipe.x
     const deltaY = event.clientY - activeSwipe.y
 
     if (!activeSwipe.active) {
-      swipe.current = null
+      monthSwipe.current = null
       return
     }
 
-    if (Math.abs(deltaX) >= SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
+    if (Math.abs(deltaX) >= MONTH_SWIPE.navigationThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
       const offset = deltaX < 0 ? 1 : -1
-      const available = offset > 0 ? nextMonthAvailable : previousMonthAvailable
+      const canMove = offset > 0 ? canMoveToNextMonth : canMoveToPreviousMonth
 
-      if (available) {
-        animateMonthShift(offset)
+      if (canMove) {
+        startMonthSlide(offset)
       } else {
-        setDragOffset(0)
+        setMonthDragOffset(0)
       }
 
       return
     }
 
-    setSlideAnimating(true)
-    setDragOffset(0)
-    settleSlideTimeout.schedule()
+    setMonthSliding(true)
+    setMonthDragOffset(0)
+    monthSlideReset.schedule()
   }
 
   const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    const activeSwipe = swipe.current
-
-    if (activeSwipe === null || activeSwipe.pointerId !== event.pointerId) {
-      return
-    }
+    const activeSwipe = monthSwipe.current
+    if (activeSwipe === null || activeSwipe.pointerId !== event.pointerId) return
 
     const deltaX = event.clientX - activeSwipe.x
     const deltaY = event.clientY - activeSwipe.y
 
-    if (Math.abs(deltaX) <= Math.abs(deltaY)) {
-      return
-    }
+    if (Math.abs(deltaX) <= Math.abs(deltaY)) return
 
     if (!activeSwipe.active) {
-      if (Math.abs(deltaX) < SWIPE_ACTIVATION_THRESHOLD) {
+      if (Math.abs(deltaX) < MONTH_SWIPE.activationThreshold) {
         return
       }
 
       activeSwipe.active = true
-      suppressNextClick()
+      suppressClickAfterSwipe()
       event.currentTarget.setPointerCapture?.(event.pointerId)
     }
 
-    const canDrag = deltaX < 0 ? nextMonthAvailable : previousMonthAvailable
-    const width = calendar.current?.getBoundingClientRect().width || SLIDE_FALLBACK_WIDTH
+    const canMove = deltaX < 0 ? canMoveToNextMonth : canMoveToPreviousMonth
+    const width = calendar.current?.getBoundingClientRect().width || MONTH_SWIPE.fallbackWidth
 
-    setDragOffset(canDrag ? Math.max(-width, Math.min(width, deltaX)) : 0)
+    setMonthDragOffset(canMove ? Math.max(-width, Math.min(width, deltaX)) : 0)
   }
 
   const onPointerCancel = () => {
-    swipe.current = null
-    setSlideAnimating(true)
-    setDragOffset(0)
-    settleSlideTimeout.schedule()
+    monthSwipe.current = null
+    setMonthDragOffset(0)
+    setMonthSliding(true)
+    monthSlideReset.schedule()
   }
 
   const onClickCapture = (event: MouseEvent<HTMLDivElement>) => {
-    if (!suppressClick.current) {
-      return
+    if (clickSuppressed.current) {
+      clickSuppressed.current = false
+      clickSuppressionEnd.cancel()
+      event.preventDefault()
+      event.stopPropagation()
     }
-
-    suppressClick.current = false
-    suppressClickTimeout.cancel()
-
-    event.preventDefault()
-    event.stopPropagation()
   }
+
+  useEffect(() => {
+    if (isCursorControlled) return
+
+    const selected = selectedDay ?? selectedRange[0] ?? selectedRange[1]
+    if (selected !== null) {
+      setUncontrolledCursor(clampCalendarMonth(selected, bounds))
+    }
+  }, [
+    isCursorControlled,
+    selectedDay?.timestamp,
+    selectedRange[0]?.timestamp,
+    selectedRange[1]?.timestamp,
+    bounds[0]?.timestamp,
+    bounds[1]?.timestamp,
+  ])
+
+  useEffect(() => {
+    if (!isCursorControlled) {
+      setUncontrolledCursor(month => clampCalendarMonth(month, bounds))
+    }
+  }, [isCursorControlled, bounds[0]?.timestamp, bounds[1]?.timestamp])
+
+  useEffect(() => {
+    monthSlideEnd.cancel()
+    setMonthSliding(false)
+    setMonthDragOffset(0)
+  }, [displayedMonth.timestamp, bounds[0]?.timestamp, bounds[1]?.timestamp])
 
   return (
     <section
@@ -532,7 +484,9 @@ export default defineComponent(function M3DatePicker({
       className={toClassName(['m3-date-picker', className, {
         'm3-date-picker_docked': layout === 'docked',
         'm3-date-picker_navigation-inline': navigation === 'inline',
-        [`m3-date-picker_weeks-${visibleWeeks}`]: layout === 'docked',
+        [`m3-date-picker_weeks-${getCalendarMonthWeeks(displayedMonth, firstDayOfWeek).filter(
+          week => week.some(day => day.inSameMonth(displayedMonth))
+        ).length}`]: layout === 'docked',
       }])}
       role="group"
       aria-label={label}
@@ -542,7 +496,16 @@ export default defineComponent(function M3DatePicker({
         <header className="m3-date-picker__header">
           <div>
             <div className="m3-date-picker__label">{label}</div>
-            <div className="m3-date-picker__headline">{selectedLabel}</div>
+            <div className="m3-date-picker__headline">
+              {type === 'range'
+                ? [
+                  selectedRange[0] ? formatDay(selectedRange[0], 'd MMM yyyy') : 'Start date',
+                  selectedRange[1] ? formatDay(selectedRange[1], 'd MMM yyyy') : 'End date',
+                ].join(' - ')
+                : selectedDay
+                  ? formatDay(selectedDay, 'd MMM yyyy')
+                  : 'No date selected'}
+            </div>
           </div>
           {headerAction ? (
             <div className="m3-date-picker__header-action">
@@ -556,38 +519,38 @@ export default defineComponent(function M3DatePicker({
         <div
           className={toClassName({
             'm3-date-picker__month-navigation': true,
-            'm3-date-picker__month-navigation_picker': monthPickerVisible || yearPickerVisible,
+            'm3-date-picker__month-navigation_picker': isPickerView,
           })}
         >
           <div className="m3-date-picker__navigation-group">
             <M3IconButton
               className={toClassName({
-                'm3-date-picker__navigation-control_hidden': monthPickerVisible || yearPickerVisible,
+                'm3-date-picker__navigation-control_hidden': isPickerView,
               })}
-              aria-label={monthPickerVisible || yearPickerVisible ? undefined : 'Previous month'}
-              aria-hidden={monthPickerVisible || yearPickerVisible}
-              tabIndex={monthPickerVisible || yearPickerVisible ? -1 : undefined}
-              disabled={disabled || monthPickerVisible || yearPickerVisible || !previousMonthAvailable}
-              onClick={() => animateMonthShift(-1)}
+              aria-label={isPickerView ? undefined : 'Previous month'}
+              aria-hidden={isPickerView}
+              tabIndex={isPickerView ? -1 : undefined}
+              disabled={disabled || isPickerView || !canMoveToPreviousMonth}
+              onClick={() => startMonthSlide(-1)}
             >
               <M3Icon name="chevron_left" />
             </M3IconButton>
 
-            {monthPickerAvailable ? (
+            {hasMonthView ? (
               <M3Button
                 appearance="text"
                 className="m3-date-picker__month-button"
-                aria-label={monthPickerVisible ? 'Switch to day selection' : 'Switch to month selection'}
-                aria-expanded={monthPickerVisible}
-                disabled={disabled || yearPickerVisible}
-                onClick={() => setCalendarView(monthPickerVisible ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.MONTHS)}
+                aria-label={isMonthView ? 'Switch to day selection' : 'Switch to month selection'}
+                aria-expanded={isMonthView}
+                disabled={disabled || isYearView}
+                onClick={() => switchView(isMonthView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.MONTHS)}
               >
-                {monthLabel}
+                {formatDay(displayedMonth, 'MMM')}
                 <M3Icon
                   name="arrow_drop_down"
                   className={toClassName({
                     'm3-date-picker__year-button-icon': true,
-                    'm3-date-picker__year-button-icon_expanded': monthPickerVisible,
+                    'm3-date-picker__year-button-icon_expanded': isMonthView,
                   })}
                 />
               </M3Button>
@@ -595,23 +558,23 @@ export default defineComponent(function M3DatePicker({
               <div
                 className={toClassName({
                   'm3-date-picker__navigation-label': true,
-                  'm3-date-picker__navigation-label_disabled': yearPickerVisible,
+                  'm3-date-picker__navigation-label_disabled': isYearView,
                 })}
                 aria-live="polite"
               >
-                {monthLabel}
+                {formatDay(displayedMonth, 'MMM')}
               </div>
             )}
 
             <M3IconButton
               className={toClassName({
-                'm3-date-picker__navigation-control_hidden': monthPickerVisible || yearPickerVisible,
+                'm3-date-picker__navigation-control_hidden': isPickerView,
               })}
-              aria-label={monthPickerVisible || yearPickerVisible ? undefined : 'Next month'}
-              aria-hidden={monthPickerVisible || yearPickerVisible}
-              tabIndex={monthPickerVisible || yearPickerVisible ? -1 : undefined}
-              disabled={disabled || monthPickerVisible || yearPickerVisible || !nextMonthAvailable}
-              onClick={() => animateMonthShift(1)}
+              aria-label={isPickerView ? undefined : 'Next month'}
+              aria-hidden={isPickerView}
+              tabIndex={isPickerView ? -1 : undefined}
+              disabled={disabled || isPickerView || !canMoveToNextMonth}
+              onClick={() => startMonthSlide(1)}
             >
               <M3Icon name="chevron_right" />
             </M3IconButton>
@@ -620,51 +583,51 @@ export default defineComponent(function M3DatePicker({
           <div className="m3-date-picker__navigation-group">
             <M3IconButton
               className={toClassName({
-                'm3-date-picker__navigation-control_hidden': dockedPickerMenuVisible,
+                'm3-date-picker__navigation-control_hidden': isDockedPickerView,
               })}
-              aria-label={dockedPickerMenuVisible ? undefined : 'Previous year'}
-              aria-hidden={dockedPickerMenuVisible || undefined}
-              tabIndex={dockedPickerMenuVisible ? -1 : undefined}
-              disabled={disabled || dockedPickerMenuVisible || !previousYearAvailable}
-              onClick={() => shiftYear(-1)}
+              aria-label={isDockedPickerView ? undefined : 'Previous year'}
+              aria-hidden={isDockedPickerView || undefined}
+              tabIndex={isDockedPickerView ? -1 : undefined}
+              disabled={disabled || isDockedPickerView || !canMoveToPreviousYear}
+              onClick={() => moveCursorByYear(-1)}
             >
               <M3Icon name="chevron_left" />
             </M3IconButton>
 
-            {yearPickerAvailable ? (
+            {hasYearView ? (
               <M3Button
                 appearance="text"
                 className="m3-date-picker__year-button"
-                aria-label={yearPickerVisible ? 'Switch to day selection' : 'Switch to year selection'}
-                aria-expanded={yearPickerVisible}
+                aria-label={isYearView ? 'Switch to day selection' : 'Switch to year selection'}
+                aria-expanded={isYearView}
                 aria-controls={yearPickerId}
-                disabled={disabled || (layout === 'docked' && monthPickerVisible)}
-                onClick={() => setCalendarView(yearPickerVisible ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)}
+                disabled={disabled || (layout === 'docked' && isMonthView)}
+                onClick={() => switchView(isYearView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)}
               >
-                {yearLabel}
+                {formatDay(displayedMonth, 'yyyy')}
                 <M3Icon
                   name="arrow_drop_down"
                   className={toClassName({
                     'm3-date-picker__year-button-icon': true,
-                    'm3-date-picker__year-button-icon_expanded': yearPickerVisible,
+                    'm3-date-picker__year-button-icon_expanded': isYearView,
                   })}
                 />
               </M3Button>
             ) : (
               <div className="m3-date-picker__navigation-label" aria-live="polite">
-                {yearLabel}
+                {formatDay(displayedMonth, 'yyyy')}
               </div>
             )}
 
             <M3IconButton
               className={toClassName({
-                'm3-date-picker__navigation-control_hidden': dockedPickerMenuVisible,
+                'm3-date-picker__navigation-control_hidden': isDockedPickerView,
               })}
-              aria-label={dockedPickerMenuVisible ? undefined : 'Next year'}
-              aria-hidden={dockedPickerMenuVisible || undefined}
-              tabIndex={dockedPickerMenuVisible ? -1 : undefined}
-              disabled={disabled || dockedPickerMenuVisible || !nextYearAvailable}
-              onClick={() => shiftYear(1)}
+              aria-label={isDockedPickerView ? undefined : 'Next year'}
+              aria-hidden={isDockedPickerView || undefined}
+              tabIndex={isDockedPickerView ? -1 : undefined}
+              disabled={disabled || isDockedPickerView || !canMoveToNextYear}
+              onClick={() => moveCursorByYear(1)}
             >
               <M3Icon name="chevron_right" />
             </M3IconButton>
@@ -672,19 +635,19 @@ export default defineComponent(function M3DatePicker({
         </div>
       )}
 
-      {monthPickerVisible ? (
+      {isMonthView ? (
         <M3MonthPicker
-          value={cursor}
+          value={displayedMonth}
           current={today}
           bounds={bounds}
           disabled={disabled}
           locale={locale}
           label="Select month"
           appearance={layout === 'docked' ? 'list' : 'grid'}
-          animating={modeAnimating}
+          animating={viewTransitioning}
           onSelect={selectMonth}
         />
-      ) : yearPickerVisible ? (
+      ) : isYearView ? (
         <>
           {navigation === 'inline' && (
             <div className="m3-date-picker__inline-navigation m3-date-picker__inline-navigation_year-picker">
@@ -692,11 +655,11 @@ export default defineComponent(function M3DatePicker({
                 appearance="text"
                 className="m3-date-picker__inline-month-button"
                 aria-label="Switch to day selection"
-                aria-expanded={yearPickerVisible}
+                aria-expanded={isYearView}
                 aria-controls={yearPickerId}
-                onClick={() => setInlineCalendarView(DATE_PICKER_VIEW.DAYS)}
+                onClick={() => scheduleInlineViewSwitch(DATE_PICKER_VIEW.DAYS)}
               >
-                {calendarLabel}
+                {formatDay(displayedMonth, 'MMMM yyyy')}
                 <M3Icon
                   name="arrow_drop_down"
                   className="m3-date-picker__year-button-icon m3-date-picker__year-button-icon_expanded"
@@ -707,14 +670,14 @@ export default defineComponent(function M3DatePicker({
 
           <M3YearPicker
             id={yearPickerId}
-            years={years}
-            value={cursor.year}
+            years={getCalendarYears(bounds)}
+            value={displayedMonth.year}
             current={today.year}
             bounds={bounds}
             availability={availability}
             disabled={disabled}
             appearance={navigation === 'inline' ? 'grid' : 'list'}
-            animating={modeAnimating}
+            animating={viewTransitioning}
             onSelect={selectYear}
           />
         </>
@@ -724,11 +687,9 @@ export default defineComponent(function M3DatePicker({
           className={toClassName({
             'm3-date-picker__calendar': true,
             'm3-date-picker__calendar_swipeable': true,
-            'm3-date-picker__mode-enter': modeAnimating && navigation !== 'inline',
+            'm3-date-picker__mode-enter': viewTransitioning && navigation !== 'inline',
           })}
-          style={{
-            '--m3-date-picker-slide-offset': `${dragOffset}px`,
-          } as CSSProperties}
+          style={{ '--m3-date-picker-slide-offset': `${monthDragOffset}px` } as CSSProperties}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -739,10 +700,10 @@ export default defineComponent(function M3DatePicker({
             <div
               className={toClassName({
                 'm3-date-picker__month-track': true,
-                'm3-date-picker__month-track_animating': slideAnimating,
+                'm3-date-picker__month-track_animating': monthSliding,
               })}
             >
-              {monthPages.map(page => (
+              {getMonthPages().map(page => (
                 <div
                   key={`${page.key}-${page.month.timestamp}`}
                   className="m3-date-picker__month-page"
@@ -750,42 +711,42 @@ export default defineComponent(function M3DatePicker({
                 >
                   {navigation === 'inline' && (
                     <div className="m3-date-picker__inline-navigation">
-                      {yearPickerAvailable ? (
+                      {hasYearView ? (
                         <M3Button
                           appearance="text"
                           className="m3-date-picker__inline-month-button"
                           aria-label={page.active ? 'Switch to year selection' : undefined}
-                          aria-expanded={page.active ? yearPickerVisible : undefined}
+                          aria-expanded={page.active ? isYearView : undefined}
                           aria-controls={page.active ? yearPickerId : undefined}
                           tabIndex={page.active ? undefined : -1}
                           onClick={page.active
-                            ? () => setInlineCalendarView(yearPickerVisible ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)
+                            ? () => scheduleInlineViewSwitch(isYearView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)
                             : undefined}
                         >
-                          {formatMonthYear.format(page.month.date)}
+                          {formatDay(page.month, 'MMMM yyyy')}
                           <M3Icon name="arrow_drop_down" />
                         </M3Button>
                       ) : (
                         <div className="m3-date-picker__inline-month-label">
-                          {formatMonthYear.format(page.month.date)}
+                          {formatDay(page.month, 'MMMM yyyy')}
                         </div>
                       )}
 
                       <div className="m3-date-picker__inline-arrows">
                         <M3IconButton
                           aria-label={page.active ? 'Previous month' : undefined}
-                          disabled={disabled || !isPreviousCalendarMonthAvailable(page.month, bounds)}
+                          disabled={disabled || !canMoveToPreviousMonthFrom(page.month)}
                           tabIndex={page.active ? undefined : -1}
-                          onClick={page.active ? () => animateMonthShift(-1) : undefined}
+                          onClick={page.active ? () => startMonthSlide(-1) : undefined}
                         >
                           <M3Icon name="chevron_left" />
                         </M3IconButton>
 
                         <M3IconButton
                           aria-label={page.active ? 'Next month' : undefined}
-                          disabled={disabled || !isNextCalendarMonthAvailable(page.month, bounds)}
+                          disabled={disabled || !canMoveToNextMonthFrom(page.month)}
                           tabIndex={page.active ? undefined : -1}
-                          onClick={page.active ? () => animateMonthShift(1) : undefined}
+                          onClick={page.active ? () => startMonthSlide(1) : undefined}
                         >
                           <M3Icon name="chevron_right" />
                         </M3IconButton>
@@ -795,7 +756,7 @@ export default defineComponent(function M3DatePicker({
 
                   <M3DayPicker
                     className={toClassName({
-                      'm3-date-picker__mode-enter': modeAnimating && navigation === 'inline',
+                      'm3-date-picker__mode-enter': viewTransitioning && navigation === 'inline',
                     })}
                     type={type}
                     month={page.month}
@@ -808,7 +769,7 @@ export default defineComponent(function M3DatePicker({
                     locale={locale}
                     firstDayOfWeek={firstDayOfWeek}
                     fixed={layout !== 'docked'}
-                    label={calendarLabel}
+                    label={formatDay(displayedMonth, 'MMMM yyyy')}
                     onSelect={selectDay}
                   />
                 </div>
@@ -818,7 +779,7 @@ export default defineComponent(function M3DatePicker({
         </div>
       )}
 
-      {layout === 'docked' && !pickerMenuVisible && slots.footer ? (
+      {layout === 'docked' && !isPickerView && slots.footer ? (
         <footer className="m3-date-picker__footer">
           {slots.footer}
         </footer>
