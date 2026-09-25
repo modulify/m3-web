@@ -1,3 +1,5 @@
+export { useAnimationFrame } from './animation'
 export { useBreakpoint } from './breakpoint'
 export { useId } from './id'
 export { useMutationObserver, useResizeObserver } from './observer'
+export { useTimeout } from './timing'

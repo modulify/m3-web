@@ -243,6 +243,7 @@ import {
   type M3MotionEasing,
 } from '@modulify/m3-foundation/lib/motion'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
+import { useAnimationFrame as useRootReactAnimationFrame } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
 import { useClickable as useRootReactClickable } from '@modulify/m3-react'
 import { useElementReference as useRootReactElementReference } from '@modulify/m3-react'
@@ -250,6 +251,7 @@ import { useFocusable as useRootReactFocusable } from '@modulify/m3-react'
 import { useInteractable as useRootReactInteractable } from '@modulify/m3-react'
 import { useMutationObserver as useRootReactMutationObserver } from '@modulify/m3-react'
 import { useResizeObserver as useRootReactResizeObserver } from '@modulify/m3-react'
+import { useTimeout as useRootReactTimeout } from '@modulify/m3-react'
 import {
   M3Button,
   type M3ButtonExposed,
@@ -261,6 +263,7 @@ import {
   type M3SideSheetExposed,
 } from '@modulify/m3-react/components'
 import {
+  useAnimationFrame as useReactAnimationFrame,
   useBreakpoint as useReactBreakpoint,
   useClickable as useReactClickable,
   useElementReference as useReactElementReference,
@@ -269,17 +272,22 @@ import {
   useInteractable as useReactInteractable,
   useMutationObserver as useReactMutationObserver,
   useResizeObserver as useReactResizeObserver,
+  useTimeout as useReactTimeout,
 } from '@modulify/m3-react/hooks'
 import { M3Select as RootM3Select } from '@modulify/m3-vue'
+import { useAnimationFrame as useRootVueAnimationFrame } from '@modulify/m3-vue'
 import { useBreakpoint as useRootVueBreakpoint } from '@modulify/m3-vue'
 import { useMutationObserver as useRootVueMutationObserver } from '@modulify/m3-vue'
 import { useResizeObserver as useRootVueResizeObserver } from '@modulify/m3-vue'
+import { useTimeout as useRootVueTimeout } from '@modulify/m3-vue'
 import { M3Select, type M3SelectOption } from '@modulify/m3-vue/components'
 import {
+  useAnimationFrame as useVueAnimationFrame,
   useBreakpoint as useVueBreakpoint,
   useId as useVueId,
   useMutationObserver as useVueMutationObserver,
   useResizeObserver as useVueResizeObserver,
+  useTimeout as useVueTimeout,
 } from '@modulify/m3-vue/composables'
 
 const buttonRef = createRef<M3ButtonExposed>()
@@ -321,6 +329,7 @@ void [
   reactMutationObserverTargets,
   reactResizeObserverTargets,
   sideSheetRef,
+  useReactAnimationFrame,
   useReactBreakpoint,
   useReactClickable,
   useReactElementReference,
@@ -329,6 +338,8 @@ void [
   useReactInteractable,
   useReactMutationObserver,
   useReactResizeObserver,
+  useReactTimeout,
+  useRootReactAnimationFrame,
   useRootReactBreakpoint,
   useRootReactClickable,
   useRootReactElementReference,
@@ -336,13 +347,18 @@ void [
   useRootReactInteractable,
   useRootReactMutationObserver,
   useRootReactResizeObserver,
+  useRootReactTimeout,
+  useRootVueAnimationFrame,
   useRootVueBreakpoint,
   useRootVueMutationObserver,
   useRootVueResizeObserver,
+  useRootVueTimeout,
+  useVueAnimationFrame,
   useVueBreakpoint,
   useVueId,
   useVueMutationObserver,
   useVueResizeObserver,
+  useVueTimeout,
   timing,
   vueMutationObserverTargets,
   vueResizeObserverTargets,
@@ -355,6 +371,7 @@ import { fileURLToPath } from 'node:url'
 import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
 import { durations, easing, timing } from '@modulify/m3-foundation/lib/motion'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
+import { useAnimationFrame as useRootReactAnimationFrame } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
 import { useClickable as useRootReactClickable } from '@modulify/m3-react'
 import { useElementReference as useRootReactElementReference } from '@modulify/m3-react'
@@ -362,8 +379,10 @@ import { useFocusable as useRootReactFocusable } from '@modulify/m3-react'
 import { useInteractable as useRootReactInteractable } from '@modulify/m3-react'
 import { useMutationObserver as useRootReactMutationObserver } from '@modulify/m3-react'
 import { useResizeObserver as useRootReactResizeObserver } from '@modulify/m3-react'
+import { useTimeout as useRootReactTimeout } from '@modulify/m3-react'
 import { M3Button } from '@modulify/m3-react/components'
 import {
+  useAnimationFrame as useReactAnimationFrame,
   useBreakpoint as useReactBreakpoint,
   useClickable as useReactClickable,
   useElementReference as useReactElementReference,
@@ -372,17 +391,22 @@ import {
   useInteractable as useReactInteractable,
   useMutationObserver as useReactMutationObserver,
   useResizeObserver as useReactResizeObserver,
+  useTimeout as useReactTimeout,
 } from '@modulify/m3-react/hooks'
 import { M3Select as RootM3Select } from '@modulify/m3-vue'
+import { useAnimationFrame as useRootVueAnimationFrame } from '@modulify/m3-vue'
 import { useBreakpoint as useRootVueBreakpoint } from '@modulify/m3-vue'
 import { useMutationObserver as useRootVueMutationObserver } from '@modulify/m3-vue'
 import { useResizeObserver as useRootVueResizeObserver } from '@modulify/m3-vue'
+import { useTimeout as useRootVueTimeout } from '@modulify/m3-vue'
 import { M3Select } from '@modulify/m3-vue/components'
 import {
+  useAnimationFrame as useVueAnimationFrame,
   useBreakpoint as useVueBreakpoint,
   useId as useVueId,
   useMutationObserver as useVueMutationObserver,
   useResizeObserver as useVueResizeObserver,
+  useTimeout as useVueTimeout,
 } from '@modulify/m3-vue/composables'
 
 await access(fileURLToPath(import.meta.resolve('@modulify/m3-foundation/styles.css')))
@@ -407,6 +431,7 @@ if (
   || !M3Select
   || !RootM3Button
   || !RootM3Select
+  || !useReactAnimationFrame
   || !useReactBreakpoint
   || !useReactClickable
   || !useReactElementReference
@@ -415,6 +440,8 @@ if (
   || !useReactInteractable
   || !useReactMutationObserver
   || !useReactResizeObserver
+  || !useReactTimeout
+  || !useRootReactAnimationFrame
   || !useRootReactBreakpoint
   || !useRootReactClickable
   || !useRootReactElementReference
@@ -422,13 +449,18 @@ if (
   || !useRootReactInteractable
   || !useRootReactMutationObserver
   || !useRootReactResizeObserver
+  || !useRootReactTimeout
+  || !useRootVueAnimationFrame
   || !useRootVueBreakpoint
   || !useRootVueMutationObserver
   || !useRootVueResizeObserver
+  || !useRootVueTimeout
+  || !useVueAnimationFrame
   || !useVueBreakpoint
   || !useVueId
   || !useVueMutationObserver
   || !useVueResizeObserver
+  || !useVueTimeout
   || !timing
 ) {
   throw new Error('Expected ESM package exports are unavailable')
@@ -438,6 +470,7 @@ if (
 const { CalendarDay } = require('@modulify/m3-foundation/lib/calendar')
 const { durations, easing, timing } = require('@modulify/m3-foundation/lib/motion')
 const { M3Button: RootM3Button } = require('@modulify/m3-react')
+const { useAnimationFrame: useRootReactAnimationFrame } = require('@modulify/m3-react')
 const { useBreakpoint: useRootReactBreakpoint } = require('@modulify/m3-react')
 const { useClickable: useRootReactClickable } = require('@modulify/m3-react')
 const { useElementReference: useRootReactElementReference } = require('@modulify/m3-react')
@@ -445,8 +478,10 @@ const { useFocusable: useRootReactFocusable } = require('@modulify/m3-react')
 const { useInteractable: useRootReactInteractable } = require('@modulify/m3-react')
 const { useMutationObserver: useRootReactMutationObserver } = require('@modulify/m3-react')
 const { useResizeObserver: useRootReactResizeObserver } = require('@modulify/m3-react')
+const { useTimeout: useRootReactTimeout } = require('@modulify/m3-react')
 const { M3Button } = require('@modulify/m3-react/components')
 const {
+  useAnimationFrame: useReactAnimationFrame,
   useBreakpoint: useReactBreakpoint,
   useClickable: useReactClickable,
   useElementReference: useReactElementReference,
@@ -455,17 +490,22 @@ const {
   useInteractable: useReactInteractable,
   useMutationObserver: useReactMutationObserver,
   useResizeObserver: useReactResizeObserver,
+  useTimeout: useReactTimeout,
 } = require('@modulify/m3-react/hooks')
 const { M3Select: RootM3Select } = require('@modulify/m3-vue')
+const { useAnimationFrame: useRootVueAnimationFrame } = require('@modulify/m3-vue')
 const { useBreakpoint: useRootVueBreakpoint } = require('@modulify/m3-vue')
 const { useMutationObserver: useRootVueMutationObserver } = require('@modulify/m3-vue')
 const { useResizeObserver: useRootVueResizeObserver } = require('@modulify/m3-vue')
+const { useTimeout: useRootVueTimeout } = require('@modulify/m3-vue')
 const { M3Select } = require('@modulify/m3-vue/components')
 const {
+  useAnimationFrame: useVueAnimationFrame,
   useBreakpoint: useVueBreakpoint,
   useId: useVueId,
   useMutationObserver: useVueMutationObserver,
   useResizeObserver: useVueResizeObserver,
+  useTimeout: useVueTimeout,
 } = require('@modulify/m3-vue/composables')
 
 if (
@@ -476,6 +516,7 @@ if (
   || !M3Select
   || !RootM3Button
   || !RootM3Select
+  || !useReactAnimationFrame
   || !useReactBreakpoint
   || !useReactClickable
   || !useReactElementReference
@@ -484,6 +525,8 @@ if (
   || !useReactInteractable
   || !useReactMutationObserver
   || !useReactResizeObserver
+  || !useReactTimeout
+  || !useRootReactAnimationFrame
   || !useRootReactBreakpoint
   || !useRootReactClickable
   || !useRootReactElementReference
@@ -491,13 +534,18 @@ if (
   || !useRootReactInteractable
   || !useRootReactMutationObserver
   || !useRootReactResizeObserver
+  || !useRootReactTimeout
+  || !useRootVueAnimationFrame
   || !useRootVueBreakpoint
   || !useRootVueMutationObserver
   || !useRootVueResizeObserver
+  || !useRootVueTimeout
+  || !useVueAnimationFrame
   || !useVueBreakpoint
   || !useVueId
   || !useVueMutationObserver
   || !useVueResizeObserver
+  || !useVueTimeout
   || !timing
 ) {
   throw new Error('Expected CommonJS package exports are unavailable')

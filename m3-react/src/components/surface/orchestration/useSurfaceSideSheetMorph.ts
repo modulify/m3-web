@@ -7,6 +7,8 @@ import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { useEffect, useRef } from 'react'
 import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
+import { useAnimationFrame } from '@/hooks'
+
 import { useStateRef } from './useStateRef'
 
 const SIDE_SHEET_WIDTH_MIN = 280
@@ -86,6 +88,7 @@ export function useSurfaceSideSheetMorph(): UseSurfaceSideSheetMorphResult {
 
   const dockedHostRef = useRef<HTMLDivElement | null>(null)
   const layoutRootRef = useRef<HTMLDivElement | null>(null)
+  const syncGeometryFrame = useAnimationFrame()
 
   const measureDockedGeometry = () => {
     const host = dockedHostRef.current
@@ -129,7 +132,7 @@ export function useSurfaceSideSheetMorph(): UseSurfaceSideSheetMorphResult {
   }
 
   const syncDockedGeometry = () => {
-    requestAnimationFrame(() => {
+    syncGeometryFrame.request(() => {
       const docked = measureDockedPanelGeometry() ?? measureDockedGeometry()
       if (!docked || sideSheetModalRef.current) {
         return

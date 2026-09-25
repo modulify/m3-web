@@ -17,6 +17,8 @@ import type { PropType, Ref } from 'vue'
 
 import { onBeforeUnmount, ref, watch } from 'vue'
 
+import { useAnimationFrame } from '@/composables/animation'
+
 const props = defineProps({
   owner: {
     type: null as unknown as PropType<Ref<HTMLElement | null>>,
@@ -34,6 +36,7 @@ const x = ref(0)
 const y = ref(0)
 
 const active = ref(false)
+const activationFrame = useAnimationFrame()
 
 let lastKey: string | null = null
 
@@ -57,7 +60,7 @@ const activate = (event: KeyboardEvent | MouseEvent) => {
   x.value = 'clientX' in event && !center ? event.clientX - rect.x : el.clientWidth / 2
   y.value = 'clientY' in event && !center ? event.clientY - rect.y : el.clientHeight / 2
 
-  requestAnimationFrame(() => {
+  activationFrame.request(() => {
     active.value = true
   })
 }

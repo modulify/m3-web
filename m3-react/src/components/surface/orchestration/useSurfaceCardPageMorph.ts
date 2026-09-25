@@ -11,7 +11,7 @@ import {
 import { useEffect, useRef } from 'react'
 import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
-import { useResizeObserver } from '@/hooks'
+import { useAnimationFrame, useResizeObserver } from '@/hooks'
 
 import { useStateRef } from './useStateRef'
 
@@ -40,7 +40,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
 
   const canvasRef = useRef<HTMLDivElement | null>(null)
   const originSlotRef = useRef<HTMLDivElement | null>(null)
-  const syncFrameRef = useRef<number | null>(null)
+  const syncFrame = useAnimationFrame()
 
   const measureOrigin = () => measureRelativeRect(canvasRef.current, originSlotRef.current)
 
@@ -69,12 +69,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
   }
 
   const scheduleSyncMotion = () => {
-    if (syncFrameRef.current !== null) {
-      cancelAnimationFrame(syncFrameRef.current)
-    }
-
-    syncFrameRef.current = requestAnimationFrame(() => {
-      syncFrameRef.current = null
+    syncFrame.request(() => {
       syncMotionToLayout()
     })
   }
@@ -164,15 +159,6 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
 
   useEffect(() => {
     void initMotion()
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      if (syncFrameRef.current !== null) {
-        cancelAnimationFrame(syncFrameRef.current)
-        syncFrameRef.current = null
-      }
-    }
   }, [])
 
   return {

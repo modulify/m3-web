@@ -6,11 +6,12 @@ import {
   measureContainerRect,
   measureRelativeRect,
 } from '@modulify/m3-foundation/lib/surface/orchestration'
-import { nextTick, onBeforeUnmount, onMounted } from 'vue'
+import { nextTick, onMounted } from 'vue'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { ref } from 'vue'
 import { toMotionStyle, wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
+import { useAnimationFrame } from '@/composables/animation'
 import { useResizeObserver } from '@/composables/observer'
 
 export function useSurfaceCardPageMorph(transitionMs: number) {
@@ -20,7 +21,7 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
   const originHeight = ref(220)
   const canvas = ref<HTMLElement | null>(null)
   const originSlot = ref<HTMLElement | null>(null)
-  const syncFrame = ref<number | null>(null)
+  const syncFrame = useAnimationFrame()
   const motion = ref<SurfaceMotionRect>({
     top: 16,
     left: 16,
@@ -63,12 +64,7 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
   }
 
   function scheduleSyncMotion() {
-    if (syncFrame.value !== null) {
-      cancelAnimationFrame(syncFrame.value)
-    }
-
-    syncFrame.value = requestAnimationFrame(() => {
-      syncFrame.value = null
+    syncFrame.request(() => {
       syncMotionToLayout()
     })
   }
@@ -163,13 +159,6 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
   onMounted(() => {
     initMotion()
     resizeObserver.observe()
-  })
-
-  onBeforeUnmount(() => {
-    if (syncFrame.value !== null) {
-      cancelAnimationFrame(syncFrame.value)
-      syncFrame.value = null
-    }
   })
 
   return {

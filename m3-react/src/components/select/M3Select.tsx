@@ -25,7 +25,12 @@ import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { requireComponentSetupContext } from '@/utils/component'
 import { toClassName } from '@/utils/styling'
-import { useElementReference, useId, useResizeObserver } from '@/hooks'
+import {
+  useAnimationFrame,
+  useElementReference,
+  useId,
+  useResizeObserver,
+} from '@/hooks'
 
 export type M3SelectOption<Value = unknown> = {
   value: Value;
@@ -127,7 +132,7 @@ export default defineComponent(function M3Select<Value = unknown>({
 
   const root = useRef<HTMLDivElement | null>(null)
   expose(useElementReference(root))
-  const resizeUpdateId = useRef<number | null>(null)
+  const resizeUpdate = useAnimationFrame()
 
   const [slots] = useMemo(() => distinct(children, {
     leading: Leading,
@@ -155,25 +160,13 @@ export default defineComponent(function M3Select<Value = unknown>({
       return
     }
 
-    if (resizeUpdateId.current !== null) {
-      cancelAnimationFrame(resizeUpdateId.current)
-    }
-
-    resizeUpdateId.current = requestAnimationFrame(() => {
-      resizeUpdateId.current = null
+    resizeUpdate.request(() => {
       setRootWidth(entry.contentRect.width)
     })
   })
 
   useEffect(() => {
     setRootWidth(root.current?.offsetWidth ?? 0)
-
-    return () => {
-      if (resizeUpdateId.current !== null) {
-        cancelAnimationFrame(resizeUpdateId.current)
-        resizeUpdateId.current = null
-      }
-    }
   }, [])
 
   return (

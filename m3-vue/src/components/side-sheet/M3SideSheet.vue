@@ -58,7 +58,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { isId, isUndefined } from '@modulify/m3-foundation/lib/predicates'
-import { nextTick, onBeforeUnmount } from 'vue'
+import { nextTick } from 'vue'
 import { Or } from '@modulify/m3-foundation/lib/predicates'
 import {
   ref,
@@ -73,7 +73,9 @@ import { M3IconButton } from '@/components/icon-button'
 import { M3ScrollRail } from '@/components/scroll-rail'
 import { M3Surface } from '@/components/surface'
 
+import { useAnimationFrame } from '@/composables/animation'
 import { useId } from '@/composables/id'
+import { useTimeout } from '@/composables/timing'
 
 const DOCKED_Z_INDEX = 1000
 const SIDE_SHEET_TRANSITION_MS = durations['extra-long2']
@@ -105,7 +107,12 @@ const slots = useSlots()
 const _id = useId('m3-side-sheet', computed(() => props.id))
 const surfaceMounted = ref(props.shown)
 const transitionState = ref<TransitionState>('idle')
-let transitionTimeout: number | null = null
+const transitionFrame = useAnimationFrame()
+const enterTimeout = useTimeout(() => transitionState.value = 'idle', SIDE_SHEET_TRANSITION_MS)
+const leaveTimeout = useTimeout(() => {
+  surfaceMounted.value = false
+  transitionState.value = 'idle'
+}, SIDE_SHEET_TRANSITION_MS)
 
 const surfaceClass = computed(() => ({
   'm3-side-sheet': true,
@@ -134,12 +141,9 @@ const surfaceAttrs = computed(() => ({
 }))
 
 function clearTransitionTimer() {
-  if (transitionTimeout === null) {
-    return
-  }
-
-  clearTimeout(transitionTimeout)
-  transitionTimeout = null
+  transitionFrame.cancel()
+  enterTimeout.cancel()
+  leaveTimeout.cancel()
 }
 
 async function enterSurface() {
@@ -148,13 +152,10 @@ async function enterSurface() {
   transitionState.value = 'pre-enter'
 
   await nextTick()
-  await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
-
-  transitionState.value = 'entering'
-  transitionTimeout = window.setTimeout(() => {
-    transitionState.value = 'idle'
-    transitionTimeout = null
-  }, SIDE_SHEET_TRANSITION_MS)
+  transitionFrame.request(() => {
+    transitionState.value = 'entering'
+    enterTimeout.schedule()
+  })
 }
 
 async function leaveSurface() {
@@ -167,14 +168,10 @@ async function leaveSurface() {
   transitionState.value = 'pre-exit'
 
   await nextTick()
-  await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
-
-  transitionState.value = 'exiting'
-  transitionTimeout = window.setTimeout(() => {
-    surfaceMounted.value = false
-    transitionState.value = 'idle'
-    transitionTimeout = null
-  }, SIDE_SHEET_TRANSITION_MS)
+  transitionFrame.request(() => {
+    transitionState.value = 'exiting'
+    leaveTimeout.schedule()
+  })
 }
 
 watch(() => props.shown, (shown) => {
@@ -183,7 +180,4 @@ watch(() => props.shown, (shown) => {
   immediate: true,
 })
 
-onBeforeUnmount(() => {
-  clearTransitionTimer()
-})
 </script>

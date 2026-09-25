@@ -14,7 +14,7 @@ import {
 import { compose } from '@/utils/events'
 import defineComponent from '@/utils/component'
 import { toClassName } from '@/utils/styling'
-import { useElementReference, useResizeObserver } from '@/hooks'
+import { useAnimationFrame, useElementReference, useResizeObserver } from '@/hooks'
 
 type AriaOptions = {
   label?: string;
@@ -104,9 +104,10 @@ export default defineComponent(function M3Slider({
   const fillerActive = useRef<HTMLDivElement | null>(null)
   const handleMax = useRef<HTMLDivElement | null>(null)
   const handleMin = useRef<HTMLDivElement | null>(null)
-  const resizeUpdateId = useRef<number | null>(null)
   const notches = useRef<Array<HTMLDivElement | null>>([])
-  const draggingResetId = useRef<number | null>(null)
+  const draggingResetFrame = useAnimationFrame()
+  const resizeUpdateFrame = useAnimationFrame()
+  const notchesUpdateFrame = useAnimationFrame()
 
   const safeStep = Math.max(step, 0)
 
@@ -258,18 +259,13 @@ export default defineComponent(function M3Slider({
   ])
 
   const resetDragging = useCallback((handle: DraggingHandle) => {
-    if (draggingResetId.current !== null) {
-      cancelAnimationFrame(draggingResetId.current)
-    }
-
-    draggingResetId.current = requestAnimationFrame(() => {
+    draggingResetFrame.request(() => {
       setDragging(current => ({
         ...current,
         [handle]: null,
       }))
-      draggingResetId.current = null
     })
-  }, [])
+  }, [draggingResetFrame])
 
   const setValueMax = useCallback((value: number) => {
     if (type === 'range') {
@@ -511,15 +507,10 @@ export default defineComponent(function M3Slider({
   }, [])
 
   const requestNotchesUpdate = useCallback(() => {
-    if (resizeUpdateId.current !== null) {
-      cancelAnimationFrame(resizeUpdateId.current)
-    }
-
-    resizeUpdateId.current = requestAnimationFrame(() => {
-      resizeUpdateId.current = null
+    resizeUpdateFrame.request(() => {
       updateNotches()
     })
-  }, [updateNotches])
+  }, [resizeUpdateFrame, updateNotches])
 
   useResizeObserver(
     [fillerActive, handleMax, handleMin],
@@ -568,28 +559,17 @@ export default defineComponent(function M3Slider({
   }, [disabled])
 
   useEffect(() => {
-    const updateId = requestAnimationFrame(updateNotches)
+    notchesUpdateFrame.request(updateNotches)
 
-    return () => cancelAnimationFrame(updateId)
+    return notchesUpdateFrame.cancel
   }, [
     current,
     dragging.max,
     dragging.min,
+    notchesUpdateFrame,
     steps,
     updateNotches,
   ])
-
-  useEffect(() => {
-    return () => {
-      if (draggingResetId.current !== null) {
-        cancelAnimationFrame(draggingResetId.current)
-      }
-
-      if (resizeUpdateId.current !== null) {
-        cancelAnimationFrame(resizeUpdateId.current)
-      }
-    }
-  }, [])
 
   return (
     <div
