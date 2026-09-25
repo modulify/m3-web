@@ -8,7 +8,7 @@
         variant="surface-container"
     >
         <template v-for="(o, i) in options" :key="id + '-option-' + i">
-            <template v-if="'subordinates' in o">
+            <template v-if="o.subordinates">
                 <div :class="$style['line']">
                     <M3Checkbox
                         :id="id + '-option-' + i"
@@ -89,15 +89,15 @@ const id = useId('m3-checkbox-example')
 
 const model = ref<string[]>([])
 
-const isSelected = (option: Required<OptionWithSubordinates>) => {
-  return option.subordinates.every(o => model.value.includes(o.value))
+const isSelected = (option: OptionWithSubordinates) => {
+  return option.subordinates?.every(o => model.value.includes(o.value)) ?? false
 }
 
-const isIndeterminate = (option: Required<OptionWithSubordinates>) => {
-  return option.subordinates.some(o => model.value.includes(o.value)) && !isSelected(option)
+const isIndeterminate = (option: OptionWithSubordinates) => {
+  return option.subordinates?.some(o => model.value.includes(o.value)) === true && !isSelected(option)
 }
 
-const toggle = (option: Required<OptionWithSubordinates>, checked: boolean) => {
+const toggle = (option: OptionWithSubordinates, checked: boolean) => {
   const values = (option.subordinates ?? []).map(o => o.value)
 
   if (checked) {

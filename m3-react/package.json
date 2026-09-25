@@ -45,6 +45,7 @@
     "test:e2e:coverage": "vitest run --config vitest.config.e2e.ts --coverage --coverage.provider=istanbul --coverage.reporter=json",
     "test": "vitest run",
     "tsc": "tsc --noEmit -p tsconfig.tsc.json",
+    "tsc:storybook": "tsc --noEmit -p tsconfig.storybook.json --skipLibCheck",
     "tsc:tests": "tsc --noEmit -p tsconfig.tests.json --skipLibCheck"
   },
   "dependencies": {

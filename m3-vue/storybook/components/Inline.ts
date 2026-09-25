@@ -1,7 +1,25 @@
+import type { Component } from 'vue'
+import type { ElementType, ReactNode } from 'react'
+
 import { createApp, h } from 'vue'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { v4 } from 'uuid'
+
+interface InlineProps {
+  is: Component;
+  children?: ReactNode;
+  tag?: ElementType;
+  [prop: string]: unknown;
+}
+
+interface MountInlineAppOptions {
+  appIdPrefix: string;
+  children?: ReactNode;
+  is: Component;
+  props: Record<string, unknown>;
+  root: Element;
+}
 
 const normalizeIdSegment = (value: string): string => {
   return value.replace(/[^a-zA-Z0-9_-]/g, '')
@@ -11,7 +29,13 @@ const buildInlineIdPrefix = (reactId: string, uuid: string): string => {
   return `m3-inline-${normalizeIdSegment(reactId)}-${normalizeIdSegment(uuid)}-`
 }
 
-const mountInlineApp = ({ appIdPrefix, children, is, props, root }) => {
+const mountInlineApp = ({
+  appIdPrefix,
+  children,
+  is,
+  props,
+  root,
+}: MountInlineAppOptions) => {
   const id = v4()
 
   const app = createApp({
@@ -33,8 +57,8 @@ const mountInlineApp = ({ appIdPrefix, children, is, props, root }) => {
   return () => app.unmount()
 }
 
-export default ({ is, children, tag, ...props }) => {
-  const ref = React.useRef(null)
+const Inline = ({ is, children, tag, ...props }: InlineProps) => {
+  const ref = React.useRef<HTMLElement | null>(null)
   const reactId = React.useId()
   const uuidRef = React.useRef(v4())
   const appIdPrefix = React.useMemo(
@@ -43,6 +67,10 @@ export default ({ is, children, tag, ...props }) => {
   )
 
   React.useEffect(() => {
+    if (!ref.current) {
+      return
+    }
+
     return mountInlineApp({
       appIdPrefix,
       children,
@@ -57,3 +85,5 @@ export default ({ is, children, tag, ...props }) => {
     ref,
   })
 }
+
+export default Inline

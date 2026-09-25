@@ -11,6 +11,10 @@ const meta = {
 
   component: M3RichTooltip,
 
+  args: {
+    target: null,
+  },
+
   parameters: {
     layout: 'centered',
   },

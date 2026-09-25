@@ -77,8 +77,8 @@ const SurfaceSideSheetModalToWindow: FC = () => {
   const [windowWidth, setWindowWidth] = useStateRef(720)
 
   const [modalInsetRight, setModalInsetRight] = useStateRef(-(sideSheetWidthRef.current + 12))
-  const [modalRadiusLeft, setModalRadiusLeft] = useStateRef(HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft)
-  const [modalElevationBase, setModalElevationBase] = useStateRef(HIDDEN_SURFACE_DESCRIPTOR.elevation)
+  const [modalRadiusLeft, setModalRadiusLeft] = useStateRef<number>(HIDDEN_SURFACE_DESCRIPTOR.rounding.topLeft)
+  const [modalElevationBase, setModalElevationBase] = useStateRef<number>(HIDDEN_SURFACE_DESCRIPTOR.elevation)
 
   const [modalMounted, setModalMounted, modalMountedRef] = useStateRef(false)
   const [modalVisible, setModalVisible] = useStateRef(false)

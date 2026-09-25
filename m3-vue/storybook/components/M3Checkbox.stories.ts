@@ -1,3 +1,4 @@
+import type { M3CheckboxProps } from '@/components/checkbox'
 import type { Meta, StoryObj } from '@storybook/vue3'
 
 import { ref } from 'vue'
@@ -11,13 +12,13 @@ import CheckboxList from '../examples/checkbox/CheckboxList.vue'
 const meta = {
   title: 'Components/M3Checkbox',
 
-  component: M3Checkbox,
+  component: M3Checkbox as unknown as NonNullable<Meta<M3CheckboxProps<boolean>>['component']>,
 
   args: {
     disabled: false,
   },
 
-  render: (args: unknown) => ({
+  render: (args: M3CheckboxProps<boolean>) => ({
     components: {
       M3Checkbox,
     },
@@ -44,7 +45,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof M3Checkbox>
+} satisfies Meta<M3CheckboxProps<boolean>>
 
 export default meta
 

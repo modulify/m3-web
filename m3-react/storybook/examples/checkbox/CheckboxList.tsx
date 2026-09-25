@@ -21,13 +21,13 @@ const CheckboxList: FC<{
   }, ['model'])
 
   const isSelected = useCallback((option: Option) => {
-    return 'subordinates' in option
+    return option.subordinates
       ? option.subordinates.every((o) => state.model.includes(o.value))
       : state.model.includes(option.value)
   }, [])
 
   const isIndeterminate = useCallback((option: Option) => {
-    return 'subordinates' in option
+    return option.subordinates !== undefined
       && option.subordinates.some((o) => state.model.includes(o.value))
       && !isSelected(option)
   }, [])

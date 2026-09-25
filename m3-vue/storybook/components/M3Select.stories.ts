@@ -16,10 +16,18 @@ type CountryOption = {
   label: string;
 }
 
+type M3SelectStoryProps = {
+  options?: unknown[];
+  label?: string;
+  outlined?: boolean;
+  placeholder?: string;
+  invalid?: boolean;
+}
+
 const meta = {
   title: 'Components/M3Select',
 
-  component: M3Select,
+  component: M3Select as unknown as NonNullable<Meta<M3SelectStoryProps>['component']>,
 
   argTypes: {
     options: {
@@ -27,7 +35,7 @@ const meta = {
     },
   },
 
-  render: (args: unknown) => ({
+  render: (args: M3SelectStoryProps) => ({
     name: 'M3SelectStory',
 
     components: {
@@ -63,7 +71,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof M3Select>
+} satisfies Meta<M3SelectStoryProps>
 
 export default meta
 
@@ -80,7 +88,7 @@ export const WithIcons: Story = {
     label: 'Country',
   },
 
-  render: (args: unknown) => ({
+  render: (args: M3SelectStoryProps) => ({
     name: 'M3SelectStory',
 
     components: {

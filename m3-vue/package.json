@@ -45,6 +45,7 @@
     "test:e2e:coverage": "vitest run --config vitest.config.e2e.ts --coverage --coverage.provider=istanbul --coverage.reporter=json",
     "test": "vitest run",
     "tsc": "vue-tsc --noEmit -p tsconfig.tsc.json",
+    "tsc:storybook": "vue-tsc --noEmit -p tsconfig.storybook.json --skipLibCheck",
     "tsc:tests": "vue-tsc --noEmit -p tsconfig.tests.json --skipLibCheck"
   },
   "dependencies": {
@@ -75,6 +76,8 @@
     "@testing-library/vue": "^8.1.0",
     "@types/lodash.isequal": "^4.5.8",
     "@types/node": "^25.3.0",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
     "@types/semver": "^7.7.1",
     "@typescript-eslint/eslint-plugin": "^8.62.0",
     "@typescript-eslint/parser": "^8.62.0",

@@ -1,6 +1,7 @@
 import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
-import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
+import type { ForwardedRef, HTMLAttributes } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
+import type { ReactElement, RefAttributes } from 'react'
 
 import {
   forwardRef,
@@ -18,40 +19,42 @@ import { useElementEffect, useId, useTarget } from '@/hooks'
 import IconCheckmark from './assets/checkmark.svg?react'
 import IconIndeterminate from './assets/indeterminate.svg?react'
 
-export interface M3CheckboxProps extends HTMLAttributes<HTMLElement> {
+export interface M3CheckboxProps<Model = boolean, Value = unknown>
+  extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
   id?: string;
-  model?: unknown;
-  value?: unknown;
+  model?: Model;
+  value?: Value;
   indeterminate?: boolean;
   invalid?: boolean;
   disabled?: boolean;
-  trueValue?: unknown;
-  falseValue?: unknown;
+  trueValue?: Model;
+  falseValue?: Model;
   equalsFn?: (a: unknown, b: unknown) => boolean;
-  onChange?: (value: unknown) => void;
+  onChange?: (value: Model) => void;
 }
 
 export interface M3CheckboxMethods extends Clickable, Focusable {}
 
 const isArray = Array.isArray
 
-const M3Checkbox: ForwardRefRenderFunction<
-  M3CheckboxMethods,
-  M3CheckboxProps
-> = ({
+type M3CheckboxComponent = <Model = boolean, Value = unknown>(
+  props: M3CheckboxProps<Model, Value> & RefAttributes<M3CheckboxMethods>
+) => ReactElement | null
+
+const M3Checkbox = <Model, Value>({
   id,
   model,
   value,
   indeterminate = false,
   invalid = false,
   disabled = false,
-  trueValue = true,
-  falseValue = false,
+  trueValue = true as Model,
+  falseValue = false as Model,
   equalsFn = (a: unknown, b: unknown): boolean => a === b,
   className = '',
-  onChange = (_: unknown) => {},
+  onChange = (_: Model) => {},
   ...args
-}, ref) => {
+}: M3CheckboxProps<Model, Value>, ref: ForwardedRef<M3CheckboxMethods>) => {
   const root = useRef<HTMLElement | null>(null)
   const input = useRef<HTMLInputElement | null>(null)
   const ripple = useRef<M3RippleMethods | null>(null)
@@ -73,11 +76,11 @@ const M3Checkbox: ForwardRefRenderFunction<
     return isArray(model) ? contains(model, value) : equalsFn(model, trueValue)
   }, [model, value, trueValue])
 
-  const calculate = useCallback((checked: boolean) => {
+  const calculate = useCallback((checked: boolean): Model => {
     if (isArray(model)) {
-      return checked
+      return (checked
         ? (contains(model, value) ? model : [...model, value])
-        : [...model].filter(v => !equalsFn(v, value))
+        : [...model].filter(v => !equalsFn(v, value))) as Model
     }
 
     return checked ? trueValue : falseValue
@@ -122,4 +125,4 @@ const M3Checkbox: ForwardRefRenderFunction<
   )
 }
 
-export default forwardRef(M3Checkbox)
+export default forwardRef(M3Checkbox) as M3CheckboxComponent

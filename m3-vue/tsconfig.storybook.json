@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "types": [
+      "vite/client"
+    ]
+  },
+  "include": [
+    "shims-*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "storybook/**/*.ts",
+    "storybook/**/*.vue"
+  ],
+  "exclude": [
+    "tests"
+  ]
+}

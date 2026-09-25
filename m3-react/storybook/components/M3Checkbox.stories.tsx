@@ -1,3 +1,4 @@
+import type { M3CheckboxProps } from '@/components/checkbox'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { useState } from 'react'
@@ -40,10 +41,10 @@ const meta = {
     return (
       <div className="flex-row">
         <M3Checkbox
+          {...args}
           id={id}
           model={model}
           onChange={setModel}
-          {...args}
         />
 
         <label htmlFor={id}>Choice</label>
@@ -54,7 +55,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof M3Checkbox>
+} satisfies Meta<M3CheckboxProps<boolean>>
 
 export default meta
 

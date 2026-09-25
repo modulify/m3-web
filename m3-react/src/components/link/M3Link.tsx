@@ -8,6 +8,8 @@ type RootElement = HTMLAnchorElement | HTMLButtonElement
 export interface M3LinkProps extends HTMLAttributes<RootElement> {
   type?: HTMLButtonElement['type'];
   href?: string;
+  target?: HTMLAnchorElement['target'];
+  rel?: string;
 }
 
 export interface M3LinkMethods extends Clickable, Focusable {

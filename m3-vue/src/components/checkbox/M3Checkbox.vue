@@ -34,17 +34,12 @@
     </span>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="Model = boolean, Value = unknown">
 import type { Interactive } from '@modulify/m3-foundation/types/dom'
-import type { PropType } from 'vue'
+import type { M3CheckboxProps } from './types'
 
 import { computed } from 'vue'
-import {
-  isArray,
-  isId,
-  isUndefined,
-  Or,
-} from '@modulify/m3-foundation/lib/predicates'
+import { isArray } from '@modulify/m3-foundation/lib/predicates'
 import { ref } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'
@@ -54,71 +49,22 @@ import useId from '@/composables/id'
 import IconCheckmark from './assets/checkmark.svg'
 import IconIndeterminate from './assets/indeterminate.svg'
 
-const props = defineProps({
-  id: {
-    type: null as unknown as PropType<string | undefined>,
-    validator: Or(isId, isUndefined),
-    default: undefined,
-  },
+const props = defineProps<M3CheckboxProps<Model, Value>>()
 
-  name: {
-    type: null as unknown as PropType<string | undefined>,
-    default: undefined,
-  },
-
-  model: {
-    type: null as unknown as PropType<unknown>,
-    default: undefined as unknown,
-  },
-
-  value: {
-    type: null as unknown as PropType<unknown>,
-    default: undefined as unknown,
-  },
-
-  indeterminate: {
-    type: Boolean,
-    default: false,
-  },
-
-  invalid: {
-    type: Boolean,
-    default: false,
-  },
-
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-
-  trueValue: {
-    type: null as unknown as PropType<never>,
-    default: true,
-  },
-
-  falseValue: {
-    type: null as unknown as PropType<never>,
-    default: false,
-  },
-
-  equalsFn: {
-    type: Function as PropType<(a: unknown, b: unknown) => boolean>,
-    default: (a: unknown, b: unknown): boolean => a === b,
-  },
-})
-
-const emit = defineEmits([
+const emit = defineEmits<{
   /** Переключение чекбокса */
-  'change',
+  change: [value: Model];
   /** Изменение значения модели */
-  'update:model',
-])
+  'update:model': [value: Model];
+}>()
 
 const root = ref<HTMLElement | null>(null)
 
 const _id = useId('m3-checkbox', computed(() => props.id))
 const _name = computed(() => props.name ?? _id.value)
 const _input = ref<HTMLInputElement | null>(null)
+const trueValue = computed((): Model => props.trueValue === undefined ? true as Model : props.trueValue)
+const falseValue = computed((): Model => props.falseValue === undefined ? false as Model : props.falseValue)
 
 defineExpose({
   click: () => _input.value?.click(),
@@ -126,23 +72,23 @@ defineExpose({
   blur: () => _input.value?.blur(),
 } satisfies Interactive)
 
-const equals = (a: unknown, b: unknown) => props.equalsFn.call(null, a, b)
+const equals = (a: unknown, b: unknown) => props.equalsFn?.call(null, a, b) ?? a === b
 const contains = (array: unknown[], value: unknown) => array.some(v => equals(v, value))
 
 const checked = computed(() => {
   return isArray(props.model)
     ? contains(props.model, props.value)
-    : equals(props.model, props.trueValue)
+    : equals(props.model, trueValue.value)
 })
 
-const calculate = (checked: boolean) => {
+const calculate = (checked: boolean): Model => {
   if (isArray(props.model)) {
-    return checked
+    return (checked
       ? (contains(props.model, props.value) ? props.model : [...props.model, props.value])
-      : [...props.model].filter(v => !equals(v, props.value))
+      : [...props.model].filter(v => !equals(v, props.value))) as Model
   }
 
-  return checked ? props.trueValue : props.falseValue
+  return checked ? trueValue.value : falseValue.value
 }
 
 const onChange = (event: Event) => {

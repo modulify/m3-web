@@ -9,7 +9,7 @@ import { M3Menu, M3MenuItem } from '@/components/menu'
 
 const M3MenuStory = (args: M3MenuProps) => {
   const [target, setTarget] = useState<HTMLElement | null>(null)
-  const bindTarget = useCallback((el: HTMLButtonElement) => {
+  const bindTarget = useCallback((el: HTMLElement) => {
     setTarget(el)
     return () => {
       setTarget(current => current === el ? null : current)
@@ -76,7 +76,7 @@ export const WithLeadingAndTrailingContent: Story = {
 
   render: (args) => {
     const [target, setTarget] = useState<HTMLElement | null>(null)
-    const bindTarget = useCallback((el: HTMLButtonElement) => {
+    const bindTarget = useCallback((el: HTMLElement) => {
       setTarget(el)
       return () => {
         setTarget(current => current === el ? null : current)
