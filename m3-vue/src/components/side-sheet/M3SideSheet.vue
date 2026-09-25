@@ -67,7 +67,7 @@ import {
   watch,
 } from 'vue'
 
-import { m3MotionDurations } from '@modulify/m3-foundation/lib/motion'
+import { durations } from '@modulify/m3-foundation/lib/motion'
 
 import { M3IconButton } from '@/components/icon-button'
 import { M3ScrollRail } from '@/components/scroll-rail'
@@ -76,7 +76,7 @@ import { M3Surface } from '@/components/surface'
 import { useId } from '@/composables/id'
 
 const DOCKED_Z_INDEX = 1000
-const SIDE_SHEET_TRANSITION_MS = m3MotionDurations['extra-long2']
+const SIDE_SHEET_TRANSITION_MS = durations['extra-long2']
 
 type TransitionState = 'idle' | 'pre-enter' | 'entering' | 'pre-exit' | 'exiting'
 

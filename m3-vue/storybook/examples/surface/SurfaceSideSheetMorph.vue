@@ -217,7 +217,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import { m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+import { easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
@@ -229,7 +229,7 @@ import {
   useSurfaceSideSheetMorph,
 } from '@/components/surface/orchestration/useSurfaceSideSheetMorph'
 
-const PANEL_TRANSITION_EASING = m3MotionEasings.standard
+const PANEL_TRANSITION_EASING = easing.standard
 
 const navExpanded = ref(false)
 const activeNavTab = ref<'inbox' | 'boards' | 'archive' | 'lab'>('inbox')

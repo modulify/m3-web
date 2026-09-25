@@ -54,14 +54,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
 import {
+  computed,
   nextTick,
   onBeforeUnmount,
   ref,
   watch,
 } from 'vue'
+
+import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Surface } from '@/components/surface'
 
@@ -76,8 +77,8 @@ const DIALOG_ROUNDING = 28
 const DIALOG_ENTRY_OFFSET_PX = 24
 const DIALOG_ELEVATION = 0
 const DIALOG_Z_INDEX = 1000
-const DIALOG_TRANSITION_MS = m3MotionDurations.medium2
-const DIALOG_TRANSITION_TIMING = m3MotionEasings.standard
+const DIALOG_TRANSITION_MS = durations.medium2
+const DIALOG_TRANSITION_TIMING = easing.standard
 
 const props = defineProps({
   opened: {

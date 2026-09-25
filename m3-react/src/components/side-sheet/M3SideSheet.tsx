@@ -2,9 +2,10 @@ import type { FC } from 'react'
 import type { M3SurfaceProps } from '@/components/surface'
 import type { ReactNode } from 'react'
 
-import { m3MotionDurations } from '@modulify/m3-foundation/lib/motion'
 import { useMemo } from 'react'
 import { useTransition } from 'react-transition-state'
+
+import { durations } from '@modulify/m3-foundation/lib/motion'
 
 import { M3IconButton } from '@/components/icon-button'
 import { M3ScrollRail } from '@/components/scroll-rail'
@@ -43,7 +44,7 @@ const MODAL_MIN_WIDTH = 320
 const MODAL_MAX_WIDTH = 400
 const MODAL_RADIUS = 16
 const SIDE_SHEET_Z_INDEX = 1000
-const SIDE_SHEET_TRANSITION_MS = m3MotionDurations['extra-long2']
+const SIDE_SHEET_TRANSITION_MS = durations['extra-long2']
 
 const M3SideSheet: FC<M3SideSheetProps> = ({
   id,

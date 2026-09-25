@@ -1,11 +1,12 @@
 /* eslint-disable max-lines-per-function */
 import { computed } from 'vue'
 import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
-import { m3MotionDurations } from '@modulify/m3-foundation/lib/motion'
 import { nextTick, onBeforeUnmount, onMounted } from 'vue'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { ref } from 'vue'
 import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+
+import { durations } from '@modulify/m3-foundation/lib/motion'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360
@@ -14,7 +15,7 @@ const SIDE_SHEET_WIDTH_RATIO = 32
 const MODAL_INSET_TOP = 0
 const MODAL_INSET_BOTTOM = 0
 const MODAL_INSET_END = 0
-const PANEL_TRANSITION_MS = m3MotionDurations.medium2
+const PANEL_TRANSITION_MS = durations.medium2
 const DOCKED_SIDE_SHEET_DESCRIPTOR = getSurfaceStateDescriptor('docked_side_sheet')
 const MODAL_SIDE_SHEET_DESCRIPTOR = getSurfaceStateDescriptor('modal_side_sheet')
 const DOCKED_HOST_WIDTH = `clamp(${SIDE_SHEET_WIDTH_MIN}px, ${SIDE_SHEET_WIDTH_RATIO}%, ${SIDE_SHEET_WIDTH_MAX}px)`

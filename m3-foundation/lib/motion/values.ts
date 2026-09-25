@@ -1,4 +1,4 @@
-export const m3MotionDurations = {
+export const durations = {
   short1: 50,
   short2: 100,
   short3: 150,
@@ -17,9 +17,9 @@ export const m3MotionDurations = {
   'extra-long4': 1000,
 } as const
 
-export type M3MotionDurationKey = keyof typeof m3MotionDurations
+export type M3MotionDuration = keyof typeof durations
 
-export const m3MotionEasings = {
+export const easing = {
   emphasized: 'cubic-bezier(0.2, 0.0, 0, 1.0)',
   'emphasized-accelerate': 'cubic-bezier(0.3, 0.0, 0.8, 0.15)',
   'emphasized-decelerate': 'cubic-bezier(0.05, 0.7, 0.1, 1.0)',
@@ -28,9 +28,9 @@ export const m3MotionEasings = {
   'standard-decelerate': 'cubic-bezier(0, 0, 0, 1)',
 } as const
 
-export type M3MotionEasingKey = keyof typeof m3MotionEasings
+export type M3MotionEasing = keyof typeof easing
 
-export const m3MotionTimingDefaults = {
+export const timing = {
   emphasized: {
     duration: 'long2',
     easing: 'emphasized',
@@ -55,7 +55,7 @@ export const m3MotionTimingDefaults = {
     duration: 'medium1',
     easing: 'standard-decelerate',
   },
-} as const satisfies Record<string, {
-  duration: M3MotionDurationKey;
-  easing: M3MotionEasingKey;
+} as const satisfies Record<M3MotionEasing, {
+  duration: M3MotionDuration;
+  easing: M3MotionEasing;
 }>

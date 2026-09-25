@@ -123,8 +123,8 @@
                                     :fill-width="true"
                                     :fill-height="overlayActive"
                                     :rounding="expanded ? 0 : 24"
-                                    :transition-ms="m3MotionDurations.medium3"
-                                    :transition-timing="m3MotionEasings.standard"
+                                    :transition-ms="durations.medium3"
+                                    :transition-timing="easing.standard"
                                     :variant="expanded ? 'surface' : 'surface-container-low'"
                                     :elevation="expanded ? 0 : 1"
                                     overflow="auto"
@@ -194,8 +194,8 @@
                                 :fill-width="true"
                                 :fill-height="overlayActive"
                                 :rounding="expanded ? 0 : 24"
-                                :transition-ms="m3MotionDurations.medium3"
-                                :transition-timing="m3MotionEasings.standard"
+                                :transition-ms="durations.medium3"
+                                :transition-timing="easing.standard"
                                 :variant="expanded ? 'surface' : 'surface-container-low'"
                                 :elevation="expanded ? 0 : 1"
                                 overflow="auto"
@@ -229,7 +229,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 
-import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
@@ -253,7 +253,7 @@ const {
   originHeight,
   overlayStyle,
   toggleCardMode,
-} = useSurfaceCardPageMorph(m3MotionDurations.medium3)
+} = useSurfaceCardPageMorph(durations.medium3)
 
 const overlayActive = computed(() => busy.value || expanded.value)
 </script>
