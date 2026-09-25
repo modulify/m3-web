@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Interactive } from '@modulify/m3-foundation'
+import type { Interactive } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'

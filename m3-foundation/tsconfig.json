@@ -3,11 +3,13 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
+    "paths": {
+      "@modulify/m3-foundation/lib/*": ["./lib/*"]
+    },
     "resolveJsonModule": true,
     "target": "ES2017"
   },
   "include": [
-    "index.d.ts",
     "lib/**/*.ts",
     "types/**/*.d.ts"
   ],

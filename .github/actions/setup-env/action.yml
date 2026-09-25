@@ -5,6 +5,10 @@ inputs:
   node-version:
     description: Node.js version to use.
     required: true
+  registry-url:
+    description: npm registry used for publishing.
+    required: false
+    default: https://registry.npmjs.org
 
 runs:
   using: composite
@@ -13,6 +17,7 @@ runs:
       uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node-version }}
+        registry-url: ${{ inputs.registry-url }}
 
     - name: Yarn configuration
       shell: bash

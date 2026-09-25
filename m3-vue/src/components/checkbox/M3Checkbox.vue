@@ -35,11 +35,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { Interactive } from '@modulify/m3-foundation'
+import type { Interactive } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
-import IconCheckmark from '@modulify/m3-foundation/assets/sprites/checkbox/checkmark.svg'
-import IconIndeterminate from '@modulify/m3-foundation/assets/sprites/checkbox/indeterminate.svg'
+import IconCheckmark from './assets/checkmark.svg'
+import IconIndeterminate from './assets/indeterminate.svg'
 import { M3Ripple } from '@/components/ripple'
 
 import {

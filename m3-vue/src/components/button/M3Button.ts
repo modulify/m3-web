@@ -1,4 +1,4 @@
-import type { Interactive } from '@modulify/m3-foundation'
+import type { Interactive } from '@modulify/m3-foundation/types/dom'
 import type { PropType, VNode } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 

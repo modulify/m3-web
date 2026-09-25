@@ -6,7 +6,7 @@ export type {
   CalendarDayOrNull,
   CalendarDayRange,
   CalendarYearRange,
-} from '../lib/calendar'
+} from '@modulify/m3-foundation/lib/calendar'
 
 export {
   DEFAULT_CALENDAR_DATE_INPUT_FORMAT,
@@ -14,4 +14,4 @@ export {
   isCalendarDaySelectable,
   isCalendarYearSelectable,
   parseCalendarDateInput,
-} from '../lib/calendar'
+} from '@modulify/m3-foundation/lib/calendar'

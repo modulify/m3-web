@@ -12,6 +12,11 @@ test-smoke: node_modules ## [Tests][docker][smoke] Runs smoke tests for all UI w
 	$(TARGET_HEADER)
 	$(YARN) test:smoke
 
+.PHONY: test-packages
+test-packages: build ## [Tests][docker][network] Packs and validates installed package contracts
+	$(TARGET_HEADER)
+	$(YARN) test:packages
+
 .PHONY: test-runtime-parity
 test-runtime-parity: ## [Tests][local] Checks Node/Yarn parity across docker services (node, storybook, playwright)
 	$(TARGET_HEADER)

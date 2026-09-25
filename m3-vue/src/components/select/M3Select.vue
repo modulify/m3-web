@@ -81,6 +81,8 @@
 import type { PropType } from 'vue'
 import type { Placement } from '@floating-ui/dom'
 
+import type { M3SelectOption } from './types'
+
 import SpriteCaret from './caret.svg'
 import {
   M3Menu,
@@ -106,11 +108,6 @@ import useId from '@/composables/id'
 
 type Maybe<T> = T | null
 
-interface Option {
-  value: T,
-  label: string,
-}
-
 const props = defineProps({
   id: {
     type: null as unknown as PropType<string | undefined>,
@@ -124,7 +121,7 @@ const props = defineProps({
   },
 
   options: {
-    type: Array as PropType<Option[]>,
+    type: Array as PropType<M3SelectOption<T>[]>,
     default: () => [],
   },
 
@@ -181,11 +178,11 @@ const rootWidth = ref(0)
 const expanded = ref(false)
 const shouldBeExpanded = ref(false)
 
-const text = computed(() => props.options.find((option: Option) => {
+const text = computed(() => props.options.find((option: M3SelectOption<T>) => {
   return props.equalPredicate.call(null, option.value, props.value as unknown as Maybe<T>)
 })?.label ?? '')
 
-const pick = (option: Option) => {
+const pick = (option: M3SelectOption<T>) => {
   emit('update:value', option.value)
   shouldBeExpanded.value = false
 }

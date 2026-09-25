@@ -6,7 +6,7 @@ import type {
   ReactNode,
 } from 'react'
 
-import type { Focusable } from '@modulify/m3-foundation'
+import type { Focusable } from '@modulify/m3-foundation/types/dom'
 
 import {
   forwardRef,

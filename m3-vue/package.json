@@ -11,23 +11,33 @@
     "vue"
   ],
   "files": [
-    "dist",
-    "types"
+    "dist"
   ],
-  "types": "./types/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "require": "./dist/m3-vue.cjs",
-      "import": "./dist/m3-vue.mjs",
-      "default": "./dist/m3-vue.mjs"
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     },
-    "./dist/*": "./dist/*",
-    "./types/*": "./types/*"
+    "./components": {
+      "types": "./dist/types/components/index.d.ts",
+      "require": "./dist/components.cjs",
+      "import": "./dist/components.mjs",
+      "default": "./dist/components.mjs"
+    },
+    "./composables": {
+      "types": "./dist/types/composables/index.d.ts",
+      "require": "./dist/composables.cjs",
+      "import": "./dist/composables.mjs",
+      "default": "./dist/composables.mjs"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "vite build",
-    "eslint": "eslint ./src ./storybook ./tests ./types",
+    "build": "vite build --mode package-root && vite build --mode package-components && vite build --mode package-composables",
+    "eslint": "eslint ./src ./storybook ./tests ./vite.config.ts ./vite.config.common.ts",
     "storybook": "storybook dev -c storybook -p 6006 --no-open",
     "storybook:build": "storybook build -c storybook -o dist-storybook",
     "test:smoke": "VITEST_STORYBOOK=false vitest run --config vitest.config.smoke.ts",
@@ -44,7 +54,8 @@
     "lodash.isequal": "^4.5.0"
   },
   "peerDependencies": {
-    "vue": "^3.5"
+    "vue": "^3.5",
+    "vue-router": "^5.0.3"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.1",

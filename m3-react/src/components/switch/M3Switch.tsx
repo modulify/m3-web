@@ -6,7 +6,7 @@ import type {
 import type {
   Clickable,
   Focusable,
-} from '@modulify/m3-foundation'
+} from '@modulify/m3-foundation/types/dom'
 
 import M3SwitchScope from './M3SwitchScope'
 
