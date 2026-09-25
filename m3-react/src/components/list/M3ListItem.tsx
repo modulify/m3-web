@@ -3,29 +3,16 @@ import type {
   FC,
   HTMLAttributes,
   KeyboardEventHandler,
-  MouseEventHandler,
-  ReactNode,
 } from 'react'
-
-import type {
-  LineCount,
-  Lines,
-} from '@modulify/m3-foundation/types/components/list'
-
+import type { LineCount, Lines } from '@modulify/m3-foundation/types/components/list'
 import type { M3RippleMethods } from '@/components/ripple'
+import type { MouseEventHandler, ReactNode } from 'react'
+
+import { useMemo, useRef, useState } from 'react'
 
 import { M3Ripple } from '@/components/ripple'
 
-import {
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement

@@ -1,25 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
-import { M3Chip } from '@/components/chip'
-import { M3Icon } from '@/components/icon'
-import ChipShowcase from '../examples/chip/ChipShowcase.vue'
-
 import { ref, watch } from 'vue'
 
-const standardTemplate = `
-  <M3Chip
-      v-bind="args"
-      :selected="selected"
-      @update:selected="selected = $event"
-  >
-      <M3Icon
-          v-if="args.variant === 'assist' || args.variant === 'suggestion'"
-          :name="args.variant === 'assist' ? 'schedule' : 'lightbulb'"
-      />
+import { M3Chip } from '@/components/chip'
+import { M3Icon } from '@/components/icon'
 
-      {{ args.variant === 'input' ? 'Project Alpha' : 'Remind later' }}
-  </M3Chip>
-`
+import ChipShowcase from '../examples/chip/ChipShowcase.vue'
 
 const renderStandard = (args: Record<string, unknown>) => ({
   components: {
@@ -38,7 +24,20 @@ const renderStandard = (args: Record<string, unknown>) => ({
     }
   },
 
-  template: standardTemplate,
+  template: `
+    <M3Chip
+        v-bind="args"
+        :selected="selected"
+        @update:selected="selected = $event"
+    >
+        <M3Icon
+            v-if="args.variant === 'assist' || args.variant === 'suggestion'"
+            :name="args.variant === 'assist' ? 'schedule' : 'lightbulb'"
+        />
+  
+        {{ args.variant === 'input' ? 'Project Alpha' : 'Remind later' }}
+    </M3Chip>
+  `,
 })
 
 const meta = {

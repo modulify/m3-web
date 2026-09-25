@@ -1,9 +1,11 @@
 import type { Entry } from './types'
 
+import { defineComponent, h, ref } from 'vue'
+
+import render from '@/utils/render'
+
 import { M3Popper } from '../popper'
 
-import { defineComponent, h, ref } from 'vue'
-import render from '@/utils/render'
 import { useCollection } from './collection'
 
 type Methods = ReturnType<typeof useCollection>

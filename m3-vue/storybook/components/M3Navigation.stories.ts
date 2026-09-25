@@ -1,16 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
+import { ref } from 'vue'
+
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-
 import {
   M3Navigation,
   M3NavigationSection,
   M3NavigationTab,
 } from '@/components/navigation'
-
-import { ref } from 'vue'
 
 const meta = {
   title: 'Components/M3Navigation',

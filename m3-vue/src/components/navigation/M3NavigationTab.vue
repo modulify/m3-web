@@ -73,33 +73,22 @@
 
 <script lang="ts" setup>
 import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
+import type { M3LinkInstance } from '@/components/link'
+import type { PropType, Ref } from 'vue'
 
-import type {
-  PropType,
-  Ref,
-} from 'vue'
+import { computed, inject } from 'vue'
+import { isId, isUndefined, Or } from '@modulify/m3-foundation/lib/predicates'
+import { ref } from 'vue'
 
 import { M3Badge } from '@/components/badge'
-import { M3Link, type M3LinkInstance } from '@/components/link'
+import { M3Link } from '@/components/link'
 import { M3Ripple } from '@/components/ripple'
-
-import { M3NavigationAppearance } from './injections'
-
-import {
-  computed,
-  inject,
-  ref,
-} from 'vue'
-
-import {
-  isId,
-  isUndefined,
-  Or,
-} from '@modulify/m3-foundation/lib/predicates'
 
 import { provideM3IconAppearance } from '@/components/icon/injections'
 import { useBreakpoint } from '@/composables/breakpoint'
 import useId from '@/composables/id'
+
+import { M3NavigationAppearance } from './injections'
 
 const props = defineProps({
   id: {

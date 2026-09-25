@@ -1,9 +1,4 @@
-import {
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/react'
-
+import { fireEvent, render, screen } from '@testing-library/react'
 import { useRef } from 'react'
 
 import { useElementEffect } from '@/hooks'

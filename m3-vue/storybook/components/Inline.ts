@@ -1,9 +1,7 @@
+import { createApp, h } from 'vue'
 import React from 'react'
 import ReactDOM from 'react-dom'
-
 import { v4 } from 'uuid'
-
-import { createApp, h } from 'vue'
 
 const normalizeIdSegment = (value: string): string => {
   return value.replace(/[^a-zA-Z0-9_-]/g, '')

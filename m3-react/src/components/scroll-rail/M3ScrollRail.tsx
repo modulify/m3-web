@@ -1,10 +1,7 @@
-import type {
-  ForwardRefRenderFunction,
-  HTMLAttributes,
-} from 'react'
-
+import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
 import type { ScrollRail } from '@modulify/m3-foundation/lib/scroll'
 
+import { createRail } from '@modulify/m3-foundation/lib/scroll'
 import {
   forwardRef,
   useEffect,
@@ -12,13 +9,8 @@ import {
   useRef,
 } from 'react'
 
-import {
-  useRecord,
-  useWatch,
-} from '@/hooks'
-
-import { createRail } from '@modulify/m3-foundation/lib/scroll'
 import { toClassName } from '@/utils/styling'
+import { useRecord, useWatch } from '@/hooks'
 
 export interface M3ScrollRailProps extends HTMLAttributes<HTMLElement> {
   horizontal?: boolean;

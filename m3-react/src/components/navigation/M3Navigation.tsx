@@ -1,36 +1,22 @@
 import type {
-  FC,
-  HTMLAttributes,
-} from 'react'
-
-import type {
   Alignment,
   Appearance,
 } from '@modulify/m3-foundation/types/components/navigation'
+import type { FC, HTMLAttributes } from 'react'
 
 import { CSSTransition } from 'react-transition-group'
 
-import M3NavigationAppearance from '@/components/navigation/M3NavigationAppearance'
-import M3NavigationSection from './M3NavigationSection'
-
-import {
-  useEffect,
-  useMemo,
-} from 'react'
-
 import { createPortal } from 'react-dom'
+import { useEffect, useMemo } from 'react'
+
+import M3NavigationAppearance from '@/components/navigation/M3NavigationAppearance'
 
 import { compose } from '@/utils/events'
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import {
-  useBreakpoint,
-  useRecord,
-  useWatch,
-} from '@/hooks'
+import { useBreakpoint, useRecord, useWatch } from '@/hooks'
+
+import M3NavigationSection from './M3NavigationSection'
 
 export interface M3NavigationProps extends HTMLAttributes<HTMLElement> {
   appearance?: Appearance;

@@ -11,7 +11,6 @@
 <script lang="ts" setup>
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
-
 import * as properties from '@/components/fab-button/properties'
 
 defineProps({

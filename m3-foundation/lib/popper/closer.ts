@@ -1,7 +1,4 @@
-import type {
-  CloserEvent,
-  CloserTarget,
-} from '../../types/components/popper'
+import type { CloserEvent, CloserTarget } from '../../types/components/popper'
 
 export const onClick = (event: CloserEvent) => {
   const el = event.currentTarget as CloserTarget

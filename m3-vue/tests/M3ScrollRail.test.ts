@@ -1,8 +1,5 @@
-import {
-  render,
-} from '@testing-library/vue'
-
 import { nextTick } from 'vue'
+import { render } from '@testing-library/vue'
 
 import { M3ScrollRail } from '@/components/scroll-rail'
 

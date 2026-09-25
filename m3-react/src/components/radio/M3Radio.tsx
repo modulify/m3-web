@@ -1,16 +1,6 @@
-import type {
-  ForwardRefRenderFunction,
-  HTMLAttributes,
-} from 'react'
-
-import type {
-  Clickable,
-  Focusable,
-} from '@modulify/m3-foundation/types/dom'
-
+import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
+import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
-
-import { M3Ripple } from '@/components/ripple'
 
 import {
   forwardRef,
@@ -20,13 +10,10 @@ import {
   useRef,
 } from 'react'
 
-import {
-  useElementEffect,
-  useId,
-  useTarget,
-} from '@/hooks'
+import { M3Ripple } from '@/components/ripple'
 
 import { toClassName } from '@/utils/styling'
+import { useElementEffect, useId, useTarget } from '@/hooks'
 
 export interface M3RadioProps extends HTMLAttributes<HTMLElement> {
   id?: string;

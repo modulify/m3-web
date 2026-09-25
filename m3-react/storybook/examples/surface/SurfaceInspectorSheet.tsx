@@ -1,8 +1,7 @@
-import type {
-  CSSProperties,
-  FC,
-} from 'react'
+import type { CSSProperties, FC } from 'react'
 import type { M3SelectOption } from '@/components/select'
+
+import { useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
@@ -10,8 +9,6 @@ import { M3IconButton } from '@/components/icon-button'
 import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
-
-import { useState } from 'react'
 
 type Priority = 'low' | 'normal' | 'high'
 

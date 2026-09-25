@@ -1,19 +1,11 @@
 /* eslint-disable max-lines-per-function */
-import {
-  computed,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-} from 'vue'
-
+import { computed } from 'vue'
 import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
 import { m3MotionDurations } from '@modulify/m3-foundation/lib/motion'
-
-import {
-  raf,
-  wait,
-} from '@modulify/m3-foundation/lib/surface/orchestration'
+import { nextTick, onBeforeUnmount, onMounted } from 'vue'
+import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { ref } from 'vue'
+import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360

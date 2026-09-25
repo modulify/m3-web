@@ -6,7 +6,7 @@ import {
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import viteConfig from './vite.config'
+import viteConfig from './vite.config.common'
 
 const __parent = fileURLToPath(new URL('../', import.meta.url))
 const __artifacts = join(__parent, 'artifacts', 'm3-vue')

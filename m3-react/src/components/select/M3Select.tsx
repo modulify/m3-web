@@ -1,19 +1,6 @@
-import type {
-  FC,
-  HTMLAttributes,
-  ReactElement,
-  ReactNode,
-  SVGAttributes,
-} from 'react'
-
+import type { FC, HTMLAttributes } from 'react'
 import type { Placement } from '@floating-ui/dom'
-
-import {
-  M3Menu,
-  M3MenuItem,
-} from '@/components/menu'
-import { M3ScrollRail } from '@/components/scroll-rail'
-import { M3TextField } from '@/components/text-field'
+import type { ReactElement, ReactNode, SVGAttributes } from 'react'
 
 import {
   useCallback,
@@ -23,15 +10,13 @@ import {
   useState,
 } from 'react'
 
-import {
-  useId,
-} from '@/hooks'
+import { M3Menu, M3MenuItem } from '@/components/menu'
+import { M3ScrollRail } from '@/components/scroll-rail'
+import { M3TextField } from '@/components/text-field'
 
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
+import { useId } from '@/hooks'
 
 export type M3SelectOption<Value = unknown> = {
   value: Value;

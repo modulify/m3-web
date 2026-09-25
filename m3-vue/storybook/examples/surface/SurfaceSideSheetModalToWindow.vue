@@ -294,38 +294,23 @@
 </template>
 
 <script lang="ts" setup>
+import { clamp } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { computed } from 'vue'
+import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
+import { nextTick, onBeforeUnmount, onMounted } from 'vue'
+import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { reactive, ref } from 'vue'
+import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+
+import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-import {
-  M3Navigation,
-  M3NavigationTab,
-} from '@/components/navigation'
+import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Select } from '@/components/select'
+import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
-import {
-  M3Surface,
-  M3SurfacePanel,
-} from '@/components/surface'
-import {
-  clamp,
-  raf,
-  wait,
-} from '@modulify/m3-foundation/lib/surface/orchestration'
-
-import {
-  computed,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  ref,
-} from 'vue'
-import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
-import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360

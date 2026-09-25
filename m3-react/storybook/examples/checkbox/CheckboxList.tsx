@@ -1,16 +1,10 @@
 import type { FC } from 'react'
 
+import { Fragment, useCallback } from 'react'
+
 import { M3Checkbox } from '@/components/checkbox'
 
-import {
-  Fragment,
-  useCallback,
-} from 'react'
-
-import {
-  useId,
-  useRecord,
-} from '@/hooks'
+import { useId, useRecord } from '@/hooks'
 
 interface Option {
   label: string;

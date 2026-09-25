@@ -1,12 +1,9 @@
-import type {
-  CSSProperties,
-  FC,
-} from 'react'
+import type { CSSProperties, FC } from 'react'
+
+import { useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
-
-import { useState } from 'react'
 
 const panelStyle = {
   padding: '18px',

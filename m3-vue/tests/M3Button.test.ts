@@ -1,10 +1,5 @@
+import { h, nextTick, ref } from 'vue'
 import { render } from '@testing-library/vue'
-
-import {
-  h,
-  nextTick,
-  ref,
-} from 'vue'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'

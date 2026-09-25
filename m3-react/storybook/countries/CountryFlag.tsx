@@ -1,9 +1,5 @@
-import type {
-  FC,
-  SVGAttributes,
-} from 'react'
-
 import type { Code } from './codes'
+import type { FC, SVGAttributes } from 'react'
 
 import provider from './CountryFlagProvider'
 

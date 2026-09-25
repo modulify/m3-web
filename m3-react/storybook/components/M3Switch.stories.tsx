@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import { useMemo } from 'react'
+
 import { M3Switch } from '@/components/switch'
 
 import makeId from '@/utils/id'
-import { useMemo } from 'react'
 import { useRecord, useWatch } from '@/hooks'
 
 const M3SwitchWithLabel = ({

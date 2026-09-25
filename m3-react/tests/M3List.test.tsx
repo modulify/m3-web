@@ -1,13 +1,7 @@
-import {
-  render,
-  screen,
-} from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 import { M3Icon } from '@/components/icon'
-import {
-  M3List,
-  M3ListItem,
-} from '@/components/list'
+import { M3List, M3ListItem } from '@/components/list'
 
 describe('m3-react/list', () => {
   test('renders native list semantics', () => {

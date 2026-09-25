@@ -1,18 +1,9 @@
-import type {
-  LineCount,
-  Lines,
-} from '@modulify/m3-foundation/types/components/list'
-import type {
-  ComputedRef,
-  PropType,
-  Ref,
-  Slots,
-  VNode,
-} from 'vue'
+import type { ComputedRef } from 'vue'
+import type { LineCount, Lines } from '@modulify/m3-foundation/types/components/list'
+import type { M3LinkInstance } from '@/components/link'
+import type { PropType, Ref } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
-
-import { M3Link, type M3LinkInstance } from '@/components/link'
-import { M3Ripple } from '@/components/ripple'
+import type { Slots, VNode } from 'vue'
 
 import {
   computed,
@@ -21,10 +12,12 @@ import {
   ref,
 } from 'vue'
 
+import { M3Link } from '@/components/link'
+import { M3Ripple } from '@/components/ripple'
+
 import { normalize } from '@/utils/runtime'
 
 type Root = HTMLElement | M3LinkInstance | null
-type EventHandler = (event: Event) => void
 type ListItemProps = Readonly<{
   type: HTMLButtonElement['type'];
   to?: RouteLocationRaw;
@@ -78,7 +71,7 @@ const call = (handler: unknown, event: Event) => {
   }
 
   if (typeof handler === 'function') {
-    (handler as EventHandler)(event)
+    (handler as ((event: Event) => void))(event)
   }
 }
 
@@ -293,7 +286,7 @@ export default defineComponent({
     const rootElement = computed(() => toElement(root.value))
     const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
 
-    const activateOnKeyup = (event: KeyboardEvent, handler: unknown) => {
+    const onKeyup = (event: KeyboardEvent, handler: unknown) => {
       if (event.code === 'Enter') {
         ripple.value?.activate(event)
       }
@@ -302,13 +295,23 @@ export default defineComponent({
     }
 
     return () => {
-      const collectedAttrs = collectAttrs(attrs)
-      const collectedSlots = collectSlots(slots)
-      const state = getState(props, collectedSlots, collectedAttrs.onClick)
-      const content = renderItemContent(props, collectedSlots, state, ripple, rootElement)
-      const container = renderContainer(props, state, collectedAttrs, root, activateOnKeyup, content)
+      const $attrs = collectAttrs(attrs)
+      const $slots = collectSlots(slots)
+      const state = getState(props, $slots, $attrs.onClick)
 
-      return renderListItem(props, state, collectedAttrs, container)
+      return renderListItem(
+        props,
+        state,
+        $attrs,
+        renderContainer(
+          props,
+          state,
+          $attrs,
+          root,
+          onKeyup,
+          renderItemContent(props, $slots, state, ripple, rootElement)
+        )
+      )
     }
   },
 })

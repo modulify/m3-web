@@ -1,10 +1,10 @@
 import type { FC } from 'react'
 
+import { useState } from 'react'
+
 import { M3Button } from '@/components/button'
 import { M3Dialog } from '@/components/dialog'
 import { M3Icon } from '@/components/icon'
-
-import { useState } from 'react'
 
 const DialogConfirmation: FC = () => {
   const [opened, setOpened] = useState(false)

@@ -1,14 +1,7 @@
 import type { Prop, PropType } from 'vue'
+import type { Size, Variant } from '@modulify/m3-foundation/types/components/fab-button'
 
-import type {
-  Size,
-  Variant,
-} from '@modulify/m3-foundation/types/components/fab-button'
-
-import {
-  sizes,
-  variants,
-} from '@/components/fab-button/values'
+import { sizes, variants } from '@/components/fab-button/values'
 
 export const size = {
   type: String as PropType<Size>,

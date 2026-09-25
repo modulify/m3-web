@@ -1,7 +1,8 @@
+import { useState } from 'react'
+
 import { M3Radio } from '@/components/radio'
 
 import { useId } from '@/hooks'
-import { useState } from 'react'
 
 export interface RadioOption {
   label: string;

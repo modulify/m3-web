@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url'
 
 import { playwright } from '@vitest/browser-playwright'
 
-import viteConfig from './vite.config'
+import viteConfig from './vite.config.common'
 
 const __parent = fileURLToPath(new URL('../', import.meta.url))
 const __workspace = fileURLToPath(new URL('./', import.meta.url))

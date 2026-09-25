@@ -1,41 +1,23 @@
-import type {
-  CSSProperties,
-  FC,
-  FormEvent,
-} from 'react'
+import type { CSSProperties, FC, FormEvent } from 'react'
 import type { M3SelectOption } from '@/components/select'
+
+import { clamp } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
+import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { useEffect, useRef } from 'react'
+import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-import {
-  M3Navigation,
-  M3NavigationTab,
-} from '@/components/navigation'
+import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Select } from '@/components/select'
-import {
-  M3Surface,
-  M3SurfacePanel,
-} from '@/components/surface'
-import { useStateRef } from '@/components/surface/orchestration/useStateRef'
-import {
-  clamp,
-  raf,
-  wait,
-} from '@modulify/m3-foundation/lib/surface/orchestration'
+import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
-import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
-import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
-
-import {
-  useEffect,
-  useRef,
-} from 'react'
 
 import { toClassName } from '@/utils/styling'
+import { useStateRef } from '@/components/surface/orchestration/useStateRef'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360

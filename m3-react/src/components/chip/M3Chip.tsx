@@ -1,17 +1,9 @@
-import type {
-  ButtonHTMLAttributes,
-  ForwardRefRenderFunction,
-  MouseEventHandler,
-  ReactNode,
-} from 'react'
-
-import type { Variant } from '@modulify/m3-foundation/types/components/chip'
-import type {
-  Clickable,
-  Focusable,
-} from '@modulify/m3-foundation/types/dom'
-
+import type { ButtonHTMLAttributes } from 'react'
+import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
+import type { ForwardRefRenderFunction } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
+import type { ReactNode } from 'react'
+import type { Variant } from '@modulify/m3-foundation/types/components/chip'
 
 import {
   forwardRef,
@@ -24,13 +16,9 @@ import {
 import { M3Icon } from '@/components/icon'
 import { M3Ripple } from '@/components/ripple'
 
-import {
-  useElementEffect,
-  useTarget,
-} from '@/hooks'
-
 import { normalize } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
+import { useElementEffect, useTarget } from '@/hooks'
 
 export interface M3ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onToggle'> {
   variant?: Variant;

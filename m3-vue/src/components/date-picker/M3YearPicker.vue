@@ -56,27 +56,22 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue'
-
 import type {
   CalendarAvailability,
   CalendarDayBounds,
 } from '@modulify/m3-foundation/lib/calendar'
+import type { PropType } from 'vue'
 
 import {
   isCalendarYearAvailable,
   isCalendarYearSelectable,
 } from '@modulify/m3-foundation/lib/calendar'
+import { nextTick, shallowRef, watch } from 'vue'
 
 import { M3Icon } from '@/components/icon'
 import { M3List, M3ListItem } from '@/components/list'
-import M3DatePickerOption from './M3DatePickerOption'
 
-import {
-  nextTick,
-  shallowRef,
-  watch,
-} from 'vue'
+import M3DatePickerOption from './M3DatePickerOption'
 
 const YEAR_ROW_HEIGHT = 56
 const YEAR_GRID_COLUMNS = 3

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import type { CSSProperties } from 'react'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import { M3Button } from '@/components/button'
 import { M3Card } from '@/components/card'

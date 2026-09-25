@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
+import { ref } from 'vue'
+
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3SideSheet } from '@/components/side-sheet'
-
-import { ref } from 'vue'
 
 const sideSheetStoryTemplate = `
     <M3Button @click="shown = true">

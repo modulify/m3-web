@@ -1,7 +1,7 @@
+import { useState } from 'react'
+
 import { M3Icon } from '@/components/icon'
 import { M3TextField } from '@/components/text-field'
-
-import { useState } from 'react'
 
 const TextFieldExamples = () => {
   const [filled, setFilled] = useState('')

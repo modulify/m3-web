@@ -58,10 +58,16 @@
 </template>
 
 <script lang="ts" setup>
+import type {
+  CalendarAvailability,
+  CalendarDayBounds,
+  CalendarDayRange,
+} from '@modulify/m3-foundation/lib/calendar'
 import type { PropType } from 'vue'
 
+import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
+import { computed } from 'vue'
 import {
-  CalendarDay,
   getCalendarMonthWeeks,
   getCalendarWeekDays,
   isCalendarDayInRange,
@@ -70,17 +76,7 @@ import {
   isCalendarDaySelectable,
 } from '@modulify/m3-foundation/lib/calendar'
 
-import type {
-  CalendarAvailability,
-  CalendarDayBounds,
-  CalendarDayRange,
-} from '@modulify/m3-foundation/lib/calendar'
-
 import M3DatePickerOption from './M3DatePickerOption'
-
-import {
-  computed,
-} from 'vue'
 
 defineOptions({
   inheritAttrs: false,

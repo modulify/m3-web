@@ -1,14 +1,7 @@
-import type {
-  FC,
-  HTMLAttributes,
-} from 'react'
-
 import type { Appearance } from '@modulify/m3-foundation/types/components/icon'
+import type { FC, HTMLAttributes } from 'react'
 
-import {
-  createContext,
-  useContext,
-} from 'react'
+import { createContext, useContext } from 'react'
 
 import { toClassName } from '@/utils/styling'
 

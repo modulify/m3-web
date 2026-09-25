@@ -1,13 +1,7 @@
-import {
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/vue'
-
-import {
-  defineComponent,
-  h,
-} from 'vue'
+import { defineComponent } from 'vue'
+import { fireEvent } from '@testing-library/vue'
+import { h } from 'vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3Menu } from '@/components/menu'
 

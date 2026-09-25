@@ -1,7 +1,4 @@
-import {
-  render,
-  screen,
-} from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 import { M3SurfacePanel } from '@/components/surface'
 

@@ -1,28 +1,12 @@
-import type {
-  FC,
-  ForwardRefRenderFunction,
-  ReactNode,
-} from 'react'
+import type { FC, ForwardRefRenderFunction } from 'react'
+import type { M3PopperMethods, M3PopperProps } from '@/components/popper'
+import type { ReactNode } from 'react'
 
-import {
-  M3PopperMethods,
-  M3PopperProps,
-} from '@/components/popper'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
-import {
-  M3Popper,
-} from '@/components/popper'
+import { M3Popper } from '@/components/popper'
 
-import {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-} from 'react'
-
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export interface M3RichTooltipProps extends M3PopperProps {}

@@ -1,20 +1,15 @@
 /* eslint-disable max-lines-per-function */
-import {
-  computed,
-  onBeforeUnmount,
-  nextTick,
-  onMounted,
-  ref,
-} from 'vue'
+import type { SurfaceMotionRect } from '@modulify/m3-foundation/lib/surface/orchestration'
 
+import { computed } from 'vue'
 import {
   measureContainerRect,
   measureRelativeRect,
-  raf,
-  toMotionStyle,
-  type SurfaceMotionRect,
-  wait,
 } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { nextTick, onBeforeUnmount, onMounted } from 'vue'
+import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { ref } from 'vue'
+import { toMotionStyle, wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 export function useSurfaceCardPageMorph(transitionMs: number) {
   const expanded = ref(false)

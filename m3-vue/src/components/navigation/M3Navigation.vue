@@ -40,18 +40,16 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue'
 import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
+import type { PropType } from 'vue'
+
+import { computed, ref, watch } from 'vue'
+
+import { useBreakpoint } from '@/composables/breakpoint'
 
 import M3NavigationSection from './M3NavigationSection.vue'
 
-import {
-  computed,
-  ref,
-  watch,
-} from 'vue'
 import { provideM3NavigationAppearance } from './injections'
-import { useBreakpoint } from '@/composables/breakpoint'
 
 const props = defineProps({
   appearance: {

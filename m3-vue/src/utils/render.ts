@@ -1,7 +1,8 @@
 import type { ContentToRender } from '~types/render'
 
-import arraify from '@/utils/arraify'
 import { h } from 'vue'
+
+import arraify from '@/utils/arraify'
 
 export default (content: ContentToRender) => arraify(
   typeof content === 'function'

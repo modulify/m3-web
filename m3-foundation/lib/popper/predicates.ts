@@ -1,16 +1,11 @@
-import type {
-  Boundary,
-} from '@floating-ui/dom'
-
-import type {
-  Delay,
-  OverflowBehavior,
-  Placement,
-  Trigger,
-  TriggerSchema,
-} from '../../types/components/popper'
-
+import type { Boundary } from '@floating-ui/dom'
+import type { Delay, OverflowBehavior, Placement } from '../../types/components/popper'
 import type { Predicate } from '../predicates'
+import type { Trigger, TriggerSchema } from '../../types/components/popper'
+
+import { isExact } from '@modulify/validator/predicates'
+import { OneOf } from '@modulify/validator/assertions'
+import { Or } from '@modulify/validator/predicates'
 
 import {
   isArrayOf,
@@ -18,15 +13,6 @@ import {
   isNumeric,
   isShape,
 } from '../predicates'
-
-import {
-  OneOf,
-} from '@modulify/validator/assertions'
-
-import {
-  isExact,
-  Or,
-} from '@modulify/validator/predicates'
 
 export const isBoundary: Predicate<Boundary> = Or(
   isExact('clippingAncestors' as const),

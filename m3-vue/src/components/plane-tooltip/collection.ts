@@ -1,5 +1,5 @@
-import type { Ref } from 'vue'
 import type { Definition, Entry } from './types'
+import type { Ref } from 'vue'
 
 import isEqual from 'lodash.isequal'
 

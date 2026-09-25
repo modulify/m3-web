@@ -1,6 +1,6 @@
 <script lang="ts">
-import type { PropType } from 'vue'
 import type { Code } from './codes'
+import type { PropType } from 'vue'
 
 import {
   defineComponent,

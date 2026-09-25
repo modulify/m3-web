@@ -1,12 +1,6 @@
-import type {
-  MutableRefObject,
-  SetStateAction,
-} from 'react'
+import type { MutableRefObject, SetStateAction } from 'react'
 
-import {
-  useRef,
-  useState,
-} from 'react'
+import { useRef, useState } from 'react'
 
 export function useStateRef<T>(
   initial: T

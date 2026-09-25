@@ -1,26 +1,18 @@
-import type {
-  FC,
-  ReactNode,
-} from 'react'
+import type { FC } from 'react'
 import type { M3SurfaceProps } from '@/components/surface'
+import type { ReactNode } from 'react'
+
+import { m3MotionDurations } from '@modulify/m3-foundation/lib/motion'
+import { useMemo } from 'react'
+import { useTransition } from 'react-transition-state'
 
 import { M3IconButton } from '@/components/icon-button'
 import { M3ScrollRail } from '@/components/scroll-rail'
 import { M3Surface } from '@/components/surface'
-import { m3MotionDurations } from '@modulify/m3-foundation/lib/motion'
 
-import {
-  useId,
-} from '@/hooks'
-
-import { useMemo } from 'react'
-import { useTransition } from 'react-transition-state'
-
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
+import { useId } from '@/hooks'
 
 export interface M3SideSheetProps extends Omit<
   M3SurfaceProps,
@@ -203,11 +195,9 @@ const M3SideSheet: FC<M3SideSheetProps> = ({
     </M3Surface>
   )
 
-  if (!transition.isMounted) {
-    return null
-  }
-
-  return surfaceNode
+  return transition.isMounted
+    ? surfaceNode
+    : null
 }
 
 export default Object.assign(M3SideSheet, {

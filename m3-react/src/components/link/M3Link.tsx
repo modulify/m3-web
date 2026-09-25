@@ -1,18 +1,7 @@
-import type {
-  ForwardRefRenderFunction,
-  HTMLAttributes,
-} from 'react'
+import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
+import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
 
-import type {
-  Clickable,
-  Focusable,
-} from '@modulify/m3-foundation/types/dom'
-
-import {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-} from 'react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement
 

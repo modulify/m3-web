@@ -45,32 +45,32 @@
 
             <M3NavigationTab
                 label="Files"
-                :active="activeNavTab === 'files'"
-                @navigate="activeNavTab = 'files'; navExpanded = false"
+                :active="navTab === 'files'"
+                @navigate="navTab = 'files'; navExpanded = false"
             >
                 <M3Icon name="folder" />
             </M3NavigationTab>
 
             <M3NavigationTab
                 label="Timeline"
-                :active="activeNavTab === 'timeline'"
-                @navigate="activeNavTab = 'timeline'; navExpanded = false"
+                :active="navTab === 'timeline'"
+                @navigate="navTab = 'timeline'; navExpanded = false"
             >
                 <M3Icon name="schedule" />
             </M3NavigationTab>
 
             <M3NavigationTab
                 label="Tasks"
-                :active="activeNavTab === 'tasks'"
-                @navigate="activeNavTab = 'tasks'; navExpanded = false"
+                :active="navTab === 'tasks'"
+                @navigate="navTab = 'tasks'; navExpanded = false"
             >
                 <M3Icon name="check_circle" />
             </M3NavigationTab>
 
             <M3NavigationTab
                 label="Analytics"
-                :active="activeNavTab === 'analytics'"
-                @navigate="activeNavTab = 'analytics'; navExpanded = false"
+                :active="navTab === 'analytics'"
+                @navigate="navTab = 'analytics'; navExpanded = false"
             >
                 <M3Icon name="insights" />
             </M3NavigationTab>
@@ -110,7 +110,7 @@
                             <div
                                 v-if="!overlayActive"
                                 class="surface-card-page__overlay-wrap surface-card-page__overlay-wrap_inline"
-                                :style="compactWrapStyle"
+                                style="width: 100%"
                                 data-testid="surface-card-overlay-wrap"
                             >
                                 <M3SurfacePanel
@@ -123,8 +123,8 @@
                                     :fill-width="true"
                                     :fill-height="overlayActive"
                                     :rounding="expanded ? 0 : 24"
-                                    :transition-ms="TRANSITION_MS"
-                                    :transition-timing="TRANSITION_EASING"
+                                    :transition-ms="m3MotionDurations.medium3"
+                                    :transition-timing="m3MotionEasings.standard"
                                     :variant="expanded ? 'surface' : 'surface-container-low'"
                                     :elevation="expanded ? 0 : 1"
                                     overflow="auto"
@@ -194,8 +194,8 @@
                                 :fill-width="true"
                                 :fill-height="overlayActive"
                                 :rounding="expanded ? 0 : 24"
-                                :transition-ms="TRANSITION_MS"
-                                :transition-timing="TRANSITION_EASING"
+                                :transition-ms="m3MotionDurations.medium3"
+                                :transition-timing="m3MotionEasings.standard"
                                 :variant="expanded ? 'surface' : 'surface-container-low'"
                                 :elevation="expanded ? 0 : 1"
                                 overflow="auto"
@@ -227,46 +227,35 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, ref } from 'vue'
+
+import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-import {
-  M3Navigation,
-  M3NavigationTab,
-} from '@/components/navigation'
-import {
-  M3SurfacePanel,
-} from '@/components/surface'
-import { useSurfaceCardPageMorph } from '@/components/surface/orchestration/useSurfaceCardPageMorph'
+import { M3Navigation, M3NavigationTab } from '@/components/navigation'
+import { M3SurfacePanel } from '@/components/surface'
 
 import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
-import {
-  computed,
-  ref,
-} from 'vue'
+  useSurfaceCardPageMorph,
+} from '@/components/surface/orchestration/useSurfaceCardPageMorph'
 
+const navTab = ref<'files' | 'timeline' | 'tasks' | 'analytics'>('files')
 const navExpanded = ref(false)
-const activeNavTab = ref<'files' | 'timeline' | 'tasks' | 'analytics'>('files')
-const TRANSITION_MS = m3MotionDurations.medium3
-const TRANSITION_EASING = m3MotionEasings.standard
 
 const {
+  canvas,
+  originSlot,
   expanded,
   busy,
   backgroundCollapsed,
   originHeight,
   overlayStyle,
-  canvas,
-  originSlot,
   toggleCardMode,
-} = useSurfaceCardPageMorph(TRANSITION_MS)
+} = useSurfaceCardPageMorph(m3MotionDurations.medium3)
+
 const overlayActive = computed(() => busy.value || expanded.value)
-const compactWrapStyle = computed(() => ({
-  width: '100%',
-}))
 </script>
 
 <style lang="scss" scoped>

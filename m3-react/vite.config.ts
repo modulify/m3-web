@@ -1,13 +1,13 @@
-import { defineConfig, type Plugin } from 'vite'
+import type { LibraryFormats } from 'vite'
+
 import { resolve } from 'node:path'
+
+import { defineConfig } from 'vite'
 import dts from 'unplugin-dts/vite'
+import { mergeConfig } from 'vite'
 
 import common from './vite.config.common'
-import {
-  dependencies,
-  name,
-  peerDependencies,
-} from './package.json'
+import { dependencies, name, peerDependencies } from './package.json'
 
 const externalPackages = [
   name,
@@ -16,22 +16,16 @@ const externalPackages = [
 ]
 
 const rootEntry = resolve(__dirname, './src/index.ts')
-const rootLayers = [
-  'components',
-  'hooks',
-]
-
-const createRootFacadePlugin = (): Plugin => ({
-  name: 'm3-react-root-facade',
-  enforce: 'pre',
-  transform: (_code, id) => {
-    if (id.split('?', 1)[0] === rootEntry) {
-      return `${rootLayers.map(layer => (
-        `export * from '${name}/${layer}'`
-      )).join('\n')}\n`
-    }
+const rootLayerAliases = [
+  {
+    find: /^\.\/components$/,
+    replacement: `${name}/components`,
   },
-})
+  {
+    find: /^\.\/hooks$/,
+    replacement: `${name}/hooks`,
+  },
+]
 
 const layers = {
   'package-root': {
@@ -66,12 +60,8 @@ const isExternal = (id: string): boolean => (
 export default defineConfig(({ mode }) => {
   const layer = layers[mode as keyof typeof layers] ?? layers['package-root']
 
-  return {
-    ...common,
-
+  return mergeConfig(common, {
     plugins: [
-      ...common.plugins ?? [],
-      ...(layer.rootFacade ? [createRootFacadePlugin()] : []),
       ...(layer.declarations ? [
         dts({
           afterDiagnostic: (diagnostics) => {
@@ -95,13 +85,17 @@ export default defineConfig(({ mode }) => {
       ] : []),
     ],
 
+    resolve: {
+      alias: layer.rootFacade ? rootLayerAliases : [],
+    },
+
     build: {
       emptyOutDir: layer.clean,
       lib: {
         name: '@modulify/m3-react',
         formats: ['es', 'cjs'],
         entry: layer.entry,
-        fileName: format => `${layer.fileName}.${format === 'es' ? 'mjs' : format}`,
+        fileName: (format: LibraryFormats) => `${layer.fileName}.${format === 'es' ? 'mjs' : format}`,
       },
       minify: false,
       rollupOptions: {
@@ -111,5 +105,5 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-  }
+  })
 })

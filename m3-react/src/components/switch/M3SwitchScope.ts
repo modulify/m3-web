@@ -1,7 +1,4 @@
-import {
-  createContext,
-  useContext,
-} from 'react'
+import { createContext, useContext } from 'react'
 
 const M3SwitchScope = createContext<{
   checked: boolean;

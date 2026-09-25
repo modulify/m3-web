@@ -1,11 +1,10 @@
 import globals from 'globals'
 
-import pluginJs from '@eslint/js'
-import pluginTs from 'typescript-eslint'
-
+import pluginDependencies from '@omnicajs/eslint-plugin-dependencies'
 import pluginImport from 'eslint-plugin-import'
 import pluginImportUnused from 'eslint-plugin-unused-imports'
-
+import pluginJs from '@eslint/js'
+import pluginTs from 'typescript-eslint'
 import pluginVue from 'eslint-plugin-vue'
 
 export default [
@@ -18,6 +17,7 @@ export default [
       },
     },
     plugins: {
+      dependencies: pluginDependencies,
       'unused-imports': pluginImportUnused,
     },
   },
@@ -27,6 +27,11 @@ export default [
   ...pluginVue.configs['flat/recommended'],
   {
     rules: {
+      '@typescript-eslint/consistent-type-imports': ['error', {
+        disallowTypeAnnotations: false,
+        fixStyle: 'separate-type-imports',
+        prefer: 'type-imports',
+      }],
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-inferrable-types': 'off',
@@ -72,10 +77,57 @@ export default [
       'quotes': ['error', 'single'],
       'semi': ['error', 'never'],
 
+      'dependencies/import-style': ['error', {
+        maxSingleLineLength: 90,
+        maxSingleLineSpecifiers: 3,
+      }],
+      'dependencies/separate-type-imports': 'error',
+      'dependencies/separate-type-partitions': 'error',
+      'dependencies/sort-named-imports': ['error', {
+        type: 'alphabetical',
+        ignoreAlias: true,
+      }],
+      'dependencies/sort-imports': ['error', {
+        type: 'alphabetical',
+        imports: {
+          orderBy: 'alias',
+          splitDeclarations: true,
+        },
+        groups: [
+          'side-effect-style',
+          'side-effect',
+          [
+            'type-import',
+            'type-builtin',
+            'type-external',
+            'type-internal',
+            'type-parent',
+            'type-sibling',
+            'type-index',
+          ],
+          'builtin',
+          'value-external',
+          'value-internal',
+          ['value-parent', 'value-sibling'],
+          'index',
+          'ts-equals-import',
+          'unknown',
+        ],
+        newlinesInside: 1,
+        partitions: {
+          orderBy: 'type-first',
+          splitBy: {
+            comments: false,
+            newlines: true,
+          },
+        },
+      }],
+
       'import/named': 'off',
       'import/newline-after-import': 'error',
       'import/no-absolute-path': 'error',
       'import/no-cycle': 'error',
+      'import/no-duplicates': 'off',
       'import/no-empty-named-blocks': 'error',
       'import/no-extraneous-dependencies': 'error',
       'import/no-self-import': 'error',

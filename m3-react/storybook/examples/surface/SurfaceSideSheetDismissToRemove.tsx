@@ -1,28 +1,17 @@
 import type { FC } from 'react'
 
+import { clamp } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { useEffect, useRef } from 'react'
+import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-import {
-  M3Navigation,
-  M3NavigationTab,
-} from '@/components/navigation'
+import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Surface } from '@/components/surface'
 import { useStateRef } from '@/components/surface/orchestration/useStateRef'
-import {
-  clamp,
-  raf,
-  wait,
-} from '@modulify/m3-foundation/lib/surface/orchestration'
-import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
-
-import {
-  useEffect,
-  useRef,
-} from 'react'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360

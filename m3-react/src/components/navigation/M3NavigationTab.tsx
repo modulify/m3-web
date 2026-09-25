@@ -1,20 +1,9 @@
-import type {
-  FC,
-  ForwardRefRenderFunction,
-  HTMLAttributes,
-  ReactNode,
-} from 'react'
-
-import type {
-  Clickable,
-  Focusable,
-} from '@modulify/m3-foundation/types/dom'
-
+import type { Clickable } from '@modulify/m3-foundation/types/dom'
+import type { FC } from 'react'
+import type { Focusable } from '@modulify/m3-foundation/types/dom'
+import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
-
-import { M3Badge } from '@/components/badge'
-import { M3IconAppearance } from '@/components/icon'
-import { M3Ripple } from '@/components/ripple'
+import type { ReactNode } from 'react'
 
 import {
   forwardRef,
@@ -23,6 +12,13 @@ import {
   useRef,
 } from 'react'
 
+import { M3Badge } from '@/components/badge'
+import { M3IconAppearance } from '@/components/icon'
+import { M3Ripple } from '@/components/ripple'
+
+import { compose } from '@/utils/events'
+import { defineSlot, distinct } from '@/utils/content'
+import { toClassName } from '@/utils/styling'
 import {
   useBreakpoint,
   useElementEffect,
@@ -30,12 +26,6 @@ import {
   useTarget,
 } from '@/hooks'
 
-import { compose } from '@/utils/events'
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
-import { toClassName } from '@/utils/styling'
 import { useM3NavigationAppearance } from './M3NavigationAppearance'
 
 export interface M3NavigationTabProps extends HTMLAttributes<HTMLElement> {

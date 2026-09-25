@@ -1,9 +1,6 @@
+import { act } from '@testing-library/react'
 import { createRef } from 'react'
-
-import {
-  act,
-  render,
-} from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 import { M3ScrollRail } from '@/components/scroll-rail'
 

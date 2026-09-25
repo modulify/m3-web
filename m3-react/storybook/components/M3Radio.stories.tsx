@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { M3Radio } from '@/components/radio'
-import RadioGroup from '../examples/radio/RadioGroup'
-
 import { useState } from 'react'
+
+import { M3Radio } from '@/components/radio'
+
 import { useId } from '@/hooks'
+
+import RadioGroup from '../examples/radio/RadioGroup'
 
 const meta = {
   title: 'Components/M3Radio',

@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts" setup>
-import { M3Radio } from '@/components/radio'
-
 import { ref } from 'vue'
+
+import { M3Radio } from '@/components/radio'
 
 import useId from '@/composables/id'
 

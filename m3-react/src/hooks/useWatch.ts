@@ -1,9 +1,5 @@
-import {
-  useEffect,
-  useRef,
-} from 'react'
-
 import isEqual from 'lodash.isequal'
+import { useEffect, useRef } from 'react'
 
 export type WatchHandler<T> = (current: T, previous: T) => void
 export type WatchOptions = {

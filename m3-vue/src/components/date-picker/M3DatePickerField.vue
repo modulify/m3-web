@@ -86,39 +86,33 @@
 
 <script lang="ts" setup>
 import type {
-  ClassValue as CssClass,
-  PropType,
-} from 'vue'
-import type { Placement } from '@floating-ui/dom'
-
-import type {
   CalendarAvailability,
   CalendarYearRange,
 } from '@modulify/m3-foundation/lib/calendar'
+import type { ClassValue as CssClass } from 'vue'
+import type { Placement } from '@floating-ui/dom'
+import type { PropType } from 'vue'
 
+import { CalendarDay, clampCalendarDay } from '@modulify/m3-foundation/lib/calendar'
+
+import { computed } from 'vue'
 import {
-  CalendarDay,
-  DEFAULT_CALENDAR_DATE_INPUT_FORMAT,
-  clampCalendarDay,
   formatCalendarDateInput,
   getCalendarBounds,
   isCalendarDaySelectable,
   parseCalendarDateInput,
 } from '@modulify/m3-foundation/lib/calendar'
+import { ref, shallowRef, watch } from 'vue'
+
+import { DEFAULT_CALENDAR_DATE_INPUT_FORMAT } from '@modulify/m3-foundation/lib/calendar'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 import { M3Popper } from '@/components/popper'
 import { M3TextField } from '@/components/text-field'
-import M3DatePicker from './M3DatePicker.vue'
 
-import {
-  computed,
-  ref,
-  shallowRef,
-  watch,
-} from 'vue'
+import M3DatePicker from './M3DatePicker.vue'
 
 defineOptions({
   inheritAttrs: false,

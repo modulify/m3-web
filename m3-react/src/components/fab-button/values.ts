@@ -1,7 +1,4 @@
-import type {
-  Size,
-  Variant,
-} from '@modulify/m3-foundation/types/components/fab-button'
+import type { Size, Variant } from '@modulify/m3-foundation/types/components/fab-button'
 
 export const sizes: Size[] = ['sm', 'md', 'lg']
 

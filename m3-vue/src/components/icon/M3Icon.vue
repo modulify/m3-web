@@ -9,16 +9,9 @@
 
 <script lang="ts" setup>
 import type { Appearance } from '@modulify/m3-foundation/types/components/icon'
-import type {
-  PropType,
-  Ref,
-} from 'vue'
+import type { PropType, Ref } from 'vue'
 
-import {
-  computed,
-  inject,
-  ref,
-} from 'vue'
+import { computed, inject, ref } from 'vue'
 
 import { M3IconAppearance } from '@/components/icon'
 

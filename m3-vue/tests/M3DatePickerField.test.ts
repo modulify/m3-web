@@ -1,11 +1,6 @@
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/vue'
-
+import { fireEvent } from '@testing-library/vue'
 import { nextTick } from 'vue'
+import { render, screen, waitFor } from '@testing-library/vue'
 
 import { M3DatePickerField } from '@/components/date-picker'
 

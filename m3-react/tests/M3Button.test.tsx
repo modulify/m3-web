@@ -1,14 +1,9 @@
-import { ForwardRefRenderFunction } from 'react'
+import type { ForwardRefRenderFunction } from 'react'
 
-import { act, render } from '@testing-library/react'
-
-import {
-  createElement,
-  createRef,
-  forwardRef,
-  useImperativeHandle,
-  useState,
-} from 'react'
+import { act } from '@testing-library/react'
+import { createElement, createRef, forwardRef } from 'react'
+import { render } from '@testing-library/react'
+import { useImperativeHandle, useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'

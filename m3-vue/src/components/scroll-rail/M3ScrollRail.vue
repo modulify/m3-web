@@ -16,14 +16,13 @@
 <script lang="ts" setup>
 import type { ScrollRail } from '@modulify/m3-foundation/lib/scroll'
 
+import { createRail } from '@modulify/m3-foundation/lib/scroll'
 import {
   onBeforeUnmount,
   onMounted,
   ref,
   watch,
 } from 'vue'
-
-import { createRail } from '@modulify/m3-foundation/lib/scroll'
 
 const props = defineProps({
   horizontal: {

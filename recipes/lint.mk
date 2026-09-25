@@ -5,6 +5,11 @@ eslint: node_modules ## [Quality][docker][lint] Runs eslint
 	$(TARGET_HEADER)
 	$(YARN) eslint
 
+.PHONY: eslint-fix
+eslint-fix: node_modules ## [Quality][docker][lint] Runs eslint with --fix flag
+	$(TARGET_HEADER)
+	$(YARN) eslint --fix
+
 .PHONY: tsc
 tsc: node_modules ## [Quality][docker][types] Runs type checks in all workspaces
 	$(TARGET_HEADER)

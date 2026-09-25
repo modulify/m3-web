@@ -1,7 +1,4 @@
-import type {
-  CSSProperties,
-  PropType,
-} from 'vue'
+import type { CSSProperties, PropType } from 'vue'
 import type {
   Length as SurfaceLength,
   Variant as SurfaceVariant,
@@ -21,11 +18,7 @@ export {
   isDefined,
   toLength,
 } from '@modulify/m3-foundation/lib/surface/style'
-import {
-  isId,
-  isUndefined,
-  Or,
-} from '@modulify/m3-foundation/lib/predicates'
+import { isId, isUndefined, Or } from '@modulify/m3-foundation/lib/predicates'
 
 export const surfacePanelProps = {
   id: {

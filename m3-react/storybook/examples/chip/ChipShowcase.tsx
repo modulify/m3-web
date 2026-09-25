@@ -1,9 +1,9 @@
 import type { FC } from 'react'
 
+import { useState } from 'react'
+
 import { M3Chip } from '@/components/chip'
 import { M3Icon } from '@/components/icon'
-
-import { useState } from 'react'
 
 export interface ChipShowcaseProps {
   mode?: 'matrix' | 'filters' | 'inputs';

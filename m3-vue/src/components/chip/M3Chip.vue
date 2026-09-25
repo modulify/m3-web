@@ -26,7 +26,7 @@
 
                 <M3ChipContent />
             </span>
-        </button>
+        </button>name
 
         <button
             v-if="dismissible"
@@ -56,13 +56,7 @@
 
 <script lang="ts" setup>
 import type { Interactive } from '@modulify/m3-foundation/types/dom'
-import type {
-  PropType,
-  StyleValue,
-} from 'vue'
-
-import { M3Icon } from '@/components/icon'
-import { M3Ripple } from '@/components/ripple'
+import type { PropType, StyleValue } from 'vue'
 
 import {
   computed,
@@ -71,6 +65,9 @@ import {
   useAttrs,
   useSlots,
 } from 'vue'
+
+import { M3Icon } from '@/components/icon'
+import { M3Ripple } from '@/components/ripple'
 
 import { normalize } from '@/utils/runtime'
 

@@ -1,7 +1,7 @@
 import {
   CalendarDay,
-  clampCalendarMonth,
   clampCalendarDay,
+  clampCalendarMonth,
   formatCalendarDateInput,
   getCalendarBounds,
   getCalendarDecade,

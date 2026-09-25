@@ -1,10 +1,6 @@
-import {
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/vue'
-
+import { fireEvent } from '@testing-library/vue'
 import { nextTick } from 'vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3Navigation } from '@/components/navigation'
 

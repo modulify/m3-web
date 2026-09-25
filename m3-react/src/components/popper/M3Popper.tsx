@@ -1,22 +1,13 @@
-import type {
-  ForwardRefRenderFunction,
-} from 'react'
-
-import type {
-  CloserEvent,
-} from '@modulify/m3-foundation/types/components/popper'
-
-import type {
-  M3PopperMethods,
-  M3PopperProps,
-} from './types'
+import type { CloserEvent } from '@modulify/m3-foundation/types/components/popper'
+import type { ForwardRefRenderFunction } from 'react'
+import type { M3PopperMethods, M3PopperProps } from './types'
 
 import Scheduler from '@modulify/m3-foundation/lib/Scheduler'
 
+import { computePosition } from '@modulify/m3-foundation/lib/popper/floating'
 import { createPortal } from 'react-dom'
-
+import { forwardRef } from 'react'
 import {
-  forwardRef,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -24,21 +15,12 @@ import {
   useRef,
 } from 'react'
 
-import {
-  useAutoAdjust,
-  useDelay,
-  useListening,
-} from './hooks'
-
-import {
-  useRecord,
-  useWatch,
-} from '@/hooks'
-
-import { computePosition } from '@modulify/m3-foundation/lib/popper/floating'
-import { toClassName } from '@/utils/styling'
-
 import * as globalEvents from '@modulify/m3-foundation/lib/popper/globalEvents'
+
+import { toClassName } from '@/utils/styling'
+import { useRecord, useWatch } from '@/hooks'
+
+import { useAutoAdjust, useDelay, useListening } from './hooks'
 
 type HideReason = 'generic' | 'by-closer' | 'by-miss-click'
 

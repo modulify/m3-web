@@ -1,8 +1,8 @@
 import type { FC } from 'react'
 
-import { M3Switch } from '@/components/switch'
-
 import { useState } from 'react'
+
+import { M3Switch } from '@/components/switch'
 
 import { toClassName } from '@/utils/styling'
 import useId from '@/hooks/useId'

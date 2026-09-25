@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
+import { ref } from 'vue'
+
 import { M3Icon } from '@/components/icon'
 import { M3TextField } from '@/components/text-field'
-
-import { ref } from 'vue'
 
 const meta = {
   title: 'Components/M3TextField',

@@ -78,33 +78,22 @@
 </template>
 
 <script lang="ts" generic="T" setup>
-import type { PropType } from 'vue'
-import type { Placement } from '@floating-ui/dom'
-
 import type { M3SelectOption } from './types'
+import type { Placement } from '@floating-ui/dom'
+import type { PropType } from 'vue'
 
-import SpriteCaret from './caret.svg'
-import {
-  M3Menu,
-  M3MenuItem,
-} from '../menu'
-import { M3ScrollRail } from '../scroll-rail'
-import { M3TextField } from '../text-field'
-
-import {
-  computed,
-  onMounted,
-  onBeforeUnmount,
-  ref,
-} from 'vue'
-
-import {
-  isId,
-  isUndefined,
-  Or,
-} from '@modulify/m3-foundation/lib/predicates'
+import { computed } from 'vue'
+import { isId, isUndefined } from '@modulify/m3-foundation/lib/predicates'
+import { onBeforeUnmount, onMounted } from 'vue'
+import { Or } from '@modulify/m3-foundation/lib/predicates'
+import { ref } from 'vue'
 
 import useId from '@/composables/id'
+
+import { M3Menu, M3MenuItem } from '../menu'
+import { M3ScrollRail } from '../scroll-rail'
+import { M3TextField } from '../text-field'
+import SpriteCaret from './caret.svg'
 
 type Maybe<T> = T | null
 

@@ -1,10 +1,6 @@
-import {
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/vue'
-
+import { fireEvent } from '@testing-library/vue'
 import { h } from 'vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3Icon } from '@/components/icon'
 import { M3NavigationTab } from '@/components/navigation'

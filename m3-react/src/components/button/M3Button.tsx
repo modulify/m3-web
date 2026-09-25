@@ -1,19 +1,9 @@
-import type {
-  ForwardRefRenderFunction,
-  HTMLAttributes,
-} from 'react'
-
 import type { Appearance } from '@modulify/m3-foundation/types/components/button'
-import type {
-  Clickable,
-  Focusable,
-} from '@modulify/m3-foundation/types/dom'
-
+import type { Clickable } from '@modulify/m3-foundation/types/dom'
 import type { ElementEffect } from '@/hooks/useElementEffect'
-
+import type { Focusable } from '@modulify/m3-foundation/types/dom'
+import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
-
-import { M3Ripple } from '@/components/ripple'
 
 import {
   forwardRef,
@@ -22,14 +12,12 @@ import {
   useRef,
 } from 'react'
 
-import {
-  useElementEffect,
-  useTarget,
-} from '@/hooks'
+import { M3Ripple } from '@/components/ripple'
 
 import { compose } from '@/utils/events'
 import { normalize } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
+import { useElementEffect, useTarget } from '@/hooks'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement
 

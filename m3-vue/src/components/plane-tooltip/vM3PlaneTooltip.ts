@@ -1,15 +1,12 @@
-import type {
-  App,
-  DirectiveHook,
-  ObjectDirective,
-  VNode,
-} from 'vue'
-
+import type { App } from 'vue'
 import type { Definition } from './types'
-
-import M3PlaneTooltipCollector, { type M3PlaneTooltipCollectorMethods } from './M3PlaneTooltipCollector'
+import type { DirectiveHook } from 'vue'
+import type { M3PlaneTooltipCollectorMethods } from './M3PlaneTooltipCollector'
+import type { ObjectDirective, VNode } from 'vue'
 
 import { createApp } from 'vue'
+
+import M3PlaneTooltipCollector from './M3PlaneTooltipCollector'
 
 let app: App | null = null
 let vm: M3PlaneTooltipCollectorMethods | null = null

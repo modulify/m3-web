@@ -1,14 +1,7 @@
-import {
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/vue'
-
-import {
-  defineComponent,
-  h,
-  nextTick,
-} from 'vue'
+import { defineComponent } from 'vue'
+import { fireEvent } from '@testing-library/vue'
+import { h, nextTick } from 'vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3SideSheet } from '@/components/side-sheet'
 

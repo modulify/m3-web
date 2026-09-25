@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
 import { M3Icon } from '@/components/icon'
-import {
-  M3List,
-  M3ListItem,
-} from '@/components/list'
+import { M3List, M3ListItem } from '@/components/list'
 
 const meta = {
   title: 'Components/M3List',

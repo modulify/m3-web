@@ -1,10 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import type { M3MenuProps } from '@/components/menu'
+import type { Meta, StoryObj } from '@storybook/react'
+
+import { useCallback, useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3Menu, M3MenuItem } from '@/components/menu'
-import { useCallback, useState } from 'react'
 
 const M3MenuStory = (args: M3MenuProps) => {
   const [target, setTarget] = useState<HTMLElement | null>(null)

@@ -1,14 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
 import type { Code } from '../countries/codes'
+import type { Meta, StoryObj } from '@storybook/vue3'
 
-import CountryFlag from '../countries/CountryFlag.vue'
+import { computed, ref } from 'vue'
+
 import { M3Icon } from '@/components/icon'
 import { M3Select } from '@/components/select'
 
-import {
-  computed,
-  ref,
-} from 'vue'
+import CountryFlag from '../countries/CountryFlag.vue'
 
 import codes from '../countries/codes'
 import countries from '../countries/names.json'
