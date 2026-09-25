@@ -104,7 +104,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Focusable } from '@modulify/m3-foundation'
+import type { Focusable } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
 import {

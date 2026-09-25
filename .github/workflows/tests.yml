@@ -110,6 +110,10 @@ jobs:
       - name: Build packages
         run: yarn build
 
+      - name: Validate packed packages
+        if: matrix.node-version == '24.x'
+        run: yarn test:packages
+
   tests:
     needs: build
     timeout-minutes: 90

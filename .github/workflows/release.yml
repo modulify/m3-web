@@ -1,4 +1,5 @@
 name: Release
+run-name: Release ${{ inputs.prerelease }} from ${{ github.ref_name }}
 
 on:
   workflow_dispatch:
@@ -14,12 +15,21 @@ on:
         default: 'none'
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    permissions:
+      contents: write
+    outputs:
+      npm_tag: ${{ steps.release_metadata.outputs.npm_tag }}
+      tag: ${{ steps.release_metadata.outputs.tag }}
 
     steps:
       - name: Checkout repository
@@ -27,15 +37,24 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Validate release ref
+        env:
+          PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          if [ "$GITHUB_REF_TYPE" != "branch" ]; then
+            echo "Release must run from a branch. Current ref type: $GITHUB_REF_TYPE"
+            exit 1
+          fi
+
+          if [ "$PRERELEASE" = "none" ] && [ "$GITHUB_REF_NAME" != "main" ]; then
+            echo "Stable releases are allowed only from main. Current branch: $GITHUB_REF_NAME"
+            exit 1
+          fi
+
       - name: Setup Node and dependencies
         uses: ./.github/actions/setup-env
         with:
           node-version: '24.x'
-
-      - name: Configure Git
-        run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
 
       - name: Run package type checks
         run: yarn tsc
@@ -61,38 +80,102 @@ jobs:
       - name: Build packages
         run: yarn build
 
+      - name: Validate packed packages
+        run: yarn test:packages
+
       - name: Build React Storybook
         run: yarn workspace @modulify/m3-react storybook:build --test --quiet
 
       - name: Build Vue Storybook
         run: yarn workspace @modulify/m3-vue storybook:build --test --quiet
 
-      - name: Run release [${{ inputs.prerelease }}]
+      - name: Configure Git
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      - name: Create prerelease commit and tag
         if: ${{ inputs.prerelease != 'none' }}
         env:
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+          YARN_ENABLE_IMMUTABLE_INSTALLS: 'false'
         run: yarn release:${{ inputs.prerelease }}
 
-      - name: Ensure stable release is running from main
+      - name: Create stable release commit and tag
         if: ${{ inputs.prerelease == 'none' }}
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: 'false'
+        run: yarn release
+
+      - name: Resolve release metadata
+        id: release_metadata
+        env:
+          PRERELEASE: ${{ inputs.prerelease }}
         run: |
-          if [ "${{ github.ref_name }}" != "main" ]; then
-            echo "Stable release is allowed only from main. Current ref: ${{ github.ref_name }}"
+          RELEASE_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version")"
+          RELEASE_TAG="v${RELEASE_VERSION}"
+
+          git rev-parse --verify "refs/tags/${RELEASE_TAG}"
+
+          if [ "$(git rev-list -n 1 "refs/tags/${RELEASE_TAG}")" != "$(git rev-parse HEAD)" ]; then
+            echo "Release tag ${RELEASE_TAG} does not point to the release commit."
             exit 1
           fi
 
-      - name: Run release
-        if: ${{ inputs.prerelease == 'none' }}
-        env:
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false
-        run: yarn release
+          if [ "$PRERELEASE" = "none" ]; then
+            NPM_TAG="latest"
+          else
+            NPM_TAG="$PRERELEASE"
+          fi
 
-      - name: Push current branch with tags
+          echo "npm_tag=${NPM_TAG}" >> "$GITHUB_OUTPUT"
+          echo "tag=${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Push release commit and tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: git push --follow-tags origin HEAD:${{ github.ref_name }}
+          RELEASE_TAG: ${{ steps.release_metadata.outputs.tag }}
+        run: git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}" "refs/tags/${RELEASE_TAG}"
+
+  publish:
+    needs: release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+          fetch-depth: 0
+
+      - name: Setup Node and dependencies
+        uses: ./.github/actions/setup-env
+        with:
+          node-version: '24.x'
+          registry-url: https://registry.npmjs.org
+
+      - name: Build packages
+        run: yarn build
+
+      - name: Validate packed packages
+        run: yarn test:packages
 
       - name: Publish packages to npm
         env:
-          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: yarn publish:packages
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN || secrets.NPM_PUBLISH_TOKEN }}
+          NPM_TAG: ${{ needs.release.outputs.npm_tag }}
+        run: |
+          if [ -n "${NODE_AUTH_TOKEN:-}" ]; then
+            echo "Publishing with an npm token."
+            # npm prefers OIDC when both authentication methods are available.
+            unset NPM_ID_TOKEN
+            unset ACTIONS_ID_TOKEN_REQUEST_URL
+            unset ACTIONS_ID_TOKEN_REQUEST_TOKEN
+          else
+            echo "Publishing with npm trusted publishing."
+            unset NODE_AUTH_TOKEN
+          fi
+
+          yarn publish:packages

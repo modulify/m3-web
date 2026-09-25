@@ -13,13 +13,40 @@
   ],
   "files": [
     "assets",
-    "index.d.ts",
-    "lib",
+    "dist",
     "types"
   ],
+  "exports": {
+    "./lib/calendar": {
+      "types": "./dist/lib/calendar/index.d.ts",
+      "import": "./dist/lib/calendar.mjs",
+      "require": "./dist/lib/calendar.cjs"
+    },
+    "./lib/motion": {
+      "types": "./dist/lib/motion/index.d.ts",
+      "import": "./dist/lib/motion.mjs",
+      "require": "./dist/lib/motion.cjs"
+    },
+    "./lib/popper": {
+      "types": "./dist/lib/popper/index.d.ts",
+      "import": "./dist/lib/popper.mjs",
+      "require": "./dist/lib/popper.cjs"
+    },
+    "./lib/*": {
+      "types": "./dist/lib/*.d.ts",
+      "import": "./dist/lib/*.mjs",
+      "require": "./dist/lib/*.cjs"
+    },
+    "./types/*": {
+      "types": "./types/*.d.ts"
+    },
+    "./assets/*": "./assets/*",
+    "./styles.css": "./dist/index.css",
+    "./package.json": "./package.json"
+  },
   "scripts": {
-    "build": "echo \"No build available yet\"",
-    "eslint": "eslint ./lib ./types ./tests ./vitest.config.ts",
+    "build": "vite build && sass assets/stylesheets/m3-foundation.scss dist/index.css --no-source-map",
+    "eslint": "eslint ./lib ./types ./tests ./vite.config.ts ./vitest.config.ts",
     "tsc": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
@@ -56,5 +83,9 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ]
 }

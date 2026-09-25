@@ -1,17 +1,21 @@
 import {
-  isArray,
-  isString,
+  isArray as validatorIsArray,
+  isNull as validatorIsNull,
+  isString as validatorIsString,
+  isUndefined as validatorIsUndefined,
+  Or as validatorOr,
 } from '@modulify/validator/predicates'
 
 export type Predicate<T = unknown> = (value: unknown) => value is T
 
-export {
-  isArray,
-  isNull,
-  isString,
-  isUndefined,
-  Or,
-} from '@modulify/validator/predicates'
+export const isArray: Predicate<unknown[]> = validatorIsArray
+export const isNull: Predicate<null> = validatorIsNull
+export const isString: Predicate<string> = validatorIsString
+export const isUndefined: Predicate<undefined> = validatorIsUndefined
+
+export const Or = <T extends unknown[]>(...predicates: {
+  [K in keyof T]: Predicate<T[K]>
+}): Predicate<T[number]> => validatorOr(...predicates)
 
 export const isArrayOf = <T>(predicate: Predicate<T>): Predicate<T[]> => {
   return (value: unknown) => isArray(value) && value.every(predicate)
@@ -19,9 +23,9 @@ export const isArrayOf = <T>(predicate: Predicate<T>): Predicate<T[]> => {
 
 export const isId = (x: unknown): x is string => isString(x) && x.length > 0 && /^[A-Za-z]/.test(x)
 
-export const isElement = (value: unknown) => value instanceof Element
+export const isElement = (value: unknown): value is Element => value instanceof Element
 
-export const isHTMLElement = (value: unknown) => value instanceof HTMLElement
+export const isHTMLElement = (value: unknown): value is HTMLElement => value instanceof HTMLElement
 
 export const isNumeric: Predicate<number | string> = (value: unknown): value is number | string => !isNaN(Number(value))
 

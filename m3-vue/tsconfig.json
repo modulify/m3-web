@@ -10,7 +10,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "~types/*": ["./types/*"]
+      "~types/*": ["./src/types/*"]
     },
     "types": [
       "vitest/globals",

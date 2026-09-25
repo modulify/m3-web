@@ -1,4 +1,4 @@
-import type { Breakpoint } from '@modulify/m3-foundation'
+import type { Breakpoint } from '@modulify/m3-foundation/types/breakpoint'
 
 import {
   computed,
