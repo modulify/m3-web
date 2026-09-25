@@ -1,8 +1,9 @@
-import type { ReactElement, ReactNode } from 'react'
+import type { FC, ReactElement, ReactNode } from 'react'
 
 import {
   Children,
   cloneElement,
+  createElement,
   Fragment,
   isValidElement,
 } from 'react'
@@ -21,6 +22,9 @@ type AnyComponent = Exclude<ReactElement['type'], string>
 type SlotComponent = string | AnyComponent
 type SlottedComponent = AnyComponent & {
   [SLOT_ID]?: string;
+}
+type DefaultSlotProps = {
+  children: ReactNode;
 }
 
 export type DistinctConfig<
@@ -76,16 +80,26 @@ export const augment = <
   Type extends string | AnyComponent = string | AnyComponent,
 >(el: ReactElement<Props, Type>, props: Props) => cloneElement(el, { ...props } as Partial<Props>)
 
-export const defineSlot = <Component extends AnyComponent>(
+const createDefaultSlot = (): FC<DefaultSlotProps> => {
+  const DefaultSlot: FC<DefaultSlotProps> = props => createElement(Fragment, null, props.children)
+
+  return DefaultSlot
+}
+
+export function defineSlot(id: string): FC<DefaultSlotProps>
+export function defineSlot<Component extends AnyComponent>(id: string, component: Component): Component
+export function defineSlot(
   id: string,
-  component: Component
-): Component => {
-  Object.defineProperty(component, SLOT_ID, {
+  component?: AnyComponent
+): AnyComponent {
+  const slot = component ?? createDefaultSlot()
+
+  Object.defineProperty(slot, SLOT_ID, {
     configurable: true,
     value: id,
   })
 
-  return component
+  return slot
 }
 
 const getSlotId = (component: unknown): string | null => {

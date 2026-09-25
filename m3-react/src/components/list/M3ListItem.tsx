@@ -6,7 +6,7 @@ import type {
 } from 'react'
 import type { LineCount, Lines } from '@modulify/m3-foundation/types/components/list'
 import type { M3RippleMethods } from '@/components/ripple'
-import type { MouseEventHandler, ReactNode } from 'react'
+import type { MouseEventHandler } from 'react'
 
 import { useMemo, useRef, useState } from 'react'
 
@@ -34,11 +34,11 @@ export interface M3ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'on
   onKeyUp?: KeyboardEventHandler<RootElement>;
 }
 
-const Leading: FC<{ children: ReactNode }> = defineSlot('M3ListItem.Leading', props => <>{props.children}</>)
-const Overline: FC<{ children: ReactNode }> = defineSlot('M3ListItem.Overline', props => <>{props.children}</>)
-const Headline: FC<{ children: ReactNode }> = defineSlot('M3ListItem.Headline', props => <>{props.children}</>)
-const SupportingText: FC<{ children: ReactNode }> = defineSlot('M3ListItem.SupportingText', props => <>{props.children}</>)
-const Trailing: FC<{ children: ReactNode }> = defineSlot('M3ListItem.Trailing', props => <>{props.children}</>)
+const Leading = defineSlot('M3ListItem.Leading')
+const Overline = defineSlot('M3ListItem.Overline')
+const Headline = defineSlot('M3ListItem.Headline')
+const SupportingText = defineSlot('M3ListItem.SupportingText')
+const Trailing = defineSlot('M3ListItem.Trailing')
 
 const resolveLines = (overline: boolean, supportingText: boolean): LineCount => {
   if (overline && supportingText) {

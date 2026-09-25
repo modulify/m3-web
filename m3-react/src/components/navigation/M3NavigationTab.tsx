@@ -3,7 +3,6 @@ import type { FC } from 'react'
 import type { Focusable } from '@modulify/m3-foundation/types/dom'
 import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
-import type { ReactNode } from 'react'
 
 import {
   forwardRef,
@@ -50,8 +49,8 @@ const Icon: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3NavigationTab.Icon',
   </span>
 ))
 
-const Label: FC<{ children: ReactNode }> = defineSlot('M3NavigationTab.Label', props => <>{props.children}</>)
-const Badge: FC<{ children: ReactNode }> = defineSlot('M3NavigationTab.Badge', props => <>{props.children}</>)
+const Label = defineSlot('M3NavigationTab.Label')
+const Badge = defineSlot('M3NavigationTab.Badge')
 
 const M3NavigationTab: ForwardRefRenderFunction<
   M3NavigationTabMethods,

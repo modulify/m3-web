@@ -1,11 +1,5 @@
-import type { FC } from 'react'
 import type { Focusable } from '@modulify/m3-foundation/types/dom'
-import type {
-  FormEvent,
-  ForwardRefRenderFunction,
-  HTMLAttributes,
-  ReactNode,
-} from 'react'
+import type { FormEvent, ForwardRefRenderFunction, HTMLAttributes } from 'react'
 
 import {
   forwardRef,
@@ -52,9 +46,9 @@ export interface M3TextFieldProps extends RootAttrs {
 
 export interface M3TextFieldMethods extends Focusable {}
 
-const Label: FC<{ children: ReactNode }> = defineSlot('M3TextField.Label', props => <>{props.children}</>)
-const LeadingIcon: FC<{ children: ReactNode }> = defineSlot('M3TextField.LeadingIcon', props => <>{props.children}</>)
-const TrailingIcon: FC<{ children: ReactNode }> = defineSlot('M3TextField.TrailingIcon', props => <>{props.children}</>)
+const Label = defineSlot('M3TextField.Label')
+const LeadingIcon = defineSlot('M3TextField.LeadingIcon')
+const TrailingIcon = defineSlot('M3TextField.TrailingIcon')
 
 const M3TextField: ForwardRefRenderFunction<
   M3TextFieldMethods,

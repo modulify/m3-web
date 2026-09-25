@@ -137,7 +137,7 @@ export default [
       'import/no-useless-path-segments': 'error',
       'import/no-unresolved': 'off',
 
-      //'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-imports': 'error',
 
       'react/react-in-jsx-scope': 'off',
       'storybook/no-renderer-packages': 'off',

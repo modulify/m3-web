@@ -1,6 +1,5 @@
-import type { FC, ForwardRefRenderFunction } from 'react'
+import type { ForwardRefRenderFunction } from 'react'
 import type { M3PopperMethods, M3PopperProps } from '@/components/popper'
-import type { ReactNode } from 'react'
 
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 
@@ -12,8 +11,8 @@ import { toClassName } from '@/utils/styling'
 export interface M3RichTooltipProps extends M3PopperProps {}
 export interface M3RichTooltipMethods extends M3PopperMethods {}
 
-const Heading: FC<{ children: ReactNode }> = defineSlot('M3RichTooltip.Heading', props => <>{props.children}</>)
-const Footer: FC<{ children: ReactNode }> = defineSlot('M3RichTooltip.Footer', props => <>{props.children}</>)
+const Heading = defineSlot('M3RichTooltip.Heading')
+const Footer = defineSlot('M3RichTooltip.Footer')
 
 const M3RichTooltip: ForwardRefRenderFunction<
   M3RichTooltipMethods,
