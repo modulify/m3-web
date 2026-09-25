@@ -134,6 +134,7 @@ import {
   watch,
 } from 'vue'
 
+import { useAnimationFrame } from '@/composables/animation'
 import { useResizeObserver } from '@/composables/observer'
 
 type AriaOptions = {
@@ -502,17 +503,12 @@ const updateNotches = () => {
   })
 }
 
-let resizeUpdateId: number | null = null
+const resizeUpdateFrame = useAnimationFrame()
 
 const resizeObserver = useResizeObserver(
   [fillerActive, handleMax, handleMin],
   () => {
-    if (resizeUpdateId !== null) {
-      cancelAnimationFrame(resizeUpdateId)
-    }
-
-    resizeUpdateId = requestAnimationFrame(() => {
-      resizeUpdateId = null
+    resizeUpdateFrame.request(() => {
       updateNotches()
     })
   }
@@ -548,9 +544,5 @@ onMounted(() => {
 onBeforeUnmount(() => {
   stopMouseListeningForMax()
   stopMouseListeningForMin()
-
-  if (resizeUpdateId !== null) {
-    cancelAnimationFrame(resizeUpdateId)
-  }
 })
 </script>

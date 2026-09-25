@@ -57,7 +57,6 @@
 import {
   computed,
   nextTick,
-  onBeforeUnmount,
   ref,
   watch,
 } from 'vue'
@@ -65,6 +64,9 @@ import {
 import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Surface } from '@/components/surface'
+
+import { useAnimationFrame } from '@/composables/animation'
+import { useTimeout } from '@/composables/timing'
 
 defineOptions({
   inheritAttrs: false,
@@ -98,8 +100,8 @@ const emit = defineEmits([
 
 const dialogMounted = ref(props.opened)
 const dialogVisible = ref(false)
-let enterFrame: number | null = null
-let leaveTimer: number | null = null
+const enterFrame = useAnimationFrame()
+const leaveTimeout = useTimeout(() => dialogMounted.value = false, DIALOG_TRANSITION_MS)
 
 const dialogStyle = computed(() => ({
   opacity: dialogVisible.value ? 1 : 0,
@@ -113,15 +115,8 @@ const dialogStyle = computed(() => ({
 }))
 
 const clearAnimationHandles = () => {
-  if (enterFrame !== null) {
-    window.cancelAnimationFrame(enterFrame)
-    enterFrame = null
-  }
-
-  if (leaveTimer !== null) {
-    window.clearTimeout(leaveTimer)
-    leaveTimer = null
-  }
+  enterFrame.cancel()
+  leaveTimeout.cancel()
 }
 
 watch(() => props.opened, async (opened) => {
@@ -132,8 +127,7 @@ watch(() => props.opened, async (opened) => {
     dialogVisible.value = false
     await nextTick()
 
-    enterFrame = window.requestAnimationFrame(() => {
-      enterFrame = null
+    enterFrame.request(() => {
       dialogVisible.value = true
     })
 
@@ -146,15 +140,9 @@ watch(() => props.opened, async (opened) => {
     return
   }
 
-  leaveTimer = window.setTimeout(() => {
-    leaveTimer = null
-    dialogMounted.value = false
-  }, DIALOG_TRANSITION_MS)
+  leaveTimeout.schedule()
 }, {
   immediate: true,
 })
 
-onBeforeUnmount(() => {
-  clearAnimationHandles()
-})
 </script>

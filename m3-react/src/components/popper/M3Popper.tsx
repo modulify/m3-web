@@ -17,7 +17,12 @@ import * as globalEvents from '@modulify/m3-foundation/lib/popper/globalEvents'
 
 import defineComponent from '@/utils/component'
 import { toClassName } from '@/utils/styling'
-import { useRecord, useWatch } from '@/hooks'
+import {
+  useAnimationFrame,
+  useRecord,
+  useTimeout,
+  useWatch,
+} from '@/hooks'
 
 import { useAutoAdjust, useDelay, useListening } from './hooks'
 
@@ -186,21 +191,34 @@ export default defineComponent(function M3Popper({
     showing: new Scheduler(),
     detach: new Scheduler(),
   }), [])
+  const showFrame = useAnimationFrame()
+  const showingFrame = useAnimationFrame()
+  const globalClickFrame = useAnimationFrame()
+  const globalTouchFrame = useAnimationFrame()
+  const showingTimeout = useTimeout(() => state.showing = false, 0)
+  const touchedTimeout = useTimeout(() => state.touched = false, 300)
+  const attachedTimeout = useTimeout(async () => {
+    if (state.shown) {
+      adjust.off()
+      await adjust.do()
+      adjust.on()
+    }
+  }, 0)
 
-  const doShow = useCallback(async () => {
+  const doShow = useCallback(() => {
     scheduler.detach.abort()
     scheduler.showing.abort()
 
     if (!state.shown) {
-      await new Promise(resolve => requestAnimationFrame(resolve))
+      showFrame.request(async () => {
+        if (!state.hiding) {
+          await adjust.do()
+          adjust.on()
 
-      if (!state.hiding) {
-        await adjust.do()
-        adjust.on()
-
-        state.shown = true
-        handlers.onToggle(true)
-      }
+          state.shown = true
+          handlers.onToggle(true)
+        }
+      })
     }
   }, [])
 
@@ -236,7 +254,7 @@ export default defineComponent(function M3Popper({
 
     handlers.onShow()
     state.showing = true
-    requestAnimationFrame(() => setTimeout(() => state.showing = false))
+    showingFrame.request(showingTimeout.schedule)
   }, [])
 
   const hide = useCallback((immediately = false, reason: HideReason = 'generic'): void => {
@@ -247,22 +265,24 @@ export default defineComponent(function M3Popper({
     handlers.onHide(reason)
   }, [])
 
-  const onGlobalTap = useCallback(async (event: CloserEvent, touch = false) => {
+  const onGlobalTap = useCallback((event: CloserEvent, touch = false) => {
     const captures = state.clicked || contains(event.target as Element)
-    await new Promise(resolve => requestAnimationFrame(resolve))
+    const frame = touch ? globalTouchFrame : globalClickFrame
 
-    if (!state.showing && state.shown && (
-      state.hideOnMissClick && !captures ||
-      event.m3PopperClose && captures ||
-      event.m3PopperCloseAll
-    )) {
-      hide()
+    frame.request(() => {
+      if (!state.showing && state.shown && (
+        state.hideOnMissClick && !captures ||
+        event.m3PopperClose && captures ||
+        event.m3PopperCloseAll
+      )) {
+        hide()
 
-      if (touch) {
-        state.touched = true
-        setTimeout(() => state.touched = false, 300)
+        if (touch) {
+          state.touched = true
+          touchedTimeout.schedule()
+        }
       }
-    }
+    })
   }, [])
 
   expose({
@@ -344,13 +364,7 @@ export default defineComponent(function M3Popper({
 
   useWatch(state.attached, (isAttached, wasAttached) => {
     if (isAttached && !wasAttached) {
-      setTimeout(async () => {
-        if (state.shown) {
-          adjust.off()
-          await adjust.do()
-          adjust.on()
-        }
-      }, 0)
+      attachedTimeout.schedule()
     }
   })
 

@@ -85,10 +85,11 @@ import type { PropType } from 'vue'
 
 import { computed } from 'vue'
 import { isId, isUndefined } from '@modulify/m3-foundation/lib/predicates'
-import { onBeforeUnmount, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { Or } from '@modulify/m3-foundation/lib/predicates'
 import { ref } from 'vue'
 
+import { useAnimationFrame } from '@/composables/animation'
 import { useId } from '@/composables/id'
 import { useResizeObserver } from '@/composables/observer'
 
@@ -182,20 +183,12 @@ const pick = (option: M3SelectOption<T>) => {
   shouldBeExpanded.value = false
 }
 
-let resizeUpdateId: number | null = null
+const resizeUpdate = useAnimationFrame()
 
 const requestResizeUpdate = (entry: ResizeObserverEntry) => {
-  resizeUpdateId = requestAnimationFrame(() => {
-    resizeUpdateId = null
+  resizeUpdate.request(() => {
     rootWidth.value = entry.contentRect.width
   })
-}
-
-const cancelResizeUpdate = () => {
-  if (resizeUpdateId !== null) {
-    cancelAnimationFrame(resizeUpdateId)
-    resizeUpdateId = null
-  }
 }
 
 const resizeObserver = useResizeObserver(root, ([entry]) => {
@@ -203,7 +196,6 @@ const resizeObserver = useResizeObserver(root, ([entry]) => {
     return
   }
 
-  cancelResizeUpdate()
   requestResizeUpdate(entry)
 })
 
@@ -213,7 +205,4 @@ onMounted(() => {
   rootWidth.value = root.value?.offsetWidth ?? 0
 })
 
-onBeforeUnmount(() => {
-  cancelResizeUpdate()
-})
 </script>

@@ -5,7 +5,7 @@ import type { Ref } from 'react'
 import { useCallback, useEffect, useRef } from 'react'
 
 import defineComponent from '@/utils/component'
-import { useRecord, useWatch } from '@/hooks'
+import { useAnimationFrame, useRecord, useWatch } from '@/hooks'
 
 export interface M3RippleProps {
   ref?: Ref<M3RippleExposed>;
@@ -33,6 +33,7 @@ export default defineComponent(function M3Ripple(
   useWatch(owner, owner => state.owner = owner)
 
   const lastKey = useRef<string | null>(null)
+  const activationFrame = useAnimationFrame()
 
   const activate = useCallback((event: KeyboardEvent | MouseEvent) => {
     const target = state.owner
@@ -63,7 +64,7 @@ export default defineComponent(function M3Ripple(
       el.style.left = `${x - 0.5 * diameter}px`
       el.style.top = `${y - 0.5 * diameter}px`
 
-      requestAnimationFrame(() => {
+      activationFrame.request(() => {
         el.style.display = 'inline-block'
         el.addEventListener('animationend', hide)
       })

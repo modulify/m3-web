@@ -61,6 +61,9 @@ import { watch } from 'vue'
 
 import * as globalEvents from '@modulify/m3-foundation/lib/popper/globalEvents'
 
+import { useAnimationFrame } from '@/composables/animation'
+import { useTimeout } from '@/composables/timing'
+
 import { useAutoUpdate } from './floating'
 
 const props = defineProps({
@@ -262,23 +265,29 @@ const {
 
 const showingScheduler = new Scheduler()
 const detachScheduler = new Scheduler()
+const showFrame = useAnimationFrame()
+const showingFrame = useAnimationFrame()
+const globalClickFrame = useAnimationFrame()
+const globalTouchFrame = useAnimationFrame()
+const showingTimeout = useTimeout(() => state.showing = false, 0)
+const touchedTimeout = useTimeout(() => state.touched = false, 300)
 
 const detach = () => state.attached = false
 
-const doShow = async () => {
+const doShow = () => {
   detachScheduler.abort()
   showingScheduler.abort()
 
   if (!state.shown) {
-    await new Promise(resolve => requestAnimationFrame(resolve))
+    showFrame.request(async () => {
+      if (!state.hiding) {
+        await adjust()
+        autoAdjustOn()
 
-    if (!state.hiding) {
-      await adjust()
-      autoAdjustOn()
-
-      state.shown = true
-      emit('update:shown', true)
-    }
+        state.shown = true
+        emit('update:shown', true)
+      }
+    })
   }
 }
 
@@ -313,7 +322,7 @@ const show = (immediately = false) => {
   emit('show')
 
   state.showing = true
-  requestAnimationFrame(() => setTimeout(() => state.showing = false))
+  showingFrame.request(showingTimeout.schedule)
 }
 
 const hide = (immediately = false, reason: 'generic' | 'by-closer' | 'by-miss-click' = 'generic'): void => {
@@ -337,22 +346,24 @@ defineExpose({
   hide: (immediately?: boolean, reason?: 'generic' | 'by-closer' | 'by-miss-click') => void;
 })
 
-const onGlobalTap = async (event: CloserEvent, touch = false) => {
+const onGlobalTap = (event: CloserEvent, touch = false) => {
   const captures = state.clicked || contains(event.target as Element)
-  await new Promise(resolve => requestAnimationFrame(resolve))
+  const frame = touch ? globalTouchFrame : globalClickFrame
 
-  if (!state.showing && state.shown && (
-    props.hideOnMissClick && !captures ||
-    event.m3PopperClose && captures ||
-    event.m3PopperCloseAll
-  )) {
-    hide()
+  frame.request(() => {
+    if (!state.showing && state.shown && (
+      props.hideOnMissClick && !captures ||
+      event.m3PopperClose && captures ||
+      event.m3PopperCloseAll
+    )) {
+      hide()
 
-    if (touch) {
-      state.touched = true
-      setTimeout(() => state.touched = false, 300)
+      if (touch) {
+        state.touched = true
+        touchedTimeout.schedule()
+      }
     }
-  }
+  })
 }
 
 const onGlobalClick = (event: CloserEvent) => onGlobalTap(event)

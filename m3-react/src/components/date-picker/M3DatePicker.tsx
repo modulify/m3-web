@@ -44,7 +44,7 @@ import { M3IconButton } from '@/components/icon-button'
 import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useElementReference } from '@/hooks'
+import { useElementReference, useTimeout } from '@/hooks'
 
 import M3DayPicker from './M3DayPicker'
 import M3MonthPicker from './M3MonthPicker'
@@ -271,10 +271,18 @@ export default defineComponent(function M3DatePicker({
   const calendar = useRef<HTMLDivElement | null>(null)
   const swipe = useRef<SwipeState | null>(null)
   const suppressClick = useRef(false)
-  const suppressClickTimer = useRef<number | null>(null)
-  const slideTimer = useRef<number | null>(null)
-  const modeTimer = useRef<number | null>(null)
-  const inlineModeSwitchTimer = useRef<number | null>(null)
+  const modeTimeout = useTimeout(() => setModeAnimating(false), MODE_TRANSITION_DURATION_MS)
+  const inlineModeSwitchTimeout = useTimeout(
+    (view: M3DatePickerView) => setCalendarView(view),
+    INLINE_MODE_SWITCH_RIPPLE_DELAY_MS
+  )
+  const slideTimeout = useTimeout((offset: number) => {
+    setSlideAnimating(false)
+    setDragOffset(0)
+    shiftMonth(offset)
+  }, SLIDE_DURATION_MS)
+  const suppressClickTimeout = useTimeout(() => suppressClick.current = false, SLIDE_DURATION_MS)
+  const settleSlideTimeout = useTimeout(() => setSlideAnimating(false), SLIDE_DURATION_MS)
   const formatMonthYear = monthYearFormatter(locale)
   const formatSelectedDate = selectedDateFormatter(locale)
   const calendarLabel = formatMonthYear.format(cursor.date)
@@ -334,33 +342,10 @@ export default defineComponent(function M3DatePicker({
   }, [cursorControlled, bounds[0]?.timestamp, bounds[1]?.timestamp])
 
   useEffect(() => {
-    if (slideTimer.current === null) {
-      return
-    }
-
-    window.clearTimeout(slideTimer.current)
-    slideTimer.current = null
+    slideTimeout.cancel()
     setSlideAnimating(false)
     setDragOffset(0)
   }, [cursor.timestamp, bounds[0]?.timestamp, bounds[1]?.timestamp])
-
-  useEffect(() => () => {
-    if (slideTimer.current !== null) {
-      window.clearTimeout(slideTimer.current)
-    }
-
-    if (modeTimer.current !== null) {
-      window.clearTimeout(modeTimer.current)
-    }
-
-    if (suppressClickTimer.current !== null) {
-      window.clearTimeout(suppressClickTimer.current)
-    }
-
-    if (inlineModeSwitchTimer.current !== null) {
-      window.clearTimeout(inlineModeSwitchTimer.current)
-    }
-  }, [])
 
   const shiftMonth = (offset: number) => {
     setCursor(shiftCalendarMonth(cursor, offset, bounds))
@@ -375,28 +360,13 @@ export default defineComponent(function M3DatePicker({
       return
     }
 
-    if (modeTimer.current !== null) {
-      window.clearTimeout(modeTimer.current)
-    }
-
     setModeAnimating(true)
     setCalendarViewState(view)
-
-    modeTimer.current = window.setTimeout(() => {
-      modeTimer.current = null
-      setModeAnimating(false)
-    }, MODE_TRANSITION_DURATION_MS)
+    modeTimeout.schedule()
   }
 
   const setInlineCalendarView = (view: M3DatePickerView) => {
-    if (inlineModeSwitchTimer.current !== null) {
-      window.clearTimeout(inlineModeSwitchTimer.current)
-    }
-
-    inlineModeSwitchTimer.current = window.setTimeout(() => {
-      inlineModeSwitchTimer.current = null
-      setCalendarView(view)
-    }, INLINE_MODE_SWITCH_RIPPLE_DELAY_MS)
+    inlineModeSwitchTimeout.schedule(view)
   }
 
   const animateMonthShift = (offset: number) => {
@@ -415,16 +385,7 @@ export default defineComponent(function M3DatePicker({
     setSlideAnimating(true)
     setDragOffset(offset > 0 ? -width : width)
 
-    if (slideTimer.current !== null) {
-      window.clearTimeout(slideTimer.current)
-    }
-
-    slideTimer.current = window.setTimeout(() => {
-      slideTimer.current = null
-      setSlideAnimating(false)
-      setDragOffset(0)
-      shiftMonth(offset)
-    }, SLIDE_DURATION_MS)
+    slideTimeout.schedule(offset)
   }
 
   const selectMonth = (month: number) => {
@@ -452,14 +413,7 @@ export default defineComponent(function M3DatePicker({
   const suppressNextClick = () => {
     suppressClick.current = true
 
-    if (suppressClickTimer.current !== null) {
-      window.clearTimeout(suppressClickTimer.current)
-    }
-
-    suppressClickTimer.current = window.setTimeout(() => {
-      suppressClickTimer.current = null
-      suppressClick.current = false
-    }, SLIDE_DURATION_MS)
+    suppressClickTimeout.schedule()
   }
 
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
@@ -520,7 +474,7 @@ export default defineComponent(function M3DatePicker({
 
     setSlideAnimating(true)
     setDragOffset(0)
-    window.setTimeout(() => setSlideAnimating(false), SLIDE_DURATION_MS)
+    settleSlideTimeout.schedule()
   }
 
   const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
@@ -557,7 +511,7 @@ export default defineComponent(function M3DatePicker({
     swipe.current = null
     setSlideAnimating(true)
     setDragOffset(0)
-    window.setTimeout(() => setSlideAnimating(false), SLIDE_DURATION_MS)
+    settleSlideTimeout.schedule()
   }
 
   const onClickCapture = (event: MouseEvent<HTMLDivElement>) => {
@@ -566,11 +520,7 @@ export default defineComponent(function M3DatePicker({
     }
 
     suppressClick.current = false
-
-    if (suppressClickTimer.current !== null) {
-      window.clearTimeout(suppressClickTimer.current)
-      suppressClickTimer.current = null
-    }
+    suppressClickTimeout.cancel()
 
     event.preventDefault()
     event.stopPropagation()

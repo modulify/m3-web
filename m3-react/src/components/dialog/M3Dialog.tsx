@@ -7,14 +7,11 @@ import type {
 } from 'react'
 
 import { durations, easing } from '@modulify/m3-foundation/lib/motion'
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { M3Surface } from '@/components/surface'
+
+import { useAnimationFrame, useTimeout } from '@/hooks'
 
 import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
@@ -96,8 +93,8 @@ export default defineComponent(function M3Dialog({
   }), [children])
   const [dialogMounted, setDialogMounted] = useState(opened)
   const [dialogVisible, setDialogVisible] = useState(false)
-  const frameRef = useRef<number | null>(null)
-  const timeoutRef = useRef<number | null>(null)
+  const enterFrame = useAnimationFrame()
+  const leaveTimeout = useTimeout(() => setDialogMounted(false), DIALOG_TRANSITION_MS)
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -106,52 +103,29 @@ export default defineComponent(function M3Dialog({
       return
     }
 
-    if (frameRef.current !== null) {
-      window.cancelAnimationFrame(frameRef.current)
-      frameRef.current = null
-    }
-
-    if (timeoutRef.current !== null) {
-      window.clearTimeout(timeoutRef.current)
-      timeoutRef.current = null
-    }
+    enterFrame.cancel()
+    leaveTimeout.cancel()
 
     if (opened) {
       setDialogMounted(true)
       setDialogVisible(false)
 
-      frameRef.current = window.requestAnimationFrame(() => {
-        frameRef.current = null
+      enterFrame.request(() => {
         setDialogVisible(true)
       })
 
-      return () => {
-        if (frameRef.current !== null) {
-          window.cancelAnimationFrame(frameRef.current)
-          frameRef.current = null
-        }
-      }
+      return enterFrame.cancel
     }
 
     setDialogVisible(false)
 
     if (dialogMounted) {
-      timeoutRef.current = window.setTimeout(() => {
-        timeoutRef.current = null
-        setDialogMounted(false)
-      }, DIALOG_TRANSITION_MS)
+      leaveTimeout.schedule()
     }
 
     return () => {
-      if (frameRef.current !== null) {
-        window.cancelAnimationFrame(frameRef.current)
-        frameRef.current = null
-      }
-
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current)
-        timeoutRef.current = null
-      }
+      enterFrame.cancel()
+      leaveTimeout.cancel()
     }
   }, [opened])
 

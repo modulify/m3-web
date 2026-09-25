@@ -314,7 +314,6 @@ import {
   isPreviousCalendarMonthAvailable,
   isPreviousCalendarYearAvailable,
 } from '@modulify/m3-foundation/lib/calendar'
-import { onBeforeUnmount } from 'vue'
 import { setCalendarMonthYear } from '@modulify/m3-foundation/lib/calendar'
 import { shallowRef } from 'vue'
 import {
@@ -326,6 +325,8 @@ import { watch } from 'vue'
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
+
+import { useTimeout } from '@/composables/timing'
 
 import M3DayPicker from './M3DayPicker.vue'
 import M3MonthPicker from './M3MonthPicker.vue'
@@ -524,10 +525,18 @@ const dragOffset = shallowRef(0)
 const slideAnimating = shallowRef(false)
 const swipe = shallowRef<SwipeState | null>(null)
 const suppressClick = shallowRef(false)
-let modeTimer: number | null = null
-let inlineModeSwitchTimer: number | null = null
-let slideTimer: number | null = null
-let suppressClickTimer: number | null = null
+const modeTimeout = useTimeout(() => modeAnimating.value = false, MODE_TRANSITION_DURATION_MS)
+const inlineModeSwitchTimeout = useTimeout(
+  (view: M3DatePickerView) => setCalendarView(view),
+  INLINE_MODE_SWITCH_RIPPLE_DELAY_MS
+)
+const slideTimeout = useTimeout((offset: number) => {
+  slideAnimating.value = false
+  dragOffset.value = 0
+  shiftMonth(offset)
+}, SLIDE_DURATION_MS)
+const suppressClickTimeout = useTimeout(() => suppressClick.value = false, SLIDE_DURATION_MS)
+const settleSlideTimeout = useTimeout(() => slideAnimating.value = false, SLIDE_DURATION_MS)
 const calendarLabel = computed(() => new Intl.DateTimeFormat(props.locale, {
   month: 'long',
   year: 'numeric',
@@ -595,24 +604,6 @@ watch(bounds, (range) => {
   }
 })
 
-onBeforeUnmount(() => {
-  if (slideTimer !== null) {
-    window.clearTimeout(slideTimer)
-  }
-
-  if (modeTimer !== null) {
-    window.clearTimeout(modeTimer)
-  }
-
-  if (suppressClickTimer !== null) {
-    window.clearTimeout(suppressClickTimer)
-  }
-
-  if (inlineModeSwitchTimer !== null) {
-    window.clearTimeout(inlineModeSwitchTimer)
-  }
-})
-
 const isInteractiveSwipeTarget = (target: EventTarget | null) => (
   target instanceof Element
   && target.closest('button, a, input, textarea, select, [role="button"]') !== null
@@ -640,28 +631,13 @@ const setCalendarView = (view: M3DatePickerView) => {
     return
   }
 
-  if (modeTimer !== null) {
-    window.clearTimeout(modeTimer)
-  }
-
   modeAnimating.value = true
   calendarView.value = view
-
-  modeTimer = window.setTimeout(() => {
-    modeTimer = null
-    modeAnimating.value = false
-  }, MODE_TRANSITION_DURATION_MS)
+  modeTimeout.schedule()
 }
 
 const setInlineCalendarView = (view: M3DatePickerView) => {
-  if (inlineModeSwitchTimer !== null) {
-    window.clearTimeout(inlineModeSwitchTimer)
-  }
-
-  inlineModeSwitchTimer = window.setTimeout(() => {
-    inlineModeSwitchTimer = null
-    setCalendarView(view)
-  }, INLINE_MODE_SWITCH_RIPPLE_DELAY_MS)
+  inlineModeSwitchTimeout.schedule(view)
 }
 
 const animateMonthShift = (offset: number) => {
@@ -680,16 +656,7 @@ const animateMonthShift = (offset: number) => {
   slideAnimating.value = true
   dragOffset.value = offset > 0 ? -width : width
 
-  if (slideTimer !== null) {
-    window.clearTimeout(slideTimer)
-  }
-
-  slideTimer = window.setTimeout(() => {
-    slideTimer = null
-    slideAnimating.value = false
-    dragOffset.value = 0
-    shiftMonth(offset)
-  }, SLIDE_DURATION_MS)
+  slideTimeout.schedule(offset)
 }
 
 const selectMonth = (month: number) => {
@@ -714,14 +681,7 @@ const selectDay = (day: CalendarDay) => {
 const suppressNextClick = () => {
   suppressClick.value = true
 
-  if (suppressClickTimer !== null) {
-    window.clearTimeout(suppressClickTimer)
-  }
-
-  suppressClickTimer = window.setTimeout(() => {
-    suppressClickTimer = null
-    suppressClick.value = false
-  }, SLIDE_DURATION_MS)
+  suppressClickTimeout.schedule()
 }
 
 const onPointerDown = (event: PointerEvent) => {
@@ -784,9 +744,7 @@ const onPointerUp = (event: PointerEvent) => {
 
   slideAnimating.value = true
   dragOffset.value = 0
-  window.setTimeout(() => {
-    slideAnimating.value = false
-  }, SLIDE_DURATION_MS)
+  settleSlideTimeout.schedule()
 }
 
 const onPointerMove = (event: PointerEvent) => {
@@ -828,9 +786,7 @@ const onPointerCancel = () => {
   swipe.value = null
   slideAnimating.value = true
   dragOffset.value = 0
-  window.setTimeout(() => {
-    slideAnimating.value = false
-  }, SLIDE_DURATION_MS)
+  settleSlideTimeout.schedule()
 }
 
 const onClickCapture = (event: MouseEvent) => {
@@ -839,11 +795,7 @@ const onClickCapture = (event: MouseEvent) => {
   }
 
   suppressClick.value = false
-
-  if (suppressClickTimer !== null) {
-    window.clearTimeout(suppressClickTimer)
-    suppressClickTimer = null
-  }
+  suppressClickTimeout.cancel()
 
   event.preventDefault()
   event.stopPropagation()
