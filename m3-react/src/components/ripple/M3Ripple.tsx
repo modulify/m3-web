@@ -1,6 +1,4 @@
-import type {
-  ForwardRefRenderFunction,
-} from 'react'
+import type { ForwardRefRenderFunction } from 'react'
 
 import {
   forwardRef,
@@ -10,10 +8,7 @@ import {
   useRef,
 } from 'react'
 
-import {
-  useRecord,
-  useWatch,
-} from '@/hooks'
+import { useRecord, useWatch } from '@/hooks'
 
 export interface M3RippleProps {
   owner: HTMLElement | null;

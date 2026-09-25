@@ -1,8 +1,5 @@
 import * as a11yAddon from '@storybook/addon-a11y/preview'
-import {
-  composeStories,
-  setProjectAnnotations,
-} from '@storybook/vue3'
+import { composeStories, setProjectAnnotations } from '@storybook/vue3'
 
 import preview from '../../storybook/preview'
 

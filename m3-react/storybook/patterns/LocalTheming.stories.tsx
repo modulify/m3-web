@@ -1,11 +1,8 @@
-import type {
-  Meta,
-  StoryObj,
-} from '@storybook/react'
+import '../examples/local-theme/styles.scss'
+
+import type { Meta, StoryObj } from '@storybook/react'
 
 import LocalThemeShowcase from '../examples/local-theme/LocalThemeShowcase'
-
-import '../examples/local-theme/styles.scss'
 
 const meta = {
   title: 'Guides/Theming',

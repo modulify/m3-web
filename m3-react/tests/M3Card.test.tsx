@@ -1,7 +1,4 @@
-import {
-  render,
-  screen,
-} from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 import { M3Card } from '@/components/card'
 

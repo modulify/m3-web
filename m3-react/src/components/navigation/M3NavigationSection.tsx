@@ -1,12 +1,6 @@
-import type {
-  FC,
-  HTMLAttributes,
-} from 'react'
+import type { FC, HTMLAttributes } from 'react'
 
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 const Header: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3NavigationSection.Header', ({

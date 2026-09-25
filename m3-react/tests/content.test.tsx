@@ -1,12 +1,6 @@
-import type {
-  FC,
-  ReactNode,
-} from 'react'
+import type { FC, ReactNode } from 'react'
 
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 
 const Header: FC<{ children?: ReactNode }> = defineSlot('TestSlots.Header', props => <>{props.children}</>)
 const Footer: FC<{ children?: ReactNode }> = defineSlot('TestSlots.Footer', props => <>{props.children}</>)

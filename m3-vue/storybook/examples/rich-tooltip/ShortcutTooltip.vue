@@ -1,10 +1,14 @@
 <template>
     <span ref="target" :style="{ display: 'inline-block' }">
-        <M3Button appearance="text" :aria-describedby="tooltipId">
+        <M3Button :aria-describedby="uid + '-tooltip'" appearance="text">
             Keyboard shortcut
         </M3Button>
 
-        <M3RichTooltip :id="tooltipId" :target="() => target" hide-on-miss-click>
+        <M3RichTooltip
+            :id="uid + '-tooltip'"
+            :target="() => target"
+            hide-on-miss-click
+        >
             <template #heading>
                 Jump to inbox
             </template>
@@ -15,11 +19,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, useId } from 'vue'
+
 import { M3Button } from '@/components/button'
 import { M3RichTooltip } from '@/components/rich-tooltip'
 
-import { ref } from 'vue'
-
+const uid = useId()
 const target = ref<HTMLElement | null>(null)
-const tooltipId = 'shortcut-tooltip-description'
 </script>

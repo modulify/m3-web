@@ -1,20 +1,16 @@
-import type {
-  CSSProperties,
-  FC,
-  HTMLAttributes,
+import type { CSSProperties, FC, HTMLAttributes } from 'react'
+
+import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
-
-import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
 import { M3Surface } from '@/components/surface'
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export interface M3DialogProps extends HTMLAttributes<HTMLElement> {

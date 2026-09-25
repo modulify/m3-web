@@ -1,8 +1,4 @@
-import type {
-  JSXElementConstructor,
-  ReactElement,
-  ReactNode,
-} from 'react'
+import type { ReactElement, ReactNode } from 'react'
 
 import {
   Children,

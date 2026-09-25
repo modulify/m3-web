@@ -1,32 +1,16 @@
-import {
-  ForwardRefRenderFunction,
-  HTMLAttributes,
-} from 'react'
-
 import type { Appearance } from '@modulify/m3-foundation/types/components/icon-button'
-import type {
-  Clickable,
-  Focusable,
-} from '@modulify/m3-foundation/types/dom'
-
+import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
+import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
+
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 import { M3IconAppearance } from '@/components/icon'
 import { M3Ripple } from '@/components/ripple'
 
-import {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-} from 'react'
-
-import {
-  useElementEffect,
-  useTarget,
-} from '@/hooks'
-
 import { compose } from '@/utils/events'
 import { toClassName } from '@/utils/styling'
+import { useElementEffect, useTarget } from '@/hooks'
 
 export interface M3IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
   type?: HTMLButtonElement['type'];

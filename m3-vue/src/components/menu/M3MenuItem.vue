@@ -36,22 +36,16 @@
 </template>
 
 <script lang="ts" setup>
+import type { M3LinkInstance } from '@/components/link'
 import type { PropType } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
-import { M3Link, type M3LinkInstance } from '@/components/link'
+import { computed, ref } from 'vue'
+
+import { isString, isUndefined, Or } from '@modulify/m3-foundation/lib/predicates'
+
+import { M3Link } from '@/components/link'
 import { M3Ripple } from '@/components/ripple'
-
-import {
-  computed,
-  ref,
-} from 'vue'
-
-import {
-  Or,
-  isString,
-  isUndefined,
-} from '@modulify/m3-foundation/lib/predicates'
 
 defineProps({
   to: {

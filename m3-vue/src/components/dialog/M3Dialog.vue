@@ -54,18 +54,16 @@
 </template>
 
 <script lang="ts" setup>
-import { M3Surface } from '@/components/surface'
+import { computed } from 'vue'
+import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
 import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
-import {
-  computed,
   nextTick,
   onBeforeUnmount,
   ref,
   watch,
 } from 'vue'
+
+import { M3Surface } from '@/components/surface'
 
 defineOptions({
   inheritAttrs: false,

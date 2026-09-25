@@ -1,11 +1,11 @@
 <template>
     <div class="flex-row">
-        <label v-if="label.length" :for="id" class="mr-2">
+        <label v-if="label.length" :for="uid" class="mr-2">
             {{ label }}
         </label>
 
         <M3Switch
-            :id="id"
+            :id="uid"
             v-model:checked="checked"
             :disabled="disabled"
             class="ml-auto"
@@ -14,10 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-import { M3Switch } from '@/components/switch'
+import { ref, useId } from 'vue'
 
-import { ref } from 'vue'
-import useId from '@/composables/id'
+import { M3Switch } from '@/components/switch'
 
 defineProps({
   label: {
@@ -31,6 +30,6 @@ defineProps({
   },
 })
 
-const id = useId('m3-switch')
+const uid = useId()
 const checked = ref(false)
 </script>

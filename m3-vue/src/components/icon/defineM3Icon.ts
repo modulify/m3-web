@@ -1,12 +1,6 @@
-import type {
-  PropType,
-  Ref,
-} from 'vue'
-
 import type { Appearance } from '@modulify/m3-foundation/types/components/icon'
+import type { PropType, Ref } from 'vue'
 import type { Sprite } from '~types/components/icon'
-
-import { M3IconAppearance } from './injections'
 
 import {
   computed,
@@ -16,6 +10,8 @@ import {
   ref,
   useAttrs,
 } from 'vue'
+
+import { M3IconAppearance } from './injections'
 
 export default (name: string, appearances: Record<Appearance, Sprite>) => defineComponent({
   name,

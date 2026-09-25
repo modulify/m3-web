@@ -46,11 +46,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+
 import { M3Button } from '@/components/button'
 import { M3Dialog } from '@/components/dialog'
 import { M3Icon } from '@/components/icon'
-
-import { ref } from 'vue'
 
 const opened = ref(false)
 </script>

@@ -11,16 +11,9 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  computed,
-  useAttrs,
-} from 'vue'
+import { computed, useAttrs } from 'vue'
 
-import {
-  getSurfacePanelClass,
-  getSurfacePanelStyle,
-  surfacePanelProps,
-} from './shared'
+import { getSurfacePanelClass, getSurfacePanelStyle, surfacePanelProps } from './shared'
 
 defineOptions({
   inheritAttrs: false,

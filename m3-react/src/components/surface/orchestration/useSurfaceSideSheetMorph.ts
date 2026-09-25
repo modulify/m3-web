@@ -1,20 +1,11 @@
 /* eslint-disable max-lines-per-function */
-import type {
-  CSSProperties,
-  MutableRefObject,
-} from 'react'
-
-import {
-  useEffect,
-  useRef,
-} from 'react'
+import type { CSSProperties, MutableRefObject } from 'react'
 
 import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
 import { m3MotionDurations } from '@modulify/m3-foundation/lib/motion'
-import {
-  raf,
-  wait,
-} from '@modulify/m3-foundation/lib/surface/orchestration'
+import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { useEffect, useRef } from 'react'
+import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import { useStateRef } from './useStateRef'
 

@@ -1,4 +1,9 @@
 import type {
+  CalendarAvailability,
+  CalendarDayRange,
+  CalendarYearRange,
+} from '@modulify/m3-foundation/lib/calendar'
+import type {
   CSSProperties,
   FC,
   HTMLAttributes,
@@ -6,20 +11,6 @@ import type {
   PointerEvent,
   ReactNode,
 } from 'react'
-
-import {
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-
-import type {
-  CalendarAvailability,
-  CalendarDayRange,
-  CalendarYearRange,
-} from '@modulify/m3-foundation/lib/calendar'
 
 import {
   CalendarDay,
@@ -36,18 +27,24 @@ import {
   shiftCalendarMonth,
   shiftCalendarYear,
 } from '@modulify/m3-foundation/lib/calendar'
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import M3YearPicker from './M3YearPicker'
+
 import M3DayPicker from './M3DayPicker'
 import M3MonthPicker from './M3MonthPicker'
+import M3YearPicker from './M3YearPicker'
 
 export type M3DatePickerType = 'single' | 'range'
 export type M3DatePickerNavigation = 'split' | 'inline' | 'none'

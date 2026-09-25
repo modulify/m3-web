@@ -1,9 +1,6 @@
 import type { Breakpoint } from '@modulify/m3-foundation/types/breakpoint'
 
-import {
-  computed,
-  ref,
-} from 'vue'
+import { computed, ref } from 'vue'
 
 const max = {
   'compact': 600 - 1,

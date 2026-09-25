@@ -1,9 +1,5 @@
-import {
-  render,
-  screen,
-} from '@testing-library/vue'
-
 import { h } from 'vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'

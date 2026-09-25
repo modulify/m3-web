@@ -1,10 +1,6 @@
 import type { App } from 'vue'
 
-import {
-  createApp,
-  nextTick,
-} from 'vue'
-
+import { createApp, nextTick } from 'vue'
 import { page } from 'vitest/browser'
 
 import SurfaceExperimentHarness from './fixtures/SurfaceExperimentHarness.vue'

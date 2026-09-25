@@ -1,7 +1,4 @@
-import type {
-  CSSProperties,
-  HTMLAttributes,
-} from 'react'
+import type { CSSProperties, HTMLAttributes } from 'react'
 import type {
   Length as SurfaceLength,
   Variant as SurfaceVariant,

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import { useState } from 'react'
+
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
@@ -8,8 +10,6 @@ import {
   M3NavigationSection,
   M3NavigationTab,
 } from '@/components/navigation'
-
-import { useState } from 'react'
 
 const meta = {
   title: 'Components/M3Navigation',

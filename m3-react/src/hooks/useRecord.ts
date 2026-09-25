@@ -1,12 +1,6 @@
-import type {
-  Dispatch,
-  SetStateAction,
-} from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
-import {
-  useRef,
-  useState,
-} from 'react'
+import { useRef, useState } from 'react'
 
 const useDispatch = <T>(initial: T): Dispatch<SetStateAction<T>> => {
   const [, set] = useState(initial)

@@ -1,17 +1,14 @@
-import {
-  defineConfig,
-  mergeConfig,
-} from 'vitest/config'
-
-import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 
-import viteConfig from './vite.config'
+import { defineConfig, mergeConfig } from 'vitest/config'
+
+import common from './vite.config.common'
 
 const __parent = fileURLToPath(new URL('../', import.meta.url))
 const __artifacts = join(__parent, 'artifacts', 'm3-react')
 
-export default mergeConfig(viteConfig, defineConfig({
+export default mergeConfig(common, defineConfig({
   test: {
     name: 'm3-react',
     globals: true,

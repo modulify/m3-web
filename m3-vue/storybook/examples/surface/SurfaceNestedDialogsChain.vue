@@ -159,28 +159,18 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, nextTick } from 'vue'
+import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { ref } from 'vue'
+import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+
+import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-import {
-  raf,
-  wait,
-} from '@modulify/m3-foundation/lib/surface/orchestration'
-import {
-  M3Navigation,
-  M3NavigationTab,
-} from '@/components/navigation'
+import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import M3Surface from '@/components/surface/M3Surface.vue'
-
-import {
-  computed,
-  nextTick,
-  ref,
-} from 'vue'
-import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
 
 const DIALOG_TRANSITION_MS = m3MotionDurations.medium2
 const DIALOG_TRANSITION_EASING = m3MotionEasings.standard

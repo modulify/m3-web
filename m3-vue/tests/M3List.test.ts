@@ -1,13 +1,7 @@
-import {
-  render,
-  screen,
-} from '@testing-library/vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3Icon } from '@/components/icon'
-import {
-  M3List,
-  M3ListItem,
-} from '@/components/list'
+import { M3List, M3ListItem } from '@/components/list'
 
 describe('m3-vue/list', () => {
   test('renders native list semantics', () => {

@@ -292,11 +292,17 @@
 </template>
 
 <script lang="ts" setup>
+import type {
+  CalendarAvailability,
+  CalendarDayRange,
+  CalendarYearRange,
+} from '@modulify/m3-foundation/lib/calendar'
 import type { PropType } from 'vue'
 
+import { CalendarDay, clampCalendarMonth } from '@modulify/m3-foundation/lib/calendar'
+
+import { computed } from 'vue'
 import {
-  CalendarDay,
-  clampCalendarMonth,
   getCalendarBounds,
   getCalendarMonthWeeks,
   getCalendarYears,
@@ -305,30 +311,23 @@ import {
   isNextCalendarYearAvailable,
   isPreviousCalendarMonthAvailable,
   isPreviousCalendarYearAvailable,
-  setCalendarMonthYear,
+} from '@modulify/m3-foundation/lib/calendar'
+import { onBeforeUnmount } from 'vue'
+import { setCalendarMonthYear } from '@modulify/m3-foundation/lib/calendar'
+import { shallowRef } from 'vue'
+import {
   shiftCalendarMonth,
   shiftCalendarYear,
 } from '@modulify/m3-foundation/lib/calendar'
-
-import type {
-  CalendarDayRange,
-  CalendarAvailability,
-  CalendarYearRange,
-} from '@modulify/m3-foundation/lib/calendar'
+import { watch } from 'vue'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-import M3YearPicker from './M3YearPicker.vue'
+
 import M3DayPicker from './M3DayPicker.vue'
 import M3MonthPicker from './M3MonthPicker.vue'
-
-import {
-  computed,
-  onBeforeUnmount,
-  shallowRef,
-  watch,
-} from 'vue'
+import M3YearPicker from './M3YearPicker.vue'
 
 const SWIPE_ACTIVATION_THRESHOLD = 8
 const SWIPE_THRESHOLD = 48

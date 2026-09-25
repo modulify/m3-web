@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
-import { M3Radio } from '@/components/radio'
-import RadioGroup from '../examples/radio/RadioGroup.vue'
 import { ref } from 'vue'
 
+import { M3Radio } from '@/components/radio'
+
 import useId from '@/composables/id'
+
+import RadioGroup from '../examples/radio/RadioGroup.vue'
 
 const meta = {
   title: 'Components/M3Radio',

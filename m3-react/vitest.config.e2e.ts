@@ -1,20 +1,16 @@
-import {
-  defineConfig,
-  mergeConfig,
-} from 'vitest/config'
-
-import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 
+import { defineConfig, mergeConfig } from 'vitest/config'
 import { playwright } from '@vitest/browser-playwright'
 
-import viteConfig from './vite.config'
+import common from './vite.config.common'
 
 const __parent = fileURLToPath(new URL('../', import.meta.url))
 const __workspace = fileURLToPath(new URL('./', import.meta.url))
 const __artifacts = join(__parent, 'artifacts', 'm3-react')
 
-export default mergeConfig(viteConfig, defineConfig({
+export default mergeConfig(common, defineConfig({
   root: __workspace,
   test: {
     name: 'm3-react-e2e',

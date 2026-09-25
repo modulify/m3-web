@@ -1,7 +1,6 @@
-import type {
-  Meta,
-  StoryObj,
-} from '@storybook/react'
+import '../examples/surface/styles.scss'
+
+import type { Meta, StoryObj } from '@storybook/react'
 
 import { M3Surface } from '@/components/surface'
 
@@ -13,8 +12,6 @@ import SurfaceSideSheetDismissToRemove from '../examples/surface/SurfaceSideShee
 import SurfaceSideSheetModalToWindow from '../examples/surface/SurfaceSideSheetModalToWindow'
 import SurfaceSideSheetMorph from '../examples/surface/SurfaceSideSheetMorph'
 import SurfaceWorkspaceDialog from '../examples/surface/SurfaceWorkspaceDialog'
-
-import '../examples/surface/styles.scss'
 
 const meta = {
   title: 'Components/M3Surface',

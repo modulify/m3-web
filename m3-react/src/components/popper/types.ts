@@ -1,17 +1,12 @@
+import type { Boundary } from '@floating-ui/dom'
+import type { Delay } from '@modulify/m3-foundation/types/components/popper'
 import type { HTMLAttributes } from 'react'
-
+import type { OverflowBehavior } from '@modulify/m3-foundation/types/components/popper'
+import type { Placement, Strategy } from '@floating-ui/dom'
 import type {
-  Delay,
-  OverflowBehavior,
   Trigger,
   TriggerSchema,
 } from '@modulify/m3-foundation/types/components/popper'
-
-import type {
-  Boundary,
-  Placement,
-  Strategy,
-} from '@floating-ui/dom'
 
 type HideReason = 'generic' | 'by-closer' | 'by-miss-click'
 

@@ -1,9 +1,4 @@
-import {
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/react'
-
+import { fireEvent, render, screen } from '@testing-library/react'
 import { useState } from 'react'
 
 import { M3Switch } from '@/components/switch'

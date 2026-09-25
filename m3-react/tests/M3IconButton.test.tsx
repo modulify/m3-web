@@ -1,7 +1,4 @@
-import {
-  render,
-  screen,
-} from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'

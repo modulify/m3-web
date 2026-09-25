@@ -62,10 +62,11 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue'
 
+import { ref } from 'vue'
+
 import { M3Checkbox } from '@/components/checkbox'
 import { M3Surface } from '@/components/surface'
 
-import { ref } from 'vue'
 import useId from '@/composables/id'
 
 interface Option {

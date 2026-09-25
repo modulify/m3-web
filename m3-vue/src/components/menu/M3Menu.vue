@@ -27,37 +27,21 @@
 </template>
 
 <script lang="ts" setup>
-import type {
-  PropType,
-  Ref,
-} from 'vue'
-
-import type {
-  Boundary,
-  Placement,
-  Strategy,
-} from '@floating-ui/dom'
-
+import type { Boundary } from '@floating-ui/dom'
 import type {
   Delay,
   OverflowBehavior,
 } from '@modulify/m3-foundation/types/components/popper'
+import type { Placement } from '@floating-ui/dom'
+import type { PropType, Ref } from 'vue'
+import type { Strategy } from '@floating-ui/dom'
+
+import { isBoundary, isDelay } from '@modulify/m3-foundation/lib/popper/predicates'
+import { isHTMLElement, isNull, isNumeric } from '@modulify/m3-foundation/lib/predicates'
+import { isPlacement } from '@modulify/m3-foundation/lib/popper/predicates'
+import { isString, Or } from '@modulify/m3-foundation/lib/predicates'
 
 import { M3Popper } from '@/components/popper'
-
-import {
-  isHTMLElement,
-  isNull,
-  isNumeric,
-  isString,
-  Or,
-} from '@modulify/m3-foundation/lib/predicates'
-
-import {
-  isBoundary,
-  isDelay,
-  isPlacement,
-} from '@modulify/m3-foundation/lib/popper/predicates'
 
 defineProps({
   target: {

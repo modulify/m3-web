@@ -1,9 +1,5 @@
-import type {
-  FC,
-  SVGProps,
-} from 'react'
-
 import type { Code } from './codes'
+import type { FC, SVGProps } from 'react'
 
 import ad from 'flag-icons/flags/1x1/ad.svg?react'
 import am from 'flag-icons/flags/1x1/am.svg?react'

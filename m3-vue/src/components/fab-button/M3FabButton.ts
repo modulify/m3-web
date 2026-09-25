@@ -1,8 +1,7 @@
-import type { PropType, VNode } from 'vue'
+import type { M3LinkInstance } from '@/components/link'
+import type { PropType } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
-
-import { M3Link, type M3LinkInstance } from '@/components/link'
-import { M3Ripple } from '@/components/ripple'
+import type { VNode } from 'vue'
 
 import {
   computed,
@@ -11,12 +10,12 @@ import {
   ref,
 } from 'vue'
 
+import { M3Link } from '@/components/link'
+import { M3Ripple } from '@/components/ripple'
+
 import { normalize } from '@/utils/runtime'
 
-import {
-  size,
-  variant,
-} from '@/components/fab-button/properties'
+import { size, variant } from '@/components/fab-button/properties'
 
 const wrap = (content: [VNode, boolean][]) => content.map(([node, isIcon]) => h('span', {
   class: {

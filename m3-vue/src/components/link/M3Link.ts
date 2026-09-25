@@ -1,8 +1,7 @@
-import type {
-  ComponentPublicInstance,
-  PropType,
-  Ref,
-} from 'vue'
+import type { ComponentPublicInstance } from 'vue'
+import type { Interactive } from '@modulify/m3-foundation/types/dom'
+import type { PropType, Ref } from 'vue'
+import type { RouteLocationRaw } from 'vue-router'
 
 import {
   computed,
@@ -13,15 +12,10 @@ import {
   resolveComponent,
 } from 'vue'
 
-import type { Interactive } from '@modulify/m3-foundation/types/dom'
-
-import type { RouteLocationRaw } from 'vue-router'
-
 type Root = ComponentPublicInstance | HTMLElement | null
 
 function componentExists (name: string) {
   const instance = getCurrentInstance()
-
   if (!instance) {
     throw new Error('componentExists must be called within a setup function')
   }

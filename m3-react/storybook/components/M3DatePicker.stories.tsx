@@ -1,8 +1,5 @@
+import type { M3DatePickerFieldProps, M3DatePickerProps } from '@/components/date-picker'
 import type { Meta, StoryObj } from '@storybook/react'
-import type {
-  M3DatePickerFieldProps,
-  M3DatePickerProps,
-} from '@/components/date-picker'
 
 import { useState } from 'react'
 

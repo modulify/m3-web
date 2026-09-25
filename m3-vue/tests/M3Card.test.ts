@@ -1,7 +1,4 @@
-import {
-  render,
-  screen,
-} from '@testing-library/vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3Card } from '@/components/card'
 

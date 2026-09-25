@@ -1,6 +1,6 @@
 /* eslint-disable vue/one-component-per-file */
 
-import { render } from '@testing-library/vue'
+import type { Sprite } from '~types/components/icon'
 
 import {
   defineComponent,
@@ -8,10 +8,11 @@ import {
   provide,
   ref,
 } from 'vue'
+import { render } from '@testing-library/vue'
 
 import defineM3Icon from '@/components/icon/defineM3Icon'
+
 import { M3IconAppearance } from '@/components/icon/injections'
-import type { Sprite } from '~types/components/icon'
 
 const FilledSprite = defineComponent({
   name: 'FilledSprite',

@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
-import { M3Checkbox } from '@/components/checkbox'
-import CheckboxList from '../examples/checkbox/CheckboxList.vue'
 import { ref } from 'vue'
 
+import { M3Checkbox } from '@/components/checkbox'
+
 import useId from '@/composables/id'
+
+import CheckboxList from '../examples/checkbox/CheckboxList.vue'
 
 const meta = {
   title: 'Components/M3Checkbox',

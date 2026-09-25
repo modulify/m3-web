@@ -1,7 +1,4 @@
-import type {
-  FC,
-} from 'react'
-
+import type { FC } from 'react'
 import type { M3PopperProps } from '@/components/popper'
 
 import { M3Popper } from '@/components/popper'

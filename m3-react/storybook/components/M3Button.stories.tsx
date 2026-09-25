@@ -1,7 +1,7 @@
+import type { CSSProperties } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import React from 'react'
-import type { CSSProperties } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'

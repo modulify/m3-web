@@ -1,14 +1,7 @@
 import type { FC } from 'react'
+import type { M3SurfacePanelProps, M3SurfacePanelVariant } from './shared'
 
-import type {
-  M3SurfacePanelProps,
-  M3SurfacePanelVariant,
-} from './shared'
-
-import {
-  getSurfacePanelClassName,
-  getSurfacePanelStyle,
-} from './shared'
+import { getSurfacePanelClassName, getSurfacePanelStyle } from './shared'
 
 export type {
   M3SurfacePanelProps,

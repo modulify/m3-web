@@ -6,7 +6,6 @@ import { Listener } from '@modulify/m3-foundation/lib/popper'
 
 import { autoUpdate } from '@floating-ui/dom'
 import { normalizeDelay } from '@modulify/m3-foundation/lib/popper/scheduling'
-
 import { useMemo } from 'react'
 
 export const useAutoAdjust = (

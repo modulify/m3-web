@@ -1,8 +1,4 @@
-import {
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 
 import { M3Surface } from '@/components/surface'
 

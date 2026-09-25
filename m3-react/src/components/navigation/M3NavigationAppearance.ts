@@ -1,9 +1,6 @@
 import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
 
-import {
-  createContext,
-  useContext,
-} from 'react'
+import { createContext, useContext } from 'react'
 
 const M3NavigationAppearance = createContext<Appearance>('auto')
 

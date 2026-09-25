@@ -1,12 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import type { M3TextFieldProps } from '@/components/text-field'
-
-import { M3Icon } from '@/components/icon'
-import {
-  M3TextField,
-} from '@/components/text-field'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import { useState } from 'react'
+
+import { M3Icon } from '@/components/icon'
+import { M3TextField } from '@/components/text-field'
 
 const M3TextFieldStory = (args: M3TextFieldProps) => {
   const [value, setValue] = useState('')

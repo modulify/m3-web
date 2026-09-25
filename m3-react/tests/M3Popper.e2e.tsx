@@ -1,14 +1,8 @@
-import type {
-  M3PopperMethods,
-} from '@/components/popper'
+import type { M3PopperMethods } from '@/components/popper'
 
-import {
-  act,
-  render,
-  waitFor,
-} from '@testing-library/react'
-
+import { act } from '@testing-library/react'
 import { createRef } from 'react'
+import { render, waitFor } from '@testing-library/react'
 
 import { M3Popper } from '@/components/popper'
 

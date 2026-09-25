@@ -1,14 +1,5 @@
-import type {
-  ForwardRefRenderFunction,
-  HTMLAttributes,
-} from 'react'
-
-import type {
-  Clickable,
-  Focusable,
-} from '@modulify/m3-foundation/types/dom'
-
-import M3SwitchScope from './M3SwitchScope'
+import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
+import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
 
 import {
   Children,
@@ -19,13 +10,10 @@ import {
   useRef,
 } from 'react'
 
-import {
-  useId,
-  useRecord,
-  useWatch,
-} from '@/hooks'
-
 import { toClassName } from '@/utils/styling'
+import { useId, useRecord, useWatch } from '@/hooks'
+
+import M3SwitchScope from './M3SwitchScope'
 
 export interface M3SwitchProps extends HTMLAttributes<HTMLElement> {
   name?: string;

@@ -1,16 +1,9 @@
 import type {
-  FC,
-} from 'react'
-
-import {
-  useMemo,
-} from 'react'
-
-import type {
   CalendarAvailability,
   CalendarDayBounds,
   CalendarDayRange,
 } from '@modulify/m3-foundation/lib/calendar'
+import type { FC } from 'react'
 
 import {
   CalendarDay,
@@ -21,8 +14,10 @@ import {
   isCalendarDayRangeStart,
   isCalendarDaySelectable,
 } from '@modulify/m3-foundation/lib/calendar'
+import { useMemo } from 'react'
 
 import { toClassName } from '@/utils/styling'
+
 import M3DatePickerOption from './M3DatePickerOption'
 
 export interface M3DayPickerProps {

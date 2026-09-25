@@ -1,9 +1,6 @@
 import type { Appearance } from '@modulify/m3-foundation/types/components/icon'
 
-import {
-  computed,
-  provide,
-} from 'vue'
+import { computed, provide } from 'vue'
 
 export const M3IconAppearance = Symbol('M3IconAppearance')
 

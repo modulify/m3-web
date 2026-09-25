@@ -62,15 +62,11 @@
 import type { Appearance } from '@modulify/m3-foundation/types/components/card'
 import type { PropType } from 'vue'
 
+import { computed } from 'vue'
+import { isId, isUndefined, Or } from '@modulify/m3-foundation/lib/predicates'
+import { ref } from 'vue'
+
 import { M3Ripple } from '@/components/ripple'
-
-import { computed, ref } from 'vue'
-
-import {
-  isId,
-  isUndefined,
-  Or,
-} from '@modulify/m3-foundation/lib/predicates'
 
 import useId from '@/composables/id'
 

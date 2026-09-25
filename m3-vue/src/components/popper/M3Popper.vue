@@ -24,21 +24,16 @@
 </template>
 
 <script lang="ts" setup>
-import type {
-  PropType,
-  Ref,
-} from 'vue'
-
-import type {
-  Boundary,
-  Placement,
-  Strategy,
-} from '@floating-ui/dom'
-
+import type { Boundary } from '@floating-ui/dom'
 import type {
   CloserEvent,
   Delay,
   OverflowBehavior,
+} from '@modulify/m3-foundation/types/components/popper'
+import type { Placement } from '@floating-ui/dom'
+import type { PropType, Ref } from 'vue'
+import type { Strategy } from '@floating-ui/dom'
+import type {
   Trigger,
   TriggerSchema,
 } from '@modulify/m3-foundation/types/components/popper'
@@ -46,41 +41,29 @@ import type {
 import { Listener } from '@modulify/m3-foundation/lib/popper'
 import Scheduler from '@modulify/m3-foundation/lib/Scheduler'
 
+import { computed } from 'vue'
+import { computePosition } from '@modulify/m3-foundation/lib/popper/floating'
+import { isBoundary, isDelay } from '@modulify/m3-foundation/lib/popper/predicates'
+import isEqual from 'lodash.isequal'
+import { isHTMLElement, isNull, isNumeric } from '@modulify/m3-foundation/lib/predicates'
+import { isOverflowBehavior } from '@modulify/m3-foundation/lib/popper/predicates'
+import { isString } from '@modulify/m3-foundation/lib/predicates'
+import { isTriggerOptions } from '@modulify/m3-foundation/lib/popper/predicates'
+import { nextTick } from 'vue'
+import { normalizeDelay } from '@modulify/m3-foundation/lib/popper/scheduling'
 import {
-  computed,
-  nextTick,
   onActivated,
   onBeforeUnmount,
   onDeactivated,
   onMounted,
-  reactive,
-  ref,
-  watch,
 } from 'vue'
-
-import isEqual from 'lodash.isequal'
-
-import { computePosition } from '@modulify/m3-foundation/lib/popper/floating'
-import { useAutoUpdate } from './floating'
-
-import { normalizeDelay } from '@modulify/m3-foundation/lib/popper/scheduling'
-
-import {
-  isHTMLElement,
-  isNull,
-  isNumeric,
-  isString,
-  Or,
-} from '@modulify/m3-foundation/lib/predicates'
-
-import {
-  isBoundary,
-  isDelay,
-  isOverflowBehavior,
-  isTriggerOptions,
-} from '@modulify/m3-foundation/lib/popper/predicates'
+import { Or } from '@modulify/m3-foundation/lib/predicates'
+import { reactive, ref } from 'vue'
+import { watch } from 'vue'
 
 import * as globalEvents from '@modulify/m3-foundation/lib/popper/globalEvents'
+
+import { useAutoUpdate } from './floating'
 
 const props = defineProps({
   target: {

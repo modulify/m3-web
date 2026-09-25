@@ -1,11 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
-import { M3Slider } from '@/components/slider'
+import { computed, ref } from 'vue'
 
-import {
-  computed,
-  ref,
-} from 'vue'
+import { M3Slider } from '@/components/slider'
 
 const meta = {
   title: 'Components/M3Slider',

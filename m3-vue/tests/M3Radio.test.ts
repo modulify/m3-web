@@ -1,8 +1,4 @@
-import {
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/vue'
+import { fireEvent, render, screen } from '@testing-library/vue'
 
 import { M3Radio } from '@/components/radio'
 

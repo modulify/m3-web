@@ -1,14 +1,6 @@
-import {
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/vue'
-
-import {
-  h,
-  nextTick,
-  ref,
-} from 'vue'
+import { fireEvent } from '@testing-library/vue'
+import { h, nextTick, ref } from 'vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3Switch } from '@/components/switch'
 

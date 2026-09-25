@@ -1,14 +1,7 @@
-import type {
-  FC,
-  HTMLAttributes,
-  ReactNode,
-} from 'react'
-
+import type { FC, HTMLAttributes } from 'react'
 import type { M3LinkMethods } from '@/components/link'
 import type { M3RippleMethods } from '@/components/ripple'
-
-import { M3Link } from '@/components/link'
-import { M3Ripple } from '@/components/ripple'
+import type { ReactNode } from 'react'
 
 import {
   useEffect,
@@ -17,11 +10,11 @@ import {
   useState,
 } from 'react'
 
+import { M3Link } from '@/components/link'
+import { M3Ripple } from '@/components/ripple'
+
 import { compose } from '@/utils/events'
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
 
 export interface M3MenuItemProps extends HTMLAttributes<HTMLElement> {

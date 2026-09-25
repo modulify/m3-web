@@ -1,9 +1,6 @@
 import type { Breakpoint } from '@modulify/m3-foundation/types/breakpoint'
 
-import {
-  useEffect,
-  useState,
-} from 'react'
+import { useEffect, useState } from 'react'
 
 const max = {
   'compact': 600 - 1,

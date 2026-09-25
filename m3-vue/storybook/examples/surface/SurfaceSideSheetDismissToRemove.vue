@@ -221,30 +221,18 @@
 </template>
 
 <script lang="ts" setup>
+import { clamp } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+import { nextTick, onBeforeUnmount, onMounted } from 'vue'
+import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { ref } from 'vue'
+import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-import {
-  clamp,
-  raf,
-  wait,
-} from '@modulify/m3-foundation/lib/surface/orchestration'
-import {
-  M3Navigation,
-  M3NavigationTab,
-} from '@/components/navigation'
+import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import M3Surface from '@/components/surface/M3Surface.vue'
-
-import {
-  onBeforeUnmount,
-  onMounted,
-  nextTick,
-  ref,
-} from 'vue'
-import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360

@@ -1,14 +1,6 @@
-import type {
-  App,
-  Component,
-} from 'vue'
+import type { App, Component } from 'vue'
 
-import {
-  createApp,
-  h,
-  nextTick,
-} from 'vue'
-
+import { createApp, h, nextTick } from 'vue'
 import { page } from 'vitest/browser'
 
 import SurfaceCardPageMorph from '../storybook/examples/surface/SurfaceCardPageMorph.vue'

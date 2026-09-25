@@ -1,31 +1,20 @@
-import type {
-  CSSProperties,
-  FC,
-} from 'react'
-
+import type { CSSProperties, FC } from 'react'
+import type { M3SurfacePanelProps, M3SurfacePanelVariant } from './shared'
 import type {
   Anchor as SurfaceAnchor,
   Length as SurfaceLength,
   Mode as SurfaceMode,
 } from '@modulify/m3-foundation/types/components/surface'
 
-import type {
-  M3SurfacePanelProps,
-  M3SurfacePanelVariant,
-} from './shared'
-
 import { createPortal } from 'react-dom'
 import { useTransition } from 'react-transition-state'
 
+import { toClassName } from '@/utils/styling'
 import { useId } from '@/hooks'
 
+import { getModalAnchorStyle } from './shared'
 import M3SurfacePanel from './M3SurfacePanel'
-
-import { toClassName } from '@/utils/styling'
-import {
-  getModalAnchorStyle,
-  toLength,
-} from './shared'
+import { toLength } from './shared'
 
 export type M3SurfaceMode = SurfaceMode
 export type M3SurfaceVariant = M3SurfacePanelVariant

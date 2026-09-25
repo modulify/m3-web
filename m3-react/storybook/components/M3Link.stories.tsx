@@ -1,9 +1,6 @@
-import type {
-  CSSProperties,
-  FC,
-} from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { CSSProperties, FC } from 'react'
 import type { M3LinkProps } from '@/components/link'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import { M3Link } from '@/components/link'
 

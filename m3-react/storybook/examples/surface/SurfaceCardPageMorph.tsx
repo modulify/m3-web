@@ -1,23 +1,18 @@
-import type {
-  FC,
-} from 'react'
+import type { FC } from 'react'
+
+import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
-import {
-  M3Navigation,
-  M3NavigationTab,
-} from '@/components/navigation'
+import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3SurfacePanel } from '@/components/surface'
-import { useSurfaceCardPageMorph } from '@/components/surface/orchestration/useSurfaceCardPageMorph'
-import { useStateRef } from '@/components/surface/orchestration/useStateRef'
-import {
-  m3MotionDurations,
-  m3MotionEasings,
-} from '@modulify/m3-foundation/lib/motion'
 
 import { toClassName } from '@/utils/styling'
+import { useStateRef } from '@/components/surface/orchestration/useStateRef'
+import {
+  useSurfaceCardPageMorph,
+} from '@/components/surface/orchestration/useSurfaceCardPageMorph'
 
 const TRANSITION_MS = m3MotionDurations.medium3
 const TRANSITION_EASING = m3MotionEasings.standard

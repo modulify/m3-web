@@ -1,7 +1,4 @@
-import type {
-  Meta,
-  StoryObj,
-} from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3'
 
 import M3Surface from '@/components/surface/M3Surface.vue'
 

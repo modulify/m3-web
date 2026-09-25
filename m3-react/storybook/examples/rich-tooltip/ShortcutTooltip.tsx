@@ -1,9 +1,9 @@
 import type { FC } from 'react'
 
+import { useState } from 'react'
+
 import { M3Button } from '@/components/button'
 import { M3RichTooltip } from '@/components/rich-tooltip'
-
-import { useState } from 'react'
 
 const ShortcutTooltip: FC = () => {
   const [target, setTarget] = useState<HTMLElement | null>(null)

@@ -3,9 +3,9 @@ import {
   fireEvent,
   render,
   screen,
-  waitFor,
 } from '@testing-library/react'
 import { useState } from 'react'
+import { waitFor } from '@testing-library/react'
 
 import { M3DatePicker } from '@/components/date-picker'
 

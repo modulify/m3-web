@@ -1,12 +1,6 @@
-import type {
-  ButtonHTMLAttributes,
-  FC,
-  ReactNode,
-} from 'react'
+import type { ButtonHTMLAttributes, FC, ReactNode } from 'react'
 
-import {
-  useState,
-} from 'react'
+import { useState } from 'react'
 
 import { M3Ripple } from '@/components/ripple'
 import { toClassName } from '@/utils/styling'

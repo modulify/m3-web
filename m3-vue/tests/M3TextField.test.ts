@@ -1,9 +1,5 @@
-import {
-  render,
-  screen,
-} from '@testing-library/vue'
-
 import { nextTick } from 'vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3TextField } from '@/components/text-field'
 

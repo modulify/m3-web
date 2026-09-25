@@ -1,30 +1,17 @@
-import {
-  FC,
-  HTMLAttributes,
-  ReactNode,
-} from 'react'
-
 import type { Appearance } from '@modulify/m3-foundation/types/components/card'
-
+import type { FC, HTMLAttributes } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
-
-import { M3Ripple } from '@/components/ripple'
+import type { ReactNode } from 'react'
 
 import { useRef } from 'react'
 
-import {
-  useElementEffect,
-  useId,
-  useTarget,
-} from '@/hooks'
+import { M3Ripple } from '@/components/ripple'
 
+import { augment } from '@/utils/content'
 import { compose } from '@/utils/events'
-import {
-  augment,
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
+import { useElementEffect, useId, useTarget } from '@/hooks'
 
 export interface M3CardProps extends HTMLAttributes<HTMLElement> {
   appearance?: Appearance;

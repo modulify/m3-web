@@ -5,7 +5,6 @@ import {
   addCloserListeners,
   removeCloserListeners,
 } from '@modulify/m3-foundation/lib/popper/closer'
-
 import { useCallback } from 'react'
 
 export type M3PopperCloserOptions = {

@@ -15,11 +15,7 @@
 <script lang="ts" setup>
 import type { PropType, Ref } from 'vue'
 
-import {
-  onBeforeUnmount,
-  ref,
-  watch,
-} from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 
 const props = defineProps({
   owner: {

@@ -81,7 +81,11 @@
                     <M3Select
                         v-model:value="priority"
                         label="Priority"
-                        :options="priorityOptions"
+                        :options="[
+                            { label: 'Low', value: 'low' },
+                            { label: 'Normal', value: 'normal' },
+                            { label: 'High', value: 'high' },
+                        ]"
                         outlined
                     />
 
@@ -108,6 +112,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
@@ -115,23 +121,10 @@ import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
 
-import { ref } from 'vue'
-
-const opened = ref(false)
 const owner = ref('owner@example.com')
 const priority = ref<'low' | 'normal' | 'high' | null>('normal')
 const notes = ref('Coordinate the release notes and schedule rollout approval.')
-
-const priorityOptions = [{
-  label: 'Low',
-  value: 'low',
-}, {
-  label: 'Normal',
-  value: 'normal',
-}, {
-  label: 'High',
-  value: 'high',
-}]
+const opened = ref(false)
 </script>
 
 <style scoped>

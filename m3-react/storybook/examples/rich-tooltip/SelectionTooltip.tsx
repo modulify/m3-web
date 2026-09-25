@@ -1,10 +1,11 @@
 import type { FC } from 'react'
 
+import { useState } from 'react'
+
 import { M3Button } from '@/components/button'
-import { useM3PopperCloserEffect } from '@/components/popper'
 import { M3RichTooltip } from '@/components/rich-tooltip'
 
-import { useState } from 'react'
+import { useM3PopperCloserEffect } from '@/components/popper'
 
 const SelectionTooltip: FC = () => {
   const [target, setTarget] = useState<HTMLElement | null>(null)

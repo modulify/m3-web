@@ -23,9 +23,10 @@
 import type { Appearance } from '@modulify/m3-foundation/types/components/icon-button'
 import type { PropType } from 'vue'
 
+import { ref } from 'vue'
+
 import { M3Ripple } from '@/components/ripple'
 
-import { ref } from 'vue'
 import { provideM3IconAppearance } from '@/components/icon/injections'
 
 const props = defineProps({

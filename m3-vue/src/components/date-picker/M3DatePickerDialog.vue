@@ -116,33 +116,30 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue'
 import type {
   CalendarAvailability,
   CalendarYearRange,
 } from '@modulify/m3-foundation/lib/calendar'
+import type { PropType } from 'vue'
 
-import { M3Button } from '@/components/button'
-import { M3Dialog } from '@/components/dialog'
-import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
-import { M3TextField } from '@/components/text-field'
-import M3DatePicker from './M3DatePicker.vue'
-
+import { CalendarDay, clampCalendarDay } from '@modulify/m3-foundation/lib/calendar'
+import { computed } from 'vue'
 import {
-  CalendarDay,
-  clampCalendarDay,
   DEFAULT_CALENDAR_DATE_INPUT_FORMAT,
   formatCalendarDateInput,
   getCalendarBounds,
   isCalendarDaySelectable,
   parseCalendarDateInput,
 } from '@modulify/m3-foundation/lib/calendar'
-import {
-  computed,
-  ref,
-  watch,
-} from 'vue'
+import { ref, watch } from 'vue'
+
+import { M3Button } from '@/components/button'
+import { M3Dialog } from '@/components/dialog'
+import { M3Icon } from '@/components/icon'
+import { M3IconButton } from '@/components/icon-button'
+import { M3TextField } from '@/components/text-field'
+
+import M3DatePicker from './M3DatePicker.vue'
 
 const cloneDate = (value: Date | null): Date | null => value ? new Date(value) : null
 

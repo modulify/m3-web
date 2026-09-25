@@ -3,10 +3,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
 
-import {
-  sizes,
-  variants,
-} from '@/components/fab-button/values'
+import { sizes, variants } from '@/components/fab-button/values'
 
 const meta = {
   title: 'Components/M3FabButton',

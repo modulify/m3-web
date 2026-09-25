@@ -1,6 +1,5 @@
-import type { Prop, PropType } from 'vue'
-
 import type { Appearance } from '@modulify/m3-foundation/types/components/button'
+import type { Prop, PropType } from 'vue'
 
 import { appearances } from './values'
 

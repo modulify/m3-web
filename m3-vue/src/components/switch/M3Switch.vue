@@ -44,17 +44,11 @@
 import type { Interactive } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
-import {
-  computed,
-  onBeforeUnmount,
-  ref,
-} from 'vue'
-
-import {
-  isId,
-  isUndefined,
-  Or,
-} from '@modulify/m3-foundation/lib/predicates'
+import { computed } from 'vue'
+import { isId, isUndefined } from '@modulify/m3-foundation/lib/predicates'
+import { onBeforeUnmount } from 'vue'
+import { Or } from '@modulify/m3-foundation/lib/predicates'
+import { ref } from 'vue'
 
 import useId from '@/composables/id'
 

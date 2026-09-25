@@ -1,13 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import { useEffect, useState } from 'react'
+
 import { M3Chip } from '@/components/chip'
 import { M3Icon } from '@/components/icon'
-import ChipShowcase from '../examples/chip/ChipShowcase'
 
-import {
-  useEffect,
-  useState,
-} from 'react'
+import ChipShowcase from '../examples/chip/ChipShowcase'
 
 const meta = {
   title: 'Components/M3Chip',

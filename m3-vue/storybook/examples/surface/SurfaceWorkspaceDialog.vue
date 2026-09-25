@@ -102,10 +102,10 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+
 import { M3Button } from '@/components/button'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
-
-import { ref } from 'vue'
 
 const opened = ref(false)
 </script>

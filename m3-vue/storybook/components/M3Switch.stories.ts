@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
-import { M3Switch } from '@/components/switch'
 import { ref } from 'vue'
+
+import { M3Switch } from '@/components/switch'
 
 import useId from '@/composables/id'
 

@@ -1,7 +1,5 @@
 import '../stylesheets/mdxCodeBlock.scss'
 
-import React from 'react'
-
 import type { ComponentPropsWithoutRef, ReactElement, ReactNode } from 'react'
 
 import bash from 'highlight.js/lib/languages/bash'
@@ -9,6 +7,7 @@ import css from 'highlight.js/lib/languages/css'
 import hljs from 'highlight.js/lib/core'
 import javascript from 'highlight.js/lib/languages/javascript'
 import json from 'highlight.js/lib/languages/json'
+import React from 'react'
 import typescript from 'highlight.js/lib/languages/typescript'
 import xml from 'highlight.js/lib/languages/xml'
 

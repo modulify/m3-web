@@ -1,11 +1,7 @@
-import type {
-  AllowedComponentProps,
-  DefineComponent,
-  Ref,
-} from 'vue'
-
-import type { PopperOptions } from '@modulify/m3-foundation/types/components/popper'
+import type { AllowedComponentProps, DefineComponent } from 'vue'
 import type { None } from '~types/scaffolding'
+import type { PopperOptions } from '@modulify/m3-foundation/types/components/popper'
+import type { Ref } from 'vue'
 
 import M3Popper from './M3Popper.vue'
 

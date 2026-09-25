@@ -76,19 +76,13 @@ import type {
   Mode as SurfaceMode,
 } from '@modulify/m3-foundation/types/components/surface'
 
-import M3SurfacePanel from './M3SurfacePanel.vue'
-
-import {
-  computed,
-  useAttrs,
-} from 'vue'
+import { computed, useAttrs } from 'vue'
 
 import useId from '@/composables/id'
-import {
-  getModalAnchorStyle,
-  surfacePanelProps,
-  toLength,
-} from './shared'
+
+import { getModalAnchorStyle } from './shared'
+import M3SurfacePanel from './M3SurfacePanel.vue'
+import { surfacePanelProps, toLength } from './shared'
 
 defineOptions({
   inheritAttrs: false,

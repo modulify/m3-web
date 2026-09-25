@@ -1,7 +1,4 @@
-import type {
-  FC,
-  HTMLAttributes,
-} from 'react'
+import type { FC, HTMLAttributes } from 'react'
 
 import { toClassName } from '@/utils/styling'
 

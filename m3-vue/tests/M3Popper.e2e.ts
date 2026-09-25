@@ -1,7 +1,4 @@
-import type {
-  App,
-  VNode,
-} from 'vue'
+import type { App, VNode } from 'vue'
 
 import {
   createApp,
@@ -11,10 +8,7 @@ import {
   withDirectives,
 } from 'vue'
 
-import {
-  M3Popper,
-  vM3PopperCloser,
-} from '@/components/popper'
+import { M3Popper, vM3PopperCloser } from '@/components/popper'
 
 type PopperSide = 'top' | 'bottom' | 'left' | 'right'
 

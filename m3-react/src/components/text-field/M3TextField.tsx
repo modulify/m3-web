@@ -1,12 +1,11 @@
+import type { FC } from 'react'
+import type { Focusable } from '@modulify/m3-foundation/types/dom'
 import type {
-  FC,
   FormEvent,
   ForwardRefRenderFunction,
   HTMLAttributes,
   ReactNode,
 } from 'react'
-
-import type { Focusable } from '@modulify/m3-foundation/types/dom'
 
 import {
   forwardRef,
@@ -17,16 +16,10 @@ import {
   useState,
 } from 'react'
 
-import {
-  useId,
-} from '@/hooks'
-
 import { compose } from '@/utils/events'
-import {
-  defineSlot,
-  distinct,
-} from '@/utils/content'
+import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
+import { useId } from '@/hooks'
 
 type TextFieldType =
   | 'email'

@@ -1,43 +1,32 @@
 import type {
-  FC,
-  ReactNode,
-} from 'react'
-
-import type { Placement } from '@floating-ui/dom'
-
-import type {
   CalendarAvailability,
   CalendarYearRange,
 } from '@modulify/m3-foundation/lib/calendar'
-
-import type {
-  M3TextFieldProps,
-} from '@/components/text-field'
+import type { CssClass } from '@/utils/styling'
+import type { FC } from 'react'
+import type { M3TextFieldProps } from '@/components/text-field'
+import type { Placement } from '@floating-ui/dom'
+import type { ReactNode } from 'react'
 
 import {
   CalendarDay,
-  DEFAULT_CALENDAR_DATE_INPUT_FORMAT,
   clampCalendarDay,
+  DEFAULT_CALENDAR_DATE_INPUT_FORMAT,
   formatCalendarDateInput,
   getCalendarBounds,
   isCalendarDaySelectable,
   parseCalendarDateInput,
 } from '@modulify/m3-foundation/lib/calendar'
-
-import {
-  useEffect,
-  useState,
-} from 'react'
+import { useEffect, useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 import { M3Popper } from '@/components/popper'
 import { M3TextField } from '@/components/text-field'
-import {
-  type CssClass,
-  toClassName,
-} from '@/utils/styling'
+
+import { toClassName } from '@/utils/styling'
+
 import M3DatePicker from './M3DatePicker'
 
 type TextFieldProps = Omit<

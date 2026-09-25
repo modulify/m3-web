@@ -1,15 +1,9 @@
+import type { M3SliderProps, M3SliderValue } from '@/components/slider'
 import type { Meta, StoryObj } from '@storybook/react'
-import type {
-  M3SliderProps,
-  M3SliderValue,
-} from '@/components/slider'
+
+import { useEffect, useState } from 'react'
 
 import { M3Slider } from '@/components/slider'
-
-import {
-  useEffect,
-  useState,
-} from 'react'
 
 const M3SliderStory = (args: M3SliderProps) => {
   const [value, setValue] = useState<M3SliderValue>(

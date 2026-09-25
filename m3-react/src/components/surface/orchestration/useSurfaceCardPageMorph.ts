@@ -1,22 +1,15 @@
 /* eslint-disable max-lines-per-function */
-import type {
-  CSSProperties,
-  MutableRefObject,
-} from 'react'
-
-import {
-  useEffect,
-  useRef,
-} from 'react'
+import type { CSSProperties, MutableRefObject } from 'react'
+import type { SurfaceMotionRect } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import {
   measureContainerRect,
   measureRelativeRect,
   raf,
   toMotionStyle,
-  type SurfaceMotionRect,
-  wait,
 } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { useEffect, useRef } from 'react'
+import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import { useStateRef } from './useStateRef'
 
@@ -53,14 +46,12 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
 
   const syncMotionToLayout = () => {
     const origin = measureOrigin()
-
     if (origin) {
       setOriginHeight(origin.height)
     }
 
     if (expandedRef.current) {
       const full = measureExpanded()
-
       if (full) {
         setMotion(full)
       }
@@ -170,7 +161,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
 
   useEffect(() => {
     if (typeof ResizeObserver === 'undefined') {
-      return
+      return () => {}
     }
 
     const observer = new ResizeObserver(() => {

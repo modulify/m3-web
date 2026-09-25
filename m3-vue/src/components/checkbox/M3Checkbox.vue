@@ -38,23 +38,21 @@
 import type { Interactive } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
-import IconCheckmark from './assets/checkmark.svg'
-import IconIndeterminate from './assets/indeterminate.svg'
-import { M3Ripple } from '@/components/ripple'
-
-import {
-  computed,
-  ref,
-} from 'vue'
-
+import { computed } from 'vue'
 import {
   isArray,
   isId,
   isUndefined,
   Or,
 } from '@modulify/m3-foundation/lib/predicates'
+import { ref } from 'vue'
+
+import { M3Ripple } from '@/components/ripple'
 
 import useId from '@/composables/id'
+
+import IconCheckmark from './assets/checkmark.svg'
+import IconIndeterminate from './assets/indeterminate.svg'
 
 const props = defineProps({
   id: {

@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { M3Checkbox } from '@/components/checkbox'
-import CheckboxList from '../examples/checkbox/CheckboxList'
-
 import { useState } from 'react'
+
+import { M3Checkbox } from '@/components/checkbox'
+
 import { useId } from '@/hooks'
+
+import CheckboxList from '../examples/checkbox/CheckboxList'
 
 const meta = {
   title: 'Components/M3Checkbox',

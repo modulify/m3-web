@@ -1,18 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import type { Code } from '../countries/codes'
-import type {
-  M3SelectOption,
-  M3SelectProps,
-} from '@/components/select'
+import type { M3SelectOption, M3SelectProps } from '@/components/select'
+import type { Meta, StoryObj } from '@storybook/react'
 
-import CountryFlag from '../countries/CountryFlag'
+import { useMemo, useState } from 'react'
+
 import { M3Icon } from '@/components/icon'
 import { M3Select } from '@/components/select'
 
-import {
-  useMemo,
-  useState,
-} from 'react'
+import CountryFlag from '../countries/CountryFlag'
 
 import codes from '../countries/codes'
 import countries from '../countries/names.json'

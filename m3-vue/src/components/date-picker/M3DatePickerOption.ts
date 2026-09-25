@@ -1,15 +1,8 @@
-import type {
-  PropType,
-  VNodeRef,
-} from 'vue'
+import type { PropType, VNodeRef } from 'vue'
+
+import { defineComponent, h, shallowRef } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'
-
-import {
-  defineComponent,
-  h,
-  shallowRef,
-} from 'vue'
 
 export type M3DatePickerOptionAppearance = 'circle' | 'pill'
 

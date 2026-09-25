@@ -1,8 +1,4 @@
-import type {
-  Boundary,
-  Placement,
-  Strategy,
-} from '@floating-ui/dom'
+import type { Boundary, Placement, Strategy } from '@floating-ui/dom'
 
 export type Delay = {
   show?: number | string;

@@ -1,13 +1,15 @@
-import type { Preview, VueRenderer } from '@storybook/vue3'
-
 import '@modulify/m3-foundation/assets/stylesheets/normalize.scss'
 import '@modulify/m3-foundation/assets/stylesheets/index.scss'
 import '@modulify/m3-foundation/assets/stylesheets/storybook/utils.scss'
 
-import { withThemeByClassName } from '@storybook/addon-themes'
+import type { Preview, VueRenderer } from '@storybook/vue3'
+
 import { addons } from 'storybook/preview-api'
-import theme from './theme'
+import { withThemeByClassName } from '@storybook/addon-themes'
+
 import { MdxCodeBlock, MdxCodePreBlock } from './utils/mdxCodeBlock'
+
+import theme from './theme'
 
 type DocsParameter = NonNullable<NonNullable<Preview['parameters']>['docs']> & {
   components?: {

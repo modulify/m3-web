@@ -56,26 +56,22 @@
 </template>
 
 <script lang="ts" setup>
-import { M3IconButton } from '@/components/icon-button'
-import { M3ScrollRail } from '@/components/scroll-rail'
-import { M3Surface } from '@/components/surface'
-import { m3MotionDurations } from '@modulify/m3-foundation/lib/motion'
-
+import { computed } from 'vue'
+import { isId, isUndefined } from '@modulify/m3-foundation/lib/predicates'
+import { nextTick, onBeforeUnmount } from 'vue'
+import { Or } from '@modulify/m3-foundation/lib/predicates'
 import {
-  computed,
-  nextTick,
-  onBeforeUnmount,
   ref,
   useAttrs,
   useSlots,
   watch,
 } from 'vue'
 
-import {
-  isId,
-  isUndefined,
-  Or,
-} from '@modulify/m3-foundation/lib/predicates'
+import { m3MotionDurations } from '@modulify/m3-foundation/lib/motion'
+
+import { M3IconButton } from '@/components/icon-button'
+import { M3ScrollRail } from '@/components/scroll-rail'
+import { M3Surface } from '@/components/surface'
 
 import useId from '@/composables/id'
 
