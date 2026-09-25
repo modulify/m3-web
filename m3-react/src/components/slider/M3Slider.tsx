@@ -15,6 +15,7 @@ import {
 
 import { compose } from '@/utils/events'
 import { toClassName } from '@/utils/styling'
+import { useResizeObserver } from '@/hooks'
 
 type AriaOptions = {
   label?: string;
@@ -98,6 +99,7 @@ const M3Slider: FC<M3SliderProps> = ({
   const fillerActive = useRef<HTMLDivElement | null>(null)
   const handleMax = useRef<HTMLDivElement | null>(null)
   const handleMin = useRef<HTMLDivElement | null>(null)
+  const resizeUpdateId = useRef<number | null>(null)
   const notches = useRef<Array<HTMLDivElement | null>>([])
   const draggingResetId = useRef<number | null>(null)
 
@@ -503,6 +505,22 @@ const M3Slider: FC<M3SliderProps> = ({
     })
   }, [])
 
+  const requestNotchesUpdate = useCallback(() => {
+    if (resizeUpdateId.current !== null) {
+      cancelAnimationFrame(resizeUpdateId.current)
+    }
+
+    resizeUpdateId.current = requestAnimationFrame(() => {
+      resizeUpdateId.current = null
+      updateNotches()
+    })
+  }, [updateNotches])
+
+  useResizeObserver(
+    [fillerActive, handleMax, handleMin],
+    requestNotchesUpdate
+  )
+
   const setNotchAt = useCallback((index: number, notch: HTMLDivElement | null) => {
     notches.current[index] = notch
   }, [])
@@ -557,30 +575,13 @@ const M3Slider: FC<M3SliderProps> = ({
   ])
 
   useEffect(() => {
-    const observer = new ResizeObserver(() => requestAnimationFrame(updateNotches))
-
-    if (fillerActive.current) {
-      observer.observe(fillerActive.current)
-    }
-
-    if (handleMax.current) {
-      observer.observe(handleMax.current)
-    }
-
-    if (handleMin.current) {
-      observer.observe(handleMin.current)
-    }
-
-    return () => observer.disconnect()
-  }, [
-    type,
-    updateNotches,
-  ])
-
-  useEffect(() => {
     return () => {
       if (draggingResetId.current !== null) {
         cancelAnimationFrame(draggingResetId.current)
+      }
+
+      if (resizeUpdateId.current !== null) {
+        cancelAnimationFrame(resizeUpdateId.current)
       }
     }
   }, [])

@@ -230,18 +230,41 @@ try {
     include: ['consumer.ts'],
   }, null, 2)}\n`)
   writeFileSync(resolve(temporaryDirectory, 'consumer.ts'), `
+import { createRef } from 'react'
+import { ref } from 'vue'
+
 import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
+import { useMutationObserver as useRootReactMutationObserver } from '@modulify/m3-react'
+import { useResizeObserver as useRootReactResizeObserver } from '@modulify/m3-react'
 import { M3Button, type M3ButtonProps } from '@modulify/m3-react/components'
-import { useBreakpoint as useReactBreakpoint, useId as useReactId } from '@modulify/m3-react/hooks'
+import {
+  useBreakpoint as useReactBreakpoint,
+  useId as useReactId,
+  useMutationObserver as useReactMutationObserver,
+  useResizeObserver as useReactResizeObserver,
+} from '@modulify/m3-react/hooks'
 import { M3Select as RootM3Select } from '@modulify/m3-vue'
 import { useBreakpoint as useRootVueBreakpoint } from '@modulify/m3-vue'
+import { useMutationObserver as useRootVueMutationObserver } from '@modulify/m3-vue'
+import { useResizeObserver as useRootVueResizeObserver } from '@modulify/m3-vue'
 import { M3Select, type M3SelectOption } from '@modulify/m3-vue/components'
-import { useBreakpoint as useVueBreakpoint, useId as useVueId } from '@modulify/m3-vue/composables'
+import {
+  useBreakpoint as useVueBreakpoint,
+  useId as useVueId,
+  useMutationObserver as useVueMutationObserver,
+  useResizeObserver as useVueResizeObserver,
+} from '@modulify/m3-vue/composables'
 
 const buttonProps: M3ButtonProps = { appearance: 'filled' }
 const options: M3SelectOption<number>[] = [{ value: 1, label: 'One' }]
+const reactObserverTarget = createRef<HTMLDivElement>()
+const reactMutationObserverTargets: Parameters<typeof useReactMutationObserver>[0] = [reactObserverTarget]
+const reactResizeObserverTargets: Parameters<typeof useReactResizeObserver>[0] = [reactObserverTarget]
+const vueObserverTarget = ref<HTMLDivElement | null>(null)
+const vueMutationObserverTargets: Parameters<typeof useVueMutationObserver>[0] = [vueObserverTarget]
+const vueResizeObserverTargets: Parameters<typeof useVueResizeObserver>[0] = [vueObserverTarget]
 
 void [
   CalendarDay,
@@ -251,12 +274,24 @@ void [
   RootM3Select,
   buttonProps,
   options,
+  reactMutationObserverTargets,
+  reactResizeObserverTargets,
   useReactBreakpoint,
   useReactId,
+  useReactMutationObserver,
+  useReactResizeObserver,
   useRootReactBreakpoint,
+  useRootReactMutationObserver,
+  useRootReactResizeObserver,
   useRootVueBreakpoint,
+  useRootVueMutationObserver,
+  useRootVueResizeObserver,
   useVueBreakpoint,
   useVueId,
+  useVueMutationObserver,
+  useVueResizeObserver,
+  vueMutationObserverTargets,
+  vueResizeObserverTargets,
 ]
 `)
   writeFileSync(resolve(temporaryDirectory, 'consumer.mjs'), `
@@ -266,12 +301,26 @@ import { fileURLToPath } from 'node:url'
 import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
+import { useMutationObserver as useRootReactMutationObserver } from '@modulify/m3-react'
+import { useResizeObserver as useRootReactResizeObserver } from '@modulify/m3-react'
 import { M3Button } from '@modulify/m3-react/components'
-import { useBreakpoint as useReactBreakpoint, useId as useReactId } from '@modulify/m3-react/hooks'
+import {
+  useBreakpoint as useReactBreakpoint,
+  useId as useReactId,
+  useMutationObserver as useReactMutationObserver,
+  useResizeObserver as useReactResizeObserver,
+} from '@modulify/m3-react/hooks'
 import { M3Select as RootM3Select } from '@modulify/m3-vue'
 import { useBreakpoint as useRootVueBreakpoint } from '@modulify/m3-vue'
+import { useMutationObserver as useRootVueMutationObserver } from '@modulify/m3-vue'
+import { useResizeObserver as useRootVueResizeObserver } from '@modulify/m3-vue'
 import { M3Select } from '@modulify/m3-vue/components'
-import { useBreakpoint as useVueBreakpoint, useId as useVueId } from '@modulify/m3-vue/composables'
+import {
+  useBreakpoint as useVueBreakpoint,
+  useId as useVueId,
+  useMutationObserver as useVueMutationObserver,
+  useResizeObserver as useVueResizeObserver,
+} from '@modulify/m3-vue/composables'
 
 await access(fileURLToPath(import.meta.resolve('@modulify/m3-foundation/styles.css')))
 
@@ -295,10 +344,18 @@ if (
   || !RootM3Select
   || !useReactBreakpoint
   || !useReactId
+  || !useReactMutationObserver
+  || !useReactResizeObserver
   || !useRootReactBreakpoint
+  || !useRootReactMutationObserver
+  || !useRootReactResizeObserver
   || !useRootVueBreakpoint
+  || !useRootVueMutationObserver
+  || !useRootVueResizeObserver
   || !useVueBreakpoint
   || !useVueId
+  || !useVueMutationObserver
+  || !useVueResizeObserver
 ) {
   throw new Error('Expected ESM package exports are unavailable')
 }
@@ -307,12 +364,26 @@ if (
 const { CalendarDay } = require('@modulify/m3-foundation/lib/calendar')
 const { M3Button: RootM3Button } = require('@modulify/m3-react')
 const { useBreakpoint: useRootReactBreakpoint } = require('@modulify/m3-react')
+const { useMutationObserver: useRootReactMutationObserver } = require('@modulify/m3-react')
+const { useResizeObserver: useRootReactResizeObserver } = require('@modulify/m3-react')
 const { M3Button } = require('@modulify/m3-react/components')
-const { useBreakpoint: useReactBreakpoint, useId: useReactId } = require('@modulify/m3-react/hooks')
+const {
+  useBreakpoint: useReactBreakpoint,
+  useId: useReactId,
+  useMutationObserver: useReactMutationObserver,
+  useResizeObserver: useReactResizeObserver,
+} = require('@modulify/m3-react/hooks')
 const { M3Select: RootM3Select } = require('@modulify/m3-vue')
 const { useBreakpoint: useRootVueBreakpoint } = require('@modulify/m3-vue')
+const { useMutationObserver: useRootVueMutationObserver } = require('@modulify/m3-vue')
+const { useResizeObserver: useRootVueResizeObserver } = require('@modulify/m3-vue')
 const { M3Select } = require('@modulify/m3-vue/components')
-const { useBreakpoint: useVueBreakpoint, useId: useVueId } = require('@modulify/m3-vue/composables')
+const {
+  useBreakpoint: useVueBreakpoint,
+  useId: useVueId,
+  useMutationObserver: useVueMutationObserver,
+  useResizeObserver: useVueResizeObserver,
+} = require('@modulify/m3-vue/composables')
 
 if (
   !CalendarDay
@@ -322,10 +393,18 @@ if (
   || !RootM3Select
   || !useReactBreakpoint
   || !useReactId
+  || !useReactMutationObserver
+  || !useReactResizeObserver
   || !useRootReactBreakpoint
+  || !useRootReactMutationObserver
+  || !useRootReactResizeObserver
   || !useRootVueBreakpoint
+  || !useRootVueMutationObserver
+  || !useRootVueResizeObserver
   || !useVueBreakpoint
   || !useVueId
+  || !useVueMutationObserver
+  || !useVueResizeObserver
 ) {
   throw new Error('Expected CommonJS package exports are unavailable')
 }

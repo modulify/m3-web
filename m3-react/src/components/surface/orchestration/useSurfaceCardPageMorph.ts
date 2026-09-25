@@ -11,6 +11,8 @@ import {
 import { useEffect, useRef } from 'react'
 import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
+import { useResizeObserver } from '@/hooks'
+
 import { useStateRef } from './useStateRef'
 
 type UseSurfaceCardPageMorphResult = {
@@ -76,6 +78,11 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
       syncMotionToLayout()
     })
   }
+
+  useResizeObserver(
+    [canvasRef, originSlotRef],
+    scheduleSyncMotion
+  )
 
   const initMotion = async () => {
     await raf()
@@ -160,25 +167,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
   }, [])
 
   useEffect(() => {
-    if (typeof ResizeObserver === 'undefined') {
-      return () => {}
-    }
-
-    const observer = new ResizeObserver(() => {
-      scheduleSyncMotion()
-    })
-
-    if (canvasRef.current) {
-      observer.observe(canvasRef.current)
-    }
-
-    if (originSlotRef.current) {
-      observer.observe(originSlotRef.current)
-    }
-
     return () => {
-      observer.disconnect()
-
       if (syncFrameRef.current !== null) {
         cancelAnimationFrame(syncFrameRef.current)
         syncFrameRef.current = null

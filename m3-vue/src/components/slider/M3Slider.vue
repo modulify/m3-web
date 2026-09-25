@@ -132,6 +132,8 @@ import {
   watch,
 } from 'vue'
 
+import { useResizeObserver } from '@/composables/observer'
+
 type AriaOptions = {
   label?: string;
   labelledBy?: string;
@@ -380,26 +382,18 @@ const setValueMin = (value: number) => {
 }
 
 const onKeyDownForMax = (event: KeyboardEvent) => {
-  if (props.disabled) {
-    return
-  }
+  if (props.disabled) return
 
   const [, valueMax] = current.value
   const [rangeMin, rangeMax] = rangeBy(valueMax, stepFor(keys.space))
 
   switch (true) {
-    case event.code === 'ArrowLeft':
-      setValueMax(rangeMin)
-      break
+    case event.code === 'ArrowLeft': setValueMax(rangeMin); break
     case event.code === 'ArrowRight':
       setValueMax(rangeMax === valueMax ? nextFor(rangeMax, keys.space) : rangeMax)
       break
-    case event.code === 'End':
-      setValueMax(props.max)
-      break
-    case event.code === 'Home':
-      setValueMax(props.min)
-      break
+    case event.code === 'End': setValueMax(props.max); break
+    case event.code === 'Home': setValueMax(props.min); break
   }
 }
 
@@ -431,26 +425,18 @@ const onStartDraggingMax = () => {
 }
 
 const onKeyDownForMin = (event: KeyboardEvent) => {
-  if (props.disabled) {
-    return
-  }
+  if (props.disabled) return
 
   const [valueMin] = current.value
   const [rangeMin, rangeMax] = rangeBy(valueMin, stepFor(keys.space))
 
   switch (true) {
-    case event.code === 'ArrowLeft':
-      setValueMin(rangeMin)
-      break
+    case event.code === 'ArrowLeft': setValueMin(rangeMin); break
     case event.code === 'ArrowRight':
       setValueMin(rangeMax === valueMin ? nextFor(rangeMax, keys.space) : rangeMax)
       break
-    case event.code === 'End':
-      setValueMin(props.max)
-      break
-    case event.code === 'Home':
-      setValueMin(props.min)
-      break
+    case event.code === 'End': setValueMin(props.max); break
+    case event.code === 'Home': setValueMin(props.min); break
   }
 }
 
@@ -509,15 +495,31 @@ const updateNotches = () => {
   })
 }
 
+let resizeUpdateId: number | null = null
+
+const resizeObserver = useResizeObserver(
+  [fillerActive, handleMax, handleMin],
+  () => {
+    if (resizeUpdateId !== null) {
+      cancelAnimationFrame(resizeUpdateId)
+    }
+
+    resizeUpdateId = requestAnimationFrame(() => {
+      resizeUpdateId = null
+      updateNotches()
+    })
+  }
+)
+
 watch(steps, () => {
   notches.value = []
-  nextTick(() => updateNotches())
+  nextTick(updateNotches)
 })
 
 watch([
   () => dragging.max,
   () => dragging.min,
-], () => updateNotches())
+], updateNotches)
 
 watch(() => props.disabled, (disabled) => {
   if (disabled) {
@@ -526,31 +528,22 @@ watch(() => props.disabled, (disabled) => {
   }
 })
 
+watch(handleMin, () => {
+  resizeObserver.unobserve()
+  resizeObserver.observe()
+}, { flush: 'post' })
+
 onMounted(() => {
   updateNotches()
-
-  const fillerActiveObserver = new ResizeObserver(() => requestAnimationFrame(updateNotches))
-  const handleMaxObserver = new ResizeObserver(() => requestAnimationFrame(updateNotches))
-  const handleMinObserver = new ResizeObserver(() => requestAnimationFrame(updateNotches))
-
-  fillerActiveObserver.observe(fillerActive.value as HTMLElement)
-  handleMaxObserver.observe(handleMax.value as HTMLElement)
-
-  watch(handleMin, (curr, prev) => {
-    if (curr && curr !== prev) {
-      handleMinObserver.observe(curr)
-    }
-  }, { immediate: true })
-
-  onBeforeUnmount(() => {
-    fillerActiveObserver.disconnect()
-    handleMaxObserver.disconnect()
-    handleMinObserver.disconnect()
-  })
+  resizeObserver.observe()
 })
 
 onBeforeUnmount(() => {
   stopMouseListeningForMax()
   stopMouseListeningForMin()
+
+  if (resizeUpdateId !== null) {
+    cancelAnimationFrame(resizeUpdateId)
+  }
 })
 </script>
