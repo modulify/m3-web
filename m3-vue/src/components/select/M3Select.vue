@@ -89,6 +89,7 @@ import { Or } from '@modulify/m3-foundation/lib/predicates'
 import { ref } from 'vue'
 
 import { useId } from '@/composables/id'
+import { useResizeObserver } from '@/composables/observer'
 
 import { M3Menu, M3MenuItem } from '../menu'
 import { M3ScrollRail } from '../scroll-rail'
@@ -176,39 +177,38 @@ const pick = (option: M3SelectOption<T>) => {
   shouldBeExpanded.value = false
 }
 
-let resizeObserver: ResizeObserver | null = null
 let resizeUpdateId: number | null = null
 
 const requestResizeUpdate = (entry: ResizeObserverEntry) => {
-  requestAnimationFrame(() => {
+  resizeUpdateId = requestAnimationFrame(() => {
+    resizeUpdateId = null
     rootWidth.value = entry.contentRect.width
   })
 }
 
 const cancelResizeUpdate = () => {
-  if (resizeUpdateId) {
+  if (resizeUpdateId !== null) {
     cancelAnimationFrame(resizeUpdateId)
     resizeUpdateId = null
   }
 }
 
+const resizeObserver = useResizeObserver(root, ([entry]) => {
+  if (!entry) {
+    return
+  }
+
+  cancelResizeUpdate()
+  requestResizeUpdate(entry)
+})
+
 onMounted(() => {
-  resizeObserver = new ResizeObserver(([entry]) => {
-    cancelResizeUpdate()
-    requestResizeUpdate(entry)
-  })
-  resizeObserver.observe(root.value as HTMLElement)
+  resizeObserver.observe()
 
   rootWidth.value = root.value?.offsetWidth ?? 0
 })
 
 onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
-  resizeObserver = null
-
-  if (resizeUpdateId) {
-    cancelAnimationFrame(resizeUpdateId)
-    resizeUpdateId = null
-  }
+  cancelResizeUpdate()
 })
 </script>

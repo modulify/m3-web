@@ -16,7 +16,7 @@ import { M3TextField } from '@/components/text-field'
 
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useId } from '@/hooks'
+import { useId, useResizeObserver } from '@/hooks'
 
 export type M3SelectOption<Value = unknown> = {
   value: Value;
@@ -112,6 +112,7 @@ const M3Select = <Value,>({
   const [rootWidth, setRootWidth] = useState(0)
 
   const root = useRef<HTMLDivElement | null>(null)
+  const resizeUpdateId = useRef<number | null>(null)
 
   const [slots] = useMemo(() => distinct(children, {
     leading: Leading,
@@ -134,34 +135,28 @@ const M3Select = <Value,>({
     onUpdate,
   ])
 
-  useEffect(() => {
-    const _root = root.current
-    if (!_root) {
+  useResizeObserver(root, ([entry]) => {
+    if (!entry) {
       return
     }
 
-    setRootWidth(_root.offsetWidth)
+    if (resizeUpdateId.current !== null) {
+      cancelAnimationFrame(resizeUpdateId.current)
+    }
 
-    let frameId: number | null = null
-    const observer = new ResizeObserver(([entry]) => {
-      if (!entry) {
-        return
-      }
-
-      if (frameId !== null) {
-        cancelAnimationFrame(frameId)
-      }
-
-      frameId = requestAnimationFrame(() => setRootWidth(entry.contentRect.width))
+    resizeUpdateId.current = requestAnimationFrame(() => {
+      resizeUpdateId.current = null
+      setRootWidth(entry.contentRect.width)
     })
+  })
 
-    observer.observe(_root)
+  useEffect(() => {
+    setRootWidth(root.current?.offsetWidth ?? 0)
 
     return () => {
-      observer.disconnect()
-
-      if (frameId !== null) {
-        cancelAnimationFrame(frameId)
+      if (resizeUpdateId.current !== null) {
+        cancelAnimationFrame(resizeUpdateId.current)
+        resizeUpdateId.current = null
       }
     }
   }, [])

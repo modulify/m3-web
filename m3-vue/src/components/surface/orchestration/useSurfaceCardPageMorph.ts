@@ -11,6 +11,8 @@ import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { ref } from 'vue'
 import { toMotionStyle, wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
+import { useResizeObserver } from '@/composables/observer'
+
 export function useSurfaceCardPageMorph(transitionMs: number) {
   const expanded = ref(false)
   const busy = ref(false)
@@ -18,7 +20,6 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
   const originHeight = ref(220)
   const canvas = ref<HTMLElement | null>(null)
   const originSlot = ref<HTMLElement | null>(null)
-  let observer: ResizeObserver | null = null
   const syncFrame = ref<number | null>(null)
   const motion = ref<SurfaceMotionRect>({
     top: 16,
@@ -71,6 +72,11 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
       syncMotionToLayout()
     })
   }
+
+  const resizeObserver = useResizeObserver(
+    [canvas, originSlot],
+    scheduleSyncMotion
+  )
 
   async function initMotion() {
     await nextTick()
@@ -156,27 +162,10 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
 
   onMounted(() => {
     initMotion()
-
-    if (typeof ResizeObserver === 'undefined') {
-      return
-    }
-
-    observer = new ResizeObserver(() => {
-      scheduleSyncMotion()
-    })
-
-    if (canvas.value) {
-      observer.observe(canvas.value)
-    }
-
-    if (originSlot.value) {
-      observer.observe(originSlot.value)
-    }
+    resizeObserver.observe()
   })
 
   onBeforeUnmount(() => {
-    observer?.disconnect()
-
     if (syncFrame.value !== null) {
       cancelAnimationFrame(syncFrame.value)
       syncFrame.value = null
