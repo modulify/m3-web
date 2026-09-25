@@ -60,7 +60,7 @@ export type M3DatePickerView = typeof DATE_PICKER_VIEW[keyof typeof DATE_PICKER_
 
 const DEFAULT_DATE_PICKER_VIEWS: M3DatePickerView[] = Object.values(DATE_PICKER_VIEW)
 
-const Footer: FC<{ children: ReactNode }> = defineSlot('M3DatePicker.Footer', props => <>{props.children}</>)
+const Footer = defineSlot('M3DatePicker.Footer')
 
 interface M3DatePickerBaseProps extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
   cursor?: Date | null;

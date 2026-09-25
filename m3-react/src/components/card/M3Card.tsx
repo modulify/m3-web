@@ -1,7 +1,6 @@
 import type { Appearance } from '@modulify/m3-foundation/types/components/card'
 import type { FC, HTMLAttributes } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
-import type { ReactNode } from 'react'
 
 import { useRef } from 'react'
 
@@ -21,7 +20,7 @@ export interface M3CardProps extends HTMLAttributes<HTMLElement> {
   landscape?: boolean;
 }
 
-const Content: FC<{ children: ReactNode }> = defineSlot('M3Card.Content', props => <>{props.children}</>)
+const Content = defineSlot('M3Card.Content')
 
 const Media: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Card.Media', ({
   className = '',

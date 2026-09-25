@@ -1,15 +1,30 @@
 import type { FC, ReactNode } from 'react'
 
+import { render } from '@testing-library/react'
+
 import { defineSlot, distinct } from '@/utils/content'
 
-const Header: FC<{ children?: ReactNode }> = defineSlot('TestSlots.Header', props => <>{props.children}</>)
-const Footer: FC<{ children?: ReactNode }> = defineSlot('TestSlots.Footer', props => <>{props.children}</>)
-const Section: FC<{ children?: ReactNode }> = defineSlot('TestSlots.Section', props => <>{props.children}</>)
+const Header = defineSlot('TestSlots.Header')
+const Footer = defineSlot('TestSlots.Footer')
+const Section = defineSlot('TestSlots.Section')
 const Wrapper: FC<{ children?: ReactNode }> = props => <>{props.children}</>
+const Custom = (props: { active: boolean; children?: ReactNode }) => (
+  <span data-active={props.active}>{props.children}</span>
+)
+const CustomSlot = defineSlot('TestSlots.Custom', Custom)
 
 describe('m3-react/content', () => {
   afterEach(() => {
     vi.restoreAllMocks()
+  })
+
+  test('creates a typed fragment component by default and preserves a provided component type', () => {
+    expectTypeOf(Header).toEqualTypeOf<FC<{ children: ReactNode }>>()
+    expectTypeOf(CustomSlot).toEqualTypeOf<typeof Custom>()
+
+    const { container } = render(<Header>Header</Header>)
+
+    expect(container.textContent).toBe('Header')
   })
 
   test('parses slots, collections and content through fragments', () => {
@@ -111,18 +126,10 @@ describe('m3-react/content', () => {
   })
 
   test('matches slots by stable marker when component identity changes', () => {
-    const PreviousHeader = defineSlot('HmrSlots.Header', ((props: { children?: ReactNode }) => (
-      <>{props.children}</>
-    )))
-    const NextHeader = defineSlot('HmrSlots.Header', ((props: { children?: ReactNode }) => (
-      <>{props.children}</>
-    )))
-    const PreviousSection = defineSlot('HmrSlots.Section', ((props: { children?: ReactNode }) => (
-      <>{props.children}</>
-    )))
-    const NextSection = defineSlot('HmrSlots.Section', ((props: { children?: ReactNode }) => (
-      <>{props.children}</>
-    )))
+    const PreviousHeader = defineSlot('HmrSlots.Header')
+    const NextHeader = defineSlot('HmrSlots.Header')
+    const PreviousSection = defineSlot('HmrSlots.Section')
+    const NextSection = defineSlot('HmrSlots.Section')
 
     const parsed = distinct(
       <>

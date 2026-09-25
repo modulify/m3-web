@@ -34,10 +34,10 @@ export interface M3SideSheetProps extends Omit<
   onDismiss?: () => void;
 }
 
-const Affordance: FC<{ children: ReactNode }> = defineSlot('M3SideSheet.Affordance', props => <>{props.children}</>)
-const Title: FC<{ children: ReactNode }> = defineSlot('M3SideSheet.Title', props => <>{props.children}</>)
-const CloseIcon: FC<{ children: ReactNode }> = defineSlot('M3SideSheet.CloseIcon', props => <>{props.children}</>)
-const Footer: FC<{ children: ReactNode }> = defineSlot('M3SideSheet.Footer', props => <>{props.children}</>)
+const Affordance = defineSlot('M3SideSheet.Affordance')
+const Title = defineSlot('M3SideSheet.Title')
+const CloseIcon = defineSlot('M3SideSheet.CloseIcon')
+const Footer = defineSlot('M3SideSheet.Footer')
 
 const DOCKED_WIDTH = 256
 const MODAL_MIN_WIDTH = 320

@@ -1,7 +1,6 @@
 import type { FC, HTMLAttributes } from 'react'
 import type { M3LinkMethods } from '@/components/link'
 import type { M3RippleMethods } from '@/components/ripple'
-import type { ReactNode } from 'react'
 
 import {
   useEffect,
@@ -23,8 +22,8 @@ export interface M3MenuItemProps extends HTMLAttributes<HTMLElement> {
   disabled?: boolean;
 }
 
-const Leading: FC<{ children: ReactNode }> = defineSlot('M3MenuItem.Leading', props => <>{props.children}</>)
-const Trailing: FC<{ children: ReactNode }> = defineSlot('M3MenuItem.Trailing', props => <>{props.children}</>)
+const Leading = defineSlot('M3MenuItem.Leading')
+const Trailing = defineSlot('M3MenuItem.Trailing')
 
 const M3MenuItem: FC<M3MenuItemProps> = ({
   href,
