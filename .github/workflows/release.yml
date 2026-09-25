@@ -62,6 +62,9 @@ jobs:
       - name: Run test type checks
         run: yarn tsc:tests
 
+      - name: Run Storybook type checks
+        run: yarn tsc:storybook
+
       - name: Run e2e config type checks
         run: yarn tsc:e2e
 

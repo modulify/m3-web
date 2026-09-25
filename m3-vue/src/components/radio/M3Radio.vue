@@ -30,65 +30,29 @@
     </span>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="Value = boolean">
 import type { Interactive } from '@modulify/m3-foundation/types/dom'
-import type { PropType } from 'vue'
+import type { M3RadioProps } from './types'
 
 import { computed } from 'vue'
-import { isId, isUndefined, Or } from '@modulify/m3-foundation/lib/predicates'
 import { ref } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'
 
 import useId from '@/composables/id'
 
-const props = defineProps({
-  id: {
-    type: null as unknown as PropType<string | undefined>,
-    validator: Or(isId, isUndefined),
-    default: undefined,
-  },
+const props = defineProps<M3RadioProps<Value>>()
 
-  name: {
-    type: null as unknown as PropType<string | undefined>,
-    default: undefined,
-  },
-
-  model: {
-    type: null as unknown as PropType<unknown>,
-    default: undefined as unknown,
-  },
-
-  value: {
-    type: null as unknown as PropType<unknown>,
-    default: true as unknown,
-  },
-
-  invalid: {
-    type: Boolean,
-    default: false,
-  },
-
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-
-  equalsFn: {
-    type: Function as PropType<(a: unknown, b: unknown) => boolean>,
-    default: (a: unknown, b: unknown): boolean => a === b,
-  },
-})
-
-const emit = defineEmits([
-  'change',
-  'update:model',
-])
+const emit = defineEmits<{
+  change: [value: Value];
+  'update:model': [value: Value];
+}>()
 
 const root = ref<HTMLElement | null>(null)
 
 const _id = useId('m3-radio', computed(() => props.id))
 const _input = ref<HTMLInputElement | null>(null)
+const value = computed((): Value => props.value === undefined ? true as Value : props.value)
 
 defineExpose({
   click: () => _input.value?.click(),
@@ -96,15 +60,15 @@ defineExpose({
   blur: () => _input.value?.blur(),
 } satisfies Interactive)
 
-const equals = (a: unknown, b: unknown) => props.equalsFn.call(null, a, b)
-const checked = computed(() => equals(props.model, props.value))
+const equals = (a: Value | undefined, b: Value) => props.equalsFn?.call(null, a, b) ?? a === b
+const checked = computed(() => equals(props.model, value.value))
 
 const onChange = (event: Event) => {
   if (!(event.target as HTMLInputElement).checked) {
     return
   }
 
-  emit('change', props.value)
-  emit('update:model', props.value)
+  emit('change', value.value)
+  emit('update:model', value.value)
 }
 </script>

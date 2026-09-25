@@ -28,6 +28,10 @@ type SlotContext<Value> = {
   option: M3SelectOption<Value>;
   active: boolean;
 }
+type SlotChildren<Context> = ReactNode | ((context: Context) => ReactNode)
+type SelectSlot = <Value>(props: {
+  children: SlotChildren<SlotContext<Value>>;
+}) => ReactElement | null
 
 export interface M3SelectProps<Value = unknown> extends HTMLAttributes<HTMLElement> {
   id?: string;
@@ -56,9 +60,18 @@ const CaretIcon: FC<SVGAttributes<SVGSVGElement>> = (attrs) => (
   </svg>
 )
 
-const Leading: FC<{ children: ReactNode }> = defineSlot('M3Select.Leading', props => <>{props.children}</>)
-const OptionLeading: FC<{ children: ReactNode }> = defineSlot('M3Select.OptionLeading', props => <>{props.children}</>)
-const OptionContent: FC<{ children: ReactNode }> = defineSlot('M3Select.OptionContent', props => <>{props.children}</>)
+const Leading: FC<{ children: SlotChildren<{ active: boolean }> }> = defineSlot(
+  'M3Select.Leading',
+  props => <>{props.children as ReactNode}</>
+)
+const OptionLeading = defineSlot(
+  'M3Select.OptionLeading',
+  props => <>{props.children as ReactNode}</>
+) as SelectSlot
+const OptionContent = defineSlot(
+  'M3Select.OptionContent',
+  props => <>{props.children as ReactNode}</>
+) as SelectSlot
 
 const asRenderProp = <Context,>(value: unknown): null | ((context: Context) => ReactNode) => {
   return typeof value === 'function' ? value as (context: Context) => ReactNode : null

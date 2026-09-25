@@ -33,21 +33,18 @@ const layers = {
     declarations: false,
     entry: rootEntry,
     fileName: 'index',
-    rootFacade: true,
   },
   'package-components': {
     clean: false,
     declarations: true,
     entry: resolve(__dirname, './src/components/index.ts'),
     fileName: 'components',
-    rootFacade: false,
   },
   'package-hooks': {
     clean: false,
     declarations: false,
     entry: resolve(__dirname, './src/hooks/index.ts'),
     fileName: 'hooks',
-    rootFacade: false,
   },
 }
 
@@ -86,7 +83,7 @@ export default defineConfig(({ mode }) => {
     ],
 
     resolve: {
-      alias: layer.rootFacade ? rootLayerAliases : [],
+      alias: mode === 'package-root' ? rootLayerAliases : [],
     },
 
     build: {

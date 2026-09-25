@@ -1,6 +1,7 @@
 import type { Clickable, Focusable } from '@modulify/m3-foundation/types/dom'
-import type { ForwardRefRenderFunction, HTMLAttributes } from 'react'
+import type { ForwardedRef, HTMLAttributes } from 'react'
 import type { M3RippleMethods } from '@/components/ripple'
+import type { ReactElement, RefAttributes } from 'react'
 
 import {
   forwardRef,
@@ -15,34 +16,36 @@ import { M3Ripple } from '@/components/ripple'
 import { toClassName } from '@/utils/styling'
 import { useElementEffect, useId, useTarget } from '@/hooks'
 
-export interface M3RadioProps extends HTMLAttributes<HTMLElement> {
+export interface M3RadioProps<Value = boolean>
+  extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
   id?: string;
   name?: string;
-  model?: unknown;
-  value?: unknown;
+  model?: Value;
+  value?: Value;
   invalid?: boolean;
   disabled?: boolean;
-  equalsFn?: (a: unknown, b: unknown) => boolean;
-  onChange?: (value: unknown) => void;
+  equalsFn?: (a: Value | undefined, b: Value) => boolean;
+  onChange?: (value: Value) => void;
 }
 
 export interface M3RadioMethods extends Clickable, Focusable {}
 
-const M3Radio: ForwardRefRenderFunction<
-  M3RadioMethods,
-  M3RadioProps
-> = ({
+type M3RadioComponent = <Value = boolean>(
+  props: M3RadioProps<Value> & RefAttributes<M3RadioMethods>
+) => ReactElement | null
+
+const M3Radio = <Value,>({
   id,
   name,
   model,
-  value = true,
+  value = true as Value,
   invalid = false,
   disabled = false,
-  equalsFn = (a: unknown, b: unknown): boolean => a === b,
+  equalsFn = (a: Value | undefined, b: Value): boolean => a === b,
   className = '',
-  onChange = (_: unknown) => {},
+  onChange = (_: Value) => {},
   ...args
-}, ref) => {
+}: M3RadioProps<Value>, ref: ForwardedRef<M3RadioMethods>) => {
   const root = useRef<HTMLElement | null>(null)
   const input = useRef<HTMLInputElement | null>(null)
   const ripple = useRef<M3RippleMethods | null>(null)
@@ -98,4 +101,4 @@ const M3Radio: ForwardRefRenderFunction<
   )
 }
 
-export default forwardRef(M3Radio)
+export default forwardRef(M3Radio) as M3RadioComponent

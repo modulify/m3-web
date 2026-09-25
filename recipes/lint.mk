@@ -35,6 +35,21 @@ tsc-tests: node_modules ## [Quality][docker][types] Runs type checks for tests i
 	$(TARGET_HEADER)
 	$(YARN) tsc:tests
 
+.PHONY: tsc-storybook
+tsc-storybook: node_modules ## [Quality][docker][types] Runs type checks for Storybook in all UI workspaces
+	$(TARGET_HEADER)
+	$(YARN) tsc:storybook
+
+.PHONY: tsc-storybook-react
+tsc-storybook-react: node_modules ## [Quality][docker][types] Runs Storybook type checks in @modulify/m3-react
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-react tsc:storybook
+
+.PHONY: tsc-storybook-vue
+tsc-storybook-vue: node_modules ## [Quality][docker][types] Runs Storybook type checks in @modulify/m3-vue
+	$(TARGET_HEADER)
+	$(YARN) workspace @modulify/m3-vue tsc:storybook
+
 .PHONY: tsc-tests-react
 tsc-tests-react: node_modules ## [Quality][docker][types] Runs type checks for tests in @modulify/m3-react
 	$(TARGET_HEADER)

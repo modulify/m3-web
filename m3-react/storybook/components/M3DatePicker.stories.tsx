@@ -1,4 +1,7 @@
-import type { M3DatePickerFieldProps, M3DatePickerProps } from '@/components/date-picker'
+import type {
+  M3DatePickerFieldProps,
+  M3DatePickerSingleProps,
+} from '@/components/date-picker'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { useState } from 'react'
@@ -15,8 +18,8 @@ const MIN_DATE = new Date(2026, 6, 3)
 const MAX_DATE = new Date(2026, 6, 24)
 const INITIAL_RANGE: [Date | null, Date | null] = [new Date(2026, 6, 17), new Date(2026, 6, 23)]
 
-const M3DatePickerStory = (args: M3DatePickerProps) => {
-  const [value, setValue] = useState<Date | null>(args.value instanceof Date ? args.value : INITIAL_DATE)
+const M3DatePickerStory = (args: M3DatePickerSingleProps) => {
+  const [value, setValue] = useState<Date | null>(args.value ?? INITIAL_DATE)
 
   return (
     <M3DatePicker
@@ -45,7 +48,7 @@ const M3DatePickerFieldStory = (args: M3DatePickerFieldProps) => {
 const meta = {
   title: 'Components/M3DatePicker',
 
-  component: M3DatePicker,
+  component: M3DatePicker as NonNullable<Meta<M3DatePickerSingleProps>['component']>,
 
   args: {
     type: 'single',
@@ -74,7 +77,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof M3DatePicker>
+} satisfies Meta<M3DatePickerSingleProps>
 
 export default meta
 

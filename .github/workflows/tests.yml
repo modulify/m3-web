@@ -103,6 +103,10 @@ jobs:
       - name: Run package type checks
         run: yarn tsc
 
+      - name: Run Storybook type checks
+        if: matrix.node-version == '24.x'
+        run: yarn tsc:storybook
+
       - name: Run e2e config type checks
         if: matrix.node-version == '24.x'
         run: yarn tsc:e2e

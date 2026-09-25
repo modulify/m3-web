@@ -164,11 +164,12 @@ const M3LinkAsBaseStory = () => {
 }
 
 const PrimitiveShapeStory = (args: M3LinkProps) => {
-  const sharedStyle = args.href.length > 0 ? styles.ghostButton : styles.solidButton
+  const isAnchor = (args.href?.length ?? 0) > 0
+  const sharedStyle = isAnchor ? styles.ghostButton : styles.solidButton
 
   return (
     <M3Link {...args} style={sharedStyle}>
-      {args.href.length > 0 ? 'I am rendered as <a>' : 'I am rendered as <button>'}
+      {isAnchor ? 'I am rendered as <a>' : 'I am rendered as <button>'}
     </M3Link>
   )
 }

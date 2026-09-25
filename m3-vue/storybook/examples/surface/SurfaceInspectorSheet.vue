@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="m3-side-sheet__affordance">
-                    <M3IconButton appearance="text" @click="opened = false">
+                    <M3IconButton appearance="standard" @click="opened = false">
                         <M3Icon name="close" />
                     </M3IconButton>
                 </div>

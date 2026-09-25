@@ -4,10 +4,27 @@ import { computed, ref } from 'vue'
 
 import { M3Slider } from '@/components/slider'
 
+type AriaOptions = {
+  label?: string;
+  labelledBy?: string;
+}
+
+type M3SliderStoryProps = {
+  type?: 'single' | 'range';
+  value?: number | [number, number] | null;
+  min?: number;
+  max?: number;
+  step?: number;
+  disabled?: boolean;
+  ariaHandle?: AriaOptions;
+  ariaHandleMin?: AriaOptions;
+  ariaHandleMax?: AriaOptions;
+}
+
 const meta = {
   title: 'Components/M3Slider',
 
-  component: M3Slider,
+  component: M3Slider as unknown as NonNullable<Meta<M3SliderStoryProps>['component']>,
 
   argTypes: {
     type: { control: false },
@@ -26,7 +43,7 @@ const meta = {
     },
   },
 
-  render: (args: unknown) => ({
+  render: (args: M3SliderStoryProps) => ({
     name: 'M3SliderStory',
 
     components: {
@@ -58,7 +75,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof M3Slider>
+} satisfies Meta<M3SliderStoryProps>
 
 export default meta
 

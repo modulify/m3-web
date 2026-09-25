@@ -1,3 +1,4 @@
+import type { M3RadioProps } from '@/components/radio'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { useState } from 'react'
@@ -41,12 +42,12 @@ const meta = {
       }}
       >
         <M3Radio
+          {...args}
           id={id}
           name={name}
           model={model}
           value="choice"
           onChange={setModel}
-          {...args}
         />
 
         <span>Choice</span>
@@ -57,7 +58,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof M3Radio>
+} satisfies Meta<M3RadioProps<string>>
 
 export default meta
 

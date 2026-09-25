@@ -101,7 +101,7 @@ const SurfaceInspectorSheet: FC = () => {
           <div className="m3-side-sheet__title">Release inspector</div>
 
           <div className="m3-side-sheet__affordance">
-            <M3IconButton appearance="text" onClick={() => setOpened(false)}>
+            <M3IconButton appearance="standard" onClick={() => setOpened(false)}>
               <M3Icon name="close" />
             </M3IconButton>
           </div>

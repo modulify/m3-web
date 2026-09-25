@@ -1,3 +1,4 @@
+import type { M3RadioProps } from '@/components/radio'
 import type { Meta, StoryObj } from '@storybook/vue3'
 
 import { ref } from 'vue'
@@ -11,14 +12,14 @@ import RadioGroup from '../examples/radio/RadioGroup.vue'
 const meta = {
   title: 'Components/M3Radio',
 
-  component: M3Radio,
+  component: M3Radio as unknown as NonNullable<Meta<M3RadioProps<string>>['component']>,
 
   args: {
     invalid: false,
     disabled: false,
   },
 
-  render: (args: unknown) => ({
+  render: (args: M3RadioProps<string>) => ({
     components: {
       M3Radio,
     },
@@ -49,7 +50,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof M3Radio>
+} satisfies Meta<M3RadioProps<string>>
 
 export default meta
 

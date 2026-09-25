@@ -133,7 +133,7 @@
                                         :target="getMenuTarget"
                                         class="m3-local-theme m3-local-theme_showcase m3-local-theme-showcase__menu"
                                         placement="bottom-end"
-                                        :container="menuContainer"
+                                        :container="menuContainer ?? undefined"
                                         strategy="absolute"
                                         :offset-main-axis="8"
                                     >
