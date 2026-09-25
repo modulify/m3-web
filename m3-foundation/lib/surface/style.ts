@@ -4,7 +4,7 @@ import type {
   Variant as SurfaceVariant,
 } from '../../types/components/surface'
 
-import { m3MotionEasings } from '../motion'
+import { easing } from '../motion'
 
 export type SurfaceStyleValue = string | number | undefined
 export type SurfaceStyleObject = Record<string, SurfaceStyleValue>
@@ -38,7 +38,7 @@ export type SurfacePanelStyleOptions = {
   style?: object;
 }
 
-export const DEFAULT_SURFACE_TRANSITION_TIMING = m3MotionEasings.standard
+export const DEFAULT_SURFACE_TRANSITION_TIMING = easing.standard
 
 const MODAL_ANCHOR_STYLE: Record<SurfaceAnchor, AnchorStyleFactory> = {
   none: ({ top, right, bottom, left }) => ({ top, right, bottom, left }),

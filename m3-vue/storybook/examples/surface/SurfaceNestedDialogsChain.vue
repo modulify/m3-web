@@ -164,7 +164,7 @@ import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { ref } from 'vue'
 import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
-import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
@@ -172,8 +172,8 @@ import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import M3Surface from '@/components/surface/M3Surface.vue'
 
-const DIALOG_TRANSITION_MS = m3MotionDurations.medium2
-const DIALOG_TRANSITION_EASING = m3MotionEasings.standard
+const DIALOG_TRANSITION_MS = durations.medium2
+const DIALOG_TRANSITION_EASING = easing.standard
 const DIALOG_ENTRY_OFFSET_PX = 24
 const DIALOG_Z_INDEX_BASE = 560
 const DIALOG_Z_INDEX_STEP = 40

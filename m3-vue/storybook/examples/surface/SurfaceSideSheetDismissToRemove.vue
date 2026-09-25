@@ -222,17 +222,18 @@
 
 <script lang="ts" setup>
 import { clamp } from '@modulify/m3-foundation/lib/surface/orchestration'
-import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
 import { nextTick, onBeforeUnmount, onMounted } from 'vue'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { ref } from 'vue'
 import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
+import { durations, easing } from '@modulify/m3-foundation/lib/motion'
+
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
-import M3Surface from '@/components/surface/M3Surface.vue'
+import { M3Surface } from '@/components/surface'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360
@@ -242,9 +243,9 @@ const SIDE_SHEET_WIDTH_STEP = 4
 const MODAL_INSET_TOP = 0
 const MODAL_INSET_BOTTOM = 0
 const MODAL_INSET_END = 0
-const PANEL_TRANSITION_MS = m3MotionDurations.medium2
-const PANEL_TRANSITION_EASING = m3MotionEasings.standard
-const SCRIM_FADE_MS = m3MotionDurations.long2
+const PANEL_TRANSITION_MS = durations.medium2
+const PANEL_TRANSITION_EASING = easing.standard
+const SCRIM_FADE_MS = durations.long2
 
 const navExpanded = ref(false)
 const activeNavTab = ref<'inbox' | 'boards' | 'archive' | 'lab'>('inbox')

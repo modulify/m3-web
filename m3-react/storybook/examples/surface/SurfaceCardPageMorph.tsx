@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 
-import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
+import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
@@ -14,8 +14,8 @@ import {
   useSurfaceCardPageMorph,
 } from '@/components/surface/orchestration/useSurfaceCardPageMorph'
 
-const TRANSITION_MS = m3MotionDurations.medium3
-const TRANSITION_EASING = m3MotionEasings.standard
+const TRANSITION_MS = durations.medium3
+const TRANSITION_EASING = easing.standard
 
 type NavTab = 'files' | 'timeline' | 'tasks' | 'analytics'
 

@@ -1,7 +1,8 @@
 import type { CSSProperties, FC } from 'react'
 
-import { m3MotionDurations, m3MotionEasings } from '@modulify/m3-foundation/lib/motion'
 import { raf, wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+
+import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
@@ -12,8 +13,8 @@ import { toClassName } from '@/utils/styling'
 
 import { useStateRef } from '@/components/surface/orchestration/useStateRef'
 
-const DIALOG_TRANSITION_MS = m3MotionDurations.medium2
-const DIALOG_TRANSITION_EASING = m3MotionEasings.standard
+const DIALOG_TRANSITION_MS = durations.medium2
+const DIALOG_TRANSITION_EASING = easing.standard
 const DIALOG_ENTRY_OFFSET_PX = 24
 const DIALOG_Z_INDEX_BASE = 560
 const DIALOG_Z_INDEX_STEP = 40

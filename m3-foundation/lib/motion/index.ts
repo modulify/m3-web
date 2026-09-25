@@ -1,10 +1,10 @@
 export type {
-  M3MotionDurationKey,
-  M3MotionEasingKey,
+  M3MotionDuration,
+  M3MotionEasing,
 } from './values'
 
 export {
-  m3MotionDurations,
-  m3MotionEasings,
-  m3MotionTimingDefaults,
+  durations,
+  easing,
+  timing,
 } from './values'

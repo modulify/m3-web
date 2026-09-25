@@ -234,6 +234,13 @@ import { createRef } from 'react'
 import { ref } from 'vue'
 
 import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
+import {
+  durations,
+  easing,
+  timing,
+  type M3MotionDuration,
+  type M3MotionEasing,
+} from '@modulify/m3-foundation/lib/motion'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
 import { useMutationObserver as useRootReactMutationObserver } from '@modulify/m3-react'
@@ -258,6 +265,8 @@ import {
 } from '@modulify/m3-vue/composables'
 
 const buttonProps: M3ButtonProps = { appearance: 'filled' }
+const duration: M3MotionDuration = 'medium2'
+const easingName: M3MotionEasing = 'standard'
 const options: M3SelectOption<number>[] = [{ value: 1, label: 'One' }]
 const reactObserverTarget = createRef<HTMLDivElement>()
 const reactMutationObserverTargets: Parameters<typeof useReactMutationObserver>[0] = [reactObserverTarget]
@@ -273,6 +282,10 @@ void [
   RootM3Button,
   RootM3Select,
   buttonProps,
+  duration,
+  durations,
+  easing,
+  easingName,
   options,
   reactMutationObserverTargets,
   reactResizeObserverTargets,
@@ -290,6 +303,7 @@ void [
   useVueId,
   useVueMutationObserver,
   useVueResizeObserver,
+  timing,
   vueMutationObserverTargets,
   vueResizeObserverTargets,
 ]
@@ -299,6 +313,7 @@ import { access } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 
 import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
+import { durations, easing, timing } from '@modulify/m3-foundation/lib/motion'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
 import { useBreakpoint as useRootReactBreakpoint } from '@modulify/m3-react'
 import { useMutationObserver as useRootReactMutationObserver } from '@modulify/m3-react'
@@ -338,6 +353,8 @@ if (foundationRootResolutionError?.code !== 'ERR_PACKAGE_PATH_NOT_EXPORTED') {
 
 if (
   !CalendarDay
+  || !durations
+  || !easing
   || !M3Button
   || !M3Select
   || !RootM3Button
@@ -356,12 +373,14 @@ if (
   || !useVueId
   || !useVueMutationObserver
   || !useVueResizeObserver
+  || !timing
 ) {
   throw new Error('Expected ESM package exports are unavailable')
 }
 `)
   writeFileSync(resolve(temporaryDirectory, 'consumer.cjs'), `
 const { CalendarDay } = require('@modulify/m3-foundation/lib/calendar')
+const { durations, easing, timing } = require('@modulify/m3-foundation/lib/motion')
 const { M3Button: RootM3Button } = require('@modulify/m3-react')
 const { useBreakpoint: useRootReactBreakpoint } = require('@modulify/m3-react')
 const { useMutationObserver: useRootReactMutationObserver } = require('@modulify/m3-react')
@@ -387,6 +406,8 @@ const {
 
 if (
   !CalendarDay
+  || !durations
+  || !easing
   || !M3Button
   || !M3Select
   || !RootM3Button
@@ -405,6 +426,7 @@ if (
   || !useVueId
   || !useVueMutationObserver
   || !useVueResizeObserver
+  || !timing
 ) {
   throw new Error('Expected CommonJS package exports are unavailable')
 }
