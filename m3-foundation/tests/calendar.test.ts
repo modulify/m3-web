@@ -2,6 +2,7 @@ import {
   CalendarDay,
   clampCalendarDay,
   clampCalendarMonth,
+  createDayFormatter,
   formatCalendarDateInput,
   getCalendarBounds,
   getCalendarDecade,
@@ -25,6 +26,8 @@ import {
   setCalendarMonthYear,
   shiftCalendarMonth,
   shiftCalendarYear,
+  toCalendarDateRange,
+  toCalendarDayRange,
 } from '../lib/calendar'
 
 const formatDay = (day: CalendarDay): string => [
@@ -118,6 +121,27 @@ describe('calendar', () => {
     expect(parseCalendarDateInput('2026 7 5')?.inSameDay(new CalendarDay(2026, 7, 5))).toBe(true)
     expect(parseCalendarDateInput('02/31/2026')).toBeNull()
     expect(parseCalendarDateInput('not a date')).toBeNull()
+  })
+
+  test('formats calendar days with the supported locale-aware patterns', () => {
+    const formatCalendarDay = createDayFormatter('en-US')
+    const day = new CalendarDay(2026, 7, 5)
+
+    expect(formatCalendarDay(day, 'MMMM yyyy')).toBe('July 2026')
+    expect(formatCalendarDay(day, 'MMM')).toBe('Jul')
+    expect(formatCalendarDay(day, 'yyyy')).toBe('2026')
+    expect(formatCalendarDay(day, 'd MMM yyyy')).toBe('Jul 5, 2026')
+  })
+
+  test('converts between date and calendar day ranges', () => {
+    const start = new Date(2026, 6, 5)
+    const end = new Date(2026, 6, 12)
+    const range = toCalendarDayRange([start, end])
+
+    expect(range[0]?.inSameDay(new CalendarDay(start))).toBe(true)
+    expect(range[1]?.inSameDay(new CalendarDay(end))).toBe(true)
+    expect(toCalendarDateRange(range)).toEqual([start, end])
+    expect(toCalendarDayRange(null)).toEqual([null, null])
   })
 
   test('resolves min, max, and clamped calendar days', () => {
