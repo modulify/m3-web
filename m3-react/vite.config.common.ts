@@ -11,10 +11,23 @@ export default defineConfig({
   ],
 
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-      react: path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-    },
+    alias: [
+      {
+        find: /^@modulify\/m3-foundation\/lib\/(.+)$/,
+        replacement: path.resolve(__dirname, '../m3-foundation/lib/$1'),
+      },
+      {
+        find: '@',
+        replacement: path.resolve(__dirname, './src'),
+      },
+      {
+        find: 'react',
+        replacement: path.resolve(__dirname, './node_modules/react'),
+      },
+      {
+        find: 'react-dom',
+        replacement: path.resolve(__dirname, './node_modules/react-dom'),
+      },
+    ],
   },
 })

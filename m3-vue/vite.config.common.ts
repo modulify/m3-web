@@ -11,8 +11,15 @@ export default defineConfig({
   ],
 
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+    alias: [
+      {
+        find: /^@modulify\/m3-foundation\/lib\/(.+)$/,
+        replacement: path.resolve(__dirname, '../m3-foundation/lib/$1'),
+      },
+      {
+        find: '@',
+        replacement: path.resolve(__dirname, './src'),
+      },
+    ],
   },
 })

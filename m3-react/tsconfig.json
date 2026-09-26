@@ -10,6 +10,7 @@
       "esnext.disposable"
     ],
     "paths": {
+      "@modulify/m3-foundation/lib/*": ["../m3-foundation/lib/*"],
       "@/*": ["./src/*"],
       "~types/*": ["./types/*"]
     },
