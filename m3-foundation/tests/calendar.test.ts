@@ -42,9 +42,11 @@ describe('calendar', () => {
   test('normalizes calendar days to local dates without time', () => {
     const source = new Date(2026, 6, 1, 18, 45, 32)
     const day = new CalendarDay(source)
+    const copy = new CalendarDay(day)
 
     source.setFullYear(2020)
 
+    expect(copy.inSameDay(day)).toBe(true)
     expect(day.year).toBe(2026)
     expect(day.month).toBe(7)
     expect(day.dayInMonth).toBe(1)
@@ -73,6 +75,10 @@ describe('calendar', () => {
       '1999-12-31',
       '2000-01-01',
     ])
+
+    expect(formatDay(getCalendarWeekDays(new CalendarDay(2000, 1, 2), 1)[0])).toBe('1999-12-27')
+    expect(getCalendarWeekDays(new CalendarDay(2000, 1, 1), -1)[0].dayInWeek).toBe(6)
+    expect(getCalendarWeekDays(new CalendarDay(2000, 1, 1))[0].dayInWeek).toBe(0)
   })
 
   test('builds a stable six-week month grid', () => {
@@ -98,6 +104,7 @@ describe('calendar', () => {
       '2000-03-11',
       '2000-03-12',
     ])
+    expect(getCalendarMonthWeeks(new CalendarDay(2000, 2))).toHaveLength(6)
   })
 
   test('compares calendar days by date', () => {
@@ -119,6 +126,7 @@ describe('calendar', () => {
     expect(parseCalendarDateInput('7-5-2026')?.inSameDay(new CalendarDay(2026, 7, 5))).toBe(true)
     expect(parseCalendarDateInput('2026-07-05')?.inSameDay(new CalendarDay(2026, 7, 5))).toBe(true)
     expect(parseCalendarDateInput('2026 7 5')?.inSameDay(new CalendarDay(2026, 7, 5))).toBe(true)
+    expect(parseCalendarDateInput('  ')).toBeNull()
     expect(parseCalendarDateInput('02/31/2026')).toBeNull()
     expect(parseCalendarDateInput('not a date')).toBeNull()
   })
@@ -141,6 +149,15 @@ describe('calendar', () => {
     expect(range[0]?.inSameDay(new CalendarDay(start))).toBe(true)
     expect(range[1]?.inSameDay(new CalendarDay(end))).toBe(true)
     expect(toCalendarDateRange(range)).toEqual([start, end])
+    expect(toCalendarDateRange([null, null])).toEqual([null, null])
+    expect(toCalendarDayRange([start, 'invalid'])).toEqual([
+      new CalendarDay(start),
+      null,
+    ])
+    expect(toCalendarDayRange(['invalid', end])).toEqual([
+      null,
+      new CalendarDay(end),
+    ])
     expect(toCalendarDayRange(null)).toEqual([null, null])
   })
 
@@ -152,7 +169,13 @@ describe('calendar', () => {
     const after = new CalendarDay(2000, 1, 30)
 
     expect(maxCalendarDay(before, after)?.inSameDay(after)).toBe(true)
+    expect(maxCalendarDay(before, null)).toBe(before)
+    expect(maxCalendarDay(null, after)).toBe(after)
+    expect(maxCalendarDay(null, null)).toBeNull()
     expect(minCalendarDay(before, after)?.inSameDay(before)).toBe(true)
+    expect(minCalendarDay(before, null)).toBe(before)
+    expect(minCalendarDay(null, after)).toBe(after)
+    expect(minCalendarDay(null, null)).toBeNull()
     expect(clampCalendarDay(before, [min, max])?.inSameDay(min)).toBe(true)
     expect(clampCalendarDay(inside, [min, max])?.inSameDay(inside)).toBe(true)
     expect(clampCalendarDay(after, [min, max])?.inSameDay(max)).toBe(true)
@@ -202,6 +225,9 @@ describe('calendar', () => {
   })
 
   test('normalizes calendar year ranges', () => {
+    expect(normalizeCalendarYearRange(undefined, [2000, 2010])).toEqual([2000, 2010])
+    expect(normalizeCalendarYearRange([2020, Number.POSITIVE_INFINITY])).toEqual([2020, 2100])
+    expect(normalizeCalendarYearRange([2020, 2030])).toEqual([2020, 2030])
     expect(normalizeCalendarYearRange([2030, 2020])).toEqual([2020, 2030])
     expect(normalizeCalendarYearRange(['bad', 2020])).toEqual([1900, 2020])
   })
@@ -215,6 +241,19 @@ describe('calendar', () => {
 
     expect(bounds[0]?.inSameDay(new CalendarDay(2026, 7, 3))).toBe(true)
     expect(bounds[1]?.inSameDay(new CalendarDay(2026, 9, 24))).toBe(true)
+
+    const collapsed = getCalendarBounds(
+      [2026, 2026],
+      new CalendarDay(2027, 1, 1),
+      new CalendarDay(2025, 12, 31)
+    )
+
+    expect(collapsed[0]?.inSameDay(new CalendarDay(2025, 12, 31))).toBe(true)
+    expect(collapsed[1]?.inSameDay(new CalendarDay(2025, 12, 31))).toBe(true)
+    expect(getCalendarBounds()).toEqual([
+      new CalendarDay(1900, 1, 1),
+      new CalendarDay(2100, 12, 31),
+    ])
   })
 
   test('checks and clamps calendar month navigation', () => {
@@ -244,6 +283,7 @@ describe('calendar', () => {
     )
 
     expect(getCalendarYears(bounds)).toEqual([2026, 2027])
+    expect(getCalendarYears([null, null])).toHaveLength(201)
     expect(isCalendarYearAvailable(2025, bounds)).toBe(false)
     expect(isCalendarYearAvailable(2026, bounds)).toBe(true)
     expect(isCalendarYearAvailable(2027, bounds)).toBe(true)
