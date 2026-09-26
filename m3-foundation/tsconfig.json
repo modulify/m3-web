@@ -7,7 +7,7 @@
       "@modulify/m3-foundation/lib/*": ["./lib/*"]
     },
     "resolveJsonModule": true,
-    "target": "ES2017",
+    "target": "ES2022",
     "verbatimModuleSyntax": true
   },
   "include": [
