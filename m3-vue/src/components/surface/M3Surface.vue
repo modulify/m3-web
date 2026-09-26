@@ -12,8 +12,9 @@
         <M3SurfacePanel
             :id="_id"
             :tag="tag"
-            :elevation="elevation"
-            :variant="variant"
+            :overflow="overflow"
+            :transition-ms="transitionMs"
+            :transition-timing="transitionTiming"
             :fill-width="fillWidth"
             :fill-height="fillHeight"
             :width="width"
@@ -27,11 +28,10 @@
             :rounding-top-right="roundingTopRight"
             :rounding-bottom-right="roundingBottomRight"
             :rounding-bottom-left="roundingBottomLeft"
-            :transition-ms="transitionMs"
-            :transition-timing="transitionTiming"
-            :overflow="overflow"
-            :class="surfaceClass"
+            :elevation="elevation"
+            :variant="variant"
             :style="surfaceStyle"
+            :class="surfaceClass"
             v-bind="surfaceAttrs"
         >
             <slot />
@@ -42,8 +42,9 @@
         v-else
         :id="_id"
         :tag="tag"
-        :elevation="elevation"
-        :variant="variant"
+        :overflow="overflow"
+        :transition-ms="transitionMs"
+        :transition-timing="transitionTiming"
         :fill-width="fillWidth"
         :fill-height="fillHeight"
         :width="width"
@@ -57,11 +58,10 @@
         :rounding-top-right="roundingTopRight"
         :rounding-bottom-right="roundingBottomRight"
         :rounding-bottom-left="roundingBottomLeft"
-        :transition-ms="transitionMs"
-        :transition-timing="transitionTiming"
-        :overflow="overflow"
-        :class="surfaceClass"
+        :elevation="elevation"
+        :variant="variant"
         :style="surfaceStyle"
+        :class="surfaceClass"
         v-bind="surfaceAttrs"
     >
         <slot />

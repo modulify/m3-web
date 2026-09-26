@@ -1,15 +1,15 @@
 <template>
     <span
         ref="root"
-        :class="rootClass"
         :style="rootStyle"
+        :class="rootClass"
     >
         <button
             ref="action"
+            :aria-pressed="variant === 'filter' ? selected : undefined"
+            :disabled="disabled"
             :type="type"
             class="m3-chip__action"
-            :disabled="disabled"
-            :aria-pressed="variant === 'filter' ? selected : undefined"
             v-bind="actionAttrs"
             @click="onActionClick"
             @keyup="onActionKeyup"
@@ -32,10 +32,10 @@
         <button
             v-if="dismissible"
             ref="dismiss"
+            :aria-label="dismissLabel"
+            :disabled="disabled"
             type="button"
             class="m3-chip__dismiss"
-            :disabled="disabled"
-            :aria-label="dismissLabel"
             @click="onDismissClick"
             @keyup="onDismissKeyup"
         >

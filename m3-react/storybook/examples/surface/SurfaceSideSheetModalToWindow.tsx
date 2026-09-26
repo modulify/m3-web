@@ -280,10 +280,10 @@ const SurfaceSideSheetModalToWindow: FC = () => {
 
       <M3Navigation
         expanded={navExpanded}
-        onToggle={setNavExpanded}
         className="surface-side-sheet-window__nav"
         appearance="auto"
         alignment="top"
+        onToggle={setNavExpanded}
       >
         <M3Navigation.Top>
           <M3IconButton
@@ -558,9 +558,9 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                     >
                       <M3TextField
                         value={form.notes}
-                        multiline
                         label="Notes"
                         placeholder="Describe constraints, risks, and acceptance criteria."
+                        multiline
                         outlined
                         onUpdate={(value) => {
                           setForm((previous) => ({

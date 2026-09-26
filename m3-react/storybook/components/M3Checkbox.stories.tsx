@@ -34,16 +34,21 @@ const meta = {
     disabled: false,
   },
 
-  render: (args) => {
+  render: ({
+    id: _id,
+    model: _model,
+    onChange: _onChange,
+    ...args
+  }) => {
     const id = useId(null, 'm3-checkbox')
     const [model, setModel] = useState(false)
 
     return (
       <div className="flex-row">
         <M3Checkbox
-          {...args}
           id={id}
           model={model}
+          {...args}
           onChange={setModel}
         />
 

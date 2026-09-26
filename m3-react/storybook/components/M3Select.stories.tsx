@@ -39,8 +39,8 @@ const M3SelectStory = (args: M3SelectStoryProps<number>) => {
     <M3Select<number>
       value={value}
       options={options}
-      onUpdate={(value) => setValue(value)}
       {...args}
+      onUpdate={(value) => setValue(value)}
     />
   )
 }
@@ -56,8 +56,8 @@ const M3SelectWithIconsStory = (args: M3SelectStoryProps<Code>) => {
     <M3Select<Code>
       value={countryCode}
       options={countryOptions}
-      onUpdate={(value) => setCountryCode(value)}
       {...args}
+      onUpdate={(value) => setCountryCode(value)}
     >
       <M3Select.Leading>
         {() => countryCode

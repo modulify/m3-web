@@ -75,18 +75,18 @@ export default defineComponent({
       const [, hasTrailingIcon] = content[content.length - 1] ?? [null, false]
 
       return h(M3Link, {
-        ref: root,
-        type: props.type,
-        to: props.to,
-        href: props.href,
         ...attrs,
+        ref: root,
+        href: props.href,
+        to: props.to,
+        type: props.type,
+        disabled: props.disabled,
         class: [attrs.class, {
           ['m3-button']: true,
           ['m3-button_' + props.appearance]: true,
           ['m3-button_has-leading-icon']: hasText && hasLeadingIcon,
           ['m3-button_has-trailing-icon']: hasText && hasTrailingIcon,
         }],
-        disabled: props.disabled,
         onKeyup,
       }, () => [
         h(M3Ripple, { ref: ripple, owner: rootElement }),

@@ -3,7 +3,7 @@
         class="m3-day-picker"
         v-bind="$attrs"
     >
-        <div class="m3-day-picker__weekdays" aria-hidden="true">
+        <div aria-hidden="true" class="m3-day-picker__weekdays">
             <span
                 v-for="day in weekdays"
                 :key="day.dayInWeek"
@@ -14,15 +14,15 @@
         </div>
 
         <div
-            class="m3-day-picker__grid"
             :role="active ? 'grid' : undefined"
             :aria-label="active ? label : undefined"
+            class="m3-day-picker__grid"
         >
             <div
                 v-for="(week, weekIndex) in weeks"
                 :key="weekIndex"
-                class="m3-day-picker__week"
                 :role="active ? 'row' : undefined"
+                class="m3-day-picker__week"
             >
                 <span
                     v-for="day in week"
@@ -35,18 +35,18 @@
                     }"
                 >
                     <M3DatePickerOption
-                        appearance="circle"
-                        role="gridcell"
+                        :aria-label="formatDay(day)"
+                        :aria-selected="active && isSelected(day)"
                         :current="today.inSameDay(day)"
                         :selected="active && isSelected(day)"
                         :outside="!day.inSameMonth(month)"
                         :in-range="active && isInRange(day)"
                         :range-start="active && isRangeStart(day)"
                         :range-end="active && isRangeEnd(day)"
-                        :aria-label="formatDay(day)"
-                        :aria-selected="active && isSelected(day)"
                         :disabled="disabled || isOutOfRange(day) || !isDaySelectable(day)"
                         :tab-index="active ? undefined : -1"
+                        role="gridcell"
+                        appearance="circle"
                         @select="emit('select', day)"
                     >
                         {{ day.dayInMonth }}

@@ -7,7 +7,11 @@ import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3SideSheet } from '@/components/side-sheet'
 
-const M3SideSheetStory = (args: M3SideSheetProps) => {
+const M3SideSheetStory = ({
+  shown: _shown,
+  onToggle: _onToggle,
+  ...args
+}: M3SideSheetProps) => {
   const [shown, setShown] = useState(false)
 
   return (
@@ -16,8 +20,8 @@ const M3SideSheetStory = (args: M3SideSheetProps) => {
 
       <M3SideSheet
         shown={shown}
-        onToggle={setShown}
         {...args}
+        onToggle={setShown}
       >
         <M3SideSheet.Title>
           Filters

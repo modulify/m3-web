@@ -258,13 +258,13 @@ const M3DatePickerDialog: FC<M3DatePickerDialogProps> = (props) => {
 
   const inputPanel = (
     <section
+      aria-label={props.label ?? 'Select date'}
       className={toClassName([
         'm3-date-picker',
         'm3-date-picker_input',
         `m3-date-picker_input-${type}`,
       ])}
       role="group"
-      aria-label={props.label ?? 'Select date'}
     >
       <header className="m3-date-picker__header">
         <div className="m3-date-picker__header-copy">
@@ -284,32 +284,32 @@ const M3DatePickerDialog: FC<M3DatePickerDialogProps> = (props) => {
         {type === 'range' ? (
           <div className="m3-date-picker__input-fields">
             <M3TextField
-              outlined={true}
-              label="Date"
-              placeholder={DEFAULT_CALENDAR_DATE_INPUT_FORMAT}
               value={rangeInputValue[0]}
-              invalid={rangeInputInvalid[0] || rangeOrderInvalid}
+              placeholder={DEFAULT_CALENDAR_DATE_INPUT_FORMAT}
               disabled={props.disabled}
+              invalid={rangeInputInvalid[0] || rangeOrderInvalid}
+              label="Date"
+              outlined
               onUpdate={value => setRangeInput(0, value)}
             />
             <M3TextField
-              outlined={true}
-              label="End date"
-              placeholder={DEFAULT_CALENDAR_DATE_INPUT_FORMAT}
               value={rangeInputValue[1]}
-              invalid={rangeInputInvalid[1] || rangeOrderInvalid}
+              placeholder={DEFAULT_CALENDAR_DATE_INPUT_FORMAT}
               disabled={props.disabled}
+              invalid={rangeInputInvalid[1] || rangeOrderInvalid}
+              label="End date"
+              outlined
               onUpdate={value => setRangeInput(1, value)}
             />
           </div>
         ) : (
           <M3TextField
-            outlined={true}
-            label="Date"
-            placeholder={DEFAULT_CALENDAR_DATE_INPUT_FORMAT}
             value={singleInputValue}
-            invalid={singleInputInvalid}
+            placeholder={DEFAULT_CALENDAR_DATE_INPUT_FORMAT}
             disabled={props.disabled}
+            invalid={singleInputInvalid}
+            label="Date"
+            outlined
             onUpdate={setSingleInput}
           />
         )}
@@ -319,32 +319,32 @@ const M3DatePickerDialog: FC<M3DatePickerDialogProps> = (props) => {
 
   return (
     <M3Dialog
+      aria-label={props.label ?? 'Select date'}
       opened={opened}
+      style={dialogStyle}
       className={toClassName([
         'm3-date-picker-dialog',
         appearance === 'input' && 'm3-date-picker-dialog_input',
         className,
       ])}
-      style={dialogStyle}
       role="dialog"
       aria-modal="true"
-      aria-label={props.label ?? 'Select date'}
       onToggle={onToggle}
     >
       {appearance === 'input' ? inputPanel : type === 'range' ? (
         <M3DatePicker
-          {...commonDatePickerProps}
-          type="range"
           value={Array.isArray(draftValue) ? draftValue : null}
           headerAction={modeToggle}
+          type="range"
+          {...commonDatePickerProps}
           onChange={syncDraftValue}
         />
       ) : (
         <M3DatePicker
-          {...commonDatePickerProps}
-          type="single"
           value={draftValue instanceof Date ? draftValue : null}
           headerAction={modeToggle}
+          type="single"
+          {...commonDatePickerProps}
           onChange={syncDraftValue}
         />
       )}
@@ -353,7 +353,7 @@ const M3DatePickerDialog: FC<M3DatePickerDialogProps> = (props) => {
         <M3Button appearance="text" onClick={close}>
           {cancelText}
         </M3Button>
-        <M3Button appearance="text" disabled={confirmDisabled} onClick={confirm}>
+        <M3Button disabled={confirmDisabled} appearance="text" onClick={confirm}>
           {confirmText}
         </M3Button>
       </M3Dialog.Footer>

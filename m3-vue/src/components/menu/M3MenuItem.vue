@@ -1,8 +1,8 @@
 <template>
     <M3Link
         ref="root"
-        :to="to"
         :href="href"
+        :to="to"
         :class="{
             'm3-menu-item': true,
             'm3-menu-item_selected': selected,

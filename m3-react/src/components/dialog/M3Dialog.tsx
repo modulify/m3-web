@@ -143,12 +143,11 @@ export default defineComponent(function M3Dialog({
 
   return (
     <M3Surface
-      tag="section"
-      mode="modal"
       shown={dialogMounted}
       scrimShown={opened}
-      teleportTo="body"
       scrim={!fullscreen}
+      transitionMs={DIALOG_TRANSITION_MS}
+      transitionTiming={DIALOG_TRANSITION_TIMING}
       anchor={fullscreen ? 'none' : 'center'}
       fillWidth={fullscreen}
       fillHeight={fullscreen}
@@ -158,15 +157,16 @@ export default defineComponent(function M3Dialog({
       maxWidth={fullscreen ? '100vw' : DIALOG_MAX_WIDTH}
       maxHeight={fullscreen ? '100vh' : null}
       rounding={fullscreen ? 0 : DIALOG_ROUNDING}
-      variant="surface-container-high"
-      elevation={DIALOG_ELEVATION}
       zIndex={DIALOG_Z_INDEX}
-      transitionMs={DIALOG_TRANSITION_MS}
-      transitionTiming={DIALOG_TRANSITION_TIMING}
-      className={toClassName(['m3-dialog', className])}
+      elevation={DIALOG_ELEVATION}
       style={dialogStyle}
-      onDismiss={() => onToggle(false)}
+      className={toClassName(['m3-dialog', className])}
+      tag="section"
+      mode="modal"
+      teleportTo="body"
+      variant="surface-container-high"
       {...attrs}
+      onDismiss={() => onToggle(false)}
     >
       {slots.icon}
       {slots.header}

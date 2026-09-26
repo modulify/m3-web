@@ -135,7 +135,7 @@ export default defineComponent(function M3ListItem({
   const itemContent = (
     <>
       {interactiveActual ? <M3Ripple ref={ripple} owner={rippleTarget} /> : null}
-      <span className="m3-list-item__state" aria-hidden={true} />
+      <span aria-hidden={true} className="m3-list-item__state" />
 
       {slots.leading ? (
         <span className="m3-list-item__leading">
@@ -183,6 +183,7 @@ export default defineComponent(function M3ListItem({
   return (
     <li
       ref={root}
+      style={itemStyle}
       className={toClassName([className, {
         'm3-list-item': true,
         'm3-list-item_multiline': linesActual > 1,
@@ -190,26 +191,25 @@ export default defineComponent(function M3ListItem({
         'm3-list-item_selected': selected,
         'm3-list-item_disabled': disabled,
       }])}
-      style={itemStyle}
       {...attrs}
     >
       {interactiveActual
         ? href.length > 0
           ? (
             <a
-              {...actionProps}
               href={disabled ? undefined : href}
               aria-disabled={disabled ? 'true' : undefined}
               tabIndex={disabled ? -1 : undefined}
+              {...actionProps}
             >
               {itemContent}
             </a>
           )
           : (
             <button
-              {...actionProps}
               type={type}
               disabled={disabled}
+              {...actionProps}
             >
               {itemContent}
             </button>

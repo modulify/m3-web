@@ -18,11 +18,11 @@
                     <ColorStrip />
 
                     <M3SurfacePanel
-                        class="m3-local-theme-showcase__notification"
                         :fill-height="false"
                         :rounding="12"
-                        variant="surface-container-high"
                         :elevation="1"
+                        class="m3-local-theme-showcase__notification"
+                        variant="surface-container-high"
                     >
                         <div class="m3-local-theme-showcase__eyebrow">
                             Azure-blue baseline
@@ -50,11 +50,11 @@
                     <ColorStrip />
 
                     <M3SurfacePanel
-                        class="m3-local-theme-showcase__notification"
                         :fill-height="false"
                         :rounding="12"
-                        variant="surface-container-high"
                         :elevation="1"
+                        class="m3-local-theme-showcase__notification"
+                        variant="surface-container-high"
                     >
                         <div class="m3-local-theme-showcase__eyebrow">
                             {{ currentNotification.eyebrow }}
@@ -87,11 +87,11 @@
 
             <M3SurfacePanel
                 v-else
-                class="m3-local-theme-showcase__cookbook"
                 :fill-height="false"
                 :rounding="28"
-                variant="surface-container-high"
                 :elevation="0"
+                class="m3-local-theme-showcase__cookbook"
+                variant="surface-container-high"
             >
                 <div class="m3-local-theme-showcase__workspace-header">
                     <div>
@@ -108,7 +108,7 @@
                 </div>
 
                 <div ref="menuContainer" class="m3-local-theme-showcase__list-area">
-                    <M3List divided class="m3-local-theme-showcase__list">
+                    <M3List class="m3-local-theme-showcase__list" divided>
                         <M3ListItem
                             lines="2"
                             headline="Billing hold"
@@ -129,13 +129,13 @@
 
                                     <M3Menu
                                         v-if="menuReady"
-                                        shown
                                         :target="getMenuTarget"
-                                        class="m3-local-theme m3-local-theme_showcase m3-local-theme-showcase__menu"
-                                        placement="bottom-end"
                                         :container="menuContainer ?? undefined"
-                                        strategy="absolute"
                                         :offset-main-axis="8"
+                                        placement="bottom-end"
+                                        strategy="absolute"
+                                        class="m3-local-theme m3-local-theme_showcase m3-local-theme-showcase__menu"
+                                        shown
                                     >
                                         <M3MenuItem>
                                             <template #leading>

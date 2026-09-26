@@ -48,23 +48,23 @@ export default defineComponent(function M3Menu({
     target={target}
     shown={shown}
     targetTriggers={['click']}
+    disabled={disabled}
+    delay={delay}
+    detachTimeout={detachTimeout}
     placement={placement}
     strategy={strategy}
     boundary={boundary}
     container={container}
+    overflow={overflow}
     offsetMainAxis={offsetMainAxis}
     offsetCrossAxis={offsetCrossAxis}
-    overflow={overflow}
-    delay={delay}
-    disabled={disabled}
-    animated={true}
-    detachTimeout={detachTimeout}
     className={toClassName(['m3-menu', className])}
-    hideOnMissClick={true}
+    animated
+    hideOnMissClick
+    {...attrs}
     onShow={onShow}
     onHide={onHide}
     onToggle={onToggle}
-    {...attrs}
   >
     {children}
   </M3Popper>

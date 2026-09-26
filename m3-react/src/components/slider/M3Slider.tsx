@@ -581,6 +581,7 @@ export default defineComponent(function M3Slider({
         'm3-slider_disabled': disabled,
       }])}
       role="group"
+      {...attrs}
       onKeyDown={compose((event) => {
         if (event.code === 'Space') {
           keys.current.space = true
@@ -591,16 +592,15 @@ export default defineComponent(function M3Slider({
           keys.current.space = false
         }
       }, onKeyUp)}
-      {...attrs}
     >
       <div ref={track} className="m3-slider__track">
         <div className="m3-slider__scale">
           <div
             ref={(el) => setNotchAt(0, el)}
             aria-label={String(min)}
-            className="m3-slider__notch"
             style={withPercentage(0)}
             role="button"
+            className="m3-slider__notch"
             onClick={onNotchMinClick}
           >
             <div className="m3-slider__notch-control" />
@@ -611,9 +611,9 @@ export default defineComponent(function M3Slider({
               key={p}
               ref={(el) => setNotchAt(i + 1, el)}
               aria-label={String(p)}
-              className="m3-slider__notch"
               style={withPercentage(percentageOf(p))}
               role="button"
+              className="m3-slider__notch"
               onClick={() => onNotchClick(p, i + 1)}
             >
               <div className="m3-slider__notch-control" />
@@ -623,9 +623,9 @@ export default defineComponent(function M3Slider({
           <div
             ref={(el) => setNotchAt(steps.length + 1, el)}
             aria-label={String(max)}
-            className="m3-slider__notch"
             style={withPercentage(100)}
             role="button"
+            className="m3-slider__notch"
             onClick={onNotchMaxClick}
           >
             <div className="m3-slider__notch-control" />
@@ -634,19 +634,19 @@ export default defineComponent(function M3Slider({
 
         {type === 'range' ? (
           <div
-            className="m3-slider__value m3-slider__value_min"
             style={withPercentage(percentage.min)}
+            className="m3-slider__value m3-slider__value_min"
             onTransitionEnd={updateNotches}
           >
             <div
               ref={handleMin}
-              aria-valuemax={current[1]}
               aria-valuemin={min}
+              aria-valuemax={current[1]}
               aria-valuenow={current[0]}
               aria-disabled={disabled ? 'true' : 'false'}
-              className="m3-slider__handle"
-              role="slider"
               tabIndex={0}
+              role="slider"
+              className="m3-slider__handle"
               {...ariaOptionsToAttrs(ariaHandleMin)}
               onKeyDown={onKeyDownForMin}
               onMouseDown={(event) => {
@@ -659,19 +659,19 @@ export default defineComponent(function M3Slider({
         ) : null}
 
         <div
-          className="m3-slider__value m3-slider__value_max"
           style={withPercentage(percentage.max)}
+          className="m3-slider__value m3-slider__value_max"
           onTransitionEnd={updateNotches}
         >
           <div
             ref={handleMax}
-            aria-valuemax={max}
             aria-valuemin={type === 'range' ? current[0] : min}
+            aria-valuemax={max}
             aria-valuenow={current[1]}
             aria-disabled={disabled ? 'true' : 'false'}
-            className="m3-slider__handle"
-            role="slider"
             tabIndex={0}
+            role="slider"
+            className="m3-slider__handle"
             {...ariaOptionsToAttrs({
               ...ariaHandle,
               ...ariaHandleMax,

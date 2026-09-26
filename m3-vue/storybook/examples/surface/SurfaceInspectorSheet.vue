@@ -1,12 +1,12 @@
 <template>
     <div class="surface-inspector-sheet">
         <M3SurfacePanel
-            class="surface-inspector-sheet__topbar"
             :fill-height="false"
             :height="84"
             :rounding="24"
-            variant="surface-container"
             :elevation="0"
+            class="surface-inspector-sheet__topbar"
+            variant="surface-container"
         >
             <div class="surface-inspector-sheet__topbar-content">
                 <div>
@@ -24,12 +24,12 @@
             <M3SurfacePanel
                 v-for="label in ['Launch plan', 'Dependencies', 'Approvals']"
                 :key="label"
-                class="surface-inspector-sheet__panel"
                 :fill-height="false"
                 :height="188"
                 :rounding="18"
-                variant="surface-container-low"
                 :elevation="1"
+                class="surface-inspector-sheet__panel"
+                variant="surface-container-low"
             >
                 <h3>{{ label }}</h3>
                 <p>Dashboard content keeps its place while the inspector surface is layered above it.</p>
@@ -37,9 +37,7 @@
         </div>
 
         <M3Surface
-            mode="modal"
             :shown="opened"
-            anchor="end"
             :fill-width="false"
             :width="360"
             :inset-top="0"
@@ -50,9 +48,11 @@
             :rounding-top-right="0"
             :rounding-bottom-right="0"
             :elevation="2"
-            variant="surface-container-high"
+            mode="modal"
+            anchor="end"
             overflow="auto"
             class="m3-side-sheet surface-inspector-sheet__sheet"
+            variant="surface-container-high"
             @update:shown="opened = $event"
             @dismiss="opened = false"
         >
@@ -80,12 +80,12 @@
 
                     <M3Select
                         v-model:value="priority"
-                        label="Priority"
                         :options="[
                             { label: 'Low', value: 'low' },
                             { label: 'Normal', value: 'normal' },
                             { label: 'High', value: 'high' },
                         ]"
+                        label="Priority"
                         outlined
                     />
 

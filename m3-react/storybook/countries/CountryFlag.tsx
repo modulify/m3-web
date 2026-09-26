@@ -16,11 +16,11 @@ const CountryFlag: FC<CountryFlagProps> = ({
 
   return (
     <Sprite
-      {...attrs}
       style={{
         ...style,
         borderRadius: '50%',
       }}
+      {...attrs}
     />
   )
 }

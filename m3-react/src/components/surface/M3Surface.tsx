@@ -85,11 +85,8 @@ const M3Surface: FC<M3SurfaceProps> = ({
   const surfaceNode = (
     <M3SurfacePanel
       id={useId(id, 'm3-surface')}
-      {...panelProps}
-      className={toClassName([className, {
-        ['m3-surface_modal']: isModal,
-        [`m3-surface_anchor-${anchor}`]: true,
-      }])}
+      role={role ?? (isModal ? 'dialog' : 'region')}
+      aria-modal={isModal ? (ariaModal ?? 'true') : ariaModal}
       style={{
         ...anchorStyle,
         position: isModal ? 'fixed' : 'relative',
@@ -97,8 +94,11 @@ const M3Surface: FC<M3SurfaceProps> = ({
         display: shown ? undefined : 'none',
         ...style,
       }}
-      role={role ?? (isModal ? 'dialog' : 'region')}
-      aria-modal={isModal ? (ariaModal ?? 'true') : ariaModal}
+      className={toClassName([className, {
+        ['m3-surface_modal']: isModal,
+        [`m3-surface_anchor-${anchor}`]: true,
+      }])}
+      {...panelProps}
     >
       {children}
     </M3SurfacePanel>
@@ -124,15 +124,15 @@ const M3Surface: FC<M3SurfaceProps> = ({
     <>
       {scrim && modalTransition.isMounted ? (
         <div
+          style={{
+            zIndex: zIndex - 1,
+          }}
           className={toClassName(['m3-surface__scrim', {
             'm3-transition-fade-enter': modalTransition.status === 'preEnter' || modalTransition.status === 'entering',
             'm3-transition-fade-enter-active': modalTransition.status === 'entering',
             'm3-transition-fade-leave-active': modalTransition.status === 'preExit' || modalTransition.status === 'exiting',
             'm3-transition-fade-leave-to': modalTransition.status === 'exiting',
           }])}
-          style={{
-            zIndex: zIndex - 1,
-          }}
           onClick={() => {
             onToggle(false)
             onDismiss()

@@ -67,10 +67,10 @@ const SurfaceSideSheetMorph: FC = () => {
 
       <M3Navigation
         expanded={navExpanded}
-        onToggle={setNavExpanded}
         className="surface-side-sheet__nav"
         appearance="auto"
         alignment="top"
+        onToggle={setNavExpanded}
       >
         <M3Navigation.Top>
           <M3IconButton
@@ -230,10 +230,10 @@ const SurfaceSideSheetMorph: FC = () => {
               <M3Surface
                 className="surface-side-sheet__sheet surface-side-sheet__sheet_modal"
                 mode="modal"
-                {...modalPanelProps}
                 transitionTiming={PANEL_TRANSITION_EASING}
                 data-testid="surface-morph-sheet"
                 data-panel-mode="modal"
+                {...modalPanelProps}
                 onDismiss={() => void closeModalFromPanel()}
               >
                 {sideSheetModal ? (

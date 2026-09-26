@@ -10,8 +10,8 @@
     >
         <M3List
             v-if="appearance === 'list'"
-            class="m3-date-picker-list"
             aria-label="Select year"
+            class="m3-date-picker-list"
         >
             <M3ListItem
                 v-for="year in years"
@@ -22,12 +22,12 @@
             >
                 <template #leading>
                     <M3Icon
-                        name="check"
-                        aria-hidden="true"
                         :class="{
                             'm3-date-picker-list__check': true,
                             'm3-date-picker-list__check_hidden': value !== year,
                         }"
+                        aria-hidden="true"
+                        name="check"
                     />
                 </template>
                 {{ year }}
@@ -35,18 +35,18 @@
         </M3List>
         <div
             v-else
-            class="m3-year-picker__grid"
             role="grid"
             aria-label="Select year"
+            class="m3-year-picker__grid"
         >
             <M3DatePickerOption
                 v-for="year in years"
                 :key="year"
-                appearance="pill"
+                :aria-pressed="value === year"
                 :current="current === year"
                 :selected="value === year"
-                :aria-pressed="value === year"
                 :disabled="disabled || !isYearSelectable(year)"
+                appearance="pill"
                 @select="emit('select', year)"
             >
                 {{ year }}

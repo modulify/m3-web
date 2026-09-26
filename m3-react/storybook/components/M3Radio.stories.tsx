@@ -29,7 +29,14 @@ const meta = {
     disabled: false,
   },
 
-  render: (args) => {
+  render: ({
+    id: _id,
+    name: _name,
+    model: _model,
+    value: _value,
+    onChange: _onChange,
+    ...args
+  }) => {
     const name = useId(null, 'm3-radio-group')
     const id = useId(null, 'm3-radio')
     const [model, setModel] = useState('choice')
@@ -42,11 +49,11 @@ const meta = {
       }}
       >
         <M3Radio
-          {...args}
           id={id}
           name={name}
           model={model}
           value="choice"
+          {...args}
           onChange={setModel}
         />
 

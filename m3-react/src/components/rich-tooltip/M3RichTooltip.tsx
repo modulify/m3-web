@@ -48,9 +48,9 @@ export default defineComponent(function M3RichTooltip({
   return (
     <M3Popper
       ref={popper}
-      className={toClassName(['m3-rich-tooltip', className])}
       delay={delay}
       overflow={overflow}
+      className={toClassName(['m3-rich-tooltip', className])}
       role="tooltip"
       {...props}
     >

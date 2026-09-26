@@ -33,14 +33,18 @@ const meta = {
     alignment: 'top',
   },
 
-  render: (args) => {
+  render: ({
+    expanded: _expanded,
+    onToggle: _onToggle,
+    ...args
+  }) => {
     const [expanded, setExpanded] = useState(false)
 
     return (
       <M3Navigation
         expanded={expanded}
-        onToggle={setExpanded}
         {...args}
+        onToggle={setExpanded}
       >
         <M3Navigation.Top>
           <M3IconButton aria-label="Open menu" onClick={() => setExpanded(true)}>
@@ -114,14 +118,18 @@ export const NavigationRail: Story = {
 }
 
 export const ModalNavigationDrawer: Story = {
-  render: (args) => {
+  render: ({
+    expanded: _expanded,
+    onToggle: _onToggle,
+    ...args
+  }) => {
     const [expanded, setExpanded] = useState(true)
 
     return (
       <M3Navigation
         expanded={expanded}
-        onToggle={setExpanded}
         {...args}
+        onToggle={setExpanded}
       >
         <M3Navigation.Top>
           <M3IconButton aria-label="Close menu" onClick={() => setExpanded(false)}>

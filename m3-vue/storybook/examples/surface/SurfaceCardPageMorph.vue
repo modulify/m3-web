@@ -1,15 +1,15 @@
 <template>
     <div
-        class="surface-card-page"
         :data-card-expanded="expanded ? 'true' : 'false'"
         data-testid="surface-card-page-root"
+        class="surface-card-page"
     >
         <M3SurfacePanel
-            class="surface-card-page__topbar"
             :fill-height="false"
             :height="72"
-            variant="surface-container"
             :elevation="0"
+            class="surface-card-page__topbar"
+            variant="surface-container"
         >
             <div class="surface-card-page__topbar-content">
                 <div>
@@ -18,9 +18,9 @@
                 </div>
 
                 <M3Button
-                    appearance="filled"
                     :disabled="busy"
                     data-testid="surface-card-toggle"
+                    appearance="filled"
                     @click="toggleCardMode"
                 >
                     {{ expanded ? 'Return to card state' : 'Expand card to page state' }}
@@ -30,9 +30,9 @@
 
         <M3Navigation
             v-model:expanded="navExpanded"
-            class="surface-card-page__nav"
-            appearance="auto"
             alignment="top"
+            appearance="auto"
+            class="surface-card-page__nav"
         >
             <template #top>
                 <M3IconButton
@@ -44,32 +44,32 @@
             </template>
 
             <M3NavigationTab
-                label="Files"
                 :active="navTab === 'files'"
+                label="Files"
                 @navigate="navTab = 'files'; navExpanded = false"
             >
                 <M3Icon name="folder" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Timeline"
                 :active="navTab === 'timeline'"
+                label="Timeline"
                 @navigate="navTab = 'timeline'; navExpanded = false"
             >
                 <M3Icon name="schedule" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Tasks"
                 :active="navTab === 'tasks'"
+                label="Tasks"
                 @navigate="navTab = 'tasks'; navExpanded = false"
             >
                 <M3Icon name="check_circle" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Analytics"
                 :active="navTab === 'analytics'"
+                label="Analytics"
                 @navigate="navTab = 'analytics'; navExpanded = false"
             >
                 <M3Icon name="insights" />
@@ -79,12 +79,12 @@
         <div class="surface-card-page__body">
             <div class="surface-card-page__workspace">
                 <M3SurfacePanel
-                    class="surface-card-page__header-card"
                     :fill-height="false"
                     :height="120"
                     :rounding="20"
-                    variant="surface-container-lowest"
                     :elevation="0"
+                    class="surface-card-page__header-card"
+                    variant="surface-container-lowest"
                 >
                     <h3>Card-to-page transition playground</h3>
                     <p>Original slot remains reserved while the morphing surface overlays the page area.</p>
@@ -92,43 +92,43 @@
 
                 <div
                     ref="canvas"
-                    class="surface-card-page__canvas"
                     data-testid="surface-card-canvas"
+                    class="surface-card-page__canvas"
                 >
                     <div
                         v-if="!backgroundCollapsed"
-                        class="surface-card-page__grid"
                         data-testid="surface-card-grid"
+                        class="surface-card-page__grid"
                     >
                         <div
                             ref="originSlot"
-                            class="surface-card-page__origin-slot"
                             :class="{ 'surface-card-page__origin-slot_filled': !overlayActive }"
                             :style="overlayActive ? { minHeight: `${originHeight}px` } : undefined"
                             data-testid="surface-card-origin"
+                            class="surface-card-page__origin-slot"
                         >
                             <div
                                 v-if="!overlayActive"
-                                class="surface-card-page__overlay-wrap surface-card-page__overlay-wrap_inline"
-                                style="width: 100%"
                                 data-testid="surface-card-overlay-wrap"
+                                style="width: 100%"
+                                class="surface-card-page__overlay-wrap surface-card-page__overlay-wrap_inline"
                             >
                                 <M3SurfacePanel
+                                    :transition-ms="durations.medium3"
+                                    :transition-timing="easing.standard"
+                                    :fill-width="true"
+                                    :fill-height="overlayActive"
+                                    :rounding="expanded ? 0 : 24"
+                                    :elevation="expanded ? 0 : 1"
+                                    :variant="expanded ? 'surface' : 'surface-container-low'"
                                     :class="[
                                         'surface-card-page__morph-surface',
                                         expanded
                                             ? 'surface-card-page__morph-surface_expanded'
                                             : 'surface-card-page__morph-surface_compact',
                                     ]"
-                                    :fill-width="true"
-                                    :fill-height="overlayActive"
-                                    :rounding="expanded ? 0 : 24"
-                                    :transition-ms="durations.medium3"
-                                    :transition-timing="easing.standard"
-                                    :variant="expanded ? 'surface' : 'surface-container-low'"
-                                    :elevation="expanded ? 0 : 1"
-                                    overflow="auto"
                                     data-testid="surface-card-morph"
+                                    overflow="auto"
                                 >
                                     <h3>Morph target surface</h3>
                                     <p>
@@ -137,12 +137,12 @@
                                     </p>
 
                                     <M3SurfacePanel
-                                        class="surface-card-page__morph-nested"
                                         :fill-height="false"
                                         :height="120"
                                         :rounding="14"
-                                        :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
                                         :elevation="expanded ? 1 : 3"
+                                        :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
+                                        class="surface-card-page__morph-nested"
                                     >
                                         Nested surface demonstrates composability in both states.
                                     </M3SurfacePanel>
@@ -151,24 +151,24 @@
                         </div>
 
                         <M3SurfacePanel
-                            class="surface-card-page__grid-card"
                             :fill-height="false"
                             :height="184"
                             :rounding="16"
-                            variant="surface-container-low"
                             :elevation="1"
+                            class="surface-card-page__grid-card"
+                            variant="surface-container-low"
                         >
                             <strong>Static card A</strong>
                             <p>Background content remains in flow.</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
-                            class="surface-card-page__grid-card"
                             :fill-height="false"
                             :height="184"
                             :rounding="16"
-                            variant="surface-container"
                             :elevation="2"
+                            class="surface-card-page__grid-card"
+                            variant="surface-container"
                         >
                             <strong>Static card B</strong>
                             <p>Independent surface in the same scene.</p>
@@ -180,26 +180,26 @@
                         class="surface-card-page__overlay"
                     >
                         <div
-                            class="surface-card-page__overlay-wrap"
                             :style="overlayStyle"
                             data-testid="surface-card-overlay-wrap"
+                            class="surface-card-page__overlay-wrap"
                         >
                             <M3SurfacePanel
+                                :transition-ms="durations.medium3"
+                                :transition-timing="easing.standard"
+                                :fill-width="true"
+                                :fill-height="overlayActive"
+                                :rounding="expanded ? 0 : 24"
+                                :elevation="expanded ? 0 : 1"
+                                :variant="expanded ? 'surface' : 'surface-container-low'"
                                 :class="[
                                     'surface-card-page__morph-surface',
                                     expanded
                                         ? 'surface-card-page__morph-surface_expanded'
                                         : 'surface-card-page__morph-surface_compact',
                                 ]"
-                                :fill-width="true"
-                                :fill-height="overlayActive"
-                                :rounding="expanded ? 0 : 24"
-                                :transition-ms="durations.medium3"
-                                :transition-timing="easing.standard"
-                                :variant="expanded ? 'surface' : 'surface-container-low'"
-                                :elevation="expanded ? 0 : 1"
-                                overflow="auto"
                                 data-testid="surface-card-morph"
+                                overflow="auto"
                             >
                                 <h3>Morph target surface</h3>
                                 <p>
@@ -208,12 +208,12 @@
                                 </p>
 
                                 <M3SurfacePanel
-                                    class="surface-card-page__morph-nested"
                                     :fill-height="false"
                                     :height="120"
                                     :rounding="14"
-                                    :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
                                     :elevation="expanded ? 1 : 3"
+                                    :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
+                                    class="surface-card-page__morph-nested"
                                 >
                                     Nested surface demonstrates composability in both states.
                                 </M3SurfacePanel>

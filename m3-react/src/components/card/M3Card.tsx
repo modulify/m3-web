@@ -111,23 +111,23 @@ export default defineComponent(function M3Card({
   return (
     <section
       ref={root}
+      role={role}
       className={toClassName([className, {
         ['m3-card']: true,
         ['m3-card_' + appearance]: true,
         ['m3-card_interactive']: interactive,
         ['m3-card_landscape']: landscape,
       }])}
-      role={role}
-      onClick={compose(event => {
-        if (interactive) {
-          ripple.current?.activate(event.nativeEvent)
-        }
-      }, onClick)}
       {...{
         ...(interactive ? { tabIndex: 0 } : {}),
         ...aria,
         ...attrs,
       }}
+      onClick={compose(event => {
+        if (interactive) {
+          ripple.current?.activate(event.nativeEvent)
+        }
+      }, onClick)}
     >
       {interactive ? (
         <div ref={state} className="m3-card__state">

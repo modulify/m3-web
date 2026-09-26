@@ -80,9 +80,9 @@ const SurfaceWorkspaceDialog: FC = () => {
         rounding={28}
         elevation={3}
         variant="surface-container-high"
+        style={{ padding: '24px' }}
         onToggle={setOpened}
         onDismiss={() => setOpened(false)}
-        style={{ padding: '24px' }}
       >
         <h3 style={{ margin: '0 0 12px' }}>Archive this workspace?</h3>
         <p style={{ margin: '0 0 12px' }}>Archiving hides the project from active planning views but keeps its history available for reporting.</p>

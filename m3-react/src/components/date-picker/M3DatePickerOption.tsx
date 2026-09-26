@@ -30,6 +30,7 @@ const M3DatePickerOption: FC<M3DatePickerOptionProps> = ({
   inRange = false,
   rangeStart = false,
   rangeEnd = false,
+  'aria-current': ariaCurrent,
   disabled = false,
   children,
   onSelect,
@@ -39,9 +40,8 @@ const M3DatePickerOption: FC<M3DatePickerOptionProps> = ({
 
   return (
     <button
-      {...attrs}
       ref={setRoot}
-      type="button"
+      aria-current={current ? 'date' : ariaCurrent}
       disabled={disabled}
       className={toClassName({
         'm3-date-picker-option': true,
@@ -53,7 +53,8 @@ const M3DatePickerOption: FC<M3DatePickerOptionProps> = ({
         'm3-date-picker-option_range-start': rangeStart,
         'm3-date-picker-option_range-end': rangeEnd,
       })}
-      aria-current={current ? 'date' : attrs['aria-current']}
+      type="button"
+      {...attrs}
       onClick={disabled ? undefined : onSelect}
     >
       <M3Ripple owner={root} />

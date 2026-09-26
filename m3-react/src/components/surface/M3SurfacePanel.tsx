@@ -57,11 +57,6 @@ export default defineComponent(function M3SurfacePanel({
         root.current = element
       }}
       id={id}
-      className={getSurfacePanelClassName({
-        className,
-        elevation,
-        variant,
-      })}
       style={getSurfacePanelStyle({
         fillWidth,
         fillHeight,
@@ -80,6 +75,11 @@ export default defineComponent(function M3SurfacePanel({
         transitionTiming,
         overflow,
         style,
+      })}
+      className={getSurfacePanelClassName({
+        className,
+        elevation,
+        variant,
       })}
       {...attrs}
     >

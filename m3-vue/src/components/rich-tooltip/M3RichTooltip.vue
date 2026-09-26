@@ -1,23 +1,23 @@
 <template>
     <M3Popper
         ref="root"
-        :shown="shown"
         :target="target"
+        :shown="shown"
         :target-triggers="targetTriggers"
         :popper-triggers="popperTriggers"
         :hide-on-miss-click="hideOnMissClick"
-        :placement="placement"
-        :offset-main-axis="offsetMainAxis"
-        :offset-cross-axis="offsetCrossAxis"
-        :overflow="overflow"
-        :boundary="boundary"
-        :container="container"
-        :strategy="strategy"
+        :disabled="disabled"
         :delay="delay"
         :detach-timeout="detachTimeout"
-        :disabled="disabled"
-        class="m3-rich-tooltip"
+        :placement="placement"
+        :strategy="strategy"
+        :boundary="boundary"
+        :container="container"
+        :overflow="overflow"
+        :offset-main-axis="offsetMainAxis"
+        :offset-cross-axis="offsetCrossAxis"
         role="tooltip"
+        class="m3-rich-tooltip"
     >
         <div class="m3-rich-tooltip__content">
             <h3

@@ -176,12 +176,12 @@ export default defineComponent(function M3Select<Value = unknown>({
       aria-expanded={expanded ? 'true' : 'false'}
       aria-disabled={disabled ? 'true' : 'false'}
       aria-readonly={readonly ? 'true' : 'false'}
-      aria-haspopup="listbox"
-      role="combobox"
       className={toClassName([className, {
         'm3-select': true,
         'm3-select_expanded': shouldBeExpanded,
       }])}
+      aria-haspopup="listbox"
+      role="combobox"
       {...attrs}
     >
       <M3TextField
@@ -210,11 +210,11 @@ export default defineComponent(function M3Select<Value = unknown>({
 
       <M3Menu
         id={_id + '-menu'}
-        shown={shouldBeExpanded}
-        target={root.current}
-        placement={placement}
         aria-hidden={expanded ? 'false' : 'true'}
+        target={root.current}
+        shown={shouldBeExpanded}
         disabled={disabled || readonly}
+        placement={placement}
         style={{ width: rootWidth + 'px' }}
         role="listbox"
         onToggle={(shown) => {

@@ -4,8 +4,8 @@
             <M3Chip
                 v-for="option in filterOptions"
                 :key="option"
-                variant="filter"
                 :selected="filters.includes(option)"
+                variant="filter"
                 @update:selected="onToggleFilter(option, $event)"
             >
                 {{ option }}
@@ -30,7 +30,7 @@
                 Remind later
             </M3Chip>
 
-            <M3Chip variant="filter" :selected="true">
+            <M3Chip :selected="true" variant="filter">
                 Updates
             </M3Chip>
 

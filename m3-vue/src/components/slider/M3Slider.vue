@@ -17,9 +17,9 @@
                 <div
                     :ref="addNotch"
                     :aria-label="String(min)"
-                    class="m3-slider__notch"
-                    style="--percentage: 0%"
                     role="button"
+                    style="--percentage: 0%"
+                    class="m3-slider__notch"
                     @click="onNotchMinClick"
                 >
                     <div class="m3-slider__notch-control" />
@@ -27,12 +27,12 @@
 
                 <div
                     v-for="(p, i) in steps"
-                    :ref="addNotch"
                     :key="p"
+                    :ref="addNotch"
                     :aria-label="String(p)"
                     :style="`--percentage: ${percentageOf(p)}%;`"
-                    class="m3-slider__notch"
                     role="button"
+                    class="m3-slider__notch"
                     @click="onNotchClick(p, i + 1)"
                 >
                     <div class="m3-slider__notch-control" />
@@ -41,9 +41,9 @@
                 <div
                     :ref="addNotch"
                     :aria-label="String(max)"
-                    class="m3-slider__notch"
-                    style="--percentage: 100%"
                     role="button"
+                    style="--percentage: 100%"
+                    class="m3-slider__notch"
                     @click="onNotchMaxClick"
                 >
                     <div class="m3-slider__notch-control" />
@@ -58,13 +58,13 @@
             >
                 <div
                     ref="handleMin"
-                    :aria-valuemax="current[1]"
                     :aria-valuemin="min"
+                    :aria-valuemax="current[1]"
                     :aria-valuenow="current[0]"
                     :aria-disabled="disabled ? 'true' : 'false'"
-                    class="m3-slider__handle"
                     role="slider"
                     tabindex="0"
+                    class="m3-slider__handle"
                     v-bind="ariaOptionsToAttrs(ariaHandleMin)"
                     @keydown="onKeyDownForMin"
                     @mousedown.left="onStartDraggingMin"
@@ -78,13 +78,13 @@
             >
                 <div
                     ref="handleMax"
-                    :aria-valuemax="max"
                     :aria-valuemin="type === 'range' ? current[0] : min"
+                    :aria-valuemax="max"
                     :aria-valuenow="current[1]"
                     :aria-disabled="disabled ? 'true' : 'false'"
-                    class="m3-slider__handle"
                     role="slider"
                     tabindex="0"
+                    class="m3-slider__handle"
                     v-bind="ariaOptionsToAttrs({
                         ...ariaHandle,
                         ...ariaHandleMax,

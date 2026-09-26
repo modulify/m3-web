@@ -1,6 +1,7 @@
 <template>
     <section
         ref="root"
+        :aria-label="label"
         :class="{
             'm3-date-picker': true,
             'm3-date-picker_docked': layout === 'docked',
@@ -10,7 +11,6 @@
             ).length}`]: layout === 'docked',
         }"
         role="group"
-        :aria-label="label"
         v-bind="$attrs"
     >
         <header v-if="layout === 'modal'" class="m3-date-picker__header">
@@ -45,13 +45,13 @@
         >
             <div class="m3-date-picker__navigation-group">
                 <M3IconButton
-                    :class="{
-                        'm3-date-picker__navigation-control_hidden': isPickerView,
-                    }"
                     :aria-label="isPickerView ? undefined : 'Previous month'"
                     :aria-hidden="isPickerView ? true : undefined"
                     :tabindex="isPickerView ? -1 : undefined"
                     :disabled="disabled || isPickerView || !canMoveToPreviousMonth"
+                    :class="{
+                        'm3-date-picker__navigation-control_hidden': isPickerView,
+                    }"
                     @click="startMonthSlide(-1)"
                 >
                     <M3Icon name="chevron_left" />
@@ -68,11 +68,11 @@
                 >
                     {{ formatDay(displayedMonth, 'MMM') }}
                     <M3Icon
-                        name="arrow_drop_down"
                         :class="{
                             'm3-date-picker__year-button-icon': true,
                             'm3-date-picker__year-button-icon_expanded': isMonthView,
                         }"
+                        name="arrow_drop_down"
                     />
                 </M3Button>
 
@@ -88,13 +88,13 @@
                 </div>
 
                 <M3IconButton
-                    :class="{
-                        'm3-date-picker__navigation-control_hidden': isPickerView,
-                    }"
                     :aria-label="isPickerView ? undefined : 'Next month'"
                     :aria-hidden="isPickerView ? true : undefined"
                     :tabindex="isPickerView ? -1 : undefined"
                     :disabled="disabled || isPickerView || !canMoveToNextMonth"
+                    :class="{
+                        'm3-date-picker__navigation-control_hidden': isPickerView,
+                    }"
                     @click="startMonthSlide(1)"
                 >
                     <M3Icon name="chevron_right" />
@@ -103,13 +103,13 @@
 
             <div class="m3-date-picker__navigation-group">
                 <M3IconButton
-                    :class="{
-                        'm3-date-picker__navigation-control_hidden': isDockedPickerView,
-                    }"
                     :aria-label="isDockedPickerView ? undefined : 'Previous year'"
                     :aria-hidden="isDockedPickerView || undefined"
                     :tabindex="isDockedPickerView ? -1 : undefined"
                     :disabled="disabled || isDockedPickerView || !canMoveToPreviousYear"
+                    :class="{
+                        'm3-date-picker__navigation-control_hidden': isDockedPickerView,
+                    }"
                     @click="moveCursorByYear(-1)"
                 >
                     <M3Icon name="chevron_left" />
@@ -117,36 +117,36 @@
 
                 <M3Button
                     v-if="hasYearView"
-                    appearance="text"
-                    class="m3-date-picker__year-button"
                     :aria-label="isYearView ? 'Switch to day selection' : 'Switch to year selection'"
                     :aria-expanded="isYearView"
-                    aria-controls="m3-year-picker"
                     :disabled="disabled || (layout === 'docked' && isMonthView)"
+                    aria-controls="m3-year-picker"
+                    appearance="text"
+                    class="m3-date-picker__year-button"
                     @click="switchView(isYearView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)"
                 >
                     {{ formatDay(displayedMonth, 'yyyy') }}
                     <M3Icon
-                        name="arrow_drop_down"
                         :class="{
                             'm3-date-picker__year-button-icon': true,
                             'm3-date-picker__year-button-icon_expanded': isYearView,
                         }"
+                        name="arrow_drop_down"
                     />
                 </M3Button>
 
-                <div v-else class="m3-date-picker__navigation-label" aria-live="polite">
+                <div v-else aria-live="polite" class="m3-date-picker__navigation-label">
                     {{ formatDay(displayedMonth, 'yyyy') }}
                 </div>
 
                 <M3IconButton
-                    :class="{
-                        'm3-date-picker__navigation-control_hidden': isDockedPickerView,
-                    }"
                     :aria-label="isDockedPickerView ? undefined : 'Next year'"
                     :aria-hidden="isDockedPickerView || undefined"
                     :tabindex="isDockedPickerView ? -1 : undefined"
                     :disabled="disabled || isDockedPickerView || !canMoveToNextYear"
+                    :class="{
+                        'm3-date-picker__navigation-control_hidden': isDockedPickerView,
+                    }"
                     @click="moveCursorByYear(1)"
                 >
                     <M3Icon name="chevron_right" />
@@ -161,9 +161,9 @@
             :bounds="bounds"
             :disabled="disabled"
             :locale="locale"
-            label="Select month"
-            :appearance="layout === 'docked' ? 'list' : 'grid'"
             :animating="viewTransitioning"
+            :appearance="layout === 'docked' ? 'list' : 'grid'"
+            label="Select month"
             @select="selectMonth"
         />
 
@@ -173,11 +173,11 @@
             class="m3-date-picker__inline-navigation m3-date-picker__inline-navigation_year-picker"
         >
             <M3Button
+                :aria-expanded="isYearView"
+                aria-label="Switch to day selection"
+                aria-controls="m3-year-picker"
                 appearance="text"
                 class="m3-date-picker__inline-month-button"
-                aria-label="Switch to day selection"
-                :aria-expanded="isYearView"
-                aria-controls="m3-year-picker"
                 @click="scheduleInlineViewSwitch(DATE_PICKER_VIEW.DAYS)"
             >
                 {{ formatDay(displayedMonth, 'MMMM yyyy') }}
@@ -197,20 +197,20 @@
             :bounds="bounds"
             :availability="availability"
             :disabled="disabled"
-            :appearance="navigation === 'inline' ? 'grid' : 'list'"
             :animating="viewTransitioning"
+            :appearance="navigation === 'inline' ? 'grid' : 'list'"
             @select="selectYear"
         />
 
         <div
             v-else-if="!isMonthView"
             ref="calendar"
+            :style="{ '--m3-date-picker-slide-offset': `${monthDragOffset}px` }"
             :class="{
                 'm3-date-picker__calendar': true,
                 'm3-date-picker__calendar_swipeable': true,
                 'm3-date-picker__mode-enter': viewTransitioning && navigation !== 'inline',
             }"
-            :style="{ '--m3-date-picker-slide-offset': `${monthDragOffset}px` }"
             @pointerdown="onPointerDown"
             @pointermove="onPointerMove"
             @pointerup="onPointerUp"
@@ -227,8 +227,8 @@
                     <div
                         v-for="page in getMonthPages()"
                         :key="`${page.key}-${page.month.timestamp}`"
-                        class="m3-date-picker__month-page"
                         :aria-hidden="!page.active"
+                        class="m3-date-picker__month-page"
                     >
                         <div
                             v-if="navigation === 'inline'"
@@ -236,12 +236,12 @@
                         >
                             <M3Button
                                 v-if="hasYearView"
-                                appearance="text"
-                                class="m3-date-picker__inline-month-button"
                                 :aria-label="page.active ? 'Switch to year selection' : undefined"
                                 :aria-expanded="page.active ? isYearView : undefined"
                                 :aria-controls="page.active ? 'm3-year-picker' : undefined"
                                 :tabindex="page.active ? undefined : -1"
+                                appearance="text"
+                                class="m3-date-picker__inline-month-button"
                                 @click="page.active && scheduleInlineViewSwitch(isYearView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)"
                             >
                                 {{ formatDay(page.month, 'MMMM yyyy') }}
@@ -274,13 +274,11 @@
                         </div>
 
                         <M3DayPicker
-                            :class="{
-                                'm3-date-picker__mode-enter': viewTransitioning && navigation === 'inline',
-                            }"
+                            :label="formatDay(displayedMonth, 'MMMM yyyy')"
                             :type="type"
+                            :value="type === 'range' ? selectedRange : selectedDay"
                             :month="page.month"
                             :today="today"
-                            :value="type === 'range' ? selectedRange : selectedDay"
                             :bounds="bounds"
                             :availability="availability"
                             :active="page.active"
@@ -288,7 +286,9 @@
                             :locale="locale"
                             :first-day-of-week="firstDayOfWeek"
                             :fixed="layout !== 'docked'"
-                            :label="formatDay(displayedMonth, 'MMMM yyyy')"
+                            :class="{
+                                'm3-date-picker__mode-enter': viewTransitioning && navigation === 'inline',
+                            }"
                             @select="selectDay"
                         />
                     </div>

@@ -62,6 +62,7 @@ export default defineComponent(function M3FabButton({
     <button
       ref={root}
       type={type}
+      disabled={disabled}
       className={toClassName({
         [className]: className.length > 0,
         ['m3-fab-button']: true,
@@ -70,13 +71,12 @@ export default defineComponent(function M3FabButton({
         ['m3-fab-button_has-leading-icon']: hasText && hasLeadingIcon,
         ['m3-fab-button_has-trailing-icon']: hasText && hasTrailingIcon,
       })}
-      disabled={disabled}
+      {...attrs}
       onKeyUp={compose(event => {
         if (event.code === 'Enter') {
           ripple.current?.activate(event.nativeEvent)
         }
       }, onKeyUp)}
-      {...attrs}
     >
       <M3Ripple ref={ripple} owner={rippleTarget}/>
       <span className="m3-fab-button__state" />

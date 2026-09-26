@@ -147,8 +147,8 @@ export default defineComponent(function M3NavigationTab({
           {hasSlot('badge') ? (
             <span
               aria-hidden={!inDrawer}
-              className="m3-navigation-tab__badge-label"
               role="status"
+              className="m3-navigation-tab__badge-label"
             >
               {slots.badge}
             </span>

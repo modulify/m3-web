@@ -7,7 +7,7 @@ import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3Menu, M3MenuItem } from '@/components/menu'
 
-const M3MenuStory = (args: M3MenuProps) => {
+const M3MenuStory = ({ target: _target, ...args }: M3MenuProps) => {
   const [target, setTarget] = useState<HTMLElement | null>(null)
   const bindTarget = useCallback((el: HTMLElement) => {
     setTarget(el)
@@ -23,8 +23,8 @@ const M3MenuStory = (args: M3MenuProps) => {
       </M3Button>
 
       <M3Menu
-        {...args}
         target={target}
+        {...args}
       >
         <M3MenuItem>Item 1</M3MenuItem>
         <M3MenuItem selected={true}>Item 2</M3MenuItem>
@@ -74,7 +74,7 @@ export const WithLeadingAndTrailingContent: Story = {
     target: null,
   },
 
-  render: (args) => {
+  render: ({ target: _target, ...args }) => {
     const [target, setTarget] = useState<HTMLElement | null>(null)
     const bindTarget = useCallback((el: HTMLElement) => {
       setTarget(el)
@@ -90,8 +90,8 @@ export const WithLeadingAndTrailingContent: Story = {
         </M3Button>
 
         <M3Menu
-          {...args}
           target={target}
+          {...args}
         >
           <M3MenuItem>
             <M3MenuItem.Leading>

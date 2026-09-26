@@ -17,7 +17,7 @@ const meta = {
   },
 
   render: (args) => (
-    <M3List {...args} aria-label="Settings">
+    <M3List aria-label="Settings" {...args}>
       <M3ListItem>
         <M3ListItem.Leading>
           <M3Icon name="wifi" />
@@ -60,7 +60,7 @@ export const Standard: Story = {}
 
 export const SupportingText: Story = {
   render: (args) => (
-    <M3List {...args} aria-label="Messages">
+    <M3List aria-label="Messages" {...args}>
       <M3ListItem
         overline="Today"
         supportingText="Design sync moved to 15:00. Review the agenda before joining."
@@ -93,7 +93,7 @@ export const InteractiveSelection: Story = {
   },
 
   render: (args) => (
-    <M3List {...args} aria-label="Folders">
+    <M3List aria-label="Folders" {...args}>
       <M3ListItem selected={true} interactive={true}>
         <M3ListItem.Leading>
           <M3Icon name="inbox" />

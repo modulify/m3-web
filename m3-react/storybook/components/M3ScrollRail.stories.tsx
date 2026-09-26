@@ -17,7 +17,7 @@ const meta = {
     disabled: false,
   },
 
-  render: (args) => {
+  render: ({ horizontal: _horizontal, ...args }) => {
     const items = Array.from({ length: 30 }, (_, i) => i + 1)
     return (
       <div className="m3-panel m3-panel_elevated-1" style={{ padding: '4px' }}>
@@ -27,7 +27,7 @@ const meta = {
         >
           <div className="m3-scroll-box__content" style={{ padding: '0 8px' }}>
             <M3ScrollRail {...args} />
-            <M3ScrollRail {...args} horizontal />
+            <M3ScrollRail horizontal {...args} />
             {items.map(i => (
               <div key={i} style={{width: '480px'}}>
                 Item {i}

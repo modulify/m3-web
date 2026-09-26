@@ -5,7 +5,12 @@ import { useEffect, useState } from 'react'
 
 import { M3Slider } from '@/components/slider'
 
-const M3SliderStory = (args: M3SliderProps) => {
+const M3SliderStory = ({
+  value: _value,
+  style: _style,
+  onUpdate: _onUpdate,
+  ...args
+}: M3SliderProps) => {
   const [value, setValue] = useState<M3SliderValue>(
     args.type === 'single' ? 50 : [25, 75]
   )
@@ -16,10 +21,10 @@ const M3SliderStory = (args: M3SliderProps) => {
 
   return (
     <M3Slider
-      {...args}
       value={value}
-      onUpdate={(value) => setValue(value)}
       style={{ width: '320px' }}
+      {...args}
+      onUpdate={(value) => setValue(value)}
     />
   )
 }
