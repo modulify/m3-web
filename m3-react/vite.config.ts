@@ -67,6 +67,7 @@ export default defineConfig(({ mode }) => {
             }
           },
           aliasesExclude: [
+            /^@modulify\/m3-foundation(?:\/.*)?$/,
             /^react(?:\/.*)?$/,
             /^react-dom(?:\/.*)?$/,
           ],
@@ -77,7 +78,7 @@ export default defineConfig(({ mode }) => {
             'src/**/*.tsx',
           ],
           outDirs: 'dist/types',
-          tsconfigPath: './tsconfig.tsc.json',
+          tsconfigPath: './tsconfig.dts.json',
         }),
       ] : []),
     ],

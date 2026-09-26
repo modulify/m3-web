@@ -67,6 +67,9 @@ export default defineConfig(({ mode }) => {
             }
           },
           cleanVueFileName: true,
+          aliasesExclude: [
+            /^@modulify\/m3-foundation(?:\/.*)?$/,
+          ],
           entryRoot: 'src',
           include: [
             'shims-*.d.ts',
@@ -74,7 +77,7 @@ export default defineConfig(({ mode }) => {
             'src/**/*.vue',
           ],
           outDirs: 'dist/types',
-          tsconfigPath: './tsconfig.tsc.json',
+          tsconfigPath: './tsconfig.dts.json',
         }),
       ] : []),
     ],
