@@ -129,7 +129,7 @@ describe('m3-react/button', () => {
       return (
         <M3Button>
           {iconActive
-            ? [<M3Icon name={'edit'} key="icon" />, 'Some text' ]
+            ? [<M3Icon key="icon" name={'edit'} />, 'Some text' ]
             : 'Some text'
           }
         </M3Button>

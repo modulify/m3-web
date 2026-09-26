@@ -13,8 +13,8 @@
             :value="inputValue"
             :label="label"
             :placeholder="placeholder"
-            :invalid="invalid || inputInvalid"
             :disabled="disabled"
+            :invalid="invalid || inputInvalid"
             :readonly="readonly"
             :outlined="outlined"
             @click="interactive && toggleExpanded(true)"
@@ -31,8 +31,8 @@
 
             <template #trailing-icon>
                 <M3IconButton
-                    aria-label="Choose date"
                     :disabled="!interactive"
+                    aria-label="Choose date"
                     @click.stop="toggleExpanded(!expanded)"
                 >
                     <M3Icon name="calendar_month" />
@@ -47,13 +47,13 @@
         </div>
 
         <M3Popper
-            :shown="expanded"
-            :class="['m3-date-picker-field__popper', popperClass]"
             :target="ref(root)"
+            :shown="expanded"
             :target-triggers="[]"
+            :disabled="!interactive"
             :placement="placement"
             :offset-main-axis="8"
-            :disabled="!interactive"
+            :class="['m3-date-picker-field__popper', popperClass]"
             animated
             hide-on-miss-click
             @update:shown="toggleExpanded"
@@ -75,7 +75,7 @@
                     <M3Button appearance="text" @click="cancel">
                         {{ cancelText }}
                     </M3Button>
-                    <M3Button appearance="text" :disabled="draftValue === null" @click="confirm">
+                    <M3Button :disabled="draftValue === null" appearance="text" @click="confirm">
                         {{ confirmText }}
                     </M3Button>
                 </template>

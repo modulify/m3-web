@@ -143,7 +143,6 @@ export default defineComponent(function M3TextField({
   return (
     <div
       ref={root}
-      role="grid"
       className={toClassName([className, {
         'm3-text-field': true,
         'm3-text-field_outlined': outlined,
@@ -156,11 +155,12 @@ export default defineComponent(function M3TextField({
         'm3-text-field_disabled': disabled,
         'm3-text-field_readonly': readonly,
       }])}
-      onClick={compose(focus, onClick)}
+      role="grid"
       {...{
         ...aria,
         ...attrs,
       }}
+      onClick={compose(focus, onClick)}
     >
       {outlined ? (
         <div className="m3-text-field__outline">
@@ -200,14 +200,14 @@ export default defineComponent(function M3TextField({
 
         {multiline ? (
           <textarea
-            id={_id}
             ref={setTextAreaRef}
+            id={_id}
             name={name}
+            aria-invalid={invalid}
             value={value}
             placeholder={placeholder}
             disabled={disabled}
             readOnly={readonly}
-            aria-invalid={invalid}
             onInput={handleInput}
             onChange={handleChange}
             onFocus={() => setFocused(true)}
@@ -215,15 +215,15 @@ export default defineComponent(function M3TextField({
           />
         ) : (
           <input
-            id={_id}
             ref={setInputRef}
-            type={_type}
+            id={_id}
             name={name}
+            aria-invalid={invalid}
+            type={_type}
             value={value}
             placeholder={placeholder}
             disabled={disabled}
             readOnly={readonly}
-            aria-invalid={invalid}
             onInput={handleInput}
             onChange={handleChange}
             onFocus={() => setFocused(true)}

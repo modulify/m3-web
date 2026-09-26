@@ -90,13 +90,13 @@ const M3Link = defineComponent({
     return () => props.to && LinkComponent
       ? h(LinkComponent, {
         ...attrs,
-        to: props.to,
         ref: root,
+        to: props.to,
       }, slots)
       : h(props.href ? 'a' : 'button', {
         ...attrs,
-        ...(props.href ? { href: props.href } : { type: props.type }),
         ref: root,
+        ...(props.href ? { href: props.href } : { type: props.type }),
       }, slots)
   },
 })

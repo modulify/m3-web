@@ -86,7 +86,7 @@ const M3DayPicker: FC<M3DayPickerProps> = ({
     <div
       className={toClassName(['m3-day-picker', className])}
     >
-      <div className="m3-day-picker__weekdays" aria-hidden={true}>
+      <div aria-hidden={true} className="m3-day-picker__weekdays">
         {weekdays.map(day => (
           <span key={day.dayInWeek} className="m3-day-picker__weekday">
             {formatWeekday.format(day.date)}
@@ -95,12 +95,12 @@ const M3DayPicker: FC<M3DayPickerProps> = ({
       </div>
 
       <div
-        className="m3-day-picker__grid"
         role={active ? 'grid' : undefined}
         aria-label={active ? label : undefined}
+        className="m3-day-picker__grid"
       >
         {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} className="m3-day-picker__week" role={active ? 'row' : undefined}>
+          <div key={weekIndex} role={active ? 'row' : undefined} className="m3-day-picker__week">
             {week.map(day => {
               const isRangeStart = type === 'range' && isCalendarDayRangeStart(day, selectedRange)
               const isRangeEnd = type === 'range' && isCalendarDayRangeEnd(day, selectedRange)
@@ -126,18 +126,18 @@ const M3DayPicker: FC<M3DayPickerProps> = ({
                   })}
                 >
                   <M3DatePickerOption
-                    appearance="circle"
-                    role="gridcell"
+                    aria-label={formatDay.format(day.date)}
+                    aria-selected={active && isSelected}
                     current={today.inSameDay(day)}
                     selected={active && isSelected}
                     outside={!day.inSameMonth(month)}
                     inRange={inRange}
                     rangeStart={rangeStart}
                     rangeEnd={rangeEnd}
-                    aria-label={formatDay.format(day.date)}
-                    aria-selected={active && isSelected}
                     disabled={isDisabled}
                     tabIndex={active ? undefined : -1}
+                    role="gridcell"
+                    appearance="circle"
                     onSelect={() => onSelect(day)}
                   >
                     {day.dayInMonth}

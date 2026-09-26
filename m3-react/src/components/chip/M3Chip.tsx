@@ -75,8 +75,8 @@ export default defineComponent(function M3Chip({
 
   const renderItem = useCallback((child: ReactNode, isIcon: boolean, key: string) => (
     <span
-      ref={root}
       key={key}
+      ref={root}
       className={toClassName({
         'm3-chip__icon': isIcon,
         'm3-chip__label': !isIcon,
@@ -88,6 +88,7 @@ export default defineComponent(function M3Chip({
 
   return (
     <span
+      style={style}
       className={toClassName([className, {
         'm3-chip': true,
         ['m3-chip_' + variant]: true,
@@ -98,14 +99,14 @@ export default defineComponent(function M3Chip({
         'm3-chip_has-trailing-icon': hasText && hasTrailingIcon,
         'm3-chip_has-checkmark': hasCheckmark,
       }])}
-      style={style}
     >
       <button
         ref={action}
+        aria-pressed={variant === 'filter' ? selected : undefined}
+        disabled={disabled}
         type={type}
         className="m3-chip__action"
-        disabled={disabled}
-        aria-pressed={variant === 'filter' ? selected : undefined}
+        {...actionAttrs}
         onClick={(event) => {
           onClick(event)
 
@@ -120,7 +121,6 @@ export default defineComponent(function M3Chip({
 
           onKeyUp(event)
         }}
-        {...actionAttrs}
       >
         <M3Ripple ref={actionRipple} owner={actionRippleTarget} />
         <span className="m3-chip__state" />
@@ -138,10 +138,10 @@ export default defineComponent(function M3Chip({
       {hasDismiss ? (
         <button
           ref={dismiss}
+          aria-label={dismissLabel}
+          disabled={disabled}
           type="button"
           className="m3-chip__dismiss"
-          disabled={disabled}
-          aria-label={dismissLabel}
           onClick={(event) => {
             event.stopPropagation()
             onDismiss?.()
@@ -152,7 +152,7 @@ export default defineComponent(function M3Chip({
             }
           }}
         >
-          <M3Ripple ref={dismissRipple} owner={dismissRippleTarget} centered={true} />
+          <M3Ripple ref={dismissRipple} owner={dismissRippleTarget} centered />
           <span className="m3-chip__state" />
           <span className="m3-chip__content">
             <span className="m3-chip__icon">

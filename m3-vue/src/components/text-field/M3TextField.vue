@@ -13,6 +13,7 @@
             'm3-text-field_disabled': disabled,
             'm3-text-field_readonly': readonly,
         }"
+        role="grid"
         v-bind="{
             ...$attrs,
             ...(!(
@@ -22,7 +23,6 @@
                 'aria-labelledby': _id + '-label',
             } : {}),
         }"
-        role="grid"
         @click="focus"
     >
         <div v-if="outlined" class="m3-text-field__outline">
@@ -63,11 +63,11 @@
                 :id="_id"
                 ref="_input"
                 :name="name"
+                :aria-invalid="invalid ? 'true' : 'false'"
                 :value="value"
                 :placeholder="placeholder"
                 :disabled="disabled"
                 :readonly="readonly"
-                :aria-invalid="invalid ? 'true' : 'false'"
                 @input="onInput"
                 @change="onChange"
                 @focus="onFocus"
@@ -78,13 +78,13 @@
                 v-else
                 :id="_id"
                 ref="_input"
-                :type="_type"
                 :name="name"
+                :aria-invalid="invalid ? 'true' : 'false'"
+                :type="_type"
                 :value="value"
                 :placeholder="placeholder"
                 :disabled="disabled"
                 :readonly="readonly"
-                :aria-invalid="invalid ? 'true' : 'false'"
                 @input="onInput"
                 @change="onChange"
                 @focus="onFocus"

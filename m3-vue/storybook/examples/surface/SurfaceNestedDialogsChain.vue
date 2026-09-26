@@ -1,14 +1,14 @@
 <template>
     <div
-        class="surface-dialog-chain"
         :data-top-level="`${topDialogLevel}`"
+        class="surface-dialog-chain"
     >
         <M3Surface
-            class="surface-dialog-chain__topbar"
             :fill-height="false"
             :height="72"
-            variant="surface-container"
             :elevation="0"
+            class="surface-dialog-chain__topbar"
+            variant="surface-container"
         >
             <div class="surface-dialog-chain__topbar-content">
                 <div>
@@ -17,9 +17,9 @@
                 </div>
 
                 <M3Button
-                    appearance="filled"
                     :disabled="chainOpened"
                     data-testid="surface-dialog-chain-open-root"
+                    appearance="filled"
                     @click="openDialog(0)"
                 >
                     {{ chainOpened ? 'Dialog chain is open' : 'Open dialog chain' }}
@@ -28,37 +28,37 @@
         </M3Surface>
 
         <M3Navigation
-            class="surface-dialog-chain__nav"
-            appearance="rail"
             alignment="top"
+            appearance="rail"
+            class="surface-dialog-chain__nav"
         >
             <M3NavigationTab
-                label="Inbox"
                 :active="activeNavTab === 'inbox'"
+                label="Inbox"
                 @navigate="activeNavTab = 'inbox'"
             >
                 <M3Icon name="inbox" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Boards"
                 :active="activeNavTab === 'boards'"
+                label="Boards"
                 @navigate="activeNavTab = 'boards'"
             >
                 <M3Icon name="dashboard" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Archive"
                 :active="activeNavTab === 'archive'"
+                label="Archive"
                 @navigate="activeNavTab = 'archive'"
             >
                 <M3Icon name="archive" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Lab"
                 :active="activeNavTab === 'lab'"
+                label="Lab"
                 @navigate="activeNavTab = 'lab'"
             >
                 <M3Icon name="science" />
@@ -68,22 +68,22 @@
         <div class="surface-dialog-chain__body">
             <div class="surface-dialog-chain__workspace">
                 <M3Surface
-                    class="surface-dialog-chain__workspace-intro"
                     :fill-height="false"
                     :height="124"
                     :rounding="20"
-                    variant="surface-container-lowest"
                     :elevation="0"
+                    class="surface-dialog-chain__workspace-intro"
+                    variant="surface-container-lowest"
                 >
                     <h3>Workspace</h3>
                     <p>Page composition stays stable while dialogs are stacked progressively.</p>
                 </M3Surface>
 
                 <M3Surface
-                    class="surface-dialog-chain__canvas"
                     :rounding="20"
-                    variant="surface-container-low"
                     :elevation="0"
+                    class="surface-dialog-chain__canvas"
+                    variant="surface-container-low"
                 >
                     <h4>Background content</h4>
                     <p>Open dialog 1 from top action, then continue through the chain.</p>
@@ -97,35 +97,35 @@
         >
             <M3Surface
                 v-if="dialogMounted[level]"
-                :class="[
-                    'surface-dialog-chain__dialog',
-                    `surface-dialog-chain__dialog_level-${level + 1}`,
-                ]"
+                :data-testid="`surface-dialog-chain-level-${level + 1}`"
                 :mode="dialogMode(level)"
                 :shown="dialogMounted[level]"
-                anchor="center"
+                :transition-ms="DIALOG_TRANSITION_MS"
+                :transition-timing="DIALOG_TRANSITION_EASING"
                 :fill-width="false"
                 :fill-height="false"
                 :width="dialog.width"
                 :inset-top="24"
                 :inset-bottom="24"
                 :rounding="dialog.rounding"
-                :transition-ms="DIALOG_TRANSITION_MS"
-                :transition-timing="DIALOG_TRANSITION_EASING"
                 :z-index="dialogZIndex(level)"
-                variant="surface-container-highest"
                 :elevation="dialogElevation(level)"
-                overflow="visible"
                 :style="dialogInlineStyle(level)"
-                :data-testid="`surface-dialog-chain-level-${level + 1}`"
+                :class="[
+                    'surface-dialog-chain__dialog',
+                    `surface-dialog-chain__dialog_level-${level + 1}`,
+                ]"
+                anchor="center"
+                overflow="visible"
+                variant="surface-container-highest"
                 @dismiss="closeFrom(level)"
             >
                 <div class="surface-dialog-chain__dialog-head">
                     <h3>Dialog {{ level + 1 }} of {{ dialogChain.length }}</h3>
 
                     <M3IconButton
-                        appearance="standard"
                         :aria-label="`Close dialog ${level + 1}`"
+                        appearance="standard"
                         @click="closeFrom(level)"
                     >
                         <M3Icon name="close" />
@@ -136,8 +136,8 @@
 
                 <div class="surface-dialog-chain__dialog-actions">
                     <M3Button
-                        appearance="text"
                         :data-testid="`surface-dialog-chain-close-${level + 1}`"
+                        appearance="text"
                         @click="closeFrom(level)"
                     >
                         Close
@@ -145,9 +145,9 @@
 
                     <M3Button
                         v-if="hasNextDialog(level)"
-                        appearance="filled"
-                        :disabled="dialogMounted[level + 1]"
                         :data-testid="`surface-dialog-chain-open-next-${level + 1}`"
+                        :disabled="dialogMounted[level + 1]"
+                        appearance="filled"
                         @click="openDialog(level + 1)"
                     >
                         Open dialog {{ level + 2 }}

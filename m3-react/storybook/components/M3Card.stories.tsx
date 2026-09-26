@@ -25,7 +25,7 @@ const meta = {
   },
 
   render: (args) => (
-    <M3Card {...args} landscape>
+    <M3Card landscape {...args}>
       <M3Card.Media>
         <img alt="" src="/assets/image-80x80.png"/>
       </M3Card.Media>
@@ -47,7 +47,7 @@ export const Landscape: Story = {}
 
 export const LandscapeWithoutMedia: Story = {
   render: (args) => (
-    <M3Card aria-label="Header" {...args} landscape>
+    <M3Card aria-label="Header" landscape {...args}>
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="20" cy="20" r="20" fill="#6750A4"/>
       </svg>

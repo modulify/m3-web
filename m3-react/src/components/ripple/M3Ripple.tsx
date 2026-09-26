@@ -94,7 +94,7 @@ export default defineComponent(function M3Ripple(
 
   return <span
     ref={root}
-    className="m3-ripple"
     style={{ display: 'none' }}
+    className="m3-ripple"
   />
 })

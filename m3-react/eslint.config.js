@@ -72,6 +72,13 @@ export default [
       }],
       'no-new-wrappers': 'error',
       'no-prototype-builtins': 'error',
+      'no-restricted-syntax': ['error', {
+        selector: 'JSXSpreadAttribute ~ JSXAttribute:not([name.name=/^on[A-Z]/])',
+        message: 'Place JSX spread attributes after regular props and before event handlers.',
+      }, {
+        selector: 'JSXAttribute[name.name=/^on[A-Z]/] ~ JSXSpreadAttribute',
+        message: 'Place JSX spread attributes after regular props and before event handlers.',
+      }],
       'no-shadow-restricted-names': 'error',
       'no-throw-literal': 'error',
       'no-unused-vars': 'off',
@@ -139,6 +146,12 @@ export default [
 
       'unused-imports/no-unused-imports': 'error',
 
+      'react/jsx-sort-props': ['error', {
+        callbacksLast: true,
+        noSortAlphabetically: true,
+        reservedFirst: ['key', 'ref'],
+        shorthandLast: true,
+      }],
       'react/react-in-jsx-scope': 'off',
       'storybook/no-renderer-packages': 'off',
     },

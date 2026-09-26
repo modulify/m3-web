@@ -64,7 +64,9 @@ export default defineComponent({
     return () => h('button', {
       ...attrs,
       ref: setRoot,
+      'aria-current': props.current ? 'date' : attrs['aria-current'],
       type: 'button',
+      disabled: props.disabled,
       class: {
         'm3-date-picker-option': true,
         [`m3-date-picker-option_${props.appearance}`]: true,
@@ -75,8 +77,6 @@ export default defineComponent({
         'm3-date-picker-option_range-start': props.rangeStart,
         'm3-date-picker-option_range-end': props.rangeEnd,
       },
-      'aria-current': props.current ? 'date' : attrs['aria-current'],
-      disabled: props.disabled,
       onClick: props.disabled ? undefined : () => emit('select'),
     }, [
       h(M3Ripple, { owner: root }),

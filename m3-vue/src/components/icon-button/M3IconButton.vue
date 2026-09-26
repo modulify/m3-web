@@ -2,13 +2,13 @@
     <button
         ref="root"
         :type="type"
+        :disabled="disabled"
         :class="{
             ['m3-icon-button']: true,
             ['m3-icon-button_' + appearance]: true,
             ['m3-icon-button_toggleable']: toggleable,
             ['m3-icon-button_selected']: toggleable && selected,
         }"
-        :disabled="disabled"
         v-bind="$attrs"
     >
         <M3Ripple :owner="ref(root)" />

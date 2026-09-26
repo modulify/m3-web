@@ -84,14 +84,14 @@ export default defineComponent(function M3Radio<Value = boolean>({
       <input
         ref={input}
         id={inputId}
-        type="radio"
         name={name}
         aria-checked={checked}
-        aria-invalid={invalid}
         aria-disabled={disabled}
-        className="m3-radio__input"
+        aria-invalid={invalid}
         checked={checked}
         disabled={disabled}
+        type="radio"
+        className="m3-radio__input"
         onChange={event => handleChange(event.currentTarget.checked)}
       />
 

@@ -168,15 +168,15 @@ export default defineComponent(function M3Switch({
       {...attrs}
     >
       <input
-        id={useId(id, 'm3-switch')}
         ref={input}
+        id={useId(id, 'm3-switch')}
         name={name}
         aria-checked={state.checked}
         aria-disabled={disabled}
         checked={state.checked}
         disabled={disabled}
-        type="checkbox"
         role="switch"
+        type="checkbox"
         className="m3-switch__input"
         onChange={event => toggle(event.target.checked)}
         onKeyDown={event => {

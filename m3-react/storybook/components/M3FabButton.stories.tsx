@@ -36,7 +36,7 @@ const meta: Meta<typeof M3FabButton> = {
   },
 
   render: (args) => (
-    <M3FabButton {...args} aria-label="Edit">
+    <M3FabButton aria-label="Edit" {...args}>
       <M3Icon name="edit" />
     </M3FabButton>
   ),

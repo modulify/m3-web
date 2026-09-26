@@ -91,8 +91,8 @@ const styles = {
 const PrimaryAction: FC<Omit<M3LinkProps, 'children'>> = (props) => {
   return (
     <M3Link
-      {...props}
       style={styles.solidButton}
+      {...props}
     >
       Save changes
     </M3Link>
@@ -102,8 +102,8 @@ const PrimaryAction: FC<Omit<M3LinkProps, 'children'>> = (props) => {
 const SecondaryAction: FC<Omit<M3LinkProps, 'children'>> = (props) => {
   return (
     <M3Link
-      {...props}
       style={styles.ghostButton}
+      {...props}
     >
       Cancel
     </M3Link>
@@ -113,8 +113,8 @@ const SecondaryAction: FC<Omit<M3LinkProps, 'children'>> = (props) => {
 const DocumentationLink: FC<Omit<M3LinkProps, 'children'>> = (props) => {
   return (
     <M3Link
-      {...props}
       style={styles.textLink}
+      {...props}
     >
       Read API reference
     </M3Link>
@@ -124,8 +124,8 @@ const DocumentationLink: FC<Omit<M3LinkProps, 'children'>> = (props) => {
 const ResourceCardLink: FC<Omit<M3LinkProps, 'children'>> = (props) => {
   return (
     <M3Link
-      {...props}
       style={styles.tileLink}
+      {...props}
     >
       <span style={styles.tileTitle}>Deploy checklist</span>
       <span style={styles.tileMeta}>8 items • 5 minutes</span>
@@ -168,7 +168,7 @@ const PrimitiveShapeStory = (args: M3LinkProps) => {
   const sharedStyle = isAnchor ? styles.ghostButton : styles.solidButton
 
   return (
-    <M3Link {...args} style={sharedStyle}>
+    <M3Link style={sharedStyle} {...args}>
       {isAnchor ? 'I am rendered as <a>' : 'I am rendered as <button>'}
     </M3Link>
   )

@@ -1,26 +1,26 @@
 <template>
-    <div class="surface-exp" data-testid="surface-exp-root">
+    <div data-testid="surface-exp-root" class="surface-exp">
         <M3Surface
-            class="surface-exp__topbar"
-            data-testid="surface-topbar"
             :fill-height="false"
             :height="64"
-            variant="surface-container"
             :elevation="2"
+            data-testid="surface-topbar"
+            class="surface-exp__topbar"
+            variant="surface-container"
         >
             <div class="surface-exp__topbar-content">
                 <strong>Surface Experiment</strong>
                 <div class="surface-exp__controls">
                     <button
-                        type="button"
                         data-testid="sheet-to-modal"
+                        type="button"
                         @click="morphSheetToModal"
                     >
                         Sheet: Docked -> Modal
                     </button>
                     <button
-                        type="button"
                         data-testid="card-to-page"
+                        type="button"
                         @click="morphCardToPage"
                     >
                         Card -> Full Page
@@ -31,12 +31,12 @@
 
         <div class="surface-exp__frame">
             <M3Surface
-                class="surface-exp__rail"
-                data-testid="surface-nav-rail"
                 :fill-width="false"
                 :width="88"
-                variant="surface-container-low"
                 :elevation="1"
+                data-testid="surface-nav-rail"
+                class="surface-exp__rail"
+                variant="surface-container-low"
             >
                 <div class="surface-exp__rail-stack">
                     <span>Nav</span>
@@ -47,60 +47,60 @@
             </M3Surface>
 
             <div class="surface-exp__workspace">
-                <section class="surface-exp__scenario" data-testid="scenario-side-sheet">
+                <section data-testid="scenario-side-sheet" class="surface-exp__scenario">
                     <header class="surface-exp__scenario-head">
                         <h2>Scenario A: Multi-surface + Docked Sheet -> Modal</h2>
                     </header>
 
                     <div class="sheet-layout">
-                        <main class="sheet-layout__content" data-testid="sheet-layout-content">
+                        <main data-testid="sheet-layout-content" class="sheet-layout__content">
                             <M3Surface
-                                class="sheet-layout__card"
-                                data-testid="static-role-surface-container-lowest"
                                 :fill-height="false"
                                 :height="112"
                                 :rounding="20"
-                                variant="surface-container-lowest"
                                 :elevation="0"
+                                data-testid="static-role-surface-container-lowest"
+                                class="sheet-layout__card"
+                                variant="surface-container-lowest"
                             >
                                 <strong>Static block: surface-container-lowest</strong>
                                 <p>Neutral content block anchored in page flow.</p>
                             </M3Surface>
 
                             <M3Surface
-                                class="sheet-layout__card"
-                                data-testid="static-role-surface-container-low"
                                 :fill-height="false"
                                 :height="112"
                                 :rounding="20"
-                                variant="surface-container-low"
                                 :elevation="1"
+                                data-testid="static-role-surface-container-low"
+                                class="sheet-layout__card"
+                                variant="surface-container-low"
                             >
                                 <strong>Static block: surface-container-low</strong>
                                 <p>Secondary panel with increased emphasis.</p>
                             </M3Surface>
 
                             <M3Surface
-                                class="sheet-layout__card"
-                                data-testid="static-role-surface-container-high"
                                 :fill-height="false"
                                 :height="112"
                                 :rounding="20"
-                                variant="surface-container-high"
                                 :elevation="3"
+                                data-testid="static-role-surface-container-high"
+                                class="sheet-layout__card"
+                                variant="surface-container-high"
                             >
                                 <strong>Static block: surface-container-high</strong>
                                 <p>Read-only section with stronger elevation.</p>
                             </M3Surface>
 
                             <M3Surface
-                                class="sheet-layout__card"
-                                data-testid="static-role-surface-dim"
                                 :fill-height="false"
                                 :height="112"
                                 :rounding="20"
-                                variant="surface-dim"
                                 :elevation="0"
+                                data-testid="static-role-surface-dim"
+                                class="sheet-layout__card"
+                                variant="surface-dim"
                             >
                                 <strong>Static block: surface-dim</strong>
                                 <p>Low-brightness background container.</p>
@@ -109,19 +109,19 @@
 
                         <div
                             v-if="!sheetIsModal"
-                            class="sheet-layout__docked-host"
-                            data-testid="sheet-docked-host"
                             :style="{ width: `${sheetDockedWidth}px` }"
+                            data-testid="sheet-docked-host"
+                            class="sheet-layout__docked-host"
                         >
                             <M3Surface
-                                class="sheet-layout__sheet"
-                                data-testid="orchestrated-side-sheet"
                                 :fill-width="true"
                                 :fill-height="true"
                                 :rounding="0"
-                                variant="surface-container-low"
                                 :elevation="1"
+                                data-testid="orchestrated-side-sheet"
                                 overflow="auto"
+                                class="sheet-layout__sheet"
+                                variant="surface-container-low"
                             >
                                 <h3>Docked side sheet</h3>
                                 <p>Initial state: coplanar with the main content.</p>
@@ -131,14 +131,10 @@
 
                         <M3Surface
                             v-else
-                            class="sheet-layout__sheet sheet-layout__sheet_modal"
-                            data-testid="orchestrated-side-sheet"
-                            mode="modal"
-                            anchor="end"
+                            :transition-ms="320"
                             :fill-width="false"
                             :fill-height="false"
                             :width="420"
-                            height="calc(100vh - 96px)"
                             :inset-top="72"
                             :inset-right="24"
                             :inset-bottom="24"
@@ -146,11 +142,15 @@
                             :rounding-bottom-left="28"
                             :rounding-top-right="0"
                             :rounding-bottom-right="0"
-                            variant="surface-container-high"
-                            :elevation="4"
                             :z-index="520"
-                            :transition-ms="320"
+                            :elevation="4"
+                            data-testid="orchestrated-side-sheet"
+                            mode="modal"
+                            anchor="end"
+                            height="calc(100vh - 96px)"
                             overflow="auto"
+                            class="sheet-layout__sheet sheet-layout__sheet_modal"
+                            variant="surface-container-high"
                         >
                             <h3>Modal side sheet</h3>
                             <p>Layer switched from docked flow to modal surface stack.</p>
@@ -159,56 +159,62 @@
                     </div>
                 </section>
 
-                <section class="surface-exp__scenario" data-testid="scenario-card-page">
+                <section data-testid="scenario-card-page" class="surface-exp__scenario">
                     <header class="surface-exp__scenario-head">
                         <h2>Scenario B: Card -> Full Page</h2>
                     </header>
 
                     <div
                         ref="cardCanvas"
-                        class="card-morph-layout"
                         data-testid="card-canvas"
+                        class="card-morph-layout"
                     >
                         <div class="card-morph-layout__grid">
                             <div
                                 ref="cardOrigin"
-                                class="card-morph-layout__origin"
-                                data-testid="card-origin-slot"
                                 :style="{ minHeight: `${cardPlaceholderHeight}px` }"
+                                data-testid="card-origin-slot"
+                                class="card-morph-layout__origin"
                             />
                             <M3Surface
-                                class="card-morph-layout__card"
-                                data-testid="card-static-a"
                                 :fill-height="false"
                                 :height="176"
                                 :rounding="16"
-                                variant="surface-container-low"
                                 :elevation="1"
+                                data-testid="card-static-a"
+                                class="card-morph-layout__card"
+                                variant="surface-container-low"
                             >
                                 <strong>Static card A</strong>
                                 <p>Background card in feed.</p>
                             </M3Surface>
                             <M3Surface
-                                class="card-morph-layout__card"
-                                data-testid="card-static-b"
                                 :fill-height="false"
                                 :height="176"
                                 :rounding="16"
-                                variant="surface-container"
                                 :elevation="2"
+                                data-testid="card-static-b"
+                                class="card-morph-layout__card"
+                                variant="surface-container"
                             >
                                 <strong>Static card B</strong>
                                 <p>Background card in feed.</p>
                             </M3Surface>
                         </div>
 
-                        <div class="card-morph-layout__overlay" data-testid="card-overlay-layer">
+                        <div data-testid="card-overlay-layer" class="card-morph-layout__overlay">
                             <div
-                                class="card-morph-layout__overlay-wrap"
-                                data-testid="card-overlay-wrap"
                                 :style="cardOverlayStyle"
+                                data-testid="card-overlay-wrap"
+                                class="card-morph-layout__overlay-wrap"
                             >
                                 <M3Surface
+                                    :transition-ms="320"
+                                    :fill-width="true"
+                                    :fill-height="true"
+                                    :rounding="cardExpanded ? 0 : 24"
+                                    :elevation="cardExpanded ? 0 : 1"
+                                    :variant="cardExpanded ? 'surface' : 'surface-container-low'"
                                     :class="[
                                         'card-morph-layout__overlay-surface',
                                         cardExpanded
@@ -216,13 +222,7 @@
                                             : 'card-morph-layout__overlay-surface_compact',
                                     ]"
                                     data-testid="orchestrated-card-surface"
-                                    :fill-width="true"
-                                    :fill-height="true"
-                                    :rounding="cardExpanded ? 0 : 24"
-                                    :transition-ms="320"
                                     transition-timing="cubic-bezier(0.2, 0, 0, 1)"
-                                    :variant="cardExpanded ? 'surface' : 'surface-container-low'"
-                                    :elevation="cardExpanded ? 0 : 1"
                                     overflow="auto"
                                 >
                                     <h3>Surface morph target</h3>

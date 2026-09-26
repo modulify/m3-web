@@ -1,15 +1,15 @@
 <template>
     <div
-        class="surface-side-sheet"
         :data-sheet-modal="sideSheetModal ? 'true' : 'false'"
         data-testid="surface-morph-root"
+        class="surface-side-sheet"
     >
         <M3SurfacePanel
-            class="surface-side-sheet__topbar"
             :fill-height="false"
             :height="72"
-            variant="surface-container"
             :elevation="0"
+            class="surface-side-sheet__topbar"
+            variant="surface-container"
         >
             <div class="surface-side-sheet__topbar-content">
                 <div>
@@ -18,9 +18,9 @@
                 </div>
 
                 <M3Button
-                    appearance="tonal"
                     :disabled="transitioning"
                     data-testid="surface-morph-toggle"
+                    appearance="tonal"
                     @click="toggleSideSheetMode"
                 >
                     {{ sideSheetModal ? 'Switch to docked sheet' : 'Switch to modal sheet' }}
@@ -30,9 +30,9 @@
 
         <M3Navigation
             v-model:expanded="navExpanded"
-            class="surface-side-sheet__nav"
-            appearance="auto"
             alignment="top"
+            appearance="auto"
+            class="surface-side-sheet__nav"
         >
             <template #top>
                 <M3IconButton
@@ -44,32 +44,32 @@
             </template>
 
             <M3NavigationTab
-                label="Inbox"
                 :active="activeNavTab === 'inbox'"
+                label="Inbox"
                 @navigate="activeNavTab = 'inbox'; navExpanded = false"
             >
                 <M3Icon name="inbox" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Boards"
                 :active="activeNavTab === 'boards'"
+                label="Boards"
                 @navigate="activeNavTab = 'boards'; navExpanded = false"
             >
                 <M3Icon name="dashboard" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Archive"
                 :active="activeNavTab === 'archive'"
+                label="Archive"
                 @navigate="activeNavTab = 'archive'; navExpanded = false"
             >
                 <M3Icon name="archive" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Lab"
                 :active="activeNavTab === 'lab'"
+                label="Lab"
                 @navigate="activeNavTab = 'lab'; navExpanded = false"
             >
                 <M3Icon name="science" />
@@ -79,12 +79,12 @@
         <div class="surface-side-sheet__body">
             <div class="surface-side-sheet__workspace">
                 <M3SurfacePanel
-                    class="surface-side-sheet__header-card"
                     :fill-height="false"
                     :height="120"
                     :rounding="20"
-                    variant="surface-container-lowest"
                     :elevation="0"
+                    class="surface-side-sheet__header-card"
+                    variant="surface-container-lowest"
                 >
                     <h3>Workspace surfaces</h3>
                     <p>Static blocks keep flow while side-sheet changes modality.</p>
@@ -92,56 +92,56 @@
 
                 <div
                     ref="layoutRoot"
-                    class="surface-side-sheet__layout"
                     data-testid="surface-morph-layout"
+                    class="surface-side-sheet__layout"
                 >
                     <main
-                        class="surface-side-sheet__content-grid"
                         data-testid="surface-morph-content-grid"
+                        class="surface-side-sheet__content-grid"
                     >
                         <M3SurfacePanel
-                            class="surface-side-sheet__grid-surface"
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            variant="surface-container-lowest"
                             :elevation="0"
+                            class="surface-side-sheet__grid-surface"
+                            variant="surface-container-lowest"
                         >
                             <strong>surface-container-lowest</strong>
                             <p>Read-heavy content block in the page flow.</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
-                            class="surface-side-sheet__grid-surface"
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            variant="surface-container-low"
                             :elevation="1"
+                            class="surface-side-sheet__grid-surface"
+                            variant="surface-container-low"
                         >
                             <strong>surface-container-low</strong>
                             <p>Secondary block with mild emphasis.</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
-                            class="surface-side-sheet__grid-surface"
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            variant="surface-container-high"
                             :elevation="3"
+                            class="surface-side-sheet__grid-surface"
+                            variant="surface-container-high"
                         >
                             <strong>surface-container-high</strong>
                             <p>Contextual utility content.</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
-                            class="surface-side-sheet__grid-surface"
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            variant="surface-dim"
                             :elevation="0"
+                            class="surface-side-sheet__grid-surface"
+                            variant="surface-dim"
                         >
                             <strong>surface-dim</strong>
                             <p>Low-brightness complementary content.</p>
@@ -150,21 +150,21 @@
 
                     <div
                         ref="dockedHost"
-                        class="surface-side-sheet__docked-host"
                         :style="dockedHostStyle"
                         data-testid="surface-morph-docked-host"
+                        class="surface-side-sheet__docked-host"
                     >
                         <M3SurfacePanel
                             v-if="dockedPanelShown"
-                            class="surface-side-sheet__sheet surface-side-sheet__sheet_docked"
                             :fill-width="true"
                             :fill-height="true"
-                            overflow="auto"
-                            variant="surface-container-low"
                             :elevation="0"
                             :style="dockedPanelStyle"
                             data-testid="surface-morph-sheet"
                             data-panel-mode="docked"
+                            overflow="auto"
+                            class="surface-side-sheet__sheet surface-side-sheet__sheet_docked"
+                            variant="surface-container-low"
                         >
                             <h3>Docked side sheet</h3>
                             <p>Coplanar layout participant with adaptive CSS width inside the layout host.</p>
@@ -177,12 +177,12 @@
 
                     <M3Surface
                         v-if="modalShown"
-                        class="surface-side-sheet__sheet surface-side-sheet__sheet_modal"
-                        mode="modal"
-                        v-bind="modalPanelProps"
                         :transition-timing="PANEL_TRANSITION_EASING"
                         data-testid="surface-morph-sheet"
                         data-panel-mode="modal"
+                        mode="modal"
+                        class="surface-side-sheet__sheet surface-side-sheet__sheet_modal"
+                        v-bind="modalPanelProps"
                         @dismiss="closeModalFromPanel"
                     >
                         <template v-if="sideSheetModal">
@@ -190,11 +190,11 @@
                                 <h3>Modal side sheet</h3>
 
                                 <M3IconButton
-                                    class="surface-side-sheet__modal-close"
-                                    appearance="standard"
-                                    aria-label="Close modal side sheet"
                                     :disabled="transitioning"
+                                    aria-label="Close modal side sheet"
                                     data-testid="surface-morph-close"
+                                    appearance="standard"
+                                    class="surface-side-sheet__modal-close"
                                     @click="closeModalFromPanel"
                                 >
                                     <M3Icon name="close" />

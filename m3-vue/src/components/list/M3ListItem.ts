@@ -180,13 +180,13 @@ const renderContainer = (
 ) => state.interactive
   ? h(M3Link, {
     ref: root,
-    type: props.type,
-    to: props.disabled ? undefined : props.to,
-    href: props.href,
-    class: 'm3-list-item__content',
-    disabled: props.disabled,
     'aria-disabled': props.disabled ? 'true' : undefined,
+    href: props.href,
+    to: props.disabled ? undefined : props.to,
+    type: props.type,
+    disabled: props.disabled,
     tabindex: props.disabled ? -1 : undefined,
+    class: 'm3-list-item__content',
     onClick: (event: MouseEvent) => {
       if (props.disabled) {
         event.preventDefault()

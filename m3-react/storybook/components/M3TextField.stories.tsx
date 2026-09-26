@@ -6,15 +6,19 @@ import { useState } from 'react'
 import { M3Icon } from '@/components/icon'
 import { M3TextField } from '@/components/text-field'
 
-const M3TextFieldStory = (args: M3TextFieldProps) => {
+const M3TextFieldStory = ({
+  value: _value,
+  onUpdate: _onUpdate,
+  ...args
+}: M3TextFieldProps) => {
   const [value, setValue] = useState('')
 
   return (
     <div style={{ width: '320px' }}>
       <M3TextField
         value={value}
-        onUpdate={setValue}
         {...args}
+        onUpdate={setValue}
       />
     </div>
   )
@@ -98,11 +102,15 @@ export const MultilineOutlined: Story = {
   },
 }
 
-const M3TextFieldStoryWithLeadingIcon = (args: M3TextFieldProps) => {
+const M3TextFieldStoryWithLeadingIcon = ({
+  value: _value,
+  onUpdate: _onUpdate,
+  ...args
+}: M3TextFieldProps) => {
   const [value, setValue] = useState('')
 
   return (
-    <M3TextField value={value} onUpdate={setValue} {...args}>
+    <M3TextField value={value} {...args} onUpdate={setValue}>
       <M3TextField.LeadingIcon>
         <M3Icon name="mail" />
       </M3TextField.LeadingIcon>

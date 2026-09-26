@@ -69,7 +69,7 @@ const M3YearPicker: FC<M3YearPickerProps> = ({
       })}
     >
       {appearance === 'list' ? (
-        <M3List className="m3-date-picker-list" aria-label="Select year">
+        <M3List aria-label="Select year" className="m3-date-picker-list">
           {years.map(year => (
             <M3ListItem
               key={year}
@@ -81,12 +81,12 @@ const M3YearPicker: FC<M3YearPickerProps> = ({
             >
               <M3ListItem.Leading>
                 <M3Icon
-                  name="check"
-                  aria-hidden="true"
                   className={toClassName({
                     'm3-date-picker-list__check': true,
                     'm3-date-picker-list__check_hidden': value !== year,
                   })}
+                  aria-hidden="true"
+                  name="check"
                 />
               </M3ListItem.Leading>
               {year}
@@ -94,17 +94,17 @@ const M3YearPicker: FC<M3YearPickerProps> = ({
           ))}
         </M3List>
       ) : (
-        <div className="m3-year-picker__grid" role="grid" aria-label="Select year">
+        <div role="grid" aria-label="Select year" className="m3-year-picker__grid">
           {years.map(year => (
             <M3DatePickerOption
               key={year}
-              appearance="pill"
+              aria-pressed={value === year}
               current={current === year}
               selected={value === year}
-              aria-pressed={value === year}
               disabled={disabled ||
                 !isCalendarYearAvailable(year, bounds) ||
                 !isCalendarYearSelectable(year, availability)}
+              appearance="pill"
               onSelect={() => onSelect(year)}
             >
               {year}

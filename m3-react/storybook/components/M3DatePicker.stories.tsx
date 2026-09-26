@@ -18,27 +18,36 @@ const MIN_DATE = new Date(2026, 6, 3)
 const MAX_DATE = new Date(2026, 6, 24)
 const INITIAL_RANGE: [Date | null, Date | null] = [new Date(2026, 6, 17), new Date(2026, 6, 23)]
 
-const M3DatePickerStory = (args: M3DatePickerSingleProps) => {
-  const [value, setValue] = useState<Date | null>(args.value ?? INITIAL_DATE)
+const M3DatePickerStory = ({
+  type: _type,
+  value: initialValue,
+  onChange: _onChange,
+  ...args
+}: M3DatePickerSingleProps) => {
+  const [value, setValue] = useState<Date | null>(initialValue ?? INITIAL_DATE)
 
   return (
     <M3DatePicker
-      {...args}
       type="single"
       value={value}
+      {...args}
       onChange={setValue}
     />
   )
 }
 
-const M3DatePickerFieldStory = (args: M3DatePickerFieldProps) => {
-  const [value, setValue] = useState<Date | null>(args.value ?? INITIAL_DATE)
+const M3DatePickerFieldStory = ({
+  value: initialValue,
+  onChange: _onChange,
+  ...args
+}: M3DatePickerFieldProps) => {
+  const [value, setValue] = useState<Date | null>(initialValue ?? INITIAL_DATE)
 
   return (
     <div style={{ width: 320 }}>
       <M3DatePickerField
-        {...args}
         value={value}
+        {...args}
         onChange={setValue}
       />
     </div>
@@ -114,14 +123,19 @@ export const RangeSelection: Story = {
     label: 'Depart - Return dates',
   },
 
-  render: (args) => {
+  render: ({
+    type: _type,
+    value: _value,
+    onChange: _onChange,
+    ...args
+  }) => {
     const [value, setValue] = useState<[Date | null, Date | null]>(INITIAL_RANGE)
 
     return (
       <M3DatePicker
-        {...args}
         type="range"
         value={value}
+        {...args}
         onChange={setValue}
       />
     )
@@ -129,16 +143,23 @@ export const RangeSelection: Story = {
 }
 
 export const ControlledCursor: Story = {
-  render: (args) => {
-    const [value, setValue] = useState<Date | null>(args.value ?? INITIAL_DATE)
+  render: ({
+    type: _type,
+    value: initialValue,
+    cursor: _cursor,
+    onCursorChange: _onCursorChange,
+    onChange: _onChange,
+    ...args
+  }) => {
+    const [value, setValue] = useState<Date | null>(initialValue ?? INITIAL_DATE)
     const [cursor, setCursor] = useState(new Date(2026, 8, 1))
 
     return (
       <M3DatePicker
-        {...args}
         type="single"
         value={value}
         cursor={cursor}
+        {...args}
         onCursorChange={setCursor}
         onChange={setValue}
       />
@@ -184,9 +205,13 @@ export const DockedField: Story = {
 }
 
 export const ModalComposition: Story = {
-  render: (args) => {
+  render: ({
+    value: initialValue,
+    onChange: _onChange,
+    ...args
+  }) => {
     const [opened, setOpened] = useState(true)
-    const [value, setValue] = useState<Date | null>(args.value ?? INITIAL_DATE)
+    const [value, setValue] = useState<Date | null>(initialValue ?? INITIAL_DATE)
 
     return (
       <div>
@@ -195,9 +220,9 @@ export const ModalComposition: Story = {
         </M3Button>
 
         <M3DatePickerDialog
-          {...args}
           opened={opened}
           value={value}
+          {...args}
           onToggle={setOpened}
           onChange={setValue}
         />
@@ -207,9 +232,13 @@ export const ModalComposition: Story = {
 }
 
 export const ModalDateInput: Story = {
-  render: (args) => {
+  render: ({
+    value: initialValue,
+    onChange: _onChange,
+    ...args
+  }) => {
     const [opened, setOpened] = useState(false)
-    const [value, setValue] = useState<Date | null>(args.value ?? INITIAL_DATE)
+    const [value, setValue] = useState<Date | null>(initialValue ?? INITIAL_DATE)
 
     return (
       <div>
@@ -218,10 +247,10 @@ export const ModalDateInput: Story = {
         </M3Button>
 
         <M3DatePickerDialog
-          {...args}
           opened={opened}
           appearance="input"
           value={value}
+          {...args}
           onToggle={setOpened}
           onChange={setValue}
         />

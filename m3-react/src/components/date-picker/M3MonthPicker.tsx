@@ -76,7 +76,7 @@ const M3MonthPicker: FC<M3MonthPickerProps> = ({
       }])}
     >
       {appearance === 'list' ? (
-        <M3List className="m3-date-picker-list" aria-label={label}>
+        <M3List aria-label={label} className="m3-date-picker-list">
           {months.map(month => (
             <M3ListItem
               key={month}
@@ -86,12 +86,12 @@ const M3MonthPicker: FC<M3MonthPickerProps> = ({
             >
               <M3ListItem.Leading>
                 <M3Icon
-                  name="check"
-                  aria-hidden="true"
                   className={toClassName({
                     'm3-date-picker-list__check': true,
                     'm3-date-picker-list__check_hidden': value.month !== month,
                   })}
+                  aria-hidden="true"
+                  name="check"
                 />
               </M3ListItem.Leading>
               {format(month)}
@@ -99,18 +99,18 @@ const M3MonthPicker: FC<M3MonthPickerProps> = ({
           ))}
         </M3List>
       ) : (
-        <div className="m3-month-picker__grid" role="grid" aria-label={label}>
+        <div aria-label={label} role="grid" className="m3-month-picker__grid">
           {rows.map((row, i) => (
-            <div key={i} className="m3-month-picker__row" role="row">
+            <div key={i} role="row" className="m3-month-picker__row">
               {row.map(month => (
                 <M3DatePickerOption
                   key={month}
-                  appearance="pill"
-                  role="gridcell"
+                  aria-pressed={value.month === month}
                   current={current.year === value.year && current.month === month}
                   selected={value.month === month}
-                  aria-pressed={value.month === month}
                   disabled={isMonthDisabled(month)}
+                  role="gridcell"
+                  appearance="pill"
                   onSelect={() => onSelect(month)}
                 >
                   {format(month)}

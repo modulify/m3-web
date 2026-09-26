@@ -106,10 +106,10 @@ const SurfaceCardPageMorph: FC = () => {
 
       <M3Navigation
         expanded={navExpanded}
-        onToggle={setNavExpanded}
         className="surface-card-page__nav"
         appearance="auto"
         alignment="top"
+        onToggle={setNavExpanded}
       >
         <M3Navigation.Top>
           <M3IconButton

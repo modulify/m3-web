@@ -135,8 +135,8 @@ export default defineComponent(function M3Navigation({
         }}
       >
         <div
-          className="m3-scrim"
           style={!expanded && !state.transitioning ? { display: 'none' } : undefined}
+          className="m3-scrim"
           onClick={() => handlers.onToggle(false)}
         />
       </CSSTransition>
@@ -148,12 +148,12 @@ export default defineComponent(function M3Navigation({
           ['m3-navigation_' + alignment]: true,
           ['m3-navigation_modal']: expanded || state.transitioning,
         }])}
+        {...attrs}
         onTransitionEnd={compose(() => {
           if (!expanded) {
             state.transitioning = false
           }
         }, onTransitionEnd)}
-        {...attrs}
       >
         {parsed.slots.top}
         {parsed.slots.header}

@@ -3,8 +3,8 @@
         :is="tag"
         :id="id"
         ref="root"
-        :class="surfaceClass"
         :style="surfaceStyle"
+        :class="surfaceClass"
         v-bind="attrs"
     >
         <slot />

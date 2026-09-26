@@ -8,11 +8,11 @@
             ['m3-navigation-tab_labelled']: 'label' in $slots || label.length > 0,
             ['m3-navigation-tab_active']: active,
         }"
+        role="tab"
         v-bind="{
             ...('aria-label' in $attrs ? {} : { 'aria-labelledby': labelId }),
             ...$attrs,
         }"
-        role="tab"
     >
         <M3Link
             ref="button"
@@ -40,8 +40,8 @@
                 <span
                     v-if="'badge' in $slots"
                     :aria-hidden="inDrawer ? 'false' : 'true'"
-                    class="m3-navigation-tab__badge-label"
                     role="status"
+                    class="m3-navigation-tab__badge-label"
                 >
                     <slot name="badge" />
                 </span>

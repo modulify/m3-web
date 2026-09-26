@@ -170,22 +170,22 @@ export default defineComponent(function M3DatePickerField({
       }])}
     >
       <M3TextField
-        {...fieldProps}
         value={inputValue}
         label={label}
         placeholder={placeholder}
         disabled={disabled}
+        invalid={invalid || inputInvalid}
         readonly={readonly}
         outlined={outlined}
-        invalid={invalid || inputInvalid}
+        {...fieldProps}
         onClick={() => interactive && toggleExpanded(true)}
         onInput={setInputValue}
         onChange={commitInput}
       >
         <M3TextField.TrailingIcon>
           <M3IconButton
-            aria-label="Choose date"
             disabled={!interactive}
+            aria-label="Choose date"
             onClick={(event) => {
               event.stopPropagation()
               toggleExpanded(!expanded)
@@ -201,15 +201,15 @@ export default defineComponent(function M3DatePickerField({
       </div>
 
       <M3Popper
-        shown={expanded}
         target={root}
+        shown={expanded}
         targetTriggers={[]}
+        disabled={!interactive}
         placement={placement}
         offsetMainAxis={8}
-        animated={true}
-        hideOnMissClick={true}
-        disabled={!interactive}
         className={toClassName(['m3-date-picker-field__popper', popperClassName])}
+        animated
+        hideOnMissClick
         onToggle={toggleExpanded}
       >
         <M3DatePicker
@@ -229,7 +229,7 @@ export default defineComponent(function M3DatePickerField({
             <M3Button appearance="text" onClick={cancel}>
               {cancelText}
             </M3Button>
-            <M3Button appearance="text" disabled={draftValue === null} onClick={confirm}>
+            <M3Button disabled={draftValue === null} appearance="text" onClick={confirm}>
               {confirmText}
             </M3Button>
           </M3DatePicker.Footer>

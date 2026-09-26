@@ -65,19 +65,19 @@ export default defineComponent(function M3Button({
     <button
       ref={root}
       type={type}
+      disabled={disabled}
       className={toClassName([className, {
         ['m3-button']: true,
         ['m3-button_' + appearance]: true,
         ['m3-button_has-leading-icon']: hasText && hasLeadingIcon,
         ['m3-button_has-trailing-icon']: hasText && hasTrailingIcon,
       }])}
-      disabled={disabled}
+      {...attrs}
       onKeyUp={compose(event => {
         if (event.code === 'Enter') {
           ripple.current?.activate(event.nativeEvent)
         }
       }, onKeyUp)}
-      {...attrs}
     >
       <M3Ripple ref={ripple} owner={rippleTarget} />
       <span className="m3-button__state" />

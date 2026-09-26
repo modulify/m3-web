@@ -1,16 +1,16 @@
 <template>
     <div
-        class="surface-side-sheet-window"
-        :data-panel-mode="panelAsWindow ? 'window' : 'sheet'"
         :data-panel-mounted="modalMounted ? 'true' : 'false'"
+        :data-panel-mode="panelAsWindow ? 'window' : 'sheet'"
         data-testid="surface-window-root"
+        class="surface-side-sheet-window"
     >
         <M3SurfacePanel
-            class="surface-side-sheet-window__topbar"
             :fill-height="false"
             :height="72"
-            variant="surface-container"
             :elevation="0"
+            class="surface-side-sheet-window__topbar"
+            variant="surface-container"
         >
             <div class="surface-side-sheet-window__topbar-content">
                 <div>
@@ -19,9 +19,9 @@
                 </div>
 
                 <M3Button
-                    appearance="tonal"
                     :disabled="transitioning || modalMounted"
                     data-testid="surface-window-open"
+                    appearance="tonal"
                     @click="openModal"
                 >
                     {{ modalMounted ? 'Modal panel is open' : 'Show modal side sheet' }}
@@ -31,9 +31,9 @@
 
         <M3Navigation
             v-model:expanded="navExpanded"
-            class="surface-side-sheet-window__nav"
-            appearance="auto"
             alignment="top"
+            appearance="auto"
+            class="surface-side-sheet-window__nav"
         >
             <template #top>
                 <M3IconButton
@@ -45,32 +45,32 @@
             </template>
 
             <M3NavigationTab
-                label="Inbox"
                 :active="activeNavTab === 'inbox'"
+                label="Inbox"
                 @navigate="activeNavTab = 'inbox'; navExpanded = false"
             >
                 <M3Icon name="inbox" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Boards"
                 :active="activeNavTab === 'boards'"
+                label="Boards"
                 @navigate="activeNavTab = 'boards'; navExpanded = false"
             >
                 <M3Icon name="dashboard" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Archive"
                 :active="activeNavTab === 'archive'"
+                label="Archive"
                 @navigate="activeNavTab = 'archive'; navExpanded = false"
             >
                 <M3Icon name="archive" />
             </M3NavigationTab>
 
             <M3NavigationTab
-                label="Lab"
                 :active="activeNavTab === 'lab'"
+                label="Lab"
                 @navigate="activeNavTab = 'lab'; navExpanded = false"
             >
                 <M3Icon name="science" />
@@ -80,12 +80,12 @@
         <div class="surface-side-sheet-window__body">
             <div class="surface-side-sheet-window__workspace">
                 <M3SurfacePanel
-                    class="surface-side-sheet-window__header-card"
                     :fill-height="false"
                     :height="120"
                     :rounding="20"
-                    variant="surface-container-lowest"
                     :elevation="0"
+                    class="surface-side-sheet-window__header-card"
+                    variant="surface-container-lowest"
                 >
                     <h3>Workspace surfaces</h3>
                     <p>Background layout stays in flow while the modal panel morphs between side-sheet and window geometries.</p>
@@ -93,56 +93,56 @@
 
                 <div
                     ref="layoutRoot"
-                    class="surface-side-sheet-window__layout"
                     data-testid="surface-window-layout"
+                    class="surface-side-sheet-window__layout"
                 >
                     <main
-                        class="surface-side-sheet-window__content-grid"
                         data-testid="surface-window-content-grid"
+                        class="surface-side-sheet-window__content-grid"
                     >
                         <M3SurfacePanel
-                            class="surface-side-sheet-window__grid-surface"
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            variant="surface-container-lowest"
                             :elevation="0"
+                            class="surface-side-sheet-window__grid-surface"
+                            variant="surface-container-lowest"
                         >
                             <strong>surface-container-lowest</strong>
                             <p>Read-heavy content block in the page flow.</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
-                            class="surface-side-sheet-window__grid-surface"
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            variant="surface-container-low"
                             :elevation="1"
+                            class="surface-side-sheet-window__grid-surface"
+                            variant="surface-container-low"
                         >
                             <strong>surface-container-low</strong>
                             <p>Secondary block with mild emphasis.</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
-                            class="surface-side-sheet-window__grid-surface"
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            variant="surface-container-high"
                             :elevation="3"
+                            class="surface-side-sheet-window__grid-surface"
+                            variant="surface-container-high"
                         >
                             <strong>surface-container-high</strong>
                             <p>Contextual utility content.</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
-                            class="surface-side-sheet-window__grid-surface"
                             :fill-height="false"
                             :height="136"
                             :rounding="18"
-                            variant="surface-dim"
                             :elevation="0"
+                            class="surface-side-sheet-window__grid-surface"
+                            variant="surface-dim"
                         >
                             <strong>surface-dim</strong>
                             <p>Low-brightness complementary content.</p>
@@ -151,12 +151,11 @@
 
                     <M3Surface
                         v-if="modalMounted"
-                        :class="[
-                            'surface-side-sheet-window__sheet',
-                            panelAsWindow ? 'surface-side-sheet-window__sheet_window' : 'surface-side-sheet-window__sheet_sheet',
-                        ]"
-                        mode="modal"
+                        :data-panel-mode="panelAsWindow ? 'window' : 'sheet'"
+                        :data-window-closing="windowClosing ? 'true' : 'false'"
                         :shown="modalVisible"
+                        :transition-ms="panelTransitionMs"
+                        :transition-timing="panelTransitionTiming"
                         :anchor="panelAnchor"
                         :fill-width="false"
                         :fill-height="false"
@@ -168,43 +167,44 @@
                         :rounding-bottom-left="panelRoundingBottomLeft"
                         :rounding-top-right="panelRoundingTopRight"
                         :rounding-bottom-right="panelRoundingBottomRight"
-                        :transition-ms="panelTransitionMs"
-                        :transition-timing="panelTransitionTiming"
                         :z-index="520"
-                        :variant="panelSurfaceRole"
                         :elevation="panelElevation"
+                        :variant="panelSurfaceRole"
                         :style="panelInlineStyle"
-                        overflow="auto"
-                        :data-panel-mode="panelAsWindow ? 'window' : 'sheet'"
-                        :data-window-closing="windowClosing ? 'true' : 'false'"
+                        :class="[
+                            'surface-side-sheet-window__sheet',
+                            panelAsWindow ? 'surface-side-sheet-window__sheet_window' : 'surface-side-sheet-window__sheet_sheet',
+                        ]"
                         data-testid="surface-window-panel"
+                        mode="modal"
+                        overflow="auto"
                         @dismiss="closeModal"
                     >
                         <div
-                            class="surface-side-sheet-window__panel-content"
                             data-testid="surface-window-panel-content"
+                            class="surface-side-sheet-window__panel-content"
                         >
                             <div class="surface-side-sheet-window__modal-header">
                                 <h3>{{ panelAsWindow ? 'Window mode' : 'Modal side sheet' }}</h3>
 
                                 <div class="surface-side-sheet-window__modal-actions">
                                     <M3IconButton
-                                        class="surface-side-sheet-window__modal-action"
-                                        appearance="standard"
                                         :aria-label="panelAsWindow ? 'Dock panel to side sheet mode' : 'Open panel in window mode'"
                                         :disabled="transitioning"
                                         data-testid="surface-window-toggle-mode"
+                                        appearance="standard"
+                                        class="surface-side-sheet-window__modal-action"
                                         @click="toggleWindowMode"
                                     >
                                         <M3Icon :name="panelAsWindow ? 'close_fullscreen' : 'open_in_new'" />
                                     </M3IconButton>
 
                                     <M3IconButton
-                                        class="surface-side-sheet-window__modal-action"
-                                        appearance="standard"
-                                        aria-label="Close modal panel"
                                         :disabled="transitioning"
+                                        aria-label="Close modal panel"
                                         data-testid="surface-window-close"
+                                        appearance="standard"
+                                        class="surface-side-sheet-window__modal-action"
                                         @click="closeModal"
                                     >
                                         <M3Icon name="close" />
@@ -215,8 +215,8 @@
                             <p>Form layout adapts when switching from side-sheet to window mode.</p>
 
                             <form
-                                class="surface-side-sheet-window__form"
                                 :class="{ 'surface-side-sheet-window__form_window': panelAsWindow }"
+                                class="surface-side-sheet-window__form"
                                 @submit.prevent
                             >
                                 <div class="surface-side-sheet-window__field">
@@ -257,30 +257,30 @@
                                 </div>
 
                                 <div
-                                    class="surface-side-sheet-window__field"
                                     :class="{ 'surface-side-sheet-window__field_wide': panelAsWindow }"
+                                    class="surface-side-sheet-window__field"
                                 >
                                     <M3TextField
                                         v-model:value="form.notes"
-                                        multiline
                                         label="Notes"
                                         placeholder="Describe constraints, risks, and acceptance criteria."
+                                        multiline
                                         outlined
                                     />
                                 </div>
 
                                 <div
-                                    class="surface-side-sheet-window__form-actions"
                                     :class="{ 'surface-side-sheet-window__form-actions_window': panelAsWindow }"
+                                    class="surface-side-sheet-window__form-actions"
                                 >
                                     <M3Button
-                                        appearance="text"
                                         type="button"
+                                        appearance="text"
                                         @click="resetForm"
                                     >
                                         Reset
                                     </M3Button>
-                                    <M3Button appearance="filled" type="button">
+                                    <M3Button type="button" appearance="filled">
                                         Save
                                     </M3Button>
                                 </div>

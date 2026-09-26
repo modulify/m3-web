@@ -1,23 +1,23 @@
 <template>
     <M3Popper
         ref="root"
-        :shown="shown"
         :target="target"
+        :shown="shown"
         :target-triggers="['click']"
+        :disabled="disabled"
+        :delay="delay"
+        :detach-timeout="detachTimeout"
         :placement="placement"
-        :overflow="overflow"
         :strategy="strategy"
         :boundary="boundary"
         :container="container"
+        :overflow="overflow"
         :offset-main-axis="offsetMainAxis"
         :offset-cross-axis="offsetCrossAxis"
-        :delay="delay"
-        :disabled="disabled"
-        animated
-        :detach-timeout="detachTimeout"
-        v-bind="$attrs"
         class="m3-menu"
+        animated
         hide-on-miss-click
+        v-bind="$attrs"
         @shown="$emit('shown')"
         @hide="$emit('hide')"
         @hidden="$emit('hidden')"

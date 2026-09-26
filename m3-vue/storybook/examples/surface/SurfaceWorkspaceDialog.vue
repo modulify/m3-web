@@ -1,12 +1,12 @@
 <template>
     <div class="surface-workspace-dialog">
         <M3SurfacePanel
-            class="surface-workspace-dialog__topbar"
             :fill-height="false"
             :height="84"
             :rounding="24"
-            variant="surface-container"
             :elevation="0"
+            class="surface-workspace-dialog__topbar"
+            variant="surface-container"
         >
             <div class="surface-workspace-dialog__topbar-content">
                 <div>
@@ -22,20 +22,20 @@
 
         <div class="surface-workspace-dialog__summary">
             <M3SurfacePanel
-                class="surface-workspace-dialog__panel"
                 :rounding="20"
-                variant="surface-container-lowest"
                 :elevation="0"
+                class="surface-workspace-dialog__panel"
+                variant="surface-container-lowest"
             >
                 <h3>Workspace overview</h3>
                 <p>Main content remains visible under the dialog, so the user keeps the surrounding context while confirming the action.</p>
             </M3SurfacePanel>
 
             <M3SurfacePanel
-                class="surface-workspace-dialog__panel"
                 :rounding="20"
-                variant="surface-container-low"
                 :elevation="1"
+                class="surface-workspace-dialog__panel"
+                variant="surface-container-low"
             >
                 <h3>Activity</h3>
                 <p>12 tasks updated today</p>
@@ -46,12 +46,12 @@
             <M3SurfacePanel
                 v-for="label in ['Roadmap', 'Assets', 'Owners']"
                 :key="label"
-                class="surface-workspace-dialog__panel"
                 :fill-height="false"
                 :height="180"
                 :rounding="18"
-                variant="surface-container-low"
                 :elevation="1"
+                class="surface-workspace-dialog__panel"
+                variant="surface-container-low"
             >
                 <h3>{{ label }}</h3>
                 <p>Supporting surface inside the same workspace scene.</p>
@@ -59,9 +59,7 @@
         </div>
 
         <M3Surface
-            mode="modal"
             :shown="opened"
-            anchor="center"
             :fill-width="false"
             :fill-height="false"
             :width="520"
@@ -69,8 +67,10 @@
             :inset-bottom="24"
             :rounding="28"
             :elevation="3"
-            variant="surface-container-high"
+            mode="modal"
+            anchor="center"
             class="surface-workspace-dialog__dialog"
+            variant="surface-container-high"
             @update:shown="opened = $event"
             @dismiss="opened = false"
         >
@@ -78,12 +78,12 @@
             <p>Archiving hides the project from active planning views but keeps its history available for reporting.</p>
 
             <M3SurfacePanel
-                class="surface-workspace-dialog__notice"
                 :fill-height="false"
                 :height="92"
                 :rounding="18"
-                variant="surface-container"
                 :elevation="0"
+                class="surface-workspace-dialog__notice"
+                variant="surface-container"
             >
                 Team members will retain read access until the workspace is restored.
             </M3SurfacePanel>

@@ -481,6 +481,7 @@ export default defineComponent(function M3DatePicker({
   return (
     <section
       ref={root}
+      aria-label={label}
       className={toClassName(['m3-date-picker', className, {
         'm3-date-picker_docked': layout === 'docked',
         'm3-date-picker_navigation-inline': navigation === 'inline',
@@ -489,7 +490,6 @@ export default defineComponent(function M3DatePicker({
         ).length}`]: layout === 'docked',
       }])}
       role="group"
-      aria-label={label}
       {...attrs}
     >
       {layout === 'modal' && (
@@ -524,13 +524,13 @@ export default defineComponent(function M3DatePicker({
         >
           <div className="m3-date-picker__navigation-group">
             <M3IconButton
-              className={toClassName({
-                'm3-date-picker__navigation-control_hidden': isPickerView,
-              })}
               aria-label={isPickerView ? undefined : 'Previous month'}
               aria-hidden={isPickerView}
               tabIndex={isPickerView ? -1 : undefined}
               disabled={disabled || isPickerView || !canMoveToPreviousMonth}
+              className={toClassName({
+                'm3-date-picker__navigation-control_hidden': isPickerView,
+              })}
               onClick={() => startMonthSlide(-1)}
             >
               <M3Icon name="chevron_left" />
@@ -538,20 +538,20 @@ export default defineComponent(function M3DatePicker({
 
             {hasMonthView ? (
               <M3Button
-                appearance="text"
-                className="m3-date-picker__month-button"
                 aria-label={isMonthView ? 'Switch to day selection' : 'Switch to month selection'}
                 aria-expanded={isMonthView}
                 disabled={disabled || isYearView}
+                appearance="text"
+                className="m3-date-picker__month-button"
                 onClick={() => switchView(isMonthView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.MONTHS)}
               >
                 {formatDay(displayedMonth, 'MMM')}
                 <M3Icon
-                  name="arrow_drop_down"
                   className={toClassName({
                     'm3-date-picker__year-button-icon': true,
                     'm3-date-picker__year-button-icon_expanded': isMonthView,
                   })}
+                  name="arrow_drop_down"
                 />
               </M3Button>
             ) : (
@@ -567,13 +567,13 @@ export default defineComponent(function M3DatePicker({
             )}
 
             <M3IconButton
-              className={toClassName({
-                'm3-date-picker__navigation-control_hidden': isPickerView,
-              })}
               aria-label={isPickerView ? undefined : 'Next month'}
               aria-hidden={isPickerView}
               tabIndex={isPickerView ? -1 : undefined}
               disabled={disabled || isPickerView || !canMoveToNextMonth}
+              className={toClassName({
+                'm3-date-picker__navigation-control_hidden': isPickerView,
+              })}
               onClick={() => startMonthSlide(1)}
             >
               <M3Icon name="chevron_right" />
@@ -582,13 +582,13 @@ export default defineComponent(function M3DatePicker({
 
           <div className="m3-date-picker__navigation-group">
             <M3IconButton
-              className={toClassName({
-                'm3-date-picker__navigation-control_hidden': isDockedPickerView,
-              })}
               aria-label={isDockedPickerView ? undefined : 'Previous year'}
               aria-hidden={isDockedPickerView || undefined}
               tabIndex={isDockedPickerView ? -1 : undefined}
               disabled={disabled || isDockedPickerView || !canMoveToPreviousYear}
+              className={toClassName({
+                'm3-date-picker__navigation-control_hidden': isDockedPickerView,
+              })}
               onClick={() => moveCursorByYear(-1)}
             >
               <M3Icon name="chevron_left" />
@@ -596,37 +596,37 @@ export default defineComponent(function M3DatePicker({
 
             {hasYearView ? (
               <M3Button
-                appearance="text"
-                className="m3-date-picker__year-button"
                 aria-label={isYearView ? 'Switch to day selection' : 'Switch to year selection'}
                 aria-expanded={isYearView}
                 aria-controls={yearPickerId}
                 disabled={disabled || (layout === 'docked' && isMonthView)}
+                appearance="text"
+                className="m3-date-picker__year-button"
                 onClick={() => switchView(isYearView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)}
               >
                 {formatDay(displayedMonth, 'yyyy')}
                 <M3Icon
-                  name="arrow_drop_down"
                   className={toClassName({
                     'm3-date-picker__year-button-icon': true,
                     'm3-date-picker__year-button-icon_expanded': isYearView,
                   })}
+                  name="arrow_drop_down"
                 />
               </M3Button>
             ) : (
-              <div className="m3-date-picker__navigation-label" aria-live="polite">
+              <div aria-live="polite" className="m3-date-picker__navigation-label">
                 {formatDay(displayedMonth, 'yyyy')}
               </div>
             )}
 
             <M3IconButton
-              className={toClassName({
-                'm3-date-picker__navigation-control_hidden': isDockedPickerView,
-              })}
               aria-label={isDockedPickerView ? undefined : 'Next year'}
               aria-hidden={isDockedPickerView || undefined}
               tabIndex={isDockedPickerView ? -1 : undefined}
               disabled={disabled || isDockedPickerView || !canMoveToNextYear}
+              className={toClassName({
+                'm3-date-picker__navigation-control_hidden': isDockedPickerView,
+              })}
               onClick={() => moveCursorByYear(1)}
             >
               <M3Icon name="chevron_right" />
@@ -642,9 +642,9 @@ export default defineComponent(function M3DatePicker({
           bounds={bounds}
           disabled={disabled}
           locale={locale}
-          label="Select month"
-          appearance={layout === 'docked' ? 'list' : 'grid'}
           animating={viewTransitioning}
+          appearance={layout === 'docked' ? 'list' : 'grid'}
+          label="Select month"
           onSelect={selectMonth}
         />
       ) : isYearView ? (
@@ -652,11 +652,11 @@ export default defineComponent(function M3DatePicker({
           {navigation === 'inline' && (
             <div className="m3-date-picker__inline-navigation m3-date-picker__inline-navigation_year-picker">
               <M3Button
-                appearance="text"
-                className="m3-date-picker__inline-month-button"
-                aria-label="Switch to day selection"
                 aria-expanded={isYearView}
                 aria-controls={yearPickerId}
+                aria-label="Switch to day selection"
+                appearance="text"
+                className="m3-date-picker__inline-month-button"
                 onClick={() => scheduleInlineViewSwitch(DATE_PICKER_VIEW.DAYS)}
               >
                 {formatDay(displayedMonth, 'MMMM yyyy')}
@@ -676,20 +676,20 @@ export default defineComponent(function M3DatePicker({
             bounds={bounds}
             availability={availability}
             disabled={disabled}
-            appearance={navigation === 'inline' ? 'grid' : 'list'}
             animating={viewTransitioning}
+            appearance={navigation === 'inline' ? 'grid' : 'list'}
             onSelect={selectYear}
           />
         </>
       ) : (
         <div
           ref={calendar}
+          style={{ '--m3-date-picker-slide-offset': `${monthDragOffset}px` } as CSSProperties}
           className={toClassName({
             'm3-date-picker__calendar': true,
             'm3-date-picker__calendar_swipeable': true,
             'm3-date-picker__mode-enter': viewTransitioning && navigation !== 'inline',
           })}
-          style={{ '--m3-date-picker-slide-offset': `${monthDragOffset}px` } as CSSProperties}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -706,19 +706,19 @@ export default defineComponent(function M3DatePicker({
               {getMonthPages().map(page => (
                 <div
                   key={`${page.key}-${page.month.timestamp}`}
-                  className="m3-date-picker__month-page"
                   aria-hidden={!page.active}
+                  className="m3-date-picker__month-page"
                 >
                   {navigation === 'inline' && (
                     <div className="m3-date-picker__inline-navigation">
                       {hasYearView ? (
                         <M3Button
-                          appearance="text"
-                          className="m3-date-picker__inline-month-button"
                           aria-label={page.active ? 'Switch to year selection' : undefined}
                           aria-expanded={page.active ? isYearView : undefined}
                           aria-controls={page.active ? yearPickerId : undefined}
                           tabIndex={page.active ? undefined : -1}
+                          appearance="text"
+                          className="m3-date-picker__inline-month-button"
                           onClick={page.active
                             ? () => scheduleInlineViewSwitch(isYearView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)
                             : undefined}
@@ -755,13 +755,11 @@ export default defineComponent(function M3DatePicker({
                   )}
 
                   <M3DayPicker
-                    className={toClassName({
-                      'm3-date-picker__mode-enter': viewTransitioning && navigation === 'inline',
-                    })}
+                    label={formatDay(displayedMonth, 'MMMM yyyy')}
                     type={type}
+                    value={type === 'range' ? selectedRange : selectedDay}
                     month={page.month}
                     today={today}
-                    value={type === 'range' ? selectedRange : selectedDay}
                     bounds={bounds}
                     availability={availability}
                     active={page.active}
@@ -769,7 +767,9 @@ export default defineComponent(function M3DatePicker({
                     locale={locale}
                     firstDayOfWeek={firstDayOfWeek}
                     fixed={layout !== 'docked'}
-                    label={formatDay(displayedMonth, 'MMMM yyyy')}
+                    className={toClassName({
+                      'm3-date-picker__mode-enter': viewTransitioning && navigation === 'inline',
+                    })}
                     onSelect={selectDay}
                   />
                 </div>

@@ -230,10 +230,10 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
 
       <M3Navigation
         expanded={navExpanded}
-        onToggle={setNavExpanded}
         className="surface-side-sheet__nav"
         appearance="auto"
         alignment="top"
+        onToggle={setNavExpanded}
       >
         <M3Navigation.Top>
           <M3IconButton

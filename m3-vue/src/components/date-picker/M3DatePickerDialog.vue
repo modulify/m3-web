@@ -1,14 +1,14 @@
 <template>
     <M3Dialog
+        :aria-label="label"
         :opened="opened"
+        :style="{ width: dialogWidth + 'px' }"
         :class="{
             'm3-date-picker-dialog': true,
             'm3-date-picker-dialog_input': appearanceActual === 'input',
         }"
-        :style="{ width: dialogWidth + 'px' }"
         role="dialog"
         aria-modal="true"
-        :aria-label="label"
         @update:opened="emit('update:opened', $event)"
     >
         <M3DatePicker
@@ -42,13 +42,13 @@
 
         <section
             v-else
+            :aria-label="label"
             :class="{
                 'm3-date-picker': true,
                 'm3-date-picker_input': true,
                 [`m3-date-picker_input-${type}`]: true,
             }"
             role="group"
-            :aria-label="label"
         >
             <header class="m3-date-picker__header">
                 <div class="m3-date-picker__header-copy">
@@ -73,32 +73,32 @@
             <div class="m3-date-picker__input-content">
                 <div v-if="type === 'range'" class="m3-date-picker__input-fields">
                     <M3TextField
-                        outlined
-                        label="Date"
-                        :placeholder="DEFAULT_CALENDAR_DATE_INPUT_FORMAT"
                         :value="rangeInputValue[0]"
-                        :invalid="rangeInputInvalid[0] || rangeOrderInvalid"
+                        :placeholder="DEFAULT_CALENDAR_DATE_INPUT_FORMAT"
                         :disabled="disabled"
+                        :invalid="rangeInputInvalid[0] || rangeOrderInvalid"
+                        label="Date"
+                        outlined
                         @update:value="setRangeInput(0, $event)"
                     />
                     <M3TextField
-                        outlined
-                        label="End date"
-                        :placeholder="DEFAULT_CALENDAR_DATE_INPUT_FORMAT"
                         :value="rangeInputValue[1]"
-                        :invalid="rangeInputInvalid[1] || rangeOrderInvalid"
+                        :placeholder="DEFAULT_CALENDAR_DATE_INPUT_FORMAT"
                         :disabled="disabled"
+                        :invalid="rangeInputInvalid[1] || rangeOrderInvalid"
+                        label="End date"
+                        outlined
                         @update:value="setRangeInput(1, $event)"
                     />
                 </div>
                 <M3TextField
                     v-else
-                    outlined
-                    label="Date"
-                    :placeholder="DEFAULT_CALENDAR_DATE_INPUT_FORMAT"
                     :value="singleInputValue"
-                    :invalid="singleInputInvalid"
+                    :placeholder="DEFAULT_CALENDAR_DATE_INPUT_FORMAT"
                     :disabled="disabled"
+                    :invalid="singleInputInvalid"
+                    label="Date"
+                    outlined
                     @update:value="setSingleInput"
                 />
             </div>
@@ -108,7 +108,7 @@
             <M3Button appearance="text" @click="cancel">
                 {{ cancelText }}
             </M3Button>
-            <M3Button appearance="text" :disabled="confirmDisabled" @click="confirm">
+            <M3Button :disabled="confirmDisabled" appearance="text" @click="confirm">
                 {{ confirmText }}
             </M3Button>
         </template>

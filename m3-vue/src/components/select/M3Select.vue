@@ -23,7 +23,7 @@
             class="m3-select__field"
         >
             <template v-if="'leading' in $slots" #leading-icon>
-                <slot name="leading" :active="shouldBeExpanded" />
+                <slot :active="shouldBeExpanded" name="leading" />
             </template>
 
             <template #trailing-icon>
@@ -37,10 +37,10 @@
         <M3Menu
             :id="_id + '-menu'"
             v-model:shown="shouldBeExpanded"
-            :target="ref(root)"
-            :placement="placement"
             :aria-hidden="expanded ? 'false' : 'true'"
+            :target="ref(root)"
             :disabled="disabled || readonly"
+            :placement="placement"
             :style="{ width: rootWidth + 'px' }"
             role="listbox"
             @shown="expanded = true"
@@ -58,16 +58,16 @@
                 >
                     <template v-if="'option-leading' in $slots" #leading>
                         <slot
-                            name="option-leading"
                             :option="option"
                             :active="shouldBeExpanded"
+                            name="option-leading"
                         />
                     </template>
 
                     <slot
-                        name="option-content"
                         :option="option"
                         :active="shouldBeExpanded"
+                        name="option-content"
                     >
                         {{ option.label }}
                     </slot>

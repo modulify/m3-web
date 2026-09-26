@@ -15,9 +15,9 @@
         <input
             :id="_id"
             ref="_input"
+            :name="_name"
             :aria-checked="checked ? 'true' : 'false'"
             :aria-invalid="invalid ? 'true' : 'false'"
-            :name="_name"
             :value="value"
             :checked="checked"
             :disabled="disabled"

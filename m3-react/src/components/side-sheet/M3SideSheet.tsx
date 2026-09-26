@@ -127,12 +127,9 @@ export default defineComponent(function M3SideSheet({
   const surfaceNode = (
     <M3Surface
       id={_id}
-      tag="div"
-      shown={true}
-      mode="modal"
-      scrim={true}
+      role={role}
+      aria-modal={'aria-modal' in attrs ? attrs['aria-modal'] : (docked ? 'false' : undefined)}
       scrimShown={!docked && shown && transition.status !== 'preEnter'}
-      anchor="end"
       fillWidth={fillWidth}
       fillHeight={fillHeight}
       width={surfaceWidth}
@@ -148,11 +145,10 @@ export default defineComponent(function M3SideSheet({
       transitionMs={transitionMs}
       transitionTiming={transitionTiming}
       overflow={overflow}
+      zIndex={zIndex}
       elevation={elevation}
       variant={variant}
-      role={role}
-      aria-modal={'aria-modal' in attrs ? attrs['aria-modal'] : (docked ? 'false' : undefined)}
-      zIndex={zIndex}
+      style={style}
       className={toClassName([className, {
         'm3-side-sheet': true,
         'm3-side-sheet_docked': docked,
@@ -161,13 +157,17 @@ export default defineComponent(function M3SideSheet({
         'm3-transition-slide-right-leave-active': transition.status === 'preExit' || transition.status === 'exiting',
         'm3-transition-slide-right-leave-to': transition.status === 'exiting',
       }])}
-      style={style}
-      onToggle={onToggle}
-      onDismiss={onDismiss}
+      tag="div"
+      mode="modal"
+      anchor="end"
+      shown
+      scrim
       {...{
         ...aria,
         ...attrs,
       }}
+      onToggle={onToggle}
+      onDismiss={onDismiss}
     >
       <header
         className={toClassName({

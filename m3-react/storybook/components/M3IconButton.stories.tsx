@@ -53,7 +53,12 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const Toggleable: Story = {
-  render: args => {
+  render: ({
+    toggleable: _toggleable,
+    selected: _selected,
+    onClick: _onClick,
+    ...args
+  }) => {
     const M3IconButtonToggleable = () => {
       const state = useRecord({
         selected: false,
@@ -61,9 +66,9 @@ export const Toggleable: Story = {
 
       return (
         <M3IconButton
-          {...args}
           toggleable={true}
           selected={state.selected}
+          {...args}
           onClick={() => state.selected = !state.selected}
         >
           <M3Icon name="favorite" />

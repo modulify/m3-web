@@ -93,9 +93,9 @@ const SurfaceInspectorSheet: FC = () => {
         elevation={2}
         variant="surface-container-high"
         overflow="auto"
+        className="m3-side-sheet surface-inspector-sheet__sheet"
         onToggle={setOpened}
         onDismiss={() => setOpened(false)}
-        className="m3-side-sheet surface-inspector-sheet__sheet"
       >
         <header className="m3-side-sheet__header">
           <div className="m3-side-sheet__title">Release inspector</div>

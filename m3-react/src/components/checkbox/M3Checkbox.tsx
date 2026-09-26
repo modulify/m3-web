@@ -103,13 +103,13 @@ export default defineComponent(function M3Checkbox<Model = boolean, Value = unkn
       <input
         ref={input}
         id={useId(id, 'm3-checkbox')}
-        type="checkbox"
         aria-checked={checked}
-        aria-invalid={invalid}
         aria-disabled={disabled}
-        className="m3-checkbox__input"
+        aria-invalid={invalid}
         checked={checked}
         disabled={disabled}
+        type="checkbox"
+        className="m3-checkbox__input"
         onChange={() => onChange(calculate(!checked))}
       />
 

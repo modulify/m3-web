@@ -10,8 +10,8 @@
     >
         <M3List
             v-if="appearance === 'list'"
-            class="m3-date-picker-list"
             :aria-label="label"
+            class="m3-date-picker-list"
         >
             <M3ListItem
                 v-for="month in months"
@@ -22,12 +22,12 @@
             >
                 <template #leading>
                     <M3Icon
-                        name="check"
-                        aria-hidden="true"
                         :class="{
                             'm3-date-picker-list__check': true,
                             'm3-date-picker-list__check_hidden': value.month !== month,
                         }"
+                        aria-hidden="true"
+                        name="check"
                     />
                 </template>
                 {{ formatMonth(month) }}
@@ -35,9 +35,9 @@
         </M3List>
         <div
             v-else
-            class="m3-month-picker__grid"
-            role="grid"
             :aria-label="label"
+            role="grid"
+            class="m3-month-picker__grid"
         >
             <div
                 v-for="(row, i) in rows"
@@ -48,12 +48,12 @@
                 <M3DatePickerOption
                     v-for="month in row"
                     :key="month"
-                    appearance="pill"
-                    role="gridcell"
+                    :aria-pressed="value.month === month"
                     :current="current.year === value.year && current.month === month"
                     :selected="value.month === month"
-                    :aria-pressed="value.month === month"
                     :disabled="disabled || !isMonthAvailable(month)"
+                    role="gridcell"
+                    appearance="pill"
                     @select="emit('select', month)"
                 >
                     {{ formatMonth(month) }}

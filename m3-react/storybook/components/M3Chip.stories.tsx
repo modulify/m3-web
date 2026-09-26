@@ -43,17 +43,21 @@ const meta = {
     showCheckmark: true,
   },
 
-  render: (args) => {
-    const [selected, setSelected] = useState(args.selected)
+  render: ({
+    selected: initialSelected,
+    onToggle: _onToggle,
+    ...args
+  }) => {
+    const [selected, setSelected] = useState(initialSelected)
 
     useEffect(() => {
-      setSelected(args.selected)
-    }, [args.selected])
+      setSelected(initialSelected)
+    }, [initialSelected])
 
     return (
       <M3Chip
-        {...args}
         selected={selected}
+        {...args}
         onToggle={setSelected}
       >
         {args.variant === 'assist' || args.variant === 'suggestion'

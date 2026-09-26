@@ -69,12 +69,12 @@ export default defineComponent(function M3MenuItem({
         'm3-menu-item_selected': selected,
         'm3-menu-item_disabled': disabled,
       }])}
+      {...attrs}
       onKeyUp={compose(event => {
         if (event.code === 'Enter') {
           ripple.current?.activate(event.nativeEvent)
         }
       }, onKeyUp)}
-      {...attrs}
     >
       <M3Ripple ref={ripple} owner={rippleTarget} />
 
