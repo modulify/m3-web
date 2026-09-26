@@ -31,7 +31,7 @@ In the docked layout, month and year controls open separate vertical selection l
 
 - The root uses `role="group"` and is named by `label`.
 - The days are exposed as a `grid` with one row per week.
-- Grid month and year pickers use `grid` semantics; docked vertical selectors use native `list` and `listitem` semantics through `M3List`.
+- Grid month and year pickers use `grid` semantics; docked vertical selectors use explicit `list` and `listitem` roles through `M3List`.
 - Each day is a native button with `aria-selected`.
 - Disabled dates use native `disabled`.
 - The month/year button uses `aria-expanded` while year selection is open.

@@ -20,7 +20,7 @@ type M3ListItemStyle = CSSProperties & {
   '--m3-list-item-supporting-lines'?: number;
 }
 
-export interface M3ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'onClick' | 'onKeyUp'> {
+export interface M3ListItemProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onClick' | 'onKeyUp'> {
   ref?: Ref<M3ListItemExposed>;
   type?: HTMLButtonElement['type'];
   href?: string;
@@ -35,7 +35,7 @@ export interface M3ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'on
   onKeyUp?: KeyboardEventHandler<RootElement>;
 }
 
-export interface M3ListItemExposed extends ElementReference<HTMLLIElement> {}
+export interface M3ListItemExposed extends ElementReference<HTMLDivElement> {}
 
 const Leading = defineSlot('M3ListItem.Leading')
 const Overline = defineSlot('M3ListItem.Overline')
@@ -85,7 +85,7 @@ export default defineComponent(function M3ListItem({
   onKeyUp,
   ...attrs
 }: M3ListItemProps, { expose }: ComponentSetupContext<M3ListItemExposed>) {
-  const root = useRef<HTMLLIElement | null>(null)
+  const root = useRef<HTMLDivElement | null>(null)
   const ripple = useRef<M3RippleExposed | null>(null)
   expose(useElementReference(root))
   const [rippleTarget, setRippleTarget] = useState<RootElement | null>(null)
@@ -181,8 +181,9 @@ export default defineComponent(function M3ListItem({
   }
 
   return (
-    <li
+    <div
       ref={root}
+      role="listitem"
       style={itemStyle}
       className={toClassName([className, {
         'm3-list-item': true,
@@ -219,7 +220,7 @@ export default defineComponent(function M3ListItem({
             {itemContent}
           </div>
         )}
-    </li>
+    </div>
   )
 }, {
   slots: { Headline, Leading, Overline, SupportingText, Trailing },
