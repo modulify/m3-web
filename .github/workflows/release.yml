@@ -182,3 +182,112 @@ jobs:
           fi
 
           yarn publish:packages
+
+  storybook-pages:
+    needs:
+      - release
+      - publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pages: read
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+          fetch-depth: 0
+
+      - name: Setup Node and dependencies
+        uses: ./.github/actions/setup-env
+        with:
+          node-version: '24.x'
+
+      - name: Build React Storybook
+        env:
+          STORYBOOK_VERSION: ${{ needs.release.outputs.tag }}
+        run: yarn workspace @modulify/m3-react storybook:build --quiet
+
+      - name: Build Vue Storybook
+        env:
+          STORYBOOK_VERSION: ${{ needs.release.outputs.tag }}
+        run: yarn workspace @modulify/m3-vue storybook:build --quiet
+
+      - name: Detect Storybook Pages history
+        id: pages_history
+        run: |
+          if git ls-remote --exit-code --heads origin gh-pages >/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout Storybook Pages history
+        if: steps.pages_history.outputs.exists == 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: gh-pages
+          path: storybook-pages
+          fetch-depth: 1
+
+      - name: Initialize Storybook Pages history
+        if: steps.pages_history.outputs.exists != 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+          path: storybook-pages
+          fetch-depth: 1
+
+      - name: Create Storybook Pages branch
+        if: steps.pages_history.outputs.exists != 'true'
+        run: |
+          git -C storybook-pages switch --orphan gh-pages
+          git -C storybook-pages rm -rf --ignore-unmatch .
+
+      - name: Prepare versioned Storybooks
+        env:
+          NPM_TAG: ${{ needs.release.outputs.npm_tag }}
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+        run: node scripts/prepare-storybook-pages.mjs storybook-pages "$RELEASE_TAG" "$NPM_TAG"
+
+      - name: Save Storybook Pages history
+        env:
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+        run: |
+          git -C storybook-pages config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C storybook-pages config user.name "github-actions[bot]"
+          git -C storybook-pages add --all
+
+          if git -C storybook-pages diff --cached --quiet; then
+            echo "Storybook Pages already contains ${RELEASE_TAG}."
+          else
+            git -C storybook-pages commit -m "docs: Storybooks for ${RELEASE_TAG} were published"
+            git -C storybook-pages push origin gh-pages
+          fi
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload Storybook Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: storybook-pages
+          include-hidden-files: true
+
+  deploy-storybook-pages:
+    needs: storybook-pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy Storybooks to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
