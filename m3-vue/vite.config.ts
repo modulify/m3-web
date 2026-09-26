@@ -54,33 +54,31 @@ const isExternal = (id: string): boolean => (
   ))
 )
 
+const declarationPlugin = dts({
+  afterDiagnostic: (diagnostics) => {
+    if (diagnostics.length > 0) {
+      throw new Error('m3-vue declaration generation failed')
+    }
+  },
+  cleanVueFileName: true,
+  aliasesExclude: [
+    /^@modulify\/m3-foundation(?:\/.*)?$/,
+  ],
+  entryRoot: 'src',
+  include: [
+    'shims-*.d.ts',
+    'src/**/*.ts',
+    'src/**/*.vue',
+  ],
+  outDirs: 'dist/types',
+  tsconfigPath: './tsconfig.dts.json',
+})
+
 export default defineConfig(({ mode }) => {
   const layer = layers[mode as keyof typeof layers] ?? layers['package-root']
 
   return mergeConfig(common, {
-    plugins: [
-      ...(layer.declarations ? [
-        dts({
-          afterDiagnostic: (diagnostics) => {
-            if (diagnostics.length > 0) {
-              throw new Error('m3-vue declaration generation failed')
-            }
-          },
-          cleanVueFileName: true,
-          aliasesExclude: [
-            /^@modulify\/m3-foundation(?:\/.*)?$/,
-          ],
-          entryRoot: 'src',
-          include: [
-            'shims-*.d.ts',
-            'src/**/*.ts',
-            'src/**/*.vue',
-          ],
-          outDirs: 'dist/types',
-          tsconfigPath: './tsconfig.dts.json',
-        }),
-      ] : []),
-    ],
+    plugins: layer.declarations ? [declarationPlugin] : [],
 
     resolve: {
       alias: mode === 'package-root' ? rootLayerAliases : [],
