@@ -1,0 +1,21 @@
+import{n as e,r as t}from"./rolldown-runtime-DkW27tQK.js";import{t as n}from"./react-Q1GcV6wX.js";import{t as r}from"./jsx-runtime-DeHZSEgm.js";import{A as i,O as a,h as o,k as s,p as c,s as l,t as u,y as d}from"./hooks-CPk-xpjN.js";import{n as f,t as p}from"./ripple-BZyVuUjI.js";import{n as m,t as h}from"./styling-Cr0ZBcFE.js";var g,_,v;function y(){return(y=e((()=>{g=n(),p(),s(),h(),u(),_=r(),v=a(function({ref:e,id:t,name:n,model:r,value:a=!0,invalid:s=!1,disabled:u=!1,equalsFn:p=(e,t)=>e===t,className:h=``,onChange:v=e=>{},...y},b){let{expose:x}=i(b),S=(0,g.useRef)(null),C=(0,g.useRef)(null),w=(0,g.useRef)(null),[T,E]=l();x(c(S,C)),d(S,E);let D=(0,g.useMemo)(()=>p(r,a),[p,r,a]),O=o(t,`m3-radio`),k=(0,g.useCallback)(e=>{e&&v(a)},[v,a]);return(0,_.jsxs)(`span`,{ref:S,className:m([h,{"m3-radio":!0,"m3-radio_checked":D,"m3-radio_invalid":s,"m3-radio_disabled":u}]),...y,children:[(0,_.jsx)(f,{ref:w,owner:T}),(0,_.jsx)(`input`,{ref:C,id:O,name:n,"aria-checked":D,"aria-disabled":u,"aria-invalid":s,checked:D,disabled:u,type:`radio`,className:`m3-radio__input`,onChange:e=>k(e.currentTarget.checked)}),(0,_.jsx)(`span`,{"aria-hidden":!0,className:`m3-radio__state`}),(0,_.jsx)(`span`,{"aria-hidden":!0,className:`m3-radio__icon`})]})},{generic:!0})})))()}function b(){return(b=e((()=>{y()})))()}var x,S,C;function w(){return(w=e((()=>{x=n(),b(),u(),S=r(),C=({legend:e=`Selection`,options:t,invalid:n=!1})=>{let r=o(null,`m3-radio-group`),[i,a]=(0,x.useState)(t[0]?.value);return(0,S.jsxs)(`fieldset`,{style:{margin:0,padding:0,border:`none`,display:`grid`,gap:`12px`,minWidth:`280px`},children:[(0,S.jsx)(`legend`,{style:{padding:0,marginBottom:`8px`,fontSize:`14px`,lineHeight:`20px`,color:`var(--m3-sys-on-surface-variant)`},children:e}),t.map(e=>{let t=`${r}-${e.value}`;return(0,S.jsxs)(`label`,{htmlFor:t,style:{display:`flex`,alignItems:`center`,gap:`12px`},children:[(0,S.jsx)(v,{id:t,name:r,model:i,value:e.value,invalid:n,disabled:e.disabled,onChange:a}),(0,S.jsx)(`span`,{children:e.label})]},e.value)})]})},C.__docgenInfo={description:``,methods:[],displayName:`RadioGroup`,props:{legend:{required:!1,tsType:{name:`string`},description:``,defaultValue:{value:`'Selection'`,computed:!1}},options:{required:!0,tsType:{name:`Array`,elements:[{name:`RadioOption`}],raw:`RadioOption[]`},description:``},invalid:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}}}}})))()}var T=t({InvalidGroup:()=>j,PreferenceGroup:()=>A,Standard:()=>k,__namedExportsOrder:()=>M,default:()=>O}),E,D,O,k,A,j,M;function N(){return(N=e((()=>{E=n(),b(),u(),w(),D=r(),O={title:`Components/M3Radio`,component:v,argTypes:{invalid:{control:`boolean`},disabled:{control:`boolean`}},args:{invalid:!1,disabled:!1},render:({id:e,name:t,model:n,value:r,onChange:i,...a})=>{let s=o(null,`m3-radio-group`),c=o(null,`m3-radio`),[l,u]=(0,E.useState)(`choice`);return(0,D.jsxs)(`label`,{style:{display:`flex`,alignItems:`center`,gap:`12px`},children:[(0,D.jsx)(v,{id:c,name:s,model:l,value:`choice`,...a,onChange:u}),(0,D.jsx)(`span`,{children:`Choice`})]})},parameters:{layout:`centered`}},k={},A={render:()=>(0,D.jsx)(C,{legend:`Notification channel`,options:[{label:`Email`,value:`email`},{label:`Push`,value:`push`},{label:`SMS`,value:`sms`,disabled:!0}]})},j={render:()=>(0,D.jsx)(C,{legend:`Release cadence`,invalid:!0,options:[{label:`Stable`,value:`stable`},{label:`Preview`,value:`preview`}]})},M=[`Standard`,`PreferenceGroup`,`InvalidGroup`],k.parameters={...k.parameters,docs:{...k.parameters?.docs,source:{originalSource:`{}`,...k.parameters?.docs?.source}}},A.parameters={...A.parameters,docs:{...A.parameters?.docs,source:{originalSource:`{
+  render: () => <RadioGroup legend="Notification channel" options={[{
+    label: 'Email',
+    value: 'email'
+  }, {
+    label: 'Push',
+    value: 'push'
+  }, {
+    label: 'SMS',
+    value: 'sms',
+    disabled: true
+  }]} />
+}`,...A.parameters?.docs?.source}}},j.parameters={...j.parameters,docs:{...j.parameters?.docs,source:{originalSource:`{
+  render: () => <RadioGroup legend="Release cadence" invalid={true} options={[{
+    label: 'Stable',
+    value: 'stable'
+  }, {
+    label: 'Preview',
+    value: 'preview'
+  }]} />
+}`,...j.parameters?.docs?.source}}}})))()}export{w as i,N as n,C as r,T as t};
