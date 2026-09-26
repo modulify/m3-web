@@ -1366,29 +1366,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.7.4":
-  version: 1.7.4
-  resolution: "@floating-ui/core@npm:1.7.4"
+"@floating-ui/core@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "@floating-ui/core@npm:1.8.0"
   dependencies:
-    "@floating-ui/utils": "npm:^0.2.10"
-  checksum: 10c0/b1175d92c0edbd0053c4ba014ad1f798ccc107de87a43a099e97af6265610cc25ef600f2b15d3763d39a79f7d36db11fcb84d0c28027beb3317e13a7ba197516
+    "@floating-ui/utils": "npm:^0.2.12"
+  checksum: 10c0/cece958f6fab0f8cd7740cd57988c4f8bc5356dca39dd4c093433d44c91952c3a02c7a54d93d7ed6c078b6544d531a29f66621d2839c8bfbb4467dca6aed7df0
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^1.7.5":
-  version: 1.7.5
-  resolution: "@floating-ui/dom@npm:1.7.5"
+"@floating-ui/dom@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "@floating-ui/dom@npm:1.8.0"
   dependencies:
-    "@floating-ui/core": "npm:^1.7.4"
-    "@floating-ui/utils": "npm:^0.2.10"
-  checksum: 10c0/94bd262127fbf1177e542f4908cb07c17392782b1ca0ab9f2dfd7e102cabcc77b4de807847304dcb4c864d4b48e8ba292b27cdcfaca3ad4e3525ab397b766a3a
+    "@floating-ui/core": "npm:^1.8.0"
+    "@floating-ui/utils": "npm:^0.2.12"
+  checksum: 10c0/c32b2de7a596b69cfffa909c7028825e14f6319be1b45da529f8943c89fe16b75a49c214e800c87ded3f172353d3b99163d50072f11410488e756961b7b629cc
   languageName: node
   linkType: hard
 
-"@floating-ui/utils@npm:^0.2.10":
-  version: 0.2.10
-  resolution: "@floating-ui/utils@npm:0.2.10"
-  checksum: 10c0/e9bc2a1730ede1ee25843937e911ab6e846a733a4488623cd353f94721b05ec2c9ec6437613a2ac9379a94c2fd40c797a2ba6fa1df2716f5ce4aa6ddb1cf9ea4
+"@floating-ui/utils@npm:^0.2.12":
+  version: 0.2.12
+  resolution: "@floating-ui/utils@npm:0.2.12"
+  checksum: 10c0/bb910b90d56991a62011afaf5f8e0c4b7fb6dab69403f4dd17fbd6eb25560b28d533dff9791f270b4f459852e9006a1077b5d73cbedb5e34d9424afc6a828314
   languageName: node
   linkType: hard
 
@@ -1725,8 +1725,8 @@ __metadata:
   resolution: "@modulify/m3-foundation@workspace:m3-foundation"
   dependencies:
     "@eslint/js": "npm:^9.39.4"
-    "@floating-ui/dom": "npm:^1.7.5"
-    "@modulify/validator": "npm:^0.1.0"
+    "@floating-ui/dom": "npm:^1.8.0"
+    "@modulify/validator": "npm:^0.2.1"
     "@omnicajs/eslint-plugin-dependencies": "npm:^0.0.4"
     "@types/lodash.isequal": "npm:^4.5.8"
     "@types/node": "npm:^24.19.0"
@@ -1754,10 +1754,11 @@ __metadata:
   dependencies:
     "@chromatic-com/storybook": "npm:^5.3.1"
     "@eslint/js": "npm:^9.39.4"
-    "@floating-ui/core": "npm:^1.7.4"
-    "@floating-ui/dom": "npm:^1.7.5"
+    "@floating-ui/core": "npm:^1.8.0"
+    "@floating-ui/dom": "npm:^1.8.0"
     "@modulify/conventional-release": "npm:^0.1.3"
     "@modulify/m3-foundation": "npm:0.0.0"
+    "@modulify/validator": "npm:^0.2.1"
     "@omnicajs/eslint-plugin-dependencies": "npm:^0.0.4"
     "@storybook/addon-a11y": "npm:^10.6.0"
     "@storybook/addon-docs": "npm:^10.6.0"
@@ -1820,10 +1821,11 @@ __metadata:
   dependencies:
     "@chromatic-com/storybook": "npm:^5.3.1"
     "@eslint/js": "npm:^9.39.4"
-    "@floating-ui/core": "npm:^1.7.4"
-    "@floating-ui/dom": "npm:^1.7.5"
+    "@floating-ui/core": "npm:^1.8.0"
+    "@floating-ui/dom": "npm:^1.8.0"
     "@modulify/conventional-release": "npm:^0.1.3"
     "@modulify/m3-foundation": "npm:0.0.0"
+    "@modulify/validator": "npm:^0.2.1"
     "@omnicajs/eslint-plugin-dependencies": "npm:^0.0.4"
     "@storybook/addon-a11y": "npm:^10.6.0"
     "@storybook/addon-docs": "npm:^10.6.0"
@@ -1915,10 +1917,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@modulify/validator@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@modulify/validator@npm:0.1.0"
-  checksum: 10c0/a25806faf6b2a9185afd197abf661c0b96752a1b9fc7831838f439b632f946846ff566f363743f335884f9d7b920d0249c849bb1e177f48aed78971ba7dff622
+"@modulify/validator@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@modulify/validator@npm:0.2.1"
+  checksum: 10c0/eb30f23efc1019b504cb38ccdc6d6e2fe5502994df2d98c911b6ce3d7324c90b4cec95db5b72a08945952b7e95a0d28f2dbbd701f94b136ccbcd8d7e9f5e9d47
   languageName: node
   linkType: hard
 
