@@ -1,5 +1,6 @@
 import type { RefObject } from 'react'
 
+import { hasProperty } from '@modulify/validator/predicates'
 import { useEffect, useRef } from 'react'
 
 type ResizeObserverTargetSource = Element | RefObject<Element | null> | (() => Element | null) | null
@@ -11,7 +12,7 @@ export type ResizeObserverTarget =
   | (() => ResizeObserverTargetValue)
 
 const isRefObject = (value: unknown): value is RefObject<ResizeObserverTargetValue> => {
-  return typeof value === 'object' && value !== null && 'current' in value
+  return hasProperty('current')(value)
 }
 
 const resolveTargets = (target: ResizeObserverTarget): Element[] => {

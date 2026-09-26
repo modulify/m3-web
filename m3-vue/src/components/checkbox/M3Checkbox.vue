@@ -39,7 +39,7 @@ import type { ElementReference, Interactable } from '@modulify/m3-foundation/typ
 import type { M3CheckboxProps } from './types'
 
 import { computed } from 'vue'
-import { isArray } from '@modulify/m3-foundation/lib/predicates'
+import { isArray } from '@modulify/validator/predicates'
 import { ref } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'

@@ -49,9 +49,10 @@
     "tsc:tests": "vue-tsc --noEmit -p tsconfig.tests.json --skipLibCheck"
   },
   "dependencies": {
-    "@floating-ui/core": "^1.7.4",
-    "@floating-ui/dom": "^1.7.5",
+    "@floating-ui/core": "^1.8.0",
+    "@floating-ui/dom": "^1.8.0",
     "@modulify/m3-foundation": "0.0.0",
+    "@modulify/validator": "^0.2.1",
     "lodash.isequal": "^4.5.0"
   },
   "peerDependencies": {

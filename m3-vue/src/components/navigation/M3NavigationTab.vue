@@ -79,7 +79,8 @@ import type { M3LinkInstance } from '@/components/link'
 import type { PropType, Ref } from 'vue'
 
 import { computed, inject } from 'vue'
-import { isId, isUndefined, Or } from '@modulify/m3-foundation/lib/predicates'
+import { isId } from '@modulify/m3-foundation/lib/predicates'
+import { isUndefined, Or } from '@modulify/validator/predicates'
 import { ref } from 'vue'
 
 import { M3Badge } from '@/components/badge'
@@ -95,7 +96,7 @@ import { M3NavigationAppearance } from './injections'
 const props = defineProps({
   id: {
     type: null as unknown as PropType<string | undefined>,
-    validator: Or(isId, isUndefined),
+    validator: Or(isId, isUndefined) as (value: unknown) => boolean,
     default: undefined,
   },
 

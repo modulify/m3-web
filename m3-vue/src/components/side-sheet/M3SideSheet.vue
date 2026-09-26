@@ -57,9 +57,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { isId, isUndefined } from '@modulify/m3-foundation/lib/predicates'
+import { isId } from '@modulify/m3-foundation/lib/predicates'
+import { isUndefined } from '@modulify/validator/predicates'
 import { nextTick } from 'vue'
-import { Or } from '@modulify/m3-foundation/lib/predicates'
+import { Or } from '@modulify/validator/predicates'
 import {
   ref,
   useAttrs,
@@ -85,7 +86,7 @@ type TransitionState = 'idle' | 'pre-enter' | 'entering' | 'pre-exit' | 'exiting
 const props = defineProps({
   id: {
     type: String,
-    validator: Or(isId, isUndefined),
+    validator: Or(isId, isUndefined) as (value: unknown) => boolean,
     default: undefined,
   },
 

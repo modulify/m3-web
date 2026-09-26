@@ -43,7 +43,7 @@ import type { RouteLocationRaw } from 'vue-router'
 
 import { computed, ref } from 'vue'
 
-import { isString, isUndefined, Or } from '@modulify/m3-foundation/lib/predicates'
+import { isString, isUndefined, Or } from '@modulify/validator/predicates'
 
 import { M3Link } from '@/components/link'
 import { M3Ripple } from '@/components/ripple'
@@ -56,7 +56,7 @@ defineProps({
 
   href: {
     type: null as unknown as PropType<string | undefined>,
-    validator: Or(isString, isUndefined),
+    validator: Or(isString, isUndefined) as (value: unknown) => boolean,
     default: undefined,
   },
 

@@ -109,9 +109,10 @@ import type { ElementReference, Focusable } from '@modulify/m3-foundation/types/
 import type { PropType } from 'vue'
 
 import { computed } from 'vue'
-import { isId, isUndefined } from '@modulify/m3-foundation/lib/predicates'
+import { isId } from '@modulify/m3-foundation/lib/predicates'
+import { isUndefined } from '@modulify/validator/predicates'
 import { onMounted } from 'vue'
-import { Or } from '@modulify/m3-foundation/lib/predicates'
+import { Or } from '@modulify/validator/predicates'
 import { ref } from 'vue'
 
 import { useId } from '@/composables/id'
@@ -119,7 +120,7 @@ import { useId } from '@/composables/id'
 const props = defineProps({
   id: {
     type: null as unknown as PropType<string | undefined>,
-    validator: Or(isId, isUndefined),
+    validator: Or(isId, isUndefined) as (value: unknown) => boolean,
     default: undefined,
   },
 

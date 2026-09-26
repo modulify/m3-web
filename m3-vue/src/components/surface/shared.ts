@@ -9,6 +9,7 @@ import {
   getSurfacePanelClassRecord,
   getSurfacePanelStyle as getFoundationSurfacePanelStyle,
 } from '@modulify/m3-foundation/lib/surface/style'
+import { isUndefined, Or } from '@modulify/validator/predicates'
 
 export {
   getModalAnchorStyle,
@@ -18,12 +19,12 @@ export {
   isDefined,
   toLength,
 } from '@modulify/m3-foundation/lib/surface/style'
-import { isId, isUndefined, Or } from '@modulify/m3-foundation/lib/predicates'
+import { isId } from '@modulify/m3-foundation/lib/predicates'
 
 export const surfacePanelProps = {
   id: {
     type: null as unknown as PropType<string | undefined>,
-    validator: Or(isId, isUndefined),
+    validator: Or(isId, isUndefined) as (value: unknown) => boolean,
     default: undefined,
   },
 
