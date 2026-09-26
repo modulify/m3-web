@@ -3,7 +3,7 @@
   "type": "module",
   "description": "Material design v3 components for React",
   "license": "ISC",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "keywords": [
     "components",
     "material",
@@ -51,7 +51,7 @@
   "dependencies": {
     "@floating-ui/core": "^1.8.0",
     "@floating-ui/dom": "^1.8.0",
-    "@modulify/m3-foundation": "0.0.0",
+    "@modulify/m3-foundation": "0.1.0",
     "@modulify/validator": "^0.3.0",
     "lodash.isequal": "^4.5.0"
   },

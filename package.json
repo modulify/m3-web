@@ -1,7 +1,7 @@
 {
   "name": "@modulify/m3-web",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Material design v3 implementation for web",
   "workspaces": [
     "m3-react",
