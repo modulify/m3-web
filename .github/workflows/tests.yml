@@ -176,7 +176,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload merged coverage artifacts
-        if: matrix.node-version == '24.x' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: matrix.node-version == '24.x'
         uses: actions/upload-artifact@v6
         with:
           name: coverage-node-24
@@ -186,7 +186,6 @@ jobs:
           if-no-files-found: error
 
   codecov:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: tests
     runs-on: ubuntu-latest
 
