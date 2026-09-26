@@ -1,6 +1,8 @@
 import { create } from 'storybook/theming'
 
 const fontBase = '\'Roboto\', \'Noto Sans\', \'Segoe UI\', -apple-system, BlinkMacSystemFont, Arial, sans-serif'
+const version = process.env.STORYBOOK_VERSION
+const versionLabel = version ? ` <small>${version}</small>` : ''
 
 export default create({
   appBg: '#141218',
@@ -12,7 +14,7 @@ export default create({
   barHoverColor: 'hsl(220, 49%, 57%)',
   barSelectedColor: 'hsl(220, 49%, 57%)',
   barTextColor: 'hsl(220, 100%, 89%)',
-  brandTitle: '<span class="s-m3-logo"><img src="/assets/logo.png" alt="" width="42px" height="42px" /> m3-vue</span>',
+  brandTitle: `<span class="s-m3-logo"><img src="assets/logo.png" alt="" width="42px" height="42px" /> m3-vue${versionLabel}</span>`,
   colorPrimary: 'hsl(220, 55%, 25%)',
   fontBase,
   fontCode: 'monospace',
