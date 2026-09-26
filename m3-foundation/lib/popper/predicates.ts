@@ -3,14 +3,9 @@ import type { Delay, OverflowBehavior, Placement } from '../../types/components/
 import type { Predicate } from '../predicates'
 import type { Trigger, TriggerSchema } from '../../types/components/popper'
 
-import { isExact, Or } from '@modulify/validator/predicates'
+import { isExact, isShape, Or } from '@modulify/validator/predicates'
 
-import {
-  isArrayOf,
-  isElement,
-  isNumeric,
-  isShape,
-} from '../predicates'
+import { isArrayOf, isElement, isNumeric } from '../predicates'
 
 const isOneOf = <T>(values: readonly T[]): Predicate<T> => Or(
   ...values.map(value => isExact(value))

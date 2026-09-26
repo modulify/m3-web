@@ -1,4 +1,4 @@
-import { isArray, isObject, isString } from '@modulify/validator/predicates'
+import { isArray, isString } from '@modulify/validator/predicates'
 
 export type Predicate<T = unknown> = (value: unknown) => value is T
 
@@ -13,44 +13,3 @@ export const isElement = (value: unknown): value is Element => value instanceof 
 export const isHTMLElement = (value: unknown): value is HTMLElement => value instanceof HTMLElement
 
 export const isNumeric: Predicate<number | string> = (value: unknown): value is number | string => !isNaN(Number(value))
-
-export type Shape<T extends object> = {
-  [K in keyof T]: [Predicate<T[K]>, boolean] | Predicate<T[K]>
-}
-
-export type IsRequired<T extends Shape<object>, K extends keyof T> =
-  T[K] extends [unknown, infer R extends boolean]
-    ? R
-    : false
-
-type ShapeRequired<S extends Shape<object>> = {
-  [K in keyof S as IsRequired<S, K> extends true ? K : never]: S[K]
-}
-
-type ShapeOptional<S extends Shape<object>> = {
-  [K in keyof S as IsRequired<S, K> extends false ? K : never]: S[K]
-}
-
-type ExtractType<S> = S extends Shape<infer T> ? T : never
-
-export type ExtractRequired<S extends Shape<object>> = ExtractType<ShapeRequired<S>>
-export type ExtractOptional<S extends Shape<object>> = Partial<ExtractType<ShapeOptional<S>>>
-
-type TypeOf<S extends Shape<object>> = ExtractRequired<S> & ExtractOptional<S>
-type ShapeKey<S extends Shape<object>> = Extract<keyof S, string>
-type ShapeConfig = [Predicate<unknown>, boolean] | Predicate<unknown>
-
-export const isShape = <S extends Shape<object>>(shape: S) => {
-  const properties = Object.keys(shape) as ShapeKey<S>[]
-  const shapeConfig = shape as Record<ShapeKey<S>, ShapeConfig>
-
-  return (value: unknown): value is TypeOf<S> => isObject(value) && properties.every(p => {
-    const config = shapeConfig[p]
-    const [predicate, required] = isArray(config) ? config : [config, false]
-    if (!(p in value)) {
-      return !required
-    }
-
-    return predicate((value as Record<ShapeKey<S>, unknown>)[p])
-  })
-}
