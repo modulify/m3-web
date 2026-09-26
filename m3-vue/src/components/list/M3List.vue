@@ -1,13 +1,14 @@
 <template>
-    <ul
+    <div
         ref="root"
         :class="{
             'm3-list': true,
             'm3-list_divided': divided,
         }"
+        role="list"
     >
         <slot />
-    </ul>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -22,9 +23,9 @@ defineProps({
   },
 })
 
-const root = ref<HTMLUListElement | null>(null)
+const root = ref<HTMLDivElement | null>(null)
 
 defineExpose({
   get el () { return root.value },
-} satisfies ElementReference<HTMLUListElement>)
+} satisfies ElementReference<HTMLDivElement>)
 </script>

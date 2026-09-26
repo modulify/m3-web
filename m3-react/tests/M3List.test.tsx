@@ -4,7 +4,7 @@ import { M3Icon } from '@/components/icon'
 import { M3List, M3ListItem } from '@/components/list'
 
 describe('m3-react/list', () => {
-  test('renders native list semantics', () => {
+  test('renders explicit list semantics on generic elements', () => {
     render(
       <M3List aria-label="Tasks">
         <M3ListItem>Inbox</M3ListItem>
@@ -12,8 +12,24 @@ describe('m3-react/list', () => {
       </M3List>
     )
 
-    expect(screen.getByRole('list').getAttribute('aria-label')).toBe('Tasks')
-    expect(screen.getAllByRole('listitem').length).toBe(2)
+    const list = screen.getByRole('list')
+    const items = screen.getAllByRole('listitem')
+
+    expect(list.tagName).toBe('DIV')
+    expect(list.getAttribute('aria-label')).toBe('Tasks')
+    expect(items).toHaveLength(2)
+    expect(items.every(item => item.tagName === 'DIV')).toBe(true)
+  })
+
+  test('allows composite list roles to override defaults', () => {
+    render(
+      <M3List role="listbox">
+        <M3ListItem role="option" aria-selected={true}>Inbox</M3ListItem>
+      </M3List>
+    )
+
+    expect(screen.getByRole('listbox').tagName).toBe('DIV')
+    expect(screen.getByRole('option').getAttribute('aria-selected')).toBe('true')
   })
 
   test('renders item slots and resolves multiline layout', () => {

@@ -206,9 +206,10 @@ const renderListItem = (
   props: ListItemProps,
   state: ListItemState,
   attrs: CollectedAttrs,
-  root: Ref<HTMLLIElement | null>,
+  root: Ref<HTMLDivElement | null>,
   container: VNode
-) => h('li', {
+) => h('div', {
+  role: 'listitem',
   ...attrs.rootAttrs,
   ref: root,
   class: [attrs.className, {
@@ -285,14 +286,14 @@ export default defineComponent({
   },
 
   setup (props, { attrs, expose, slots }) {
-    const listItem = ref<HTMLLIElement | null>(null)
+    const listItem = ref<HTMLDivElement | null>(null)
     const root = ref<Root>(null)
     const rootElement = computed(() => toElement(root.value))
     const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
 
     expose({
       get el () { return listItem.value },
-    } satisfies ElementReference<HTMLLIElement>)
+    } satisfies ElementReference<HTMLDivElement>)
 
     const onKeyup = (event: KeyboardEvent, handler: unknown) => {
       if (event.code === 'Enter') {

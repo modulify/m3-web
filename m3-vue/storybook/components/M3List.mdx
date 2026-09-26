@@ -9,14 +9,14 @@ Lists present related rows of text and optional visuals. Use them for settings, 
 
 ## API
 
-`M3List` renders the semantic list container. `M3ListItem` renders a row with optional `leading`, `trailing`, `overline`, `headline`, and `supportingText` slots.
+`M3List` renders a generic list container. `M3ListItem` renders a generic row with optional `leading`, `trailing`, `overline`, `headline`, and `supportingText` slots.
 
 Use default slot content as the headline, or use the `headline` slot when the headline needs explicit markup. `href`, `to`, `interactive`, or `@click` make the row interactive.
 
 ## Accessibility semantics
 
-- `M3List` uses native list semantics. Add `aria-label` or `aria-labelledby` when the list needs a programmatic name.
-- `M3ListItem` keeps row semantics on the list item and uses a native link or button through `M3Link` for interactive rows.
+- `M3List` uses a generic element with `role="list"`. Add `aria-label` or `aria-labelledby` when the list needs a programmatic name.
+- `M3ListItem` uses a generic element with `role="listitem"` and a native link or button through `M3Link` for interactive rows.
 - Use `href` or `to` for navigation rows and `interactive`/`@click` for in-place actions.
 - For selectable option lists, set the container and rows to the appropriate composite pattern yourself, such as `role="listbox"`, `role="option"`, and `aria-selected`.
 
