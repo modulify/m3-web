@@ -43,9 +43,11 @@ import { computed } from 'vue'
 import { computePosition } from '@modulify/m3-foundation/lib/popper/floating'
 import { isBoundary, isDelay } from '@modulify/m3-foundation/lib/popper/predicates'
 import isEqual from 'lodash.isequal'
-import { isHTMLElement, isNull, isNumeric } from '@modulify/m3-foundation/lib/predicates'
+import { isHTMLElement } from '@modulify/m3-foundation/lib/predicates'
+import { isNull } from '@modulify/validator/predicates'
+import { isNumeric } from '@modulify/m3-foundation/lib/predicates'
 import { isOverflowBehavior } from '@modulify/m3-foundation/lib/popper/predicates'
-import { isString } from '@modulify/m3-foundation/lib/predicates'
+import { isString } from '@modulify/validator/predicates'
 import { isTriggerOptions } from '@modulify/m3-foundation/lib/popper/predicates'
 import { nextTick } from 'vue'
 import { normalizeDelay } from '@modulify/m3-foundation/lib/popper/scheduling'
@@ -55,7 +57,7 @@ import {
   onDeactivated,
   onMounted,
 } from 'vue'
-import { Or } from '@modulify/m3-foundation/lib/predicates'
+import { Or } from '@modulify/validator/predicates'
 import { reactive, ref } from 'vue'
 import { watch } from 'vue'
 
@@ -112,7 +114,7 @@ const props = defineProps({
 
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
-    validator: Or(isString, isHTMLElement),
+    validator: Or(isString, isHTMLElement) as (value: unknown) => boolean,
     default: 'body',
   },
 
@@ -152,7 +154,7 @@ const props = defineProps({
 
   detachTimeout: {
     type: null as unknown as PropType<null | number | string>,
-    validator: Or(isNull, isNumeric),
+    validator: Or(isNull, isNumeric) as (value: unknown) => boolean,
     default: 5000,
   },
 })

@@ -1,6 +1,6 @@
 import type { MutableRefObject } from 'react'
 
-import { isArray } from '@modulify/m3-foundation/lib/predicates'
+import { isArray } from '@modulify/validator/predicates'
 import { useEffect } from 'react'
 
 export type ElementEffect<T extends Element> = (el: T) => () => void

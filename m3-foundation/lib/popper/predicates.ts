@@ -3,9 +3,7 @@ import type { Delay, OverflowBehavior, Placement } from '../../types/components/
 import type { Predicate } from '../predicates'
 import type { Trigger, TriggerSchema } from '../../types/components/popper'
 
-import { isExact } from '@modulify/validator/predicates'
-import { OneOf } from '@modulify/validator/assertions'
-import { Or } from '@modulify/validator/predicates'
+import { isExact, Or } from '@modulify/validator/predicates'
 
 import {
   isArrayOf,
@@ -14,6 +12,10 @@ import {
   isShape,
 } from '../predicates'
 
+const isOneOf = <T>(values: readonly T[]): Predicate<T> => Or(
+  ...values.map(value => isExact(value))
+)
+
 export const isBoundary: Predicate<Boundary> = Or(
   isExact('clippingAncestors' as const),
   isElement,
@@ -21,15 +23,15 @@ export const isBoundary: Predicate<Boundary> = Or(
 )
 
 export const isDelay: Predicate<number | string | Delay> = Or(isNumeric, isShape({
-  show: isNumeric,
-  hide: isNumeric,
+  show: [isNumeric, false],
+  hide: [isNumeric, false],
 }))
 
 export const isOverflowBehavior: Predicate<OverflowBehavior[]> = isArrayOf(
-  OneOf<OverflowBehavior>(['flip', 'shift', 'hide'])
+  isOneOf<OverflowBehavior>(['flip', 'shift', 'hide'])
 )
 
-export const isPlacement: Predicate<Placement> = OneOf<Placement>([
+export const isPlacement: Predicate<Placement> = isOneOf<Placement>([
   'left',
   'left-start',
   'left-end',
@@ -44,8 +46,8 @@ export const isPlacement: Predicate<Placement> = OneOf<Placement>([
   'bottom-end',
 ])
 
-export const isTrigger: Predicate<Trigger> = OneOf<Trigger>(['hover', 'focus', 'click', 'touch'])
+export const isTrigger: Predicate<Trigger> = isOneOf<Trigger>(['hover', 'focus', 'click', 'touch'])
 export const isTriggerOptions: Predicate<Trigger[] | TriggerSchema> = Or(isArrayOf(isTrigger), isShape({
-  show: isArrayOf(isTrigger),
-  hide: isArrayOf(isTrigger),
+  show: [isArrayOf(isTrigger), false],
+  hide: [isArrayOf(isTrigger), false],
 }))

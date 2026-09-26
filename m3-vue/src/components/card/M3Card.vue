@@ -65,7 +65,8 @@ import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { PropType } from 'vue'
 
 import { computed } from 'vue'
-import { isId, isUndefined, Or } from '@modulify/m3-foundation/lib/predicates'
+import { isId } from '@modulify/m3-foundation/lib/predicates'
+import { isUndefined, Or } from '@modulify/validator/predicates'
 import { ref } from 'vue'
 
 import { M3Ripple } from '@/components/ripple'
@@ -75,7 +76,7 @@ import { useId } from '@/composables/id'
 const props = defineProps({
   id: {
     type: null as unknown as PropType<string | undefined>,
-    validator: Or(isId, isUndefined),
+    validator: Or(isId, isUndefined) as (value: unknown) => boolean,
     default: undefined,
   },
 

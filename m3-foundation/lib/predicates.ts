@@ -1,21 +1,6 @@
-import {
-  isArray as validatorIsArray,
-  isNull as validatorIsNull,
-  isString as validatorIsString,
-  isUndefined as validatorIsUndefined,
-  Or as validatorOr,
-} from '@modulify/validator/predicates'
+import { isArray, isObject, isString } from '@modulify/validator/predicates'
 
 export type Predicate<T = unknown> = (value: unknown) => value is T
-
-export const isArray: Predicate<unknown[]> = validatorIsArray
-export const isNull: Predicate<null> = validatorIsNull
-export const isString: Predicate<string> = validatorIsString
-export const isUndefined: Predicate<undefined> = validatorIsUndefined
-
-export const Or = <T extends unknown[]>(...predicates: {
-  [K in keyof T]: Predicate<T[K]>
-}): Predicate<T[number]> => validatorOr(...predicates)
 
 export const isArrayOf = <T>(predicate: Predicate<T>): Predicate<T[]> => {
   return (value: unknown) => isArray(value) && value.every(predicate)
@@ -59,7 +44,7 @@ export const isShape = <S extends Shape<object>>(shape: S) => {
   const properties = Object.keys(shape) as ShapeKey<S>[]
   const shapeConfig = shape as Record<ShapeKey<S>, ShapeConfig>
 
-  return (value: unknown): value is TypeOf<S> => typeof value === 'object' && value !== null && properties.every(p => {
+  return (value: unknown): value is TypeOf<S> => isObject(value) && properties.every(p => {
     const config = shapeConfig[p]
     const [predicate, required] = isArray(config) ? config : [config, false]
     if (!(p in value)) {

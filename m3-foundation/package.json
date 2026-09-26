@@ -50,8 +50,8 @@
     "tsc": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.7.5",
-    "@modulify/validator": "^0.1.0",
+    "@floating-ui/dom": "^1.8.0",
+    "@modulify/validator": "^0.2.1",
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {

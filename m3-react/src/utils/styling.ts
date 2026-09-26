@@ -1,10 +1,6 @@
-export type CssClass = false | null | undefined | string | Record<string, unknown> | CssClass[]
+import { isRecord } from '@modulify/validator/predicates'
 
-const isCssClassRecord = (value: CssClass): value is Record<string, unknown> => (
-  typeof value === 'object' &&
-  value !== null &&
-  !Array.isArray(value)
-)
+export type CssClass = false | null | undefined | string | Record<string, unknown> | CssClass[]
 
 const filter = (classes: Record<string, unknown>): string[] => Object.keys(classes).filter(key => classes[key])
 
@@ -17,11 +13,11 @@ export const toClassNameList = (classes: CssClass): string[] => {
         result.push(classes)
       } else if (Array.isArray(classes)) {
         result.push(...toClassNameList(classes))
-      } else if (isCssClassRecord(classes)) {
+      } else if (isRecord(classes)) {
         result.push(...filter(classes))
       }
     })
-  } else if (isCssClassRecord(classes)) {
+  } else if (isRecord(classes)) {
     result.push(...filter(classes))
   } else if (typeof classes === 'string') {
     result.push(classes)

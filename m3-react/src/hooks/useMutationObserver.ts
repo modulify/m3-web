@@ -1,5 +1,6 @@
 import type { RefObject } from 'react'
 
+import { hasProperty } from '@modulify/validator/predicates'
 import { useEffect, useRef } from 'react'
 
 type MutationObserverTargetSource = Node | RefObject<Node | null> | (() => Node | null) | null
@@ -11,7 +12,7 @@ export type MutationObserverTarget =
   | (() => MutationObserverTargetValue)
 
 const isRefObject = (value: unknown): value is RefObject<MutationObserverTargetValue> => {
-  return typeof value === 'object' && value !== null && 'current' in value
+  return hasProperty('current')(value)
 }
 
 const resolveTargets = (target: MutationObserverTarget): Node[] => {

@@ -38,9 +38,12 @@ import type { PropType, Ref } from 'vue'
 import type { Strategy } from '@floating-ui/dom'
 
 import { isBoundary, isDelay } from '@modulify/m3-foundation/lib/popper/predicates'
-import { isHTMLElement, isNull, isNumeric } from '@modulify/m3-foundation/lib/predicates'
+import { isHTMLElement } from '@modulify/m3-foundation/lib/predicates'
+import { isNull } from '@modulify/validator/predicates'
+import { isNumeric } from '@modulify/m3-foundation/lib/predicates'
 import { isPlacement } from '@modulify/m3-foundation/lib/popper/predicates'
-import { isString, Or } from '@modulify/m3-foundation/lib/predicates'
+import { isString } from '@modulify/validator/predicates'
+import { Or } from '@modulify/validator/predicates'
 
 import { ref } from 'vue'
 
@@ -76,7 +79,7 @@ defineProps({
 
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
-    validator: Or(isString, isHTMLElement),
+    validator: Or(isString, isHTMLElement) as (value: unknown) => boolean,
     default: 'body',
   },
 
@@ -110,7 +113,7 @@ defineProps({
 
   detachTimeout: {
     type: null as unknown as PropType<number | string | null>,
-    validator: Or(isNull, isNumeric),
+    validator: Or(isNull, isNumeric) as (value: unknown) => boolean,
     default: 5000,
   },
 })
