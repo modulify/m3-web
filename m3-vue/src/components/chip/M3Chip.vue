@@ -27,7 +27,7 @@
 
                 <M3ChipContent />
             </span>
-        </button>name
+        </button>
 
         <button
             v-if="dismissible"
