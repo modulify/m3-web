@@ -13,22 +13,22 @@
   "files": [
     "dist"
   ],
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
     "./components": {
-      "types": "./dist/types/components/index.d.ts",
+      "types": "./dist/components/index.d.ts",
       "require": "./dist/components.cjs",
       "import": "./dist/components.mjs",
       "default": "./dist/components.mjs"
     },
     "./hooks": {
-      "types": "./dist/types/hooks/index.d.ts",
+      "types": "./dist/hooks/index.d.ts",
       "require": "./dist/hooks.cjs",
       "import": "./dist/hooks.mjs",
       "default": "./dist/hooks.mjs"
@@ -36,7 +36,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "vite build --mode package-root && vite build --mode package-components && vite build --mode package-hooks",
+    "build": "vite build",
     "eslint": "eslint ./src ./storybook ./tests ./vite.config.ts ./vite.config.common.ts",
     "storybook": "storybook dev -c storybook -p 6006 --no-open",
     "storybook:build": "storybook build -c storybook -o dist-storybook",
