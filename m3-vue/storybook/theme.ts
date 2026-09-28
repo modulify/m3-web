@@ -1,8 +1,18 @@
 import { create } from 'storybook/theming'
 
 const fontBase = '\'Roboto\', \'Noto Sans\', \'Segoe UI\', -apple-system, BlinkMacSystemFont, Arial, sans-serif'
-const version = process.env.STORYBOOK_VERSION
-const versionLabel = version ? ` <small>${version}</small>` : ''
+
+const getReleaseVersion = () => {
+  try {
+    return process.env.STORYBOOK_VERSION
+  } catch {
+    return undefined
+  }
+}
+
+const releaseVersion = getReleaseVersion()
+const version = releaseVersion ?? (Reflect.get(globalThis, 'CONFIG_TYPE') === 'DEVELOPMENT' ? 'dev' : undefined)
+const versionLabel = version ? `<sup class="s-m3-logo__version">${version}</sup>` : ''
 
 export default create({
   appBg: '#141218',
