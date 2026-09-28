@@ -138,14 +138,6 @@
             color: var(--m3-sys-on-surface) !important;
         }
 
-        :where(code:not(.hljs, .hljs *)) {
-            border-radius: 8px;
-            background: var(--m3-sys-surface-container-highest) !important;
-            color: var(--m3-sys-on-surface) !important;
-            font-size: 0.875em;
-            padding: 0.125em 0.5em;
-        }
-
         :where(h2:not(.sb-anchor, .sb-unstyled, .sb-unstyled h2)) {
             border-color: var(--m3-state-layers-on-surface-opacity-020) !important;
         }
@@ -163,11 +155,11 @@
         color: var(--m3-sys-on-surface) !important;
     }
 
-    :where(.sbdocs-content code:not(.hljs, .hljs *)) {
-        border-radius: 8px;
+    .sbdocs-content code:not(.hljs, .hljs *) {
+        border-radius: 6px;
         background: var(--m3-sys-surface-container-highest) !important;
         color: var(--m3-sys-on-surface) !important;
         font-size: 0.875em;
-        padding: 0.125em 0.5em;
+        padding: 1px 3px;
     }
 </style>
