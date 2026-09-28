@@ -2,8 +2,7 @@
   "extends": "./tsconfig.tsc.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-      "~types/*": ["./src/types/*"]
+      "@/*": ["./src/*"]
     }
   }
 }

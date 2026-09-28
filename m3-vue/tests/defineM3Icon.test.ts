@@ -1,4 +1,4 @@
-import type { Sprite } from '~types/components/icon'
+import type { Sprite } from '@/components/icon/defineM3Icon'
 
 import {
   defineComponent,

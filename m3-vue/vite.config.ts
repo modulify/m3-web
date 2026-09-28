@@ -15,37 +15,10 @@ const externalPackages = [
   ...Object.keys(peerDependencies),
 ]
 
-const rootEntry = resolve(__dirname, './src/index.ts')
-const rootLayerAliases = [
-  {
-    find: /^\.\/components$/,
-    replacement: `${name}/components`,
-  },
-  {
-    find: /^\.\/composables$/,
-    replacement: `${name}/composables`,
-  },
-]
-
-const layers = {
-  'package-root': {
-    clean: true,
-    declarations: false,
-    entry: rootEntry,
-    fileName: 'index',
-  },
-  'package-components': {
-    clean: false,
-    declarations: true,
-    entry: resolve(__dirname, './src/components/index.ts'),
-    fileName: 'components',
-  },
-  'package-composables': {
-    clean: false,
-    declarations: false,
-    entry: resolve(__dirname, './src/composables/index.ts'),
-    fileName: 'composables',
-  },
+const entries = {
+  components: resolve(import.meta.dirname, 'src/components/index.ts'),
+  composables: resolve(import.meta.dirname, 'src/composables/index.ts'),
+  index: resolve(import.meta.dirname, 'src/index.ts'),
 }
 
 const isExternal = (id: string): boolean => (
@@ -53,6 +26,13 @@ const isExternal = (id: string): boolean => (
     id === packageName || id.startsWith(`${packageName}/`)
   ))
 )
+
+const getFileName = (format: LibraryFormats, entryName: string): string => {
+  const extension = format === 'es' ? 'mjs' : format
+  const normalizedEntryName = entryName.replaceAll('?', '.')
+
+  return `${normalizedEntryName}.${extension}`
+}
 
 const declarationPlugin = dts({
   afterDiagnostic: (diagnostics) => {
@@ -70,35 +50,28 @@ const declarationPlugin = dts({
     'src/**/*.ts',
     'src/**/*.vue',
   ],
-  outDirs: 'dist/types',
+  outDirs: 'dist',
   tsconfigPath: './tsconfig.dts.json',
 })
 
-export default defineConfig(({ mode }) => {
-  const layer = layers[mode as keyof typeof layers] ?? layers['package-root']
+export default defineConfig(() => mergeConfig(common, {
+  plugins: [declarationPlugin],
 
-  return mergeConfig(common, {
-    plugins: layer.declarations ? [declarationPlugin] : [],
-
-    resolve: {
-      alias: mode === 'package-root' ? rootLayerAliases : [],
+  build: {
+    lib: {
+      name: '@modulify/m3-vue',
+      formats: ['es', 'cjs'],
+      entry: entries,
+      fileName: getFileName,
     },
-
-    build: {
-      emptyOutDir: layer.clean,
-      lib: {
-        name: '@modulify/m3-vue',
-        formats: ['es', 'cjs'],
-        entry: layer.entry,
-        fileName: (format: LibraryFormats) => `${layer.fileName}.${format === 'es' ? 'mjs' : format}`,
-      },
-      minify: false,
-      rollupOptions: {
-        external: isExternal,
-        output: {
-          assetFileNames: 'm3-vue[extname]',
-        },
+    minify: false,
+    rolldownOptions: {
+      external: isExternal,
+      output: {
+        assetFileNames: 'm3-vue[extname]',
+        preserveModules: true,
+        preserveModulesRoot: resolve(import.meta.dirname, 'src'),
       },
     },
-  })
-})
+  },
+}))

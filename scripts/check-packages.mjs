@@ -7,7 +7,9 @@ import {
 } from 'node:fs'
 import { tmpdir } from 'node:os'
 import {
+  dirname,
   join,
+  relative,
   resolve,
 } from 'node:path'
 
@@ -57,39 +59,47 @@ const assertDeclarationsArePublishable = (directory, packedPaths) => {
   }
 }
 
-const assertNoPrivateRuntimeChunks = (directory, manifest, packedPaths) => {
+const assertPreservedRuntimeModules = (directory, manifest, packedPaths) => {
   const publicRuntimePaths = new Set(collectExportTargets(manifest.exports)
     .filter(target => /\.(?:cjs|js|mjs)$/.test(target))
     .map(target => target.replace(/^\.\//, '')))
-  const privateRuntimePaths = packedPaths.filter(path => (
+  const preservedRuntimePaths = packedPaths.filter(path => (
     path.startsWith('dist/')
     && /\.(?:cjs|js|mjs)$/.test(path)
     && !publicRuntimePaths.has(path)
   ))
 
-  if (privateRuntimePaths.length > 0) {
-    throw new Error(`${directory} contains private runtime chunks: ${privateRuntimePaths.join(', ')}`)
+  if (preservedRuntimePaths.length === 0) {
+    throw new Error(`${directory} does not contain preserved runtime modules`)
+  }
+
+  const hashedRuntimePaths = preservedRuntimePaths.filter(path => (
+    /-[A-Za-z0-9_-]{8,}\.(?:cjs|js|mjs)$/.test(path)
+  ))
+
+  if (hashedRuntimePaths.length > 0) {
+    throw new Error(`${directory} contains hashed runtime chunks: ${hashedRuntimePaths.join(', ')}`)
   }
 }
 
 const assertRootDelegatesToLayers = (directory, manifest) => {
-  const layerSpecifiers = Object.entries(manifest.exports)
-    .filter(([exportPath, target]) => (
-      exportPath !== '.'
-      && typeof target === 'object'
-      && ('import' in target || 'require' in target)
-    ))
-    .map(([exportPath]) => `${manifest.name}/${exportPath.slice(2)}`)
-  const rootRuntimePaths = new Set([
-    manifest.exports['.'].import,
-    manifest.exports['.'].require,
-  ])
-
-  for (const runtimePath of rootRuntimePaths) {
+  for (const condition of ['import', 'require']) {
+    const runtimePath = manifest.exports['.'][condition]
+    const runtimeFilePath = runtimePath.replace(/^\.\//, '')
     const content = readFileSync(
-      resolve(root, directory, runtimePath.replace(/^\.\//, '')),
+      resolve(root, directory, runtimeFilePath),
       'utf8',
     )
+    const layerSpecifiers = Object.entries(manifest.exports)
+      .filter(([exportPath, target]) => exportPath !== '.' && typeof target === 'object')
+      .map(([, target]) => target[condition])
+      .filter(Boolean)
+      .map((target) => {
+        const targetFilePath = target.replace(/^\.\//, '')
+        const specifier = relative(dirname(runtimeFilePath), targetFilePath).replaceAll('\\', '/')
+
+        return specifier.startsWith('.') ? specifier : `./${specifier}`
+      })
 
     const missingSpecifiers = layerSpecifiers.filter(specifier => !content.includes(specifier))
 
@@ -179,10 +189,16 @@ try {
       if (packedPaths.some(path => path.startsWith('dist/types/'))) {
         throw new Error('m3-foundation must not duplicate its source types/ contract under dist/')
       }
-    } else if (packedPaths.some(path => /(?:^|\/)shims-[^/]+\.d\.ts$/.test(path))) {
-      throw new Error(`${directory} must not publish build-only declaration shims`)
     } else {
-      assertNoPrivateRuntimeChunks(directory, manifest, packedPaths)
+      if (packedPaths.some(path => /(?:^|\/)shims-[^/]+\.d\.ts$/.test(path))) {
+        throw new Error(`${directory} must not publish build-only declaration shims`)
+      }
+
+      if (packedPaths.some(path => path.startsWith('dist/types/'))) {
+        throw new Error(`${directory} must publish declarations alongside runtime modules`)
+      }
+
+      assertPreservedRuntimeModules(directory, manifest, packedPaths)
       assertRootDelegatesToLayers(directory, manifest)
       assertFoundationIsExternal(directory, packedPaths)
     }

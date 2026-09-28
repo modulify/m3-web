@@ -15,37 +15,10 @@ const externalPackages = [
   ...Object.keys(peerDependencies),
 ]
 
-const rootEntry = resolve(__dirname, './src/index.ts')
-const rootLayerAliases = [
-  {
-    find: /^\.\/components$/,
-    replacement: `${name}/components`,
-  },
-  {
-    find: /^\.\/hooks$/,
-    replacement: `${name}/hooks`,
-  },
-]
-
-const layers = {
-  'package-root': {
-    clean: true,
-    declarations: false,
-    entry: rootEntry,
-    fileName: 'index',
-  },
-  'package-components': {
-    clean: false,
-    declarations: true,
-    entry: resolve(__dirname, './src/components/index.ts'),
-    fileName: 'components',
-  },
-  'package-hooks': {
-    clean: false,
-    declarations: false,
-    entry: resolve(__dirname, './src/hooks/index.ts'),
-    fileName: 'hooks',
-  },
+const entries = {
+  components: resolve(import.meta.dirname, 'src/components/index.ts'),
+  hooks: resolve(import.meta.dirname, 'src/hooks/index.ts'),
+  index: resolve(import.meta.dirname, 'src/index.ts'),
 }
 
 const isExternal = (id: string): boolean => (
@@ -53,6 +26,13 @@ const isExternal = (id: string): boolean => (
     id === packageName || id.startsWith(`${packageName}/`)
   ))
 )
+
+const getFileName = (format: LibraryFormats, entryName: string): string => {
+  const extension = format === 'es' ? 'mjs' : format
+  const normalizedEntryName = entryName.replaceAll('?', '.')
+
+  return `${normalizedEntryName}.${extension}`
+}
 
 const declarationPlugin = dts({
   afterDiagnostic: (diagnostics) => {
@@ -71,35 +51,28 @@ const declarationPlugin = dts({
     'src/**/*.ts',
     'src/**/*.tsx',
   ],
-  outDirs: 'dist/types',
+  outDirs: 'dist',
   tsconfigPath: './tsconfig.dts.json',
 })
 
-export default defineConfig(({ mode }) => {
-  const layer = layers[mode as keyof typeof layers] ?? layers['package-root']
+export default defineConfig(() => mergeConfig(common, {
+  plugins: [declarationPlugin],
 
-  return mergeConfig(common, {
-    plugins: layer.declarations ? [declarationPlugin] : [],
-
-    resolve: {
-      alias: mode === 'package-root' ? rootLayerAliases : [],
+  build: {
+    lib: {
+      name: '@modulify/m3-react',
+      formats: ['es', 'cjs'],
+      entry: entries,
+      fileName: getFileName,
     },
-
-    build: {
-      emptyOutDir: layer.clean,
-      lib: {
-        name: '@modulify/m3-react',
-        formats: ['es', 'cjs'],
-        entry: layer.entry,
-        fileName: (format: LibraryFormats) => `${layer.fileName}.${format === 'es' ? 'mjs' : format}`,
-      },
-      minify: false,
-      rollupOptions: {
-        external: isExternal,
-        output: {
-          assetFileNames: 'm3-react[extname]',
-        },
+    minify: false,
+    rolldownOptions: {
+      external: isExternal,
+      output: {
+        assetFileNames: 'm3-react[extname]',
+        preserveModules: true,
+        preserveModulesRoot: resolve(import.meta.dirname, 'src'),
       },
     },
-  })
-})
+  },
+}))
