@@ -16,6 +16,7 @@ describe('m3-vue/chip', () => {
 
     const button = screen.getByRole('button', { name: 'Updates' })
 
+    expect(view.container.textContent).toBe('Updates')
     expect(button.getAttribute('aria-pressed')).toBe('false')
 
     await fireEvent.click(button)
