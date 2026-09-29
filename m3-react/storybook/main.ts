@@ -27,16 +27,14 @@ const config: StorybookConfig = {
   core: {
     allowedHosts,
     disableWhatsNewNotifications: true,
-    builder: {
-      name: '@storybook/builder-vite',
-      options: {
-        viteConfigPath: './vite.config.ts',
-      },
-    },
   },
   framework: {
     name: '@storybook/react-vite',
-    options: {},
+    options: {
+      builder: {
+        viteConfigPath: './storybook/vite.config.ts',
+      },
+    },
   },
   features: {
     sidebarOnboardingChecklist: false,
