@@ -9,9 +9,15 @@
             ['m3-card_landscape']: landscape,
         }"
         v-bind="{
-            role: 'region',
+            role: 'role' in $attrs ? undefined : (
+                'aria-label' in $attrs ||
+                'aria-labelledby' in $attrs ||
+                (!('content' in $slots) && ('heading' in $slots || heading.length))
+                    ? 'region'
+                    : undefined
+            ),
             ...(interactive ? { tabindex: 0 } : {}),
-            ...(!('aria-label' in $attrs) && !('content' in $slots) && ('heading' in $slots || heading.length) ? {
+            ...(!('aria-label' in $attrs) && !('aria-labelledby' in $attrs) && !('content' in $slots) && ('heading' in $slots || heading.length) ? {
                 'aria-labelledby': _id + '-heading',
             } : {}),
             ...$attrs,

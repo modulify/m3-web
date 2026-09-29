@@ -85,7 +85,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
   const surfaceNode = (
     <M3SurfacePanel
       id={useId(id, 'm3-surface')}
-      role={role ?? (isModal ? 'dialog' : 'region')}
+      role={role ?? (isModal ? 'dialog' : undefined)}
       aria-modal={isModal ? (ariaModal ?? 'true') : ariaModal}
       style={{
         ...anchorStyle,

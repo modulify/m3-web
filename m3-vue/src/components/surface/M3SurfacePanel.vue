@@ -3,6 +3,7 @@
         :is="tag"
         :id="id"
         ref="root"
+        :tabindex="tabIndex"
         :style="surfaceStyle"
         :class="surfaceClass"
         v-bind="attrs"
@@ -26,6 +27,10 @@ const props = defineProps(surfacePanelProps)
 
 const attrs = useAttrs()
 const root = ref<HTMLElement | null>(null)
+
+const tabIndex = computed(() => attrs.tabindex ?? (
+  props.overflow === 'auto' || props.overflow === 'scroll' ? 0 : undefined
+))
 
 defineExpose({
   get el () { return root.value },

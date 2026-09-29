@@ -3,6 +3,12 @@ import { render, screen } from '@testing-library/react'
 import { M3Card } from '@/components/card'
 
 describe('m3-react/card', () => {
+  test('does not create an unnamed landmark', () => {
+    const { container } = render(<M3Card>Body</M3Card>)
+
+    expect(container.querySelector('.m3-card')?.getAttribute('role')).toBeNull()
+  })
+
   test('sets aria-labelledby from heading when needed', () => {
     render(
       <M3Card heading="Card title">

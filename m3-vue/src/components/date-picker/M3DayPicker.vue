@@ -44,7 +44,7 @@
                         :range-start="active && isRangeStart(day)"
                         :range-end="active && isRangeEnd(day)"
                         :disabled="disabled || isOutOfRange(day) || !isDaySelectable(day)"
-                        :tab-index="active ? undefined : -1"
+                        :tabindex="active ? undefined : -1"
                         role="gridcell"
                         appearance="circle"
                         @select="emit('select', day)"

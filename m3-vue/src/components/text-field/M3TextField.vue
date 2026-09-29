@@ -13,16 +13,7 @@
             'm3-text-field_disabled': disabled,
             'm3-text-field_readonly': readonly,
         }"
-        role="grid"
-        v-bind="{
-            ...$attrs,
-            ...(!(
-                'aria-label' in $attrs ||
-                'aria-labelledby' in $attrs
-            ) && (label.length || 'label' in $slots) ? {
-                'aria-labelledby': _id + '-label',
-            } : {}),
-        }"
+        v-bind="rootAttrs"
         @click="focus"
     >
         <div v-if="outlined" class="m3-text-field__outline">
@@ -62,6 +53,7 @@
                 v-if="multiline"
                 :id="_id"
                 ref="_input"
+                v-bind="inputAttrs"
                 :name="name"
                 :aria-invalid="invalid ? 'true' : 'false'"
                 :value="value"
@@ -78,6 +70,7 @@
                 v-else
                 :id="_id"
                 ref="_input"
+                v-bind="inputAttrs"
                 :name="name"
                 :aria-invalid="invalid ? 'true' : 'false'"
                 :type="_type"
@@ -106,16 +99,21 @@
 
 <script lang="ts" setup>
 import type { ElementReference, Focusable } from '@modulify/m3-foundation/types/dom'
-import type { PropType } from 'vue'
+import type { HTMLAttributes, PropType } from 'vue'
 
 import { computed } from 'vue'
 import { isId } from '@modulify/m3-foundation/lib/predicates'
 import { isUndefined } from '@modulify/validator/predicates'
+import { mergeIdRefs } from '@modulify/m3-foundation/lib/dom'
 import { onMounted } from 'vue'
 import { Or } from '@modulify/validator/predicates'
 import { ref } from 'vue'
+import { useAttrs } from 'vue'
+import { useSlots } from 'vue'
 
 import { useId } from '@/composables/id'
+
+defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
   id: {
@@ -197,6 +195,64 @@ const emit = defineEmits([
 
 const _id = useId('m3-text-field', computed(() => props.id))
 const _type = computed(() => props.type === 'number' ? 'text' : props.type)
+const attrs = useAttrs() as HTMLAttributes
+const slots = useSlots()
+const hasLabel = computed(() => props.label.length > 0 || 'label' in slots)
+const inputAttrs = computed(() => {
+  const {
+    role,
+    'aria-activedescendant': ariaActiveDescendant,
+    'aria-autocomplete': ariaAutocomplete,
+    'aria-controls': ariaControls,
+    'aria-describedby': ariaDescribedBy,
+    'aria-disabled': ariaDisabled,
+    'aria-errormessage': ariaErrorMessage,
+    'aria-expanded': ariaExpanded,
+    'aria-haspopup': ariaHasPopup,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
+    'aria-readonly': ariaReadOnly,
+    'aria-required': ariaRequired,
+  } = attrs
+
+  return {
+    role,
+    'aria-activedescendant': ariaActiveDescendant,
+    'aria-autocomplete': ariaAutocomplete,
+    'aria-controls': ariaControls,
+    'aria-describedby': ariaDescribedBy,
+    'aria-disabled': ariaDisabled,
+    'aria-errormessage': ariaErrorMessage,
+    'aria-expanded': ariaExpanded,
+    'aria-haspopup': ariaHasPopup,
+    'aria-label': ariaLabel,
+    'aria-labelledby': typeof ariaLabelledBy === 'string'
+      ? mergeIdRefs(ariaLabelledBy, hasLabel.value ? _id.value + '-label' : undefined)
+      : ariaLabelledBy,
+    'aria-readonly': ariaReadOnly,
+    'aria-required': ariaRequired,
+  }
+})
+const rootAttrs = computed(() => {
+  const {
+    role: _role,
+    'aria-activedescendant': _ariaActiveDescendant,
+    'aria-autocomplete': _ariaAutocomplete,
+    'aria-controls': _ariaControls,
+    'aria-describedby': _ariaDescribedBy,
+    'aria-disabled': _ariaDisabled,
+    'aria-errormessage': _ariaErrorMessage,
+    'aria-expanded': _ariaExpanded,
+    'aria-haspopup': _ariaHasPopup,
+    'aria-label': _ariaLabel,
+    'aria-labelledby': _ariaLabelledBy,
+    'aria-readonly': _ariaReadOnly,
+    'aria-required': _ariaRequired,
+    ...root
+  } = attrs
+
+  return root
+})
 const root = ref<HTMLDivElement | null>(null)
 const _input = ref<HTMLInputElement | HTMLTextAreaElement | null>(null)
 

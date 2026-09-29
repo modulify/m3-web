@@ -16,12 +16,13 @@
         :overflow="overflow"
         :offset-main-axis="offsetMainAxis"
         :offset-cross-axis="offsetCrossAxis"
-        role="tooltip"
         class="m3-rich-tooltip"
+        v-bind="rootAttrs"
     >
         <div class="m3-rich-tooltip__content">
             <h3
                 v-if="'heading' in $slots"
+                :id="headingId"
                 class="m3-rich-tooltip__heading"
             >
                 <slot name="heading" />
@@ -63,11 +64,21 @@ import {
 } from '@modulify/m3-foundation/lib/popper/predicates'
 import { isString } from '@modulify/validator/predicates'
 import { isTriggerOptions } from '@modulify/m3-foundation/lib/popper/predicates'
+import { mergeIdRefs } from '@modulify/m3-foundation/lib/dom'
 import { Or } from '@modulify/validator/predicates'
 
-import { ref } from 'vue'
+import {
+  computed,
+  ref,
+  useAttrs,
+  useSlots,
+} from 'vue'
 
 import { M3Popper } from '@/components/popper'
+
+import { useId } from '@/composables/id'
+
+defineOptions({ inheritAttrs: false })
 
 defineProps({
   target: {
@@ -156,7 +167,27 @@ defineProps({
   },
 })
 
+const attrs = useAttrs()
+const slots = useSlots()
 const root = ref<M3PopperInstance | null>(null)
+const headingId = useId('m3-rich-tooltip-heading')
+
+const rootAttrs = computed(() => {
+  const role = attrs.role ?? ('footer' in slots ? 'dialog' : 'tooltip')
+  const labelledBy = typeof attrs['aria-labelledby'] === 'string'
+    ? attrs['aria-labelledby']
+    : undefined
+
+  return {
+    ...attrs,
+    role,
+    'aria-labelledby': role === 'dialog'
+      && 'heading' in slots
+      && (attrs['aria-label'] === undefined || labelledBy !== undefined)
+      ? mergeIdRefs(labelledBy, headingId.value)
+      : labelledBy,
+  }
+})
 
 defineExpose({
   get el () { return root.value?.el ?? null },

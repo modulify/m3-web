@@ -164,10 +164,7 @@ const surfaceAttrs = computed(() => {
     role: 'dialog',
     'aria-modal': 'true',
     ...attrs,
-  } : {
-    role: 'region',
-    ...attrs,
-  }
+  } : attrs
 })
 
 const surfaceClass = computed(() => ({

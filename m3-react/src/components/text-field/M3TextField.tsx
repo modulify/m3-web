@@ -2,6 +2,7 @@ import type { ComponentSetupContext } from '@/utils/component'
 import type { ElementReference, Focusable } from '@modulify/m3-foundation/types/dom'
 import type { FormEvent, HTMLAttributes, Ref } from 'react'
 
+import { mergeIdRefs } from '@modulify/m3-foundation/lib/dom'
 import {
   useEffect,
   useMemo,
@@ -69,6 +70,19 @@ export default defineComponent(function M3TextField({
   outlined = false,
   className = '',
   children = [],
+  role,
+  'aria-activedescendant': ariaActiveDescendant,
+  'aria-autocomplete': ariaAutocomplete,
+  'aria-controls': ariaControls,
+  'aria-describedby': ariaDescribedBy,
+  'aria-disabled': ariaDisabled,
+  'aria-errormessage': ariaErrorMessage,
+  'aria-expanded': ariaExpanded,
+  'aria-haspopup': ariaHasPopup,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-readonly': ariaReadOnly,
+  'aria-required': ariaRequired,
   onInput = (_: string) => {},
   onChange = (_: string) => {},
   onUpdate = (_: string) => {},
@@ -97,6 +111,9 @@ export default defineComponent(function M3TextField({
   }), [children])
 
   const hasLabel = !!slots.label || label.length > 0
+  const inputAriaLabelledBy = ariaLabelledBy === undefined
+    ? undefined
+    : mergeIdRefs(ariaLabelledBy, hasLabel ? _id + '-label' : undefined)
 
   const focus = () => input.current?.focus()
 
@@ -115,10 +132,6 @@ export default defineComponent(function M3TextField({
       }
     }
   }, [])
-
-  const aria = !('aria-label' in attrs) && !('aria-labelledby' in attrs) && hasLabel
-    ? { 'aria-labelledby': _id + '-label' }
-    : {}
 
   const handleInput = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const rawValue = event.currentTarget.value
@@ -155,11 +168,7 @@ export default defineComponent(function M3TextField({
         'm3-text-field_disabled': disabled,
         'm3-text-field_readonly': readonly,
       }])}
-      role="grid"
-      {...{
-        ...aria,
-        ...attrs,
-      }}
+      {...attrs}
       onClick={compose(focus, onClick)}
     >
       {outlined ? (
@@ -203,7 +212,20 @@ export default defineComponent(function M3TextField({
             ref={setTextAreaRef}
             id={_id}
             name={name}
+            aria-activedescendant={ariaActiveDescendant}
+            aria-autocomplete={ariaAutocomplete}
+            aria-controls={ariaControls}
+            aria-describedby={ariaDescribedBy}
+            aria-disabled={ariaDisabled}
+            aria-errormessage={ariaErrorMessage}
+            aria-expanded={ariaExpanded}
+            aria-haspopup={ariaHasPopup}
             aria-invalid={invalid}
+            aria-label={ariaLabel}
+            aria-labelledby={inputAriaLabelledBy}
+            aria-readonly={ariaReadOnly}
+            aria-required={ariaRequired}
+            role={role}
             value={value}
             placeholder={placeholder}
             disabled={disabled}
@@ -218,7 +240,20 @@ export default defineComponent(function M3TextField({
             ref={setInputRef}
             id={_id}
             name={name}
+            aria-activedescendant={ariaActiveDescendant}
+            aria-autocomplete={ariaAutocomplete}
+            aria-controls={ariaControls}
+            aria-describedby={ariaDescribedBy}
+            aria-disabled={ariaDisabled}
+            aria-errormessage={ariaErrorMessage}
+            aria-expanded={ariaExpanded}
+            aria-haspopup={ariaHasPopup}
             aria-invalid={invalid}
+            aria-label={ariaLabel}
+            aria-labelledby={inputAriaLabelledBy}
+            aria-readonly={ariaReadOnly}
+            aria-required={ariaRequired}
+            role={role}
             type={_type}
             value={value}
             placeholder={placeholder}

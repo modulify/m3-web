@@ -8,17 +8,13 @@
             ['m3-navigation-tab_labelled']: 'label' in $slots || label.length > 0,
             ['m3-navigation-tab_active']: active,
         }"
-        role="tab"
-        v-bind="{
-            ...('aria-label' in $attrs ? {} : { 'aria-labelledby': labelId }),
-            ...$attrs,
-        }"
+        v-bind="rootAttrs"
     >
         <M3Link
             ref="button"
-            :aria-labelledby="labelId"
             :href="href"
             class="m3-navigation-tab__button"
+            v-bind="linkAttrs"
             @click="onClick"
         >
             <M3Ripple :owner="ref(buttonElement)" centered />
@@ -80,8 +76,11 @@ import type { PropType, Ref } from 'vue'
 
 import { computed, inject } from 'vue'
 import { isId } from '@modulify/m3-foundation/lib/predicates'
-import { isUndefined, Or } from '@modulify/validator/predicates'
+import { isUndefined } from '@modulify/validator/predicates'
+import { mergeIdRefs } from '@modulify/m3-foundation/lib/dom'
+import { Or } from '@modulify/validator/predicates'
 import { ref } from 'vue'
+import { useAttrs } from 'vue'
 
 import { M3Badge } from '@/components/badge'
 import { M3Link } from '@/components/link'
@@ -92,6 +91,8 @@ import { useBreakpoint } from '@/composables/breakpoint'
 import { useId } from '@/composables/id'
 
 import { M3NavigationAppearance } from './injections'
+
+defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
   id: {
@@ -142,6 +143,27 @@ const inDrawer = computed(() => breakpoint.value.ge('large') || appearance.value
 const labelIdForDrawer = computed(() => _id.value + '-label-for-drawer')
 const labelIdForRail = computed(() => _id.value + '-label-for-rail')
 const labelId = computed(() => inDrawer.value ? labelIdForDrawer.value : labelIdForRail.value)
+const attrs = useAttrs()
+const linkAttrs = computed(() => {
+  const ariaLabel = attrs['aria-label']
+  const ariaLabelledBy = attrs['aria-labelledby']
+
+  return {
+    'aria-label': ariaLabel,
+    'aria-labelledby': typeof ariaLabelledBy === 'string'
+      ? mergeIdRefs(ariaLabelledBy, labelId.value)
+      : ariaLabel === undefined ? labelId.value : undefined,
+  }
+})
+const rootAttrs = computed(() => {
+  const {
+    'aria-label': _ariaLabel,
+    'aria-labelledby': _ariaLabelledBy,
+    ...root
+  } = attrs
+
+  return root
+})
 
 provideM3IconAppearance(() => props.active ? 'filled' : 'outlined')
 

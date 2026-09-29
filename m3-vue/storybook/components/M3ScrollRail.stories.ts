@@ -37,6 +37,7 @@ const meta = {
         args,
         item: localize(globals.locale, { 'en-US': 'Item', 'ru-RU': 'Элемент' }),
         items: 30,
+        scrollArea: localize(globals.locale, { 'en-US': 'Scrollable items', 'ru-RU': 'Прокручиваемые элементы' }),
       }
     },
 
@@ -53,7 +54,12 @@ const meta = {
                 class="m3-scroll-box m3-scroll-box_scroll-x m3-scroll-box_scroll-y"
                 style="max-width: 360px; max-height: 360px;"
             >
-                <div class="m3-scroll-box__content" style="padding: 0 8px;">
+                <div
+                    :aria-label="scrollArea"
+                    class="m3-scroll-box__content"
+                    style="padding: 0 8px;"
+                    tabindex="0"
+                >
                     <M3ScrollRail v-bind="args" />
                     <M3ScrollRail v-bind="args" horizontal />
                     <div v-for="i in items" :key="i" style="width: 480px;">

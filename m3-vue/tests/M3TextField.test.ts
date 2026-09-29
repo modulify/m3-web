@@ -4,17 +4,33 @@ import { render, screen } from '@testing-library/vue'
 import { M3TextField } from '@/components/text-field'
 
 describe('m3-vue/text-field', () => {
-  test('sets aria-labelledby when label is provided', () => {
-    render(M3TextField, {
+  test('labels the input and keeps the visual wrapper semantically neutral', () => {
+    const { container } = render(M3TextField, {
       props: {
         label: 'Email',
       },
     })
 
-    const root = screen.getByRole('grid')
+    const input = screen.getByRole('textbox', { name: 'Email' })
+    const root = container.querySelector('.m3-text-field')
 
-    expect(root.getAttribute('aria-labelledby')).toContain('-label')
-    expect(screen.getByText('Email')).not.toBeNull()
+    expect(input).not.toBeNull()
+    expect(root?.getAttribute('role')).toBeNull()
+  })
+
+  test('combines an external accessible name with the visible label', () => {
+    render(M3TextField, {
+      props: {
+        label: 'Email',
+      },
+      attrs: {
+        'aria-labelledby': 'section-heading',
+      },
+    })
+
+    const input = screen.getByRole('textbox', { name: 'Email' })
+
+    expect(input.getAttribute('aria-labelledby')).toMatch(/^section-heading .+-label$/)
   })
 
   test('emits input and update:value on input when not lazy', async () => {

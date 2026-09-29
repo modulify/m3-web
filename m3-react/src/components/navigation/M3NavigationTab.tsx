@@ -6,6 +6,7 @@ import type { Interactable } from '@modulify/m3-foundation/types/dom'
 import type { M3RippleExposed } from '@/components/ripple'
 import type { Ref } from 'react'
 
+import { mergeIdRefs } from '@modulify/m3-foundation/lib/dom'
 import { useMemo, useRef } from 'react'
 
 import { M3Badge } from '@/components/badge'
@@ -63,6 +64,8 @@ export default defineComponent(function M3NavigationTab({
   badged = false,
   prevent = false,
   children = [],
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
   onKeyUp = () => {},
   onNavigate = () => {},
   ...attrs
@@ -93,6 +96,9 @@ export default defineComponent(function M3NavigationTab({
   const labelIdForDrawer = _id + '-label-for-drawer'
   const labelIdForRail = _id + '-label-for-rail'
   const labelId = inDrawer ? labelIdForDrawer : labelIdForRail
+  const buttonAriaLabelledBy = ariaLabelledBy === undefined
+    ? ariaLabel === undefined ? labelId : undefined
+    : mergeIdRefs(ariaLabelledBy, labelId)
 
   expose(interactable)
 
@@ -105,14 +111,12 @@ export default defineComponent(function M3NavigationTab({
         ['m3-navigation-tab_labelled']: hasLabel,
         ['m3-navigation-tab_active']: active,
       })}
-      {...{
-        ...('aria-label' in attrs ? {} : { 'aria-labelledby': labelId }),
-        ...attrs,
-      }}
+      {...attrs}
     >
       <button
         ref={button}
-        aria-labelledby={labelId}
+        aria-label={ariaLabel}
+        aria-labelledby={buttonAriaLabelledBy}
         className="m3-navigation-tab__button"
         onClick={event => {
           if (prevent) {

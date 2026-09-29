@@ -1,26 +1,29 @@
 <template>
     <div
         ref="root"
-        :aria-controls="_id + '-menu'"
-        :aria-expanded="expanded ? 'true' : 'false'"
-        :aria-disabled="disabled ? 'true' : 'false'"
-        :aria-readonly="readonly ? 'true' : 'false'"
         :class="{
             'm3-select': true,
             'm3-select_expanded': shouldBeExpanded,
         }"
-        aria-haspopup="listbox"
-        role="combobox"
+        v-bind="rootAttrs"
     >
         <M3TextField
             :id="_id"
+            :aria-controls="_id + '-menu'"
+            :aria-disabled="disabled ? 'true' : 'false'"
+            :aria-expanded="expanded ? 'true' : 'false'"
+            :aria-readonly="readonly ? 'true' : 'false'"
             :value="text"
             :label="label"
             :placeholder="placeholder"
             :invalid="invalid"
+            :disabled="disabled"
             :readonly="readonly"
             :outlined="outlined"
+            aria-haspopup="listbox"
             class="m3-select__field"
+            role="combobox"
+            v-bind="inputAttrs"
         >
             <template v-if="'leading' in $slots" #leading-icon>
                 <slot :active="shouldBeExpanded" name="leading" />
@@ -89,6 +92,7 @@ import { isUndefined } from '@modulify/validator/predicates'
 import { onMounted } from 'vue'
 import { Or } from '@modulify/validator/predicates'
 import { ref } from 'vue'
+import { useAttrs } from 'vue'
 
 import { useAnimationFrame } from '@/composables/animation'
 import { useId } from '@/composables/id'
@@ -98,6 +102,8 @@ import { M3Menu, M3MenuItem } from '../menu'
 import { M3ScrollRail } from '../scroll-rail'
 import { M3TextField } from '../text-field'
 import SpriteCaret from './caret.svg'
+
+defineOptions({ inheritAttrs: false })
 
 type Maybe<T> = T | null
 
@@ -164,6 +170,22 @@ const emit = defineEmits([
 ])
 
 const _id = useId('m3-select', computed(() => props.id))
+const attrs = useAttrs()
+const inputAttrs = computed(() => ({
+  'aria-describedby': attrs['aria-describedby'],
+  'aria-label': attrs['aria-label'],
+  'aria-labelledby': attrs['aria-labelledby'],
+}))
+const rootAttrs = computed(() => {
+  const {
+    'aria-describedby': _ariaDescribedBy,
+    'aria-label': _ariaLabel,
+    'aria-labelledby': _ariaLabelledBy,
+    ...root
+  } = attrs
+
+  return root
+})
 
 const root = ref<HTMLElement | null>(null)
 const rootWidth = ref(0)
