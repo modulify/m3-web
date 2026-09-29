@@ -7,6 +7,8 @@
   "include": [
     "vitest.config.e2e.ts",
     "m3-react/vitest.config.e2e.ts",
-    "m3-vue/vitest.config.e2e.ts"
+    "m3-react/vitest.config.smoke.ts",
+    "m3-vue/vitest.config.e2e.ts",
+    "m3-vue/vitest.config.smoke.ts"
   ]
 }

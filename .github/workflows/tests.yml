@@ -233,6 +233,9 @@ jobs:
       - name: Build Vue Storybook
         run: yarn workspace @modulify/m3-vue storybook:build --test --quiet
 
+      - name: Install Playwright Chromium
+        run: yarn playwright install --with-deps chromium
+
       - name: Run React Storybook smoke tests
         run: yarn workspace @modulify/m3-react test:smoke
 

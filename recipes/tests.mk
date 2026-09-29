@@ -10,7 +10,7 @@ NYC_OUTPUT_DIR=.nyc_output
 .PHONY: test-smoke
 test-smoke: node_modules ## [Tests][docker][smoke] Runs smoke tests for all UI workspaces
 	$(TARGET_HEADER)
-	$(YARN) test:smoke
+	$(YARN_PLAYWRIGHT) test:smoke
 
 .PHONY: test-packages
 test-packages: build ## [Tests][docker][network] Packs and validates installed package contracts

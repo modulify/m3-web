@@ -21,7 +21,7 @@ const projectAnnotations = setProjectAnnotations([
   preview,
 ])
 
-const storyModules = import.meta.glob('../../storybook/components/*.stories.tsx', {
+const storyModules = import.meta.glob('../../storybook/**/*.stories.tsx', {
   eager: true,
 })
 
@@ -41,11 +41,17 @@ const stories = Object.entries(storyModules).flatMap(([modulePath, moduleExports
 })
 
 describe('m3-react/storybook a11y smoke', () => {
+  test('fails the run when the a11y addon finds violations', () => {
+    expect(import.meta.env.VITEST_STORYBOOK).toBe('false')
+  })
+
   test('collects stories for smoke checks', () => {
     expect(stories.length).toBeGreaterThan(0)
   })
 
   test.each(stories)('$id', async ({ story }) => {
     await story.run()
+
+    expect(document.querySelector('[class^="m3-"], [class*=" m3-"]')).not.toBeNull()
   })
 })
