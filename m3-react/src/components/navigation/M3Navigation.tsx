@@ -8,7 +8,7 @@ import type { FC, HTMLAttributes, Ref } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { createPortal } from 'react-dom'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
 import M3NavigationAppearance from '@/components/navigation/M3NavigationAppearance'
 
@@ -77,6 +77,7 @@ export default defineComponent(function M3Navigation({
   ...attrs
 }: M3NavigationProps, { expose }: ComponentSetupContext<M3NavigationExposed>) {
   const breakpoint = useBreakpoint()
+  const scrim = useRef<HTMLDivElement | null>(null)
 
   const state = useRecord({
     appearance: expanded ? 'drawer' : appearance,
@@ -125,6 +126,7 @@ export default defineComponent(function M3Navigation({
   return createPortal(
     <>
       <CSSTransition
+        nodeRef={scrim}
         in={expanded}
         timeout={{ appear: 500, enter: 500, exit: 800 }}
         classNames={{
@@ -135,6 +137,7 @@ export default defineComponent(function M3Navigation({
         }}
       >
         <div
+          ref={scrim}
           style={!expanded && !state.transitioning ? { display: 'none' } : undefined}
           className="m3-scrim"
           onClick={() => handlers.onToggle(false)}
