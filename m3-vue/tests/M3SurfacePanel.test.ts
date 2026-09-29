@@ -37,6 +37,18 @@ describe('m3-vue/surface-panel', () => {
     expect(surface.style.borderBottomLeftRadius).toBe('16px')
   })
 
+  test('makes an overflowing panel keyboard-scrollable', () => {
+    render(M3SurfacePanel, {
+      props: {
+        overflow: 'auto',
+      },
+    })
+
+    const surface = document.querySelector('.m3-surface') as HTMLElement
+
+    expect(surface.tabIndex).toBe(0)
+  })
+
   test('maps auto variant from elevation and allows explicit variant override', async () => {
     const view = render(M3SurfacePanel, {
       props: {

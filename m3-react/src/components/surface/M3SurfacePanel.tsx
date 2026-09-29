@@ -42,6 +42,7 @@ export default defineComponent(function M3SurfacePanel({
   transitionMs = 220,
   transitionTiming,
   overflow = 'visible',
+  tabIndex,
   className = '',
   style,
   children,
@@ -57,6 +58,7 @@ export default defineComponent(function M3SurfacePanel({
         root.current = element
       }}
       id={id}
+      tabIndex={tabIndex ?? (overflow === 'auto' || overflow === 'scroll' ? 0 : undefined)}
       style={getSurfacePanelStyle({
         fillWidth,
         fillHeight,

@@ -4,14 +4,15 @@ import M3Surface from '@/components/surface/M3Surface.vue'
 
 describe('m3-vue/experimental/surface', () => {
   test('applies deterministic default contract', () => {
-    render(M3Surface, {
+    const { container } = render(M3Surface, {
       slots: {
         default: 'Surface body',
       },
     })
 
-    const surface = screen.getByRole('region')
+    const surface = container.querySelector('.m3-surface') as HTMLElement
 
+    expect(surface.getAttribute('role')).toBeNull()
     expect(surface.classList.contains('m3-surface')).toBe(true)
     expect(surface.style.width).toBe('100%')
     expect(surface.style.height).toBe('100%')
@@ -25,7 +26,7 @@ describe('m3-vue/experimental/surface', () => {
   })
 
   test('supports global and per-corner rounding overrides', () => {
-    render(M3Surface, {
+    const { container } = render(M3Surface, {
       props: {
         rounding: 16,
         roundingTopLeft: 4,
@@ -33,7 +34,7 @@ describe('m3-vue/experimental/surface', () => {
       },
     })
 
-    const surface = screen.getByRole('region')
+    const surface = container.querySelector('.m3-surface') as HTMLElement
 
     expect(surface.style.borderTopLeftRadius).toBe('4px')
     expect(surface.style.borderTopRightRadius).toBe('16px')
@@ -90,7 +91,7 @@ describe('m3-vue/experimental/surface', () => {
       },
     })
 
-    let surface = screen.getByRole('region')
+    let surface = view.container.querySelector('.m3-surface') as HTMLElement
 
     expect(surface.classList.contains('m3-surface_container-high')).toBe(true)
 
@@ -99,7 +100,7 @@ describe('m3-vue/experimental/surface', () => {
       variant: 'surface-bright',
     })
 
-    surface = screen.getByRole('region')
+    surface = view.container.querySelector('.m3-surface') as HTMLElement
 
     expect(surface.classList.contains('m3-surface_bright')).toBe(true)
     expect(surface.classList.contains('m3-surface_container-high')).toBe(false)

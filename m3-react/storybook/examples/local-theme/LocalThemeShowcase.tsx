@@ -75,7 +75,7 @@ const Notification: FC<NotificationProps> = ({
       elevation={1}
     >
       <div className="m3-local-theme-showcase__eyebrow">{eyebrow}</div>
-      <h3 className="m3-local-theme-showcase__title">{title}</h3>
+      <h2 className="m3-local-theme-showcase__title">{title}</h2>
       <p className="m3-local-theme-showcase__copy">{copy}</p>
 
       <div className="m3-local-theme-showcase__actions">
@@ -189,7 +189,7 @@ const ListMenuScene: FC = () => {
       <div className="m3-local-theme-showcase__workspace-header">
         <div>
           <div className="m3-local-theme-showcase__eyebrow">{text.cookbook}</div>
-          <h3 className="m3-local-theme-showcase__title">{text.listTitle}</h3>
+          <h2 className="m3-local-theme-showcase__title">{text.listTitle}</h2>
           <p className="m3-local-theme-showcase__copy">
             {text.listCopy}
           </p>

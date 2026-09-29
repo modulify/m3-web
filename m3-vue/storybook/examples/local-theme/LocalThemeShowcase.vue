@@ -27,9 +27,9 @@
                         <div class="m3-local-theme-showcase__eyebrow">
                             {{ text.baseline }}
                         </div>
-                        <h3 class="m3-local-theme-showcase__title">
+                        <h2 class="m3-local-theme-showcase__title">
                             {{ currentNotification.title }}
-                        </h3>
+                        </h2>
                         <p class="m3-local-theme-showcase__copy">
                             {{ text.baselineCopy }}
                         </p>
@@ -59,9 +59,9 @@
                         <div class="m3-local-theme-showcase__eyebrow">
                             {{ currentNotification.eyebrow }}
                         </div>
-                        <h3 class="m3-local-theme-showcase__title">
+                        <h2 class="m3-local-theme-showcase__title">
                             {{ currentNotification.title }}
-                        </h3>
+                        </h2>
                         <p class="m3-local-theme-showcase__copy">
                             {{ currentNotification.copy }}
                         </p>
@@ -98,9 +98,9 @@
                         <div class="m3-local-theme-showcase__eyebrow">
                             {{ text.cookbook }}
                         </div>
-                        <h3 class="m3-local-theme-showcase__title">
+                        <h2 class="m3-local-theme-showcase__title">
                             {{ text.listTitle }}
-                        </h3>
+                        </h2>
                         <p class="m3-local-theme-showcase__copy">
                             {{ text.listCopy }}
                         </p>

@@ -14,12 +14,13 @@ describe('m3-react/navigation-tab', () => {
     )
 
     const root = container.querySelector('.m3-navigation-tab') as HTMLElement
+    const button = screen.getByRole('button')
     const icon = container.querySelector('.m3-icon') as HTMLElement
     const badge = container.querySelector('.m3-navigation-tab__badge') as HTMLElement
 
     expect(root.classList.contains('m3-navigation-tab_active')).toBe(true)
     expect(icon.classList.contains('m3-icon_filled')).toBe(true)
-    expect(root.getAttribute('aria-labelledby')).toContain('-label-for-rail')
+    expect(button.getAttribute('aria-labelledby')).toContain('-label-for-rail')
     expect(badge).not.toBeNull()
   })
 
@@ -40,16 +41,16 @@ describe('m3-react/navigation-tab', () => {
   })
 
   test('respects explicit aria-label over generated aria-labelledby', () => {
-    const { container } = render(
+    render(
       <M3NavigationTab
         label="Inbox"
         aria-label="Custom tab label"
       />
     )
 
-    const root = container.querySelector('.m3-navigation-tab') as HTMLElement
+    const button = screen.getByRole('button')
 
-    expect(root.getAttribute('aria-label')).toBe('Custom tab label')
-    expect(root.getAttribute('aria-labelledby')).toBeNull()
+    expect(button.getAttribute('aria-label')).toBe('Custom tab label')
+    expect(button.getAttribute('aria-labelledby')).toBeNull()
   })
 })

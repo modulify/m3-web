@@ -73,7 +73,7 @@ export default defineComponent(function M3Card({
   interactive = false,
   landscape = false,
   className = '',
-  role = 'region',
+  role,
   children = [],
   onClick = (_) => {},
   ...attrs
@@ -104,14 +104,15 @@ export default defineComponent(function M3Card({
       ? <Heading id={_id + '-heading'}>{heading}</Heading>
       : null
 
-  const aria = !('aria-label' in attrs) && !hasSlot('content') && hasHeading ? {
+  const aria = !('aria-label' in attrs) && !('aria-labelledby' in attrs) && !hasSlot('content') && hasHeading ? {
     'aria-labelledby': headingId ?? _id + '-heading',
   } : {}
+  const hasAccessibleName = 'aria-label' in attrs || 'aria-labelledby' in attrs || 'aria-labelledby' in aria
 
   return (
     <section
       ref={root}
-      role={role}
+      role={role ?? (hasAccessibleName ? 'region' : undefined)}
       className={toClassName([className, {
         ['m3-card']: true,
         ['m3-card_' + appearance]: true,

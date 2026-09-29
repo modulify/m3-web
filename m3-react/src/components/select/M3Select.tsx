@@ -120,6 +120,9 @@ export default defineComponent(function M3Select<Value = unknown>({
   placement = 'bottom-start',
   className = '',
   children = [],
+  'aria-describedby': ariaDescribedBy,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
   onUpdate = (_: Value) => {},
   ...attrs
 }: M3SelectProps<Value>, context?: ComponentSetupContext<M3SelectExposed>) {
@@ -172,27 +175,31 @@ export default defineComponent(function M3Select<Value = unknown>({
   return (
     <div
       ref={root}
-      aria-controls={_id + '-menu'}
-      aria-expanded={expanded ? 'true' : 'false'}
-      aria-disabled={disabled ? 'true' : 'false'}
-      aria-readonly={readonly ? 'true' : 'false'}
       className={toClassName([className, {
         'm3-select': true,
         'm3-select_expanded': shouldBeExpanded,
       }])}
-      aria-haspopup="listbox"
-      role="combobox"
       {...attrs}
     >
       <M3TextField
         id={_id}
+        aria-controls={_id + '-menu'}
+        aria-describedby={ariaDescribedBy}
+        aria-disabled={disabled ? 'true' : 'false'}
+        aria-expanded={expanded ? 'true' : 'false'}
+        aria-haspopup="listbox"
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-readonly={readonly ? 'true' : 'false'}
         value={text}
         label={label}
         placeholder={placeholder}
         invalid={invalid}
+        disabled={disabled}
         readonly={readonly}
         outlined={outlined}
         className="m3-select__field"
+        role="combobox"
       >
         {slots.leading ? (
           <M3TextField.LeadingIcon>

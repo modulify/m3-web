@@ -4,14 +4,15 @@ import { M3Surface } from '@/components/surface'
 
 describe('m3-react/surface', () => {
   test('applies deterministic default contract', () => {
-    render(
+    const { container } = render(
       <M3Surface>
         Surface body
       </M3Surface>
     )
 
-    const surface = screen.getByRole('region')
+    const surface = container.querySelector('.m3-surface') as HTMLElement
 
+    expect(surface.getAttribute('role')).toBeNull()
     expect(surface.classList.contains('m3-surface')).toBe(true)
     expect(surface.style.width).toBe('100%')
     expect(surface.style.height).toBe('100%')
@@ -25,7 +26,7 @@ describe('m3-react/surface', () => {
   })
 
   test('supports global and per-corner rounding overrides', () => {
-    render(
+    const { container } = render(
       <M3Surface
         rounding={16}
         roundingTopLeft={4}
@@ -33,7 +34,7 @@ describe('m3-react/surface', () => {
       />
     )
 
-    const surface = screen.getByRole('region')
+    const surface = container.querySelector('.m3-surface') as HTMLElement
 
     expect(surface.style.borderTopLeftRadius).toBe('4px')
     expect(surface.style.borderTopRightRadius).toBe('16px')
@@ -88,11 +89,11 @@ describe('m3-react/surface', () => {
   })
 
   test('maps auto role from elevation and allows explicit variant override', () => {
-    const { rerender } = render(
+    const { container, rerender } = render(
       <M3Surface elevation={3} />
     )
 
-    let surface = screen.getByRole('region')
+    let surface = container.querySelector('.m3-surface') as HTMLElement
 
     expect(surface.classList.contains('m3-surface_container-high')).toBe(true)
 
@@ -100,7 +101,7 @@ describe('m3-react/surface', () => {
       <M3Surface elevation={3} variant="surface-bright" />
     )
 
-    surface = screen.getByRole('region')
+    surface = container.querySelector('.m3-surface') as HTMLElement
 
     expect(surface.classList.contains('m3-surface_bright')).toBe(true)
     expect(surface.classList.contains('m3-surface_container-high')).toBe(false)
