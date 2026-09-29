@@ -3,6 +3,8 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { M3ScrollRail } from '@/components/scroll-rail'
 import { M3Surface } from '@/components/surface'
 
+import { localize } from '../i18n'
+
 const meta = {
   title: 'Components/M3ScrollRail',
 
@@ -22,7 +24,7 @@ const meta = {
     disabled: false,
   },
 
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     name: 'M3ScrollRailStory',
 
     components: {
@@ -33,6 +35,7 @@ const meta = {
     setup () {
       return {
         args,
+        item: localize(globals.locale, { 'en-US': 'Item', 'ru-RU': 'Элемент' }),
         items: 30,
       }
     },
@@ -54,7 +57,7 @@ const meta = {
                     <M3ScrollRail v-bind="args" />
                     <M3ScrollRail v-bind="args" horizontal />
                     <div v-for="i in items" :key="i" style="width: 480px;">
-                      Item {{ i }}
+                      {{ item }} {{ i }}
                     </div>
                 </div>
             </div>

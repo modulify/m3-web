@@ -1,7 +1,10 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3RichTooltipStories from './M3RichTooltip.stories'
 
 <Meta of={M3RichTooltipStories} />
+
+<Localized locale="en-US">
 
 # Rich tooltip
 
@@ -19,7 +22,7 @@ Rich tooltips should stay short, contextual, and secondary:
 
 - one clear heading or intent
 - one compact supporting explanation
-- optional lightweight action or shortcut hint
+- up to two brief text actions, or a shortcut hint
 
 ### Behavior
 
@@ -33,13 +36,13 @@ The tooltip should remain attached to its trigger context and disappear when the
 
 ## Story guide
 
-- [Destructive Action](?path=/story/components-m3richtooltip--destructive-action)
+- [Action consequence](?path=/story/components-m3richtooltip--action-consequence)
 - [Bulk Selection](?path=/story/components-m3richtooltip--bulk-selection)
 - [Shortcut Hint](?path=/story/components-m3richtooltip--shortcut-hint)
 
 ## Demo
 
-<Canvas of={M3RichTooltipStories.DestructiveAction} />
+<Canvas of={M3RichTooltipStories.ActionConsequence} />
 <Canvas of={M3RichTooltipStories.BulkSelection} />
 <Canvas of={M3RichTooltipStories.ShortcutHint} />
 
@@ -52,6 +55,10 @@ If the user must know the message to complete the task safely, do not hide it be
 ### Keep interaction lightweight
 
 Rich tooltips can contain more than plain text, but they should still feel like supplementary context, not a mini dialog.
+
+### Keep actions brief
+
+Use no more than two short text buttons. Put the surrounding context in supporting text so the buttons can remain concise and stay side by side.
 
 ## Content anatomy
 
@@ -67,6 +74,7 @@ The stories in this workspace keep the payload deliberately compact so the toolt
 
 - keep the message tightly tied to the hovered or focused trigger
 - prefer consequence framing for risky actions and hint framing for shortcuts
+- keep action labels brief and explain their context in the supporting text
 - keep the tooltip short enough to read without shifting task focus
 
 ### Don’t
@@ -80,3 +88,88 @@ The stories in this workspace keep the payload deliberately compact so the toolt
 - [M3 Tooltips overview](https://m3.material.io/components/tooltips/overview)
 - [M3 Tooltips guidelines](https://m3.material.io/components/tooltips/guidelines)
 - [WAI-ARIA APG: Tooltip Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Расширенная подсказка
+
+Расширенные подсказки показывают дополнительную контекстную информацию рядом с управляющим элементом. Они содержательнее обычных tooltip, но остаются лёгкими и неблокирующими.
+
+## API
+
+### Когда использовать
+
+Используйте подсказку для краткой справки, сочетаний клавиш или последствий действия. Критичное содержимое и подтверждения со сложным взаимодействием лучше поместить в отдельную поверхность.
+
+### Ограничения содержимого
+
+- один понятный заголовок или намерение
+- одно краткое объяснение
+- до двух коротких текстовых действий или подсказка о сочетании клавиш
+
+### Поведение
+
+Подсказка должна сохранять связь со своим триггером и исчезать при выходе из контекста. Не размещайте только в ней обязательную для задачи информацию.
+
+## Доступность
+
+- Свяжите триггер и подсказку через `aria-describedby`.
+- Делайте текст кратким и относящимся к задаче.
+- Не используйте tooltip как единственный источник критичных сведений.
+
+## Примеры в Storybook
+
+- [Последствия действия](?path=/story/components-m3richtooltip--action-consequence)
+- [Множественный выбор](?path=/story/components-m3richtooltip--bulk-selection)
+- [Сочетание клавиш](?path=/story/components-m3richtooltip--shortcut-hint)
+
+## Демонстрация
+
+<Canvas of={M3RichTooltipStories.ActionConsequence} />
+<Canvas of={M3RichTooltipStories.BulkSelection} />
+<Canvas of={M3RichTooltipStories.ShortcutHint} />
+
+## Рекомендации
+
+### Не скрывайте требования
+
+Если сообщение необходимо для безопасного завершения задачи, покажите его непосредственно в интерфейсе.
+
+### Не усложняйте взаимодействие
+
+Даже расширенная подсказка должна оставаться вспомогательным контекстом, а не превращаться в мини-диалог.
+
+### Короткие подписи действий
+
+Используйте не более двух коротких текстовых кнопок. Переносите уточняющий контекст в поясняющий текст, чтобы кнопки оставались лаконичными и помещались рядом.
+
+## Структура содержимого
+
+- короткий заголовок
+- одно предложение о последствиях, сочетании клавиш или контексте
+- необязательная завершающая подсказка или простое действие
+
+## Что делать и чего избегать
+
+### Можно
+
+- тесно связывать сообщение с триггером
+- описывать последствия рискованных действий и подсказки для сочетаний клавиш
+- делать подписи действий короткими, а их контекст раскрывать в поясняющем тексте
+- сохранять текст достаточно коротким
+
+### Нельзя
+
+- прятать в tooltip обязательную валидацию, разрешения или правила
+- помещать в него несколько абзацев или полноценные формы
+- заменять им блокирующее подтверждение
+
+## Полезные ссылки
+
+- [Обзор M3 Tooltips](https://m3.material.io/components/tooltips/overview)
+- [Рекомендации M3 Tooltips](https://m3.material.io/components/tooltips/guidelines)
+- [WAI-ARIA APG: паттерн Tooltip](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)
+
+</Localized>

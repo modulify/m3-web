@@ -10,19 +10,19 @@
         >
             <div class="surface-inspector-sheet__topbar-content">
                 <div>
-                    <strong>Scenario: inspector side sheet</strong>
-                    <p>A supplemental editing surface appears from the edge while the main dashboard stays visible.</p>
+                    <strong>{{ text.heading }}</strong>
+                    <p>{{ text.description }}</p>
                 </div>
 
                 <M3Button appearance="tonal" @click="opened = true">
-                    Open inspector
+                    {{ text.open }}
                 </M3Button>
             </div>
         </M3SurfacePanel>
 
         <div class="surface-inspector-sheet__grid">
             <M3SurfacePanel
-                v-for="label in ['Launch plan', 'Dependencies', 'Approvals']"
+                v-for="label in text.cards"
                 :key="label"
                 :fill-height="false"
                 :height="188"
@@ -32,7 +32,7 @@
                 variant="surface-container-low"
             >
                 <h3>{{ label }}</h3>
-                <p>Dashboard content keeps its place while the inspector surface is layered above it.</p>
+                <p>{{ text.cardDescription }}</p>
             </M3SurfacePanel>
         </div>
 
@@ -58,7 +58,7 @@
         >
             <header class="m3-side-sheet__header">
                 <div class="m3-side-sheet__title">
-                    Release inspector
+                    {{ text.title }}
                 </div>
 
                 <div class="m3-side-sheet__affordance">
@@ -70,28 +70,24 @@
 
             <div class="m3-side-sheet__content">
                 <div class="surface-inspector-sheet__form">
-                    <p>Use the side sheet for supporting edits that should not replace the dashboard context.</p>
+                    <p>{{ text.sheetDescription }}</p>
 
                     <M3TextField
                         v-model:value="owner"
-                        label="Owner email"
+                        :label="text.owner"
                         outlined
                     />
 
                     <M3Select
                         v-model:value="priority"
-                        :options="[
-                            { label: 'Low', value: 'low' },
-                            { label: 'Normal', value: 'normal' },
-                            { label: 'High', value: 'high' },
-                        ]"
-                        label="Priority"
+                        :options="priorityOptions"
+                        :label="text.priority"
                         outlined
                     />
 
                     <M3TextField
                         v-model:value="notes"
-                        label="Notes"
+                        :label="text.notes"
                         outlined
                         multiline
                     />
@@ -100,11 +96,11 @@
 
             <footer class="m3-side-sheet__footer surface-inspector-sheet__actions">
                 <M3Button appearance="text" @click="opened = false">
-                    Dismiss
+                    {{ text.dismiss }}
                 </M3Button>
 
                 <M3Button appearance="filled" @click="opened = false">
-                    Save changes
+                    {{ text.save }}
                 </M3Button>
             </footer>
         </M3Surface>
@@ -112,6 +108,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { StorybookLocale } from '../../i18n'
+
 import { ref } from 'vue'
 
 import { M3Button } from '@/components/button'
@@ -121,9 +119,20 @@ import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
 
+import { localize } from '../../i18n'
+
+const props = defineProps<{ locale: StorybookLocale }>()
+const text = localize(props.locale, {
+  'en-US': { cards: ['Launch plan', 'Dependencies', 'Approvals'], cardDescription: 'Dashboard content keeps its place while the inspector surface is layered above it.', description: 'A supplemental editing surface appears from the edge while the main dashboard stays visible.', dismiss: 'Dismiss', heading: 'Scenario: inspector side sheet', notes: 'Notes', notesValue: 'Coordinate the release notes and schedule rollout approval.', open: 'Open inspector', owner: 'Owner email', priority: 'Priority', priorities: ['Low', 'Normal', 'High'], save: 'Save changes', sheetDescription: 'Use the side sheet for supporting edits that should not replace the dashboard context.', title: 'Release inspector' },
+  'ru-RU': { cards: ['План запуска', 'Зависимости', 'Согласования'], cardDescription: 'Содержимое дашборда остаётся на месте, пока панель инспектора располагается поверх него.', description: 'Вспомогательная панель редактирования появляется с края, а основной дашборд остаётся видимым.', dismiss: 'Закрыть', heading: 'Сценарий: боковая панель инспектора', notes: 'Заметки', notesValue: 'Согласовать заметки к выпуску и запланировать подтверждение запуска.', open: 'Открыть инспектор', owner: 'Почта владельца', priority: 'Приоритет', priorities: ['Низкий', 'Обычный', 'Высокий'], save: 'Сохранить изменения', sheetDescription: 'Используйте боковую панель для вспомогательных правок, которые не должны заменять контекст дашборда.', title: 'Инспектор выпуска' },
+})
+const priorityOptions = [
+  { label: text.priorities[0], value: 'low' }, { label: text.priorities[1], value: 'normal' }, { label: text.priorities[2], value: 'high' },
+]
+
 const owner = ref('owner@example.com')
 const priority = ref<'low' | 'normal' | 'high' | null>('normal')
-const notes = ref('Coordinate the release notes and schedule rollout approval.')
+const notes = ref(text.notesValue)
 const opened = ref(false)
 </script>
 

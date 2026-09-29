@@ -1,7 +1,10 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3LinkStories from './M3Link.stories'
 
 <Meta of={M3LinkStories} />
+
+<Localized locale="en-US">
 
 # Link
 
@@ -54,3 +57,61 @@ Because `M3Link` is intentionally primitive, treat it as a foundation for custom
 - [M3 Cards overview](https://m3.material.io/components/cards/overview)
 - [M3 Navigation drawer overview](https://m3.material.io/components/navigation-drawer/overview)
 - [MDN: Links vs. buttons](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Links_and_navigation)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Ссылка
+
+`M3Link` — семантический примитив, который отрисовывает либо кнопку, либо ссылку в зависимости от наличия навигации. В этом workspace он намеренно остаётся низкоуровневой основой для более сложных элементов.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Link`, когда нужен кликабельный примитив, способный стать `<button>` или `<a>` без переписывания окружающего оформления. Это удобно для пользовательских элементов с общей стилизацией, но разной навигационной семантикой.
+
+### Роль примитива
+
+Material 3 не описывает отдельный самостоятельный примитив ссылки: ссылки входят в кнопки, карточки и навигационные элементы. Компонент закрывает этот уровень реализации, следуя рекомендациям компонентов над ним.
+
+### Модель отрисовки
+
+- без `href` отрисовывается `<button>` для действия внутри приложения
+- с `href` отрисовывается `<a>` для перехода
+
+## Доступность
+
+- Для действий, меняющих состояние, используйте семантику кнопки.
+- Для перехода к ресурсу или адресу используйте семантику ссылки.
+- Видимая подпись должна быть понятной вне окружающего контекста.
+
+## Примеры в Storybook
+
+- [Форма примитива](?path=/story/components-m3link--primitive-shape)
+- [Основа пользовательских элементов](?path=/story/components-m3link--as-base-for-custom-controls)
+
+## Демонстрация
+
+<Canvas of={M3LinkStories.PrimitiveShape} />
+<Canvas of={M3LinkStories.AsBaseForCustomControls} />
+
+## Рекомендации
+
+### Сначала семантика
+
+Выбирайте между ссылкой и кнопкой не по внешнему виду, а по результату: навигация это или действие.
+
+### Собственное оформление
+
+`M3Link` намеренно остаётся примитивом, поэтому используйте его как фундамент пользовательских элементов, а не как готовый визуальный компонент.
+
+## Полезные ссылки
+
+- [Обзор M3 Buttons](https://m3.material.io/components/buttons/overview)
+- [Обзор M3 Cards](https://m3.material.io/components/cards/overview)
+- [Обзор M3 Navigation drawer](https://m3.material.io/components/navigation-drawer/overview)
+- [MDN: ссылки и кнопки](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Links_and_navigation)
+
+</Localized>

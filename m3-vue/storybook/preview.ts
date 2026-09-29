@@ -9,6 +9,11 @@ import { withThemeByClassName } from '@storybook/addon-themes'
 
 import { MdxCodeBlock, MdxCodePreBlock } from './utils/mdxCodeBlock'
 
+import {
+  DEFAULT_STORYBOOK_LOCALE,
+  installStorybookLocaleSync,
+  STORYBOOK_LOCALE_ITEMS,
+} from './i18n'
 import theme from './theme'
 
 type DocsParameter = NonNullable<NonNullable<Preview['parameters']>['docs']> & {
@@ -101,8 +106,23 @@ const installThemeSync = (): void => {
 }
 
 installThemeSync()
+installStorybookLocaleSync()
 
 export default {
+  globalTypes: {
+    locale: {
+      name: 'Language',
+      description: 'Storybook content language',
+      toolbar: {
+        icon: 'globe',
+        items: STORYBOOK_LOCALE_ITEMS,
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: {
+    locale: DEFAULT_STORYBOOK_LOCALE,
+  },
   parameters: {
     a11y: {
       test: 'error',

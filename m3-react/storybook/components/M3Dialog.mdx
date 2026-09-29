@@ -1,6 +1,9 @@
 import { Unstyled } from '@storybook/addon-docs/blocks'
 
 import DialogConfirmation from '../examples/dialog/DialogConfirmation'
+import { Localized } from '../i18n'
+
+<Localized locale="en-US">
 
 # Dialogs
 
@@ -40,7 +43,7 @@ The component now renders on top of `M3Surface`, so dialog presentation and moti
 
 <Unstyled>
   <div className="mb-3">
-    <DialogConfirmation />
+    <DialogConfirmation locale="en-US" />
   </div>
 </Unstyled>
 
@@ -103,3 +106,111 @@ const dialogDescriptionId = 'dialog-confirmation-description'
 - [M3 Dialogs overview](https://m3.material.io/components/dialogs/overview)
 - [M3 Dialogs guidelines](https://m3.material.io/components/dialogs/guidelines)
 - [WAI-ARIA APG: Modal Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Диалоги
+
+Диалоги сообщают важную информацию и блокируют основной интерфейс, пока пользователь не ответит.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Dialog` для коротких прерывающих решений, которые требуют явного выбора перед продолжением работы со страницей. В терминах Material 3 это прежде всего подтверждения, уведомления и блокирующие задачи, а не длинные формы редактирования или навигация.
+
+### Структура
+
+`M3Dialog` сохраняет одинаковую анатомию содержимого в React и Vue:
+
+- `M3Dialog.Icon` для ведущей визуальной подсказки
+- `M3Dialog.Header` для заголовка
+- содержимое по умолчанию для поясняющего текста или компактных полей формы
+- `M3Dialog.Footer` для наиболее важных действий
+
+Компонент построен поверх `M3Surface`, поэтому оформление и движение диалога согласованы с тем же языком модальных поверхностей, который используется боковыми панелями и композиционными историями.
+
+### Особенности реализации
+
+- Обычные диалоги открываются как центрированные модальные поверхности со scrim.
+- Полноэкранные диалоги убирают scrim и занимают весь viewport.
+- Поверхность появляется с коротким fade-эффектом и небольшим движением вверх, соответствующим модальной анимации вложенных поверхностей.
+- Во время закрытия содержимое ненадолго остаётся смонтированным, чтобы анимация успела завершиться.
+
+## Доступность
+
+- Укажите `role="dialog"` или `alertdialog` для срочных подтверждений.
+- Для модальных сценариев задайте `aria-modal="true"`.
+- Свяжите заголовок и описание через `aria-labelledby` и `aria-describedby`.
+- Пока диалог открыт, удерживайте фокус внутри него.
+- Используйте явные подписи действий, описывающие результат.
+
+<Unstyled>
+  <div className="mb-3">
+    <DialogConfirmation locale="ru-RU" />
+  </div>
+</Unstyled>
+
+## Рекомендации
+
+### Плотность содержимого
+
+Предпочитайте короткий заголовок, одно поясняющее сообщение и одно понятное основное действие. Если сценарию требуются большие формы, несколько прокручиваемых областей или навигация, боковая панель или отдельная страница обычно лучше передают смену состояния.
+
+### Действия
+
+- Оставляйте окончательное решение в футере.
+- Явно обозначайте опасные действия и подписью, и расположением.
+- Предпочитайте вторичную кнопку отмены, например `Отмена`, вместо закрытия только по нажатию на scrim.
+
+### Полноэкранный режим
+
+Используйте `fullscreen`, только если задаче нужен весь viewport или компактные размеры диалога ухудшают читаемость. Семантика диалога сохраняется, но визуально такой режим ближе к временной рабочей поверхности, чем к небольшому окну подтверждения.
+
+## Пример кода
+
+```tsx
+const dialogTitleId = 'dialog-confirmation-title'
+const dialogDescriptionId = 'dialog-confirmation-description'
+
+<M3Dialog
+  opened={opened}
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby={dialogTitleId}
+  aria-describedby={dialogDescriptionId}
+  onToggle={setOpened}
+>
+  <M3Dialog.Icon>
+    <M3Icon name="delete" appearance="outlined" />
+  </M3Dialog.Icon>
+
+  <M3Dialog.Header>
+    <h3 id={dialogTitleId}>Удалить навсегда?</h3>
+  </M3Dialog.Header>
+
+  <p id={dialogDescriptionId}>
+    Выбранные сообщения также будут удалены со всех синхронизированных устройств.
+  </p>
+
+  <M3Dialog.Footer>
+    <M3Button appearance="text" onClick={() => setOpened(false)}>
+      Отмена
+    </M3Button>
+
+    <M3Button appearance="tonal" onClick={() => setOpened(false)}>
+      Удалить
+    </M3Button>
+  </M3Dialog.Footer>
+</M3Dialog>
+```
+
+## Полезные ссылки
+
+- [Обзор M3 Dialogs](https://m3.material.io/components/dialogs/overview)
+- [Рекомендации M3 Dialogs](https://m3.material.io/components/dialogs/guidelines)
+- [WAI-ARIA APG: шаблон модального диалога](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+
+</Localized>

@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { M3ScrollRail } from '@/components/scroll-rail'
 
+import { localize } from '../i18n'
+
 const meta = {
   title: 'Components/M3ScrollRail',
 
@@ -17,8 +19,9 @@ const meta = {
     disabled: false,
   },
 
-  render: ({ horizontal: _horizontal, ...args }) => {
+  render: ({ horizontal: _horizontal, ...args }, { globals }) => {
     const items = Array.from({ length: 30 }, (_, i) => i + 1)
+    const item = localize(globals.locale, { 'en-US': 'Item', 'ru-RU': 'Элемент' })
     return (
       <div className="m3-panel m3-panel_elevated-1" style={{ padding: '4px' }}>
         <div
@@ -30,7 +33,7 @@ const meta = {
             <M3ScrollRail horizontal {...args} />
             {items.map(i => (
               <div key={i} style={{width: '480px'}}>
-                Item {i}
+                {item} {i}
               </div>
             ))}
           </div>

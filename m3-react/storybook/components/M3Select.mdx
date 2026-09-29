@@ -1,7 +1,10 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3SelectStories from './M3Select.stories'
 
 <Meta of={M3SelectStories} />
+
+<Localized locale="en-US">
 
 # Select
 
@@ -75,3 +78,73 @@ If the option set becomes very large, consider search or autocomplete instead of
 - [M3 Menus guidelines](https://m3.material.io/components/menus/guidelines)
 - [WAI-ARIA APG: Combobox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)
 - [WAI-ARIA APG: Listbox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Поля выбора
+
+`M3Select` сочетает оформление текстового поля с меню вариантов. Он подходит, когда текущее значение должно оставаться видимым в форме, а варианты открываются в привязанном списке.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Select` для выбора одного варианта из структурированного списка. Если разрешён произвольный ввод, используйте текстовое поле или autocomplete.
+
+### Композиция
+
+- триггер в виде поля с подписью, контуром, вспомогательным текстом и текущим значением
+- всплывающий список вариантов
+- необязательное ведущее содержимое для выбранного значения и строк вариантов
+
+### Ведущие элементы
+
+История `WithIcons` показывает выбор страны, учётной записи или категории с компактной визуальной подсказкой, которая ускоряет распознавание, не заменяя текст.
+
+## Доступность
+
+- `M3Select` предоставляет семантику combobox со всплывающим listbox и вариантами option.
+- Задайте видимую подпись через `label` либо явный `aria-label`/`aria-labelledby`.
+- Используйте уникальные и осмысленные подписи вариантов.
+
+## Примеры в Storybook
+
+- [Стандартный](?path=/story/components-m3select--standard)
+- [С иконками](?path=/story/components-m3select--with-icons)
+- [Контурный](?path=/story/components-m3select--outlined)
+- [Невалидный](?path=/story/components-m3select--invalid)
+
+## Демонстрация
+
+<Canvas of={M3SelectStories.Standard} />
+<Canvas of={M3SelectStories.WithIcons} />
+<Canvas of={M3SelectStories.Outlined} />
+
+## Рекомендации
+
+Сохраняйте подписи вариантов краткими и однозначными. Для очень большого списка добавьте поиск или autocomplete.
+
+## Пример кода
+
+```tsx
+<M3Select<number>
+  value={value}
+  label="Выберите"
+  options={[
+    { label: 'Вариант 1', value: 1 },
+    { label: 'Вариант 2', value: 2 },
+  ]}
+  onUpdate={setValue}
+/>
+```
+
+## Полезные ссылки
+
+- [Обзор M3 Text fields](https://m3.material.io/components/text-fields/overview)
+- [Обзор M3 Menus](https://m3.material.io/components/menus/overview)
+- [WAI-ARIA APG: паттерн Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)
+- [WAI-ARIA APG: паттерн Listbox](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/)
+
+</Localized>

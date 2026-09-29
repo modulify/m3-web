@@ -7,7 +7,13 @@ import { M3Radio } from '@/components/radio'
 
 import { useId } from '@/hooks'
 
+import { localize } from '../i18n'
 import RadioGroup from '../examples/radio/RadioGroup'
+
+const messages = {
+  'en-US': { choice: 'Choice', email: 'Email', notificationChannel: 'Notification channel', preview: 'Preview', push: 'Push', releaseCadence: 'Release cadence', sms: 'SMS', stable: 'Stable' },
+  'ru-RU': { choice: 'Выбор', email: 'Электронная почта', notificationChannel: 'Канал уведомлений', preview: 'Предварительные версии', push: 'Push-уведомления', releaseCadence: 'Канал обновлений', sms: 'SMS', stable: 'Стабильные версии' },
+}
 
 const meta = {
   title: 'Components/M3Radio',
@@ -36,10 +42,11 @@ const meta = {
     value: _value,
     onChange: _onChange,
     ...args
-  }) => {
+  }, { globals }) => {
     const name = useId(null, 'm3-radio-group')
     const id = useId(null, 'm3-radio')
     const [model, setModel] = useState('choice')
+    const text = localize(globals.locale, messages)
 
     return (
       <label style={{
@@ -57,7 +64,7 @@ const meta = {
           onChange={setModel}
         />
 
-        <span>Choice</span>
+        <span>{text.choice}</span>
       </label>
     )
   },
@@ -74,36 +81,44 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const PreferenceGroup: Story = {
-  render: () => (
-    <RadioGroup
-      legend="Notification channel"
-      options={[{
-        label: 'Email',
-        value: 'email',
-      }, {
-        label: 'Push',
-        value: 'push',
-      }, {
-        label: 'SMS',
-        value: 'sms',
-        disabled: true,
-      }]}
-    />
-  ),
+  render: (_args, { globals }) => {
+    const text = localize(globals.locale, messages)
+
+    return (
+      <RadioGroup
+        legend={text.notificationChannel}
+        options={[{
+          label: text.email,
+          value: 'email',
+        }, {
+          label: text.push,
+          value: 'push',
+        }, {
+          label: text.sms,
+          value: 'sms',
+          disabled: true,
+        }]}
+      />
+    )
+  },
 }
 
 export const InvalidGroup: Story = {
-  render: () => (
-    <RadioGroup
-      legend="Release cadence"
-      invalid={true}
-      options={[{
-        label: 'Stable',
-        value: 'stable',
-      }, {
-        label: 'Preview',
-        value: 'preview',
-      }]}
-    />
-  ),
+  render: (_args, { globals }) => {
+    const text = localize(globals.locale, messages)
+
+    return (
+      <RadioGroup
+        legend={text.releaseCadence}
+        invalid={true}
+        options={[{
+          label: text.stable,
+          value: 'stable',
+        }, {
+          label: text.preview,
+          value: 'preview',
+        }]}
+      />
+    )
+  },
 }

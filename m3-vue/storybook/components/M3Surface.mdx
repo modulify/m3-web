@@ -1,7 +1,10 @@
 import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3SurfaceStories from './M3Surface.stories'
 
 <Meta of={M3SurfaceStories} />
+
+<Localized locale="en-US">
 
 # Surfaces
 
@@ -104,3 +107,62 @@ The `Inspector Side Sheet` story shows this anatomy with the standard `m3-side-s
 - [M3 Cards overview](https://m3.material.io/components/cards/overview)
 - [M3 Dialogs overview](https://m3.material.io/components/dialogs/overview)
 - [M3 Side sheets overview](https://m3.material.io/components/side-sheets/overview)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Поверхности
+
+Используйте `M3SurfacePanel` для статичных декоративных контейнеров: карточек, обёрток документации и вложенных блоков. `M3Surface` предназначен для модального поведения и управления сложными контейнерами.
+
+## API
+
+### Роли поверхностей
+
+- `M3SurfacePanel` для локальных контейнеров в потоке документа
+- `M3Surface` для модального позиционирования, scrim, привязки и переходов
+
+### Варианты оформления и высота
+
+Используйте `variant`, когда роль поверхности определена. `auto` подходит только для намеренного выбора тона по elevation. В сценариях переходов лучше сохранять явную семантику варианта.
+
+### Модальное поведение
+
+`M3Surface` управляет переносом модального элемента, затемнением, позиционированием, скруглением, размерами и отступами при morph-переходах. Структуру содержимого задают построенные поверх него диалоги, side sheet и пользовательские поверхности.
+
+## Примеры в Storybook
+
+- [Закреплённая панель в модальную](?path=/story/components-m3surface--side-sheet-docked-to-modal)
+- [Карточка заменяет страницу](?path=/story/components-m3surface--card-replacing-page)
+- [Закрытие удаляет панель](?path=/story/components-m3surface--side-sheet-modal-dismiss-removes-surface)
+- [Всегда модальная панель](?path=/story/components-m3surface--side-sheet-always-modal-toggle)
+- [Модальная панель в окно](?path=/story/components-m3surface--side-sheet-modal-to-window)
+- [Цепочка вложенных диалогов](?path=/story/components-m3surface--nested-dialogs-chain)
+- [Модальный диалог рабочего пространства](?path=/story/components-m3surface--workspace-modal-dialog)
+- [Панель инспектора](?path=/story/components-m3surface--inspector-side-sheet)
+
+## Рекомендации
+
+Выбирайте самую узкую абстракцию: `M3SurfacePanel` для тона, радиуса и локального размера; `M3Surface` — только когда нужны модальность, привязка или переходы.
+
+Описывайте устойчивые состояния явно (`docked`, `modal-sheet`, `window`) и выводите геометрию из них. При morph-анимации двигайтесь к измеренной конечной геометрии, чтобы избежать скачка в конце.
+
+## Структура содержимого
+
+Диалоговая поверхность содержит короткий заголовок, компактное пояснение и сгруппированные действия. Side sheet содержит заголовок, прокручиваемое содержимое и при необходимости закреплённый footer.
+
+## Что делать и чего избегать
+
+- Сохраняйте вспомогательные поверхности узко связанными с одной задачей.
+- Не заменяйте основной маршрут приложения боковой панелью.
+- Не перегружайте модальные поверхности навигацией и несвязанными инструментами.
+- Не прячьте критичные инструкции только во временной поверхности.
+
+## Полезные ссылки
+
+- [Обзор M3 Cards](https://m3.material.io/components/cards/overview)
+- [Обзор M3 Dialogs](https://m3.material.io/components/dialogs/overview)
+- [Обзор M3 Side sheets](https://m3.material.io/components/side-sheets/overview)
+
+</Localized>

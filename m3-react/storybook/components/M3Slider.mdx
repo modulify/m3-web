@@ -1,7 +1,10 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3SliderStories from './M3Slider.stories'
 
 <Meta of={M3SliderStories} />
+
+<Localized locale="en-US">
 
 # Sliders
 
@@ -57,3 +60,56 @@ If the task depends on precise numeric values, provide an exact-input companion 
 - [M3 Sliders guidelines](https://m3.material.io/components/sliders/guidelines)
 - [WAI-ARIA APG: Slider Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/slider/)
 - [WAI-ARIA APG: Multi-Thumb Slider Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Слайдеры
+
+Слайдеры позволяют напрямую выбрать значение или ограниченный диапазон. Они подходят для непрерывных и почти непрерывных шкал, где важно видеть относительное положение.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Slider` для громкости, интенсивности, масштаба или границ бюджета. Для точного ввода и длинных дискретных списков понятнее текстовое поле или select.
+
+### Одно значение и диапазон
+
+- single slider для одного значения
+- range slider для нижней и верхней границы
+
+Обе ручки диапазона должны относиться к одной шкале, а минимум и максимум — быть понятны без дополнительных догадок.
+
+## Доступность
+
+- Задайте каждой ручке имя через `ariaHandle`, `ariaHandleMin` и `ariaHandleMax`.
+- Делайте диапазоны и шаги предсказуемыми.
+- Поддерживайте клавиши Arrow, Home и End для всех ручек.
+
+## Примеры в Storybook
+
+- [Одно значение](?path=/story/components-m3slider--single)
+- [Диапазон](?path=/story/components-m3slider--range)
+- [Дискретное значение](?path=/story/components-m3slider--discrete-single)
+- [Недоступный диапазон](?path=/story/components-m3slider--disabled-range)
+
+## Демонстрация
+
+<Canvas of={M3SliderStories.Single} />
+<Canvas of={M3SliderStories.Range} />
+<Canvas of={M3SliderStories.DiscreteSingle} />
+
+## Рекомендации
+
+Объясняйте смысл крайних значений с помощью подписей, единиц и вспомогательного текста. Если задача требует точного числа, добавьте отдельный ввод или выберите другой контрол.
+
+## Полезные ссылки
+
+- [Обзор M3 Sliders](https://m3.material.io/components/sliders/overview)
+- [Рекомендации M3 Sliders](https://m3.material.io/components/sliders/guidelines)
+- [WAI-ARIA APG: паттерн Slider](https://www.w3.org/WAI/ARIA/apg/patterns/slider/)
+- [WAI-ARIA APG: паттерн Multi-Thumb Slider](https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/)
+
+</Localized>

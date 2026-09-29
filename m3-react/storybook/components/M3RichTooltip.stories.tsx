@@ -24,14 +24,14 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const DestructiveAction: Story = {
-  render: () => <DeleteTooltip />,
+export const ActionConsequence: Story = {
+  render: (_args, { globals }) => <DeleteTooltip locale={globals.locale} />,
 }
 
 export const BulkSelection: Story = {
-  render: () => <SelectionTooltip />,
+  render: (_args, { globals }) => <SelectionTooltip locale={globals.locale} />,
 }
 
 export const ShortcutHint: Story = {
-  render: () => <ShortcutTooltip />,
+  render: (_args, { globals }) => <ShortcutTooltip locale={globals.locale} />,
 }

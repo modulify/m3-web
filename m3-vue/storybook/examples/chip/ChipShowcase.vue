@@ -1,70 +1,111 @@
 <template>
-    <div class="m3-chip-showcase">
-        <template v-if="mode === 'filters'">
+    <div :lang="props.locale" class="m3-chip-showcase">
+        <template v-if="props.mode === 'filters'">
             <M3Chip
                 v-for="option in filterOptions"
-                :key="option"
-                :selected="filters.includes(option)"
+                :key="option.id"
+                :selected="filters.includes(option.id)"
                 variant="filter"
-                @update:selected="onToggleFilter(option, $event)"
+                @update:selected="onToggleFilter(option.id, $event)"
             >
-                {{ option }}
+                {{ option.label }}
             </M3Chip>
         </template>
 
-        <template v-else-if="mode === 'inputs'">
+        <template v-else-if="props.mode === 'inputs'">
             <M3Chip
                 v-for="token in tokens"
-                :key="token"
+                :key="token.id"
                 variant="input"
                 dismissible
-                @dismiss="removeToken(token)"
+                @dismiss="removeToken(token.id)"
             >
-                {{ token }}
+                {{ token.label }}
             </M3Chip>
         </template>
 
         <template v-else>
             <M3Chip variant="assist">
                 <M3Icon name="schedule" />
-                Remind later
+                {{ text.remindLater }}
             </M3Chip>
 
             <M3Chip :selected="true" variant="filter">
-                Updates
+                {{ text.updates }}
             </M3Chip>
 
             <M3Chip variant="input" dismissible>
-                Project Alpha
+                {{ text.projectAlpha }}
             </M3Chip>
 
             <M3Chip variant="suggestion">
                 <M3Icon name="lightbulb" />
-                Draft summary
+                {{ text.draftSummary }}
             </M3Chip>
         </template>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import type { StorybookLocale } from '../../i18n'
+
+import { computed, ref } from 'vue'
 
 import { M3Chip } from '@/components/chip'
 import { M3Icon } from '@/components/icon'
 
-defineProps({
-  mode: {
-    type: String as () => 'matrix' | 'filters' | 'inputs',
-    default: 'matrix',
+import { DEFAULT_STORYBOOK_LOCALE, localize } from '../../i18n'
+
+type FilterId = 'assignedToMe' | 'needsReview' | 'urgent'
+type TokenId = 'billing' | 'designReview' | 'onboarding'
+
+const messages = {
+  'en-US': {
+    assignedToMe: 'Assigned to me',
+    billing: 'Billing',
+    designReview: 'Design review',
+    draftSummary: 'Draft summary',
+    needsReview: 'Needs review',
+    onboarding: 'Onboarding',
+    projectAlpha: 'Project Alpha',
+    remindLater: 'Remind later',
+    updates: 'Updates',
+    urgent: 'Urgent',
   },
+  'ru-RU': {
+    assignedToMe: 'Назначено мне',
+    billing: 'Оплата',
+    designReview: 'Ревью дизайна',
+    draftSummary: 'Сводка черновика',
+    needsReview: 'Нужно ревью',
+    onboarding: 'Онбординг',
+    projectAlpha: 'Проект Альфа',
+    remindLater: 'Напомнить позже',
+    updates: 'Обновления',
+    urgent: 'Срочно',
+  },
+}
+
+const props = withDefaults(defineProps<{
+  locale?: StorybookLocale
+  mode?: 'matrix' | 'filters' | 'inputs'
+}>(), {
+  locale: DEFAULT_STORYBOOK_LOCALE,
+  mode: 'matrix',
 })
 
-const filterOptions = ['Assigned to me', 'Urgent', 'Needs review']
+const text = computed(() => localize(props.locale, messages))
 
-const filters = ref<string[]>(['Assigned to me', 'Urgent'])
-const tokens = ref<string[]>(['Onboarding', 'Billing', 'Design review'])
+const filterOptions = computed(() => {
+  const options: FilterId[] = ['assignedToMe', 'urgent', 'needsReview']
+  return options.map(id => ({ id, label: text.value[id] }))
+})
 
-const onToggleFilter = (option: string, selected: boolean) => {
+const filters = ref<FilterId[]>(['assignedToMe', 'urgent'])
+const tokenIds = ref<TokenId[]>(['onboarding', 'billing', 'designReview'])
+const tokens = computed(() => tokenIds.value.map(id => ({ id, label: text.value[id] })))
+
+const onToggleFilter = (option: FilterId, selected: boolean) => {
   if (selected) {
     filters.value = [...filters.value, option]
     return
@@ -73,8 +114,8 @@ const onToggleFilter = (option: string, selected: boolean) => {
   filters.value = filters.value.filter(value => value !== option)
 }
 
-const removeToken = (token: string) => {
-  tokens.value = tokens.value.filter(value => value !== token)
+const removeToken = (token: TokenId) => {
+  tokenIds.value = tokenIds.value.filter(value => value !== token)
 }
 </script>
 

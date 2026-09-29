@@ -6,9 +6,11 @@ import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3SideSheet } from '@/components/side-sheet'
 
+import { localize } from '../i18n'
+
 const sideSheetStoryTemplate = `
     <M3Button @click="shown = true">
-        Open side sheet
+        {{ text.open }}
     </M3Button>
 
     <M3SideSheet
@@ -17,17 +19,17 @@ const sideSheetStoryTemplate = `
         @update:shown="shown = $event"
     >
         <template #title>
-            Filters
+            {{ text.filter }}
         </template>
 
         <template #close-icon>
             <M3Icon name="close" />
         </template>
 
-        <p class="m-4">Choose filters and apply changes.</p>
+        <p class="m-4">{{ text.body }}</p>
 
         <template #footer>
-            <div class="p-4">Footer actions</div>
+            <div class="p-4">{{ text.footer }}</div>
         </template>
     </M3SideSheet>
 `
@@ -47,7 +49,7 @@ const meta = {
     docked: false,
   },
 
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Button,
       M3Icon,
@@ -60,6 +62,10 @@ const meta = {
       return {
         args,
         shown,
+        text: localize(globals.locale, {
+          'en-US': { body: 'Choose filters and apply changes.', filter: 'Filters', footer: 'Footer actions', open: 'Open side sheet' },
+          'ru-RU': { body: 'Выберите фильтры и примените изменения.', filter: 'Фильтры', footer: 'Действия', open: 'Открыть боковую панель' },
+        }),
       }
     },
 

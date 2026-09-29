@@ -27,33 +27,33 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const SideSheetDockedToModal: Story = {
-  render: () => <SurfaceSideSheetMorph />,
+  render: (_args, { globals }) => <SurfaceSideSheetMorph locale={globals.locale} />,
 }
 
 export const CardReplacingPage: Story = {
-  render: () => <SurfaceCardPageMorph />,
+  render: (_args, { globals }) => <SurfaceCardPageMorph locale={globals.locale} />,
 }
 
 export const SideSheetModalDismissRemovesSurface: Story = {
-  render: () => <SurfaceSideSheetDismissToRemove />,
+  render: (_args, { globals }) => <SurfaceSideSheetDismissToRemove locale={globals.locale} />,
 }
 
 export const SideSheetAlwaysModalToggle: Story = {
-  render: () => <SurfaceSideSheetAlwaysModal />,
+  render: (_args, { globals }) => <SurfaceSideSheetAlwaysModal locale={globals.locale} />,
 }
 
 export const SideSheetModalToWindow: Story = {
-  render: () => <SurfaceSideSheetModalToWindow />,
+  render: (_args, { globals }) => <SurfaceSideSheetModalToWindow locale={globals.locale} />,
 }
 
 export const NestedDialogsChain: Story = {
-  render: () => <SurfaceNestedDialogsChain />,
+  render: (_args, { globals }) => <SurfaceNestedDialogsChain locale={globals.locale} />,
 }
 
 export const WorkspaceModalDialog: Story = {
-  render: () => <SurfaceWorkspaceDialog />,
+  render: (_args, { globals }) => <SurfaceWorkspaceDialog locale={globals.locale} />,
 }
 
 export const InspectorSideSheet: Story = {
-  render: () => <SurfaceInspectorSheet />,
+  render: (_args, { globals }) => <SurfaceInspectorSheet locale={globals.locale} />,
 }

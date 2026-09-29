@@ -7,7 +7,13 @@ import { M3Radio } from '@/components/radio'
 
 import { useId } from '@/composables/id'
 
+import { localize } from '../i18n'
 import RadioGroup from '../examples/radio/RadioGroup.vue'
+
+const messages = {
+  'en-US': { choice: 'Choice', email: 'Email', notificationChannel: 'Notification channel', preview: 'Preview', push: 'Push', releaseCadence: 'Release cadence', sms: 'SMS', stable: 'Stable' },
+  'ru-RU': { choice: 'Выбор', email: 'Электронная почта', notificationChannel: 'Канал уведомлений', preview: 'Предварительные версии', push: 'Push-уведомления', releaseCadence: 'Канал обновлений', sms: 'SMS', stable: 'Стабильные версии' },
+}
 
 const meta = {
   title: 'Components/M3Radio',
@@ -19,7 +25,7 @@ const meta = {
     disabled: false,
   },
 
-  render: (args: M3RadioProps<string>) => ({
+  render: (args: M3RadioProps<string>, { globals }) => ({
     components: {
       M3Radio,
     },
@@ -28,6 +34,7 @@ const meta = {
       id: useId('m3-radio'),
       name: useId('m3-radio-group'),
       args,
+      label: localize(globals.locale, messages).choice,
       model: ref('choice'),
     }),
 
@@ -42,7 +49,7 @@ const meta = {
               @update:model="model = $event"
           />
 
-          <span>Choice</span>
+          <span>{{ label }}</span>
       </label>
     `,
   }),
@@ -59,22 +66,24 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const PreferenceGroup: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       RadioGroup,
     },
 
+    setup: () => ({ text: localize(globals.locale, messages) }),
+
     template: `
       <RadioGroup
-          legend="Notification channel"
+          :legend="text.notificationChannel"
           :options="[{
-              label: 'Email',
+              label: text.email,
               value: 'email',
           }, {
-              label: 'Push',
+              label: text.push,
               value: 'push',
           }, {
-              label: 'SMS',
+              label: text.sms,
               value: 'sms',
               disabled: true,
           }]"
@@ -84,20 +93,22 @@ export const PreferenceGroup: Story = {
 }
 
 export const InvalidGroup: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       RadioGroup,
     },
 
+    setup: () => ({ text: localize(globals.locale, messages) }),
+
     template: `
       <RadioGroup
-          legend="Release cadence"
+          :legend="text.releaseCadence"
           invalid
           :options="[{
-              label: 'Stable',
+              label: text.stable,
               value: 'stable',
           }, {
-              label: 'Preview',
+              label: text.preview,
               value: 'preview',
           }]"
       />

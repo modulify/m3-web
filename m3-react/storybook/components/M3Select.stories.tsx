@@ -11,6 +11,7 @@ import CountryFlag from '../countries/CountryFlag'
 
 import codes from '../countries/codes'
 import countries from '../countries/names.json'
+import { localize, resolveStorybookLocale } from '../i18n'
 
 type CountryOption = {
   value: Code;
@@ -22,18 +23,32 @@ type M3SelectStoryProps<Value> = Omit<
   'value' | 'options' | 'onUpdate'
 >
 
-const M3SelectStory = (args: M3SelectStoryProps<number>) => {
+const localizeArgs = <Value,>(locale: unknown, args: M3SelectStoryProps<Value>): M3SelectStoryProps<Value> => {
+  const text = localize(locale, {
+    'en-US': { choose: 'Choose', country: 'Country', required: 'Required', select: 'Select an option' },
+    'ru-RU': { choose: 'Выберите', country: 'Страна', required: 'Обязательное поле', select: 'Выберите вариант' },
+  })
+
+  return {
+    ...args,
+    label: args.label === 'Country' ? text.country : text.choose,
+    placeholder: args.placeholder === 'Required' ? text.required : args.placeholder ? text.select : undefined,
+  }
+}
+
+const M3SelectStory = ({ locale, ...args }: M3SelectStoryProps<number> & { locale: unknown }) => {
   const [value, setValue] = useState<number | null>(null)
+  const option = localize(locale, { 'en-US': 'Option', 'ru-RU': 'Вариант' })
   const options = useMemo<Array<M3SelectOption<number>>>(() => [{
-    label: 'Option 1',
+    label: `${option} 1`,
     value: 1,
   }, {
-    label: 'Option 2',
+    label: `${option} 2`,
     value: 2,
   }, {
-    label: 'Option 3',
+    label: `${option} 3`,
     value: 3,
-  }], [])
+  }], [option])
 
   return (
     <M3Select<number>
@@ -45,12 +60,13 @@ const M3SelectStory = (args: M3SelectStoryProps<number>) => {
   )
 }
 
-const M3SelectWithIconsStory = (args: M3SelectStoryProps<Code>) => {
+const M3SelectWithIconsStory = ({ locale, ...args }: M3SelectStoryProps<Code> & { locale: unknown }) => {
   const [countryCode, setCountryCode] = useState<Code | null>(null)
+  const displayNames = useMemo(() => new Intl.DisplayNames([resolveStorybookLocale(locale)], { type: 'region' }), [locale])
   const countryOptions = useMemo(() => (codes.map(code => ({
     value: code,
-    label: (countries as Record<Code, string>)[code],
-  })) as Array<CountryOption>).sort((a, b) => a.label.localeCompare(b.label)), [])
+    label: displayNames.of(code) ?? (countries as Record<Code, string>)[code],
+  })) as Array<CountryOption>).sort((a, b) => a.label.localeCompare(b.label)), [displayNames])
 
   return (
     <M3Select<Code>
@@ -95,7 +111,7 @@ const meta = {
     onUpdate: { control: false },
   },
 
-  render: (args) => <M3SelectStory {...args} />,
+  render: (args, { globals }) => <M3SelectStory locale={globals.locale} {...localizeArgs(globals.locale, args)} />,
 
   parameters: {
     layout: 'centered',
@@ -117,7 +133,7 @@ export const WithIcons: Story = {
     label: 'Country',
   },
 
-  render: (args) => <M3SelectWithIconsStory {...args} />,
+  render: (args, { globals }) => <M3SelectWithIconsStory locale={globals.locale} {...localizeArgs(globals.locale, args)} />,
 }
 
 export const Outlined: Story = {

@@ -1,9 +1,12 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
 import Inline from '../components/Inline'
 import M3Button from '../examples/button/ButtonExample.vue'
+import { Localized } from '../i18n'
 import * as LocalThemingStories from './LocalTheming.stories'
 
 <Meta of={LocalThemingStories} />
+
+<Localized locale="en-US">
 
 # Theming
 
@@ -293,3 +296,81 @@ State-layer tokens should be generated from the local foreground color, not copi
 - use local theming to create unrelated visual systems inside one page
 - change only accent tokens while leaving surface and state-layer tokens global
 - nest reset scopes unless the inner control has a clear reason to return to baseline
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Настройка темы
+
+Тема — это контракт токенов, а не слой переопределения компонентов. Она задаёт системные токены Material, например `--m3-sys-primary`, `--m3-sys-surface` и `--m3-sys-on-surface`; компоненты читают их без изменения API.
+
+Примеры используют намеренно изменённую базовую лазурно-синюю тему, чтобы локальные области хорошо отличались от общего оформления.
+
+## Основные принципы
+
+### Слои темы
+
+Toolbar Storybook переключает документ между `m3-theme-light` и `m3-theme-dark`. Пример добавляет локальную базовую область, а вложенные danger, warning, success и brand-области переопределяют тот же набор токенов только для своего модуля.
+
+### Локальная область темы
+
+Локальная тема переназначает выбранные `--m3-sys-*` токены только для потомков. Props компонентов остаются прежними, а цвета, поверхности и state layers следуют ближайшей области токенов.
+
+```scss
+.m3-local-theme {
+  --m3-sys-primary: var(--m3-local-primary);
+  --m3-sys-primary-container: var(--m3-local-primary-container);
+  --m3-sys-on-primary: var(--m3-local-on-primary);
+  --m3-sys-surface: var(--m3-local-surface);
+  --m3-sys-on-surface: var(--m3-local-on-surface);
+}
+```
+
+Оберните наименьший модуль, которому действительно нужен другой набор токенов. Reset-область добавляйте только элементу, который должен вернуться к базовой теме.
+
+## Базовые примеры
+
+### Панель с акцентом
+
+Используйте локальную пару `primary` для действия и локальные роли surface для окружающей геометрии.
+
+### Иерархия поверхностей
+
+Контейнерные токены должны показывать иерархию связанных тонов, а не набор несвязанных брендовых цветов.
+
+## Готовые сценарии
+
+Каждое уведомление показывает небольшую палитру над компонентом: левое остаётся на базовой теме руководства, правое получает локальную область.
+
+<Canvas of={LocalThemingStories.DangerNotification} />
+<Canvas of={LocalThemingStories.WarmAlertNotification} />
+<Canvas of={LocalThemingStories.SuccessNotification} />
+<Canvas of={LocalThemingStories.BrandMutedNotification} />
+<Canvas of={LocalThemingStories.ListWithDangerMenu} />
+
+## Примеры в Storybook
+
+- [Опасное уведомление](?path=/story/guides-theming--danger-notification)
+- [Тёплое предупреждение](?path=/story/guides-theming--warm-alert-notification)
+- [Успешное уведомление](?path=/story/guides-theming--success-notification)
+- [Приглушённый бренд](?path=/story/guides-theming--brand-muted-notification)
+- [Список с опасным действием](?path=/story/guides-theming--list-with-danger-menu)
+
+## Что делать и чего избегать
+
+### Можно
+
+- сохранять области небольшими и связанными с продуктовым модулем
+- одновременно определять значения для светлой и тёмной темы
+- строить state-layer токены из локального цвета переднего плана
+- проверять обычное, hover, focus, selected и disabled состояния
+
+### Нельзя
+
+- переопределять классы компонентов, когда изменение выражается sys-токеном
+- создавать одной страницей несколько несвязанных визуальных систем
+- менять только акцент, оставляя поверхности и state layers глобальными
+- вкладывать reset-области без явной причины
+
+</Localized>

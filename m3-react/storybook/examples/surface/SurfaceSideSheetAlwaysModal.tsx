@@ -1,5 +1,7 @@
 import type { FC } from 'react'
 
+import type { StorybookLocale } from '../../i18n'
+
 import { clamp } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { useEffect, useRef } from 'react'
@@ -15,6 +17,8 @@ import { M3Surface } from '@/components/surface'
 
 import { useStateRef } from '@/components/surface/orchestration/useStateRef'
 
+import { localize } from '../../i18n'
+
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360
 const SIDE_SHEET_WIDTH_RATIO = 0.32
@@ -29,7 +33,11 @@ const SCRIM_FADE_MS = durations.long2
 
 type NavTab = 'inbox' | 'boards' | 'archive' | 'lab'
 
-const SurfaceSideSheetAlwaysModal: FC = () => {
+const SurfaceSideSheetAlwaysModal: FC<{ locale: StorybookLocale }> = ({ locale }) => {
+  const text = localize(locale, {
+    'en-US': { archive: 'Archive', boards: 'Boards', close: 'Close modal side sheet', closeActions: 'Close actions: scrim click or close button inside the panel.', contextual: 'Contextual utility content.', description: 'The side sheet exists only in modal mode and can be shown repeatedly from the page header.', dim: 'Low-brightness complementary content.', heading: 'Surface orchestration: always-modal side sheet', inbox: 'Inbox', lab: 'Lab', modal: 'Modal side sheet', modalDescription: 'This side sheet is always modal and never returns to a docked state.', open: 'Show modal side sheet', opened: 'Modal side sheet is open', openNavigation: 'Open navigation', read: 'Read-heavy content block in the page flow.', secondary: 'Secondary block with mild emphasis.', workspace: 'Workspace surfaces', workspaceDescription: 'Background layout stays in flow while the side sheet appears as a modal overlay.' },
+    'ru-RU': { archive: 'Архив', boards: 'Доски', close: 'Закрыть модальную панель', closeActions: 'Способы закрытия: нажатие на scrim или кнопка внутри панели.', contextual: 'Контекстное вспомогательное содержимое.', description: 'Боковая панель существует только в модальном режиме и может открываться повторно из заголовка страницы.', dim: 'Дополнительное содержимое с пониженной яркостью.', heading: 'Управление поверхностью: всегда модальная панель', inbox: 'Входящие', lab: 'Лаборатория', modal: 'Модальная боковая панель', modalDescription: 'Эта панель всегда модальная и не возвращается в закреплённое состояние.', open: 'Показать модальную панель', opened: 'Модальная панель открыта', openNavigation: 'Открыть навигацию', read: 'Блок для чтения в потоке страницы.', secondary: 'Вторичный блок с умеренным акцентом.', workspace: 'Поверхности рабочего пространства', workspaceDescription: 'Фоновая компоновка остаётся в потоке, пока панель показана как модальный overlay.' },
+  })
   const [navExpanded, setNavExpanded] = useStateRef(false)
   const [activeNavTab, setActiveNavTab] = useStateRef<NavTab>('inbox')
   const [sideSheetWidth, setSideSheetWidth, sideSheetWidthRef] = useStateRef(320)
@@ -132,8 +140,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
       >
         <div className="surface-side-sheet__topbar-content">
           <div>
-            <strong>Surface orchestration: always-modal side sheet</strong>
-            <p>The side sheet exists only in modal mode and can be shown repeatedly from the page header.</p>
+            <strong>{text.heading}</strong><p>{text.description}</p>
           </div>
 
           <M3Button
@@ -142,7 +149,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
             data-testid="surface-always-open"
             onClick={() => void openModal()}
           >
-            {modalMounted ? 'Modal side sheet is open' : 'Show modal side sheet'}
+            {modalMounted ? text.opened : text.open}
           </M3Button>
         </div>
       </M3Surface>
@@ -156,7 +163,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
       >
         <M3Navigation.Top>
           <M3IconButton
-            aria-label="Open navigation"
+            aria-label={text.openNavigation}
             onClick={() => setNavExpanded(true)}
           >
             <M3Icon name="menu" />
@@ -164,7 +171,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
         </M3Navigation.Top>
 
         <M3NavigationTab
-          label="Inbox"
+          label={text.inbox}
           active={activeNavTab === 'inbox'}
           onNavigate={() => {
             setActiveNavTab('inbox')
@@ -175,7 +182,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Boards"
+          label={text.boards}
           active={activeNavTab === 'boards'}
           onNavigate={() => {
             setActiveNavTab('boards')
@@ -186,7 +193,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Archive"
+          label={text.archive}
           active={activeNavTab === 'archive'}
           onNavigate={() => {
             setActiveNavTab('archive')
@@ -197,7 +204,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Lab"
+          label={text.lab}
           active={activeNavTab === 'lab'}
           onNavigate={() => {
             setActiveNavTab('lab')
@@ -218,8 +225,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
             variant="surface-container-lowest"
             elevation={0}
           >
-            <h3>Workspace surfaces</h3>
-            <p>Background layout stays in flow while the side sheet appears as a modal overlay.</p>
+            <h3>{text.workspace}</h3><p>{text.workspaceDescription}</p>
           </M3Surface>
 
           <div
@@ -240,7 +246,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
                 elevation={0}
               >
                 <strong>surface-container-lowest</strong>
-                <p>Read-heavy content block in the page flow.</p>
+                <p>{text.read}</p>
               </M3Surface>
 
               <M3Surface
@@ -252,7 +258,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
                 elevation={1}
               >
                 <strong>surface-container-low</strong>
-                <p>Secondary block with mild emphasis.</p>
+                <p>{text.secondary}</p>
               </M3Surface>
 
               <M3Surface
@@ -264,7 +270,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
                 elevation={3}
               >
                 <strong>surface-container-high</strong>
-                <p>Contextual utility content.</p>
+                <p>{text.contextual}</p>
               </M3Surface>
 
               <M3Surface
@@ -276,7 +282,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
                 elevation={0}
               >
                 <strong>surface-dim</strong>
-                <p>Low-brightness complementary content.</p>
+                <p>{text.dim}</p>
               </M3Surface>
             </main>
 
@@ -306,12 +312,12 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
                 onDismiss={() => void closeModal()}
               >
                 <div className="surface-side-sheet__modal-header">
-                  <h3>Modal side sheet</h3>
+                  <h3>{text.modal}</h3>
 
                   <M3IconButton
                     className="surface-side-sheet__modal-close"
                     appearance="standard"
-                    aria-label="Close modal side sheet"
+                    aria-label={text.close}
                     disabled={transitioning}
                     data-testid="surface-always-close"
                     onClick={() => void closeModal()}
@@ -320,8 +326,7 @@ const SurfaceSideSheetAlwaysModal: FC = () => {
                   </M3IconButton>
                 </div>
 
-                <p>This side sheet is always modal and never returns to a docked state.</p>
-                <p>Close actions: scrim click or close button inside the panel.</p>
+                <p>{text.modalDescription}</p><p>{text.closeActions}</p>
                 <p className="surface-side-sheet__meta">
                   Fixed width: {sideSheetWidth}px
                 </p>

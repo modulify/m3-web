@@ -1,15 +1,23 @@
 import type { CSSProperties, FC } from 'react'
 
+import type { StorybookLocale } from '../../i18n'
+
 import { useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 
+import { localize } from '../../i18n'
+
 const panelStyle = {
   padding: '18px',
 } satisfies CSSProperties
 
-const SurfaceWorkspaceDialog: FC = () => {
+const SurfaceWorkspaceDialog: FC<{ locale: StorybookLocale }> = ({ locale }) => {
+  const text = localize(locale, {
+    'en-US': { activity: 'Activity', archive: 'Archive', archiveProject: 'Archive project', cancel: 'Cancel', cards: ['Roadmap', 'Assets', 'Owners'], cardText: 'Supporting surface inside the same workspace scene.', decision: 'Archive this workspace?', decisionText: 'Archiving hides the project from active planning views but keeps its history available for reporting.', description: 'A blocking decision interrupts the current workspace without replacing the layout beneath it.', heading: 'Scenario: workspace confirmation dialog', overview: 'Workspace overview', overviewText: 'Main content remains visible under the dialog, so the user keeps the surrounding context while confirming the action.', retention: 'Team members will retain read access until the workspace is restored.', tasks: '12 tasks updated today' },
+    'ru-RU': { activity: 'Активность', archive: 'Архивировать', archiveProject: 'Архивировать проект', cancel: 'Отмена', cards: ['План', 'Материалы', 'Владельцы'], cardText: 'Вспомогательная поверхность в том же рабочем пространстве.', decision: 'Архивировать рабочее пространство?', decisionText: 'Архивация скроет проект из активного планирования, но сохранит историю для отчётов.', description: 'Блокирующее решение прерывает текущую работу, не заменяя расположенный ниже интерфейс.', heading: 'Сценарий: диалог подтверждения', overview: 'Обзор рабочего пространства', overviewText: 'Основное содержимое остаётся видимым под диалогом, сохраняя контекст во время подтверждения.', retention: 'Участники сохранят доступ на чтение до восстановления рабочего пространства.', tasks: 'Сегодня обновлено 12 задач' },
+  })
   const [opened, setOpened] = useState(false)
 
   return (
@@ -30,29 +38,29 @@ const SurfaceWorkspaceDialog: FC = () => {
         style={{ ...panelStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
       >
         <div>
-          <strong style={{ display: 'block', marginBottom: '6px' }}>Scenario: workspace confirmation dialog</strong>
-          <span style={{ fontSize: '13px', opacity: 0.82 }}>A blocking decision interrupts the current workspace without replacing the layout beneath it.</span>
+          <strong style={{ display: 'block', marginBottom: '6px' }}>{text.heading}</strong>
+          <span style={{ fontSize: '13px', opacity: 0.82 }}>{text.description}</span>
         </div>
 
         <M3Button onClick={() => setOpened(true)}>
-          Archive project
+          {text.archiveProject}
         </M3Button>
       </M3SurfacePanel>
 
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginTop: '16px' }}>
         <M3SurfacePanel rounding={20} variant="surface-container-lowest" elevation={0} style={panelStyle}>
-          <h3 style={{ margin: '0 0 8px' }}>Workspace overview</h3>
-          <p style={{ margin: 0 }}>Main content remains visible under the dialog, so the user keeps the surrounding context while confirming the action.</p>
+          <h3 style={{ margin: '0 0 8px' }}>{text.overview}</h3>
+          <p style={{ margin: 0 }}>{text.overviewText}</p>
         </M3SurfacePanel>
 
         <M3SurfacePanel rounding={20} variant="surface-container-low" elevation={1} style={panelStyle}>
-          <h3 style={{ margin: '0 0 8px' }}>Activity</h3>
-          <p style={{ margin: 0 }}>12 tasks updated today</p>
+          <h3 style={{ margin: '0 0 8px' }}>{text.activity}</h3>
+          <p style={{ margin: 0 }}>{text.tasks}</p>
         </M3SurfacePanel>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '16px', marginTop: '16px' }}>
-        {['Roadmap', 'Assets', 'Owners'].map(label => (
+        {text.cards.map(label => (
           <M3SurfacePanel
             key={label}
             fillHeight={false}
@@ -63,7 +71,7 @@ const SurfaceWorkspaceDialog: FC = () => {
             style={panelStyle}
           >
             <h3 style={{ margin: '0 0 8px' }}>{label}</h3>
-            <p style={{ margin: 0 }}>Supporting surface inside the same workspace scene.</p>
+            <p style={{ margin: 0 }}>{text.cardText}</p>
           </M3SurfacePanel>
         ))}
       </div>
@@ -84,8 +92,8 @@ const SurfaceWorkspaceDialog: FC = () => {
         onToggle={setOpened}
         onDismiss={() => setOpened(false)}
       >
-        <h3 style={{ margin: '0 0 12px' }}>Archive this workspace?</h3>
-        <p style={{ margin: '0 0 12px' }}>Archiving hides the project from active planning views but keeps its history available for reporting.</p>
+        <h3 style={{ margin: '0 0 12px' }}>{text.decision}</h3>
+        <p style={{ margin: '0 0 12px' }}>{text.decisionText}</p>
 
         <M3SurfacePanel
           fillHeight={false}
@@ -95,16 +103,16 @@ const SurfaceWorkspaceDialog: FC = () => {
           elevation={0}
           style={{ ...panelStyle, marginBottom: '16px' }}
         >
-          Team members will retain read access until the workspace is restored.
+          {text.retention}
         </M3SurfacePanel>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
           <M3Button appearance="text" onClick={() => setOpened(false)}>
-            Cancel
+            {text.cancel}
           </M3Button>
 
           <M3Button appearance="filled" onClick={() => setOpened(false)}>
-            Archive
+            {text.archive}
           </M3Button>
         </div>
       </M3Surface>

@@ -12,8 +12,7 @@
         >
             <div class="surface-dialog-chain__topbar-content">
                 <div>
-                    <strong>Surface orchestration: nested dialogs chain</strong>
-                    <p>Rail layout opens a nested dialog chain with one active scrim on the topmost dialog.</p>
+                    <strong>{{ text.heading }}</strong><p>{{ text.summary }}</p>
                 </div>
 
                 <M3Button
@@ -22,7 +21,7 @@
                     appearance="filled"
                     @click="openDialog(0)"
                 >
-                    {{ chainOpened ? 'Dialog chain is open' : 'Open dialog chain' }}
+                    {{ chainOpened ? text.chainOpen : text.open }}
                 </M3Button>
             </div>
         </M3Surface>
@@ -34,7 +33,7 @@
         >
             <M3NavigationTab
                 :active="activeNavTab === 'inbox'"
-                label="Inbox"
+                :label="text.inbox"
                 @navigate="activeNavTab = 'inbox'"
             >
                 <M3Icon name="inbox" />
@@ -42,7 +41,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'boards'"
-                label="Boards"
+                :label="text.boards"
                 @navigate="activeNavTab = 'boards'"
             >
                 <M3Icon name="dashboard" />
@@ -50,7 +49,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'archive'"
-                label="Archive"
+                :label="text.archive"
                 @navigate="activeNavTab = 'archive'"
             >
                 <M3Icon name="archive" />
@@ -58,7 +57,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'lab'"
-                label="Lab"
+                :label="text.lab"
                 @navigate="activeNavTab = 'lab'"
             >
                 <M3Icon name="science" />
@@ -75,8 +74,7 @@
                     class="surface-dialog-chain__workspace-intro"
                     variant="surface-container-lowest"
                 >
-                    <h3>Workspace</h3>
-                    <p>Page composition stays stable while dialogs are stacked progressively.</p>
+                    <h3>{{ text.workspace }}</h3><p>{{ text.workspaceDescription }}</p>
                 </M3Surface>
 
                 <M3Surface
@@ -85,8 +83,7 @@
                     class="surface-dialog-chain__canvas"
                     variant="surface-container-low"
                 >
-                    <h4>Background content</h4>
-                    <p>Open dialog 1 from top action, then continue through the chain.</p>
+                    <h4>{{ text.background }}</h4><p>{{ text.backgroundDescription }}</p>
                 </M3Surface>
             </div>
         </div>
@@ -121,10 +118,10 @@
                 @dismiss="closeFrom(level)"
             >
                 <div class="surface-dialog-chain__dialog-head">
-                    <h3>Dialog {{ level + 1 }} of {{ dialogChain.length }}</h3>
+                    <h3>{{ text.dialog }} {{ level + 1 }} {{ text.of }} {{ dialogChain.length }}</h3>
 
                     <M3IconButton
-                        :aria-label="`Close dialog ${level + 1}`"
+                        :aria-label="`${text.closeDialog} ${level + 1}`"
                         appearance="standard"
                         @click="closeFrom(level)"
                     >
@@ -132,7 +129,7 @@
                     </M3IconButton>
                 </div>
 
-                <p>{{ dialog.description }}</p>
+                <p>{{ text.descriptions[level] }}</p>
 
                 <div class="surface-dialog-chain__dialog-actions">
                     <M3Button
@@ -140,7 +137,7 @@
                         appearance="text"
                         @click="closeFrom(level)"
                     >
-                        Close
+                        {{ text.close }}
                     </M3Button>
 
                     <M3Button
@@ -150,7 +147,7 @@
                         appearance="filled"
                         @click="openDialog(level + 1)"
                     >
-                        Open dialog {{ level + 2 }}
+                        {{ text.openDialog }} {{ level + 2 }}
                     </M3Button>
                 </div>
             </M3Surface>
@@ -159,6 +156,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { StorybookLocale } from '../../i18n'
+
 import { computed, nextTick } from 'vue'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { ref } from 'vue'
@@ -171,6 +170,8 @@ import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import M3Surface from '@/components/surface/M3Surface.vue'
+
+import { localize } from '../../i18n'
 
 const DIALOG_TRANSITION_MS = durations.medium2
 const DIALOG_TRANSITION_EASING = easing.standard
@@ -206,6 +207,12 @@ const dialogChain: DialogSpec[] = [{
   rounding: 22,
   description: 'Final layer in this scenario: close only, no next dialog action.',
 }]
+
+const props = defineProps<{ locale: StorybookLocale }>()
+const text = localize(props.locale, {
+  'en-US': { archive: 'Archive', background: 'Background content', backgroundDescription: 'Open dialog 1 from top action, then continue through the chain.', boards: 'Boards', chainOpen: 'Dialog chain is open', close: 'Close', closeDialog: 'Close dialog', descriptions: dialogChain.map(dialog => dialog.description), dialog: 'Dialog', heading: 'Surface orchestration: nested dialogs chain', inbox: 'Inbox', lab: 'Lab', of: 'of', open: 'Open dialog chain', openDialog: 'Open dialog', summary: 'Rail layout opens a nested dialog chain with one active scrim on the topmost dialog.', workspace: 'Workspace', workspaceDescription: 'Page composition stays stable while dialogs are stacked progressively.' },
+  'ru-RU': { archive: 'Архив', background: 'Фоновое содержимое', backgroundDescription: 'Откройте диалог 1 верхней кнопкой и последовательно продолжите цепочку.', boards: 'Доски', chainOpen: 'Цепочка диалогов открыта', close: 'Закрыть', closeDialog: 'Закрыть диалог', descriptions: ['Первый слой цепочки открывает диалог 2.', 'Второй слой сохраняет те же элементы управления и открывает следующий диалог.', 'Третий слой открывает последний вложенный диалог.', 'Последний слой сценария можно только закрыть.'], dialog: 'Диалог', heading: 'Управление поверхностью: цепочка вложенных диалогов', inbox: 'Входящие', lab: 'Лаборатория', of: 'из', open: 'Открыть цепочку диалогов', openDialog: 'Открыть диалог', summary: 'Компоновка с рейкой открывает цепочку вложенных диалогов; активный scrim принадлежит верхнему.', workspace: 'Рабочее пространство', workspaceDescription: 'Композиция страницы остаётся стабильной при последовательном наложении диалогов.' },
+})
 
 const activeNavTab = ref<'inbox' | 'boards' | 'archive' | 'lab'>('inbox')
 const dialogMounted = ref<boolean[]>(Array.from({ length: dialogChain.length }, () => false))

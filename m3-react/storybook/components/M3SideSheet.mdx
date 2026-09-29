@@ -1,7 +1,10 @@
 import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3SideSheetStories from './M3SideSheet.stories'
 
 <Meta of={M3SideSheetStories} />
+
+<Localized locale="en-US">
 
 # Side Sheets
 
@@ -82,3 +85,68 @@ In modal mode, users should be able to close the sheet from the close icon and b
 - [M3 Side sheets overview](https://m3.material.io/components/side-sheets/overview)
 - [M3 Side sheets guidelines](https://m3.material.io/components/side-sheets/guidelines)
 - [WAI-ARIA APG: Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Боковые панели
+
+`M3SideSheet` расширяет `M3Surface` правой панелью с отдельным заголовком, прокручиваемым содержимым и необязательными действиями в footer.
+
+## API
+
+### Когда использовать
+
+Используйте `M3SideSheet` для дополнительного контекста, фильтров и вторичного редактирования с сохранением видимой основной задачи. По сравнению с диалогом side sheet лучше подходит для вспомогательного содержимого средней плотности.
+
+### Режимы
+
+- стандартный режим открывает модальную панель поверх страницы
+- `docked` сохраняет панель в компоновке как постоянную область
+
+### Структура содержимого
+
+- `M3SideSheet.Title`
+- `M3SideSheet.CloseIcon`
+- основное содержимое
+- `M3SideSheet.Footer`
+
+Заголовок и footer отделены от прокручиваемой области, поэтому действия остаются доступными при изменении содержимого.
+
+## Доступность
+
+- Используйте ясный заголовок для `aria-labelledby`.
+- Делайте кнопку закрытия заметной; в модальном режиме поддерживайте закрытие через scrim.
+- Оставляйте в footer итоговые или наиболее важные действия.
+- Считайте модальную панель оверлеем, а docked-панель — частью компоновки.
+
+## Примеры в Storybook
+
+- [Стандартная](?path=/story/components-m3sidesheet--standard)
+- [Закреплённая](?path=/story/components-m3sidesheet--docked)
+
+## Рекомендации
+
+Выбирайте `docked`, когда страница должна постоянно резервировать место для панели. Модальный режим подходит для временного, закрываемого содержимого поверх страницы.
+
+Используйте footer для применения, сохранения и очистки; пояснения оставляйте в основной области.
+
+## Пример кода
+
+```tsx
+<M3SideSheet shown={shown} onToggle={setShown}>
+  <M3SideSheet.Title>Фильтры</M3SideSheet.Title>
+  <M3SideSheet.CloseIcon><M3Icon name="close" /></M3SideSheet.CloseIcon>
+  <p className="m-4">Выберите фильтры и примените изменения.</p>
+  <M3SideSheet.Footer><div className="p-4">Действия</div></M3SideSheet.Footer>
+</M3SideSheet>
+```
+
+## Полезные ссылки
+
+- [Обзор M3 Side sheets](https://m3.material.io/components/side-sheets/overview)
+- [Рекомендации M3 Side sheets](https://m3.material.io/components/side-sheets/guidelines)
+- [WAI-ARIA APG: паттерн Dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+
+</Localized>

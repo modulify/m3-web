@@ -1,9 +1,12 @@
 import { Meta } from '@storybook/addon-docs/blocks'
 import Inline from './Inline'
 import ChipShowcase from '../examples/chip/ChipShowcase.vue'
+import { Localized } from '../i18n'
 import * as M3ChipStories from './M3Chip.stories'
 
 <Meta of={M3ChipStories} />
+
+<Localized locale="en-US">
 
 # Chips
 
@@ -36,19 +39,19 @@ This implementation keeps `filter` chips controlled through `selected` and `upda
 ### Variant panel
 
 <div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
-  <Inline is={ChipShowcase} mode="matrix" />
+  <Inline is={ChipShowcase} locale="en-US" mode="matrix" />
 </div>
 
 ### Filter set
 
 <div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
-  <Inline is={ChipShowcase} mode="filters" />
+  <Inline is={ChipShowcase} locale="en-US" mode="filters" />
 </div>
 
 ### Input tokens
 
 <div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
-  <Inline is={ChipShowcase} mode="inputs" />
+  <Inline is={ChipShowcase} locale="en-US" mode="inputs" />
 </div>
 
 ## Story guide
@@ -73,3 +76,78 @@ Use assist and suggestion chips as action affordances. Use filter chips only whe
 - [M3 Chips overview](https://m3.material.io/components/chips/overview)
 - [M3 Chips guidelines](https://m3.material.io/components/chips/guidelines)
 - [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Чипы
+
+Чипы помогают вводить данные, делать выбор, фильтровать содержимое или запускать действия. Material 3 выделяет четыре вида чипов: assist, filter, input и suggestion.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Chip` для компактных контекстных действий или вариантов выбора. Если действию нужен более сильный акцент или длинная подпись, лучше выбрать кнопку.
+
+### Варианты
+
+- `assist` для быстрых контекстных действий, например «Напомнить позже»
+- `filter` для переключаемых фильтров, которые остаются видимыми как активные ограничения
+- `input` для введённых сущностей или токенов, которые обычно можно удалить
+- `suggestion` для ненавязчивых рекомендаций, которые помогают продолжить сценарий
+
+### Выбор и удаление
+
+Состояние `filter`-чипов управляется через `selected` и `update:selected`. Для input-чипов можно отдельно включить удаление через `dismissible` и обработать событие `dismiss`.
+
+## Доступность
+
+- Отдельной ARIA-роли для чипа нет: основная поверхность использует нативную семантику кнопки.
+- Filter-чипы передают состояние переключателя через `aria-pressed`.
+- Если чип можно удалить, у кнопки удаления должна оставаться явная доступная подпись.
+- Подписи чипов должны оставаться короткими и легко считываться в плотных горизонтальных группах.
+
+### Сравнение вариантов
+
+<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+  <Inline is={ChipShowcase} locale="ru-RU" mode="matrix" />
+</div>
+
+### Набор фильтров
+
+<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+  <Inline is={ChipShowcase} locale="ru-RU" mode="filters" />
+</div>
+
+### Введённые значения
+
+<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+  <Inline is={ChipShowcase} locale="ru-RU" mode="inputs" />
+</div>
+
+## Примеры в Storybook
+
+- [Стандартная](?path=/story/components-m3chip--standard)
+- [Матрица вариантов](?path=/story/components-m3chip--variant-matrix)
+- [Набор фильтров](?path=/story/components-m3chip--filter-set)
+- [Введённые токены](?path=/story/components-m3chip--input-tokens)
+
+## Рекомендации
+
+### Короткие подписи
+
+Чипы лучше работают с короткими подписями, которые легко просматривать в строке. Если подпись превращается в предложение, скорее всего вместо чипа нужна кнопка или строка списка.
+
+### Выбирайте вариант по задаче
+
+Используйте assist- и suggestion-чипы для действий. Filter-чипы подходят только там, где важно выбранное состояние. Input-чипы уместны, когда сам элемент становится частью текущей формы или области.
+
+## Полезные ссылки
+
+- [Обзор M3 Chips](https://m3.material.io/components/chips/overview)
+- [Рекомендации M3 Chips](https://m3.material.io/components/chips/guidelines)
+- [WAI-ARIA APG: шаблон Button](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>

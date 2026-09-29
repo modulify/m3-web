@@ -13,10 +13,43 @@ import {
   M3DatePickerField,
 } from '@/components/date-picker'
 
+import { localize, resolveStorybookLocale } from '../i18n'
+
 const INITIAL_DATE = new Date(2026, 6, 1)
 const MIN_DATE = new Date(2026, 6, 3)
 const MAX_DATE = new Date(2026, 6, 24)
 const INITIAL_RANGE: [Date | null, Date | null] = [new Date(2026, 6, 17), new Date(2026, 6, 23)]
+
+const messages = {
+  'en-US': {
+    openDateInput: 'Open date input',
+    openDatePicker: 'Open date picker',
+    rangeDates: 'Depart - Return dates',
+    selectDate: 'Select date',
+    tripDate: 'Trip date',
+  },
+  'ru-RU': {
+    openDateInput: 'Открыть ввод даты',
+    openDatePicker: 'Открыть календарь',
+    rangeDates: 'Даты отправления и возвращения',
+    selectDate: 'Выберите дату',
+    tripDate: 'Дата поездки',
+  },
+}
+
+const getLocalizedArgs = <T extends object>(
+  args: T,
+  localeValue: unknown,
+  label: 'rangeDates' | 'selectDate' = 'selectDate'
+) => {
+  const locale = resolveStorybookLocale(localeValue)
+
+  return {
+    ...args,
+    label: localize(locale, messages)[label],
+    locale,
+  }
+}
 
 const M3DatePickerStory = ({
   type: _type,
@@ -62,8 +95,6 @@ const meta = {
   args: {
     type: 'single',
     value: INITIAL_DATE,
-    label: 'Select date',
-    locale: 'en-US',
     firstDayOfWeek: 0,
     navigation: 'split',
     views: ['days', 'months', 'years'],
@@ -71,6 +102,8 @@ const meta = {
   },
 
   argTypes: {
+    label: { control: false },
+    locale: { control: false },
     value: { control: false },
     min: { control: false },
     max: { control: false },
@@ -81,7 +114,9 @@ const meta = {
     onChange: { control: false },
   },
 
-  render: (args) => <M3DatePickerStory {...args} />,
+  render: (args, { globals }) => (
+    <M3DatePickerStory {...getLocalizedArgs(args, globals.locale)} />
+  ),
 
   parameters: {
     layout: 'centered',
@@ -119,23 +154,20 @@ export const Availability: Story = {
 }
 
 export const RangeSelection: Story = {
-  args: {
-    label: 'Depart - Return dates',
-  },
-
   render: ({
     type: _type,
     value: _value,
     onChange: _onChange,
     ...args
-  }) => {
+  }, { globals }) => {
     const [value, setValue] = useState<[Date | null, Date | null]>(INITIAL_RANGE)
+    const localizedArgs = getLocalizedArgs(args, globals.locale, 'rangeDates')
 
     return (
       <M3DatePicker
         type="range"
         value={value}
-        {...args}
+        {...localizedArgs}
         onChange={setValue}
       />
     )
@@ -150,16 +182,17 @@ export const ControlledCursor: Story = {
     onCursorChange: _onCursorChange,
     onChange: _onChange,
     ...args
-  }) => {
+  }, { globals }) => {
     const [value, setValue] = useState<Date | null>(initialValue ?? INITIAL_DATE)
     const [cursor, setCursor] = useState(new Date(2026, 8, 1))
+    const localizedArgs = getLocalizedArgs(args, globals.locale)
 
     return (
       <M3DatePicker
         type="single"
         value={value}
         cursor={cursor}
-        {...args}
+        {...localizedArgs}
         onCursorChange={setCursor}
         onChange={setValue}
       />
@@ -193,15 +226,20 @@ export const InlineNavigation: Story = {
 }
 
 export const DockedField: Story = {
-  render: () => (
-    <M3DatePickerFieldStory
-      value={new Date(2026, 6, 10)}
-      label="Trip date"
-      name="trip_date"
-      supportingText={<span>MM/DD/YYYY</span>}
-      placeholder="MM/DD/YYYY"
-    />
-  ),
+  render: (_args, { globals }) => {
+    const locale = resolveStorybookLocale(globals.locale)
+
+    return (
+      <M3DatePickerFieldStory
+        value={new Date(2026, 6, 10)}
+        label={localize(locale, messages).tripDate}
+        locale={locale}
+        name="trip_date"
+        supportingText={<span>MM/DD/YYYY</span>}
+        placeholder="MM/DD/YYYY"
+      />
+    )
+  },
 }
 
 export const ModalComposition: Story = {
@@ -209,20 +247,23 @@ export const ModalComposition: Story = {
     value: initialValue,
     onChange: _onChange,
     ...args
-  }) => {
+  }, { globals }) => {
     const [opened, setOpened] = useState(true)
     const [value, setValue] = useState<Date | null>(initialValue ?? INITIAL_DATE)
+    const locale = resolveStorybookLocale(globals.locale)
+    const text = localize(locale, messages)
+    const localizedArgs = getLocalizedArgs(args, locale)
 
     return (
       <div>
         <M3Button onClick={() => setOpened(true)}>
-          Open date picker
+          {text.openDatePicker}
         </M3Button>
 
         <M3DatePickerDialog
           opened={opened}
           value={value}
-          {...args}
+          {...localizedArgs}
           onToggle={setOpened}
           onChange={setValue}
         />
@@ -236,21 +277,24 @@ export const ModalDateInput: Story = {
     value: initialValue,
     onChange: _onChange,
     ...args
-  }) => {
+  }, { globals }) => {
     const [opened, setOpened] = useState(false)
     const [value, setValue] = useState<Date | null>(initialValue ?? INITIAL_DATE)
+    const locale = resolveStorybookLocale(globals.locale)
+    const text = localize(locale, messages)
+    const localizedArgs = getLocalizedArgs(args, locale)
 
     return (
       <div>
         <M3Button onClick={() => setOpened(true)}>
-          Open date input
+          {text.openDateInput}
         </M3Button>
 
         <M3DatePickerDialog
           opened={opened}
           appearance="input"
           value={value}
-          {...args}
+          {...localizedArgs}
           onToggle={setOpened}
           onChange={setValue}
         />

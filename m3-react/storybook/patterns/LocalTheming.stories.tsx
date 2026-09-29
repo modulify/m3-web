@@ -16,21 +16,21 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const DangerNotification: Story = {
-  render: () => <LocalThemeShowcase variant="danger" />,
+  render: (_args, { globals }) => <LocalThemeShowcase locale={globals.locale} variant="danger" />,
 }
 
 export const WarmAlertNotification: Story = {
-  render: () => <LocalThemeShowcase variant="warm-alert" />,
+  render: (_args, { globals }) => <LocalThemeShowcase locale={globals.locale} variant="warm-alert" />,
 }
 
 export const SuccessNotification: Story = {
-  render: () => <LocalThemeShowcase variant="success" />,
+  render: (_args, { globals }) => <LocalThemeShowcase locale={globals.locale} variant="success" />,
 }
 
 export const BrandMutedNotification: Story = {
-  render: () => <LocalThemeShowcase variant="brand-muted" />,
+  render: (_args, { globals }) => <LocalThemeShowcase locale={globals.locale} variant="brand-muted" />,
 }
 
 export const ListWithDangerMenu: Story = {
-  render: () => <LocalThemeShowcase variant="list-menu" />,
+  render: (_args, { globals }) => <LocalThemeShowcase locale={globals.locale} variant="list-menu" />,
 }

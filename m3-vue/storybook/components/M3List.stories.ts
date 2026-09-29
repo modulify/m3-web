@@ -3,6 +3,13 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { M3Icon } from '@/components/icon'
 import { M3List, M3ListItem } from '@/components/list'
 
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': { archive: 'Archive', bluetoothSupport: 'Connected to office network', folders: 'Folders', inbox: 'Inbox', messages: 'Messages', notifications: 'Notifications', on: 'On', planning: 'Planning meeting', planningSupport: 'Design sync moved to 15:00. Review the agenda before joining.', review: 'Review updates', reviewSupport: 'Two unread comments in the component review thread.', sent: 'Sent', settings: 'Settings', today: 'Today' },
+  'ru-RU': { archive: 'Архив', bluetoothSupport: 'Подключено к офисной сети', folders: 'Папки', inbox: 'Входящие', messages: 'Сообщения', notifications: 'Уведомления', on: 'Включено', planning: 'Планирование', planningSupport: 'Синхронизацию по дизайну перенесли на 15:00. Просмотрите повестку перед встречей.', review: 'Обновления ревью', reviewSupport: 'Два непрочитанных комментария в обсуждении компонентов.', sent: 'Отправленные', settings: 'Настройки', today: 'Сегодня' },
+}
+
 const meta = {
   title: 'Components/M3List',
 
@@ -16,7 +23,7 @@ const meta = {
     divided: false,
   },
 
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Icon,
       M3List,
@@ -24,11 +31,11 @@ const meta = {
     },
 
     setup () {
-      return { args }
+      return { args, text: localize(globals.locale, messages) }
     },
 
     template: `
-        <M3List v-bind="args" aria-label="Settings">
+        <M3List :aria-label="text.settings" v-bind="args">
             <M3ListItem>
                 <template #leading>
                     <M3Icon name="wifi" />
@@ -37,11 +44,11 @@ const meta = {
                 Wi-Fi
 
                 <template #trailing>
-                    On
+                    {{ text.on }}
                 </template>
             </M3ListItem>
 
-            <M3ListItem supporting-text="Connected to office network">
+            <M3ListItem :supporting-text="text.bluetoothSupport">
                 <template #leading>
                     <M3Icon name="bluetooth" />
                 </template>
@@ -54,7 +61,7 @@ const meta = {
                     <M3Icon name="notifications" />
                 </template>
 
-                Notifications
+                {{ text.notifications }}
 
                 <template #trailing>
                     <M3Icon name="chevron_right" />
@@ -76,7 +83,7 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const SupportingText: Story = {
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Icon,
       M3List,
@@ -84,32 +91,32 @@ export const SupportingText: Story = {
     },
 
     setup () {
-      return { args }
+      return { args, text: localize(globals.locale, messages) }
     },
 
     template: `
-        <M3List v-bind="args" aria-label="Messages">
+        <M3List :aria-label="text.messages" v-bind="args">
             <M3ListItem
-                overline="Today"
-                supporting-text="Design sync moved to 15:00. Review the agenda before joining."
+                :overline="text.today"
+                :supporting-text="text.planningSupport"
             >
                 <template #leading>
                     <M3Icon name="event" />
                 </template>
 
-                Planning meeting
+                {{ text.planning }}
 
                 <template #trailing>
                     14:12
                 </template>
             </M3ListItem>
 
-            <M3ListItem supporting-text="Two unread comments in the component review thread.">
+            <M3ListItem :supporting-text="text.reviewSupport">
                 <template #leading>
                     <M3Icon name="chat" />
                 </template>
 
-                Review updates
+                {{ text.review }}
 
                 <template #trailing>
                     09:30
@@ -125,7 +132,7 @@ export const InteractiveSelection: Story = {
     divided: true,
   },
 
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Icon,
       M3List,
@@ -133,17 +140,17 @@ export const InteractiveSelection: Story = {
     },
 
     setup () {
-      return { args }
+      return { args, text: localize(globals.locale, messages) }
     },
 
     template: `
-        <M3List v-bind="args" aria-label="Folders">
+        <M3List :aria-label="text.folders" v-bind="args">
             <M3ListItem selected interactive>
                 <template #leading>
                     <M3Icon name="inbox" />
                 </template>
 
-                Inbox
+                {{ text.inbox }}
 
                 <template #trailing>
                     24
@@ -155,7 +162,7 @@ export const InteractiveSelection: Story = {
                     <M3Icon name="send" />
                 </template>
 
-                Sent
+                {{ text.sent }}
             </M3ListItem>
 
             <M3ListItem disabled interactive>
@@ -163,7 +170,7 @@ export const InteractiveSelection: Story = {
                     <M3Icon name="archive" />
                 </template>
 
-                Archive
+                {{ text.archive }}
             </M3ListItem>
         </M3List>
     `,

@@ -1,13 +1,48 @@
 import type { FC } from 'react'
 
+import type { StorybookLocale } from '../../i18n'
+
 import { useState } from 'react'
 
 import { M3Chip } from '@/components/chip'
 import { M3Icon } from '@/components/icon'
 
+import { DEFAULT_STORYBOOK_LOCALE, localize } from '../../i18n'
+
 export interface ChipShowcaseProps {
+  locale?: StorybookLocale;
   mode?: 'matrix' | 'filters' | 'inputs';
 }
+
+const messages = {
+  'en-US': {
+    assignedToMe: 'Assigned to me',
+    billing: 'Billing',
+    designReview: 'Design review',
+    draftSummary: 'Draft summary',
+    needsReview: 'Needs review',
+    onboarding: 'Onboarding',
+    projectAlpha: 'Project Alpha',
+    remindLater: 'Remind later',
+    updates: 'Updates',
+    urgent: 'Urgent',
+  },
+  'ru-RU': {
+    assignedToMe: 'Назначено мне',
+    billing: 'Оплата',
+    designReview: 'Ревью дизайна',
+    draftSummary: 'Сводка черновика',
+    needsReview: 'Нужно ревью',
+    onboarding: 'Онбординг',
+    projectAlpha: 'Проект Альфа',
+    remindLater: 'Напомнить позже',
+    updates: 'Обновления',
+    urgent: 'Срочно',
+  },
+}
+
+type FilterId = 'assignedToMe' | 'needsReview' | 'urgent'
+type TokenId = 'billing' | 'designReview' | 'onboarding'
 
 const wrapStyle = {
   display: 'flex',
@@ -16,16 +51,18 @@ const wrapStyle = {
 }
 
 const ChipShowcase: FC<ChipShowcaseProps> = ({
+  locale = DEFAULT_STORYBOOK_LOCALE,
   mode = 'matrix',
 }) => {
-  const [filters, setFilters] = useState<string[]>(['Assigned to me', 'Urgent'])
-  const [tokens, setTokens] = useState<string[]>(['Onboarding', 'Billing', 'Design review'])
+  const text = localize(locale, messages)
+  const [filters, setFilters] = useState<FilterId[]>(['assignedToMe', 'urgent'])
+  const [tokens, setTokens] = useState<TokenId[]>(['onboarding', 'billing', 'designReview'])
 
   if (mode === 'filters') {
-    const options = ['Assigned to me', 'Urgent', 'Needs review']
+    const options: FilterId[] = ['assignedToMe', 'urgent', 'needsReview']
 
     return (
-      <div style={wrapStyle}>
+      <div lang={locale} style={wrapStyle}>
         {options.map(option => (
           <M3Chip
             key={option}
@@ -39,7 +76,7 @@ const ChipShowcase: FC<ChipShowcaseProps> = ({
               })
             }}
           >
-            {option}
+            {text[option]}
           </M3Chip>
         ))}
       </div>
@@ -48,7 +85,7 @@ const ChipShowcase: FC<ChipShowcaseProps> = ({
 
   if (mode === 'inputs') {
     return (
-      <div style={wrapStyle}>
+      <div lang={locale} style={wrapStyle}>
         {tokens.map(token => (
           <M3Chip
             key={token}
@@ -56,7 +93,7 @@ const ChipShowcase: FC<ChipShowcaseProps> = ({
             dismissible={true}
             onDismiss={() => setTokens(current => current.filter(value => value !== token))}
           >
-            {token}
+            {text[token]}
           </M3Chip>
         ))}
       </div>
@@ -64,23 +101,23 @@ const ChipShowcase: FC<ChipShowcaseProps> = ({
   }
 
   return (
-    <div style={wrapStyle}>
+    <div lang={locale} style={wrapStyle}>
       <M3Chip variant="assist">
         <M3Icon name="schedule" />
-        Remind later
+        {text.remindLater}
       </M3Chip>
 
       <M3Chip variant="filter" selected={true}>
-        Updates
+        {text.updates}
       </M3Chip>
 
       <M3Chip variant="input" dismissible={true}>
-        Project Alpha
+        {text.projectAlpha}
       </M3Chip>
 
       <M3Chip variant="suggestion">
         <M3Icon name="lightbulb" />
-        Draft summary
+        {text.draftSummary}
       </M3Chip>
     </div>
   )

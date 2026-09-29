@@ -1,7 +1,10 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3ListStories from './M3List.stories'
 
 <Meta of={M3ListStories} />
+
+<Localized locale="en-US">
 
 # Lists
 
@@ -47,3 +50,54 @@ Trailing text and icons work best for concise metadata, status, or navigation af
 - [M3 Lists overview](https://m3.material.io/components/lists/overview)
 - [M3 Lists guidelines](https://m3.material.io/components/lists/guidelines)
 - [WAI-ARIA: list role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/list_role)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Списки
+
+Списки представляют связанные строки текста и необязательные визуальные элементы. Используйте их для настроек, папок, сообщений и другой повторяющейся информации, которую важно быстро просматривать.
+
+## API
+
+`M3List` создаёт общий контейнер списка. `M3ListItem` создаёт строку с необязательным ведущим и завершающим содержимым, надстрочным заголовком, основным и вспомогательным текстом.
+
+Обычные дочерние элементы становятся заголовком строки; `M3ListItem.Headline` нужен для явной разметки. `href`, `interactive` или `onClick` делают строку интерактивной.
+
+## Доступность
+
+- `M3List` использует `role="list"`; при необходимости задайте `aria-label` или `aria-labelledby`.
+- `M3ListItem` использует `role="listitem"`, а для интерактивных строк — нативную ссылку или кнопку.
+- Для навигации используйте `href`, для действий на месте — `interactive`/`onClick`.
+- Для списков выбора самостоятельно задайте подходящий составной паттерн: `listbox`, `option` и `aria-selected`.
+
+## Примеры в Storybook
+
+- [Стандартный список](?path=/story/components-m3list--standard)
+- [Вспомогательный текст](?path=/story/components-m3list--supporting-text)
+- [Интерактивный выбор](?path=/story/components-m3list--interactive-selection)
+
+## Демонстрация
+
+<Canvas of={M3ListStories.Standard} />
+<Canvas of={M3ListStories.SupportingText} />
+<Canvas of={M3ListStories.InteractiveSelection} />
+
+## Рекомендации
+
+### Сохраняйте структуру строки
+
+Используйте надстрочный заголовок и вспомогательный текст для вторичной информации, а не перегружайте основной заголовок несвязанными фрагментами.
+
+### Не перегружайте правую часть строки
+
+Текст и иконки в конце строки лучше всего подходят для кратких метаданных, статуса или навигации.
+
+## Полезные ссылки
+
+- [Обзор M3 Lists](https://m3.material.io/components/lists/overview)
+- [Рекомендации M3 Lists](https://m3.material.io/components/lists/guidelines)
+- [WAI-ARIA: роль list](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/list_role)
+
+</Localized>

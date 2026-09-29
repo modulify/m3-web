@@ -5,8 +5,11 @@ import * as M3IconButtonStories from './M3IconButton.stories'
 
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
+import { Localized } from '../i18n'
 
 <Meta of={M3IconButtonStories} />
+
+<Localized locale="en-US">
 
 # Icon buttons
 
@@ -91,3 +94,88 @@ If the action simply opens a menu or triggers a one-off command, do not model it
 - [M3 Icon Buttons overview](https://m3.material.io/components/icon-buttons/overview)
 - [M3 Icon Buttons guidelines](https://m3.material.io/components/icon-buttons/guidelines)
 - [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Кнопки с иконками
+
+Кнопки с иконками дают компактный доступ к частым действиям без визуального веса полноценной текстовой кнопки. Они подходят для панелей инструментов, конечных действий в строках и повторяющихся локальных элементов управления.
+
+## API
+
+### Когда использовать
+
+Используйте `M3IconButton` для вторичных и служебных действий с хорошо знакомой иконкой. Для рискованного или неочевидного действия обычно понятнее текстовая кнопка.
+
+### Варианты оформления
+
+Поддерживаются `standard`, `filled`, `tonal` и `outlined`, соответствующие распространённым уровням акцента локальных действий.
+
+### Переключаемое состояние
+
+При `toggleable` кнопка представляет состояние включено/выключено. Используйте оформление выбранного состояния вместе с `aria-pressed`.
+
+## Доступность
+
+- Элементу только с иконкой требуется доступное имя через `aria-label`.
+- Переключаемая кнопка должна передавать состояние через `aria-pressed`.
+- Не используйте иконку без текста для основных опасных действий.
+
+<Inline tag={'p'} is={defineComponent({
+  setup () {
+    const selected = ref(false)
+    const icon = { default: () => h(M3Icon, { name: 'favorite' }) }
+
+    return () => [
+      h(M3IconButton, { appearance: 'filled', 'aria-label': 'Добавить в избранное' }, icon),
+      h(M3IconButton, {
+        appearance: 'filled',
+        selected: selected.value,
+        toggleable: true,
+        'aria-label': 'Переключить избранное',
+        'aria-pressed': selected.value ? 'true' : 'false',
+        onClick: () => selected.value = !selected.value,
+      }, icon),
+    ]
+  },
+})} />
+
+## Примеры в Storybook
+
+- [Стандартная](?path=/story/components-m3iconbutton--standard)
+- [Переключаемая](?path=/story/components-m3iconbutton--toggleable)
+- [Матрица оформления](?path=/story/components-m3iconbutton--appearance-matrix)
+
+## Рекомендации
+
+### Достаточная область нажатия
+
+Даже у небольшой иконки интерактивная область должна оставаться удобной для мыши и касания.
+
+### Когда использовать переключаемое состояние
+
+Если кнопка открывает меню или выполняет одноразовую команду, не моделируйте её как выбранную.
+
+## Пример кода
+
+```html
+<M3IconButton
+  appearance="tonal"
+  :toggleable="true"
+  :selected="selected"
+  aria-label="Переключить избранное"
+  :aria-pressed="selected"
+>
+  <M3Icon name="favorite" />
+</M3IconButton>
+```
+
+## Полезные ссылки
+
+- [Обзор M3 Icon Buttons](https://m3.material.io/components/icon-buttons/overview)
+- [Рекомендации M3 Icon Buttons](https://m3.material.io/components/icon-buttons/guidelines)
+- [WAI-ARIA APG: шаблон Button](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>

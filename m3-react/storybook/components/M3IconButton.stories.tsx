@@ -6,6 +6,13 @@ import { M3IconButton } from '@/components/icon-button'
 
 import { useRecord } from '@/hooks'
 
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': { favorite: 'Favorite', favoriteDisabled: 'Favorite, disabled' },
+  'ru-RU': { favorite: 'Избранное', favoriteDisabled: 'Избранное, недоступно' },
+}
+
 const meta: Meta<typeof M3IconButton> = {
   title: 'Components/M3IconButton',
 
@@ -35,8 +42,8 @@ const meta: Meta<typeof M3IconButton> = {
     disabled: false,
   },
 
-  render: args => (
-    <M3IconButton {...args}>
+  render: (args, { globals }) => (
+    <M3IconButton aria-label={localize(globals.locale, messages).favorite} {...args}>
       <M3Icon name="favorite" />
     </M3IconButton>
   ),
@@ -58,7 +65,7 @@ export const Toggleable: Story = {
     selected: _selected,
     onClick: _onClick,
     ...args
-  }) => {
+  }, { globals }) => {
     const M3IconButtonToggleable = () => {
       const state = useRecord({
         selected: false,
@@ -68,6 +75,7 @@ export const Toggleable: Story = {
         <M3IconButton
           toggleable={true}
           selected={state.selected}
+          aria-label={localize(globals.locale, messages).favorite}
           {...args}
           onClick={() => state.selected = !state.selected}
         >
@@ -81,7 +89,8 @@ export const Toggleable: Story = {
 }
 
 export const AppearanceMatrix: Story = {
-  render: () => {
+  render: (_args, { globals }) => {
+    const text = localize(globals.locale, messages)
     const row = {
       display: 'flex',
       flexWrap: 'wrap',
@@ -99,7 +108,7 @@ export const AppearanceMatrix: Story = {
       <div style={stack}>
         <div style={row}>
           {appearances.map(appearance => (
-            <M3IconButton key={appearance} appearance={appearance} aria-label={appearance}>
+            <M3IconButton key={appearance} appearance={appearance} aria-label={text.favorite}>
               <M3Icon name="favorite" />
             </M3IconButton>
           ))}
@@ -110,7 +119,7 @@ export const AppearanceMatrix: Story = {
             <M3IconButton
               key={appearance}
               appearance={appearance}
-              aria-label={appearance + '-disabled'}
+              aria-label={text.favoriteDisabled}
               disabled={true}
             >
               <M3Icon name="favorite" />

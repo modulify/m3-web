@@ -7,16 +7,23 @@ import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3SideSheet } from '@/components/side-sheet'
 
+import { localize } from '../i18n'
+
 const M3SideSheetStory = ({
   shown: _shown,
+  locale,
   onToggle: _onToggle,
   ...args
-}: M3SideSheetProps) => {
+}: M3SideSheetProps & { locale: unknown }) => {
   const [shown, setShown] = useState(false)
+  const text = localize(locale, {
+    'en-US': { body: 'Choose filters and apply changes.', filter: 'Filters', footer: 'Footer actions', open: 'Open side sheet' },
+    'ru-RU': { body: 'Выберите фильтры и примените изменения.', filter: 'Фильтры', footer: 'Действия', open: 'Открыть боковую панель' },
+  })
 
   return (
     <>
-      <M3Button onClick={() => setShown(true)}>Open side sheet</M3Button>
+      <M3Button onClick={() => setShown(true)}>{text.open}</M3Button>
 
       <M3SideSheet
         shown={shown}
@@ -24,17 +31,17 @@ const M3SideSheetStory = ({
         onToggle={setShown}
       >
         <M3SideSheet.Title>
-          Filters
+          {text.filter}
         </M3SideSheet.Title>
 
         <M3SideSheet.CloseIcon>
           <M3Icon name="close" />
         </M3SideSheet.CloseIcon>
 
-        <p className="m-4">Choose filters and apply changes.</p>
+        <p className="m-4">{text.body}</p>
 
         <M3SideSheet.Footer>
-          <div className="p-4">Footer actions</div>
+          <div className="p-4">{text.footer}</div>
         </M3SideSheet.Footer>
       </M3SideSheet>
     </>
@@ -54,7 +61,7 @@ const meta = {
     docked: false,
   },
 
-  render: (args) => <M3SideSheetStory {...args} />,
+  render: (args, { globals }) => <M3SideSheetStory locale={globals.locale} {...args} />,
 
   parameters: {
     layout: 'centered',

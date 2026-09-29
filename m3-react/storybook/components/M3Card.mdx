@@ -2,9 +2,12 @@ import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
 
 import LiveMusic1 from '../examples/card/LiveMusic1'
 import LiveMusic2 from '../examples/card/LiveMusic2'
+import { Localized } from '../i18n'
 import * as M3CardStories from './M3Card.stories'
 
 <Meta of={M3CardStories} />
+
+<Localized locale="en-US">
 
 # Cards
 
@@ -36,8 +39,8 @@ Material 3 cards rely on tone and outline treatment to signal emphasis. This imp
 - Keep a clear heading hierarchy inside cards for screen reader navigation.
 
 <Unstyled style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-  <LiveMusic1 interactive={true} />
-  <LiveMusic2 interactive={true} />
+  <LiveMusic1 interactive={true} locale="en-US" />
+  <LiveMusic2 interactive={true} locale="en-US" />
 </Unstyled>
 
 ## Story guide
@@ -77,3 +80,81 @@ If the whole card is interactive, nested actions should remain semantically dist
 - [M3 Cards overview](https://m3.material.io/components/cards/overview)
 - [M3 Cards guidelines](https://m3.material.io/components/cards/guidelines)
 - [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Карточки
+
+Карточки объединяют связанное содержимое и действия в одном контейнере. В Material 3 они лучше всего работают вокруг одной темы, одного решения или компактного резюме.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Card`, когда содержимое должно восприниматься как единая группа, но оставаться частью потока страницы. Если взаимодействие блокирует интерфейс или требует scrim, выберите `M3Dialog` или `M3Surface`.
+
+### Анатомия
+
+Обычная структура карточки включает:
+
+- медиа или ведущий визуальный элемент
+- заголовок и необязательный подзаголовок
+- поясняющее содержимое
+- необязательные конечные действия или футер
+
+### Варианты оформления
+
+Material 3 использует тон и обводку для передачи акцента. Доступны `filled`, `elevated` и `outlined`, покрывающие основные уровни иерархии.
+
+## Доступность
+
+- Неинтерактивная карточка остаётся обычным контейнером содержимого.
+- Действия внутри интерактивной карточки должны быть семантическими кнопками или ссылками.
+- Сохраняйте понятную иерархию заголовков для навигации экранного диктора.
+
+<Unstyled style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+  <LiveMusic1 interactive={true} locale="ru-RU" />
+  <LiveMusic2 interactive={true} locale="ru-RU" />
+</Unstyled>
+
+## Примеры в Storybook
+
+- [Альбомная](?path=/story/components-m3card--landscape)
+- [Альбомная без медиа](?path=/story/components-m3card--landscape-without-media)
+- [Портретная](?path=/story/components-m3card--portrait)
+- [Матрица оформления](?path=/story/components-m3card--appearance-matrix)
+
+## Рекомендации
+
+### Сохраняйте фокус
+
+Не превращайте карточку в мини-страницу. Для длинных форм, глубокой навигации или постоянного редактирования лучше подходит более крупная поверхность.
+
+### Разделяйте действие карточки и вложенные действия
+
+Если вся карточка интерактивна, вложенные действия должны оставаться семантически отдельными и визуально предсказуемыми.
+
+## Пример кода
+
+```tsx
+<M3Card appearance="filled">
+  <M3Card.Media>
+    <img alt="" src="/assets/image-720x376.png" />
+  </M3Card.Media>
+
+  <M3Card.Heading>Название</M3Card.Heading>
+  <M3Card.Subheading>Подзаголовок</M3Card.Subheading>
+
+  Поясняющий текст
+</M3Card>
+```
+
+## Полезные ссылки
+
+- [Обзор M3 Cards](https://m3.material.io/components/cards/overview)
+- [Рекомендации M3 Cards](https://m3.material.io/components/cards/guidelines)
+- [WAI-ARIA APG: шаблон Button](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>

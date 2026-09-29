@@ -14,8 +14,7 @@
         >
             <div class="surface-side-sheet-window__topbar-content">
                 <div>
-                    <strong>Surface orchestration: modal side sheet to window</strong>
-                    <p>Use the action inside the panel to morph a modal side sheet into a modal window.</p>
+                    <strong>{{ text.heading }}</strong><p>{{ text.description }}</p>
                 </div>
 
                 <M3Button
@@ -24,7 +23,7 @@
                     appearance="tonal"
                     @click="openModal"
                 >
-                    {{ modalMounted ? 'Modal panel is open' : 'Show modal side sheet' }}
+                    {{ modalMounted ? text.opened : text.open }}
                 </M3Button>
             </div>
         </M3SurfacePanel>
@@ -37,7 +36,7 @@
         >
             <template #top>
                 <M3IconButton
-                    aria-label="Open navigation"
+                    :aria-label="text.openNavigation"
                     @click="navExpanded = true"
                 >
                     <M3Icon name="menu" />
@@ -46,7 +45,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'inbox'"
-                label="Inbox"
+                :label="text.inbox"
                 @navigate="activeNavTab = 'inbox'; navExpanded = false"
             >
                 <M3Icon name="inbox" />
@@ -54,7 +53,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'boards'"
-                label="Boards"
+                :label="text.boards"
                 @navigate="activeNavTab = 'boards'; navExpanded = false"
             >
                 <M3Icon name="dashboard" />
@@ -62,7 +61,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'archive'"
-                label="Archive"
+                :label="text.archive"
                 @navigate="activeNavTab = 'archive'; navExpanded = false"
             >
                 <M3Icon name="archive" />
@@ -70,7 +69,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'lab'"
-                label="Lab"
+                :label="text.lab"
                 @navigate="activeNavTab = 'lab'; navExpanded = false"
             >
                 <M3Icon name="science" />
@@ -87,8 +86,7 @@
                     class="surface-side-sheet-window__header-card"
                     variant="surface-container-lowest"
                 >
-                    <h3>Workspace surfaces</h3>
-                    <p>Background layout stays in flow while the modal panel morphs between side-sheet and window geometries.</p>
+                    <h3>{{ text.workspace }}</h3><p>{{ text.workspaceDescription }}</p>
                 </M3SurfacePanel>
 
                 <div
@@ -109,7 +107,7 @@
                             variant="surface-container-lowest"
                         >
                             <strong>surface-container-lowest</strong>
-                            <p>Read-heavy content block in the page flow.</p>
+                            <p>{{ text.read }}</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
@@ -121,7 +119,7 @@
                             variant="surface-container-low"
                         >
                             <strong>surface-container-low</strong>
-                            <p>Secondary block with mild emphasis.</p>
+                            <p>{{ text.secondary }}</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
@@ -133,7 +131,7 @@
                             variant="surface-container-high"
                         >
                             <strong>surface-container-high</strong>
-                            <p>Contextual utility content.</p>
+                            <p>{{ text.contextual }}</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
@@ -145,7 +143,7 @@
                             variant="surface-dim"
                         >
                             <strong>surface-dim</strong>
-                            <p>Low-brightness complementary content.</p>
+                            <p>{{ text.dim }}</p>
                         </M3SurfacePanel>
                     </main>
 
@@ -185,11 +183,11 @@
                             class="surface-side-sheet-window__panel-content"
                         >
                             <div class="surface-side-sheet-window__modal-header">
-                                <h3>{{ panelAsWindow ? 'Window mode' : 'Modal side sheet' }}</h3>
+                                <h3>{{ panelAsWindow ? text.window : text.modal }}</h3>
 
                                 <div class="surface-side-sheet-window__modal-actions">
                                     <M3IconButton
-                                        :aria-label="panelAsWindow ? 'Dock panel to side sheet mode' : 'Open panel in window mode'"
+                                        :aria-label="panelAsWindow ? text.dock : text.openWindow"
                                         :disabled="transitioning"
                                         data-testid="surface-window-toggle-mode"
                                         appearance="standard"
@@ -201,7 +199,7 @@
 
                                     <M3IconButton
                                         :disabled="transitioning"
-                                        aria-label="Close modal panel"
+                                        :aria-label="text.close"
                                         data-testid="surface-window-close"
                                         appearance="standard"
                                         class="surface-side-sheet-window__modal-action"
@@ -212,7 +210,7 @@
                                 </div>
                             </div>
 
-                            <p>Form layout adapts when switching from side-sheet to window mode.</p>
+                            <p>{{ text.formDescription }}</p>
 
                             <form
                                 :class="{ 'surface-side-sheet-window__form_window': panelAsWindow }"
@@ -222,7 +220,7 @@
                                 <div class="surface-side-sheet-window__field">
                                     <M3TextField
                                         v-model:value="form.project"
-                                        label="Project name"
+                                        :label="text.project"
                                         placeholder="Q3 Design Refresh"
                                         outlined
                                     />
@@ -231,8 +229,8 @@
                                 <div class="surface-side-sheet-window__field">
                                     <M3TextField
                                         v-model:value="form.ownerEmail"
+                                        :label="text.owner"
                                         type="email"
-                                        label="Owner email"
                                         placeholder="owner@example.com"
                                         outlined
                                     />
@@ -241,7 +239,7 @@
                                 <div class="surface-side-sheet-window__field">
                                     <M3TextField
                                         v-model:value="form.startDate"
-                                        label="Start date"
+                                        :label="text.startDate"
                                         placeholder="YYYY-MM-DD"
                                         outlined
                                     />
@@ -251,7 +249,7 @@
                                     <M3Select
                                         v-model:value="form.priority"
                                         :options="priorityOptions"
-                                        label="Priority"
+                                        :label="text.priority"
                                         outlined
                                     />
                                 </div>
@@ -262,8 +260,8 @@
                                 >
                                     <M3TextField
                                         v-model:value="form.notes"
-                                        label="Notes"
-                                        placeholder="Describe constraints, risks, and acceptance criteria."
+                                        :label="text.notes"
+                                        :placeholder="text.notesPlaceholder"
                                         multiline
                                         outlined
                                     />
@@ -278,10 +276,10 @@
                                         appearance="text"
                                         @click="resetForm"
                                     >
-                                        Reset
+                                        {{ text.reset }}
                                     </M3Button>
                                     <M3Button type="button" appearance="filled">
-                                        Save
+                                        {{ text.save }}
                                     </M3Button>
                                 </div>
                             </form>
@@ -294,6 +292,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { StorybookLocale } from '../../i18n'
+
 import { clamp } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { computed } from 'vue'
 import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
@@ -311,6 +311,8 @@ import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
+
+import { localize } from '../../i18n'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360
@@ -359,24 +361,30 @@ type FormState = {
   notes: string,
 }
 
+const props = defineProps<{ locale: StorybookLocale }>()
+const text = localize(props.locale, {
+  'en-US': { archive: 'Archive', boards: 'Boards', close: 'Close modal panel', contextual: 'Contextual utility content.', description: 'Use the action inside the panel to morph a modal side sheet into a modal window.', dim: 'Low-brightness complementary content.', dock: 'Dock panel to side sheet mode', formDescription: 'Form layout adapts when switching from side-sheet to window mode.', heading: 'Surface orchestration: modal side sheet to window', inbox: 'Inbox', lab: 'Lab', modal: 'Modal side sheet', notes: 'Notes', notesPlaceholder: 'Describe constraints, risks, and acceptance criteria.', open: 'Show modal side sheet', opened: 'Modal panel is open', openNavigation: 'Open navigation', openWindow: 'Open panel in window mode', owner: 'Owner email', priorities: ['Low', 'Normal', 'High'], priority: 'Priority', project: 'Project name', read: 'Read-heavy content block in the page flow.', reset: 'Reset', save: 'Save', secondary: 'Secondary block with mild emphasis.', startDate: 'Start date', window: 'Window mode', workspace: 'Workspace surfaces', workspaceDescription: 'Background layout stays in flow while the modal panel morphs between side-sheet and window geometries.' },
+  'ru-RU': { archive: 'Архив', boards: 'Доски', close: 'Закрыть модальную панель', contextual: 'Контекстное вспомогательное содержимое.', description: 'Действие внутри панели преобразует модальную боковую панель в модальное окно.', dim: 'Дополнительное содержимое с пониженной яркостью.', dock: 'Вернуть режим боковой панели', formDescription: 'Компоновка формы адаптируется при переходе между боковой панелью и окном.', heading: 'Управление поверхностью: боковая панель в окно', inbox: 'Входящие', lab: 'Лаборатория', modal: 'Модальная боковая панель', notes: 'Заметки', notesPlaceholder: 'Опишите ограничения, риски и критерии приёмки.', open: 'Показать модальную панель', opened: 'Модальная панель открыта', openNavigation: 'Открыть навигацию', openWindow: 'Открыть панель в режиме окна', owner: 'Почта владельца', priorities: ['Низкий', 'Обычный', 'Высокий'], priority: 'Приоритет', project: 'Название проекта', read: 'Блок для чтения в потоке страницы.', reset: 'Сбросить', save: 'Сохранить', secondary: 'Вторичный блок с умеренным акцентом.', startDate: 'Дата начала', window: 'Режим окна', workspace: 'Поверхности рабочего пространства', workspaceDescription: 'Фоновая компоновка остаётся в потоке, пока панель преобразуется между геометрией side sheet и окна.' },
+})
+
 const DEFAULT_FORM: FormState = {
   project: 'Q3 Design Refresh',
   ownerEmail: 'owner@example.com',
   startDate: '2026-03-01',
   priority: 'normal',
-  notes: 'Move supplemental workflows into a reusable surface with predictable transitions.',
+  notes: localize(props.locale, { 'en-US': 'Move supplemental workflows into a reusable surface with predictable transitions.', 'ru-RU': 'Перенести вспомогательные процессы в переиспользуемую поверхность с предсказуемыми переходами.' }),
 }
 
 const form = reactive<FormState>({ ...DEFAULT_FORM })
 
 const priorityOptions = [{
-  label: 'Low',
+  label: text.priorities[0],
   value: 'low',
 }, {
-  label: 'Normal',
+  label: text.priorities[1],
   value: 'normal',
 }, {
-  label: 'High',
+  label: text.priorities[2],
   value: 'high',
 }]
 

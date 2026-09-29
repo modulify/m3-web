@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { M3RichTooltip } from '@/components/rich-tooltip'
 
 import DeleteTooltip from '../examples/rich-tooltip/DeleteTooltip.vue'
+import { resolveStorybookLocale } from '../i18n'
 import SelectionTooltip from '../examples/rich-tooltip/SelectionTooltip.vue'
 import ShortcutTooltip from '../examples/rich-tooltip/ShortcutTooltip.vue'
 
@@ -24,32 +25,35 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const DestructiveAction: Story = {
-  render: () => ({
+export const ActionConsequence: Story = {
+  render: (_args, { globals }) => ({
     components: {
       DeleteTooltip,
     },
 
-    template: '<DeleteTooltip />',
+    setup: () => ({ locale: resolveStorybookLocale(globals.locale) }),
+    template: '<DeleteTooltip :locale="locale" />',
   }),
 }
 
 export const BulkSelection: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       SelectionTooltip,
     },
 
-    template: '<SelectionTooltip />',
+    setup: () => ({ locale: resolveStorybookLocale(globals.locale) }),
+    template: '<SelectionTooltip :locale="locale" />',
   }),
 }
 
 export const ShortcutHint: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       ShortcutTooltip,
     },
 
-    template: '<ShortcutTooltip />',
+    setup: () => ({ locale: resolveStorybookLocale(globals.locale) }),
+    template: '<ShortcutTooltip :locale="locale" />',
   }),
 }

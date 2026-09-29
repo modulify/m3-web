@@ -5,6 +5,13 @@ import { ref } from 'vue'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': { favorite: 'Favorite', favoriteDisabled: 'Favorite, disabled' },
+  'ru-RU': { favorite: 'Избранное', favoriteDisabled: 'Избранное, недоступно' },
+}
+
 const meta = {
   title: 'Components/M3IconButton',
 
@@ -34,18 +41,21 @@ const meta = {
     disabled: false,
   },
 
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Icon,
       M3IconButton,
     },
 
     setup () {
-      return { args }
+      return {
+        args,
+        label: localize(globals.locale, messages).favorite,
+      }
     },
 
     template: `
-        <M3IconButton v-bind="args">
+        <M3IconButton v-bind="args" :aria-label="label">
             <M3Icon name="favorite" />
         </M3IconButton>
     `,
@@ -63,7 +73,7 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const Toggleable: Story = {
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Icon,
       M3IconButton,
@@ -74,6 +84,7 @@ export const Toggleable: Story = {
 
       return {
         args,
+        label: localize(globals.locale, messages).favorite,
         selected,
       }
     },
@@ -82,6 +93,7 @@ export const Toggleable: Story = {
         <M3IconButton
             :selected="selected"
             v-bind="args"
+            :aria-label="label"
             toggleable
             @click="selected = !selected"
         >
@@ -92,7 +104,7 @@ export const Toggleable: Story = {
 }
 
 export const AppearanceMatrix: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       M3Icon,
       M3IconButton,
@@ -101,6 +113,7 @@ export const AppearanceMatrix: Story = {
     setup () {
       return {
         appearances: ['standard', 'filled', 'tonal', 'outlined'],
+        text: localize(globals.locale, messages),
       }
     },
 
@@ -111,7 +124,7 @@ export const AppearanceMatrix: Story = {
                     v-for="appearance in appearances"
                     :key="appearance"
                     :appearance="appearance"
-                    :aria-label="appearance"
+                    :aria-label="text.favorite"
                 >
                     <M3Icon name="favorite" />
                 </M3IconButton>
@@ -122,7 +135,7 @@ export const AppearanceMatrix: Story = {
                     v-for="appearance in appearances"
                     :key="appearance + '-disabled'"
                     :appearance="appearance"
-                    :aria-label="appearance + '-disabled'"
+                    :aria-label="text.favoriteDisabled"
                     disabled
                 >
                     <M3Icon name="favorite" />

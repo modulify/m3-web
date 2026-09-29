@@ -1,5 +1,7 @@
 import type { FC } from 'react'
 
+import type { StorybookLocale } from '../../i18n'
+
 import { easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
@@ -9,15 +11,22 @@ import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 
 import { useStateRef } from '@/components/surface/orchestration/useStateRef'
+
 import {
   useSurfaceSideSheetMorph,
 } from '@/components/surface/orchestration/useSurfaceSideSheetMorph'
+
+import { localize } from '../../i18n'
 
 const PANEL_TRANSITION_EASING = easing.standard
 
 type NavTab = 'inbox' | 'boards' | 'archive' | 'lab'
 
-const SurfaceSideSheetMorph: FC = () => {
+const SurfaceSideSheetMorph: FC<{ locale: StorybookLocale }> = ({ locale }) => {
+  const text = localize(locale, {
+    'en-US': { archive: 'Archive', boards: 'Boards', close: 'Close modal side sheet', contextual: 'Contextual utility content.', description: 'Docked sheet transitions into modal sheet with fixed width, right-edge anchoring, and full-height modal target.', dim: 'Low-brightness complementary content.', docked: 'Docked side sheet', dockedDescription: 'Coplanar layout participant with adaptive CSS width inside the layout host.', heading: 'Surface orchestration: side sheet morph', inbox: 'Inbox', interactive: 'Main content remains interactive.', lab: 'Lab', layer: 'Layer rebind: docked layer to modal layer.', modal: 'Modal side sheet', modalDescription: 'Stable modal state stays in overlay, while docked state remains layout-driven.', openNavigation: 'Open navigation', read: 'Read-heavy content block in the page flow.', secondary: 'Secondary block with mild emphasis.', switchDocked: 'Switch to docked sheet', switchModal: 'Switch to modal sheet', workspace: 'Workspace surfaces', workspaceDescription: 'Static blocks keep flow while side-sheet changes modality.' },
+    'ru-RU': { archive: 'Архив', boards: 'Доски', close: 'Закрыть модальную панель', contextual: 'Контекстное вспомогательное содержимое.', description: 'Закреплённая панель переходит в полноразмерную модальную панель фиксированной ширины у правого края.', dim: 'Дополнительное содержимое с пониженной яркостью.', docked: 'Закреплённая боковая панель', dockedDescription: 'Участник общей компоновки с адаптивной CSS-шириной внутри контейнера.', heading: 'Управление поверхностью: преобразование боковой панели', inbox: 'Входящие', interactive: 'Основное содержимое остаётся интерактивным.', lab: 'Лаборатория', layer: 'Переназначение слоя: из закреплённого в модальный.', modal: 'Модальная боковая панель', modalDescription: 'Модальное состояние остаётся в overlay, а закреплённое управляется компоновкой.', openNavigation: 'Открыть навигацию', read: 'Блок для чтения в потоке страницы.', secondary: 'Вторичный блок с умеренным акцентом.', switchDocked: 'Переключить в закреплённый режим', switchModal: 'Переключить в модальный режим', workspace: 'Поверхности рабочего пространства', workspaceDescription: 'Статичные блоки остаются в потоке при смене режима панели.' },
+  })
   const [navExpanded, setNavExpanded] = useStateRef(false)
   const [activeNavTab, setActiveNavTab] = useStateRef<NavTab>('inbox')
   const {
@@ -50,8 +59,8 @@ const SurfaceSideSheetMorph: FC = () => {
       >
         <div className="surface-side-sheet__topbar-content">
           <div>
-            <strong>Surface orchestration: side sheet morph</strong>
-            <p>Docked sheet transitions into modal sheet with fixed width, right-edge anchoring, and full-height modal target.</p>
+            <strong>{text.heading}</strong>
+            <p>{text.description}</p>
           </div>
 
           <M3Button
@@ -60,7 +69,7 @@ const SurfaceSideSheetMorph: FC = () => {
             data-testid="surface-morph-toggle"
             onClick={() => void toggleSideSheetMode()}
           >
-            {sideSheetModal ? 'Switch to docked sheet' : 'Switch to modal sheet'}
+            {sideSheetModal ? text.switchDocked : text.switchModal}
           </M3Button>
         </div>
       </M3SurfacePanel>
@@ -74,7 +83,7 @@ const SurfaceSideSheetMorph: FC = () => {
       >
         <M3Navigation.Top>
           <M3IconButton
-            aria-label="Open navigation"
+            aria-label={text.openNavigation}
             onClick={() => setNavExpanded(true)}
           >
             <M3Icon name="menu" />
@@ -82,7 +91,7 @@ const SurfaceSideSheetMorph: FC = () => {
         </M3Navigation.Top>
 
         <M3NavigationTab
-          label="Inbox"
+          label={text.inbox}
           active={activeNavTab === 'inbox'}
           onNavigate={() => {
             setActiveNavTab('inbox')
@@ -93,7 +102,7 @@ const SurfaceSideSheetMorph: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Boards"
+          label={text.boards}
           active={activeNavTab === 'boards'}
           onNavigate={() => {
             setActiveNavTab('boards')
@@ -104,7 +113,7 @@ const SurfaceSideSheetMorph: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Archive"
+          label={text.archive}
           active={activeNavTab === 'archive'}
           onNavigate={() => {
             setActiveNavTab('archive')
@@ -115,7 +124,7 @@ const SurfaceSideSheetMorph: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Lab"
+          label={text.lab}
           active={activeNavTab === 'lab'}
           onNavigate={() => {
             setActiveNavTab('lab')
@@ -136,8 +145,8 @@ const SurfaceSideSheetMorph: FC = () => {
             variant="surface-container-lowest"
             elevation={0}
           >
-            <h3>Workspace surfaces</h3>
-            <p>Static blocks keep flow while side-sheet changes modality.</p>
+            <h3>{text.workspace}</h3>
+            <p>{text.workspaceDescription}</p>
           </M3SurfacePanel>
 
           <div
@@ -158,7 +167,7 @@ const SurfaceSideSheetMorph: FC = () => {
                 elevation={0}
               >
                 <strong>surface-container-lowest</strong>
-                <p>Read-heavy content block in the page flow.</p>
+                <p>{text.read}</p>
               </M3SurfacePanel>
 
               <M3SurfacePanel
@@ -170,7 +179,7 @@ const SurfaceSideSheetMorph: FC = () => {
                 elevation={1}
               >
                 <strong>surface-container-low</strong>
-                <p>Secondary block with mild emphasis.</p>
+                <p>{text.secondary}</p>
               </M3SurfacePanel>
 
               <M3SurfacePanel
@@ -182,7 +191,7 @@ const SurfaceSideSheetMorph: FC = () => {
                 elevation={3}
               >
                 <strong>surface-container-high</strong>
-                <p>Contextual utility content.</p>
+                <p>{text.contextual}</p>
               </M3SurfacePanel>
 
               <M3SurfacePanel
@@ -194,7 +203,7 @@ const SurfaceSideSheetMorph: FC = () => {
                 elevation={0}
               >
                 <strong>surface-dim</strong>
-                <p>Low-brightness complementary content.</p>
+                <p>{text.dim}</p>
               </M3SurfacePanel>
             </main>
 
@@ -216,9 +225,9 @@ const SurfaceSideSheetMorph: FC = () => {
                   data-testid="surface-morph-sheet"
                   data-panel-mode="docked"
                 >
-                  <h3>Docked side sheet</h3>
-                  <p>Coplanar layout participant with adaptive CSS width inside the layout host.</p>
-                  <p>Main content remains interactive.</p>
+                  <h3>{text.docked}</h3>
+                  <p>{text.dockedDescription}</p>
+                  <p>{text.interactive}</p>
                   <p className="surface-side-sheet__meta">
                     Adaptive width: {sideSheetWidth}px
                   </p>
@@ -239,12 +248,12 @@ const SurfaceSideSheetMorph: FC = () => {
                 {sideSheetModal ? (
                   <>
                     <div className="surface-side-sheet__modal-header">
-                      <h3>Modal side sheet</h3>
+                      <h3>{text.modal}</h3>
 
                       <M3IconButton
                         className="surface-side-sheet__modal-close"
                         appearance="standard"
-                        aria-label="Close modal side sheet"
+                        aria-label={text.close}
                         disabled={transitioning}
                         data-testid="surface-morph-close"
                         onClick={() => void closeModalFromPanel()}
@@ -253,8 +262,8 @@ const SurfaceSideSheetMorph: FC = () => {
                       </M3IconButton>
                     </div>
 
-                    <p>Layer rebind: docked layer to modal layer.</p>
-                    <p>Stable modal state stays in overlay, while docked state remains layout-driven.</p>
+                    <p>{text.layer}</p>
+                    <p>{text.modalDescription}</p>
                     <p className="surface-side-sheet__meta">
                       Measured transition width: {modalPanelProps.width}px
                     </p>

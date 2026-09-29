@@ -1,7 +1,10 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3MenuStories from './M3Menu.stories'
 
 <Meta of={M3MenuStories} />
+
+<Localized locale="en-US">
 
 # Menus
 
@@ -52,3 +55,59 @@ Menu items work best when each row starts with a distinct action or state label.
 - [M3 Menus overview](https://m3.material.io/components/menus/overview)
 - [M3 Menus guidelines](https://m3.material.io/components/menus/guidelines)
 - [WAI-ARIA APG: Menu Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Меню
+
+Меню показывает короткий список действий или вариантов рядом с элементом, который его открыл. Меню Material 3 лёгкие, контекстные и лучше всего подходят для действий текущей области интерфейса.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Menu` для контекстных действий, быстрого выбора и компактных списков команд. Для длинного описательного содержимого или форм лучше выбрать боковую панель или диалог.
+
+### Привязка
+
+Меню должно открываться от явно связанного элемента. Реализация принимает `target`, чтобы позиционирование оставалось привязано к управляющему элементу.
+
+### Выбор
+
+Выбранная строка может показывать текущее значение, но само меню должно оставаться компактным и легко читаемым.
+
+## Доступность
+
+- Свяжите кнопку и всплывающее меню семантикой menu button.
+- Делайте подписи краткими и ориентированными на действие.
+- После закрытия возвращайте фокус на управляющий элемент.
+
+## Примеры в Storybook
+
+- [Стандартное меню](?path=/story/components-m3menu--standard)
+- [Ведущее и завершающее содержимое](?path=/story/components-m3menu--with-leading-and-trailing-content)
+
+## Демонстрация
+
+<Canvas of={M3MenuStories.Standard} />
+<Canvas of={M3MenuStories.WithLeadingAndTrailingContent} />
+
+## Рекомендации
+
+### Делайте меню короткими
+
+Если пользователю приходится прокручивать меню или сравнивать длинные описания, лучше выбрать другой паттерн.
+
+### Используйте ясные глаголы
+
+Строки легче просматривать, когда каждая начинается с отличимого действия или состояния.
+
+## Полезные ссылки
+
+- [Обзор M3 Menus](https://m3.material.io/components/menus/overview)
+- [Рекомендации M3 Menus](https://m3.material.io/components/menus/guidelines)
+- [WAI-ARIA APG: паттерн Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/)
+
+</Localized>

@@ -10,12 +10,11 @@
         >
             <div class="surface-workspace-dialog__topbar-content">
                 <div>
-                    <strong>Scenario: workspace confirmation dialog</strong>
-                    <p>A blocking decision interrupts the current workspace without replacing the layout beneath it.</p>
+                    <strong>{{ text.heading }}</strong><p>{{ text.description }}</p>
                 </div>
 
                 <M3Button @click="opened = true">
-                    Archive project
+                    {{ text.archiveProject }}
                 </M3Button>
             </div>
         </M3SurfacePanel>
@@ -27,8 +26,7 @@
                 class="surface-workspace-dialog__panel"
                 variant="surface-container-lowest"
             >
-                <h3>Workspace overview</h3>
-                <p>Main content remains visible under the dialog, so the user keeps the surrounding context while confirming the action.</p>
+                <h3>{{ text.overview }}</h3><p>{{ text.overviewText }}</p>
             </M3SurfacePanel>
 
             <M3SurfacePanel
@@ -37,14 +35,13 @@
                 class="surface-workspace-dialog__panel"
                 variant="surface-container-low"
             >
-                <h3>Activity</h3>
-                <p>12 tasks updated today</p>
+                <h3>{{ text.activity }}</h3><p>{{ text.tasks }}</p>
             </M3SurfacePanel>
         </div>
 
         <div class="surface-workspace-dialog__grid">
             <M3SurfacePanel
-                v-for="label in ['Roadmap', 'Assets', 'Owners']"
+                v-for="label in text.cards"
                 :key="label"
                 :fill-height="false"
                 :height="180"
@@ -54,7 +51,7 @@
                 variant="surface-container-low"
             >
                 <h3>{{ label }}</h3>
-                <p>Supporting surface inside the same workspace scene.</p>
+                <p>{{ text.cardText }}</p>
             </M3SurfacePanel>
         </div>
 
@@ -74,8 +71,7 @@
             @update:shown="opened = $event"
             @dismiss="opened = false"
         >
-            <h3>Archive this workspace?</h3>
-            <p>Archiving hides the project from active planning views but keeps its history available for reporting.</p>
+            <h3>{{ text.decision }}</h3><p>{{ text.decisionText }}</p>
 
             <M3SurfacePanel
                 :fill-height="false"
@@ -85,16 +81,16 @@
                 class="surface-workspace-dialog__notice"
                 variant="surface-container"
             >
-                Team members will retain read access until the workspace is restored.
+                {{ text.retention }}
             </M3SurfacePanel>
 
             <div class="surface-workspace-dialog__actions">
                 <M3Button appearance="text" @click="opened = false">
-                    Cancel
+                    {{ text.cancel }}
                 </M3Button>
 
                 <M3Button appearance="filled" @click="opened = false">
-                    Archive
+                    {{ text.archive }}
                 </M3Button>
             </div>
         </M3Surface>
@@ -102,10 +98,20 @@
 </template>
 
 <script lang="ts" setup>
+import type { StorybookLocale } from '../../i18n'
+
 import { ref } from 'vue'
 
 import { M3Button } from '@/components/button'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
+
+import { localize } from '../../i18n'
+
+const props = defineProps<{ locale: StorybookLocale }>()
+const text = localize(props.locale, {
+  'en-US': { activity: 'Activity', archive: 'Archive', archiveProject: 'Archive project', cancel: 'Cancel', cards: ['Roadmap', 'Assets', 'Owners'], cardText: 'Supporting surface inside the same workspace scene.', decision: 'Archive this workspace?', decisionText: 'Archiving hides the project from active planning views but keeps its history available for reporting.', description: 'A blocking decision interrupts the current workspace without replacing the layout beneath it.', heading: 'Scenario: workspace confirmation dialog', overview: 'Workspace overview', overviewText: 'Main content remains visible under the dialog, so the user keeps the surrounding context while confirming the action.', retention: 'Team members will retain read access until the workspace is restored.', tasks: '12 tasks updated today' },
+  'ru-RU': { activity: 'Активность', archive: 'Архивировать', archiveProject: 'Архивировать проект', cancel: 'Отмена', cards: ['План', 'Материалы', 'Владельцы'], cardText: 'Вспомогательная поверхность в том же рабочем пространстве.', decision: 'Архивировать рабочее пространство?', decisionText: 'Архивация скроет проект из активного планирования, но сохранит историю для отчётов.', description: 'Блокирующее решение прерывает текущую работу, не заменяя расположенный ниже интерфейс.', heading: 'Сценарий: диалог подтверждения', overview: 'Обзор рабочего пространства', overviewText: 'Основное содержимое остаётся видимым под диалогом, сохраняя контекст во время подтверждения.', retention: 'Участники сохранят доступ на чтение до восстановления рабочего пространства.', tasks: 'Сегодня обновлено 12 задач' },
+})
 
 const opened = ref(false)
 </script>

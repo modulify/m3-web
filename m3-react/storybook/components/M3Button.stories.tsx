@@ -8,6 +8,13 @@ import { M3Icon } from '@/components/icon'
 
 import * as values from '@/components/button/values'
 
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': { share: 'Share' },
+  'ru-RU': { share: 'Поделиться' },
+}
+
 const meta: Meta<typeof M3Button> = {
   title: 'Components/M3Button',
 
@@ -29,9 +36,9 @@ const meta: Meta<typeof M3Button> = {
     disabled: false,
   },
 
-  render: (args) => (
+  render: (args, { globals }) => (
     <M3Button {...args}>
-      Share
+      {localize(globals.locale, messages).share}
     </M3Button>
   ),
 
@@ -47,15 +54,16 @@ type Story = StoryObj<typeof meta>
 export const WithTextOnly: Story = {}
 
 export const WithLeadingIcon: Story = {
-  render: (args) => (
+  render: (args, { globals }) => (
     <M3Button {...args}>
-      <M3Icon name="share" /> Share
+      <M3Icon name="share" /> {localize(globals.locale, messages).share}
     </M3Button>
   ),
 }
 
 export const AppearanceMatrix: Story = {
-  render: () => {
+  render: (_args, { globals }) => {
+    const text = localize(globals.locale, messages)
     const stack = {
       display: 'grid',
       gap: '16px',
@@ -72,7 +80,7 @@ export const AppearanceMatrix: Story = {
         <div style={row}>
           {values.appearances.map(appearance => (
             <M3Button key={appearance} appearance={appearance}>
-              Share
+              {text.share}
             </M3Button>
           ))}
         </div>
@@ -80,7 +88,7 @@ export const AppearanceMatrix: Story = {
         <div style={row}>
           {values.appearances.map(appearance => (
             <M3Button key={appearance} appearance={appearance}>
-              <M3Icon name="share" /> Share
+              <M3Icon name="share" /> {text.share}
             </M3Button>
           ))}
         </div>
@@ -90,7 +98,8 @@ export const AppearanceMatrix: Story = {
 }
 
 export const DisabledStates: Story = {
-  render: () => {
+  render: (_args, { globals }) => {
+    const text = localize(globals.locale, messages)
     const row = {
       display: 'flex',
       flexWrap: 'wrap',
@@ -101,7 +110,7 @@ export const DisabledStates: Story = {
       <div style={row}>
         {values.appearances.map(appearance => (
           <M3Button key={appearance} appearance={appearance} disabled={true}>
-            Share
+            {text.share}
           </M3Button>
         ))}
       </div>

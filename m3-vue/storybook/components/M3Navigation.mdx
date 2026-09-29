@@ -1,7 +1,10 @@
 import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3NavigationStories from './M3Navigation.stories'
 
 <Meta of={M3NavigationStories} />
+
+<Localized locale="en-US">
 
 # Navigation
 
@@ -49,3 +52,56 @@ Use drawer or rail based on screen width, information density, and shell persist
 - [M3 Navigation rail overview](https://m3.material.io/components/navigation-rail/overview)
 - [M3 Navigation drawer overview](https://m3.material.io/components/navigation-drawer/overview)
 - [WAI-ARIA APG: Landmark Regions](https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Навигация
+
+Навигационные компоненты помогают перемещаться между разделами верхнего уровня. Material 3 выбирает форму навигации по доступному пространству и постоянству, а не только по внешнему виду.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Navigation` для стабильных разделов приложения, к которым пользователь возвращается в течение сессии. Не смешивайте их с локальными вкладками и фильтрами содержимого.
+
+### Формы навигации
+
+- navigation drawer для широкого набора разделов и подробных подписей
+- navigation rail для средних и больших экранов с постоянной вертикальной областью
+- navigation bar для компактных экранов и небольшого числа основных разделов
+
+Текущие истории показывают реализованные в пакете drawer и rail.
+
+## Доступность
+
+- Используйте контейнер как навигационный landmark и при необходимости задайте понятную подпись.
+- Делайте названия разделов краткими и уникальными.
+- Последовательно обозначайте активный раздел.
+
+## Примеры в Storybook
+
+- [Навигационная панель](?path=/story/components-m3navigation--navigation-drawer)
+- [Навигационная рейка](?path=/story/components-m3navigation--navigation-rail)
+- [Модальная навигационная панель](?path=/story/components-m3navigation--modal-navigation-drawer)
+
+## Рекомендации
+
+### Стабильный набор разделов
+
+Навигация верхнего уровня не должна вести себя как ситуативный фильтр. Непредсказуемое появление и исчезновение пунктов разрушает карту приложения.
+
+### Выбирайте вариант по компоновке
+
+Выбирайте drawer или rail по ширине экрана, плотности информации и структуре оболочки приложения.
+
+## Полезные ссылки
+
+- [Обзор M3 Navigation bar](https://m3.material.io/components/navigation-bar/overview)
+- [Обзор M3 Navigation rail](https://m3.material.io/components/navigation-rail/overview)
+- [Обзор M3 Navigation drawer](https://m3.material.io/components/navigation-drawer/overview)
+- [WAI-ARIA APG: landmark regions](https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/)
+
+</Localized>

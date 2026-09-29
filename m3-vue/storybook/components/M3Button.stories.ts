@@ -5,6 +5,13 @@ import { M3Icon } from '@/components/icon'
 
 import * as values from '@/components/button/values'
 
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': { share: 'Share' },
+  'ru-RU': { share: 'Поделиться' },
+}
+
 const meta = {
   title: 'Components/M3Button',
 
@@ -26,16 +33,19 @@ const meta = {
     disabled: false,
   },
 
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Button,
     },
 
     setup () {
-      return { args }
+      return {
+        args,
+        label: localize(globals.locale, messages).share,
+      }
     },
 
-    template: '<M3Button v-bind="args">Share</M3Button>',
+    template: '<M3Button v-bind="args">{{ label }}</M3Button>',
   }),
 
   parameters: {
@@ -50,27 +60,30 @@ type Story = StoryObj<typeof meta>
 export const WithTextOnly: Story = {}
 
 export const WithLeadingIcon: Story = {
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Button,
       M3Icon,
     },
 
     setup () {
-      return { args }
+      return {
+        args,
+        label: localize(globals.locale, messages).share,
+      }
     },
 
     template: `
         <M3Button v-bind="args">
             <M3Icon name="share" />
-            Share
+            {{ label }}
         </M3Button>
     `,
   }),
 }
 
 export const AppearanceMatrix: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       M3Button,
       M3Icon,
@@ -79,6 +92,7 @@ export const AppearanceMatrix: Story = {
     setup () {
       return {
         appearances: values.appearances,
+        label: localize(globals.locale, messages).share,
       }
     },
 
@@ -90,7 +104,7 @@ export const AppearanceMatrix: Story = {
                     :key="'text-' + appearance"
                     :appearance="appearance"
                 >
-                    Share
+                    {{ label }}
                 </M3Button>
             </div>
 
@@ -101,7 +115,7 @@ export const AppearanceMatrix: Story = {
                     :appearance="appearance"
                 >
                     <M3Icon name="share" />
-                    Share
+                    {{ label }}
                 </M3Button>
             </div>
         </div>
@@ -110,7 +124,7 @@ export const AppearanceMatrix: Story = {
 }
 
 export const DisabledStates: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       M3Button,
     },
@@ -118,6 +132,7 @@ export const DisabledStates: Story = {
     setup () {
       return {
         appearances: values.appearances,
+        label: localize(globals.locale, messages).share,
       }
     },
 
@@ -129,7 +144,7 @@ export const DisabledStates: Story = {
                 :appearance="appearance"
                 disabled
             >
-                Share
+                {{ label }}
             </M3Button>
         </div>
     `,

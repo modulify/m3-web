@@ -1,9 +1,12 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
 
 import TextFieldExamples from '../examples/text-field/TextFieldExamples'
+import { Localized } from '../i18n'
 import * as M3TextFieldStories from './M3TextField.stories'
 
 <Meta of={M3TextFieldStories} />
+
+<Localized locale="en-US">
 
 # Text fields
 
@@ -71,3 +74,50 @@ Use semantic input types like `email`, `tel`, or `password` whenever possible so
 - [M3 Text fields overview](https://m3.material.io/components/text-fields/overview)
 - [M3 Text fields guidelines](https://m3.material.io/components/text-fields/guidelines)
 - [WAI Tutorials: Form Labels](https://www.w3.org/WAI/tutorials/forms/labels/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Текстовые поля
+
+Текстовые поля предназначены для короткого и среднего по объёму ввода. Material 3 использует их для обычного и вспомогательного ввода, паролей и многострочного текста.
+
+## API
+
+Используйте `M3TextField` для прямого ввода текста, поиска, паролей и небольших заметок. Если значение должно выбираться из готового списка, используйте `M3Select` или autocomplete.
+
+Поддерживаются заполненное и контурное оформление, ведущие иконки, пароль и многострочный режим. Подпись, вспомогательный текст и сообщения валидации должны работать совместно.
+
+## Доступность
+
+- Задайте постоянную подпись через `label` или `aria-labelledby`.
+- Сочетайте `aria-invalid` с пояснением ошибки.
+- Для длинного ввода используйте `textarea` с той же стратегией подписывания.
+
+<Unstyled><TextFieldExamples /></Unstyled>
+
+## Примеры в Storybook
+
+- [Текстовое поле](?path=/story/components-m3textfield--text-field)
+- [Поле пароля](?path=/story/components-m3textfield--password-field)
+- [Контурное с ведущей иконкой](?path=/story/components-m3textfield--outlined-with-leading-icon)
+- [Многострочное контурное](?path=/story/components-m3textfield--multiline-outlined)
+
+## Рекомендации
+
+Placeholder не заменяет подпись: назначение поля должно оставаться видимым во время ввода. Используйте семантические типы `email`, `tel` и `password`.
+
+## Пример кода
+
+```tsx
+<M3TextField value={value} label="Электронная почта" type="email" onUpdate={setValue} />
+```
+
+## Полезные ссылки
+
+- [Обзор M3 Text fields](https://m3.material.io/components/text-fields/overview)
+- [Рекомендации M3 Text fields](https://m3.material.io/components/text-fields/guidelines)
+- [WAI: подписи форм](https://www.w3.org/WAI/tutorials/forms/labels/)
+
+</Localized>

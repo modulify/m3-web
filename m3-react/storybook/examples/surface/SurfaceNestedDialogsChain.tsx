@@ -1,5 +1,7 @@
 import type { CSSProperties, FC } from 'react'
 
+import type { StorybookLocale } from '../../i18n'
+
 import { raf, wait } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import { durations, easing } from '@modulify/m3-foundation/lib/motion'
@@ -12,6 +14,8 @@ import { M3Surface } from '@/components/surface'
 import { toClassName } from '@/utils/styling'
 
 import { useStateRef } from '@/components/surface/orchestration/useStateRef'
+
+import { localize } from '../../i18n'
 
 const DIALOG_TRANSITION_MS = durations.medium2
 const DIALOG_TRANSITION_EASING = easing.standard
@@ -50,7 +54,11 @@ const dialogChain: DialogSpec[] = [{
   description: 'Final layer in this scenario: close only, no next dialog action.',
 }]
 
-const SurfaceNestedDialogsChain: FC = () => {
+const SurfaceNestedDialogsChain: FC<{ locale: StorybookLocale }> = ({ locale }) => {
+  const text = localize(locale, {
+    'en-US': { archive: 'Archive', background: 'Background content', backgroundDescription: 'Open dialog 1 from top action, then continue through the chain.', boards: 'Boards', chainOpen: 'Dialog chain is open', close: 'Close', closeDialog: 'Close dialog', descriptions: dialogChain.map(dialog => dialog.description), dialog: 'Dialog', heading: 'Surface orchestration: nested dialogs chain', inbox: 'Inbox', lab: 'Lab', of: 'of', open: 'Open dialog chain', openDialog: 'Open dialog', summary: 'Rail layout opens a nested dialog chain with one active scrim on the topmost dialog.', workspace: 'Workspace', workspaceDescription: 'Page composition stays stable while dialogs are stacked progressively.' },
+    'ru-RU': { archive: 'Архив', background: 'Фоновое содержимое', backgroundDescription: 'Откройте диалог 1 верхней кнопкой и последовательно продолжите цепочку.', boards: 'Доски', chainOpen: 'Цепочка диалогов открыта', close: 'Закрыть', closeDialog: 'Закрыть диалог', descriptions: ['Первый слой цепочки открывает диалог 2.', 'Второй слой сохраняет те же элементы управления и открывает следующий диалог.', 'Третий слой открывает последний вложенный диалог.', 'Последний слой сценария можно только закрыть.'], dialog: 'Диалог', heading: 'Управление поверхностью: цепочка вложенных диалогов', inbox: 'Входящие', lab: 'Лаборатория', of: 'из', open: 'Открыть цепочку диалогов', openDialog: 'Открыть диалог', summary: 'Компоновка с рейкой открывает цепочку вложенных диалогов; активный scrim принадлежит верхнему.', workspace: 'Рабочее пространство', workspaceDescription: 'Композиция страницы остаётся стабильной при последовательном наложении диалогов.' },
+  })
   const [activeNavTab, setActiveNavTab] = useStateRef<NavTab>('inbox')
   const [dialogMounted, setDialogMounted, dialogMountedRef] = useStateRef<boolean[]>(
     Array.from({ length: dialogChain.length }, () => false)
@@ -195,8 +203,7 @@ const SurfaceNestedDialogsChain: FC = () => {
       >
         <div className="surface-dialog-chain__topbar-content">
           <div>
-            <strong>Surface orchestration: nested dialogs chain</strong>
-            <p>Rail layout opens a nested dialog chain with one active scrim on the topmost dialog.</p>
+            <strong>{text.heading}</strong><p>{text.summary}</p>
           </div>
 
           <M3Button
@@ -205,7 +212,7 @@ const SurfaceNestedDialogsChain: FC = () => {
             data-testid="surface-dialog-chain-open-root"
             onClick={() => void openDialog(0)}
           >
-            {chainOpened ? 'Dialog chain is open' : 'Open dialog chain'}
+            {chainOpened ? text.chainOpen : text.open}
           </M3Button>
         </div>
       </M3Surface>
@@ -216,7 +223,7 @@ const SurfaceNestedDialogsChain: FC = () => {
         alignment="top"
       >
         <M3NavigationTab
-          label="Inbox"
+          label={text.inbox}
           active={activeNavTab === 'inbox'}
           onNavigate={() => setActiveNavTab('inbox')}
         >
@@ -224,7 +231,7 @@ const SurfaceNestedDialogsChain: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Boards"
+          label={text.boards}
           active={activeNavTab === 'boards'}
           onNavigate={() => setActiveNavTab('boards')}
         >
@@ -232,7 +239,7 @@ const SurfaceNestedDialogsChain: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Archive"
+          label={text.archive}
           active={activeNavTab === 'archive'}
           onNavigate={() => setActiveNavTab('archive')}
         >
@@ -240,7 +247,7 @@ const SurfaceNestedDialogsChain: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Lab"
+          label={text.lab}
           active={activeNavTab === 'lab'}
           onNavigate={() => setActiveNavTab('lab')}
         >
@@ -258,8 +265,7 @@ const SurfaceNestedDialogsChain: FC = () => {
             variant="surface-container-lowest"
             elevation={0}
           >
-            <h3>Workspace</h3>
-            <p>Page composition stays stable while dialogs are stacked progressively.</p>
+            <h3>{text.workspace}</h3><p>{text.workspaceDescription}</p>
           </M3Surface>
 
           <M3Surface
@@ -268,8 +274,7 @@ const SurfaceNestedDialogsChain: FC = () => {
             variant="surface-container-low"
             elevation={0}
           >
-            <h4>Background content</h4>
-            <p>Open dialog 1 from top action, then continue through the chain.</p>
+            <h4>{text.background}</h4><p>{text.backgroundDescription}</p>
           </M3Surface>
         </div>
       </div>
@@ -306,18 +311,18 @@ const SurfaceNestedDialogsChain: FC = () => {
             onDismiss={() => void closeFrom(level)}
           >
             <div className="surface-dialog-chain__dialog-head">
-              <h3>Dialog {level + 1} of {dialogChain.length}</h3>
+              <h3>{text.dialog} {level + 1} {text.of} {dialogChain.length}</h3>
 
               <M3IconButton
                 appearance="standard"
-                aria-label={`Close dialog ${level + 1}`}
+                aria-label={`${text.closeDialog} ${level + 1}`}
                 onClick={() => void closeFrom(level)}
               >
                 <M3Icon name="close" />
               </M3IconButton>
             </div>
 
-            <p>{dialog.description}</p>
+            <p>{text.descriptions[level]}</p>
 
             <div className="surface-dialog-chain__dialog-actions">
               <M3Button
@@ -325,7 +330,7 @@ const SurfaceNestedDialogsChain: FC = () => {
                 data-testid={`surface-dialog-chain-close-${level + 1}`}
                 onClick={() => void closeFrom(level)}
               >
-                Close
+                {text.close}
               </M3Button>
 
               {hasNextDialog(level) ? (
@@ -335,7 +340,7 @@ const SurfaceNestedDialogsChain: FC = () => {
                   data-testid={`surface-dialog-chain-open-next-${level + 1}`}
                   onClick={() => void openDialog(level + 1)}
                 >
-                  Open dialog {level + 2}
+                  {text.openDialog} {level + 2}
                 </M3Button>
               ) : null}
             </div>
