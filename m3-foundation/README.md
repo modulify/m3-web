@@ -1,6 +1,11 @@
 # @modulify/m3-foundation
 
+<p align="center"><img src="https://raw.githubusercontent.com/modulify/m3-web/main/m3-foundation/assets/logo.png" alt="Modulify M3 logo" width="128" /></p>
+
 CSS stylesheet, SCSS resources for Material Design v3 components.
+
+The logo is included in this package as `@modulify/m3-foundation/assets/logo.svg`
+and `@modulify/m3-foundation/assets/logo.png`.
 
 ## Installation
 

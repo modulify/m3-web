@@ -1,6 +1,12 @@
 # @modulify/m3-react
 
+<p align="center"><img src="https://raw.githubusercontent.com/modulify/m3-web/main/m3-react/assets/logo.png" alt="Modulify M3 React logo" width="128" /></p>
+
 Material Design 3 components for React.
+
+The logo is included in this package as `@modulify/m3-react/assets/logo.svg`
+and `@modulify/m3-react/assets/logo.png`.
+[Artwork attribution](assets/NOTICE.md).
 
 ## Installation
 

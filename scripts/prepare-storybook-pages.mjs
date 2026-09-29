@@ -45,7 +45,7 @@ const escapeHtml = value => value
   .replaceAll('"', '&quot;')
   .replaceAll('\'', '&#39;')
 
-const renderPage = ({ title, eyebrow, heading, content }) => `<!doctype html>
+const renderPage = ({ title, eyebrow, heading, content, logoPath }) => `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -56,6 +56,7 @@ const renderPage = ({ title, eyebrow, heading, content }) => `<!doctype html>
       body { min-height: 100vh; margin: 0; display: grid; place-items: center; background: #141218; color: #e6e0e9; }
       main { width: min(720px, calc(100% - 48px)); }
       p { color: #cac4d0; line-height: 1.6; }
+      .logo { display: block; width: 88px; height: 88px; margin-bottom: 20px; }
       .eyebrow { color: #adc6ff; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
       .links { display: grid; gap: 12px; margin: 28px 0; }
       a { padding: 16px 20px; border: 1px solid #49454f; border-radius: 16px; color: #d7e3ff; text-decoration: none; }
@@ -68,6 +69,7 @@ const renderPage = ({ title, eyebrow, heading, content }) => `<!doctype html>
   </head>
   <body>
     <main>
+      <img class="logo" src="${escapeHtml(logoPath)}" alt="Modulify M3 logo" width="88" height="88" />
       <div class="eyebrow">${escapeHtml(eyebrow)}</div>
       <h1>${escapeHtml(heading)}</h1>
       ${content}
@@ -100,9 +102,21 @@ const renderRedirect = target => `<!doctype html>
 `
 
 const versionDirectory = resolve(output, version)
+const copyLogoAssets = async directory => {
+  await mkdir(directory, { recursive: true })
+
+  for (const extension of ['svg', 'png']) {
+    await cp(
+      resolve(root, 'm3-foundation/assets', `logo.${extension}`),
+      resolve(directory, `logo.${extension}`),
+    )
+  }
+}
 
 await rm(versionDirectory, { force: true, recursive: true })
 await mkdir(versionDirectory, { recursive: true })
+await copyLogoAssets(resolve(output, 'assets'))
+await copyLogoAssets(resolve(versionDirectory, 'assets'))
 
 for (const storybook of storybooks) {
   await cp(storybook.directory, resolve(versionDirectory, storybook.name), {
@@ -114,6 +128,7 @@ await writeFile(resolve(versionDirectory, 'index.html'), renderPage({
   title: `M3 Storybook ${version}`,
   eyebrow: version,
   heading: 'M3 component Storybooks',
+  logoPath: './assets/logo.svg',
   content: `<p>Select the framework implementation for this release.</p>
       <div class="links">
         ${renderVersionLinks('./')}
@@ -166,6 +181,7 @@ await writeFile(resolve(output, 'index.html'), renderPage({
   title: 'M3 Storybooks',
   eyebrow: 'Modulify M3',
   heading: 'Component Storybooks',
+  logoPath: './assets/logo.svg',
   content: `${latestLinks}
       <h2>Published versions</h2>
       <ul>

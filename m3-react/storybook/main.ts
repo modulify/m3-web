@@ -43,6 +43,7 @@ const config: StorybookConfig = {
   },
   staticDirs: [
     { from: './assets', to: '/assets' },
+    { from: '../assets', to: '/brand' },
   ],
   stories: [
     './**/*.mdx',

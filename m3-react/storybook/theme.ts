@@ -24,7 +24,7 @@ export default create({
   barHoverColor: 'hsl(220, 49%, 57%)',
   barSelectedColor: 'hsl(220, 49%, 57%)',
   barTextColor: 'hsl(220, 100%, 89%)',
-  brandTitle: `<span class="s-m3-logo"><img src="assets/logo.png" alt="" width="42px" height="42px" /> m3-react${versionLabel}</span>`,
+  brandTitle: `<span class="s-m3-logo"><img src="brand/logo.svg" alt="" width="42px" height="42px" /> m3-react${versionLabel}</span>`,
   colorPrimary: 'hsl(220, 55%, 25%)',
   fontBase,
   fontCode: 'monospace',
