@@ -2,9 +2,12 @@ import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
+import { Localized } from '../i18n'
 import * as M3ButtonStories from './M3Button.stories'
 
 <Meta of={M3ButtonStories} />
+
+<Localized locale="en-US">
 
 # Buttons
 
@@ -84,3 +87,88 @@ export const EditButton = () => (
 - [M3 Buttons overview](https://m3.material.io/components/buttons/overview)
 - [M3 Buttons guidelines](https://m3.material.io/components/buttons/guidelines)
 - [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Кнопки
+
+Кнопки обозначают доступные действия и задают их иерархию на поверхности. В Material 3 кнопки различаются прежде всего уровнем акцента, а не набором возможностей.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Button` для явных действий: сохранения, отправки, публикации или продолжения. Если результат меняет состояние интерфейса или запускает операцию внутри приложения, кнопка предпочтительнее ссылки.
+
+### Варианты оформления
+
+- `filled` для основного действия в области
+- `elevated` для акцента на поверхностях с низким контрастом
+- `tonal` для заметного вторичного действия
+- `outlined` для менее приоритетных альтернатив
+- `text` для лёгких вспомогательных действий
+
+### Иконки и подписи
+
+Ведущая иконка ускоряет чтение, когда её образ хорошо знаком. Даже рядом с иконкой сохраняйте явную текстовую подпись, чтобы смысл действия не зависел только от распознавания символа.
+
+## Доступность
+
+- Используйте понятную текстовую подпись.
+- Для кнопки только с иконкой задайте `aria-label`.
+- Недоступные действия помечайте состоянием `disabled`.
+
+<Unstyled>
+  <p style={{ display: 'flex', gap: '16px' }}>
+    <M3Button>Изменить</M3Button>
+    <M3Button appearance={'elevated'}>Изменить</M3Button>
+    <M3Button appearance={'outlined'}>Изменить</M3Button>
+    <M3Button appearance={'text'}>Изменить</M3Button>
+    <M3Button appearance={'tonal'}>Изменить</M3Button>
+  </p>
+
+  <p style={{ display: 'flex', gap: '16px' }}>
+    <M3Button><M3Icon name={'edit'} /> Изменить</M3Button>
+    <M3Button appearance={'elevated'}><M3Icon name={'edit'} /> Изменить</M3Button>
+    <M3Button appearance={'outlined'}><M3Icon name={'edit'} /> Изменить</M3Button>
+    <M3Button appearance={'text'}><M3Icon name={'edit'} /> Изменить</M3Button>
+    <M3Button appearance={'tonal'}><M3Icon name={'edit'} /> Изменить</M3Button>
+  </p>
+</Unstyled>
+
+## Примеры в Storybook
+
+- [Только текст](?path=/story/components-m3button--with-text-only)
+- [С ведущей иконкой](?path=/story/components-m3button--with-leading-icon)
+- [Матрица оформления](?path=/story/components-m3button--appearance-matrix)
+- [Недоступные состояния](?path=/story/components-m3button--disabled-states)
+
+## Рекомендации
+
+### Иерархия действий
+
+Обычно в каждой области должно быть одно действие с максимальным акцентом. Если все кнопки заполненные, пользователь теряет ощущение приоритета.
+
+### Когда отключать кнопку
+
+Используйте `disabled`, только когда действие действительно недоступно. Если действие возможно, но рискованно, оставьте его активным и объясните последствия.
+
+## Пример кода
+
+```tsx
+export const EditButton = () => (
+  <M3Button appearance="tonal">
+    <M3Icon name="edit" /> Изменить
+  </M3Button>
+)
+```
+
+## Полезные ссылки
+
+- [Обзор M3 Buttons](https://m3.material.io/components/buttons/overview)
+- [Рекомендации M3 Buttons](https://m3.material.io/components/buttons/guidelines)
+- [WAI-ARIA APG: шаблон Button](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>

@@ -11,6 +11,13 @@ import {
   M3NavigationTab,
 } from '@/components/navigation'
 
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': { close: 'Close menu', drafts: 'Drafts', family: 'Family', favorites: 'Favorites', inbox: 'Inbox', mail: 'Mail', open: 'Open menu', outbox: 'Outbox', personalFolders: 'Personal folders', trash: 'Trash', wedding: 'Wedding' },
+  'ru-RU': { close: 'Закрыть меню', drafts: 'Черновики', family: 'Семья', favorites: 'Избранное', inbox: 'Входящие', mail: 'Почта', open: 'Открыть меню', outbox: 'Исходящие', personalFolders: 'Личные папки', trash: 'Корзина', wedding: 'Свадьба' },
+}
+
 const meta = {
   title: 'Components/M3Navigation',
 
@@ -34,7 +41,7 @@ const meta = {
   },
 
   // eslint-disable-next-line max-lines-per-function
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     name: 'M3NavigationStory',
 
     components: {
@@ -50,6 +57,7 @@ const meta = {
       return {
         args,
         expanded: ref(false),
+        text: localize(globals.locale, messages),
       }
     },
 
@@ -60,7 +68,7 @@ const meta = {
         >
             <template #top>
                 <M3IconButton
-                    aria-label="Open menu"
+                    :aria-label="text.open"
                     @click="expanded = true"
                 >
                     <M3Icon name="menu" />
@@ -72,10 +80,10 @@ const meta = {
             </template>
 
             <template #header>
-                Mail
+                {{ text.mail }}
             </template>
 
-            <M3NavigationTab label="Inbox" active>
+            <M3NavigationTab :label="text.inbox" active>
                 <M3Icon name="inbox" />
 
                 <template #badge>
@@ -83,29 +91,29 @@ const meta = {
                 </template>
             </M3NavigationTab>
 
-            <M3NavigationTab label="Outbox">
+            <M3NavigationTab :label="text.outbox">
                 <M3Icon name="send" />
             </M3NavigationTab>
 
-            <M3NavigationTab label="Favorites">
+            <M3NavigationTab :label="text.favorites">
                 <M3Icon name="favorite" />
             </M3NavigationTab>
 
-            <M3NavigationTab label="Trash">
+            <M3NavigationTab :label="text.trash">
                 <M3Icon name="delete" />
             </M3NavigationTab>
 
             <template #sections>
                 <M3NavigationSection>
                     <template #header>
-                        Personal folders
+                        {{ text.personalFolders }}
                     </template>
 
-                    <M3NavigationTab label="Family">
+                    <M3NavigationTab :label="text.family">
                         <M3Icon name="folder" />
                     </M3NavigationTab>
 
-                    <M3NavigationTab label="Wedding">
+                    <M3NavigationTab :label="text.wedding">
                         <M3Icon name="folder" />
                     </M3NavigationTab>
                 </M3NavigationSection>
@@ -136,7 +144,7 @@ export const NavigationRail: Story = {
 }
 
 export const ModalNavigationDrawer: Story = {
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     name: 'M3ModalNavigationDrawerStory',
 
     components: {
@@ -150,6 +158,7 @@ export const ModalNavigationDrawer: Story = {
       return {
         args,
         expanded: ref(true),
+        text: localize(globals.locale, messages),
       }
     },
 
@@ -160,7 +169,7 @@ export const ModalNavigationDrawer: Story = {
         >
             <template #top>
                 <M3IconButton
-                    aria-label="Close menu"
+                    :aria-label="text.close"
                     @click="expanded = false"
                 >
                     <M3Icon name="menu" />
@@ -168,18 +177,18 @@ export const ModalNavigationDrawer: Story = {
             </template>
 
             <template #header>
-                Mail
+                {{ text.mail }}
             </template>
 
-            <M3NavigationTab label="Inbox" active>
+            <M3NavigationTab :label="text.inbox" active>
                 <M3Icon name="inbox" />
             </M3NavigationTab>
 
-            <M3NavigationTab label="Drafts">
+            <M3NavigationTab :label="text.drafts">
                 <M3Icon name="mail" />
             </M3NavigationTab>
 
-            <M3NavigationTab label="Trash">
+            <M3NavigationTab :label="text.trash">
                 <M3Icon name="delete" />
             </M3NavigationTab>
         </M3Navigation>

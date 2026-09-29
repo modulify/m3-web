@@ -5,6 +5,27 @@ import { M3Card } from '@/components/card'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
 
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': {
+    cardEmphasis: 'Card emphasis',
+    enabled: 'Enabled',
+    header: 'Header',
+    supportingText: 'Supporting text for the current card style.',
+    subhead: 'Subhead',
+    title: 'Title',
+  },
+  'ru-RU': {
+    cardEmphasis: 'Акцент карточки',
+    enabled: 'Доступно',
+    header: 'Заголовок',
+    supportingText: 'Поясняющий текст для текущего стиля карточки.',
+    subhead: 'Подзаголовок',
+    title: 'Название',
+  },
+}
+
 const meta = {
   title: 'Components/M3Card',
 
@@ -21,14 +42,14 @@ const meta = {
     appearance: 'filled',
   },
 
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Button,
       M3Card,
     },
 
     setup () {
-      return { args }
+      return { args, text: localize(globals.locale, messages) }
     },
 
     template: `
@@ -38,11 +59,11 @@ const meta = {
             </template>
 
             <template #heading>
-                Header
+                {{ text.header }}
             </template>
 
             <template #subheading>
-                Subhead
+                {{ text.subhead }}
             </template>
         </M3Card>
     `,
@@ -60,7 +81,7 @@ type Story = StoryObj<typeof meta>
 export const Landscape: Story = {}
 
 export const LandscapeWithoutMedia: Story = {
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Button,
       M3Card,
@@ -69,7 +90,7 @@ export const LandscapeWithoutMedia: Story = {
     },
 
     setup () {
-      return { args }
+      return { args, text: localize(globals.locale, messages) }
     },
 
     template: `
@@ -79,8 +100,8 @@ export const LandscapeWithoutMedia: Story = {
             </svg>
 
             <div class="m3-card__head">
-                <div class="m3-card__heading">Header</div>
-                <div class="m3-card__subheading">Subhead</div>
+                <div class="m3-card__heading">{{ text.header }}</div>
+                <div class="m3-card__subheading">{{ text.subhead }}</div>
             </div>
 
             <M3IconButton class="ml-auto">
@@ -92,7 +113,7 @@ export const LandscapeWithoutMedia: Story = {
 }
 
 export const Portrait: Story = {
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Button,
       M3Card,
@@ -101,7 +122,7 @@ export const Portrait: Story = {
     },
 
     setup () {
-      return { args }
+      return { args, text: localize(globals.locale, messages) }
     },
 
     template: `
@@ -111,21 +132,21 @@ export const Portrait: Story = {
             </template>
 
             <template #heading>
-                Title
+                {{ text.title }}
             </template>
 
             <template #subheading>
-                Subhead
+                {{ text.subhead }}
             </template>
 
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
 
             <div style="display: flex; justify-content: flex-end; gap: 8px; width: 100%;">
                 <M3Button appearance="outlined">
-                    Enabled
+                    {{ text.enabled }}
                 </M3Button>
 
-                <M3Button>Enabled</M3Button>
+                <M3Button>{{ text.enabled }}</M3Button>
             </div>
         </M3Card>
     `,
@@ -133,7 +154,7 @@ export const Portrait: Story = {
 }
 
 export const AppearanceMatrix: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       M3Card,
     },
@@ -141,6 +162,7 @@ export const AppearanceMatrix: Story = {
     setup () {
       return {
         appearances: ['filled', 'elevated', 'outlined'],
+        text: localize(globals.locale, messages),
       }
     },
 
@@ -157,10 +179,10 @@ export const AppearanceMatrix: Story = {
                 </template>
 
                 <template #subheading>
-                    Card emphasis
+                    {{ text.cardEmphasis }}
                 </template>
 
-                Supporting text for the current card style.
+                {{ text.supportingText }}
             </M3Card>
         </div>
     `,

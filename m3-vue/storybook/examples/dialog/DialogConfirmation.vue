@@ -3,7 +3,7 @@
         appearance="tonal"
         @click="opened = true"
     >
-        Delete
+        {{ text.delete }}
     </M3Button>
 
     <M3Dialog
@@ -19,12 +19,12 @@
 
         <template #header>
             <h3 id="dialog-confirmation-title">
-                Permanently delete?
+                {{ text.title }}
             </h3>
         </template>
 
         <p id="dialog-confirmation-description">
-            Deleting the selected messages will also remove them from all synced devices.
+            {{ text.description }}
         </p>
 
         <template #footer>
@@ -32,25 +32,51 @@
                 appearance="text"
                 @click="opened = false"
             >
-                Cancel
+                {{ text.cancel }}
             </M3Button>
 
             <M3Button
                 appearance="tonal"
                 @click="opened = false"
             >
-                Delete
+                {{ text.delete }}
             </M3Button>
         </template>
     </M3Dialog>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import type { StorybookLocale } from '../../i18n'
+
+import { computed, ref } from 'vue'
 
 import { M3Button } from '@/components/button'
 import { M3Dialog } from '@/components/dialog'
 import { M3Icon } from '@/components/icon'
 
+import { localize } from '../../i18n'
+
+interface DialogConfirmationProps {
+  locale: StorybookLocale;
+}
+
+const props = defineProps<DialogConfirmationProps>()
+
+const messages = {
+  'en-US': {
+    cancel: 'Cancel',
+    delete: 'Delete',
+    description: 'Deleting the selected messages will also remove them from all synced devices.',
+    title: 'Permanently delete?',
+  },
+  'ru-RU': {
+    cancel: 'Отмена',
+    delete: 'Удалить',
+    description: 'Выбранные сообщения также будут удалены со всех синхронизированных устройств.',
+    title: 'Удалить навсегда?',
+  },
+}
+
 const opened = ref(false)
+const text = computed(() => localize(props.locale, messages))
 </script>

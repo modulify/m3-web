@@ -1,9 +1,12 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
 
 import RadioGroup from '../examples/radio/RadioGroup'
+import { Localized } from '../i18n'
 import * as M3RadioStories from './M3Radio.stories'
 
 <Meta of={M3RadioStories} />
+
+<Localized locale="en-US">
 
 # Radio buttons
 
@@ -68,3 +71,73 @@ If the choice is simply on/off, prefer a switch or checkbox. Radios communicate 
 
 - [M3 Radio button overview](https://m3.material.io/components/radio-button/overview)
 - [WAI-ARIA APG: Radio Group Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Радиокнопки
+
+Радиокнопки позволяют выбрать ровно один вариант из связанного набора. В отличие от чекбоксов, они не предназначены для независимого множественного выбора.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Radio`, когда пользователь должен выбрать один вариант из небольшого видимого списка. Для выбора нескольких вариантов используйте `M3Checkbox`.
+
+### Модель выбора
+
+Радиокнопка отмечена, когда `model` равен `value`; выбор отправляет это `value`.
+
+### Группировка
+
+Для нативной клавиатурной и форменной семантики связанные радиокнопки должны иметь одинаковый `name`. По возможности объединяйте их в `fieldset` с видимым `legend`.
+
+## Доступность
+
+- Каждой радиокнопке нужна видимая текстовая подпись.
+- Связанные варианты объединяйте общей подписью.
+- Используйте один `name` внутри группы.
+- Помечайте выбор невалидным только когда он обязателен, но не сделан.
+
+### Группа предпочтений
+
+<Unstyled className="m3-panel m3-panel_elevated-1">
+  <RadioGroup
+    legend="Тема оформления"
+    options={[{
+      label: 'Системная',
+      value: 'system',
+    }, {
+      label: 'Светлая',
+      value: 'light',
+    }, {
+      label: 'Тёмная',
+      value: 'dark',
+    }]}
+  />
+</Unstyled>
+
+## Примеры в Storybook
+
+- [Стандартная](?path=/story/components-m3radio--standard)
+- [Группа предпочтений](?path=/story/components-m3radio--preference-group)
+- [Невалидная группа](?path=/story/components-m3radio--invalid-group)
+
+## Рекомендации
+
+### Короткий и понятный набор вариантов
+
+Группа работает лучше всего, когда все варианты видны одновременно и взаимно исключают друг друга.
+
+### Не заменяйте переключатели радиокнопками
+
+Для простого состояния вкл./выкл. выберите switch или checkbox. Радиокнопки обозначают выбор одного из нескольких вариантов.
+
+## Полезные ссылки
+
+- [Обзор M3 Radio button](https://m3.material.io/components/radio-button/overview)
+- [WAI-ARIA APG: паттерн Radio Group](https://www.w3.org/WAI/ARIA/apg/patterns/radio/)
+
+</Localized>

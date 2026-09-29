@@ -6,6 +6,18 @@ import { M3Chip } from '@/components/chip'
 import { M3Icon } from '@/components/icon'
 
 import ChipShowcase from '../examples/chip/ChipShowcase'
+import { localize, resolveStorybookLocale } from '../i18n'
+
+const messages = {
+  'en-US': {
+    input: 'Project Alpha',
+    standard: 'Remind later',
+  },
+  'ru-RU': {
+    input: 'Проект Альфа',
+    standard: 'Напомнить позже',
+  },
+}
 
 const meta = {
   title: 'Components/M3Chip',
@@ -47,24 +59,28 @@ const meta = {
     selected: initialSelected,
     onToggle: _onToggle,
     ...args
-  }) => {
+  }, { globals }) => {
     const [selected, setSelected] = useState(initialSelected)
+    const locale = resolveStorybookLocale(globals.locale)
+    const text = localize(locale, messages)
 
     useEffect(() => {
       setSelected(initialSelected)
     }, [initialSelected])
 
     return (
-      <M3Chip
-        selected={selected}
-        {...args}
-        onToggle={setSelected}
-      >
-        {args.variant === 'assist' || args.variant === 'suggestion'
-          ? <M3Icon name={args.variant === 'assist' ? 'schedule' : 'lightbulb'} />
-          : null}
-        {args.variant === 'input' ? 'Project Alpha' : 'Remind later'}
-      </M3Chip>
+      <div lang={locale}>
+        <M3Chip
+          selected={selected}
+          {...args}
+          onToggle={setSelected}
+        >
+          {args.variant === 'assist' || args.variant === 'suggestion'
+            ? <M3Icon name={args.variant === 'assist' ? 'schedule' : 'lightbulb'} />
+            : null}
+          {args.variant === 'input' ? text.input : text.standard}
+        </M3Chip>
+      </div>
     )
   },
 
@@ -80,13 +96,28 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const VariantMatrix: Story = {
-  render: () => <ChipShowcase mode="matrix" />,
+  render: (_args, { globals }) => (
+    <ChipShowcase
+      locale={resolveStorybookLocale(globals.locale)}
+      mode="matrix"
+    />
+  ),
 }
 
 export const FilterSet: Story = {
-  render: () => <ChipShowcase mode="filters" />,
+  render: (_args, { globals }) => (
+    <ChipShowcase
+      locale={resolveStorybookLocale(globals.locale)}
+      mode="filters"
+    />
+  ),
 }
 
 export const InputTokens: Story = {
-  render: () => <ChipShowcase mode="inputs" />,
+  render: (_args, { globals }) => (
+    <ChipShowcase
+      locale={resolveStorybookLocale(globals.locale)}
+      mode="inputs"
+    />
+  ),
 }

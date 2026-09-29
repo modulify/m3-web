@@ -1,9 +1,12 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
 
 import CheckboxList from '../examples/checkbox/CheckboxList'
+import { Localized } from '../i18n'
 import * as M3CheckboxStories from './M3Checkbox.stories'
 
 <Meta of={M3CheckboxStories} />
+
+<Localized locale="en-US">
 
 # Checkboxes
 
@@ -91,3 +94,78 @@ Do not present `indeterminate` as a user-selectable third state. It should only 
 - [M3 Checkbox overview](https://m3.material.io/components/checkbox/overview)
 - [M3 Checkbox guidelines](https://m3.material.io/components/checkbox/guidelines)
 - [WAI-ARIA APG: Checkbox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Флажки
+
+Флажки позволяют независимо выбрать один или несколько вариантов. Они также поддерживают родительские состояния, отражающие совокупный выбор дочерних элементов.
+
+## API
+
+### Когда использовать
+
+Используйте `M3Checkbox`, когда одновременно можно выбрать несколько элементов или когда один параметр работает как логическое значение формы. Если нужно выбрать ровно один вариант, используйте radio-кнопки.
+
+### Модель выбора
+
+Поддерживаются простое логическое значение, выбор нескольких значений через массив и `indeterminate` для агрегирующих родительских строк.
+
+### Вложенный выбор
+
+В иерархическом списке родительский флажок должен быть:
+
+- отмечен, когда выбраны все потомки
+- неопределённым, когда выбрана только часть потомков
+- снят, когда не выбран ни один потомок
+
+## Доступность
+
+- У каждого флажка должна быть видимая подпись.
+- Связанные флажки объединяйте общей подписью группы через `fieldset/legend` или `aria-labelledby`.
+- Используйте неопределённое состояние только для частичного выбора потомков.
+
+### Обычный список
+
+<Unstyled className="m3-panel m3-panel_elevated-1">
+  <CheckboxList options={[{ label: 'Яблоки', value: 'apples' }, { label: 'Бананы', value: 'bananas' }, { label: 'Апельсины', value: 'oranges' }]} />
+</Unstyled>
+
+### Вложенный список
+
+<Unstyled className="m3-panel m3-panel_elevated-1">
+  <CheckboxList options={[{
+    label: 'Напоминать',
+    value: 'remind',
+    subordinates: [
+      { label: 'Ежедневно', value: 'daily' },
+      { label: 'Еженедельно', value: 'weekly' },
+      { label: 'Ежемесячно', value: 'monthly' },
+    ],
+  }]} />
+</Unstyled>
+
+## Примеры в Storybook
+
+- [Стандартная](?path=/story/components-m3checkbox--standard)
+- [Вложенный выбор](?path=/story/components-m3checkbox--nested-selection)
+
+## Рекомендации
+
+### Явные подписи
+
+Подпись должна описывать итоговое состояние, а не сам элемент управления. «Получать чеки по почте» понятнее, чем «Включить».
+
+### Неопределённое состояние — только для сводки
+
+Не предлагайте `indeterminate` как третье состояние, выбираемое пользователем. Оно сообщает лишь о частичном выборе потомков.
+
+## Полезные ссылки
+
+- [Обзор M3 Checkbox](https://m3.material.io/components/checkbox/overview)
+- [Рекомендации M3 Checkbox](https://m3.material.io/components/checkbox/guidelines)
+- [WAI-ARIA APG: шаблон Checkbox](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/)
+
+</Localized>

@@ -4,6 +4,8 @@ import { computed, ref } from 'vue'
 
 import { M3Slider } from '@/components/slider'
 
+import { localize } from '../i18n'
+
 type AriaOptions = {
   label?: string;
   labelledBy?: string;
@@ -43,7 +45,7 @@ const meta = {
     },
   },
 
-  render: (args: M3SliderStoryProps) => ({
+  render: (args: M3SliderStoryProps, { globals }) => ({
     name: 'M3SliderStory',
 
     components: {
@@ -54,7 +56,17 @@ const meta = {
       const bindings = computed(() => {
         const { value: _, ...bindings } = args
 
-        return bindings
+        const text = localize(globals.locale, {
+          'en-US': { maximum: 'Maximum', minimum: 'Minimum', value: 'Value', volume: 'Volume' },
+          'ru-RU': { maximum: 'Максимум', minimum: 'Минимум', value: 'Значение', volume: 'Громкость' },
+        })
+
+        return {
+          ...bindings,
+          ariaHandle: bindings.ariaHandle?.label ? { label: args.step === 10 ? text.volume : text.value } : bindings.ariaHandle,
+          ariaHandleMax: bindings.ariaHandleMax?.label ? { label: text.maximum } : bindings.ariaHandleMax,
+          ariaHandleMin: bindings.ariaHandleMin?.label ? { label: text.minimum } : bindings.ariaHandleMin,
+        }
       })
 
       return {

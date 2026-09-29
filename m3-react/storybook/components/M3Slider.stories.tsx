@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 
 import { M3Slider } from '@/components/slider'
 
+import { localize } from '../i18n'
+
 const M3SliderStory = ({
   value: _value,
   style: _style,
@@ -52,7 +54,10 @@ const meta = {
     },
   },
 
-  render: (args) => <M3SliderStory {...args} />,
+  render: (args, { globals }) => {
+    const text = localize(globals.locale, { 'en-US': { maximum: 'Maximum', minimum: 'Minimum' }, 'ru-RU': { maximum: 'Максимум', minimum: 'Минимум' } })
+    return <M3SliderStory {...{ ...args, ariaHandleMax: { label: text.maximum }, ariaHandleMin: { label: text.minimum } }} />
+  },
 
   parameters: {
     layout: 'centered',
@@ -73,6 +78,11 @@ export const Single: Story = {
   },
 }
 
+Single.render = (args, { globals }) => {
+  const label = localize(globals.locale, { 'en-US': 'Value', 'ru-RU': 'Значение' })
+  return <M3SliderStory {...{ ...args, ariaHandle: { label } }} />
+}
+
 export const Range: Story = {
   args: {
     type: 'range',
@@ -88,6 +98,11 @@ export const DiscreteSingle: Story = {
     },
     ariaHandleMax: {},
   },
+}
+
+DiscreteSingle.render = (args, { globals }) => {
+  const label = localize(globals.locale, { 'en-US': 'Volume', 'ru-RU': 'Громкость' })
+  return <M3SliderStory {...{ ...args, ariaHandle: { label } }} />
 }
 
 export const DisabledRange: Story = {

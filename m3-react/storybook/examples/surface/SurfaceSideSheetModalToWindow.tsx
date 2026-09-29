@@ -1,6 +1,8 @@
 import type { CSSProperties, FC, FormEvent } from 'react'
 import type { M3SelectOption } from '@/components/select'
 
+import type { StorybookLocale } from '../../i18n'
+
 import { clamp } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
@@ -19,6 +21,8 @@ import { M3TextField } from '@/components/text-field'
 
 import { toClassName } from '@/utils/styling'
 import { useStateRef } from '@/components/surface/orchestration/useStateRef'
+
+import { localize } from '../../i18n'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360
@@ -60,18 +64,15 @@ const DEFAULT_FORM: FormState = {
   notes: 'Move supplemental workflows into a reusable surface with predictable transitions.',
 }
 
-const priorityOptions: Array<M3SelectOption<Priority>> = [{
-  label: 'Low',
-  value: 'low',
-}, {
-  label: 'Normal',
-  value: 'normal',
-}, {
-  label: 'High',
-  value: 'high',
-}]
-
-const SurfaceSideSheetModalToWindow: FC = () => {
+const SurfaceSideSheetModalToWindow: FC<{ locale: StorybookLocale }> = ({ locale }) => {
+  const text = localize(locale, {
+    'en-US': { archive: 'Archive', boards: 'Boards', close: 'Close modal panel', contextual: 'Contextual utility content.', description: 'Use the action inside the panel to morph a modal side sheet into a modal window.', dim: 'Low-brightness complementary content.', dock: 'Dock panel to side sheet mode', formDescription: 'Form layout adapts when switching from side-sheet to window mode.', heading: 'Surface orchestration: modal side sheet to window', inbox: 'Inbox', lab: 'Lab', modal: 'Modal side sheet', notes: 'Notes', notesPlaceholder: 'Describe constraints, risks, and acceptance criteria.', open: 'Show modal side sheet', opened: 'Modal panel is open', openNavigation: 'Open navigation', openWindow: 'Open panel in window mode', owner: 'Owner email', priorities: ['Low', 'Normal', 'High'], priority: 'Priority', project: 'Project name', read: 'Read-heavy content block in the page flow.', reset: 'Reset', save: 'Save', secondary: 'Secondary block with mild emphasis.', startDate: 'Start date', window: 'Window mode', workspace: 'Workspace surfaces', workspaceDescription: 'Background layout stays in flow while the modal panel morphs between side-sheet and window geometries.' },
+    'ru-RU': { archive: 'Архив', boards: 'Доски', close: 'Закрыть модальную панель', contextual: 'Контекстное вспомогательное содержимое.', description: 'Действие внутри панели преобразует модальную боковую панель в модальное окно.', dim: 'Дополнительное содержимое с пониженной яркостью.', dock: 'Вернуть режим боковой панели', formDescription: 'Компоновка формы адаптируется при переходе между боковой панелью и окном.', heading: 'Управление поверхностью: боковая панель в окно', inbox: 'Входящие', lab: 'Лаборатория', modal: 'Модальная боковая панель', notes: 'Заметки', notesPlaceholder: 'Опишите ограничения, риски и критерии приёмки.', open: 'Показать модальную панель', opened: 'Модальная панель открыта', openNavigation: 'Открыть навигацию', openWindow: 'Открыть панель в режиме окна', owner: 'Почта владельца', priorities: ['Низкий', 'Обычный', 'Высокий'], priority: 'Приоритет', project: 'Название проекта', read: 'Блок для чтения в потоке страницы.', reset: 'Сбросить', save: 'Сохранить', secondary: 'Вторичный блок с умеренным акцентом.', startDate: 'Дата начала', window: 'Режим окна', workspace: 'Поверхности рабочего пространства', workspaceDescription: 'Фоновая компоновка остаётся в потоке, пока панель преобразуется между геометрией side sheet и окна.' },
+  })
+  const defaultForm = { ...DEFAULT_FORM, notes: localize(locale, { 'en-US': DEFAULT_FORM.notes, 'ru-RU': 'Перенести вспомогательные процессы в переиспользуемую поверхность с предсказуемыми переходами.' }) }
+  const priorityOptions: Array<M3SelectOption<Priority>> = [
+    { label: text.priorities[0], value: 'low' }, { label: text.priorities[1], value: 'normal' }, { label: text.priorities[2], value: 'high' },
+  ]
   const [navExpanded, setNavExpanded] = useStateRef(false)
   const [activeNavTab, setActiveNavTab] = useStateRef<NavTab>('inbox')
   const [sideSheetWidth, setSideSheetWidth, sideSheetWidthRef] = useStateRef(320)
@@ -86,7 +87,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
   const [panelAsWindow, setPanelAsWindow, panelAsWindowRef] = useStateRef(false)
   const [windowClosing, setWindowClosing] = useStateRef(false)
   const [transitioning, setTransitioning, transitioningRef] = useStateRef(false)
-  const [form, setForm] = useStateRef<FormState>({ ...DEFAULT_FORM })
+  const [form, setForm] = useStateRef<FormState>(defaultForm)
 
   const layoutRoot = useRef<HTMLDivElement | null>(null)
 
@@ -231,7 +232,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
   }
 
   const resetForm = () => {
-    setForm({ ...DEFAULT_FORM })
+    setForm(defaultForm)
   }
 
   useEffect(() => {
@@ -263,8 +264,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
       >
         <div className="surface-side-sheet-window__topbar-content">
           <div>
-            <strong>Surface orchestration: modal side sheet to window</strong>
-            <p>Use the action inside the panel to morph a modal side sheet into a modal window.</p>
+            <strong>{text.heading}</strong><p>{text.description}</p>
           </div>
 
           <M3Button
@@ -273,7 +273,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
             data-testid="surface-window-open"
             onClick={() => void openModal()}
           >
-            {modalMounted ? 'Modal panel is open' : 'Show modal side sheet'}
+            {modalMounted ? text.opened : text.open}
           </M3Button>
         </div>
       </M3SurfacePanel>
@@ -287,7 +287,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
       >
         <M3Navigation.Top>
           <M3IconButton
-            aria-label="Open navigation"
+            aria-label={text.openNavigation}
             onClick={() => setNavExpanded(true)}
           >
             <M3Icon name="menu" />
@@ -295,7 +295,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
         </M3Navigation.Top>
 
         <M3NavigationTab
-          label="Inbox"
+          label={text.inbox}
           active={activeNavTab === 'inbox'}
           onNavigate={() => {
             setActiveNavTab('inbox')
@@ -306,7 +306,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Boards"
+          label={text.boards}
           active={activeNavTab === 'boards'}
           onNavigate={() => {
             setActiveNavTab('boards')
@@ -317,7 +317,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Archive"
+          label={text.archive}
           active={activeNavTab === 'archive'}
           onNavigate={() => {
             setActiveNavTab('archive')
@@ -328,7 +328,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Lab"
+          label={text.lab}
           active={activeNavTab === 'lab'}
           onNavigate={() => {
             setActiveNavTab('lab')
@@ -349,8 +349,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
             variant="surface-container-lowest"
             elevation={0}
           >
-            <h3>Workspace surfaces</h3>
-            <p>Background layout stays in flow while the modal panel morphs between side-sheet and window geometries.</p>
+            <h3>{text.workspace}</h3><p>{text.workspaceDescription}</p>
           </M3SurfacePanel>
 
           <div
@@ -371,7 +370,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                 elevation={0}
               >
                 <strong>surface-container-lowest</strong>
-                <p>Read-heavy content block in the page flow.</p>
+                <p>{text.read}</p>
               </M3SurfacePanel>
 
               <M3SurfacePanel
@@ -383,7 +382,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                 elevation={1}
               >
                 <strong>surface-container-low</strong>
-                <p>Secondary block with mild emphasis.</p>
+                <p>{text.secondary}</p>
               </M3SurfacePanel>
 
               <M3SurfacePanel
@@ -395,7 +394,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                 elevation={3}
               >
                 <strong>surface-container-high</strong>
-                <p>Contextual utility content.</p>
+                <p>{text.contextual}</p>
               </M3SurfacePanel>
 
               <M3SurfacePanel
@@ -407,7 +406,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                 elevation={0}
               >
                 <strong>surface-dim</strong>
-                <p>Low-brightness complementary content.</p>
+                <p>{text.dim}</p>
               </M3SurfacePanel>
             </main>
 
@@ -449,13 +448,13 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                   data-testid="surface-window-panel-content"
                 >
                   <div className="surface-side-sheet-window__modal-header">
-                    <h3>{panelAsWindow ? 'Window mode' : 'Modal side sheet'}</h3>
+                    <h3>{panelAsWindow ? text.window : text.modal}</h3>
 
                     <div className="surface-side-sheet-window__modal-actions">
                       <M3IconButton
                         className="surface-side-sheet-window__modal-action"
                         appearance="standard"
-                        aria-label={panelAsWindow ? 'Dock panel to side sheet mode' : 'Open panel in window mode'}
+                        aria-label={panelAsWindow ? text.dock : text.openWindow}
                         disabled={transitioning}
                         data-testid="surface-window-toggle-mode"
                         onClick={() => void toggleWindowMode()}
@@ -466,7 +465,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                       <M3IconButton
                         className="surface-side-sheet-window__modal-action"
                         appearance="standard"
-                        aria-label="Close modal panel"
+                        aria-label={text.close}
                         disabled={transitioning}
                         data-testid="surface-window-close"
                         onClick={() => void closeModal()}
@@ -476,7 +475,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                     </div>
                   </div>
 
-                  <p>Form layout adapts when switching from side-sheet to window mode.</p>
+                  <p>{text.formDescription}</p>
 
                   <form
                     className={toClassName([
@@ -490,7 +489,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                     <div className="surface-side-sheet-window__field">
                       <M3TextField
                         value={form.project}
-                        label="Project name"
+                        label={text.project}
                         placeholder="Q3 Design Refresh"
                         outlined
                         onUpdate={(value) => {
@@ -506,7 +505,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                       <M3TextField
                         value={form.ownerEmail}
                         type="email"
-                        label="Owner email"
+                        label={text.owner}
                         placeholder="owner@example.com"
                         outlined
                         onUpdate={(value) => {
@@ -521,7 +520,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                     <div className="surface-side-sheet-window__field">
                       <M3TextField
                         value={form.startDate}
-                        label="Start date"
+                        label={text.startDate}
                         placeholder="YYYY-MM-DD"
                         outlined
                         onUpdate={(value) => {
@@ -537,7 +536,7 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                       <M3Select<Priority>
                         value={form.priority}
                         options={priorityOptions}
-                        label="Priority"
+                        label={text.priority}
                         outlined
                         onUpdate={(value) => {
                           setForm((previous) => ({
@@ -558,8 +557,8 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                     >
                       <M3TextField
                         value={form.notes}
-                        label="Notes"
-                        placeholder="Describe constraints, risks, and acceptance criteria."
+                        label={text.notes}
+                        placeholder={text.notesPlaceholder}
                         multiline
                         outlined
                         onUpdate={(value) => {
@@ -584,10 +583,10 @@ const SurfaceSideSheetModalToWindow: FC = () => {
                         type="button"
                         onClick={resetForm}
                       >
-                        Reset
+                        {text.reset}
                       </M3Button>
                       <M3Button appearance="filled" type="button">
-                        Save
+                        {text.save}
                       </M3Button>
                     </div>
                   </form>

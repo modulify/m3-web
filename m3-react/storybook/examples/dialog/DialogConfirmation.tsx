@@ -1,15 +1,39 @@
 import type { FC } from 'react'
 
+import type { StorybookLocale } from '../../i18n'
+
 import { useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Dialog } from '@/components/dialog'
 import { M3Icon } from '@/components/icon'
 
-const DialogConfirmation: FC = () => {
+import { localize } from '../../i18n'
+
+interface DialogConfirmationProps {
+  locale: StorybookLocale;
+}
+
+const messages = {
+  'en-US': {
+    cancel: 'Cancel',
+    delete: 'Delete',
+    description: 'Deleting the selected messages will also remove them from all synced devices.',
+    title: 'Permanently delete?',
+  },
+  'ru-RU': {
+    cancel: 'Отмена',
+    delete: 'Удалить',
+    description: 'Выбранные сообщения также будут удалены со всех синхронизированных устройств.',
+    title: 'Удалить навсегда?',
+  },
+}
+
+const DialogConfirmation: FC<DialogConfirmationProps> = ({ locale }) => {
   const [opened, setOpened] = useState(false)
   const dialogTitleId = 'dialog-confirmation-title'
   const dialogDescriptionId = 'dialog-confirmation-description'
+  const text = localize(locale, messages)
 
   return (
     <>
@@ -17,7 +41,7 @@ const DialogConfirmation: FC = () => {
         appearance="tonal"
         onClick={() => setOpened(true)}
       >
-        Delete
+        {text.delete}
       </M3Button>
 
       <M3Dialog
@@ -33,11 +57,11 @@ const DialogConfirmation: FC = () => {
         </M3Dialog.Icon>
 
         <M3Dialog.Header>
-          <h3 id={dialogTitleId}>Permanently delete?</h3>
+          <h3 id={dialogTitleId}>{text.title}</h3>
         </M3Dialog.Header>
 
         <p id={dialogDescriptionId}>
-          Deleting the selected messages will also remove them from all synced devices.
+          {text.description}
         </p>
 
         <M3Dialog.Footer>
@@ -45,14 +69,14 @@ const DialogConfirmation: FC = () => {
             appearance="text"
             onClick={() => setOpened(false)}
           >
-            Cancel
+            {text.cancel}
           </M3Button>
 
           <M3Button
             appearance="tonal"
             onClick={() => setOpened(false)}
           >
-            Delete
+            {text.delete}
           </M3Button>
         </M3Dialog.Footer>
       </M3Dialog>

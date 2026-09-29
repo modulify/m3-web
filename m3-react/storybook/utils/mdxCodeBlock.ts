@@ -12,6 +12,8 @@ import json from 'highlight.js/lib/languages/json'
 import typescript from 'highlight.js/lib/languages/typescript'
 import xml from 'highlight.js/lib/languages/xml'
 
+import { localize, useStorybookLocale } from '../i18n'
+
 type MdxCodeBlockProps = ComponentPropsWithoutRef<'code'>
 type MdxPreBlockProps = ComponentPropsWithoutRef<'pre'>
 type CodeElementProps = ComponentPropsWithoutRef<'code'> & {
@@ -35,6 +37,9 @@ type RenderCodeBlockProps = {
   codeLanguage: string | null
   copied: boolean
   html: string
+  copyAriaLabel: string
+  copySuccessText: string
+  copyText: string
   onCopy: () => void
   restProps: Omit<MdxPreBlockProps, 'children' | 'className'>
 }
@@ -49,8 +54,18 @@ const CODE_BLOCK_CLASS = 'm3-docs-code-block'
 const COPY_BUTTON_CLASS = 'm3-docs-code-copy'
 const COPY_RESET_DELAY_MS = 1500
 const COPY_STATE_ATTRIBUTE = 'data-copied'
-const COPY_SUCCESS_TEXT = 'Copied'
-const COPY_TEXT = 'Copy code'
+const COPY_MESSAGES = {
+  'en-US': {
+    ariaLabel: 'Copy code block',
+    copied: 'Copied',
+    copy: 'Copy code',
+  },
+  'ru-RU': {
+    ariaLabel: 'Скопировать блок кода',
+    copied: 'Скопировано',
+    copy: 'Копировать',
+  },
+}
 const LANGUAGE_BADGE_CLASS = 'm3-docs-code-language'
 const LANGUAGE_PREFIXES = ['language-', 'lang-']
 const PANEL_CLASS = 'm3-panel m3-panel_elevated-1'
@@ -368,17 +383,23 @@ function renderLanguageBadge (badgeLanguage: string | null): React.ReactElement 
   )
 }
 
-function renderCopyButton (copied: boolean, onCopy: () => void): React.ReactElement {
+function renderCopyButton (
+  ariaLabel: string,
+  copied: boolean,
+  copySuccessText: string,
+  copyText: string,
+  onCopy: () => void
+): React.ReactElement {
   return React.createElement(
     'button',
     {
       type: 'button',
       className: COPY_BUTTON_CLASS,
-      'aria-label': 'Copy code block',
+      'aria-label': ariaLabel,
       [COPY_STATE_ATTRIBUTE]: copied ? 'true' : 'false',
       onClick: onCopy,
     },
-    copied ? COPY_SUCCESS_TEXT : COPY_TEXT
+    copied ? copySuccessText : copyText
   )
 }
 
@@ -397,6 +418,9 @@ function renderCodeBlock ({
   className,
   codeLanguage,
   copied,
+  copyAriaLabel,
+  copySuccessText,
+  copyText,
   html,
   onCopy,
   restProps,
@@ -409,7 +433,7 @@ function renderCodeBlock ({
       'data-language': codeLanguage || undefined,
     },
     renderLanguageBadge(badgeLanguage),
-    renderCopyButton(copied, onCopy),
+    renderCopyButton(copyAriaLabel, copied, copySuccessText, copyText, onCopy),
     renderCodeContent(html, codeLanguage)
   )
 }
@@ -430,6 +454,8 @@ export function MdxCodePreBlock (props: MdxPreBlockProps): React.ReactElement {
     [payload.highlightLanguage, payload.source]
   )
   const { copied, onCopy } = useCopyState(payload.source)
+  const locale = useStorybookLocale()
+  const copyMessages = localize(locale, COPY_MESSAGES)
   const languages = React.useMemo(
     () => resolveRenderedLanguages(payload, highlight),
     [payload, highlight]
@@ -444,6 +470,9 @@ export function MdxCodePreBlock (props: MdxPreBlockProps): React.ReactElement {
     className,
     codeLanguage: languages.codeLanguage,
     copied,
+    copyAriaLabel: copyMessages.ariaLabel,
+    copySuccessText: copyMessages.copied,
+    copyText: copyMessages.copy,
     html: highlight.html || escapeHtml(payload.source),
     onCopy,
     restProps,

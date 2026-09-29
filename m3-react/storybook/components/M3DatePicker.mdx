@@ -1,7 +1,10 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3DatePickerStories from './M3DatePicker.stories'
 
 <Meta of={M3DatePickerStories} />
+
+<Localized locale="en-US">
 
 # Date Picker
 
@@ -123,3 +126,130 @@ const [date, setDate] = useState<Date | null>(new Date(2026, 6, 10))
 
 - [M3 Date pickers overview](https://m3.material.io/components/date-pickers/overview)
 - [WAI-ARIA APG: Dialog Modal Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Выбор даты
+
+Компоненты выбора даты позволяют выбрать одну дату в календарной сетке. `M3DatePicker` предоставляет поверхность календаря, сценарии с закреплённым полем собираются с помощью `M3DatePickerField`, а модальные сценарии — с помощью `M3DatePickerDialog`.
+
+## API
+
+`M3DatePicker` управляется через `value` и передаёт выбранную дату или диапазон в `onChange`. Используйте `layout="docked"` для компактной закреплённой поверхности Material; стандартный `layout="modal"` сохраняет заголовок и геометрию модального варианта.
+
+Действия закреплённого календаря можно собрать через `M3DatePicker.Footer`. Компонент сам управляет контейнером футера и скрывает его, пока открыт список месяцев или лет.
+
+`M3DatePickerField` объединяет `M3TextField`, кнопку с иконкой календаря и закреплённый popper. Значение остаётся типа `Date | null`; поддерживаются безопасные свойства текстового поля, включая `id`, `name`, `label`, `placeholder`, `invalid`, `disabled`, `readonly` и `outlined`. Введённые даты нормализуются в `MM/DD/YYYY`. Корневой `className`, `popperClassName` и составной `supportingText` дают локальные точки расширения формы, не перехватывая состояние календаря.
+
+По умолчанию закреплённое поле использует outlined-вариант и открывает календарь в приподнятом popup под полем. Нажатие на день меняет локальный черновик: Cancel отменяет его, а OK передаёт результат в `onChange`.
+
+`M3DatePickerDialog` оборачивает тот же календарь в модальную оболочку. Пока диалог открыт, значение хранится как черновик и попадает в `onChange` только после нажатия OK. `appearance="input"` включает модальный ввод даты Material; при включённом `switchable` можно переключаться между календарём и текстовым вводом.
+
+`firstDayOfWeek` задаёт первый день недели, `min` и `max` отключают даты вне диапазона, а `availability` описывает дополнительные правила доступности дат и лет. Модальная раскладка всегда содержит шесть недель. Высота закреплённой раскладки следует поверхности M3 и показывает только необходимые четыре, пять или шесть строк.
+
+Выбранное `value` и навигационный `cursor` — независимые состояния. Стрелки, выбор месяца или года и свайп двигают только курсор; `onChange` вызывается лишь после выбора дня. Используйте `cursor` и `onCursorChange`, когда положением календаря управляет родитель.
+
+`navigation` задаёт вид навигации, а `views` — доступные состояния `days`, `months` и `years`. Стандартный `navigation="split"` остаётся вне области свайпа; `navigation="inline"` помещает управление внутрь каждой страницы месяца; `navigation="none"` скрывает его. Горизонтальный свайп между доступными месяцами всегда работает на календарной сетке.
+
+В закреплённой раскладке выбор месяца и года открывает отдельные вертикальные списки. Активный список сохраняет свою кнопку доступной, отключает другую и после выбора возвращает сетку дней.
+
+## Доступность
+
+- Корень использует `role="group"` и получает доступное имя из `label`.
+- Дни представлены как `grid` с одной строкой на неделю.
+- Сетки выбора месяца и года используют семантику `grid`; закреплённые вертикальные селекторы — явные роли `list` и `listitem` через `M3List`.
+- Каждый день — нативная кнопка с `aria-selected`.
+- Недоступные даты используют нативный `disabled`.
+- Кнопка месяца и года использует `aria-expanded`, пока открыт выбор года.
+- Модальные сценарии используют `M3DatePickerDialog`, который получает семантику диалога через `M3Dialog`.
+
+## Примеры в Storybook
+
+- [Стандартная](?path=/story/components-m3datepicker--standard)
+- [Неделя с понедельника](?path=/story/components-m3datepicker--monday-first)
+- [Ограниченный диапазон](?path=/story/components-m3datepicker--restricted-range)
+- [Доступность дат](?path=/story/components-m3datepicker--availability)
+- [Выбор диапазона](?path=/story/components-m3datepicker--range-selection)
+- [Управляемый курсор](?path=/story/components-m3datepicker--controlled-cursor)
+- [Без навигации](?path=/story/components-m3datepicker--without-navigation)
+- [Без выбора года](?path=/story/components-m3datepicker--without-year-view)
+- [Навигация свайпом](?path=/story/components-m3datepicker--swipe-navigation)
+- [Встроенная навигация](?path=/story/components-m3datepicker--inline-navigation)
+- [Закреплённое поле](?path=/story/components-m3datepicker--docked-field)
+- [Модальная композиция](?path=/story/components-m3datepicker--modal-composition)
+- [Модальный ввод даты](?path=/story/components-m3datepicker--modal-date-input)
+
+## Демонстрация
+
+<Canvas of={M3DatePickerStories.Standard} />
+<Canvas of={M3DatePickerStories.RestrictedRange} />
+<Canvas of={M3DatePickerStories.Availability} />
+<Canvas of={M3DatePickerStories.RangeSelection} />
+<Canvas of={M3DatePickerStories.ControlledCursor} />
+<Canvas of={M3DatePickerStories.DockedField} />
+<Canvas of={M3DatePickerStories.ModalDateInput} />
+<Canvas of={M3DatePickerStories.WithoutYearView} />
+
+## Рекомендации
+
+Используйте встроенный календарь, когда выбор даты — основная задача. Модальная композиция подходит, когда выбор даты временно прерывает работу с формой или компактным сценарием.
+
+Закреплённое поле уместно внутри формы, когда выбранное значение должно оставаться видимым.
+
+Показывайте ограничения диапазона через отключённые даты, а не скрывайте дни: так сетка месяца остаётся предсказуемой.
+
+## Пример закреплённого поля
+
+```tsx
+const [date, setDate] = useState<Date | null>(new Date(2026, 6, 10))
+
+<M3DatePickerField
+  value={date}
+  min={new Date(2026, 6, 3)}
+  max={new Date(2026, 6, 24)}
+  label="Дата поездки"
+  name="trip_date"
+  supportingText={<span>MM/DD/YYYY</span>}
+  className="trip-date"
+  popperClassName={['trip-date-popper', { 'trip-date-popper_open': true }]}
+  placeholder="MM/DD/YYYY"
+  onChange={setDate}
+/>
+```
+
+## Пример модального диалога
+
+```tsx
+const [opened, setOpened] = useState(false)
+const [date, setDate] = useState<Date | null>(new Date(2026, 6, 10))
+
+<M3DatePickerDialog
+  opened={opened}
+  value={date}
+  label="Дата поездки"
+  onToggle={setOpened}
+  onChange={setDate}
+/>
+```
+
+## Пример модального ввода даты
+
+```tsx
+<M3DatePickerDialog
+  opened={opened}
+  appearance="input"
+  value={date}
+  label="Дата поездки"
+  onToggle={setOpened}
+  onChange={setDate}
+/>
+```
+
+## Полезные ссылки
+
+- [Обзор M3 Date pickers](https://m3.material.io/components/date-pickers/overview)
+- [WAI-ARIA APG: шаблон модального диалога](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+
+</Localized>

@@ -1,7 +1,10 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
 import * as M3ScrollRailStories from './M3ScrollRail.stories'
 
 <Meta of={M3ScrollRailStories} />
+
+<Localized locale="en-US">
 
 # Scroll rails
 
@@ -50,3 +53,51 @@ Nested scrolling is hard to discover and harder to control with keyboard or touc
 - [M3 Side sheets overview](https://m3.material.io/components/side-sheets/overview)
 - [M3 Navigation drawer overview](https://m3.material.io/components/navigation-drawer/overview)
 - [M3 Menus overview](https://m3.material.io/components/menus/overview)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Индикаторы прокрутки
+
+`M3ScrollRail` — вспомогательный примитив для прокручиваемых поверхностей. Он делает доступную ось прокрутки заметнее стандартного оформления браузера, особенно внутри пользовательских контейнеров.
+
+## API
+
+### Когда использовать
+
+Используйте `M3ScrollRail` в ограниченных областях: drawer, side sheet, панелях данных и медиалентах, когда требуется более явный индикатор прокрутки.
+
+### Ориентация
+
+Компонент поддерживает вертикальную и горизонтальную ориентацию. История показывает обе оси в одном контейнере.
+
+### Область применения
+
+Material 3 не описывает отдельный компонент scroll rail. В этом пакете примитив обслуживает прокручиваемые M3-поверхности.
+
+## Доступность
+
+- Подписывайте область прокрутки, если её назначение неочевидно.
+- Не запирайте клавиатурный фокус внутри пользовательского контейнера.
+- Сохраняйте понятный порядок фокуса.
+
+## Примеры в Storybook
+
+- [Обе оси](?path=/story/components-m3scrollrail--both)
+
+## Демонстрация
+
+<Canvas of={M3ScrollRailStories.Both} />
+
+## Рекомендации
+
+Рейка дополняет структуру, но не заменяет понятные размеры и иерархию области. По возможности избегайте вложенных областей прокрутки.
+
+## Полезные ссылки
+
+- [Обзор M3 Side sheets](https://m3.material.io/components/side-sheets/overview)
+- [Обзор M3 Navigation drawer](https://m3.material.io/components/navigation-drawer/overview)
+- [Обзор M3 Menus](https://m3.material.io/components/menus/overview)
+
+</Localized>

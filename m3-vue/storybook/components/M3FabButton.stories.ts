@@ -5,6 +5,13 @@ import { M3Icon } from '@/components/icon'
 
 import { sizes, variants } from '@/components/fab-button/values'
 
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': { edit: 'Edit', newTask: 'New task' },
+  'ru-RU': { edit: 'Редактировать', newTask: 'Новая задача' },
+}
+
 const meta = {
   title: 'Components/M3FabButton',
 
@@ -32,18 +39,21 @@ const meta = {
     disabled: false,
   },
 
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3FabButton,
       M3Icon,
     },
 
     setup () {
-      return { args }
+      return {
+        args,
+        label: localize(globals.locale, messages).edit,
+      }
     },
 
     template: `
-        <M3FabButton v-bind="args" aria-label="Edit">
+        <M3FabButton v-bind="args" :aria-label="label">
             <M3Icon name="edit" />
         </M3FabButton>
     `,
@@ -61,26 +71,29 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const Extended: Story = {
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3FabButton,
       M3Icon,
     },
 
     setup () {
-      return { args }
+      return {
+        args,
+        label: localize(globals.locale, messages).edit,
+      }
     },
 
     template: `
         <M3FabButton v-bind="args">
-            <M3Icon name="edit" aria-hidden="true" /> Edit
+            <M3Icon name="edit" aria-hidden="true" /> {{ label }}
         </M3FabButton>
     `,
   }),
 }
 
 export const VariantMatrix: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       M3FabButton,
       M3Icon,
@@ -89,6 +102,7 @@ export const VariantMatrix: Story = {
     setup () {
       return {
         variants,
+        label: localize(globals.locale, messages).newTask,
       }
     },
 
@@ -111,7 +125,7 @@ export const VariantMatrix: Story = {
                     :key="'text-' + variant"
                     :variant="variant"
                 >
-                    <M3Icon name="edit" /> New task
+                    <M3Icon name="edit" /> {{ label }}
                 </M3FabButton>
             </div>
         </div>

@@ -3,7 +3,13 @@ import { useState } from 'react'
 import { M3Icon } from '@/components/icon'
 import { M3TextField } from '@/components/text-field'
 
+import { localize, useStorybookLocale } from '../../i18n'
+
 const TextFieldExamples = () => {
+  const text = localize(useStorybookLocale(), {
+    'en-US': { about: 'About', email: 'E-mail' },
+    'ru-RU': { about: 'О себе', email: 'Электронная почта' },
+  })
   const [filled, setFilled] = useState('')
   const [outlined, setOutlined] = useState('')
   const [multiline, setMultiline] = useState('')
@@ -14,7 +20,7 @@ const TextFieldExamples = () => {
       <div style={{ marginBottom: '16px' }}>
         <M3TextField
           value={filled}
-          label="E-mail"
+          label={text.email}
           onUpdate={setFilled}
         >
           <M3TextField.LeadingIcon>
@@ -26,7 +32,7 @@ const TextFieldExamples = () => {
       <div style={{ marginBottom: '16px' }}>
         <M3TextField
           value={outlined}
-          label="E-mail"
+          label={text.email}
           outlined={true}
           onUpdate={setOutlined}
         >
@@ -39,7 +45,7 @@ const TextFieldExamples = () => {
       <div style={{ marginBottom: '16px' }}>
         <M3TextField
           value={multiline}
-          label="About"
+          label={text.about}
           multiline={true}
           onUpdate={setMultiline}
         />
@@ -48,7 +54,7 @@ const TextFieldExamples = () => {
       <div>
         <M3TextField
           value={multilineOutlined}
-          label="About"
+          label={text.about}
           multiline={true}
           outlined={true}
           onUpdate={setMultilineOutlined}

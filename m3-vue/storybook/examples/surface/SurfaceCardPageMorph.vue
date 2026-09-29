@@ -13,8 +13,7 @@
         >
             <div class="surface-card-page__topbar-content">
                 <div>
-                    <strong>Surface orchestration: card replacing page</strong>
-                    <p>The same surface morphs between compact card and page-like container.</p>
+                    <strong>{{ text.heading }}</strong><p>{{ text.description }}</p>
                 </div>
 
                 <M3Button
@@ -23,7 +22,7 @@
                     appearance="filled"
                     @click="toggleCardMode"
                 >
-                    {{ expanded ? 'Return to card state' : 'Expand card to page state' }}
+                    {{ expanded ? text.return : text.expand }}
                 </M3Button>
             </div>
         </M3SurfacePanel>
@@ -36,7 +35,7 @@
         >
             <template #top>
                 <M3IconButton
-                    aria-label="Open navigation"
+                    :aria-label="text.openNavigation"
                     @click="navExpanded = true"
                 >
                     <M3Icon name="menu" />
@@ -45,7 +44,7 @@
 
             <M3NavigationTab
                 :active="navTab === 'files'"
-                label="Files"
+                :label="text.files"
                 @navigate="navTab = 'files'; navExpanded = false"
             >
                 <M3Icon name="folder" />
@@ -53,7 +52,7 @@
 
             <M3NavigationTab
                 :active="navTab === 'timeline'"
-                label="Timeline"
+                :label="text.timeline"
                 @navigate="navTab = 'timeline'; navExpanded = false"
             >
                 <M3Icon name="schedule" />
@@ -61,7 +60,7 @@
 
             <M3NavigationTab
                 :active="navTab === 'tasks'"
-                label="Tasks"
+                :label="text.tasks"
                 @navigate="navTab = 'tasks'; navExpanded = false"
             >
                 <M3Icon name="check_circle" />
@@ -69,7 +68,7 @@
 
             <M3NavigationTab
                 :active="navTab === 'analytics'"
-                label="Analytics"
+                :label="text.analytics"
                 @navigate="navTab = 'analytics'; navExpanded = false"
             >
                 <M3Icon name="insights" />
@@ -86,8 +85,7 @@
                     class="surface-card-page__header-card"
                     variant="surface-container-lowest"
                 >
-                    <h3>Card-to-page transition playground</h3>
-                    <p>Original slot remains reserved while the morphing surface overlays the page area.</p>
+                    <h3>{{ text.playground }}</h3><p>{{ text.playgroundDescription }}</p>
                 </M3SurfacePanel>
 
                 <div
@@ -130,11 +128,7 @@
                                     data-testid="surface-card-morph"
                                     overflow="auto"
                                 >
-                                    <h3>Morph target surface</h3>
-                                    <p>
-                                        In compact mode this surface behaves like a card. In expanded mode it replaces the
-                                        page work area while keeping top bar and rail reserved.
-                                    </p>
+                                    <h3>{{ text.morph }}</h3><p>{{ text.compact }}</p>
 
                                     <M3SurfacePanel
                                         :fill-height="false"
@@ -144,7 +138,7 @@
                                         :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
                                         class="surface-card-page__morph-nested"
                                     >
-                                        Nested surface demonstrates composability in both states.
+                                        {{ text.nested }}
                                     </M3SurfacePanel>
                                 </M3SurfacePanel>
                             </div>
@@ -158,8 +152,7 @@
                             class="surface-card-page__grid-card"
                             variant="surface-container-low"
                         >
-                            <strong>Static card A</strong>
-                            <p>Background content remains in flow.</p>
+                            <strong>{{ text.staticA }}</strong><p>{{ text.staticADescription }}</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
@@ -170,8 +163,7 @@
                             class="surface-card-page__grid-card"
                             variant="surface-container"
                         >
-                            <strong>Static card B</strong>
-                            <p>Independent surface in the same scene.</p>
+                            <strong>{{ text.staticB }}</strong><p>{{ text.staticBDescription }}</p>
                         </M3SurfacePanel>
                     </div>
 
@@ -201,11 +193,7 @@
                                 data-testid="surface-card-morph"
                                 overflow="auto"
                             >
-                                <h3>Morph target surface</h3>
-                                <p>
-                                    In compact mode this surface behaves like a card. In expanded mode it replaces the
-                                    page work area while keeping top bar and rail reserved.
-                                </p>
+                                <h3>{{ text.morph }}</h3><p>{{ text.compact }}</p>
 
                                 <M3SurfacePanel
                                     :fill-height="false"
@@ -215,7 +203,7 @@
                                     :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
                                     class="surface-card-page__morph-nested"
                                 >
-                                    Nested surface demonstrates composability in both states.
+                                    {{ text.nested }}
                                 </M3SurfacePanel>
                             </M3SurfacePanel>
                         </div>
@@ -227,6 +215,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { StorybookLocale } from '../../i18n'
+
 import { computed, ref } from 'vue'
 
 import { durations, easing } from '@modulify/m3-foundation/lib/motion'
@@ -240,6 +230,14 @@ import { M3SurfacePanel } from '@/components/surface'
 import {
   useSurfaceCardPageMorph,
 } from '@/components/surface/orchestration/useSurfaceCardPageMorph'
+
+import { localize } from '../../i18n'
+
+const props = defineProps<{ locale: StorybookLocale }>()
+const text = localize(props.locale, {
+  'en-US': { analytics: 'Analytics', compact: 'In compact mode this surface behaves like a card. In expanded mode it replaces the page work area while keeping top bar and rail reserved.', description: 'The same surface morphs between compact card and page-like container.', expand: 'Expand card to page state', files: 'Files', heading: 'Surface orchestration: card replacing page', morph: 'Morph target surface', nested: 'Nested surface demonstrates composability in both states.', openNavigation: 'Open navigation', playground: 'Card-to-page transition playground', playgroundDescription: 'Original slot remains reserved while the morphing surface overlays the page area.', return: 'Return to card state', staticA: 'Static card A', staticADescription: 'Background content remains in flow.', staticB: 'Static card B', staticBDescription: 'Independent surface in the same scene.', tasks: 'Tasks', timeline: 'Timeline' },
+  'ru-RU': { analytics: 'Аналитика', compact: 'В компактном режиме поверхность ведёт себя как карточка. В развёрнутом она заменяет рабочую область, сохраняя верхнюю панель и рейку.', description: 'Одна поверхность преобразуется между компактной карточкой и контейнером страницы.', expand: 'Развернуть карточку в страницу', files: 'Файлы', heading: 'Управление поверхностью: карточка заменяет страницу', morph: 'Преобразуемая поверхность', nested: 'Вложенная поверхность показывает композицию в обоих состояниях.', openNavigation: 'Открыть навигацию', playground: 'Переход карточки в страницу', playgroundDescription: 'Исходное место остаётся зарезервированным, пока поверхность перекрывает рабочую область.', return: 'Вернуть состояние карточки', staticA: 'Статичная карточка A', staticADescription: 'Фоновое содержимое остаётся в потоке.', staticB: 'Статичная карточка B', staticBDescription: 'Независимая поверхность в той же сцене.', tasks: 'Задачи', timeline: 'Хронология' },
+})
 
 const navTab = ref<'files' | 'timeline' | 'tasks' | 'analytics'>('files')
 const navExpanded = ref(false)

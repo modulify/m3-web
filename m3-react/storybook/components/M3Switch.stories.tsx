@@ -4,6 +4,8 @@ import { M3Switch } from '@/components/switch'
 
 import { useId, useRecord, useWatch } from '@/hooks'
 
+import { localize } from '../i18n'
+
 const M3SwitchWithLabel = ({
   children = 'M3Switch',
   checked = false,
@@ -52,10 +54,10 @@ const meta = {
     disabled: false,
   },
 
-  render: ({ checked, disabled }) => {
+  render: ({ checked, disabled }, { globals }) => {
     return (
       <M3SwitchWithLabel checked={checked} disabled={disabled}>
-        Airplane mode
+        {localize(globals.locale, { 'en-US': 'Airplane mode', 'ru-RU': 'Авиарежим' })}
       </M3SwitchWithLabel>
     )
   },

@@ -2,9 +2,12 @@ import Inline from './Inline'
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
 
 import FieldSwitch from '../examples/switch/SwitchExample.vue'
+import { Localized } from '../i18n'
 import * as M3SwitchStories from './M3Switch.stories'
 
 <Meta of={M3SwitchStories} />
+
+<Localized locale="en-US">
 
 # Switch
 
@@ -57,3 +60,51 @@ If toggling the control can delete data or trigger destructive side effects, use
 - [M3 Switch overview](https://m3.material.io/components/switch/overview)
 - [M3 Switch guidelines](https://m3.material.io/components/switch/guidelines)
 - [WAI-ARIA APG: Switch Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/switch/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Переключатели
+
+Переключатели обозначают немедленно применяемое состояние вкл./выкл. Они подходят для настроек и независимых параметров.
+
+## API
+
+Используйте `M3Switch` для двоичных системных настроек и предпочтений: Wi-Fi, уведомлений или синхронизации. Если выбор применяется позднее вместе с формой, понятнее может быть checkbox.
+
+Material 3 подразумевает прямое изменение состояния: контрол и окружающий интерфейс должны сразу отразить новое значение.
+
+## Доступность
+
+- Располагайте рядом видимую подпись.
+- Передавайте состояние через `role="switch"` и `aria-checked`.
+- Не используйте switch для выбора одного из нескольких вариантов.
+
+### Демонстрация
+
+<Unstyled>
+  <div
+    className="m3-surface m3-surface_container m3-surface_elevation-0 my-4"
+    style={{ maxWidth: '360px', padding: '32px', borderRadius: '16px', color: 'var(--m3-sys-on-surface)' }}
+  >
+    <Inline is={FieldSwitch} label="Wi-Fi" class="mb-4" />
+    <Inline is={FieldSwitch} label="Bluetooth" />
+  </div>
+</Unstyled>
+
+## Примеры в Storybook
+
+- [Стандартный переключатель](?path=/story/components-m3switch--standard-switch)
+
+## Рекомендации
+
+Называйте переключатели текущими параметрами: «Wi-Fi» или «Автообновление», а не командами. Для необратимых и рискованных действий используйте явное подтверждение.
+
+## Полезные ссылки
+
+- [Обзор M3 Switch](https://m3.material.io/components/switch/overview)
+- [Рекомендации M3 Switch](https://m3.material.io/components/switch/guidelines)
+- [WAI-ARIA APG: паттерн Switch](https://www.w3.org/WAI/ARIA/apg/patterns/switch/)
+
+</Localized>

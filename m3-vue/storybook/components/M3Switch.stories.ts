@@ -6,6 +6,8 @@ import { M3Switch } from '@/components/switch'
 
 import { useId } from '@/composables/id'
 
+import { localize } from '../i18n'
+
 const meta = {
   title: 'Components/M3Switch',
 
@@ -21,7 +23,7 @@ const meta = {
     disabled: false,
   },
 
-  render: (args: unknown) => ({
+  render: (args: unknown, { globals }) => ({
     components: {
       M3Switch,
     },
@@ -30,11 +32,12 @@ const meta = {
       id: useId('m3-switch'),
       args,
       checked: ref(false),
+      label: localize(globals.locale, { 'en-US': 'Airplane mode', 'ru-RU': 'Авиарежим' }),
     }),
 
     template: `
       <div class="flex-row">
-          <label :for="id" class="mr-6">Airplane mode</label>
+          <label :for="id" class="mr-6">{{ label }}</label>
 
           <M3Switch
               :id="id"

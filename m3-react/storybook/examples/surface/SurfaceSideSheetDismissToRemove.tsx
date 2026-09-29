@@ -1,5 +1,7 @@
 import type { FC } from 'react'
 
+import type { StorybookLocale } from '../../i18n'
+
 import { clamp } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { useEffect, useRef } from 'react'
@@ -14,6 +16,8 @@ import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Surface } from '@/components/surface'
 
 import { useStateRef } from '@/components/surface/orchestration/useStateRef'
+
+import { localize } from '../../i18n'
 
 const SIDE_SHEET_WIDTH_MIN = 280
 const SIDE_SHEET_WIDTH_MAX = 360
@@ -30,7 +34,11 @@ const SCRIM_FADE_MS = durations.long2
 type NavTab = 'inbox' | 'boards' | 'archive' | 'lab'
 type ModalRole = 'surface-container-low' | 'surface-container-high'
 
-const SurfaceSideSheetDismissToRemove: FC = () => {
+const SurfaceSideSheetDismissToRemove: FC<{ locale: StorybookLocale }> = ({ locale }) => {
+  const text = localize(locale, {
+    'en-US': { archive: 'Archive', boards: 'Boards', close: 'Close modal side sheet', closeRemove: 'Close modal and remove sheet', contextual: 'Contextual utility content.', description: 'After modal close, the side sheet is removed from the page instead of returning to docked mode.', dim: 'Low-brightness complementary content.', docked: 'Docked side sheet', dockedDescription: 'Coplanar layout participant with fixed width per layout region.', heading: 'Surface orchestration: side sheet remove flow', inbox: 'Inbox', interactive: 'Main content remains interactive.', lab: 'Lab', layer: 'Layer rebind: docked layer to modal layer.', modal: 'Modal side sheet', modalDescription: 'Anchored to end/right edge with full-height modal surface.', openNavigation: 'Open navigation', read: 'Read-heavy content block in the page flow.', removed: 'Side sheet removed', removeDescription: 'Closing this modal removes the side sheet from the scene.', secondary: 'Secondary block with mild emphasis.', switchModal: 'Switch to modal sheet', workspace: 'Workspace surfaces', workspaceDescription: 'Static blocks keep flow while side-sheet changes modality.' },
+    'ru-RU': { archive: 'Архив', boards: 'Доски', close: 'Закрыть модальную панель', closeRemove: 'Закрыть и удалить панель', contextual: 'Контекстное вспомогательное содержимое.', description: 'После закрытия модальной панели она удаляется со страницы, а не возвращается в закреплённый режим.', dim: 'Дополнительное содержимое с пониженной яркостью.', docked: 'Закреплённая боковая панель', dockedDescription: 'Участник общей компоновки с фиксированной шириной для области.', heading: 'Управление поверхностью: удаление боковой панели', inbox: 'Входящие', interactive: 'Основное содержимое остаётся интерактивным.', lab: 'Лаборатория', layer: 'Переназначение слоя: из закреплённого в модальный.', modal: 'Модальная боковая панель', modalDescription: 'Полноразмерная модальная поверхность закреплена у правого края.', openNavigation: 'Открыть навигацию', read: 'Блок для чтения в потоке страницы.', removed: 'Боковая панель удалена', removeDescription: 'Закрытие модального режима удаляет панель из сцены.', secondary: 'Вторичный блок с умеренным акцентом.', switchModal: 'Переключить в модальный режим', workspace: 'Поверхности рабочего пространства', workspaceDescription: 'Статичные блоки остаются в потоке при смене режима панели.' },
+  })
   const [navExpanded, setNavExpanded] = useStateRef(false)
   const [activeNavTab, setActiveNavTab] = useStateRef<NavTab>('inbox')
   const [sideSheetModal, setSideSheetModal, sideSheetModalRef] = useStateRef(false)
@@ -210,8 +218,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
       >
         <div className="surface-side-sheet__topbar-content">
           <div>
-            <strong>Surface orchestration: side sheet remove flow</strong>
-            <p>After modal close, the side sheet is removed from the page instead of returning to docked mode.</p>
+            <strong>{text.heading}</strong><p>{text.description}</p>
           </div>
 
           <M3Button
@@ -221,8 +228,8 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
           >
             {
               sheetRemoved
-                ? 'Side sheet removed'
-                : (sideSheetModal ? 'Close modal and remove sheet' : 'Switch to modal sheet')
+                ? text.removed
+                : (sideSheetModal ? text.closeRemove : text.switchModal)
             }
           </M3Button>
         </div>
@@ -237,7 +244,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
       >
         <M3Navigation.Top>
           <M3IconButton
-            aria-label="Open navigation"
+            aria-label={text.openNavigation}
             onClick={() => setNavExpanded(true)}
           >
             <M3Icon name="menu" />
@@ -245,7 +252,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
         </M3Navigation.Top>
 
         <M3NavigationTab
-          label="Inbox"
+          label={text.inbox}
           active={activeNavTab === 'inbox'}
           onNavigate={() => {
             setActiveNavTab('inbox')
@@ -256,7 +263,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Boards"
+          label={text.boards}
           active={activeNavTab === 'boards'}
           onNavigate={() => {
             setActiveNavTab('boards')
@@ -267,7 +274,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Archive"
+          label={text.archive}
           active={activeNavTab === 'archive'}
           onNavigate={() => {
             setActiveNavTab('archive')
@@ -278,7 +285,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
         </M3NavigationTab>
 
         <M3NavigationTab
-          label="Lab"
+          label={text.lab}
           active={activeNavTab === 'lab'}
           onNavigate={() => {
             setActiveNavTab('lab')
@@ -299,8 +306,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
             variant="surface-container-lowest"
             elevation={0}
           >
-            <h3>Workspace surfaces</h3>
-            <p>Static blocks keep flow while side-sheet changes modality.</p>
+            <h3>{text.workspace}</h3><p>{text.workspaceDescription}</p>
           </M3Surface>
 
           <div
@@ -317,7 +323,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
                 elevation={0}
               >
                 <strong>surface-container-lowest</strong>
-                <p>Read-heavy content block in the page flow.</p>
+                <p>{text.read}</p>
               </M3Surface>
 
               <M3Surface
@@ -329,7 +335,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
                 elevation={1}
               >
                 <strong>surface-container-low</strong>
-                <p>Secondary block with mild emphasis.</p>
+                <p>{text.secondary}</p>
               </M3Surface>
 
               <M3Surface
@@ -341,7 +347,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
                 elevation={3}
               >
                 <strong>surface-container-high</strong>
-                <p>Contextual utility content.</p>
+                <p>{text.contextual}</p>
               </M3Surface>
 
               <M3Surface
@@ -353,7 +359,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
                 elevation={0}
               >
                 <strong>surface-dim</strong>
-                <p>Low-brightness complementary content.</p>
+                <p>{text.dim}</p>
               </M3Surface>
             </main>
 
@@ -373,9 +379,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
                     elevation={0}
                     overflow="auto"
                   >
-                    <h3>Docked side sheet</h3>
-                    <p>Coplanar layout participant with fixed width per layout region.</p>
-                    <p>Main content remains interactive.</p>
+                    <h3>{text.docked}</h3><p>{text.dockedDescription}</p><p>{text.interactive}</p>
                     <p className="surface-side-sheet__meta">
                       Fixed width: {sideSheetWidth}px
                     </p>
@@ -409,13 +413,13 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
                 onDismiss={() => void closeModalFromPanel()}
               >
                 <div className="surface-side-sheet__modal-header">
-                  <h3>Modal side sheet</h3>
+                  <h3>{text.modal}</h3>
 
                   {sideSheetModal ? (
                     <M3IconButton
                       className="surface-side-sheet__modal-close"
                       appearance="standard"
-                      aria-label="Close modal side sheet"
+                      aria-label={text.close}
                       disabled={transitioning}
                       onClick={() => void closeModalFromPanel()}
                     >
@@ -424,9 +428,7 @@ const SurfaceSideSheetDismissToRemove: FC = () => {
                   ) : null}
                 </div>
 
-                <p>Layer rebind: docked layer to modal layer.</p>
-                <p>Anchored to end/right edge with full-height modal surface.</p>
-                <p>Closing this modal removes the side sheet from the scene.</p>
+                <p>{text.layer}</p><p>{text.modalDescription}</p><p>{text.removeDescription}</p>
                 <p className="surface-side-sheet__meta">
                   Fixed width: {modalWidth}px
                 </p>

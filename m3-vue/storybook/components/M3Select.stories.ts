@@ -10,6 +10,7 @@ import CountryFlag from '../countries/CountryFlag.vue'
 
 import codes from '../countries/codes'
 import countries from '../countries/names.json'
+import { localize, resolveStorybookLocale } from '../i18n'
 
 type CountryOption = {
   value: Code;
@@ -24,6 +25,19 @@ type M3SelectStoryProps = {
   invalid?: boolean;
 }
 
+const localizeArgs = (locale: unknown, args: M3SelectStoryProps): M3SelectStoryProps => {
+  const text = localize(locale, {
+    'en-US': { choose: 'Choose', country: 'Country', required: 'Required', select: 'Select an option' },
+    'ru-RU': { choose: 'Выберите', country: 'Страна', required: 'Обязательное поле', select: 'Выберите вариант' },
+  })
+
+  return {
+    ...args,
+    label: args.label === 'Country' ? text.country : text.choose,
+    placeholder: args.placeholder === 'Required' ? text.required : args.placeholder ? text.select : undefined,
+  }
+}
+
 const meta = {
   title: 'Components/M3Select',
 
@@ -35,7 +49,7 @@ const meta = {
     },
   },
 
-  render: (args: M3SelectStoryProps) => ({
+  render: (args: M3SelectStoryProps, { globals }) => ({
     name: 'M3SelectStory',
 
     components: {
@@ -43,17 +57,18 @@ const meta = {
     },
 
     setup () {
+      const option = localize(globals.locale, { 'en-US': 'Option', 'ru-RU': 'Вариант' })
       return {
-        args,
+        args: localizeArgs(globals.locale, args),
         value: ref(''),
         options: [{
-          label: 'Option 1',
+          label: `${option} 1`,
           value: 1,
         }, {
-          label: 'Option 2',
+          label: `${option} 2`,
           value: 2,
         }, {
-          label: 'Option 3',
+          label: `${option} 3`,
           value: 3,
         }],
       }
@@ -88,7 +103,7 @@ export const WithIcons: Story = {
     label: 'Country',
   },
 
-  render: (args: M3SelectStoryProps) => ({
+  render: (args: M3SelectStoryProps, { globals }) => ({
     name: 'M3SelectStory',
 
     components: {
@@ -99,13 +114,14 @@ export const WithIcons: Story = {
 
     setup () {
       const countryCode = ref<Code | null>(null)
+      const displayNames = new Intl.DisplayNames([resolveStorybookLocale(globals.locale)], { type: 'region' })
       const countryOptions = computed(() => (codes.map(code => ({
         value: code,
-        label: countries[code],
+        label: displayNames.of(code) ?? countries[code],
       })) as Array<CountryOption>).sort((a, b) => a.label.localeCompare(b.label)))
 
       return {
-        args,
+        args: localizeArgs(globals.locale, args),
         countryCode,
         countryOptions,
       }

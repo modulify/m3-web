@@ -38,4 +38,41 @@
         margin-left: 6px;
         margin-top: 5px;
     }
+
+    button[aria-label^="Storybook content language"] > svg {
+        display: none;
+    }
+
+    button[aria-label^="Storybook content language"]::before,
+    li[id$="-opt-en-US"] > div::before,
+    li[id$="-opt-ru-RU"] > div::before {
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 1px rgb(0 0 0 / 12%);
+        content: '';
+        flex: 0 0 14px;
+        height: 14px;
+        overflow: hidden;
+        width: 14px;
+    }
+
+    button[aria-label$="English"]::before,
+    li[id$="-opt-en-US"] > div::before {
+        background:
+            linear-gradient(#3c3b6e 0 0) left top / 48% 54% no-repeat,
+            repeating-linear-gradient(
+                to bottom,
+                #b22234 0 7.7%,
+                #fff 7.7% 15.4%
+            );
+    }
+
+    button[aria-label$="Русский"]::before,
+    li[id$="-opt-ru-RU"] > div::before {
+        background: linear-gradient(
+            to bottom,
+            #fff 0 33.33%,
+            #0039a6 33.33% 66.66%,
+            #d52b1e 66.66%
+        );
+    }
 </style>

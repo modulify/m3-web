@@ -13,8 +13,7 @@
         >
             <div class="surface-side-sheet__topbar-content">
                 <div>
-                    <strong>Surface orchestration: side sheet morph</strong>
-                    <p>Docked sheet transitions into modal sheet with fixed width, right-edge anchoring, and full-height modal target.</p>
+                    <strong>{{ text.heading }}</strong><p>{{ text.description }}</p>
                 </div>
 
                 <M3Button
@@ -23,7 +22,7 @@
                     appearance="tonal"
                     @click="toggleSideSheetMode"
                 >
-                    {{ sideSheetModal ? 'Switch to docked sheet' : 'Switch to modal sheet' }}
+                    {{ sideSheetModal ? text.switchDocked : text.switchModal }}
                 </M3Button>
             </div>
         </M3SurfacePanel>
@@ -36,7 +35,7 @@
         >
             <template #top>
                 <M3IconButton
-                    aria-label="Open navigation"
+                    :aria-label="text.openNavigation"
                     @click="navExpanded = true"
                 >
                     <M3Icon name="menu" />
@@ -45,7 +44,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'inbox'"
-                label="Inbox"
+                :label="text.inbox"
                 @navigate="activeNavTab = 'inbox'; navExpanded = false"
             >
                 <M3Icon name="inbox" />
@@ -53,7 +52,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'boards'"
-                label="Boards"
+                :label="text.boards"
                 @navigate="activeNavTab = 'boards'; navExpanded = false"
             >
                 <M3Icon name="dashboard" />
@@ -61,7 +60,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'archive'"
-                label="Archive"
+                :label="text.archive"
                 @navigate="activeNavTab = 'archive'; navExpanded = false"
             >
                 <M3Icon name="archive" />
@@ -69,7 +68,7 @@
 
             <M3NavigationTab
                 :active="activeNavTab === 'lab'"
-                label="Lab"
+                :label="text.lab"
                 @navigate="activeNavTab = 'lab'; navExpanded = false"
             >
                 <M3Icon name="science" />
@@ -86,8 +85,7 @@
                     class="surface-side-sheet__header-card"
                     variant="surface-container-lowest"
                 >
-                    <h3>Workspace surfaces</h3>
-                    <p>Static blocks keep flow while side-sheet changes modality.</p>
+                    <h3>{{ text.workspace }}</h3><p>{{ text.workspaceDescription }}</p>
                 </M3SurfacePanel>
 
                 <div
@@ -108,7 +106,7 @@
                             variant="surface-container-lowest"
                         >
                             <strong>surface-container-lowest</strong>
-                            <p>Read-heavy content block in the page flow.</p>
+                            <p>{{ text.read }}</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
@@ -120,7 +118,7 @@
                             variant="surface-container-low"
                         >
                             <strong>surface-container-low</strong>
-                            <p>Secondary block with mild emphasis.</p>
+                            <p>{{ text.secondary }}</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
@@ -132,7 +130,7 @@
                             variant="surface-container-high"
                         >
                             <strong>surface-container-high</strong>
-                            <p>Contextual utility content.</p>
+                            <p>{{ text.contextual }}</p>
                         </M3SurfacePanel>
 
                         <M3SurfacePanel
@@ -144,7 +142,7 @@
                             variant="surface-dim"
                         >
                             <strong>surface-dim</strong>
-                            <p>Low-brightness complementary content.</p>
+                            <p>{{ text.dim }}</p>
                         </M3SurfacePanel>
                     </main>
 
@@ -166,9 +164,7 @@
                             class="surface-side-sheet__sheet surface-side-sheet__sheet_docked"
                             variant="surface-container-low"
                         >
-                            <h3>Docked side sheet</h3>
-                            <p>Coplanar layout participant with adaptive CSS width inside the layout host.</p>
-                            <p>Main content remains interactive.</p>
+                            <h3>{{ text.docked }}</h3><p>{{ text.dockedDescription }}</p><p>{{ text.interactive }}</p>
                             <p class="surface-side-sheet__meta">
                                 Adaptive width: {{ sideSheetWidth }}px
                             </p>
@@ -187,11 +183,11 @@
                     >
                         <template v-if="sideSheetModal">
                             <div class="surface-side-sheet__modal-header">
-                                <h3>Modal side sheet</h3>
+                                <h3>{{ text.modal }}</h3>
 
                                 <M3IconButton
                                     :disabled="transitioning"
-                                    aria-label="Close modal side sheet"
+                                    :aria-label="text.close"
                                     data-testid="surface-morph-close"
                                     appearance="standard"
                                     class="surface-side-sheet__modal-close"
@@ -201,8 +197,7 @@
                                 </M3IconButton>
                             </div>
 
-                            <p>Layer rebind: docked layer to modal layer.</p>
-                            <p>Stable modal state stays in overlay, while docked state remains layout-driven.</p>
+                            <p>{{ text.layer }}</p><p>{{ text.modalDescription }}</p>
                             <p class="surface-side-sheet__meta">
                                 Measured transition width: {{ modalPanelProps.width }}px
                             </p>
@@ -215,6 +210,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { StorybookLocale } from '../../i18n'
+
 import { ref } from 'vue'
 
 import { easing } from '@modulify/m3-foundation/lib/motion'
@@ -228,6 +225,14 @@ import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import {
   useSurfaceSideSheetMorph,
 } from '@/components/surface/orchestration/useSurfaceSideSheetMorph'
+
+import { localize } from '../../i18n'
+
+const props = defineProps<{ locale: StorybookLocale }>()
+const text = localize(props.locale, {
+  'en-US': { archive: 'Archive', boards: 'Boards', close: 'Close modal side sheet', contextual: 'Contextual utility content.', description: 'Docked sheet transitions into modal sheet with fixed width, right-edge anchoring, and full-height modal target.', dim: 'Low-brightness complementary content.', docked: 'Docked side sheet', dockedDescription: 'Coplanar layout participant with adaptive CSS width inside the layout host.', heading: 'Surface orchestration: side sheet morph', inbox: 'Inbox', interactive: 'Main content remains interactive.', lab: 'Lab', layer: 'Layer rebind: docked layer to modal layer.', modal: 'Modal side sheet', modalDescription: 'Stable modal state stays in overlay, while docked state remains layout-driven.', openNavigation: 'Open navigation', read: 'Read-heavy content block in the page flow.', secondary: 'Secondary block with mild emphasis.', switchDocked: 'Switch to docked sheet', switchModal: 'Switch to modal sheet', workspace: 'Workspace surfaces', workspaceDescription: 'Static blocks keep flow while side-sheet changes modality.' },
+  'ru-RU': { archive: 'Архив', boards: 'Доски', close: 'Закрыть модальную панель', contextual: 'Контекстное вспомогательное содержимое.', description: 'Закреплённая панель переходит в полноразмерную модальную панель фиксированной ширины у правого края.', dim: 'Дополнительное содержимое с пониженной яркостью.', docked: 'Закреплённая боковая панель', dockedDescription: 'Участник общей компоновки с адаптивной CSS-шириной внутри контейнера.', heading: 'Управление поверхностью: преобразование боковой панели', inbox: 'Входящие', interactive: 'Основное содержимое остаётся интерактивным.', lab: 'Лаборатория', layer: 'Переназначение слоя: из закреплённого в модальный.', modal: 'Модальная боковая панель', modalDescription: 'Модальное состояние остаётся в overlay, а закреплённое управляется компоновкой.', openNavigation: 'Открыть навигацию', read: 'Блок для чтения в потоке страницы.', secondary: 'Вторичный блок с умеренным акцентом.', switchDocked: 'Переключить в закреплённый режим', switchModal: 'Переключить в модальный режим', workspace: 'Поверхности рабочего пространства', workspaceDescription: 'Статичные блоки остаются в потоке при смене режима панели.' },
+})
 
 const PANEL_TRANSITION_EASING = easing.standard
 

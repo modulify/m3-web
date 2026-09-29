@@ -7,8 +7,16 @@ import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
 import { M3Menu, M3MenuItem } from '@/components/menu'
 
-const M3MenuStory = ({ target: _target, ...args }: M3MenuProps) => {
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': { archive: 'Archive', editProfile: 'Edit profile', favorite: 'Favorite', items: ['Item 1', 'Item 2', 'Item 3'], open: 'Open menu', selected: 'Selected' },
+  'ru-RU': { archive: 'Архивировать', editProfile: 'Изменить профиль', favorite: 'Избранное', items: ['Пункт 1', 'Пункт 2', 'Пункт 3'], open: 'Открыть меню', selected: 'Выбрано' },
+}
+
+const M3MenuStory = ({ locale, target: _target, ...args }: M3MenuProps & { locale: unknown }) => {
   const [target, setTarget] = useState<HTMLElement | null>(null)
+  const text = localize(locale, messages)
   const bindTarget = useCallback((el: HTMLElement) => {
     setTarget(el)
     return () => {
@@ -19,16 +27,16 @@ const M3MenuStory = ({ target: _target, ...args }: M3MenuProps) => {
   return (
     <div style={{ minHeight: '220px', minWidth: '240px' }}>
       <M3Button effects={[bindTarget]}>
-        Open menu
+        {text.open}
       </M3Button>
 
       <M3Menu
         target={target}
         {...args}
       >
-        <M3MenuItem>Item 1</M3MenuItem>
-        <M3MenuItem selected={true}>Item 2</M3MenuItem>
-        <M3MenuItem>Item 3</M3MenuItem>
+        <M3MenuItem>{text.items[0]}</M3MenuItem>
+        <M3MenuItem selected={true}>{text.items[1]}</M3MenuItem>
+        <M3MenuItem>{text.items[2]}</M3MenuItem>
       </M3Menu>
     </div>
   )
@@ -52,7 +60,7 @@ const meta = {
     onDispose: { control: false },
   },
 
-  render: (args) => <M3MenuStory {...args} />,
+  render: (args, { globals }) => <M3MenuStory locale={globals.locale} {...args} />,
 
   parameters: {
     layout: 'centered',
@@ -74,8 +82,9 @@ export const WithLeadingAndTrailingContent: Story = {
     target: null,
   },
 
-  render: ({ target: _target, ...args }) => {
+  render: ({ target: _target, ...args }, { globals }) => {
     const [target, setTarget] = useState<HTMLElement | null>(null)
+    const text = localize(globals.locale, messages)
     const bindTarget = useCallback((el: HTMLElement) => {
       setTarget(el)
       return () => {
@@ -86,7 +95,7 @@ export const WithLeadingAndTrailingContent: Story = {
     return (
       <div style={{ minHeight: '220px', minWidth: '280px' }}>
         <M3Button effects={[bindTarget]}>
-          Open menu
+          {text.open}
         </M3Button>
 
         <M3Menu
@@ -97,21 +106,21 @@ export const WithLeadingAndTrailingContent: Story = {
             <M3MenuItem.Leading>
               <M3Icon name="edit" />
             </M3MenuItem.Leading>
-            Edit profile
+            {text.editProfile}
           </M3MenuItem>
 
           <M3MenuItem selected={true}>
             <M3MenuItem.Leading>
               <M3Icon name="favorite" />
             </M3MenuItem.Leading>
-            Favorite
+            {text.favorite}
             <M3MenuItem.Trailing>
-              <span style={{ fontSize: '12px' }}>Selected</span>
+              <span style={{ fontSize: '12px' }}>{text.selected}</span>
             </M3MenuItem.Trailing>
           </M3MenuItem>
 
           <M3MenuItem disabled={true}>
-            Archive
+            {text.archive}
           </M3MenuItem>
         </M3Menu>
       </div>

@@ -2,9 +2,12 @@ import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
 
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
+import { Localized } from '../i18n'
 import * as M3FabButtonStories from './M3FabButton.stories'
 
 <Meta of={M3FabButtonStories} />
+
+<Localized locale="en-US">
 
 # Floating action buttons
 
@@ -87,3 +90,91 @@ If users need to stop and decode the icon, show the label. The slight increase i
 - [M3 Extended FAB overview](https://m3.material.io/components/extended-fab/overview)
 - [M3 Extended FAB guidelines](https://m3.material.io/components/extended-fab/guidelines)
 - [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Плавающие кнопки действий
+
+Плавающие кнопки подчёркивают самое приоритетное действие на поверхности. FAB лучше всего работает, когда у страницы есть одно очевидное следующее действие.
+
+## API
+
+### Когда использовать
+
+Используйте `M3FabButton` для основного действия экрана или крупного раздела, особенно если оно должно оставаться доступным при прокрутке.
+
+### Обычный и расширенный варианты
+
+- обычная FAB для компактного действия с иконкой
+- расширенная FAB, когда действию нужна видимая подпись
+
+Расширенный вариант легче распознать, если смысл иконки не очевиден сам по себе.
+
+### Варианты
+
+Доступны тона Material 3 `surface`, `primary`, `secondary` и `tertiary`, позволяющие сохранить акцент без единственного фиксированного цвета.
+
+## Доступность
+
+- FAB только с иконкой требует доступного имени через `aria-label`.
+- Используйте FAB для одного главного действия поверхности.
+- Подпись расширенной FAB должна быть короткой.
+
+### Обычные плавающие кнопки
+
+<Unstyled>
+  <p style={{ display: 'flex', gap: '16px' }}>
+    <M3FabButton aria-label="Новая задача" variant={'surface'}><M3Icon name={'edit'} /></M3FabButton>
+    <M3FabButton aria-label="Новая задача"><M3Icon name={'edit'} /></M3FabButton>
+    <M3FabButton aria-label="Новая задача" variant={'secondary'}><M3Icon name={'edit'} /></M3FabButton>
+    <M3FabButton aria-label="Новая задача" variant={'tertiary'}><M3Icon name={'edit'} /></M3FabButton>
+  </p>
+</Unstyled>
+
+### Расширенные плавающие кнопки
+
+<Unstyled>
+  <p style={{ display: 'flex', gap: '16px' }}>
+    <M3FabButton variant={'surface'}><M3Icon name={'edit'} /> Новая задача</M3FabButton>
+    <M3FabButton><M3Icon name={'edit'} /> Новая задача</M3FabButton>
+    <M3FabButton variant={'secondary'}><M3Icon name={'edit'} /> Новая задача</M3FabButton>
+    <M3FabButton variant={'tertiary'}><M3Icon name={'edit'} /> Новая задача</M3FabButton>
+  </p>
+</Unstyled>
+
+## Примеры в Storybook
+
+- [Стандартная](?path=/story/components-m3fabbutton--standard)
+- [Расширенная](?path=/story/components-m3fabbutton--extended)
+- [Матрица вариантов](?path=/story/components-m3fabbutton--variant-matrix)
+- [Матрица размеров](?path=/story/components-m3fabbutton--size-matrix)
+
+## Рекомендации
+
+### Одна плавающая кнопка на контекст
+
+На большинстве поверхностей должна быть не более чем одна FAB. Несколько конкурирующих кнопок размывают смысл главного действия.
+
+### Подпись для неочевидной иконки
+
+Если пользователю приходится расшифровывать иконку, показывайте подпись: дополнительная ширина обычно окупается ясностью.
+
+## Пример кода
+
+```tsx
+<M3FabButton>
+  <M3Icon name="add" /> Новая задача
+</M3FabButton>
+```
+
+## Полезные ссылки
+
+- [Обзор M3 FAB](https://m3.material.io/components/floating-action-button/overview)
+- [Рекомендации M3 FAB](https://m3.material.io/components/floating-action-button/guidelines)
+- [Обзор M3 Extended FAB](https://m3.material.io/components/extended-fab/overview)
+- [Рекомендации M3 Extended FAB](https://m3.material.io/components/extended-fab/guidelines)
+- [WAI-ARIA APG: шаблон Button](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+
+</Localized>

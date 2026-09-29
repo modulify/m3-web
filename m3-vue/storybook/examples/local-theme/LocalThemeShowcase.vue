@@ -3,13 +3,13 @@
         <div class="sb-container-fluid px-6 py-6">
             <div class="m3-local-theme-showcase__intro mb-6">
                 <div class="m3-local-theme-showcase__eyebrow">
-                    Guide
+                    {{ text.guide }}
                 </div>
                 <h1 class="m3-local-theme-showcase__headline">
-                    Theming with local token scopes
+                    {{ text.title }}
                 </h1>
                 <p class="m3-local-theme-showcase__copy">
-                    This guide intentionally uses an azure-blue baseline theme instead of the standard Material default, so local token changes are easier to compare.
+                    {{ text.intro }}
                 </p>
             </div>
 
@@ -25,13 +25,13 @@
                         variant="surface-container-high"
                     >
                         <div class="m3-local-theme-showcase__eyebrow">
-                            Azure-blue baseline
+                            {{ text.baseline }}
                         </div>
                         <h3 class="m3-local-theme-showcase__title">
                             {{ currentNotification.title }}
                         </h3>
                         <p class="m3-local-theme-showcase__copy">
-                            This notification inherits the guide baseline theme. It is intentionally azure blue, not the standard Material purple default.
+                            {{ text.baselineCopy }}
                         </p>
 
                         <div class="m3-local-theme-showcase__actions">
@@ -96,13 +96,13 @@
                 <div class="m3-local-theme-showcase__workspace-header">
                     <div>
                         <div class="m3-local-theme-showcase__eyebrow">
-                            Cookbook
+                            {{ text.cookbook }}
                         </div>
                         <h3 class="m3-local-theme-showcase__title">
-                            List with a destructive menu action
+                            {{ text.listTitle }}
                         </h3>
                         <p class="m3-local-theme-showcase__copy">
-                            The list inherits the azure-blue guide theme. The release checklist item owns an icon action with a popper menu, and only the delete menu item enters the local danger scope.
+                            {{ text.listCopy }}
                         </p>
                     </div>
                 </div>
@@ -110,19 +110,19 @@
                 <div ref="menuContainer" class="m3-local-theme-showcase__list-area">
                     <M3List class="m3-local-theme-showcase__list" divided>
                         <M3ListItem
+                            :headline="text.billing"
+                            :supporting-text="text.billingCopy"
                             lines="2"
-                            headline="Billing hold"
-                            supporting-text="Payment retry is waiting for a finance owner."
                         />
                         <M3ListItem
+                            :headline="text.release"
+                            :supporting-text="text.releaseCopy"
                             lines="2"
-                            headline="Release checklist"
-                            supporting-text="Three items need review before publication."
                         >
                             <template #trailing>
                                 <span class="m3-local-theme-showcase__menu-anchor">
                                     <span ref="menuTarget">
-                                        <M3IconButton aria-label="Actions">
+                                        <M3IconButton :aria-label="text.actions">
                                             <M3Icon name="more_vert" />
                                         </M3IconButton>
                                     </span>
@@ -141,30 +141,30 @@
                                             <template #leading>
                                                 <M3Icon name="edit" />
                                             </template>
-                                            Rename list
+                                            {{ text.rename }}
                                         </M3MenuItem>
 
                                         <M3MenuItem>
                                             <template #leading>
                                                 <M3Icon name="archive" />
                                             </template>
-                                            Archive
+                                            {{ text.archive }}
                                         </M3MenuItem>
 
                                         <M3MenuItem class="m3-local-theme m3-local-theme_danger">
                                             <template #leading>
                                                 <M3Icon name="delete" />
                                             </template>
-                                            Delete list
+                                            {{ text.deleteList }}
                                         </M3MenuItem>
                                     </M3Menu>
                                 </span>
                             </template>
                         </M3ListItem>
                         <M3ListItem
+                            :headline="text.access"
+                            :supporting-text="text.accessCopy"
                             lines="2"
-                            headline="Access review"
-                            supporting-text="Two external collaborators still have access."
                         />
                     </M3List>
                 </div>
@@ -175,6 +175,8 @@
 
 <script lang="ts" setup>
 import type { Component } from 'vue'
+
+import type { StorybookLocale } from '../../i18n'
 
 import {
   computed,
@@ -191,6 +193,8 @@ import { M3List, M3ListItem } from '@/components/list'
 import { M3Menu, M3MenuItem } from '@/components/menu'
 import { M3SurfacePanel } from '@/components/surface'
 
+import { localize } from '../../i18n'
+
 type LocalThemeVariant = 'danger' | 'warm-alert' | 'success' | 'brand-muted' | 'list-menu'
 
 type Notification = {
@@ -204,8 +208,14 @@ type Notification = {
 }
 
 const props = defineProps<{
+  locale: StorybookLocale
   variant: LocalThemeVariant
 }>()
+
+const text = localize(props.locale, {
+  'en-US': { access: 'Access review', accessCopy: 'Two external collaborators still have access.', actions: 'Actions', archive: 'Archive', baseline: 'Azure-blue baseline', baselineCopy: 'This notification inherits the guide baseline theme. It is intentionally azure blue, not the standard Material purple default.', billing: 'Billing hold', billingCopy: 'Payment retry is waiting for a finance owner.', cookbook: 'Cookbook', deleteList: 'Delete list', guide: 'Guide', intro: 'This guide intentionally uses an azure-blue baseline theme instead of the standard Material default, so local token changes are easier to compare.', listCopy: 'The list inherits the azure-blue guide theme. The release checklist item owns an icon action with a popper menu, and only the delete menu item enters the local danger scope.', listTitle: 'List with a destructive menu action', palette: ['Surface', 'Container high', 'Primary', 'On primary'], release: 'Release checklist', releaseCopy: 'Three items need review before publication.', rename: 'Rename list', title: 'Theming with local token scopes', tokenSample: 'Token sample' },
+  'ru-RU': { access: 'Проверка доступа', accessCopy: 'У двух внешних участников всё ещё есть доступ.', actions: 'Действия', archive: 'Архивировать', baseline: 'Базовая лазурно-синяя тема', baselineCopy: 'Уведомление наследует базовую тему руководства — намеренно лазурно-синюю, а не стандартную фиолетовую Material.', billing: 'Приостановка оплаты', billingCopy: 'Повторный платёж ожидает ответственного от финансов.', cookbook: 'Рецепт', deleteList: 'Удалить список', guide: 'Руководство', intro: 'Руководство намеренно использует лазурно-синюю базовую тему, чтобы локальные изменения токенов было легче сравнивать.', listCopy: 'Список наследует базовую тему. Только действие удаления в меню переходит в локальную опасную область.', listTitle: 'Список с опасным действием в меню', palette: ['Поверхность', 'Высокий контейнер', 'Основной', 'На основном'], release: 'Чек-лист выпуска', releaseCopy: 'Перед публикацией нужно проверить три пункта.', rename: 'Переименовать список', title: 'Темизация локальными областями токенов', tokenSample: 'Образец токенов' },
+})
 
 defineOptions({
   name: 'LocalThemeShowcase',
@@ -215,24 +225,24 @@ const ColorStrip: Component = defineComponent({
   name: 'ColorStrip',
 
   setup: () => () => h('div', {
-    'aria-label': 'Token sample',
+    'aria-label': text.tokenSample,
     class: 'm3-local-theme-showcase__palette',
   }, [
     h('span', { class: 'm3-local-theme-showcase__palette-item' }, [
       h('span', { class: 'm3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_surface' }),
-      h('span', 'Surface'),
+      h('span', text.palette[0]),
     ]),
     h('span', { class: 'm3-local-theme-showcase__palette-item' }, [
       h('span', { class: 'm3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_container' }),
-      h('span', 'Container high'),
+      h('span', text.palette[1]),
     ]),
     h('span', { class: 'm3-local-theme-showcase__palette-item' }, [
       h('span', { class: 'm3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_primary' }),
-      h('span', 'Primary'),
+      h('span', text.palette[2]),
     ]),
     h('span', { class: 'm3-local-theme-showcase__palette-item' }, [
       h('span', { class: 'm3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_on-primary' }),
-      h('span', 'On primary'),
+      h('span', text.palette[3]),
     ]),
   ]),
 })
@@ -276,11 +286,54 @@ const notifications: Record<Exclude<LocalThemeVariant, 'list-menu'>, Notificatio
   },
 }
 
+const notificationsRu: typeof notifications = {
+  danger: {
+    eyebrow: 'Опасная область',
+    title: 'Запрошено удаление выпуска',
+    copy: 'Деструктивное уведомление сохраняет API компонентов, а действия, поверхности и state layers переходят в локальную опасную палитру.',
+    scopeClassName: 'm3-local-theme m3-local-theme_danger',
+    primaryAction: 'Удалить выпуск',
+    secondaryAction: 'Просмотреть журналы',
+    resetAction: 'Отмена',
+  },
+  'warm-alert': {
+    eyebrow: 'Тёплая область предупреждения',
+    title: 'Запланирован повторный платёж',
+    copy: 'Предупреждение использует более тёплые контейнерные тона для срочности, не делая все элементы опасными.',
+    scopeClassName: 'm3-local-theme m3-local-theme_warm-alert',
+    primaryAction: 'Снять блокировку',
+    secondaryAction: 'Открыть счета',
+  },
+  success: {
+    eyebrow: 'Успешная область',
+    title: 'Выпуск опубликован',
+    copy: 'Успешная область переводит модуль в зелёный акцент, сохраняя иерархию и поведение компонентов.',
+    scopeClassName: 'm3-local-theme m3-local-theme_success',
+    primaryAction: 'Поделиться обновлением',
+    secondaryAction: 'Проверить запуск',
+  },
+  'brand-muted': {
+    eyebrow: 'Приглушённая брендовая область',
+    title: 'Руководство обновлено',
+    copy: 'Приглушённая брендовая область сохраняет продуктовый акцент, но снижает визуальное давление для редакционных рекомендаций.',
+    scopeClassName: 'm3-local-theme m3-local-theme_brand-muted',
+    primaryAction: 'Открыть руководство',
+    secondaryAction: 'Скачать материалы',
+  },
+}
+
 const menuTarget = ref<HTMLElement | null>(null)
 const menuContainer = ref<HTMLElement | null>(null)
 const menuReady = ref(false)
 const getMenuTarget = () => menuTarget.value
-const currentNotification = computed(() => props.variant === 'list-menu' ? null : notifications[props.variant])
+const currentNotification = computed(() => {
+  if (props.variant === 'list-menu') return null
+
+  return localize(props.locale, {
+    'en-US': notifications,
+    'ru-RU': notificationsRu,
+  })[props.variant]
+})
 
 onMounted(() => {
   menuReady.value = true

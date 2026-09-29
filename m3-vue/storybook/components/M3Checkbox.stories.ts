@@ -8,6 +8,24 @@ import { M3Checkbox } from '@/components/checkbox'
 import { useId } from '@/composables/id'
 
 import CheckboxList from '../examples/checkbox/CheckboxList.vue'
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': {
+    choice: 'Choice',
+    email: 'Email',
+    notifications: 'Notifications',
+    push: 'Push',
+    sms: 'SMS',
+  },
+  'ru-RU': {
+    choice: 'Выбор',
+    email: 'Электронная почта',
+    notifications: 'Уведомления',
+    push: 'Push-уведомления',
+    sms: 'SMS',
+  },
+}
 
 const meta = {
   title: 'Components/M3Checkbox',
@@ -18,7 +36,7 @@ const meta = {
     disabled: false,
   },
 
-  render: (args: M3CheckboxProps<boolean>) => ({
+  render: (args: M3CheckboxProps<boolean>, { globals }) => ({
     components: {
       M3Checkbox,
     },
@@ -26,6 +44,7 @@ const meta = {
     setup: () => ({
       id: useId('m3-checkbox'),
       args,
+      label: localize(globals.locale, messages).choice,
       model: ref(false),
     }),
 
@@ -37,7 +56,7 @@ const meta = {
               v-bind="args"
           />
 
-          <label :for="id">Choice</label>
+          <label :for="id">{{ label }}</label>
       </div>
     `,
   }),
@@ -54,28 +73,32 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const NestedSelection: Story = {
-  render: () => ({
+  render: (_args, { globals }) => ({
     components: {
       CheckboxList,
     },
 
-    template: `
-      <CheckboxList
-          :options="[{
-              label: 'Notifications',
-              value: 'notifications',
-              subordinates: [{
-                  label: 'Email',
-                  value: 'email',
-              }, {
-                  label: 'Push',
-                  value: 'push',
-              }, {
-                  label: 'SMS',
-                  value: 'sms',
-              }],
-          }]"
-      />
-    `,
+    setup: () => {
+      const text = localize(globals.locale, messages)
+
+      return {
+        options: [{
+          label: text.notifications,
+          value: 'notifications',
+          subordinates: [{
+            label: text.email,
+            value: 'email',
+          }, {
+            label: text.push,
+            value: 'push',
+          }, {
+            label: text.sms,
+            value: 'sms',
+          }],
+        }],
+      }
+    },
+
+    template: '<CheckboxList :options="options" />',
   }),
 }

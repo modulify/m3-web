@@ -6,8 +6,23 @@ import { M3Chip } from '@/components/chip'
 import { M3Icon } from '@/components/icon'
 
 import ChipShowcase from '../examples/chip/ChipShowcase.vue'
+import { localize, resolveStorybookLocale } from '../i18n'
 
-const renderStandard = (args: Record<string, unknown>) => ({
+const messages = {
+  'en-US': {
+    input: 'Project Alpha',
+    standard: 'Remind later',
+  },
+  'ru-RU': {
+    input: 'Проект Альфа',
+    standard: 'Напомнить позже',
+  },
+}
+
+const renderStandard = (
+  args: Record<string, unknown>,
+  { globals }: { globals: Record<string, unknown> }
+) => ({
   components: {
     M3Chip,
     M3Icon,
@@ -15,29 +30,50 @@ const renderStandard = (args: Record<string, unknown>) => ({
 
   setup: () => {
     const selected = ref(Boolean(args.selected))
+    const locale = resolveStorybookLocale(globals.locale)
 
     watch(() => args.selected, value => selected.value = Boolean(value), { immediate: true })
 
     return {
       args,
+      locale,
       selected,
+      text: localize(locale, messages),
     }
   },
 
   template: `
-    <M3Chip
-        v-bind="args"
-        :selected="selected"
-        @update:selected="selected = $event"
-    >
-        <M3Icon
-            v-if="args.variant === 'assist' || args.variant === 'suggestion'"
-            :name="args.variant === 'assist' ? 'schedule' : 'lightbulb'"
-        />
+    <div :lang="locale">
+        <M3Chip
+            v-bind="args"
+            :selected="selected"
+            @update:selected="selected = $event"
+        >
+            <M3Icon
+                v-if="args.variant === 'assist' || args.variant === 'suggestion'"
+                :name="args.variant === 'assist' ? 'schedule' : 'lightbulb'"
+            />
   
-        {{ args.variant === 'input' ? 'Project Alpha' : 'Remind later' }}
-    </M3Chip>
+            {{ args.variant === 'input' ? text.input : text.standard }}
+        </M3Chip>
+    </div>
   `,
+})
+
+const renderShowcase = (
+  mode: 'filters' | 'inputs' | 'matrix',
+  locale: unknown
+) => ({
+  components: {
+    ChipShowcase,
+  },
+
+  setup: () => ({
+    locale: resolveStorybookLocale(locale),
+    mode,
+  }),
+
+  template: '<ChipShowcase :locale="locale" :mode="mode" />',
 })
 
 const meta = {
@@ -67,31 +103,13 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const VariantMatrix: Story = {
-  render: () => ({
-    components: {
-      ChipShowcase,
-    },
-
-    template: '<ChipShowcase mode="matrix" />',
-  }),
+  render: (_args, { globals }) => renderShowcase('matrix', globals.locale),
 }
 
 export const FilterSet: Story = {
-  render: () => ({
-    components: {
-      ChipShowcase,
-    },
-
-    template: '<ChipShowcase mode="filters" />',
-  }),
+  render: (_args, { globals }) => renderShowcase('filters', globals.locale),
 }
 
 export const InputTokens: Story = {
-  render: () => ({
-    components: {
-      ChipShowcase,
-    },
-
-    template: '<ChipShowcase mode="inputs" />',
-  }),
+  render: (_args, { globals }) => renderShowcase('inputs', globals.locale),
 }

@@ -8,6 +8,13 @@ import { M3Icon } from '@/components/icon'
 
 import * as values from '@/components/fab-button/values'
 
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': { edit: 'Edit', newTask: 'New task' },
+  'ru-RU': { edit: 'Редактировать', newTask: 'Новая задача' },
+}
+
 const meta: Meta<typeof M3FabButton> = {
   title: 'Components/M3FabButton',
 
@@ -35,8 +42,8 @@ const meta: Meta<typeof M3FabButton> = {
     disabled: false,
   },
 
-  render: (args) => (
-    <M3FabButton aria-label="Edit" {...args}>
+  render: (args, { globals }) => (
+    <M3FabButton aria-label={localize(globals.locale, messages).edit} {...args}>
       <M3Icon name="edit" />
     </M3FabButton>
   ),
@@ -53,15 +60,16 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const Extended: Story = {
-  render: (args) => (
+  render: (args, { globals }) => (
     <M3FabButton {...args}>
-      <M3Icon name="edit" aria-hidden="true" /> Edit
+      <M3Icon name="edit" aria-hidden="true" /> {localize(globals.locale, messages).edit}
     </M3FabButton>
   ),
 }
 
 export const VariantMatrix: Story = {
-  render: () => {
+  render: (_args, { globals }) => {
+    const text = localize(globals.locale, messages)
     const stack = {
       display: 'grid',
       gap: '16px',
@@ -87,7 +95,7 @@ export const VariantMatrix: Story = {
         <div style={row}>
           {values.variants.map(variant => (
             <M3FabButton key={variant} variant={variant}>
-              <M3Icon name="edit" /> New task
+              <M3Icon name="edit" /> {text.newTask}
             </M3FabButton>
           ))}
         </div>

@@ -8,6 +8,24 @@ import { M3Checkbox } from '@/components/checkbox'
 import { useId } from '@/hooks'
 
 import CheckboxList from '../examples/checkbox/CheckboxList'
+import { localize } from '../i18n'
+
+const messages = {
+  'en-US': {
+    choice: 'Choice',
+    email: 'Email',
+    notifications: 'Notifications',
+    push: 'Push',
+    sms: 'SMS',
+  },
+  'ru-RU': {
+    choice: 'Выбор',
+    email: 'Электронная почта',
+    notifications: 'Уведомления',
+    push: 'Push-уведомления',
+    sms: 'SMS',
+  },
+}
 
 const meta = {
   title: 'Components/M3Checkbox',
@@ -39,9 +57,10 @@ const meta = {
     model: _model,
     onChange: _onChange,
     ...args
-  }) => {
+  }, { globals }) => {
     const id = useId(null, 'm3-checkbox')
     const [model, setModel] = useState(false)
+    const text = localize(globals.locale, messages)
 
     return (
       <div className="flex-row">
@@ -52,7 +71,7 @@ const meta = {
           onChange={setModel}
         />
 
-        <label htmlFor={id}>Choice</label>
+        <label htmlFor={id}>{text.choice}</label>
       </div>
     )
   },
@@ -69,22 +88,26 @@ type Story = StoryObj<typeof meta>
 export const Standard: Story = {}
 
 export const NestedSelection: Story = {
-  render: () => (
-    <CheckboxList
-      options={[{
-        label: 'Notifications',
-        value: 'notifications',
-        subordinates: [{
-          label: 'Email',
-          value: 'email',
-        }, {
-          label: 'Push',
-          value: 'push',
-        }, {
-          label: 'SMS',
-          value: 'sms',
-        }],
-      }]}
-    />
-  ),
+  render: (_args, { globals }) => {
+    const text = localize(globals.locale, messages)
+
+    return (
+      <CheckboxList
+        options={[{
+          label: text.notifications,
+          value: 'notifications',
+          subordinates: [{
+            label: text.email,
+            value: 'email',
+          }, {
+            label: text.push,
+            value: 'push',
+          }, {
+            label: text.sms,
+            value: 'sms',
+          }],
+        }]}
+      />
+    )
+  },
 }

@@ -6,6 +6,13 @@ import { useState } from 'react'
 import { M3Icon } from '@/components/icon'
 import { M3TextField } from '@/components/text-field'
 
+import { localize } from '../i18n'
+
+const labels = {
+  'en-US': { about: 'About', email: 'Email', password: 'Password field', summary: 'Add a short summary', text: 'Text field' },
+  'ru-RU': { about: 'О себе', email: 'Электронная почта', password: 'Пароль', summary: 'Добавьте краткое описание', text: 'Текстовое поле' },
+}
+
 const M3TextFieldStory = ({
   value: _value,
   onUpdate: _onUpdate,
@@ -53,7 +60,7 @@ const meta = {
     label: 'Text field',
   },
 
-  render: (args) => <M3TextFieldStory {...args} />,
+  render: (args, { globals }) => <M3TextFieldStory {...{ ...args, label: localize(globals.locale, labels).text }} />,
 
   parameters: {
     layout: 'centered',
@@ -78,10 +85,12 @@ export const PasswordField: Story = {
   },
 }
 
+PasswordField.render = (args, { globals }) => <M3TextFieldStory {...{ ...args, label: localize(globals.locale, labels).password }} />
+
 export const OutlinedWithLeadingIcon: Story = {
-  render: (args) => (
+  render: (args, { globals }) => (
     <div style={{ width: '320px' }}>
-      <M3TextFieldStoryWithLeadingIcon {...args} />
+      <M3TextFieldStoryWithLeadingIcon {...{ ...args, label: localize(globals.locale, labels).email }} />
     </div>
   ),
 
@@ -100,6 +109,11 @@ export const MultilineOutlined: Story = {
     multiline: true,
     placeholder: 'Add a short summary',
   },
+}
+
+MultilineOutlined.render = (args, { globals }) => {
+  const text = localize(globals.locale, labels)
+  return <M3TextFieldStory {...{ ...args, label: text.about, placeholder: text.summary }} />
 }
 
 const M3TextFieldStoryWithLeadingIcon = ({

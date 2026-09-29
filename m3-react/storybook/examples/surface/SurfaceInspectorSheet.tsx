@@ -1,6 +1,8 @@
 import type { CSSProperties, FC } from 'react'
 import type { M3SelectOption } from '@/components/select'
 
+import type { StorybookLocale } from '../../i18n'
+
 import { useState } from 'react'
 
 import { M3Button } from '@/components/button'
@@ -10,28 +12,28 @@ import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
 
-type Priority = 'low' | 'normal' | 'high'
+import { localize } from '../../i18n'
 
-const priorityOptions: Array<M3SelectOption<Priority>> = [{
-  label: 'Low',
-  value: 'low',
-}, {
-  label: 'Normal',
-  value: 'normal',
-}, {
-  label: 'High',
-  value: 'high',
-}]
+type Priority = 'low' | 'normal' | 'high'
 
 const panelStyle = {
   padding: '18px',
 } satisfies CSSProperties
 
-const SurfaceInspectorSheet: FC = () => {
+const SurfaceInspectorSheet: FC<{ locale: StorybookLocale }> = ({ locale }) => {
+  const text = localize(locale, {
+    'en-US': { cards: ['Launch plan', 'Dependencies', 'Approvals'], cardDescription: 'Dashboard content keeps its place while the inspector surface is layered above it.', description: 'A supplemental editing surface appears from the edge while the main dashboard stays visible.', dismiss: 'Dismiss', heading: 'Scenario: inspector side sheet', notes: 'Notes', notesValue: 'Coordinate the release notes and schedule rollout approval.', open: 'Open inspector', owner: 'Owner email', priority: 'Priority', priorities: ['Low', 'Normal', 'High'], save: 'Save changes', sheetDescription: 'Use the side sheet for supporting edits that should not replace the dashboard context.', title: 'Release inspector' },
+    'ru-RU': { cards: ['План запуска', 'Зависимости', 'Согласования'], cardDescription: 'Содержимое дашборда остаётся на месте, пока панель инспектора располагается поверх него.', description: 'Вспомогательная панель редактирования появляется с края, а основной дашборд остаётся видимым.', dismiss: 'Закрыть', heading: 'Сценарий: боковая панель инспектора', notes: 'Заметки', notesValue: 'Согласовать заметки к выпуску и запланировать подтверждение запуска.', open: 'Открыть инспектор', owner: 'Почта владельца', priority: 'Приоритет', priorities: ['Низкий', 'Обычный', 'Высокий'], save: 'Сохранить изменения', sheetDescription: 'Используйте боковую панель для вспомогательных правок, которые не должны заменять контекст дашборда.', title: 'Инспектор выпуска' },
+  })
+  const priorityOptions: Array<M3SelectOption<Priority>> = [
+    { label: text.priorities[0], value: 'low' },
+    { label: text.priorities[1], value: 'normal' },
+    { label: text.priorities[2], value: 'high' },
+  ]
   const [opened, setOpened] = useState(false)
   const [owner, setOwner] = useState('owner@example.com')
   const [priority, setPriority] = useState<Priority | null>('normal')
-  const [notes, setNotes] = useState('Coordinate the release notes and schedule rollout approval.')
+  const [notes, setNotes] = useState(text.notesValue)
 
   return (
     <div style={{
@@ -51,17 +53,17 @@ const SurfaceInspectorSheet: FC = () => {
         style={{ ...panelStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
       >
         <div>
-          <strong style={{ display: 'block', marginBottom: '6px' }}>Scenario: inspector side sheet</strong>
-          <span style={{ fontSize: '13px', opacity: 0.82 }}>A supplemental editing surface appears from the edge while the main dashboard stays visible.</span>
+          <strong style={{ display: 'block', marginBottom: '6px' }}>{text.heading}</strong>
+          <span style={{ fontSize: '13px', opacity: 0.82 }}>{text.description}</span>
         </div>
 
         <M3Button appearance="tonal" onClick={() => setOpened(true)}>
-          Open inspector
+          {text.open}
         </M3Button>
       </M3SurfacePanel>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '16px', marginTop: '16px' }}>
-        {['Launch plan', 'Dependencies', 'Approvals'].map(label => (
+        {text.cards.map(label => (
           <M3SurfacePanel
             key={label}
             fillHeight={false}
@@ -72,7 +74,7 @@ const SurfaceInspectorSheet: FC = () => {
             style={panelStyle}
           >
             <h3 style={{ margin: '0 0 8px' }}>{label}</h3>
-            <p style={{ margin: 0 }}>Dashboard content keeps its place while the inspector surface is layered above it.</p>
+            <p style={{ margin: 0 }}>{text.cardDescription}</p>
           </M3SurfacePanel>
         ))}
       </div>
@@ -98,7 +100,7 @@ const SurfaceInspectorSheet: FC = () => {
         onDismiss={() => setOpened(false)}
       >
         <header className="m3-side-sheet__header">
-          <div className="m3-side-sheet__title">Release inspector</div>
+          <div className="m3-side-sheet__title">{text.title}</div>
 
           <div className="m3-side-sheet__affordance">
             <M3IconButton appearance="standard" onClick={() => setOpened(false)}>
@@ -109,19 +111,19 @@ const SurfaceInspectorSheet: FC = () => {
 
         <div className="m3-side-sheet__content">
           <div style={{ display: 'grid', gap: '16px', width: '100%', padding: '0 24px 24px' }}>
-            <p style={{ margin: 0 }}>Use the side sheet for supporting edits that should not replace the dashboard context.</p>
+            <p style={{ margin: 0 }}>{text.sheetDescription}</p>
 
             <div style={{ display: 'grid', gap: '12px' }}>
               <M3TextField
                 value={owner}
-                label="Owner email"
+                label={text.owner}
                 outlined={true}
                 onUpdate={setOwner}
               />
 
               <M3Select<Priority>
                 value={priority}
-                label="Priority"
+                label={text.priority}
                 options={priorityOptions}
                 outlined={true}
                 onUpdate={setPriority}
@@ -129,7 +131,7 @@ const SurfaceInspectorSheet: FC = () => {
 
               <M3TextField
                 value={notes}
-                label="Notes"
+                label={text.notes}
                 outlined={true}
                 multiline={true}
                 onUpdate={setNotes}
@@ -140,11 +142,11 @@ const SurfaceInspectorSheet: FC = () => {
 
         <footer className="m3-side-sheet__footer" style={{ justifyContent: 'flex-end' }}>
           <M3Button appearance="text" onClick={() => setOpened(false)}>
-            Dismiss
+            {text.dismiss}
           </M3Button>
 
           <M3Button appearance="filled" onClick={() => setOpened(false)}>
-            Save changes
+            {text.save}
           </M3Button>
         </footer>
       </M3Surface>

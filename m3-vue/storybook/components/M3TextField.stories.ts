@@ -5,6 +5,13 @@ import { ref } from 'vue'
 import { M3Icon } from '@/components/icon'
 import { M3TextField } from '@/components/text-field'
 
+import { localize } from '../i18n'
+
+const labels = {
+  'en-US': { about: 'About', email: 'Email', password: 'Password field', summary: 'Add a short summary', text: 'Text field' },
+  'ru-RU': { about: 'О себе', email: 'Электронная почта', password: 'Пароль', summary: 'Добавьте краткое описание', text: 'Текстовое поле' },
+}
+
 const meta = {
   title: 'Components/M3TextField',
 
@@ -29,12 +36,15 @@ const meta = {
     type: 'text',
   },
 
-  render: (args: unknown) => ({
+  render: (args: Record<string, unknown>, { globals }) => ({
     components: { M3TextField },
 
     setup () {
       return {
-        args,
+        args: {
+          ...args,
+          label: localize(globals.locale, labels).text,
+        },
         value: ref(''),
       }
     },
@@ -70,6 +80,12 @@ export const PasswordField: Story = {
   },
 }
 
+PasswordField.render = (args: Record<string, unknown>, { globals }) => ({
+  components: { M3TextField },
+  setup: () => ({ args: { ...args, label: localize(globals.locale, labels).password }, value: ref('') }),
+  template: '<M3TextField v-model:value="value" v-bind="args" />',
+})
+
 export const OutlinedWithLeadingIcon: Story = {
   args: {
     type: 'email',
@@ -78,7 +94,7 @@ export const OutlinedWithLeadingIcon: Story = {
     placeholder: 'name@example.com',
   },
 
-  render: (args: unknown) => ({
+  render: (args: Record<string, unknown>, { globals }) => ({
     components: {
       M3Icon,
       M3TextField,
@@ -86,7 +102,7 @@ export const OutlinedWithLeadingIcon: Story = {
 
     setup () {
       return {
-        args,
+        args: { ...args, label: localize(globals.locale, labels).email },
         value: ref(''),
       }
     },
@@ -111,4 +127,13 @@ export const MultilineOutlined: Story = {
     multiline: true,
     placeholder: 'Add a short summary',
   },
+}
+
+MultilineOutlined.render = (args: Record<string, unknown>, { globals }) => {
+  const text = localize(globals.locale, labels)
+  return {
+    components: { M3TextField },
+    setup: () => ({ args: { ...args, label: text.about, placeholder: text.summary }, value: ref('') }),
+    template: '<M3TextField v-model:value="value" v-bind="args" />',
+  }
 }
