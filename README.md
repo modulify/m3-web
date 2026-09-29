@@ -1,5 +1,7 @@
 # m3-web
 
+<p align="center"><img src="./m3-foundation/assets/logo.png" alt="Modulify M3 logo" width="128" /></p>
+
 [![codecov](https://codecov.io/gh/modulify/m3-web/graph/badge.svg?branch=main)](https://codecov.io/gh/modulify/m3-web)
 
 `m3-web` is a monorepo for a Material Design 3 component library for web.
@@ -10,9 +12,13 @@ The project builds a shared UI foundation for two platforms (`React` and `Vue`) 
 
 ## Repository Contents
 
-- `m3-foundation`: shared styles, tokens, and base utilities.
-- `m3-react`: React component implementation.
-- `m3-vue`: Vue component implementation.
+| Workspace | Logo | Contents |
+| --- | --- | --- |
+| `m3-foundation` | <img src="./m3-foundation/assets/logo.png" alt="M3 foundation logo" width="48" /> | Shared styles, tokens, and base utilities. |
+| `m3-react` | <img src="./m3-react/assets/logo.png" alt="M3 React logo" width="48" /> | React component implementation. |
+| `m3-vue` | <img src="./m3-vue/assets/logo.png" alt="M3 Vue logo" width="48" /> | Vue component implementation. |
+
+Each workspace includes its logo as an SVG and a PNG in `assets/`.
 
 ## Participating
 

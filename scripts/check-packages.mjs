@@ -59,6 +59,24 @@ const assertDeclarationsArePublishable = (directory, packedPaths) => {
   }
 }
 
+const assertLogoAssetsArePublishable = (directory, packedPaths) => {
+  for (const path of ['assets/logo.svg', 'assets/logo.png']) {
+    if (!packedPaths.includes(path)) {
+      throw new Error(`${directory} must publish ${path}`)
+    }
+  }
+
+  const svg = readFileSync(resolve(root, directory, 'assets/logo.svg'), 'utf8')
+
+  if (/<image\b|data:image\//.test(svg)) {
+    throw new Error(`${directory}/assets/logo.svg must contain vector shapes only`)
+  }
+
+  if (directory !== 'm3-foundation' && !packedPaths.includes('assets/NOTICE.md')) {
+    throw new Error(`${directory} must publish its artwork attribution`)
+  }
+}
+
 const assertPreservedRuntimeModules = (directory, manifest, packedPaths) => {
   const publicRuntimePaths = new Set(collectExportTargets(manifest.exports)
     .filter(target => /\.(?:cjs|js|mjs)$/.test(target))
@@ -169,6 +187,7 @@ try {
 
     assertPublishedExportsExist(directory, manifest, packedPaths)
     assertDeclarationsArePublishable(directory, packedPaths)
+    assertLogoAssetsArePublishable(directory, packedPaths)
 
     if (directory === 'm3-foundation') {
       if (!packedPaths.some(path => path.startsWith('types/'))) {
@@ -426,6 +445,11 @@ import {
 } from '@modulify/m3-vue/composables'
 
 await access(fileURLToPath(import.meta.resolve('@modulify/m3-foundation/styles.css')))
+for (const name of ['m3-foundation', 'm3-react', 'm3-vue']) {
+  for (const extension of ['svg', 'png']) {
+    await access(fileURLToPath(import.meta.resolve('@modulify/' + name + '/assets/logo.' + extension)))
+  }
+}
 
 let foundationRootResolutionError
 
@@ -583,7 +607,7 @@ if (
   run('node', ['consumer.mjs'], temporaryDirectory)
   run('node', ['consumer.cjs'], temporaryDirectory)
 
-  console.log('Packed package external dependencies, ESM, CommonJS, CSS, and TypeScript contracts are valid.')
+  console.log('Packed package external dependencies, ESM, CommonJS, CSS, logo assets, and TypeScript contracts are valid.')
 } finally {
   rmSync(temporaryDirectory, {
     force: true,
