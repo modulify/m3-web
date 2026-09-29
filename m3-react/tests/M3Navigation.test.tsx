@@ -3,6 +3,7 @@ import type { M3NavigationExposed } from '@/components/navigation'
 import { act } from '@testing-library/react'
 import { createRef } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { useState } from 'react'
 
 import {
   M3Navigation,
@@ -11,6 +12,30 @@ import {
 } from '@/components/navigation'
 
 describe('m3-react/navigation', () => {
+  test('opens from a trigger without relying on legacy DOM lookup', () => {
+    const Navigation = () => {
+      const [expanded, setExpanded] = useState(false)
+
+      return (
+        <M3Navigation
+          appearance="drawer"
+          expanded={expanded}
+          onToggle={setExpanded}
+        >
+          <M3Navigation.Top>
+            <button type="button" onClick={() => setExpanded(true)}>Open menu</button>
+          </M3Navigation.Top>
+        </M3Navigation>
+      )
+    }
+
+    render(<Navigation />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }))
+
+    expect(document.body.querySelector('.m3-navigation_modal')).not.toBeNull()
+  })
+
   test('exposes expand and collapse requests', () => {
     const ref = createRef<M3NavigationExposed>()
     const onToggle = vi.fn()
