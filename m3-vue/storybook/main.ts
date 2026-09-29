@@ -51,6 +51,13 @@ const config: StorybookConfig = {
   ],
   viteFinal: async (config) => {
     config.server ??= {}
+    config.server.watch = {
+      ...(config.server.watch ?? {}),
+      awaitWriteFinish: {
+        stabilityThreshold: 100,
+        pollInterval: 10,
+      },
+    }
 
     if (config.server.allowedHosts !== true) {
       config.server.allowedHosts = [
