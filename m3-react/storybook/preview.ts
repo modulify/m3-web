@@ -126,12 +126,6 @@ export default {
   parameters: {
     a11y: {
       test: 'error',
-      options: {
-        runOnly: {
-          type: 'tag',
-          values: ['wcag2a', 'wcag2aa'],
-        },
-      },
     },
     backgrounds: { disable: true },
     docs: docsParameter,
