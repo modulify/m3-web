@@ -2,7 +2,7 @@
 
 <p align="center"><img src="./m3-foundation/assets/logo.png" alt="Modulify M3 logo" width="128" /></p>
 
-[![codecov](https://codecov.io/gh/modulify/m3-web/graph/badge.svg?branch=main)](https://codecov.io/gh/modulify/m3-web)
+[![codecov](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.codecov.io%2Fapi%2Fv2%2Fgithub%2Fmodulify%2Frepos%2Fm3-web%2F&query=%24.totals.coverage&suffix=%25&label=codecov&logo=codecov&color=F01F7A)](https://codecov.io/gh/modulify/m3-web)
 [![Storybook](https://img.shields.io/badge/Storybook-live-FF4785?logo=storybook&logoColor=white)](https://modulify.github.io/m3-web/)
 
 `m3-web` is a monorepo for a Material Design 3 component library for web.
