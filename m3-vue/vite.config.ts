@@ -1,5 +1,7 @@
 import type { LibraryFormats } from 'vite'
 
+import { extname } from 'node:path'
+import { globSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 import { defineConfig } from 'vite'
@@ -15,11 +17,23 @@ const externalPackages = [
   ...Object.keys(peerDependencies),
 ]
 
-const entries = {
-  components: resolve(import.meta.dirname, 'src/components/index.ts'),
-  composables: resolve(import.meta.dirname, 'src/composables/index.ts'),
-  index: resolve(import.meta.dirname, 'src/index.ts'),
+const sourceRoot = resolve(import.meta.dirname, 'src')
+
+const layerEntryNames: Record<string, string> = {
+  'components/index.ts': 'components',
+  'composables/index.ts': 'composables',
+  'index.ts': 'index',
 }
+
+const entries = Object.fromEntries([
+  ...globSync('**/*.ts', { cwd: sourceRoot }),
+  ...globSync('**/*.vue', { cwd: sourceRoot }),
+]
+  .sort()
+  .map(file => [
+    layerEntryNames[file] ?? file.slice(0, -extname(file).length),
+    resolve(sourceRoot, file),
+  ]))
 
 const isExternal = (id: string): boolean => (
   externalPackages.some(packageName => (
@@ -60,18 +74,25 @@ export default defineConfig(() => mergeConfig(common, {
   build: {
     lib: {
       name: '@modulify/m3-vue',
-      formats: ['es', 'cjs'],
       entry: entries,
       fileName: getFileName,
     },
     minify: false,
     rolldownOptions: {
       external: isExternal,
-      output: {
-        assetFileNames: 'm3-vue[extname]',
-        preserveModules: true,
-        preserveModulesRoot: resolve(import.meta.dirname, 'src'),
-      },
+      preserveEntrySignatures: 'allow-extension',
+      output: [
+        {
+          assetFileNames: 'm3-vue[extname]',
+          chunkFileNames: '[name].mjs',
+          format: 'es',
+        },
+        {
+          assetFileNames: 'm3-vue[extname]',
+          chunkFileNames: '[name].cjs',
+          format: 'cjs',
+        },
+      ],
     },
   },
 }))

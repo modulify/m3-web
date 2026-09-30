@@ -100,6 +100,18 @@ const assertPreservedRuntimeModules = (directory, manifest, packedPaths) => {
   }
 }
 
+const assertNoVueVirtualRuntimeModules = (packedPaths) => {
+  const virtualRuntimePaths = packedPaths.filter(path => (
+    path.startsWith('dist/')
+    && /\.(?:cjs|js|mjs)$/.test(path)
+    && (path.includes('?') || path.includes('&') || path.includes('.vue.'))
+  ))
+
+  if (virtualRuntimePaths.length > 0) {
+    throw new Error(`m3-vue contains Vue virtual runtime modules: ${virtualRuntimePaths.join(', ')}`)
+  }
+}
+
 const assertRootDelegatesToLayers = (directory, manifest) => {
   for (const condition of ['import', 'require']) {
     const runtimePath = manifest.exports['.'][condition]
@@ -220,6 +232,10 @@ try {
       assertPreservedRuntimeModules(directory, manifest, packedPaths)
       assertRootDelegatesToLayers(directory, manifest)
       assertFoundationIsExternal(directory, packedPaths)
+
+      if (directory === 'm3-vue') {
+        assertNoVueVirtualRuntimeModules(packedPaths)
+      }
     }
 
     return [manifest.name, tarball]
