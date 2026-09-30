@@ -40,12 +40,14 @@ ${puzzlePaths.join('\n')}
 </g>`
 const sharedMark = `${ring}\n${puzzleMark}`
 
+const createCornerCutout = (id, center, radius) => `<mask id="${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="600" height="600">
+  <rect width="600" height="600" fill="white"/>
+  <circle cx="${center}" cy="${center}" r="${radius}" fill="black"/>
+</mask>`
+
 const cutoutCenter = 438
 const cutoutRadius = 105
-const cornerCutout = `<mask id="corner-cutout" maskUnits="userSpaceOnUse" x="0" y="0" width="600" height="600">
-  <rect width="600" height="600" fill="white"/>
-  <circle cx="${cutoutCenter}" cy="${cutoutCenter}" r="${cutoutRadius}" fill="black"/>
-</mask>`
+const cornerCutout = createCornerCutout('corner-cutout', cutoutCenter, cutoutRadius)
 const cutoutMark = `<g mask="url(#corner-cutout)">
 ${sharedMark}
 </g>
@@ -64,6 +66,28 @@ const vueVerticalOffset = 226.69 * vueScale * 0.125
 const vueTransform = `translate(${cutoutCenter} ${cutoutCenter + vueVerticalOffset}) scale(${vueScale}) translate(-130.88 -113.35)`
 const vueMark = `${cutoutMark}
 <g transform="${vueTransform}">
+  <path d="${vueOuterPath}" fill="#41B883"/>
+  <path d="${vueInnerPath}" fill="#34495E"/>
+</g>`
+
+const faviconCutoutCenter = 420
+const faviconCutout = createCornerCutout('favicon-corner-cutout', faviconCutoutCenter, 155)
+const faviconCutoutMark = `<g mask="url(#favicon-corner-cutout)">
+${sharedMark}
+</g>
+`
+const reactFaviconMark = `${faviconCutoutMark}<g transform="translate(${faviconCutoutCenter} ${faviconCutoutCenter})" fill="none" stroke="#61DAFB" stroke-width="15">
+  <ellipse rx="105" ry="40"/>
+  <ellipse rx="105" ry="40" transform="rotate(60)"/>
+  <ellipse rx="105" ry="40" transform="rotate(120)"/>
+  <circle r="14" fill="#61DAFB" stroke="none"/>
+</g>`
+
+const faviconVueScale = 0.82
+const faviconVueVerticalOffset = 226.69 * faviconVueScale * 0.125
+const faviconVueTransform = `translate(${faviconCutoutCenter} ${faviconCutoutCenter + faviconVueVerticalOffset}) scale(${faviconVueScale}) translate(-130.88 -113.35)`
+const vueFaviconMark = `${faviconCutoutMark}
+<g transform="${faviconVueTransform}">
   <path d="${vueOuterPath}" fill="#41B883"/>
   <path d="${vueInnerPath}" fill="#34495E"/>
 </g>`
@@ -102,6 +126,32 @@ ${markup}
 
   await mkdir(destination, { recursive: true })
   await writeFile(resolve(destination, 'logo.svg'), svg)
+}
+
+const storybookFavicons = [
+  {
+    directory: 'react',
+    markup: reactFaviconMark,
+  },
+  {
+    directory: 'vue',
+    markup: vueFaviconMark,
+  },
+]
+
+for (const { directory, markup } of storybookFavicons) {
+  const destination = resolve(root, 'storybook/assets', directory)
+  const favicon = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="50 50 500 500">
+  <defs>
+${puzzleGradients.trim()}
+${faviconCutout}
+  </defs>
+${markup}
+</svg>
+`
+
+  await mkdir(destination, { recursive: true })
+  await writeFile(resolve(destination, 'favicon.svg'), favicon)
 }
 
 const browser = await chromium.launch({ headless: true })

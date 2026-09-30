@@ -40,6 +40,7 @@ const config: StorybookConfig = {
     sidebarOnboardingChecklist: false,
   },
   staticDirs: [
+    { from: '../../storybook/assets', to: '/storybook-assets' },
     { from: './assets', to: '/assets' },
     { from: '../assets', to: '/brand' },
   ],
