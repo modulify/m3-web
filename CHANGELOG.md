@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.2
+
+### Features
+
+* Framework Storybook favicons were added ([fa0c04b](https://github.com/modulify/m3-web/commit/fa0c04bf7f29ffa967d77b7a5a2699156b95139e))
+
+### Bug Fixes
+
+* **m3-vue:** Radio docs rendering was fixed ([f6ef7c1](https://github.com/modulify/m3-web/commit/f6ef7c109126a1bf7ae29e907cd174ed2db91fba))
+
 ## 0.1.1
 
 ### Features
