@@ -33,6 +33,11 @@ const STORYBOOK_ERROR_PATTERNS = [
   'Expected component `',
 ]
 
+const STORYBOOK_LOCALES = [
+  'en-US',
+  'ru-RU',
+]
+
 const toErrorMessage = value => value instanceof Error ? value.message : String(value)
 
 const normalizeBaseUrl = value => `${value.replace(/\/+$/, '')}/`
@@ -124,7 +129,7 @@ const loadTarget = async target => {
   }
 }
 
-const inspectDocsEntry = async (browser, baseUrl, entry) => {
+const inspectDocsEntry = async (browser, baseUrl, entry, locale) => {
   const page = await browser.newPage()
   const runtimeErrors = []
 
@@ -144,6 +149,7 @@ const inspectDocsEntry = async (browser, baseUrl, entry) => {
     const url = new URL('iframe.html', baseUrl)
     url.searchParams.set('id', entry.id)
     url.searchParams.set('viewMode', 'docs')
+    url.searchParams.set('globals', `locale:${locale}`)
 
     const response = await page.goto(url.href, {
       waitUntil: 'domcontentloaded',
@@ -201,10 +207,17 @@ try {
       console.log(`Checking ${docsEntries.length} docs entries in ${target}`)
 
       for (const entry of docsEntries) {
-        const errors = await inspectDocsEntry(browser, loadedTarget.baseUrl, entry)
+        for (const locale of STORYBOOK_LOCALES) {
+          const errors = await inspectDocsEntry(
+            browser,
+            loadedTarget.baseUrl,
+            entry,
+            locale
+          )
 
-        if (errors.length > 0) {
-          failures.push(`${target}:${entry.id}\n  ${errors.join('\n  ')}`)
+          if (errors.length > 0) {
+            failures.push(`${target}:${entry.id}:${locale}\n  ${errors.join('\n  ')}`)
+          }
         }
       }
     } finally {
