@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{Q as t,s as n}from"./iframe-CwdcI8lG.js";function r(){let e=null,n=()=>{e!==null&&(cancelAnimationFrame(e),e=null)};return t(n),{request:t=>{n();let r=!1,i=requestAnimationFrame(n=>{r=!0,e=null,t(n)});r||(e=i)},cancel:n}}function i(){return(i=e((()=>{n()})))()}export{r as n,i as t};
