@@ -7,10 +7,20 @@ import SurfaceExperimentHarness from './fixtures/SurfaceExperimentHarness.vue'
 
 const RUN_ID = 'EXP-2026-02-23-surface-e2e-002h-001'
 const SCREENSHOT_DIR = `../../drafts/experiment/runs/${RUN_ID}/screenshots/e2e`
+const MAX_EASING_RATE_FACTOR = 5
+const MAX_BACKTRACK_PX = 6
+const SIDE_SHEET_TRANSITION_MS = 420
+const CARD_TRANSITION_MS = 320
 
 type HarnessMount = {
   app: App;
   mountPoint: HTMLDivElement;
+}
+
+type RectPoint = {
+  timestamp: number;
+  width: number;
+  height: number;
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
@@ -47,12 +57,13 @@ const mountHarness = (): HarnessMount => {
 }
 
 const collectRectSeries = async (element: HTMLElement, durationMs = 380, stepMs = 32) => {
-  const points: Array<{ width: number, height: number }> = []
+  const points: RectPoint[] = []
   const startedAt = performance.now()
 
   while (performance.now() - startedAt < durationMs) {
     const rect = element.getBoundingClientRect()
     points.push({
+      timestamp: performance.now(),
       width: rect.width,
       height: rect.height,
     })
@@ -63,6 +74,25 @@ const collectRectSeries = async (element: HTMLElement, durationMs = 380, stepMs 
 }
 
 const deltas = (values: number[]) => values.slice(1).map((value, index) => value - values[index])
+
+const expectSmoothGrowth = (
+  points: RectPoint[],
+  dimension: 'width' | 'height',
+  totalChange: number,
+  transitionMs: number
+) => {
+  const values = points.map(point => point[dimension])
+  const valueDeltas = deltas(values)
+  const rates = valueDeltas.map((delta, index) => (
+    delta / (points[index + 1].timestamp - points[index].timestamp)
+  ))
+
+  expect(valueDeltas.some(delta => delta > 0)).toBe(true)
+  expect(Math.min(...valueDeltas)).toBeGreaterThan(-MAX_BACKTRACK_PX)
+  expect(Math.max(...rates)).toBeLessThan(
+    Math.abs(totalChange) / transitionMs * MAX_EASING_RATE_FACTOR
+  )
+}
 
 const click = (selector: string) => {
   const element = document.querySelector(selector) as HTMLButtonElement | null
@@ -121,8 +151,7 @@ describe('m3-vue/surface e2e', () => {
     click('[data-testid="sheet-to-modal"]')
     await nextTick()
 
-    const widthSeries = (await collectRectSeries(content, 560, 32)).map(point => point.width)
-    const widthDeltas = deltas(widthSeries)
+    const rectSeries = await collectRectSeries(content, 560, 32)
 
     await waitFor(() => {
       const modalSheet = document.querySelector('[data-testid="orchestrated-side-sheet"][role="dialog"]')
@@ -134,13 +163,10 @@ describe('m3-vue/surface e2e', () => {
     await delay(180)
     await capture('scenario-a-side-sheet-mid')
 
-    expect(widthDeltas.some(delta => delta > 0)).toBe(true)
-    expect(Math.min(...widthDeltas)).toBeGreaterThan(-6)
-    expect(Math.max(...widthDeltas)).toBeLessThan(120)
-
     await delay(220)
     const afterRect = content.getBoundingClientRect()
     expect(afterRect.width).toBeGreaterThan(beforeRect.width + 220)
+    expectSmoothGrowth(rectSeries, 'width', afterRect.width - beforeRect.width, SIDE_SHEET_TRANSITION_MS)
 
     await capture('scenario-a-side-sheet-after')
   })
@@ -167,25 +193,14 @@ describe('m3-vue/surface e2e', () => {
     await capture('scenario-b-card-mid')
 
     const rectSeries = await collectRectSeries(overlayWrap, 380, 32)
-    const widths = rectSeries.map(point => point.width)
-    const heights = rectSeries.map(point => point.height)
-
-    const widthDeltas = deltas(widths)
-    const heightDeltas = deltas(heights)
-
-    expect(widthDeltas.some(delta => delta > 0)).toBe(true)
-    expect(heightDeltas.some(delta => delta > 0)).toBe(true)
-    expect(Math.min(...widthDeltas)).toBeGreaterThan(-6)
-    expect(Math.min(...heightDeltas)).toBeGreaterThan(-6)
-    expect(Math.max(...widthDeltas)).toBeLessThan(140)
-    expect(Math.max(...heightDeltas)).toBeLessThan(140)
-
     await delay(240)
     const afterRect = overlayWrap.getBoundingClientRect()
     const canvasRect = canvas.getBoundingClientRect()
 
     expect(afterRect.width).toBeGreaterThan(canvasRect.width - 44)
     expect(afterRect.height).toBeGreaterThan(canvasRect.height - 44)
+    expectSmoothGrowth(rectSeries, 'width', afterRect.width - beforeRect.width, CARD_TRANSITION_MS)
+    expectSmoothGrowth(rectSeries, 'height', afterRect.height - beforeRect.height, CARD_TRANSITION_MS)
 
     const morphedSurface = document.querySelector('[data-testid="orchestrated-card-surface"]') as HTMLElement
     expect(morphedSurface.classList.contains('m3-surface')).toBe(true)
