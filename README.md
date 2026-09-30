@@ -3,6 +3,7 @@
 <p align="center"><img src="./m3-foundation/assets/logo.png" alt="Modulify M3 logo" width="128" /></p>
 
 [![codecov](https://codecov.io/gh/modulify/m3-web/graph/badge.svg?branch=main)](https://codecov.io/gh/modulify/m3-web)
+[![Storybook](https://img.shields.io/badge/Storybook-live-FF4785?logo=storybook&logoColor=white)](https://modulify.github.io/m3-web/)
 
 `m3-web` is a monorepo for a Material Design 3 component library for web.
 The project builds a shared UI foundation for two platforms (`React` and `Vue`) with a focus on:
