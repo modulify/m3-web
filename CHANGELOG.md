@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.1.1
+
+### Features
+
+* Workspace logos were added ([c40738d](https://github.com/modulify/m3-web/commit/c40738dd1e4a74fa9857642bdf566785715623df))
+* Storybook localization was added ([7ea6eb3](https://github.com/modulify/m3-web/commit/7ea6eb3c3844ac7985886351a6a21f20b3099a82))
+
+### Bug Fixes
+
+* **m3-vue:** Stray chip label was removed ([8ed1684](https://github.com/modulify/m3-web/commit/8ed16840ff854b4a37936cf0b7ab1144ecbabfbb))
+* Storybook version labels were corrected ([98f9d2c](https://github.com/modulify/m3-web/commit/98f9d2c1b37a9fc30feb89386f17e1f19670675e))
+* Storybook inline code styles were corrected ([3b6fe67](https://github.com/modulify/m3-web/commit/3b6fe674832a17f52aa96ac5967b2d5ba3df30ff))
+* Accessibility contracts were corrected ([1faed98](https://github.com/modulify/m3-web/commit/1faed983db974ff74414eeb46eea6c174350916a))
+* **m3-react:** Navigation transition was made React 19 compatible ([e6ae150](https://github.com/modulify/m3-web/commit/e6ae1503b756666323cde609dcebb3f527a11c5f))
+* Storybook HMR writes were stabilized ([17af2e9](https://github.com/modulify/m3-web/commit/17af2e922e660457ee5e560673eac7a0176a537c))
+* **m3-foundation:** Scroll rail state was synchronized ([b8c4d18](https://github.com/modulify/m3-web/commit/b8c4d18ba44f00dd29efae368e39a52c2aea74ae))
+
 ## 0.1.0
 
 ### ⚠ BREAKING CHANGE* Removed obsolete CSS color variables
