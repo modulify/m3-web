@@ -87,10 +87,13 @@ jobs:
         run: yarn test:packages
 
       - name: Build React Storybook
-        run: yarn workspace @modulify/m3-react storybook:build --test --quiet
+        run: yarn workspace @modulify/m3-react storybook:build --quiet
 
       - name: Build Vue Storybook
-        run: yarn workspace @modulify/m3-vue storybook:build --test --quiet
+        run: yarn workspace @modulify/m3-vue storybook:build --quiet
+
+      - name: Check Storybook docs at runtime
+        run: yarn test:storybook-docs
 
       - name: Configure Git
         run: |

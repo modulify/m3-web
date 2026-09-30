@@ -24,6 +24,7 @@
     "test:e2e:coverage:react": "yarn workspace @modulify/m3-react test:e2e:coverage --coverage.reportsDirectory=../coverage/e2e-react",
     "test:e2e:coverage:vue": "yarn workspace @modulify/m3-vue test:e2e:coverage --coverage.reportsDirectory=../coverage/e2e-vue",
     "test:e2e:coverage": "yarn test:e2e:coverage:react && yarn test:e2e:coverage:vue",
+    "test:storybook-docs": "node scripts/check-storybook-docs.mjs",
     "test:smoke": "yarn workspace @modulify/m3-react test:smoke && yarn workspace @modulify/m3-vue test:smoke",
     "test:packages": "node scripts/check-packages.mjs",
     "test": "vitest run",
