@@ -1,0 +1,39 @@
+import{n as e,r as t}from"./rolldown-runtime-DkW27tQK.js";import{C as n,D as r,N as i,O as a,S as o,V as s,Y as c,a as l,at as u,b as d,et as f,g as p,i as m,rt as h,s as g,st as _,x as v,y,z as b}from"./iframe-hIq0EEjR.js";import{n as ee,t as x}from"./ripple-vFigACnV.js";import{n as S,r as te}from"./predicates-Fn35WtiC.js";import{n as C,t as w}from"./id-Nxxsyh-m.js";import{n as T,t as E}from"./surface-CnZ08RFu.js";import{n as ne,t as re}from"./_plugin-vue_export-helper-BqBa3wPr.js";function ie(e,t){return b(),n(`svg`,D,[...t[0]||=[d(`path`,{fill:`currentColor`,d:`m10 16.4-4-4L7.4 11l2.6 2.6L16.6 7 18 8.4z`},null,-1)]])}var D,ae;function oe(){return(oe=e((()=>{g(),D={xmlns:`http://www.w3.org/2000/svg`,width:`24`,height:`24`,fill:`none`},ae={render:ie}})))()}function se(e,t){return b(),n(`svg`,O,[...t[0]||=[d(`path`,{fill:`currentColor`,d:`M7 13v-2h10v2z`},null,-1)]])}var O,k;function A(){return(A=e((()=>{g(),O={xmlns:`http://www.w3.org/2000/svg`,width:`24`,height:`24`,fill:`none`},k={render:se}})))()}var j,M,N;function P(){return(P=e((()=>{g(),S(),x(),w(),oe(),A(),j=[`id`,`name`,`aria-checked`,`aria-invalid`,`value`,`checked`,`disabled`],M={"aria-hidden":`true`,class:`m3-checkbox__checkmark`},N=a({__name:`M3Checkbox`,props:{id:{},name:{},model:{},value:{},indeterminate:{type:Boolean},invalid:{type:Boolean},disabled:{type:Boolean},trueValue:{},falseValue:{},equalsFn:{type:Function}},emits:[`change`,`update:model`],setup(e,{expose:t,emit:a}){let s=e,c=a,l=f(null),u=C(`m3-checkbox`,y(()=>s.id)),p=y(()=>s.name??u.value),m=f(null),g=y(()=>s.trueValue===void 0||s.trueValue),_=y(()=>s.falseValue!==void 0&&s.falseValue);t({get el(){return l.value},click:()=>m.value?.click(),focus:()=>m.value?.focus(),blur:()=>m.value?.blur()});let x=(e,t)=>s.equalsFn?.call(null,e,t)??e===t,S=(e,t)=>e.some(e=>x(e,t)),w=y(()=>te(s.model)?S(s.model,s.value):x(s.model,g.value)),T=e=>te(s.model)?e?S(s.model,s.value)?s.model:[...s.model,s.value]:[...s.model].filter(e=>!x(e,s.value)):e?g.value:_.value,E=e=>{let t=T(e.target.checked);c(`change`,t),c(`update:model`,t)};return(t,a)=>(b(),n(`span`,i({ref_key:`root`,ref:l,class:{"m3-checkbox":!0,"m3-checkbox_checked":w.value,"m3-checkbox_indeterminate":e.indeterminate,"m3-checkbox_invalid":e.invalid,"m3-checkbox_disabled":e.disabled}},t.$attrs),[r(h(ee),{owner:f(l.value)},null,8,[`owner`]),d(`input`,{id:h(u),ref_key:`_input`,ref:m,name:p.value,"aria-checked":w.value?`true`:`false`,"aria-invalid":e.invalid?`true`:`false`,value:e.value,checked:w.value,disabled:e.disabled,type:`checkbox`,class:`m3-checkbox__input`,onChange:E},null,40,j),a[0]||=d(`span`,{"aria-hidden":`true`,class:`m3-checkbox__state`},null,-1),d(`span`,M,[e.indeterminate?(b(),v(h(k),{key:0})):w.value?(b(),v(h(ae),{key:1})):o(``,!0)])],16))}})})))()}var F;function I(){return(I=e((()=>{P(),F=N,N.__docgenInfo=Object.assign({displayName:N.name??N.__name},{exportName:`default`,displayName:`M3Checkbox`,description:``,tags:{},props:[{name:`id`,required:!1,type:{name:`string`}},{name:`name`,required:!1,type:{name:`string`}},{name:`model`,required:!1,type:{name:`Model`}},{name:`value`,required:!1,type:{name:`Value`}},{name:`indeterminate`,required:!1,type:{name:`boolean`}},{name:`invalid`,required:!1,type:{name:`boolean`}},{name:`disabled`,required:!1,type:{name:`boolean`}},{name:`trueValue`,required:!1,type:{name:`Model`}},{name:`falseValue`,required:!1,type:{name:`Model`}},{name:`equalsFn`,required:!1,type:{name:`TSFunctionType`}}],events:[{name:`change`,type:{names:[`Model`]},description:`Переключение чекбокса`},{name:`update:model`,type:{names:[`Model`]},description:`Изменение значения модели`}],sourceFiles:[`/home/runner/work/m3-web/m3-web/m3-vue/src/components/checkbox/M3Checkbox.vue`]})})))()}function L(){return(L=e((()=>{I()})))()}var R,z,B,V,H;function U(){return(U=e((()=>{g(),L(),E(),w(),R=[`for`],z={style:{"padding-left":`32px`}},B=[`for`],V=[`for`],H=a({__name:`CheckboxList`,props:{options:{type:Array,default:()=>[]}},setup(e){let t=C(`m3-checkbox-example`),i=f([]),a=e=>e.subordinates?.every(e=>i.value.includes(e.value))??!1,o=e=>e.subordinates?.some(e=>i.value.includes(e.value))===!0&&!a(e),l=(e,t)=>{let n=(e.subordinates??[]).map(e=>e.value);t?i.value.push(...n.filter(e=>!i.value.includes(e))):i.value=i.value.filter(e=>!n.includes(e))};return(f,m)=>(b(),v(h(T),{class:u(f.$style.panel),"fill-width":!1,"fill-height":!1,rounding:16,elevation:0,variant:`surface-container`},{default:c(()=>[(b(!0),n(p,null,s(e.options,(e,c)=>(b(),n(p,{key:h(t)+`-option-`+c},[e.subordinates?(b(),n(p,{key:0},[d(`div`,{class:u(f.$style.line)},[r(h(F),{id:h(t)+`-option-`+c,model:a(e),indeterminate:o(e),onChange:t=>l(e,t)},null,8,[`id`,`model`,`indeterminate`,`onChange`]),d(`label`,{for:h(t)+`-option-`+c},_(e.label),9,R)],2),d(`div`,z,[(b(!0),n(p,null,s(e.subordinates,(e,a)=>(b(),n(`div`,{key:h(t)+`-option-`+c+`-`+a,class:u(f.$style.line)},[r(h(F),{id:h(t)+`-option-`+c+`-`+a,model:i.value,"onUpdate:model":m[0]||=e=>i.value=e,value:e.value},null,8,[`id`,`model`,`value`]),d(`label`,{for:h(t)+`-option-`+c+`-`+a},_(e.label),9,B)],2))),128))])],64)):(b(),n(`div`,{key:1,class:u(f.$style.line)},[r(h(F),{id:h(t)+`-option-`+c,model:i.value,"onUpdate:model":m[1]||=e=>i.value=e,value:e.value},null,8,[`id`,`model`,`value`]),d(`label`,{for:h(t)+`-option-`+c},_(e.label),9,V)],2))],64))),128))]),_:1},8,[`class`]))}})})))()}var W,G,K;function q(){return(q=e((()=>{W=`_panel_ulmsc_2`,G=`_line_ulmsc_7`,K={panel:W,line:G}})))()}var J,Y;function X(){return(X=e((()=>{U(),q(),ne(),J={$style:K},Y=re(H,[[`__cssModules`,J]]),H.__docgenInfo=Object.assign({displayName:H.name??H.__name},{exportName:`default`,displayName:`CheckboxList`,description:``,tags:{},props:[{name:`options`,type:{name:`OptionWithSubordinates[]`},defaultValue:{func:!0,value:`() => []`}}],sourceFiles:[`/home/runner/work/m3-web/m3-web/m3-vue/storybook/examples/checkbox/CheckboxList.vue`]})})))()}var ce=t({NestedSelection:()=>$,Standard:()=>Q,__namedExportsOrder:()=>ue,default:()=>le}),Z,le,Q,$,ue;function de(){return(de=e((()=>{g(),L(),w(),X(),m(),Z={"en-US":{choice:`Choice`,email:`Email`,notifications:`Notifications`,push:`Push`,sms:`SMS`},"ru-RU":{choice:`Выбор`,email:`Электронная почта`,notifications:`Уведомления`,push:`Push-уведомления`,sms:`SMS`}},le={title:`Components/M3Checkbox`,component:F,args:{disabled:!1},render:(e,{globals:t})=>({components:{M3Checkbox:F},setup:()=>({id:C(`m3-checkbox`),args:e,label:l(t.locale,Z).choice,model:f(!1)}),template:`
+      <div class="flex-row">
+          <M3Checkbox
+              :id="id"
+              v-model:model="model"
+              v-bind="args"
+          />
+
+          <label :for="id">{{ label }}</label>
+      </div>
+    `}),parameters:{layout:`centered`}},Q={},$={render:(e,{globals:t})=>({components:{CheckboxList:Y},setup:()=>{let e=l(t.locale,Z);return{options:[{label:e.notifications,value:`notifications`,subordinates:[{label:e.email,value:`email`},{label:e.push,value:`push`},{label:e.sms,value:`sms`}]}]}},template:`<CheckboxList :options="options" />`})},ue=[`Standard`,`NestedSelection`],Q.parameters={...Q.parameters,docs:{...Q.parameters?.docs,source:{originalSource:`{}`,...Q.parameters?.docs?.source}}},$.parameters={...$.parameters,docs:{...$.parameters?.docs,source:{originalSource:`{
+  render: (_args, {
+    globals
+  }) => ({
+    components: {
+      CheckboxList
+    },
+    setup: () => {
+      const text = localize(globals.locale, messages);
+      return {
+        options: [{
+          label: text.notifications,
+          value: 'notifications',
+          subordinates: [{
+            label: text.email,
+            value: 'email'
+          }, {
+            label: text.push,
+            value: 'push'
+          }, {
+            label: text.sms,
+            value: 'sms'
+          }]
+        }]
+      };
+    },
+    template: '<CheckboxList :options="options" />'
+  })
+}`,...$.parameters?.docs?.source}}}})))()}export{X as i,de as n,Y as r,ce as t};

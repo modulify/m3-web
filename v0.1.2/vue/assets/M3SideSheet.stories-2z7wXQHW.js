@@ -1,0 +1,29 @@
+import{n as e,r as t}from"./rolldown-runtime-DkW27tQK.js";import{C as n,D as r,G as i,H as a,J as o,N as ee,O as s,P as c,S as l,Y as u,a as d,at as te,b as f,et as p,i as m,q as h,rt as g,s as _,x as ne,y as v,z as y}from"./iframe-hIq0EEjR.js";import{n as re,t as b}from"./animation-Ch36syEA.js";import{n as x,t as S}from"./button-B4RKEk47.js";import{i as C,t as w}from"./icon-Bv7HR_mB.js";import{d as T,n as E,o as D,s as O,t as k}from"./predicates-Fn35WtiC.js";import{n as ie,t as A}from"./id-Nxxsyh-m.js";import{n as j,t as M}from"./icon-button-CH1XkFcG.js";import{c as N,n as ae,o as oe,t as P}from"./surface-CnZ08RFu.js";import{n as F,t as I}from"./timing-CAZ8WCCI.js";import{n as se,t as ce}from"./scroll-rail-B_sdz833.js";var L,R,z,B,V,H,U;function W(){return(W=e((()=>{_(),O(),E(),N(),M(),ce(),P(),b(),A(),I(),L={key:0,class:`m3-side-sheet__affordance`},R=[`id`],z={class:`m3-side-sheet__affordance`},B={class:`m3-side-sheet__content`},V={key:0,class:`m3-side-sheet__footer`},H=1e3,U=s({__name:`M3SideSheet`,props:{id:{type:String,validator:k(T,D),default:void 0},shown:{type:Boolean,default:!1},docked:{type:Boolean,default:!1}},emits:[`update:shown`],setup(e,{emit:t}){let s=oe[`extra-long2`],d=e,m=t,_=i(),b=h(),x=ie(`m3-side-sheet`,v(()=>d.id)),S=p(d.shown),C=p(`idle`),w=re(),T=F(()=>C.value=`idle`,s),E=F(()=>{S.value=!1,C.value=`idle`},s),D=v(()=>({"m3-side-sheet":!0,"m3-side-sheet_docked":d.docked,"m3-transition-slide-right-enter":C.value===`pre-enter`||C.value===`entering`,"m3-transition-slide-right-enter-active":C.value===`entering`,"m3-transition-slide-right-leave-active":C.value===`pre-exit`||C.value===`exiting`,"m3-transition-slide-right-leave-to":C.value===`exiting`})),O=v(()=>({"m3-side-sheet__header":!0,"m3-side-sheet__header_has-leading-affordance":`affordance`in b})),k=v(()=>!d.docked&&d.shown&&C.value!==`pre-enter`),A=v(()=>({..._,...`aria-label`in _||`aria-labelledby`in _?{}:{"aria-labelledby":x.value+`-title`},...`aria-modal`in _||!d.docked?{}:{"aria-modal":`false`}}));function M(){w.cancel(),T.cancel(),E.cancel()}async function N(){M(),S.value=!0,C.value=`pre-enter`,await c(),w.request(()=>{C.value=`entering`,T.schedule()})}async function P(){if(!S.value){C.value=`idle`;return}M(),C.value=`pre-exit`,await c(),w.request(()=>{C.value=`exiting`,E.schedule()})}return o(()=>d.shown,e=>{e?N():P()},{immediate:!0}),(t,i)=>S.value?(y(),ne(g(ae),ee({key:0,id:g(x),shown:!0,"scrim-shown":k.value,"fill-width":!1,"fill-height":!0,width:e.docked?256:void 0,"min-width":e.docked?256:320,"max-width":e.docked?256:400,"z-index":H,"rounding-top-left":e.docked?0:16,"rounding-bottom-left":e.docked?0:16,"rounding-top-right":0,"rounding-bottom-right":0,elevation:0,class:D.value,role:`dialog`,tag:`div`,mode:`modal`,anchor:`end`,overflow:`hidden`,variant:`surface-container-low`},A.value,{"onUpdate:shown":i[1]||=e=>m(`update:shown`,e)}),{default:u(()=>[f(`header`,{class:te(O.value)},[`affordance`in t.$slots?(y(),n(`div`,L,[a(t.$slots,`affordance`)])):l(``,!0),f(`div`,{id:g(x)+`-title`,class:`m3-side-sheet__title`},[a(t.$slots,`title`)],8,R),f(`div`,z,[r(g(j),{onClick:i[0]||=e=>m(`update:shown`,!1)},{default:u(()=>[a(t.$slots,`close-icon`)]),_:3})])],2),f(`div`,B,[r(g(se)),a(t.$slots,`default`)]),`footer`in t.$slots?(y(),n(`footer`,V,[a(t.$slots,`footer`)])):l(``,!0)]),_:3},16,[`id`,`scrim-shown`,`width`,`min-width`,`max-width`,`rounding-top-left`,`rounding-bottom-left`,`class`])):l(``,!0)}})})))()}var G;function K(){return(K=e((()=>{W(),G=U,U.__docgenInfo=Object.assign({displayName:U.name??U.__name},{exportName:`default`,displayName:`M3SideSheet`,description:``,tags:{},props:[{name:`id`,type:{name:`string`},defaultValue:{func:!1,value:`undefined`}},{name:`shown`,type:{name:`boolean`},defaultValue:{func:!1,value:`false`}},{name:`docked`,type:{name:`boolean`},defaultValue:{func:!1,value:`false`}}],events:[{name:`update:shown`}],slots:[{name:`affordance`},{name:`title`},{name:`close-icon`},{name:`default`},{name:`footer`}],sourceFiles:[`/home/runner/work/m3-web/m3-web/m3-vue/src/components/side-sheet/M3SideSheet.vue`]})})))()}function q(){return(q=e((()=>{K()})))()}var le=t({Docked:()=>Z,Standard:()=>X,__namedExportsOrder:()=>Q,default:()=>Y}),J,Y,X,Z,Q;function $(){return($=e((()=>{_(),S(),w(),q(),m(),J=`
+    <M3Button @click="shown = true">
+        {{ text.open }}
+    </M3Button>
+
+    <M3SideSheet
+        v-bind="args"
+        :shown="shown"
+        @update:shown="shown = $event"
+    >
+        <template #title>
+            {{ text.filter }}
+        </template>
+
+        <template #close-icon>
+            <M3Icon name="close" />
+        </template>
+
+        <p class="m-4">{{ text.body }}</p>
+
+        <template #footer>
+            <div class="p-4">{{ text.footer }}</div>
+        </template>
+    </M3SideSheet>
+`,Y={title:`Components/M3SideSheet`,component:G,argTypes:{shown:{control:!1}},args:{docked:!1},render:(e,{globals:t})=>({components:{M3Button:x,M3Icon:C,M3SideSheet:G},setup(){return{args:e,shown:p(!1),text:d(t.locale,{"en-US":{body:`Choose filters and apply changes.`,filter:`Filters`,footer:`Footer actions`,open:`Open side sheet`},"ru-RU":{body:`Выберите фильтры и примените изменения.`,filter:`Фильтры`,footer:`Действия`,open:`Открыть боковую панель`}})}},template:J}),parameters:{layout:`centered`}},X={},Z={args:{docked:!0}},Q=[`Standard`,`Docked`],X.parameters={...X.parameters,docs:{...X.parameters?.docs,source:{originalSource:`{}`,...X.parameters?.docs?.source}}},Z.parameters={...Z.parameters,docs:{...Z.parameters?.docs,source:{originalSource:`{
+  args: {
+    docked: true
+  }
+}`,...Z.parameters?.docs?.source}}}})))()}export{$ as n,le as t};
