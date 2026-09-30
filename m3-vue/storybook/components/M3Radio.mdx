@@ -1,4 +1,4 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
+import { Meta } from '@storybook/addon-docs/blocks'
 import Inline from './Inline'
 import RadioGroup from '../examples/radio/RadioGroup.vue'
 import { Localized } from '../i18n'
@@ -100,21 +100,18 @@ If the choice is simply on/off, prefer a switch or checkbox. Radios communicate 
 
 ### Группа предпочтений
 
-<Unstyled className="m3-panel m3-panel_elevated-1">
-  <RadioGroup
-    legend="Тема оформления"
-    options={[{
-      label: 'Системная',
-      value: 'system',
-    }, {
-      label: 'Светлая',
-      value: 'light',
-    }, {
-      label: 'Тёмная',
-      value: 'dark',
-    }]}
-  />
-</Unstyled>
+<div className="m3-panel m3-panel_elevated-1">
+  <Inline is={RadioGroup} legend="Тема оформления" options={[{
+    label: 'Системная',
+    value: 'system',
+  }, {
+    label: 'Светлая',
+    value: 'light',
+  }, {
+    label: 'Тёмная',
+    value: 'dark',
+  }]} />
+</div>
 
 ## Примеры в Storybook
 
