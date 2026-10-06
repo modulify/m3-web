@@ -1,0 +1,221 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as M3SnackbarStories from './M3Snackbar.stories'
+
+<Meta of={M3SnackbarStories} />
+
+<Localized locale="en-US">
+
+# Snackbars
+
+Snackbars report an app process without interrupting the current task. They sit near the bottom of the content, may offer one action, and never stack. Use a dialog when a decision must block the page. See the [Material 3 guidelines](https://m3.material.io/components/snackbar/guidelines).
+
+## Guide
+
+### Choose a message and lifetime
+
+Keep the message short, ideally one line and at most two at compact widths. A long action can move below the message. Do not put icons, inline links, formatted text, or several actions in a snackbar. An `Undo` action is useful for reversible operations; a core feature must also be available elsewhere.
+
+`M3SnackbarHost.show()` displays one request and queues later calls. Actionless requests last 6000 ms by default; requests with an action remain until the action or dismissal. Pass `duration: null` for an actionless persistent message; the host then shows a close button by default. `duration` has no effect when an action is supplied. `replace()` immediately replaces the visible request when its information is outdated, while preserving the waiting queue.
+
+On the web, a timed snackbar must not be the only place to find its information. Update an inline label or nearby status as well, as in [Inline Feedback](?path=/story/components-m3snackbar--inline-feedback), or keep an actionable snackbar visible until interaction. [Material accessibility](https://m3.material.io/components/snackbar/accessibility) explains this requirement.
+
+### Place it with the page
+
+Put the host inside the content region. It uses fixed bottom placement, leaving space for navigation when the ancestor has `m3-has-navigation` or a specific navigation class. The [navigation and FAB story](?path=/story/components-m3snackbar--with-navigation-and-fab) sets `--m3-snackbar-inset-block-end` so the snackbar stays above the FAB. Keep it clear of navigation, focused controls, and important actions. For other layouts, override `--m3-snackbar-inset-inline-start` and `--m3-snackbar-inset-block-end` on the host.
+
+The default placement is leading aligned, 16 px from the viewport edges in compact layouts and 24 px in wider layouts. Its width is bounded by available viewport space and 560 px. Material specifies the placement principle, not these exact package offsets. The container uses inverse color roles, `body-medium` text, `label-large` action text, extra-small corners, elevation 3, and 48/68 px minimum heights. Material's prose says 64 dp for compact two-line messages while its token says 68 dp; this implementation follows the token and allows content to grow.
+
+### Keyboard and announcement
+
+The host keeps a persistent polite live region and never moves focus just because a message appears. `Alt+G` moves focus to the active snackbar action or close button; document this shortcut in the app's keyboard help. `Tab` follows the ordinary page order, and `Escape` dismisses the snackbar when its button is focused. Closing a focused snackbar returns focus to its trigger, or the next focusable element captured when it opened if the trigger is gone. Hovering or focusing pauses an actionless timer.
+
+For a standalone visual `M3Snackbar`, supply `onAction` and `onDismiss`. Render its single action as `M3Snackbar.Action` containing an `M3Button` with `appearance="text"`. The action render function receives `buttonProps`, which connects the button to the message and activation event. The close control is an `M3IconButton` described by the message. Use the host for real notifications, sequencing, and reliable live updates. Translate `closeLabel` for the app locale.
+
+### Avoid
+
+- Do not stack messages, position one over navigation or a FAB, or animate the FAB together with the snackbar.
+- Do not auto-dismiss a snackbar with an action.
+- Do not rely on a timed snackbar as the sole confirmation or only way to undo a change.
+- Do not add filled or elevated action buttons, decorative icons, or links inside the supporting text.
+
+## API
+
+| Export | Purpose |
+| --- | --- |
+| `M3Snackbar` | Visual message, optional action and close control. |
+| `M3SnackbarHost` | One visible snackbar, FIFO queue, timer, announcement, keyboard access, and focus return. |
+| `SnackbarOptions`, `SnackbarResult`, `SnackbarHostMethods`, `SnackbarActionContext` | Public types; action renderers are framework-specific. |
+
+| `M3Snackbar` prop | Default | Effect |
+| --- | --- | --- |
+| `message` | required | Supporting text. |
+| `closable`, `closeLabel` | `false`, `Close notification` | Adds an accessible icon button; `onDismiss` receives click or focused `Escape`. |
+| `layout` | `inline` | `inline` keeps the action beside the message; `stacked` places it below. |
+| `onAction`, `onDismiss` | unset | Called by the action context and the close button, respectively. |
+| `announce` | `true` | Applies polite status semantics to standalone text. Host sets it to `false` and uses its own persistent live region. |
+| `leaving` | `false` | Applies exit motion; ordinarily controlled by the host. |
+| HTML attributes | — | Forwarded to the snackbar root. |
+
+`M3Snackbar.Action` is the single named child slot. It accepts an action render function `(context) => ReactNode` or static content. The context contains `message`, `messageId`, `performAction()`, `dismiss()`, and `buttonProps`. Spread `buttonProps` onto an `M3Button` to apply text appearance, inverse colors, `aria-describedby`, and action activation. Host HTML attributes are forwarded to its root.
+
+| `M3SnackbarHost` prop | Effect |
+| --- | --- |
+| `renderAction` | Default action render function for requests; an option's `action` overrides it, while `action: null` suppresses it. |
+| HTML attributes | Forwarded to the host root. |
+
+`M3SnackbarHost` exposes the methods below through its React ref.
+
+| `M3SnackbarHost` method | Result |
+| --- | --- |
+| `show(options)` | Enqueues and resolves to a `SnackbarResult`. |
+| `replace(options)` | Replaces the current snackbar immediately; its promise resolves to `replaced`. Waiting requests stay queued. |
+| `dismiss()` | Closes the active snackbar with result `dismiss`. |
+| `clear()` | Closes the active and waiting requests with result `cleared`. |
+| `focus()` | Focuses the active action or close button. |
+
+`SnackbarOptions` contains `message`, optional `action` renderer (or `null`), `closeLabel`, `layout`, `closable`, and `duration` in milliseconds or `null` for an actionless persistent message. `SnackbarResult` is `action`, `dismiss`, `timeout`, `replaced`, `cleared`, or `disposed`. A host unmount resolves all outstanding requests as `disposed`. A duration must be finite and non-negative. `closable` defaults to true for an action or persistent message and can be overridden.
+
+### React example
+
+```tsx
+const host = useRef<SnackbarHostMethods>(null)
+const [saved, setSaved] = useState(false)
+
+const save = () => {
+  setSaved(true) // Accessible inline feedback survives the snackbar timeout.
+  void host.current?.show({ message: 'Changes saved', duration: 6000 })
+}
+
+return <>
+  <M3Button onClick={save}>{saved ? 'Saved' : 'Save'}</M3Button>
+  <M3SnackbarHost ref={host} />
+</>
+```
+
+For Undo, pass a render function and reverse the operation only when the result is `action`:
+
+```tsx
+const result = await host.current?.show({
+  message: 'Email archived',
+  action: ({ buttonProps }) => <M3Button {...buttonProps}>Undo</M3Button>,
+})
+if (result === 'action') undoArchive()
+```
+
+## Sources
+
+- [Material 3 overview](https://m3.material.io/components/snackbar/overview)
+- [Material 3 specs](https://m3.material.io/components/snackbar/specs)
+- [Material 3 guidelines](https://m3.material.io/components/snackbar/guidelines)
+- [Material 3 accessibility](https://m3.material.io/components/snackbar/accessibility)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Snackbar
+
+Snackbar коротко сообщает о процессе приложения и не прерывает текущую задачу. Он появляется снизу над содержимым, может предлагать одно действие и не складывается с другими сообщениями. Для решения, блокирующего страницу, нужен диалог. См. [рекомендации Material 3](https://m3.material.io/components/snackbar/guidelines).
+
+## Руководство
+
+### Текст и время показа
+
+Пишите коротко: лучше одна строка, на компактном экране допускаются две. Длинное действие можно перенести под текст. Не помещайте внутрь snackbar декоративные иконки, ссылки, форматированный текст или несколько действий. `Отменить` подходит для обратимого изменения; важная функция должна быть доступна и вне сообщения.
+
+`M3SnackbarHost.show()` показывает один запрос, следующие ждут в очереди. Сообщение без действия по умолчанию видно 6000 мс; с действием остаётся до взаимодействия или закрытия. `duration: null` делает сообщение без действия постоянным, и host по умолчанию добавляет закрытие. При наличии действия таймер не применяется. `replace()` немедленно заменяет устаревшее видимое сообщение, сохраняя очередь.
+
+На вебе временный snackbar не должен быть единственным источником информации. Обновляйте подпись или статус рядом с вызвавшим действием, как в истории [Inline Feedback](?path=/story/components-m3snackbar--inline-feedback), либо оставляйте actionable snackbar до взаимодействия. См. [доступность Material](https://m3.material.io/components/snackbar/accessibility).
+
+### Размещение
+
+Расположите host внутри области содержимого. Он фиксируется снизу и учитывает навигацию, если у предка есть `m3-has-navigation` или её явный вариант. В [истории с навигацией и FAB](?path=/story/components-m3snackbar--with-navigation-and-fab) через `--m3-snackbar-inset-block-end` сообщение поднято над FAB. Оно не должно перекрывать навигацию, фокус и важные действия. Для своего layout можно задать `--m3-snackbar-inset-inline-start` и `--m3-snackbar-inset-block-end`.
+
+По умолчанию отступ от начального и нижнего края — 16 px на компактном экране и 24 px на широком; ширина ограничена доступной областью и 560 px. Это значения библиотеки: Material указывает принцип размещения, но не эти точные отступы. Контейнер использует инверсные цвета, типографику `body-medium`/`label-large`, малый радиус, подъём 3 и минимальную высоту 48/68 px. В тексте Material для двух строк сказано 64 dp, а в токене — 68 dp; здесь взят токен, при увеличении текста высота растёт.
+
+### Клавиатура и объявление
+
+Host держит постоянно смонтированную polite live region и не переводит фокус при появлении. `Alt+G` переводит фокус на действие или закрытие активного snackbar; укажите сочетание в справке приложения. `Tab` следует обычному порядку страницы, `Escape` закрывает snackbar, когда его кнопка в фокусе. После закрытия фокус возвращается к инициатору, а если его нет — к следующему элементу, запомненному при открытии. Наведение и фокус приостанавливают таймер временного сообщения.
+
+Для отдельно используемого `M3Snackbar` передайте `onAction` и `onDismiss`. Единственное действие передайте через `M3Snackbar.Action` как `M3Button` с `appearance="text"`. Функция отрисовки получает `buttonProps`, связывающие кнопку с сообщением и обработчиком действия. Закрытие рисуется через `M3IconButton` и связано с сообщением. Для настоящих уведомлений, очереди и надёжного объявления используйте host. Переводите `closeLabel` для языка приложения.
+
+### Чего избегать
+
+- Не складывайте snackbar в стопку, не закрывайте им навигацию или FAB и не анимируйте FAB одновременно с сообщением.
+- Не скрывайте по таймеру snackbar с действием.
+- Не оставляйте временное сообщение единственным подтверждением или способом отмены.
+- Не используйте заполненное/приподнятое действие, декоративные иконки и ссылки внутри текста.
+
+## API
+
+| Экспорт | Назначение |
+| --- | --- |
+| `M3Snackbar` | Визуальное сообщение, необязательное действие и закрытие. |
+| `M3SnackbarHost` | Одно видимое сообщение, очередь FIFO, таймер, объявление, клавиатура и возврат фокуса. |
+| `SnackbarOptions`, `SnackbarResult`, `SnackbarHostMethods`, `SnackbarActionContext` | Публичные типы; функция отрисовки действия зависит от фреймворка. |
+
+| Свойство `M3Snackbar` | По умолчанию | Действие |
+| --- | --- | --- |
+| `message` | обязательно | Текст сообщения. |
+| `closable`, `closeLabel` | `false`, `Close notification` | Добавляют доступную кнопку с иконкой; `onDismiss` вызывается по нажатию или `Escape` в фокусе. |
+| `layout` | `inline` | `inline` оставляет действие рядом с текстом, `stacked` размещает его под текстом. |
+| `onAction`, `onDismiss` | не заданы | Вызываются через контекст действия и кнопку закрытия соответственно. |
+| `announce` | `true` | В отдельном компоненте добавляет polite status; host ставит `false` и использует свою постоянную live region. |
+| `leaving` | `false` | Анимация ухода; обычно ей управляет host. |
+| HTML-атрибуты | — | Передаются корню snackbar. |
+
+`M3Snackbar.Action` — единственный именованный дочерний слот. Он принимает функцию `(context) => ReactNode` или готовый контент. В контексте есть `message`, `messageId`, `performAction()`, `dismiss()` и `buttonProps`. Передайте `buttonProps` в `M3Button`, чтобы применить текстовый вид, инверсные цвета, `aria-describedby` и обработчик действия. HTML-атрибуты host передаются его корню.
+
+| Свойство `M3SnackbarHost` | Действие |
+| --- | --- |
+| `renderAction` | Функция действия по умолчанию; `action` отдельного запроса переопределяет её, `action: null` отключает. |
+| HTML-атрибуты | Передаются корню host. |
+
+Перечисленные ниже методы `M3SnackbarHost` доступны через React ref.
+
+| Метод `M3SnackbarHost` | Результат |
+| --- | --- |
+| `show(options)` | Ставит запрос в очередь и возвращает `Promise<SnackbarResult>`. |
+| `replace(options)` | Сразу заменяет видимое сообщение; старый запрос получает `replaced`, очередь сохраняется. |
+| `dismiss()` | Закрывает активное сообщение с результатом `dismiss`. |
+| `clear()` | Закрывает активный и ожидающие запросы с результатом `cleared`. |
+| `focus()` | Переводит фокус на действие или закрытие. |
+
+`SnackbarOptions` содержит `message`, необязательную функцию отрисовки `action` (или `null`), `closeLabel`, `layout`, `closable` и `duration` в миллисекундах или `null` для постоянного сообщения без действия. `SnackbarResult`: `action`, `dismiss`, `timeout`, `replaced`, `cleared`, `disposed`. При удалении host все ожидающие запросы получают `disposed`. Длительность должна быть конечным неотрицательным числом. `closable` по умолчанию включается при действии или постоянном сообщении.
+
+### Пример для React
+
+```tsx
+const host = useRef<SnackbarHostMethods>(null)
+const [saved, setSaved] = useState(false)
+
+const save = () => {
+  setSaved(true) // Информация останется доступной после исчезновения snackbar.
+  void host.current?.show({ message: 'Изменения сохранены', duration: 6000 })
+}
+
+return <>
+  <M3Button onClick={save}>{saved ? 'Сохранено' : 'Сохранить'}</M3Button>
+  <M3SnackbarHost ref={host} />
+</>
+```
+
+Для отмены передайте функцию отрисовки и откатывайте изменение только при результате `action`:
+
+```tsx
+const result = await host.current?.show({
+  message: 'Письмо архивировано',
+  action: ({ buttonProps }) => <M3Button {...buttonProps}>Отменить</M3Button>,
+})
+if (result === 'action') undoArchive()
+```
+
+## Источники
+
+- [Обзор Material 3](https://m3.material.io/components/snackbar/overview)
+- [Спецификация Material 3](https://m3.material.io/components/snackbar/specs)
+- [Рекомендации Material 3](https://m3.material.io/components/snackbar/guidelines)
+- [Доступность Material 3](https://m3.material.io/components/snackbar/accessibility)
+
+</Localized>

@@ -22,15 +22,19 @@ export default <Arguments extends unknown[]>(callback: (...args: Arguments) => v
     timerRef.current = null
   }, [])
 
-  const schedule = useCallback((...args: Arguments) => {
+  const scheduleWithDelay = useCallback((nextDelay: number, ...args: Arguments) => {
     cancel()
     timerRef.current = setTimeout(() => {
       timerRef.current = null
       callbackRef.current(...args)
-    }, delayRef.current)
+    }, nextDelay)
   }, [cancel])
+
+  const schedule = useCallback((...args: Arguments) => {
+    scheduleWithDelay(delayRef.current, ...args)
+  }, [scheduleWithDelay])
 
   useEffect(() => cancel, [cancel])
 
-  return useMemo(() => ({ schedule, cancel }), [schedule, cancel])
+  return useMemo(() => ({ schedule, scheduleWithDelay, cancel }), [schedule, scheduleWithDelay, cancel])
 }
