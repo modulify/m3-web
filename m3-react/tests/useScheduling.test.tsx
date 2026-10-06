@@ -89,4 +89,16 @@ describe('m3-react/scheduling hooks', () => {
     vi.advanceTimersByTime(1000)
     expect(callback).not.toHaveBeenCalled()
   })
+
+  test('timeout can use a delay chosen for one schedule', () => {
+    vi.useFakeTimers()
+    const callback = vi.fn<(value: string) => void>()
+    const { result } = renderHook(() => useTimeout(callback, 1000))
+
+    result.current.scheduleWithDelay(250, 'override')
+    vi.advanceTimersByTime(249)
+    expect(callback).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(1)
+    expect(callback).toHaveBeenCalledWith('override')
+  })
 })
