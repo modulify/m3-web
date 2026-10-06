@@ -11,6 +11,7 @@ const entries = {
   'lib/dom': resolve(__dirname, 'lib/dom.ts'),
   'lib/motion': resolve(__dirname, 'lib/motion/index.ts'),
   'lib/motion/values': resolve(__dirname, 'lib/motion/values.ts'),
+  'lib/modal': resolve(__dirname, 'lib/modal.ts'),
   'lib/platform': resolve(__dirname, 'lib/platform.ts'),
   'lib/popper': resolve(__dirname, 'lib/popper/index.ts'),
   'lib/popper/Listener': resolve(__dirname, 'lib/popper/Listener.ts'),

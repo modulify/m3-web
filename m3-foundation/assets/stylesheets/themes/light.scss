@@ -29,7 +29,8 @@ $m3-sys-light-on-surface-variant: $m3-palette-neutral-variant-30;
 $m3-sys-light-inverse-surface:    $m3-palette-neutral-20;
 $m3-sys-light-inverse-on-surface: $m3-palette-neutral-95;
 
-// Secondary container
+// Secondary
+$m3-sys-light-secondary:              $m3-palette-secondary-40;
 $m3-sys-light-secondary-container:    $m3-palette-secondary-90;
 $m3-sys-light-on-secondary-container: $m3-palette-secondary-10;
 
@@ -77,7 +78,8 @@ $m3-elevation-light-5: 0 4px 4px 0   rgba(0, 0, 0, 0.30), 0 8px 12px 6px rgba(0,
   --m3-sys-inverse-surface: #{$m3-sys-light-inverse-surface};
   --m3-sys-inverse-on-surface: #{$m3-sys-light-inverse-on-surface};
 
-  /** Secondary container */
+  /** Secondary */
+  --m3-sys-secondary: #{$m3-sys-light-secondary};
   --m3-sys-secondary-container: #{$m3-sys-light-secondary-container};
   --m3-sys-on-secondary-container: #{$m3-sys-light-on-secondary-container};
   --m3-state-layers-on-secondary-container-opacity-008: #{rgba($m3-sys-light-on-secondary-container, 0.08)};
