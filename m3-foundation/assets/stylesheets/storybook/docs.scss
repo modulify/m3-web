@@ -1,0 +1,33 @@
+#storybook-docs .sbdocs-content > table {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--m3-sys-outline-variant);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  background: var(--m3-sys-surface-container-low);
+  color: var(--m3-sys-on-surface);
+
+  thead tr {
+    background: var(--m3-sys-surface-container-high);
+  }
+
+  tbody tr {
+    background: transparent;
+  }
+
+  th,
+  td {
+    padding: 12px 16px;
+    border: 0;
+    border-block-end: 1px solid var(--m3-sys-outline-variant);
+    background: transparent;
+    color: var(--m3-sys-on-surface);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td {
+    border-block-end: 0;
+  }
+}
