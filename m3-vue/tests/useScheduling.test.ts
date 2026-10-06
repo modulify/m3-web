@@ -101,4 +101,16 @@ describe('m3-vue/scheduling composables', () => {
     vi.advanceTimersByTime(1000)
     expect(callback).not.toHaveBeenCalled()
   })
+
+  test('timeout can use a delay chosen for one schedule', () => {
+    vi.useFakeTimers()
+    const callback = vi.fn<(value: string) => void>()
+    const { result } = mountComposable(() => useTimeout(callback, 1000))
+
+    result.scheduleWithDelay(250, 'override')
+    vi.advanceTimersByTime(249)
+    expect(callback).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(1)
+    expect(callback).toHaveBeenCalledWith('override')
+  })
 })
