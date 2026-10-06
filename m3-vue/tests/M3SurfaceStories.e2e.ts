@@ -39,7 +39,7 @@ const mountStory = (component: Component): MountedStory => {
   document.body.append(mountPoint)
 
   const app = createApp({
-    render: () => h(component),
+    render: () => h(component, { locale: 'en-US' }),
   })
 
   app.mount(mountPoint)
@@ -258,42 +258,34 @@ describe('m3-vue/surface stories e2e', () => {
 
   test('reopens always-modal side-sheet with animated entry after close', async () => {
     mounted = mountStory(SurfaceSideSheetAlwaysModal)
-
-    await waitFor(() => {
-      expect(document.querySelector('[data-testid="surface-always-open"]')).not.toBeNull()
-    })
-
-    const openAndSampleEntry = async () => {
-      click('[data-testid="surface-always-open"]')
-      await nextTick()
-
-      await waitFor(() => {
-        expect(document.querySelector('[data-testid="surface-always-panel"]')).not.toBeNull()
-      })
-
-      const rightSeries = await collectSeries(
-        () => toNumber(getComputedStyle(query<HTMLElement>('[data-testid="surface-always-panel"]')).right),
-        380,
-        24
-      )
-
-      const rightDeltas = deltas(rightSeries)
-      const amplitude = Math.max(...rightSeries) - Math.min(...rightSeries)
-
-      expect(amplitude).toBeGreaterThan(40)
-      expect(rightDeltas.some(delta => delta > 0.2)).toBe(true)
+    let entryTransitions = 0
+    let observingEntry = false
+    const onTransitionRun = (event: TransitionEvent) => {
+      if (observingEntry && event.propertyName === 'right' && event.target instanceof HTMLElement && event.target.matches('[data-testid="surface-always-panel"]')) {
+        entryTransitions++
+        observingEntry = false
+      }
     }
+    document.addEventListener('transitionrun', onTransitionRun)
 
-    await openAndSampleEntry()
+    try {
+      const openAndObserveEntry = async (expectedTransitions: number) => {
+        await waitFor(() => expect(query<HTMLButtonElement>('[data-testid="surface-always-open"]').disabled).toBe(false), 2200)
+        observingEntry = true
+        click('[data-testid="surface-always-open"]')
+        await waitFor(() => expect(document.querySelector('[data-testid="surface-always-panel"]')).not.toBeNull(), 2200)
+        await waitFor(() => expect(entryTransitions).toBe(expectedTransitions), 2200)
+        await waitFor(() => expect(query<HTMLButtonElement>('[data-testid="surface-always-close"]').disabled).toBe(false), 2200)
+        await waitFor(() => expect(toNumber(getComputedStyle(query<HTMLElement>('[data-testid="surface-always-panel"]')).right)).toBe(0), 2200)
+      }
 
-    click('[data-testid="surface-always-close"]')
-    await nextTick()
-
-    await waitFor(() => {
-      expect(document.querySelector('[data-testid="surface-always-panel"]')).toBeNull()
-    }, 2200)
-
-    await openAndSampleEntry()
+      await openAndObserveEntry(1)
+      click('[data-testid="surface-always-close"]')
+      await waitFor(() => expect(document.querySelector('[data-testid="surface-always-panel"]')).toBeNull(), 2200)
+      await openAndObserveEntry(2)
+    } finally {
+      document.removeEventListener('transitionrun', onTransitionRun)
+    }
   })
 
   test('closes modal window with fade+slide and keeps animated re-open in side-sheet mode', async () => {

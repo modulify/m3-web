@@ -109,13 +109,15 @@ test('animates from the bar height to the rail height', async () => {
   try {
     const nav = query<HTMLElement>('nav.m3-navigation')
     expect(nav.getBoundingClientRect().height).toBe(64)
+    const transitionProperties = new Set<string>()
+    nav.addEventListener('transitionrun', event => {
+      if (event.target === nav) transitionProperties.add(event.propertyName)
+    })
 
     appearance.value = 'rail'
     await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 80))
-
-    expect(nav.getBoundingClientRect().height).toBeGreaterThan(64)
-    expect(nav.getBoundingClientRect().height).toBeLessThan(800)
+    await waitFor(() => expect([...transitionProperties]).toContain('height'))
+    await waitFor(() => expect(nav.getBoundingClientRect().height).toBe(800))
   } finally {
     app.unmount()
     mountPoint.remove()
@@ -145,14 +147,18 @@ test('slides the hidden modal rail offscreen at its expanded width', async () =>
     const nav = query<HTMLElement>('nav.m3-navigation')
     const expandedWidth = nav.getBoundingClientRect().width
     expect(expandedWidth).toBe(220)
+    const transitionProperties = new Set<string>()
+    nav.addEventListener('transitionrun', event => {
+      if (event.target === nav) transitionProperties.add(event.propertyName)
+    })
 
     expanded.value = false
     await nextTick()
     expect(nav.classList.contains('m3-navigation_rail-leaving')).toBe(true)
     expect(nav.getBoundingClientRect().width).toBe(expandedWidth)
 
-    await new Promise(resolve => setTimeout(resolve, 80))
-    expect(nav.getBoundingClientRect().x).toBeLessThan(0)
+    await waitFor(() => expect([...transitionProperties]).toContain('transform'))
+    await waitFor(() => expect(nav.getBoundingClientRect().x).toBeLessThan(0))
     expect(nav.getBoundingClientRect().width).toBe(expandedWidth)
 
     await waitFor(() => expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true))
@@ -509,11 +515,14 @@ test('animates standard rail expansion and resizes page content', async () => {
   try {
     const nav = query<HTMLElement>('nav.m3-navigation')
     expect(nav.getBoundingClientRect().width).toBe(96)
+    const transitionProperties = new Set<string>()
+    nav.addEventListener('transitionrun', event => {
+      if (event.target === nav) transitionProperties.add(event.propertyName)
+    })
+
     expanded.value = true
     await nextTick()
-    await new Promise(resolve => setTimeout(resolve, 80))
-    expect(nav.getBoundingClientRect().width).toBeGreaterThan(96)
-    expect(nav.getBoundingClientRect().width).toBeLessThan(220)
+    await waitFor(() => expect([...transitionProperties]).toContain('width'))
     await waitFor(() => expect(nav.getBoundingClientRect().width).toBe(220))
     expect(getComputedStyle(content).paddingLeft).toBe('220px')
     expect(document.querySelector('[aria-modal="true"]')).toBeNull()
