@@ -1,5 +1,6 @@
 import '@modulify/m3-foundation/assets/stylesheets/normalize.scss'
 import '@modulify/m3-foundation/assets/stylesheets/index.scss'
+import '@modulify/m3-foundation/assets/stylesheets/storybook/docs.scss'
 import '@modulify/m3-foundation/assets/stylesheets/storybook/utils.scss'
 
 import type { Preview, ReactRenderer } from '@storybook/react'
