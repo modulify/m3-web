@@ -26,8 +26,11 @@ describe('m3-vue/navigation-tab', () => {
 
     expect(root.classList.contains('m3-navigation-tab_active')).toBe(true)
     expect(icon.classList.contains('m3-icon_filled')).toBe(true)
-    expect(button.getAttribute('aria-labelledby')).toContain('-label-for-rail')
+    expect(button.getAttribute('aria-labelledby')).toContain('-label')
+    expect(button.querySelector('.m3-navigation-tab__label')?.textContent).toBe('Inbox')
     expect(badge).not.toBeNull()
+    expect(badge.closest('.m3-navigation-tab__button')).toBe(button)
+    expect(screen.getByRole('status').textContent).toBe('3')
   })
 
   test('emits navigate on click', async () => {

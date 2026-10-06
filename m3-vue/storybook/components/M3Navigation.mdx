@@ -18,11 +18,25 @@ Use `M3Navigation` for app-level destinations that users may revisit repeatedly 
 
 ### Navigation forms
 
-- navigation drawer for broad destination sets and more descriptive labels
-- navigation rail for medium and large layouts where a vertical persistent control fits the shell
-- navigation bar for compact layouts and a small number of top-level destinations
+- expressive navigation rail for medium and large layouts, collapsed or expanded
+- classic navigation drawer when explicitly requested by an existing app
+- navigation bar for compact and medium layouts with three to five top-level destinations
 
-The current stories focus on drawer and rail, which are the forms implemented in this workspace today.
+Set `appearance` to `bar`, `rail`, `rail-expanded`, or `drawer` to keep a form regardless of viewport width. The default `auto` uses bar below 840px (vertical items below 600px, horizontal items from 600px), collapsed rail from 840px, and standard expanded rail from 1200px. Explicit `drawer` preserves the classic drawer. `expanded` opens an expanded rail from `rail`, or makes an explicit drawer modal. Bar does not expand; when navigation switches to bar, it requests `expanded=false`.
+
+The **Modal Navigation Drawer** story switches `appearance` from `drawer` to `rail` when it closes. Its menu button in the collapsed rail reopens the modal drawer. The **Navigation Drawer** story keeps the classic drawer visible.
+
+For a controlled rail expansion, `railExpandedMode="auto"` chooses modal below 1200px and standard at larger widths. Choose `"modal"` to overlay content or `"standard"` to resize it at any width. The forced `appearance="rail-expanded"` is always standard. Put a menu control in the `Top` slot and update `expanded` (or `appearance` for a forced form) when it is selected. Change its icon and accessible name to describe collapsing while the rail is expanded. The rail itself does not create a menu button.
+
+The **Immersive Navigation Rail** example keeps the expanded rail hidden until an external menu button is selected. It combines `hideWhenCollapsed` with `railExpandedMode="modal"`, so opening the rail overlays the content at every width. The hidden navigation is inert and reserves no content space; `expand()` and `collapse()` remain available for programmatic control.
+
+For the bar, `barLayout="vertical"` keeps labels below the indicator at any width. The default `barLayout="auto"` uses vertical items below 600px and horizontal items from 600px. Material recommends these widths for each arrangement, but keeps both arrangements in the flexible bar.
+
+Apply `m3-has-navigation` to page content for the automatic inset. For a forced form, also apply `m3-has-navigation_bar`, `m3-has-navigation_rail`, `m3-has-navigation_rail-expanded`, or `m3-has-navigation_drawer`. A standard controlled rail expansion updates the inset automatically; modal expansion leaves it in place.
+
+The bar and collapsed rail show primary destinations from the first section. Keep the bar to three to five stable destinations; it does not add a **More** item or a drawer trigger. Extra sections appear when the rail expands. The collapsed rail is 96px wide; the expanded rail defaults to 220px and supports widths up to 360px with `--m3-navigation-rail-expanded-width`.
+
+When the rail is taller than the window, only its destinations scroll. The menu and FAB in `Top` stay visible. The native scrollbar uses the scroll rail's width and thumb colors.
 
 ## Accessibility semantics
 
@@ -34,6 +48,12 @@ The current stories focus on drawer and rail, which are the forms implemented in
 
 - [Navigation Drawer](?path=/story/components-m3navigation--navigation-drawer)
 - [Navigation Rail](?path=/story/components-m3navigation--navigation-rail)
+- [Expanded Navigation Rail](?path=/story/components-m3navigation--navigation-rail-expanded)
+- [Modal Navigation Rail](?path=/story/components-m3navigation--modal-navigation-rail)
+- [Immersive Navigation Rail](?path=/story/components-m3navigation--immersive-navigation-rail)
+- [Navigation Bar](?path=/story/components-m3navigation--navigation-bar)
+- [Vertical Navigation Bar](?path=/story/components-m3navigation--vertical-navigation-bar)
+- [Adaptive Navigation](?path=/story/components-m3navigation--adaptive-navigation)
 - [Modal Navigation Drawer](?path=/story/components-m3navigation--modal-navigation-drawer)
 
 ## Usage guidance
@@ -44,7 +64,7 @@ Top-level navigation should not behave like a task-specific filter group. If ite
 
 ### Match pattern to layout
 
-Use drawer or rail based on screen width, information density, and shell persistence. Do not switch patterns arbitrarily if the content model itself has not changed.
+Use standard or modal rail expansion based on available width and content density. Keep the classic drawer for consumers that explicitly request it.
 
 ## Resources
 
@@ -69,11 +89,25 @@ Use drawer or rail based on screen width, information density, and shell persist
 
 ### Формы навигации
 
-- navigation drawer для широкого набора разделов и подробных подписей
-- navigation rail для средних и больших экранов с постоянной вертикальной областью
-- navigation bar для компактных экранов и небольшого числа основных разделов
+- expressive navigation rail для средних и больших экранов, свернутый или раскрытый
+- классический navigation drawer при явном выборе существующим приложением
+- navigation bar для компактных и средних экранов с тремя–пятью основными разделами
 
-Текущие истории показывают реализованные в пакете drawer и rail.
+Задайте `appearance="bar"`, `"rail"`, `"rail-expanded"` или `"drawer"`, чтобы закрепить вид независимо от ширины окна. `auto` выбирает bar до 840 px (вертикальные пункты до 600 px, горизонтальные — от 600 px), свернутый rail от 840 px и standard rail-expanded от 1200 px. Явный `drawer` сохраняет классическую панель. `expanded` раскрывает rail или делает явный drawer модальным. Bar не раскрывается; при переходе в bar компонент запрашивает `expanded=false`.
+
+История **Modal Navigation Drawer** при закрытии переключает `appearance` с `drawer` на `rail`. Кнопка меню в свернутом rail снова открывает модальный drawer. История **Navigation Drawer** сохраняет обычный drawer на экране.
+
+При управляемом раскрытии `railExpandedMode="auto"` выбирает modal до 1200 px и standard на большей ширине. Значение `"modal"` накладывает rail поверх контента, `"standard"` меняет его ширину при любой ширине окна. Явный `appearance="rail-expanded"` всегда standard. Поместите кнопку меню в слот `Top` и меняйте `expanded` (или `appearance` для закрепленного вида) по нажатию. У раскрытой рейки иконка и доступное имя кнопки должны обозначать сворачивание. Компонент не создает кнопку меню самостоятельно.
+
+История **Immersive Navigation Rail** скрывает раскрываемую рейку до нажатия внешней кнопки меню. Сочетание `hideWhenCollapsed` и `railExpandedMode="modal"` выводит её поверх контента при любой ширине окна. Скрытая навигация инертна и не занимает место; методы `expand()` и `collapse()` остаются доступны для программного управления.
+
+Для bar параметр `barLayout="vertical"` оставляет подписи под индикаторами при любой ширине. По умолчанию `barLayout="auto"`: вертикальные пункты до 600 px и горизонтальные от 600 px. Material рекомендует эти размеры для каждого расположения, но сохраняет оба варианта flexible bar.
+
+Добавьте к содержимому страницы класс `m3-has-navigation` для автоматического отступа. При явном выборе вида добавьте `m3-has-navigation_bar`, `m3-has-navigation_rail`, `m3-has-navigation_rail-expanded` или `m3-has-navigation_drawer`. Управляемое раскрытие standard автоматически меняет отступ; modal сохраняет прежний.
+
+Bar и свернутый rail показывают основные пункты из первой секции. Оставляйте в bar от трёх до пяти постоянных разделов; пункт **«Ещё»** и кнопка открытия drawer не добавляются. Дополнительные секции появляются при раскрытии rail. Ширина свернутого rail — 96 px; раскрытого — по умолчанию 220 px, до 360 px через `--m3-navigation-rail-expanded-width`.
+
+Если пункты не помещаются по высоте, прокручивается только их область. Кнопка меню и FAB в слоте `Top` остаются видимыми. Нативный scrollbar использует толщину и цвета M3ScrollRail.
 
 ## Доступность
 
@@ -85,6 +119,12 @@ Use drawer or rail based on screen width, information density, and shell persist
 
 - [Навигационная панель](?path=/story/components-m3navigation--navigation-drawer)
 - [Навигационная рейка](?path=/story/components-m3navigation--navigation-rail)
+- [Раскрытая навигационная рейка](?path=/story/components-m3navigation--navigation-rail-expanded)
+- [Модальная навигационная рейка](?path=/story/components-m3navigation--modal-navigation-rail)
+- [Навигационная рейка для полноэкранного режима](?path=/story/components-m3navigation--immersive-navigation-rail)
+- [Нижняя панель навигации](?path=/story/components-m3navigation--navigation-bar)
+- [Панель с подписями под индикаторами](?path=/story/components-m3navigation--vertical-navigation-bar)
+- [Адаптивная навигация](?path=/story/components-m3navigation--adaptive-navigation)
 - [Модальная навигационная панель](?path=/story/components-m3navigation--modal-navigation-drawer)
 
 ## Рекомендации
@@ -95,7 +135,7 @@ Use drawer or rail based on screen width, information density, and shell persist
 
 ### Выбирайте вариант по компоновке
 
-Выбирайте drawer или rail по ширине экрана, плотности информации и структуре оболочки приложения.
+Выбирайте standard или modal раскрытие rail по доступной ширине и плотности содержимого. Классический drawer остается для явного выбора.
 
 ## Полезные ссылки
 

@@ -25,6 +25,11 @@ const props = defineProps({
     required: true,
   },
 
+  surface: {
+    type: null as unknown as PropType<HTMLElement | null>,
+    default: null,
+  },
+
   centered: {
     type: Boolean,
     default: false,
@@ -47,7 +52,7 @@ const rememberKey = (event: KeyboardEvent) => {
 const activate = (event: KeyboardEvent | MouseEvent) => {
   active.value = false
 
-  const el = props.owner.value
+  const el = props.surface ?? props.owner.value
   if (el === null) {
     return
   }

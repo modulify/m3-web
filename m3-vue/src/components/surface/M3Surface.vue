@@ -3,6 +3,7 @@
         <Transition v-if="scrim" name="m3-transition-fade">
             <div
                 v-show="resolvedScrimShown"
+                ref="scrimElement"
                 :style="{ zIndex: zIndex - 1 }"
                 class="m3-surface__scrim"
                 @click="onScrimClick"
@@ -11,6 +12,7 @@
 
         <M3SurfacePanel
             :id="_id"
+            ref="modalPanel"
             :tag="tag"
             :overflow="overflow"
             :transition-ms="transitionMs"
@@ -76,7 +78,14 @@ import type {
   Mode as SurfaceMode,
 } from '@modulify/m3-foundation/types/components/surface'
 
-import { computed, useAttrs } from 'vue'
+import {
+  computed,
+  ref,
+  useAttrs,
+  watch,
+} from 'vue'
+
+import { activateModalFocus } from '@modulify/m3-foundation/lib/modal'
 
 import { useId } from '@/composables/id'
 
@@ -153,6 +162,8 @@ const emit = defineEmits([
 ])
 
 const attrs = useAttrs()
+const modalPanel = ref<InstanceType<typeof M3SurfacePanel> | null>(null)
+const scrimElement = ref<HTMLElement | null>(null)
 
 const _id = useId('m3-surface', computed(() => props.id))
 
@@ -190,4 +201,15 @@ function onScrimClick() {
   emit('update:shown', false)
   emit('dismiss')
 }
+
+watch([modalPanel, isModal, () => props.shown, () => surfaceAttrs.value['aria-modal'], () => props.tag], ([panel, modal, shown, ariaModal], _, onCleanup) => {
+  const dialog = panel?.el
+  if (!dialog || !modal || !shown || String(ariaModal) === 'false') return
+
+  onCleanup(activateModalFocus({
+    dialog,
+    exempt: () => [scrimElement.value],
+    onEscape: onScrimClick,
+  }))
+}, { immediate: true, flush: 'post' })
 </script>

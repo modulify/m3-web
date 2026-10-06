@@ -13,58 +13,50 @@
         <M3Link
             ref="button"
             :href="href"
+            :aria-current="active ? 'page' : undefined"
             class="m3-navigation-tab__button"
             v-bind="linkAttrs"
             @click="onClick"
         >
-            <M3Ripple :owner="ref(buttonElement)" centered />
-
             <span class="m3-navigation-tab__state">
                 <span class="m3-navigation-tab__icon">
                     <slot />
                 </span>
 
+                <M3Badge
+                    v-if="'badge' in $slots"
+                    :aria-hidden="inDrawer ? 'true' : 'false'"
+                    class="m3-navigation-tab__badge m3-navigation-tab__badge_labelled"
+                >
+                    <slot name="badge" />
+                </M3Badge>
+
+                <M3Badge
+                    v-else-if="badged"
+                    :aria-hidden="inDrawer ? 'true' : 'false'"
+                    class="m3-navigation-tab__badge"
+                />
+
                 <span
                     v-if="('label' in $slots || label.length > 0)"
-                    :id="labelIdForDrawer"
-                    :aria-hidden="inDrawer ? 'false' : 'true'"
+                    :id="labelId"
                     class="m3-navigation-tab__label"
                 >
                     <slot name="label">{{ label }}</slot>
                 </span>
 
                 <span
-                    v-if="'badge' in $slots"
-                    :aria-hidden="inDrawer ? 'false' : 'true'"
+                    v-if="'badge' in $slots && inDrawer"
                     role="status"
                     class="m3-navigation-tab__badge-label"
                 >
                     <slot name="badge" />
                 </span>
+                <span ref="rippleSurface" class="m3-navigation-tab__ripple-surface">
+                    <M3Ripple :owner="ref(buttonElement)" :surface="rippleSurface" centered />
+                </span>
             </span>
         </M3Link>
-
-        <div
-            v-if="('label' in $slots || label.length > 0)"
-            :id="labelIdForRail"
-            :aria-hidden="inDrawer ? 'true' : 'false'"
-            class="m3-navigation-tab__label"
-        >
-            <slot name="label">
-                {{ label }}
-            </slot>
-        </div>
-
-        <M3Badge
-            v-if="'badge' in $slots || badged"
-            :aria-hidden="inDrawer ? 'true' : 'false'"
-            :class="{
-                'm3-navigation-tab__badge': true,
-                'm3-navigation-tab__badge_labelled': 'badge' in $slots,
-            }"
-        >
-            <slot name="badge" />
-        </M3Badge>
     </div>
 </template>
 
@@ -132,17 +124,19 @@ const emit = defineEmits(['navigate'])
 
 const _id = useId('m3-navigation-item', computed(() => props.id))
 
-const appearance = inject<Ref<Appearance>>(M3NavigationAppearance, ref('auto'))
+const requestedAppearance = inject<Ref<Appearance>>(M3NavigationAppearance, ref('auto'))
 const breakpoint = useBreakpoint()
+const appearance = computed(() => requestedAppearance.value === 'auto'
+  ? breakpoint.value.ge('large') ? 'rail-expanded' : breakpoint.value.ge('expanded') ? 'rail' : 'bar'
+  : requestedAppearance.value)
 const button = ref<M3LinkInstance | null>(null)
 const root = ref<HTMLDivElement | null>(null)
+const rippleSurface = ref<HTMLElement | null>(null)
 const buttonElement = computed(() => button.value?.el ?? null)
 
-const inDrawer = computed(() => breakpoint.value.ge('large') || appearance.value === 'drawer')
+const inDrawer = computed(() => appearance.value === 'drawer')
 
-const labelIdForDrawer = computed(() => _id.value + '-label-for-drawer')
-const labelIdForRail = computed(() => _id.value + '-label-for-rail')
-const labelId = computed(() => inDrawer.value ? labelIdForDrawer.value : labelIdForRail.value)
+const labelId = computed(() => _id.value + '-label')
 const attrs = useAttrs()
 const linkAttrs = computed(() => {
   const ariaLabel = attrs['aria-label']
