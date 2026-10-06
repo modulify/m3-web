@@ -15,15 +15,17 @@ export function useTimeout<Arguments extends unknown[]> (
     timer = null
   }
 
-  const schedule = (...args: Arguments) => {
+  const scheduleWithDelay = (nextDelay: number, ...args: Arguments) => {
     cancel()
     timer = setTimeout(() => {
       timer = null
       callback(...args)
-    }, delay)
+    }, nextDelay)
   }
+
+  const schedule = (...args: Arguments) => scheduleWithDelay(delay, ...args)
 
   onScopeDispose(cancel)
 
-  return { schedule, cancel }
+  return { schedule, scheduleWithDelay, cancel }
 }
