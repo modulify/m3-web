@@ -173,6 +173,14 @@ const inspectDocsEntry = async (browser, baseUrl, entry, locale) => {
       runtimeErrors.push('render: #storybook-docs is empty')
     }
 
+    if (entry.id === 'components-m3navigation--docs') {
+      const tableCount = await page.locator('#storybook-docs table').count()
+
+      if (tableCount === 0) {
+        runtimeErrors.push('render: navigation Markdown tables are not HTML tables')
+      }
+    }
+
     for (const pattern of STORYBOOK_ERROR_PATTERNS) {
       if (bodyText.includes(pattern)) {
         runtimeErrors.push(`render: page contains ${JSON.stringify(pattern)}`)
