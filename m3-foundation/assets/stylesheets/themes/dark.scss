@@ -28,6 +28,7 @@ $m3-sys-dark-on-surface-variant: $m3-palette-neutral-variant-80;
 // Inverse surface
 $m3-sys-dark-inverse-surface:    $m3-palette-neutral-90;
 $m3-sys-dark-inverse-on-surface: $m3-palette-neutral-20;
+$m3-sys-dark-inverse-primary:    $m3-palette-primary-40;
 
 // Secondary
 $m3-sys-dark-secondary:              $m3-palette-secondary-80;
@@ -77,6 +78,7 @@ $m3-elevation-dark-5: 0 4px 4px 0 rgba(0, 0, 0, 0.30), 0 8px 12px 6px rgba(0, 0,
   /** Inverse surface */
   --m3-sys-inverse-surface: #{$m3-sys-dark-inverse-surface};
   --m3-sys-inverse-on-surface: #{$m3-sys-dark-inverse-on-surface};
+  --m3-sys-inverse-primary: #{$m3-sys-dark-inverse-primary};
 
   /** Secondary */
   --m3-sys-secondary: #{$m3-sys-dark-secondary};
