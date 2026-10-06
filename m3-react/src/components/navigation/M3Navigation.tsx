@@ -1,18 +1,28 @@
 import type {
   Alignment,
   Appearance,
+  BarLayout,
 } from '@modulify/m3-foundation/types/components/navigation'
 import type { ComponentSetupContext } from '@/utils/component'
-import type { FC, HTMLAttributes, Ref } from 'react'
+import type { FC, HTMLAttributes } from 'react'
+import type {
+  RailExpandedMode,
+} from '@modulify/m3-foundation/types/components/navigation'
+import type { Ref } from 'react'
 
+import { activateModalFocus } from '@modulify/m3-foundation/lib/modal'
 import { CSSTransition } from 'react-transition-group'
 
 import { createPortal } from 'react-dom'
-import { useEffect, useMemo, useRef } from 'react'
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from 'react'
 
 import M3NavigationAppearance from '@/components/navigation/M3NavigationAppearance'
 
-import { compose } from '@/utils/events'
 import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
@@ -24,6 +34,9 @@ export interface M3NavigationProps extends Omit<HTMLAttributes<HTMLElement>, 'on
   ref?: Ref<M3NavigationExposed>;
   appearance?: Appearance;
   alignment?: Alignment;
+  barLayout?: BarLayout;
+  railExpandedMode?: RailExpandedMode;
+  hideWhenCollapsed?: boolean;
   expanded?: boolean;
   onToggle?: (expanded: boolean) => void;
 }
@@ -69,6 +82,9 @@ export default defineComponent(function M3Navigation({
   ref: _ref,
   appearance = 'auto',
   alignment = 'top',
+  barLayout = 'auto',
+  railExpandedMode = 'auto',
+  hideWhenCollapsed = false,
   expanded = false,
   className = '',
   children = [],
@@ -77,12 +93,29 @@ export default defineComponent(function M3Navigation({
   ...attrs
 }: M3NavigationProps, { expose }: ComponentSetupContext<M3NavigationExposed>) {
   const breakpoint = useBreakpoint()
-  const scrim = useRef<HTMLDivElement | null>(null)
 
-  const state = useRecord({
-    appearance: expanded ? 'drawer' : appearance,
-    transitioning: expanded,
-  }, ['appearance', 'transitioning'])
+  const appearanceBase = appearance === 'auto'
+    ? breakpoint.ge('large') ? 'rail-expanded' : breakpoint.ge('expanded') ? 'rail' : 'bar'
+    : appearance
+  const previousAppearanceBase = useRef(appearanceBase)
+
+  const railExpanded = appearanceBase === 'rail' && expanded
+  const railHidden = appearanceBase === 'rail' && hideWhenCollapsed && !expanded
+
+  const modalExpanded = (appearanceBase === 'drawer' && expanded)
+    || (railExpanded && (railExpandedMode === 'modal' || (railExpandedMode === 'auto' && !breakpoint.ge('large'))))
+  const state = useRecord({ transitioning: modalExpanded }, ['transitioning'])
+  const railLeaving = railHidden && state.transitioning
+  const appearanceActual = railExpanded || railLeaving
+    ? 'rail-expanded'
+    : appearanceBase
+
+  const modalDialog = useRef<HTMLDivElement | null>(null)
+  const modalActive = (appearanceBase === 'drawer' || appearanceBase === 'rail') && (modalExpanded || state.transitioning)
+
+  const scrim = useRef<HTMLDivElement | null>(null)
+  const navigation = useRef<HTMLElement | null>(null)
+  const { 'aria-hidden': ariaHidden, inert, ...navigationAttrs } = attrs
 
   const parsed = useMemo(() => distinct(children, {
     slots: {
@@ -102,32 +135,65 @@ export default defineComponent(function M3Navigation({
   useWatch(onToggle, onToggle => handlers.onToggle = onToggle)
 
   expose({
-    expand: () => handlers.onToggle(true),
-    collapse: () => handlers.onToggle(false),
+    expand: () => {
+      if (appearanceBase === 'rail' || appearanceBase === 'drawer') handlers.onToggle(true)
+    },
+    collapse: () => {
+      if (appearanceBase === 'rail' || appearanceBase === 'drawer') handlers.onToggle(false)
+    },
   })
 
-  useWatch(expanded, expanded => {
+  useWatch(modalExpanded, expanded => {
     if (expanded) {
       state.transitioning = true
     }
   })
 
   useEffect(() => {
-    if (appearance === 'auto' && breakpoint.ge('large')) {
-      handlers.onToggle(false)
+    if (appearanceBase !== 'rail' && appearanceBase !== 'drawer'
+      || (previousAppearanceBase.current !== appearanceBase && !modalExpanded)) {
       state.transitioning = false
     }
-  }, [appearance, breakpoint])
+    previousAppearanceBase.current = appearanceBase
+
+    if (expanded && appearanceBase === 'bar') {
+      handlers.onToggle(false)
+    }
+  }, [appearanceBase, expanded, modalExpanded])
 
   useEffect(() => {
-    state.appearance = expanded ? 'drawer' : appearance
-  }, [appearance, expanded])
+    const element = navigation.current
+    if (appearanceActual !== 'bar' || !element || typeof ResizeObserver === 'undefined') {
+      return
+    }
+
+    const observer = new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--m3-navigation-bar-measured-height', `${element.getBoundingClientRect().height}px`)
+    })
+    observer.observe(element)
+
+    return () => {
+      observer.disconnect()
+      document.documentElement.style.removeProperty('--m3-navigation-bar-measured-height')
+    }
+  }, [appearanceActual])
+
+  useLayoutEffect(() => {
+    const dialog = modalDialog.current
+    if (!modalActive || !dialog) return
+
+    return activateModalFocus({
+      dialog,
+      exempt: () => [scrim.current],
+      onEscape: () => handlers.onToggle(false),
+    })
+  }, [modalActive])
 
   return createPortal(
     <>
       <CSSTransition
         nodeRef={scrim}
-        in={expanded}
+        in={modalExpanded}
         timeout={{ appear: 500, enter: 500, exit: 800 }}
         classNames={{
           appear: 'm3-transition-fade-enter-from',
@@ -135,39 +201,53 @@ export default defineComponent(function M3Navigation({
           exit: 'm3-transition-fade-leave-active',
           exitActive: 'm3-transition-fade-leave-to',
         }}
+        onExited={() => state.transitioning = false}
       >
         <div
           ref={scrim}
-          style={!expanded && !state.transitioning ? { display: 'none' } : undefined}
+          style={appearanceBase === 'bar' || (!modalExpanded && !state.transitioning) ? { display: 'none' } : undefined}
           className="m3-scrim"
           onClick={() => handlers.onToggle(false)}
         />
       </CSSTransition>
 
-      <nav
-        className={toClassName([className, {
-          ['m3-navigation']: true,
-          ['m3-navigation_' + state.appearance]: true,
-          ['m3-navigation_' + alignment]: true,
-          ['m3-navigation_modal']: expanded || state.transitioning,
-        }])}
-        {...attrs}
-        onTransitionEnd={compose(() => {
-          if (!expanded) {
-            state.transitioning = false
-          }
-        }, onTransitionEnd)}
+      <div
+        ref={modalDialog}
+        role={modalActive ? 'dialog' : undefined}
+        aria-modal={modalActive ? true : undefined}
+        aria-label={modalActive ? (attrs['aria-label'] ?? 'Navigation') : undefined}
+        tabIndex={-1}
       >
-        {parsed.slots.top}
-        {parsed.slots.header}
-        <M3NavigationAppearance.Provider value={state.appearance}>
-          <M3NavigationSection>
-            {parsed.slots.subheader}
-            {parsed.content}
-          </M3NavigationSection>
-          {parsed.collections.sections}
-        </M3NavigationAppearance.Provider>
-      </nav>
+        <nav
+          ref={navigation}
+          className={toClassName([className, {
+            ['m3-navigation']: true,
+            ['m3-navigation_' + appearanceActual]: true,
+            ['m3-navigation_bar-vertical']: appearanceActual === 'bar' && barLayout === 'vertical',
+            ['m3-navigation_' + alignment]: true,
+            ['m3-navigation_modal']: modalActive,
+            ['m3-navigation_hide-collapsed']: appearanceBase === 'rail' && hideWhenCollapsed,
+            ['m3-navigation_rail-leaving']: railLeaving,
+            ['m3-navigation_rail-hidden']: railHidden && !railLeaving,
+          }])}
+          aria-hidden={railHidden || ariaHidden}
+          inert={railHidden || inert}
+          {...navigationAttrs}
+          onTransitionEnd={onTransitionEnd}
+        >
+          {parsed.slots.top}
+          {parsed.slots.header}
+          <div className="m3-navigation__body">
+            <M3NavigationAppearance.Provider value={appearanceActual}>
+              <M3NavigationSection>
+                {parsed.slots.subheader}
+                {parsed.content}
+              </M3NavigationSection>
+              {parsed.collections.sections}
+            </M3NavigationAppearance.Provider>
+          </div>
+        </nav>
+      </div>
     </>,
     document.body
   )

@@ -46,7 +46,9 @@ const subscribe = (subscriber: Subscriber): () => void => {
   return () => { subscribers.delete(subscriber) }
 }
 
-let _breakpoint = new BreakpointValue('compact')
+let _breakpoint = typeof window === 'undefined'
+  ? new BreakpointValue('compact')
+  : calculateBreakpoint()
 
 if (typeof window !== 'undefined') {
   window.addEventListener('resize', () => {

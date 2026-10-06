@@ -10,6 +10,7 @@ describe('m3-react/navigation-tab', () => {
         <M3NavigationTab.Icon>
           <M3Icon name="mail" />
         </M3NavigationTab.Icon>
+        <M3NavigationTab.Badge>3</M3NavigationTab.Badge>
       </M3NavigationTab>
     )
 
@@ -20,8 +21,11 @@ describe('m3-react/navigation-tab', () => {
 
     expect(root.classList.contains('m3-navigation-tab_active')).toBe(true)
     expect(icon.classList.contains('m3-icon_filled')).toBe(true)
-    expect(button.getAttribute('aria-labelledby')).toContain('-label-for-rail')
+    expect(button.getAttribute('aria-labelledby')).toContain('-label')
+    expect(button.querySelector('.m3-navigation-tab__label')?.textContent).toBe('Inbox')
     expect(badge).not.toBeNull()
+    expect(badge.closest('.m3-navigation-tab__button')).toBe(button)
+    expect(screen.getByRole('status').textContent).toBe('3')
   })
 
   test('fires onNavigate on click', () => {
@@ -52,5 +56,24 @@ describe('m3-react/navigation-tab', () => {
 
     expect(button.getAttribute('aria-label')).toBe('Custom tab label')
     expect(button.getAttribute('aria-labelledby')).toBeNull()
+  })
+
+  test('renders a destination as a link with current-page semantics', () => {
+    render(<M3NavigationTab href="/inbox" label="Inbox" active />)
+
+    const link = screen.getByRole('link', { name: 'Inbox' })
+
+    expect(link.getAttribute('href')).toBe('/inbox')
+    expect(link.getAttribute('aria-current')).toBe('page')
+  })
+
+  test('can switch between a button and a destination link', () => {
+    const view = render(<M3NavigationTab label="Inbox" />)
+
+    expect(screen.getByRole('button', { name: 'Inbox' })).not.toBeNull()
+
+    view.rerender(<M3NavigationTab href="/inbox" label="Inbox" />)
+
+    expect(screen.getByRole('link', { name: 'Inbox' }).getAttribute('href')).toBe('/inbox')
   })
 })

@@ -10,6 +10,7 @@ import { useAnimationFrame, useRecord, useWatch } from '@/hooks'
 export interface M3RippleProps {
   ref?: Ref<M3RippleExposed>;
   owner: HTMLElement | null;
+  surface?: HTMLElement | null;
   centered?: boolean;
 }
 
@@ -20,17 +21,19 @@ export interface M3RippleMethods {
 }
 
 export default defineComponent(function M3Ripple(
-  { ref: _ref, owner, centered = false }: M3RippleProps,
+  { ref: _ref, owner, surface = null, centered = false }: M3RippleProps,
   { expose }: ComponentSetupContext<M3RippleExposed>
 ) {
   const root = useRef<HTMLSpanElement | null>(null)
   const state = useRecord({
     centered,
     owner,
+    surface,
   })
 
   useWatch(centered, centered => state.centered = centered)
   useWatch(owner, owner => state.owner = owner)
+  useWatch(surface, surface => state.surface = surface)
 
   const lastKey = useRef<string | null>(null)
   const activationFrame = useAnimationFrame()
@@ -47,7 +50,8 @@ export default defineComponent(function M3Ripple(
 
     const el = root.current
     if (el) {
-      const rect = target.getBoundingClientRect()
+      const rippleSurface = state.surface ?? target
+      const rect = rippleSurface.getBoundingClientRect()
       const hide = () => {
         el.style.display = 'none'
         el.removeEventListener('animationend', hide)
@@ -55,9 +59,9 @@ export default defineComponent(function M3Ripple(
 
       hide()
 
-      const diameter = Math.max(target.clientWidth, target.clientHeight)
-      const x = 'clientX' in event && !center ? event.clientX - rect.x : target.clientWidth / 2
-      const y = 'clientY' in event && !center ? event.clientY - rect.y : target.clientHeight / 2
+      const diameter = Math.max(rippleSurface.clientWidth, rippleSurface.clientHeight)
+      const x = 'clientX' in event && !center ? event.clientX - rect.x : rippleSurface.clientWidth / 2
+      const y = 'clientY' in event && !center ? event.clientY - rect.y : rippleSurface.clientHeight / 2
 
       el.style.width = `${diameter}px`
       el.style.height = `${diameter}px`

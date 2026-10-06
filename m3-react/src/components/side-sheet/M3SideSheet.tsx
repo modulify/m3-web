@@ -2,7 +2,7 @@ import type { ComponentSetupContext } from '@/utils/component'
 import type { M3SurfaceProps } from '@/components/surface'
 import type { ReactNode, Ref } from 'react'
 
-import { useMemo } from 'react'
+import { useLayoutEffect, useMemo } from 'react'
 import { useTransition } from 'react-transition-state'
 
 import { durations } from '@modulify/m3-foundation/lib/motion'
@@ -105,13 +105,15 @@ export default defineComponent(function M3SideSheet({
   const surfaceTopLeft = roundingTopLeft ?? (docked ? 0 : MODAL_RADIUS)
   const surfaceBottomLeft = roundingBottomLeft ?? (docked ? 0 : MODAL_RADIUS)
 
-  const [transition, toggle] = useTransition({
+  const [transition, toggle, endTransition] = useTransition({
     timeout: SIDE_SHEET_TRANSITION_MS,
     preEnter: true,
     preExit: true,
     mountOnEnter: true,
     unmountOnExit: true,
   })
+
+  useLayoutEffect(() => () => endTransition(), [endTransition])
 
   toggle(shown)
 
