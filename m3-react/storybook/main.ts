@@ -1,5 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-vite'
 
+import remarkGfm from 'remark-gfm'
+
 const DEFAULT_ALLOWED_HOSTS = [
   'localhost',
   '127.0.0.1',
@@ -20,7 +22,16 @@ const config: StorybookConfig = {
   addons: [
     '@chromatic-com/storybook',
     '@storybook/addon-a11y',
-    '@storybook/addon-docs',
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
     '@storybook/addon-links',
     '@storybook/addon-themes',
   ],
