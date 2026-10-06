@@ -88,6 +88,22 @@ describe('m3-react/surface', () => {
     expect(surface.style.height).toBe('240px')
   })
 
+  test('cancels an entering modal transition when unmounted', () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'requestAnimationFrame', 'cancelAnimationFrame'] })
+
+    try {
+      const view = render(<M3Surface mode="modal" shown />)
+
+      expect(vi.getTimerCount()).toBeGreaterThan(0)
+
+      view.unmount()
+
+      expect(vi.getTimerCount()).toBe(0)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   test('maps auto role from elevation and allows explicit variant override', () => {
     const { container, rerender } = render(
       <M3Surface elevation={3} />

@@ -116,4 +116,20 @@ describe('m3-react/side-sheet', () => {
 
     expect(onToggle).toHaveBeenCalledWith(false)
   })
+
+  test('cancels an entering sheet transition when unmounted', () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'requestAnimationFrame', 'cancelAnimationFrame'] })
+
+    try {
+      const view = render(<M3SideSheet shown />)
+
+      expect(vi.getTimerCount()).toBeGreaterThan(0)
+
+      view.unmount()
+
+      expect(vi.getTimerCount()).toBe(0)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })

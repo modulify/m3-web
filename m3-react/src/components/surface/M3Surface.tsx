@@ -1,4 +1,5 @@
 import type { CSSProperties, FC } from 'react'
+import type { M3SurfacePanelExposed } from './M3SurfacePanel'
 import type { M3SurfacePanelOptions, M3SurfacePanelVariant } from './shared'
 import type {
   Anchor as SurfaceAnchor,
@@ -6,7 +7,9 @@ import type {
   Mode as SurfaceMode,
 } from '@modulify/m3-foundation/types/components/surface'
 
+import { activateModalFocus } from '@modulify/m3-foundation/lib/modal'
 import { createPortal } from 'react-dom'
+import { useLayoutEffect, useRef } from 'react'
 import { useTransition } from 'react-transition-state'
 
 import { toClassName } from '@/utils/styling'
@@ -60,14 +63,35 @@ const M3Surface: FC<M3SurfaceProps> = ({
   ...panelProps
 }) => {
   const isModal = mode === 'modal'
+  const panel = useRef<M3SurfacePanelExposed | null>(null)
+  const scrimElement = useRef<HTMLDivElement | null>(null)
+  const dismiss = useRef<() => void>(() => {})
+  dismiss.current = () => {
+    onToggle(false)
+    onDismiss()
+  }
+
+  useLayoutEffect(() => {
+    const dialog = panel.current?.el
+    if (!isModal || !shown || String(ariaModal) === 'false' || !dialog) return
+
+    return activateModalFocus({
+      dialog,
+      exempt: () => [scrimElement.current],
+      onEscape: () => dismiss.current(),
+    })
+  }, [isModal, shown, ariaModal, teleportTo, panelProps.tag])
+
   const resolvedScrimShown = scrimShown ?? shown
-  const [modalTransition, toggleModalTransition] = useTransition({
+  const [modalTransition, toggleModalTransition, endModalTransition] = useTransition({
     timeout: transitionMs,
     preEnter: true,
     preExit: true,
     mountOnEnter: true,
     unmountOnExit: true,
   })
+
+  useLayoutEffect(() => () => endModalTransition(), [endModalTransition])
 
   toggleModalTransition(isModal && scrim && resolvedScrimShown)
 
@@ -84,6 +108,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
 
   const surfaceNode = (
     <M3SurfacePanel
+      ref={panel}
       id={useId(id, 'm3-surface')}
       role={role ?? (isModal ? 'dialog' : undefined)}
       aria-modal={isModal ? (ariaModal ?? 'true') : ariaModal}
@@ -124,6 +149,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
     <>
       {scrim && modalTransition.isMounted ? (
         <div
+          ref={scrimElement}
           style={{
             zIndex: zIndex - 1,
           }}
@@ -133,10 +159,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
             'm3-transition-fade-leave-active': modalTransition.status === 'preExit' || modalTransition.status === 'exiting',
             'm3-transition-fade-leave-to': modalTransition.status === 'exiting',
           }])}
-          onClick={() => {
-            onToggle(false)
-            onDismiss()
-          }}
+          onClick={() => dismiss.current()}
         />
       ) : null}
       {surfaceNode}
