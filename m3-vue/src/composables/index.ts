@@ -1,4 +1,5 @@
 export { useAnimationFrame } from './animation'
+export { m3Adaptive } from './adaptive'
 export { useBreakpoint } from './breakpoint'
 export { useId } from './id'
 export { useMutationObserver, useResizeObserver } from './observer'
