@@ -46,7 +46,7 @@ test('adapts an open search without losing the query or overflowing the viewport
     await nextTick()
 
     const dialog = document.querySelector('.m3-search__view') as HTMLElement
-    expect(dialog.classList.contains('m3-search__view_full-screen')).toBe(true)
+    await waitFor(() => expect(dialog.classList.contains('m3-search__view_full-screen')).toBe(true))
     expect(getComputedStyle(document.querySelector('.m3-search__bar')!).visibility).toBe('hidden')
     expect(dialog.offsetWidth).toBe(390)
     expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(390)
