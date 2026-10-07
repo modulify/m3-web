@@ -873,55 +873,78 @@
   }
 }
 
+body {
+  --m3-layout-edge-gap: 16px;
+  --m3-navigation-content-inset-inline-start: 0px;
+  --m3-navigation-content-inset-block-end: var(--m3-navigation-bar-measured-height, #{$m3-navigation-bar-height});
+  --m3-navigation-snackbar-inline-gap: var(--m3-layout-edge-gap);
+  --m3-navigation-snackbar-block-gap: 16px;
+
+  @include m3-layout.screen-from('medium') {
+    --m3-layout-edge-gap: 24px;
+  }
+
+  @include m3-layout.screen-from('expanded') {
+    --m3-navigation-content-inset-inline-start: #{$m3-navigation-rail-width};
+    --m3-navigation-content-inset-block-end: 0px;
+    --m3-navigation-snackbar-block-gap: var(--m3-layout-edge-gap);
+  }
+
+  @include m3-layout.screen-from('large') {
+    --m3-navigation-content-inset-inline-start: #{$m3-navigation-rail-expanded-size};
+  }
+
+  &:has(.m3-navigation_bar) {
+    --m3-navigation-content-inset-inline-start: 0px;
+    --m3-navigation-content-inset-block-end: var(--m3-navigation-bar-measured-height, #{$m3-navigation-bar-height});
+    --m3-navigation-snackbar-inline-gap: var(--m3-layout-edge-gap);
+    --m3-navigation-snackbar-block-gap: 16px;
+  }
+
+  &:has(.m3-navigation_rail),
+  &:has(.m3-navigation_rail-expanded),
+  &:has(.m3-navigation_drawer) {
+    --m3-navigation-content-inset-block-end: 0px;
+    --m3-navigation-snackbar-inline-gap: 24px;
+    --m3-navigation-snackbar-block-gap: var(--m3-layout-edge-gap);
+  }
+
+  &:has(.m3-navigation_rail) {
+    --m3-navigation-content-inset-inline-start: #{$m3-navigation-rail-width};
+  }
+
+  &:has(.m3-navigation_rail-expanded:not(.m3-navigation_modal)) {
+    --m3-navigation-content-inset-inline-start: #{$m3-navigation-rail-expanded-size};
+    --m3-navigation-snackbar-block-gap: 24px;
+  }
+
+  &:has(.m3-navigation_rail-expanded.m3-navigation_modal),
+  &:has(.m3-navigation_drawer.m3-navigation_modal) {
+    --m3-navigation-content-inset-inline-start: #{$m3-navigation-rail-width};
+  }
+
+  &:has(.m3-navigation_drawer:not(.m3-navigation_modal)) {
+    --m3-navigation-content-inset-inline-start: #{$m3-navigation-drawer-width};
+  }
+
+  &:has(.m3-navigation_hide-collapsed:not(.m3-navigation_rail-expanded)),
+  &:has(.m3-navigation_hide-collapsed.m3-navigation_modal) {
+    --m3-navigation-content-inset-inline-start: 0px;
+    --m3-navigation-content-inset-block-end: 0px;
+    --m3-navigation-snackbar-inline-gap: 24px;
+    --m3-navigation-snackbar-block-gap: 24px;
+  }
+}
+
 .m3-has-navigation {
-  padding-inline-start: 0;
-  padding-block-end: var(--m3-navigation-bar-measured-height, #{$m3-navigation-bar-height});
+  padding-inline-start: var(--m3-navigation-content-inset-inline-start);
+  padding-block-end: var(--m3-navigation-content-inset-block-end);
   transition:
     m3-motion.timing-emphasized(padding-inline-start),
     m3-motion.timing-emphasized(padding-block-end)
   ;
 
-  @include m3-layout.screen-from('expanded') {
-    padding-inline-start: $m3-navigation-rail-width;
-    padding-block-end: 0;
-  }
-
-  @include m3-layout.screen-from('large') {
-    padding-inline-start: $m3-navigation-rail-expanded-size;
-  }
-
-  &_bar {
-    padding-inline-start: 0;
-    padding-block-end: var(--m3-navigation-bar-measured-height, #{$m3-navigation-bar-height});
-  }
-
-  &_rail {
-    padding-inline-start: $m3-navigation-rail-width;
-    padding-block-end: 0;
-  }
-
-  &_rail-expanded {
-    padding-inline-start: $m3-navigation-rail-expanded-size;
-    padding-block-end: 0;
-  }
-
-  &_drawer {
-    padding-inline-start: $m3-navigation-drawer-width;
-    padding-block-end: 0;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
-}
-
-body:has(.m3-navigation_rail-expanded:not(.m3-navigation_modal)) :is(.m3-has-navigation, .m3-has-navigation_rail):not(.m3-has-navigation_bar):not(.m3-has-navigation_drawer) {
-  padding-inline-start: $m3-navigation-rail-expanded-size;
-  padding-block-end: 0;
-}
-
-body:has(.m3-navigation_hide-collapsed:not(.m3-navigation_rail-expanded)) :is(.m3-has-navigation, .m3-has-navigation_rail),
-body:has(.m3-navigation_hide-collapsed.m3-navigation_modal) :is(.m3-has-navigation, .m3-has-navigation_rail) {
-  padding-inline-start: 0;
-  padding-block-end: 0;
 }
