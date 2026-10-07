@@ -17,6 +17,10 @@ class BreakpointValue {
     this._name = name
   }
 
+  get name (): Breakpoint {
+    return this._name
+  }
+
   ge (than: Breakpoint) {
     return max[this._name] >= max[than]
   }
