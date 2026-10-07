@@ -22,7 +22,7 @@ On the web, information in a timed snackbar must also be available inline or nea
 
 ### Placement
 
-Mount the host in the content region. It uses fixed bottom placement and accounts for a surrounding `m3-has-navigation` class. The [navigation and FAB story](?path=/story/components-m3snackbar--with-navigation-and-fab) overrides `--m3-snackbar-inset-block-end` to keep the message above the FAB. Override that variable and `--m3-snackbar-inset-inline-start` for other page structures. Do not cover navigation or a focused control.
+Mount the host in the content region. It uses fixed bottom placement and follows the rendered navigation when an ancestor has `m3-has-navigation`. The [navigation and FAB story](?path=/story/components-m3snackbar--with-navigation-and-fab) overrides `--m3-snackbar-inset-block-end` to keep the message above the FAB. Override that variable and `--m3-snackbar-inset-inline-start` for other page structures. Do not cover navigation or a focused control.
 
 Package defaults are 16 px leading/bottom inset in compact layouts, 24 px on wider layouts, and a maximum width of 560 px. Material specifies the principle but not these exact offsets. The component uses inverse surface/on-surface/primary colors, `body-medium` and `label-large`, extra-small corners, elevation 3, and 48/68 px minimum height. The Material two-line token says 68 dp while responsive prose says 64 dp; this implementation follows the token and grows for larger text.
 

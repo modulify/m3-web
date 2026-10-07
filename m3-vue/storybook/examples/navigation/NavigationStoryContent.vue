@@ -1,5 +1,5 @@
 <template>
-    <main :class="insetClass" class="navigation-story-content">
+    <main :class="{ 'm3-has-navigation': inset }" class="navigation-story-content">
         <div :class="{ 'navigation-story-content__inner_with-top-action': topAction }" class="navigation-story-content__inner">
             <header class="navigation-story-content__header">
                 <h1>{{ text.heading }}</h1>
@@ -38,8 +38,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
-
 import { computed } from 'vue'
 
 import { M3SurfacePanel } from '@/components/surface'
@@ -48,14 +46,9 @@ import { localize } from '../../i18n'
 
 const props = withDefaults(defineProps<{
   locale: unknown
-  appearance?: Appearance
   inset?: boolean
   topAction?: boolean
-}>(), { appearance: 'auto', inset: true, topAction: false })
-
-const insetClass = computed(() => props.inset === false
-  ? []
-  : ['m3-has-navigation', props.appearance && props.appearance !== 'auto' ? `m3-has-navigation_${props.appearance}` : ''])
+}>(), { inset: true, topAction: false })
 
 const text = computed(() => localize(props.locale, {
   'en-US': {

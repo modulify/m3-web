@@ -171,7 +171,7 @@ const meta = {
 
             ${destinationsTemplate}
         </M3Navigation>
-        <NavigationStoryContent :locale="locale" :appearance="appearance" />
+        <NavigationStoryContent :locale="locale" />
       </div>
     `,
   }),
@@ -224,7 +224,7 @@ export const NavigationRailExpanded: Story = {
         </template>
         ${destinationsTemplate}
       </M3Navigation>
-      <NavigationStoryContent :locale="locale" :appearance="appearance" />
+      <NavigationStoryContent :locale="locale" />
       </div>
     `,
   }),
@@ -248,7 +248,7 @@ export const ModalNavigationRail: Story = {
         </template>
         ${destinationsTemplate}
       </M3Navigation>
-      <NavigationStoryContent :locale="locale" appearance="rail" />
+      <NavigationStoryContent :locale="locale" />
       </div>
     `,
   }),
@@ -279,7 +279,7 @@ export const ImmersiveNavigationRail: Story = {
         </template>
         ${destinationsTemplate}
       </M3Navigation>
-      <NavigationStoryContent :locale="locale" appearance="rail" top-action />
+      <NavigationStoryContent :locale="locale" top-action />
       </div>
     `,
   }),
@@ -350,7 +350,7 @@ export const ModalNavigationDrawer: Story = {
 
             ${destinationsTemplate}
         </M3Navigation>
-        <NavigationStoryContent :locale="locale" appearance="rail" />
+        <NavigationStoryContent :locale="locale" />
         </div>
     `,
   }),

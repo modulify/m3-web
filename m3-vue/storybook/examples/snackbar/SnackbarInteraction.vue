@@ -13,7 +13,7 @@
         </M3Navigation>
 
         <main
-            :class="{ 'm3-has-navigation_bar': scenario === 'navigation' }"
+            :class="{ 'm3-has-navigation': scenario === 'navigation' }"
             :style="{ minHeight: scenario === 'navigation' ? '100vh' : '360px', padding: '32px', background: 'var(--m3-sys-surface)' }"
         >
             <div :style="{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }">
