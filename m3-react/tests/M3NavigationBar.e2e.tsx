@@ -351,7 +351,7 @@ test('can exclude bar from automatic navigation and open a hidden modal rail', a
 
   try {
     const nav = query<HTMLElement>('nav.m3-navigation')
-    expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true)
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true))
     expect(nav.classList.contains('m3-navigation_bar')).toBe(false)
 
     view.rerender(navigation(true))
@@ -386,7 +386,7 @@ test('keeps the vertical bar when it is the allowed bar form', async () => {
 
   try {
     const nav = query<HTMLElement>('nav.m3-navigation')
-    expect(nav.classList.contains('m3-navigation_bar')).toBe(true)
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_bar')).toBe(true))
     expect(nav.classList.contains('m3-navigation_bar-vertical')).toBe(true)
     expect(query<HTMLElement>('.m3-navigation-tab').classList.contains('m3-navigation-tab_in-bar')).toBe(true)
 
