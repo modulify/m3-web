@@ -1,0 +1,155 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as M3SearchStories from './M3Search.stories'
+
+<Meta of={M3SearchStories} />
+
+<Localized locale="en-US">
+
+# Search
+
+Search combines a persistent entry bar with an expanded area for suggestions or results. Use it to help people find items in a large collection. Place the bar near the content it searches. The [Material 3 Search guidelines](https://m3.material.io/components/search/guidelines) recommend the contained style for new interfaces; the divided baseline style remains available.
+
+## Guide
+
+### Appearance and layout
+
+The contained style keeps a rounded filled bar when search opens. Divided uses a divider between the input header and results. `layout="auto"` opens full screen below 600 px and docked at wider breakpoints. Choose a fixed layout only when the surrounding product calls for it. The docked surface has a scrim; both expanded layouts behave as modal dialogs in this web implementation.
+
+Search starts with an empty results container. Put an `M3List` or custom content in `M3Search.Results`. Show recent queries before typing if they help; suggestions may appear while typing, and results may appear after submission. Keep filtering, async requests, ranking, empty states, and result navigation in your application. Group distinct result sections with gaps and clear headings.
+
+### Query, focus, and keyboard
+
+`query` and `open` are controlled. Update them in `onQueryChange` and `onOpenChange`; `onSubmit` receives the current query. Submitting leaves the query visible and moves focus from the input to the results area. The back button, Escape, and the docked scrim request closing; focus returns to the control that opened search. Arrow Down/Up moves from the input into the result controls and between them. `Tab` follows the dialog's interactive controls.
+
+Provide a localized `label` describing the searched content, not just “Search.” `hint` is the visible prompt; by default it matches `label`. When they differ, the control's accessible name includes both. Translate `backLabel` and `clearLabel`. Pass a short localized `status` whenever suggestions or results change, such as “3 results”; the polite live region announces it without reading the whole list. Name every custom icon button. A simple list of results uses list/link/button semantics; do not put a rich list under `role="listbox"` without implementing the corresponding combobox pattern.
+
+### Avoid
+
+- Do not use M3Search as a replacement for a small static navigation list.
+- Do not place more than two trailing actions in the expanded bar; when clear is visible, count it as one.
+- Do not let a late async response reopen a closed search or move focus back into its input.
+- Do not treat `type="search"` on M3TextField as the complete Search pattern.
+
+## API
+
+| Export | Purpose |
+| --- | --- |
+| `M3Search` | Entry bar and modal expanded search view. |
+| `M3SearchProps`, `M3SearchExposed`, `SearchResultsContext` | Typed component contract, imperative methods, and results render context. |
+
+| Prop / callback | Default | Effect |
+| --- | --- | --- |
+| `query`, `onQueryChange` | required | Controlled input value and update request. |
+| `open`, `onOpenChange` | required | Controlled expanded state and request from trigger/back/Escape/scrim. |
+| `label`, `status` | required | Accessible search name and polite result announcement. |
+| `hint` | `label` | Visible prompt when query is empty. |
+| `appearance` | `contained` | `contained` or `divided`. |
+| `layout` | `auto` | `auto`, `full-screen`, or `docked`. |
+| `backLabel`, `clearLabel` | English labels | Accessible names for built-in icon buttons; translate them. |
+| `onSubmit` | — | Called with the query on Enter. |
+| HTML attributes | — | Passed to the collapsed root. |
+
+| Named child | Purpose |
+| --- | --- |
+| `M3Search.Leading` | Optional collapsed-bar leading control; without it a decorative search icon appears in the trigger. |
+| `M3Search.Trailing` | Optional actions at the end of the collapsed bar. |
+| `M3Search.Actions` | Optional expanded-bar trailing actions after the clear button. |
+| `M3Search.Results` | Results content; pass `render={({ query, close, submit }) => ...}` to use the current context. Unslotted children are used when Results is absent. |
+
+The ref exposes `open()`, `close()`, and `focus()`. These request controlled state changes or focus the visible search control; `open()` and `close()` do not mutate parent state.
+
+```tsx
+const [query, setQuery] = useState('')
+const [open, setOpen] = useState(false)
+
+<M3Search
+  query={query}
+  open={open}
+  label="Search messages"
+  status={`${results.length} results`}
+  onQueryChange={setQuery}
+  onOpenChange={setOpen}
+  onSubmit={search}
+>
+  <M3Search.Results render={({ close }) => (
+    <M3List>{results.map(item => (
+      <M3ListItem key={item.id} headline={item.title} onClick={() => { select(item); close() }} />
+    ))}</M3List>
+  )} />
+</M3Search>
+```
+
+## Sources
+
+- [Material Search overview](https://m3.material.io/components/search/overview)
+- [Material Search specs](https://m3.material.io/components/search/specs)
+- [Material Search guidelines](https://m3.material.io/components/search/guidelines)
+- [Material Search accessibility](https://m3.material.io/components/search/accessibility)
+- [WAI-ARIA Combobox pattern](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Поиск
+
+Search объединяет постоянную строку входа и раскрытую область подсказок или результатов. Используйте его для поиска в большом наборе объектов и ставьте рядом с искомым содержимым. [Material 3](https://m3.material.io/components/search/guidelines) рекомендует contained для новых интерфейсов; baseline divided остаётся доступен.
+
+## Руководство
+
+### Вид и расположение
+
+Contained сохраняет округлую заполненную строку после раскрытия. Divided разделяет заголовок и результаты линией. `layout="auto"` выбирает полный экран при ширине меньше 600 px и docked при большей. Фиксируйте layout, когда этого требует компоновка продукта. У docked есть затемнение фона; оба раскрытых layout реализованы здесь как модальные диалоги.
+
+Контейнер результатов по умолчанию пуст. Передайте `M3List` или своё содержимое в `M3Search.Results`. До ввода можно показывать историю; во время ввода — подсказки; после отправки — результаты. Фильтрация, асинхронные запросы, сортировка, пустое состояние и переход к результату принадлежат приложению. Разделяйте группы результатов промежутками и понятными заголовками.
+
+### Запрос, фокус и клавиатура
+
+`query` и `open` — управляемые значения. Обновляйте их через `onQueryChange` и `onOpenChange`; `onSubmit` получает текущий запрос. После Enter текст остаётся видимым, а фокус переходит из поля в область результатов. Кнопка назад, Escape и нажатие на затемнение docked запрашивают закрытие; фокус возвращается к инициатору. Стрелки вниз/вверх переводят фокус к действиям результатов и между ними. `Tab` идёт по интерактивным элементам диалога.
+
+Передайте локализованную `label`, называющую область поиска, а не просто «Поиск». `hint` — видимая подсказка; по умолчанию совпадает с `label`. Если они различаются, доступное имя включает оба текста. Переведите `backLabel` и `clearLabel`. При изменении подсказок/результатов обновляйте короткий `status`, например «3 результата»: polite live region объявит его, не читая весь список. Давайте названия всем своим кнопкам с иконкой. Для богатого списка используйте семантику списка/ссылок/кнопок; `listbox` требует отдельной реализации соответствующего combobox-паттерна.
+
+### Чего избегать
+
+- Не заменяйте Search небольшой статический список навигации.
+- Не помещайте больше двух trailing-действий в раскрытую строку; clear считается одним из них.
+- Не позволяйте запоздалому ответу сервера вновь открыть закрытый поиск или перевести фокус в его поле.
+- Не считайте `type="search"` у M3TextField полноценным Search.
+
+## API
+
+| Экспорт | Назначение |
+| --- | --- |
+| `M3Search` | Строка входа и модальная раскрытая область. |
+| `M3SearchProps`, `M3SearchExposed`, `SearchResultsContext` | Типизированный контракт, методы и контекст результатов. |
+
+| Свойство / callback | По умолчанию | Действие |
+| --- | --- | --- |
+| `query`, `onQueryChange` | обязательны | Управляемый текст и запрос обновления. |
+| `open`, `onOpenChange` | обязательны | Управляемое раскрытие и запрос от trigger/back/Escape/scrim. |
+| `label`, `status` | обязательны | Доступное имя и объявление результата. |
+| `hint` | `label` | Видимая подсказка при пустом запросе. |
+| `appearance` | `contained` | `contained` или `divided`. |
+| `layout` | `auto` | `auto`, `full-screen` или `docked`. |
+| `backLabel`, `clearLabel` | английский текст | Доступные имена встроенных кнопок; переведите их. |
+| `onSubmit` | — | Вызывается по Enter с текущим запросом. |
+| HTML-атрибуты | — | Передаются корню свёрнутого поиска. |
+
+| Именованный потомок | Назначение |
+| --- | --- |
+| `M3Search.Leading` | Необязательное действие в начале свёрнутой строки; иначе у trigger декоративная лупа. |
+| `M3Search.Trailing` | Действия в конце свёрнутой строки. |
+| `M3Search.Actions` | Действия раскрытой строки после clear. |
+| `M3Search.Results` | Содержимое; `render={({ query, close, submit }) => ...}` получает текущий контекст. Без Results используются обычные children. |
+
+Ref открывает методы `open()`, `close()` и `focus()`. Первые два запрашивают смену управляемого состояния; родитель обновляет его сам.
+
+## Источники
+
+- [Обзор Material Search](https://m3.material.io/components/search/overview)
+- [Размеры и токены](https://m3.material.io/components/search/specs)
+- [Рекомендации](https://m3.material.io/components/search/guidelines)
+- [Доступность](https://m3.material.io/components/search/accessibility)
+
+</Localized>
