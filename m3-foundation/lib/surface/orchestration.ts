@@ -18,6 +18,10 @@ export function wait(ms: number): Promise<void> {
   })
 }
 
+export function waitForMotion(ms: number): Promise<void> {
+  return wait(globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : ms)
+}
+
 export function raf(): Promise<void> {
   return new Promise<void>((resolve) => {
     requestAnimationFrame(() => resolve())

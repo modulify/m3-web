@@ -24,7 +24,7 @@
   outline: none;
   overflow: hidden;
   transition:
-    m3-motion.timing-standard(background),
+    m3-motion.timing-standard(background-color),
     m3-motion.timing-standard(border-radius),
     m3-motion.timing-standard(color)
   ;
@@ -77,7 +77,7 @@
     inset-block-start: 0;
     inset-inline-start: 0;
     transition:
-      m3-motion.timing-standard(background),
+      m3-motion.timing-standard(background-color),
       m3-motion.timing-standard(opacity)
     ;
   }
@@ -144,5 +144,16 @@
 
   &:disabled &__content {
     opacity: 0.38;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-fab-button,
+  .m3-fab-button__state,
+  .m3-fab-button__content,
+  .m3-fab-button__icon,
+  .m3-fab-button__icon > *,
+  .m3-fab-button__text {
+    transition: none;
   }
 }

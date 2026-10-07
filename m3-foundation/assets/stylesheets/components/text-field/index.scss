@@ -267,13 +267,18 @@
 
     &::after {
       content: '';
-      inline-size: 0;
+      inline-size: 100%;
       block-size: 100%;
       background: var(--m3-sys-primary);
       position: absolute;
-      inset-inline-start: 50%;
+      inset-inline-start: 0;
       inset-block-end: 0;
-      transition: m3-motion.timing-standard(all);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition:
+        m3-motion.timing-standard(transform),
+        m3-motion.timing-standard(background-color)
+      ;
     }
   }
 
@@ -282,8 +287,7 @@
   }
 
   &_focused &__underline::after {
-    inline-size: 100%;
-    inset-inline-start: 0;
+    transform: scaleX(1);
   }
 
   &_invalid:not(&_disabled):not(&_readonly) &__underline,
@@ -314,6 +318,21 @@
   &_muted {
     color: var(--m3-sys-on-surface);
     opacity: 0.38;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-text-field {
+    &__label,
+    &__outline-leading,
+    &__outline-notch,
+    &__outline-trailing,
+    &__content,
+    &__underline,
+    &__underline::after {
+      animation: none;
+      transition: none;
+    }
   }
 }
 

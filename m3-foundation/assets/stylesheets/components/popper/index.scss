@@ -31,7 +31,6 @@
   &_animated {
     transform-origin: var(--m3-popper-origin-x) var(--m3-popper-origin-y);
     transform: translate(var(--m3-popper-enter-x), var(--m3-popper-enter-y)) scale(var(--m3-popper-scale-x-hidden), var(--m3-popper-scale-y-hidden));
-    will-change: opacity, transform;
     transition:
       opacity var(--m3-popper-opacity-exit-duration) var(--m3-popper-exit-easing),
       transform var(--m3-popper-exit-duration) var(--m3-popper-exit-easing),

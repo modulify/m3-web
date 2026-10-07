@@ -55,7 +55,7 @@
       background: var(--m3-sys-primary);
       border-radius: 50%;
       transition:
-        m3-motion.timing-standard(background),
+        m3-motion.timing-standard(background-color),
         m3-motion.timing-standard(opacity)
       ;
     }
@@ -106,7 +106,7 @@
       position: absolute;
       inset-block-start: 0;
       transition:
-        m3-motion.timing-standard(background),
+        m3-motion.timing-standard(background-color),
         m3-motion.timing-standard(opacity)
       ;
     }
@@ -157,7 +157,7 @@
 
   &_stepped &__filler::before {
     transition:
-      m3-motion.timing-standard(background),
+      m3-motion.timing-standard(background-color),
       m3-motion.timing-standard(opacity),
       m3-motion.timing-standard(inline-size),
       m3-motion.timing-standard(left)
@@ -210,7 +210,7 @@
       background: var(--m3-sys-primary);
       border-radius: 2px;
       transition:
-        m3-motion.timing-standard(background),
+        m3-motion.timing-standard(background-color),
         m3-motion.timing-standard(opacity)
       ;
     }
@@ -265,5 +265,18 @@
 
   &_range:not(&_disabled) &__value_max:active ~ &__filler_active::before {
     inline-size: calc(100% - 15px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-slider {
+    &__filler,
+    &__filler::before,
+    &__value,
+    &_stepped &__filler,
+    &_stepped &__filler::before,
+    &_stepped &__value {
+      transition: none;
+    }
   }
 }

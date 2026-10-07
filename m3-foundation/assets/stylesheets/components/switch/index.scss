@@ -120,35 +120,50 @@
     --background: var(--m3-sys-outline);
 
     display: inline-flex;
-    @include m3-shape.circle(16px);
-    background: var(--background);
+    @include m3-shape.circle(28px);
     align-items: center;
     justify-content: center;
     color: var(--m3-sys-surface-container-highest);
-    transition:
-      m3-motion.timing-standard(inline-size, 'long4'),
-      m3-motion.timing-standard(block-size, 'long4'),
-      m3-motion.timing-standard(background-color)
-      m3-motion.timing-standard(opacity)
-    ;
+    position: relative;
+    transition: m3-motion.timing-standard(opacity);
+
+    &::before {
+      content: '';
+      @include m3-shape.circle(16px);
+      background: var(--background);
+      position: absolute;
+      inset-block-start: 6px;
+      inset-inline-start: 6px;
+      transition:
+        m3-motion.timing-standard(transform, 'long4'),
+        m3-motion.timing-standard(background-color)
+      ;
+    }
+
+    > * {
+      position: relative;
+    }
   }
 
   &:not(&_disabled) &__input:hover ~ &__handle &__checkmark {
     --background: var(--m3-sys-on-surface-variant);
   }
 
-  &:not(&_disabled) &__input:active ~ &__handle &__checkmark {
-    @include m3-shape.square(28px);
+  &:not(&_disabled) &__input:active ~ &__handle &__checkmark::before {
+    transform: scale(1.75);
   }
 
-  &__handle_has-icon &__checkmark {
-    @include m3-shape.square(24px);
+  &__handle_has-icon &__checkmark::before {
+    transform: scale(1.5);
   }
 
   &_checked &__checkmark {
-    @include m3-shape.square(24px);
-    background: var(--m3-sys-on-primary);
+    --background: var(--m3-sys-on-primary);
     color: var(--m3-sys-on-primary-container);
+  }
+
+  &_checked &__checkmark::before {
+    transform: scale(1.5);
   }
 
   &_checked:not(&_disabled) &__input:hover ~ &__handle &__checkmark,
@@ -157,17 +172,38 @@
     --background: var(--m3-sys-primary-container);
   }
 
+  &_checked:not(&_disabled) &__input:active ~ &__handle &__checkmark::before {
+    transform: scale(1.75);
+  }
+
   &_disabled &__checkmark {
-    background: var(--m3-sys-on-surface);
+    --background: var(--m3-sys-on-surface);
     opacity: 0.38;
   }
 
   &_checked#{&}_disabled &__checkmark {
-    background: var(--m3-sys-surface);
+    --background: var(--m3-sys-surface);
     opacity: 1;
   }
 
   &_checked#{&}_disabled &__checkmark * {
     opacity: 0.38;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-switch {
+    &::before,
+    &__handle,
+    &__checkmark,
+    &__checkmark::before,
+    &__state,
+    &__state::before {
+      transition: none;
+    }
+
+    &__state {
+      animation-duration: 1ms;
+    }
   }
 }
