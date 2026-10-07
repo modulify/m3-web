@@ -9,7 +9,7 @@ import {
   toMotionStyle,
 } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { useEffect, useRef } from 'react'
-import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { waitForMotion } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import { useAnimationFrame, useResizeObserver } from '@/hooks'
 
@@ -17,6 +17,7 @@ import { useStateRef } from './useStateRef'
 
 type UseSurfaceCardPageMorphResult = {
   expanded: boolean;
+  surfaceExpanded: boolean;
   busy: boolean;
   backgroundCollapsed: boolean;
   originHeight: number;
@@ -28,6 +29,7 @@ type UseSurfaceCardPageMorphResult = {
 
 export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPageMorphResult {
   const [expanded, setExpanded, expandedRef] = useStateRef(false)
+  const [surfaceExpanded, setSurfaceExpanded] = useStateRef(false)
   const [busy, setBusy, busyRef] = useStateRef(false)
   const [backgroundCollapsed, setBackgroundCollapsed, backgroundCollapsedRef] = useStateRef(false)
   const [originHeight, setOriginHeight] = useStateRef(220)
@@ -102,6 +104,8 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
 
     setExpanded(true)
     await raf()
+    await raf()
+    setSurfaceExpanded(true)
 
     const full = measureExpanded()
     if (!full) {
@@ -109,7 +113,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
     }
 
     setMotion(full)
-    await wait(transitionMs)
+    await waitForMotion(transitionMs)
     setBackgroundCollapsed(true)
   }
 
@@ -130,6 +134,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
     }
 
     setExpanded(false)
+    setSurfaceExpanded(false)
     await raf()
 
     if (!origin) {
@@ -137,7 +142,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
     }
 
     setMotion(origin)
-    await wait(transitionMs)
+    await waitForMotion(transitionMs)
   }
 
   const toggleCardMode = async () => {
@@ -163,6 +168,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
 
   return {
     expanded,
+    surfaceExpanded,
     busy,
     backgroundCollapsed,
     originHeight,

@@ -1,7 +1,10 @@
+import '../storybook/examples/surface/styles.scss'
+
 import { fireEvent } from '@testing-library/react'
 import { page } from 'vitest/browser'
 import { render, waitFor } from '@testing-library/react'
 
+import SurfaceCardPageMorph from '../storybook/examples/surface/SurfaceCardPageMorph'
 import SurfaceSideSheetAlwaysModal from '../storybook/examples/surface/SurfaceSideSheetAlwaysModal'
 
 const query = <ElementType extends Element>(selector: string): ElementType => {
@@ -41,6 +44,40 @@ test('reopens always-modal side-sheet with animated entry after close', async ()
     await openAndObserveEntry(2)
   } finally {
     document.removeEventListener('transitionrun', onTransitionRun)
+    view.unmount()
+  }
+})
+
+test('animates card rounding while expanding to a page', async () => {
+  await page.viewport(1440, 1024)
+  const view = render(<SurfaceCardPageMorph locale="en-US" />)
+
+  try {
+    expect(getComputedStyle(query<HTMLElement>('[data-testid="surface-card-morph"]')).borderTopLeftRadius).toBe('24px')
+
+    fireEvent.click(query<HTMLButtonElement>('[data-testid="surface-card-toggle"]'))
+
+    await waitFor(() => {
+      const panel = query<HTMLElement>('[data-testid="surface-card-morph"]')
+      expect(panel.getAnimations().some(animation =>
+        'transitionProperty' in animation && animation.transitionProperty === 'border-top-left-radius'
+      )).toBe(true)
+    })
+
+    await waitFor(() => expect(getComputedStyle(query<HTMLElement>('[data-testid="surface-card-morph"]')).borderTopLeftRadius).toBe('0px'), { timeout: 2200 })
+
+    await waitFor(() => expect(query<HTMLButtonElement>('[data-testid="surface-card-toggle"]').disabled).toBe(false), { timeout: 2200 })
+    fireEvent.click(query<HTMLButtonElement>('[data-testid="surface-card-toggle"]'))
+
+    await waitFor(() => {
+      const panel = query<HTMLElement>('[data-testid="surface-card-morph"]')
+      expect(panel.getAnimations().some(animation =>
+        'transitionProperty' in animation && animation.transitionProperty === 'border-top-left-radius'
+      )).toBe(true)
+    })
+
+    await waitFor(() => expect(getComputedStyle(query<HTMLElement>('[data-testid="surface-card-morph"]')).borderTopLeftRadius).toBe('24px'), { timeout: 2200 })
+  } finally {
     view.unmount()
   }
 })
