@@ -1,7 +1,6 @@
 @use '../../basics/layout' as m3-layout;
 @use '../../basics/motion' as m3-motion;
 @use '../../basics/typography' as m3-typography;
-@use '../navigation/variables' as navigation;
 
 .m3-snackbar-host {
   --m3-snackbar-inset-inline-start: 16px;
@@ -111,45 +110,9 @@
   }
 }
 
-.m3-has-navigation .m3-snackbar-host,
-.m3-has-navigation_bar .m3-snackbar-host {
-  --m3-snackbar-inset-block-end: calc(var(--m3-navigation-bar-measured-height, #{navigation.$m3-navigation-bar-height}) + 16px);
-}
-
-.m3-has-navigation_rail .m3-snackbar-host {
-  --m3-snackbar-inset-inline-start: calc(#{navigation.$m3-navigation-rail-width} + 24px);
-}
-
-.m3-has-navigation_rail-expanded .m3-snackbar-host {
-  --m3-snackbar-inset-inline-start: calc(#{navigation.$m3-navigation-rail-expanded-size} + 24px);
-}
-
-.m3-has-navigation_drawer .m3-snackbar-host {
-  --m3-snackbar-inset-inline-start: calc(#{navigation.$m3-navigation-drawer-width} + 24px);
-}
-
-@include m3-layout.screen-from('expanded') {
-  .m3-has-navigation:not(.m3-has-navigation_bar, .m3-has-navigation_rail, .m3-has-navigation_rail-expanded, .m3-has-navigation_drawer) .m3-snackbar-host {
-    --m3-snackbar-inset-inline-start: calc(#{navigation.$m3-navigation-rail-width} + 24px);
-    --m3-snackbar-inset-block-end: 24px;
-  }
-}
-
-@include m3-layout.screen-from('large') {
-  .m3-has-navigation:not(.m3-has-navigation_bar, .m3-has-navigation_rail, .m3-has-navigation_rail-expanded, .m3-has-navigation_drawer) .m3-snackbar-host {
-    --m3-snackbar-inset-inline-start: calc(#{navigation.$m3-navigation-rail-expanded-size} + 24px);
-  }
-}
-
-body:has(.m3-navigation_rail-expanded:not(.m3-navigation_modal)) :is(.m3-has-navigation, .m3-has-navigation_rail):not(.m3-has-navigation_bar):not(.m3-has-navigation_drawer) .m3-snackbar-host {
-  --m3-snackbar-inset-inline-start: calc(#{navigation.$m3-navigation-rail-expanded-size} + 24px);
-  --m3-snackbar-inset-block-end: 24px;
-}
-
-body:has(.m3-navigation_hide-collapsed:not(.m3-navigation_rail-expanded)) :is(.m3-has-navigation, .m3-has-navigation_rail) .m3-snackbar-host,
-body:has(.m3-navigation_hide-collapsed.m3-navigation_modal) :is(.m3-has-navigation, .m3-has-navigation_rail) .m3-snackbar-host {
-  --m3-snackbar-inset-inline-start: 24px;
-  --m3-snackbar-inset-block-end: 24px;
+.m3-has-navigation .m3-snackbar-host {
+  --m3-snackbar-inset-inline-start: calc(var(--m3-navigation-content-inset-inline-start) + var(--m3-navigation-snackbar-inline-gap));
+  --m3-snackbar-inset-block-end: calc(var(--m3-navigation-content-inset-block-end) + var(--m3-navigation-snackbar-block-gap));
 }
 
 @keyframes m3-snackbar-enter {
