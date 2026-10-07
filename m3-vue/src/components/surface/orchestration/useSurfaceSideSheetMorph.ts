@@ -4,7 +4,7 @@ import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/d
 import { nextTick, onBeforeUnmount, onMounted } from 'vue'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { ref } from 'vue'
-import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { waitForMotion } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import { durations } from '@modulify/m3-foundation/lib/motion'
 
@@ -136,7 +136,7 @@ export function useSurfaceSideSheetMorph() {
     modalElevation.value = MODAL_SIDE_SHEET_DESCRIPTOR.elevation
     modalRole.value = MODAL_SIDE_SHEET_DESCRIPTOR.variant
 
-    await wait(PANEL_TRANSITION_MS)
+    await waitForMotion(PANEL_TRANSITION_MS)
 
     dockedPanelShown.value = false
   }
@@ -164,7 +164,7 @@ export function useSurfaceSideSheetMorph() {
     modalInsetRight.value = dockedTarget.insetRight
     modalInsetBottom.value = dockedTarget.insetBottom
 
-    await wait(PANEL_TRANSITION_MS)
+    await waitForMotion(PANEL_TRANSITION_MS)
 
     sideSheetModal.value = false
     modalShown.value = false

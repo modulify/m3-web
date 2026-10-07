@@ -553,6 +553,12 @@ onBeforeUnmount(() => {
     transition: width var(--surface-panel-transition-ms) var(--surface-panel-transition-easing);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .surface-side-sheet__docked-host {
+        transition: none;
+    }
+}
+
 :global(.surface-side-sheet__sheet h3) {
     margin-block: 0 8px;
     margin-inline: 0;

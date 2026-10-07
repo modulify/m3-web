@@ -381,6 +381,12 @@ const {
     transition: width var(--surface-panel-transition-ms) var(--surface-panel-transition-easing);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .surface-side-sheet__docked-host {
+        transition: none;
+    }
+}
+
 .surface-side-sheet__sheet_docked {
     flex: 1 1 auto;
     min-inline-size: 0;

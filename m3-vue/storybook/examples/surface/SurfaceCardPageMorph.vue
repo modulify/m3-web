@@ -116,12 +116,12 @@
                                     :transition-timing="easing.standard"
                                     :fill-width="true"
                                     :fill-height="overlayActive"
-                                    :rounding="expanded ? 0 : 24"
-                                    :elevation="expanded ? 0 : 1"
-                                    :variant="expanded ? 'surface' : 'surface-container-low'"
+                                    :rounding="surfaceExpanded ? 0 : 24"
+                                    :elevation="surfaceExpanded ? 0 : 1"
+                                    :variant="surfaceExpanded ? 'surface' : 'surface-container-low'"
                                     :class="[
                                         'surface-card-page__morph-surface',
-                                        expanded
+                                        surfaceExpanded
                                             ? 'surface-card-page__morph-surface_expanded'
                                             : 'surface-card-page__morph-surface_compact',
                                     ]"
@@ -134,8 +134,8 @@
                                         :fill-height="false"
                                         :height="120"
                                         :rounding="14"
-                                        :elevation="expanded ? 1 : 3"
-                                        :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
+                                        :elevation="surfaceExpanded ? 1 : 3"
+                                        :variant="surfaceExpanded ? 'surface-container-low' : 'surface-container-high'"
                                         class="surface-card-page__morph-nested"
                                     >
                                         {{ text.nested }}
@@ -181,12 +181,12 @@
                                 :transition-timing="easing.standard"
                                 :fill-width="true"
                                 :fill-height="overlayActive"
-                                :rounding="expanded ? 0 : 24"
-                                :elevation="expanded ? 0 : 1"
-                                :variant="expanded ? 'surface' : 'surface-container-low'"
+                                :rounding="surfaceExpanded ? 0 : 24"
+                                :elevation="surfaceExpanded ? 0 : 1"
+                                :variant="surfaceExpanded ? 'surface' : 'surface-container-low'"
                                 :class="[
                                     'surface-card-page__morph-surface',
-                                    expanded
+                                    surfaceExpanded
                                         ? 'surface-card-page__morph-surface_expanded'
                                         : 'surface-card-page__morph-surface_compact',
                                 ]"
@@ -199,8 +199,8 @@
                                     :fill-height="false"
                                     :height="120"
                                     :rounding="14"
-                                    :elevation="expanded ? 1 : 3"
-                                    :variant="expanded ? 'surface-container-low' : 'surface-container-high'"
+                                    :elevation="surfaceExpanded ? 1 : 3"
+                                    :variant="surfaceExpanded ? 'surface-container-low' : 'surface-container-high'"
                                     class="surface-card-page__morph-nested"
                                 >
                                     {{ text.nested }}
@@ -246,6 +246,7 @@ const {
   canvas,
   originSlot,
   expanded,
+  surfaceExpanded,
   busy,
   backgroundCollapsed,
   originHeight,
@@ -397,6 +398,12 @@ const overlayActive = computed(() => busy.value || expanded.value)
         left #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
         width #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')},
         height #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')};
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .surface-card-page__overlay-wrap {
+        transition: none;
+    }
 }
 
 .surface-card-page__overlay-wrap_inline {
