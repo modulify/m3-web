@@ -59,6 +59,10 @@ const query = <T extends Element>(selector: string) => {
   return element
 }
 
+const hasRadiusTransition = () => query<HTMLElement>('[data-testid="surface-card-morph"]')
+  .getAnimations()
+  .some(animation => 'transitionProperty' in animation && animation.transitionProperty === 'border-top-left-radius')
+
 const click = (selector: string) => {
   query<HTMLElement>(selector).dispatchEvent(new MouseEvent('click', {
     bubbles: true,
@@ -198,9 +202,14 @@ describe('m3-vue/surface stories e2e', () => {
     const originBefore = query<HTMLElement>('[data-testid="surface-card-origin"]').getBoundingClientRect()
 
     expect(document.querySelector('[data-testid="surface-card-grid"]')).not.toBeNull()
+    expect(getComputedStyle(query<HTMLElement>('[data-testid="surface-card-morph"]')).borderTopLeftRadius).toBe('24px')
 
     click('[data-testid="surface-card-toggle"]')
     await nextTick()
+
+    await waitFor(() => {
+      expect(hasRadiusTransition()).toBe(true)
+    })
 
     await delay(120)
     expect(document.querySelector('[data-testid="surface-card-grid"]')).not.toBeNull()
@@ -227,6 +236,10 @@ describe('m3-vue/surface stories e2e', () => {
 
     click('[data-testid="surface-card-toggle"]')
     await nextTick()
+
+    await waitFor(() => {
+      expect(hasRadiusTransition()).toBe(true)
+    })
 
     await delay(80)
     expect(document.querySelector('[data-testid="surface-card-grid"]')).not.toBeNull()

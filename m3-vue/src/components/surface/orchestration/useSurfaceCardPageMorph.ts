@@ -9,13 +9,17 @@ import {
 import { nextTick, onMounted } from 'vue'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { ref } from 'vue'
-import { toMotionStyle, wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+import {
+  toMotionStyle,
+  waitForMotion,
+} from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import { useAnimationFrame } from '@/composables/animation'
 import { useResizeObserver } from '@/composables/observer'
 
 export function useSurfaceCardPageMorph(transitionMs: number) {
   const expanded = ref(false)
+  const surfaceExpanded = ref(false)
   const busy = ref(false)
   const backgroundCollapsed = ref(false)
   const originHeight = ref(220)
@@ -99,6 +103,8 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
     expanded.value = true
     await nextTick()
     await raf()
+    await raf()
+    surfaceExpanded.value = true
 
     const full = measureExpanded()
     if (!full) {
@@ -106,7 +112,7 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
     }
 
     motion.value = full
-    await wait(transitionMs)
+    await waitForMotion(transitionMs)
     backgroundCollapsed.value = true
   }
 
@@ -128,6 +134,7 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
     }
 
     expanded.value = false
+    surfaceExpanded.value = false
     await nextTick()
     await raf()
 
@@ -136,7 +143,7 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
     }
 
     motion.value = origin
-    await wait(transitionMs)
+    await waitForMotion(transitionMs)
   }
 
   async function toggleCardMode() {
@@ -163,6 +170,7 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
 
   return {
     expanded,
+    surfaceExpanded,
     busy,
     backgroundCollapsed,
     originHeight,
