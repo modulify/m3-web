@@ -140,6 +140,12 @@ html.m3-theme-dark .surface-card-page {
     height #{m3-motion.duration('medium3')} #{m3-motion.easing('standard')};
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .surface-card-page__overlay-wrap {
+    transition: none;
+  }
+}
+
 .surface-card-page__overlay-wrap_inline {
   position: relative;
   transition: none;
@@ -425,6 +431,12 @@ html.m3-theme-dark .surface-card-page {
   overflow: hidden;
   border-left: 1px solid var(--surface-border);
   transition: width var(--surface-panel-transition-ms) var(--surface-panel-transition-easing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface-side-sheet__docked-host {
+    transition: none;
+  }
 }
 
 .surface-side-sheet__sheet_docked {

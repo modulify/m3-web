@@ -32,6 +32,7 @@ const SurfaceCardPageMorph: FC<{ locale: StorybookLocale }> = ({ locale }) => {
   const [activeNavTab, setActiveNavTab] = useStateRef<NavTab>('files')
   const {
     expanded,
+    surfaceExpanded,
     busy,
     backgroundCollapsed,
     originHeight,
@@ -49,17 +50,17 @@ const SurfaceCardPageMorph: FC<{ locale: StorybookLocale }> = ({ locale }) => {
     <M3SurfacePanel
       className={toClassName([
         'surface-card-page__morph-surface',
-        expanded
+        surfaceExpanded
           ? 'surface-card-page__morph-surface_expanded'
           : 'surface-card-page__morph-surface_compact',
       ])}
       fillWidth={true}
       fillHeight={overlayActive}
-      rounding={expanded ? 0 : 24}
+      rounding={surfaceExpanded ? 0 : 24}
       transitionMs={TRANSITION_MS}
       transitionTiming={TRANSITION_EASING}
-      variant={expanded ? 'surface' : 'surface-container-low'}
-      elevation={expanded ? 0 : 1}
+      variant={surfaceExpanded ? 'surface' : 'surface-container-low'}
+      elevation={surfaceExpanded ? 0 : 1}
       overflow="auto"
       data-testid="surface-card-morph"
     >
@@ -71,8 +72,8 @@ const SurfaceCardPageMorph: FC<{ locale: StorybookLocale }> = ({ locale }) => {
         fillHeight={false}
         height={120}
         rounding={14}
-        variant={expanded ? 'surface-container-low' : 'surface-container-high'}
-        elevation={expanded ? 1 : 3}
+        variant={surfaceExpanded ? 'surface-container-low' : 'surface-container-high'}
+        elevation={surfaceExpanded ? 1 : 3}
       >
         {text.nested}
       </M3SurfacePanel>

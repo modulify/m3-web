@@ -5,7 +5,7 @@ import { durations } from '@modulify/m3-foundation/lib/motion'
 import { getSurfaceStateDescriptor } from '@modulify/m3-foundation/lib/surface/descriptor'
 import { raf } from '@modulify/m3-foundation/lib/surface/orchestration'
 import { useEffect, useRef } from 'react'
-import { wait } from '@modulify/m3-foundation/lib/surface/orchestration'
+import { waitForMotion } from '@modulify/m3-foundation/lib/surface/orchestration'
 
 import { useAnimationFrame } from '@/hooks'
 
@@ -176,7 +176,7 @@ export function useSurfaceSideSheetMorph(): UseSurfaceSideSheetMorphResult {
     setModalElevation(MODAL_SIDE_SHEET_DESCRIPTOR.elevation)
     setModalRole(MODAL_SIDE_SHEET_DESCRIPTOR.variant)
 
-    await wait(PANEL_TRANSITION_MS)
+    await waitForMotion(PANEL_TRANSITION_MS)
 
     setDockedPanelShown(false)
   }
@@ -203,7 +203,7 @@ export function useSurfaceSideSheetMorph(): UseSurfaceSideSheetMorphResult {
     setModalInsetRight(dockedTarget.insetRight)
     setModalInsetBottom(dockedTarget.insetBottom)
 
-    await wait(PANEL_TRANSITION_MS)
+    await waitForMotion(PANEL_TRANSITION_MS)
 
     setSideSheetModal(false)
     setModalShown(false)
