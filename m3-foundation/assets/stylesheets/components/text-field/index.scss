@@ -29,7 +29,7 @@
   textarea {
     display: block;
     flex-grow: 1;
-    width: 100%;
+    inline-size: 100%;
     padding: 12px 0;
     background: transparent;
     border: none;
@@ -48,19 +48,18 @@
   }
 
   input {
-    height: 48px;
+    block-size: 48px;
   }
 
   textarea {
-    min-height: 48px;
+    min-block-size: 48px;
     padding-inline-end: 12px;
     resize: vertical;
   }
 
   &:not(&_outlined) input,
   &:not(&_outlined) textarea {
-    padding-top: 20px;
-    padding-bottom: 4px;
+    padding-block: 20px 4px;
   }
 
   &:not(&_focused) input::placeholder,
@@ -71,7 +70,7 @@
   &__label {
     display: inline-block;
     transition:
-      m3-motion.timing-standard(width),
+      m3-motion.timing-standard(inline-size),
       m3-motion.timing-standard(font-size),
       m3-motion.timing-standard(line-height)
     ;
@@ -99,10 +98,10 @@
     display: flex;
     border-radius: inherit;
     position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    inset-block-end: 0;
   }
 
   &__outline-leading,
@@ -138,29 +137,29 @@
   }
 
   &__outline-leading {
-    width: 16px;
+    inline-size: 16px;
     border-inline-end: none;
     border-start-start-radius: inherit;
     border-end-start-radius: inherit;
     transition:
       m3-motion.timing-standard(border, 'short2'),
-      m3-motion.timing-standard(width)
+      m3-motion.timing-standard(inline-size)
     ;
   }
 
   &_has-leading &__outline-leading {
-    width: 48px;
+    inline-size: 48px;
   }
 
   &_has-leading#{&}_filled &__outline-leading,
   &_has-leading#{&}_focused &__outline-leading {
-    width: 16px;
+    inline-size: 16px;
   }
 
   &__outline-notch {
     padding-block: 16px;
-    border-left: none;
-    border-right: none;
+    border-inline-start: none;
+    border-inline-end: none;
     transition:
       m3-motion.timing-standard(padding-inline),
       m3-motion.timing-standard(border, 'short2')
@@ -169,14 +168,14 @@
   }
 
   &__outline-notch &__label {
-    width: 100%;
+    inline-size: 100%;
     animation: m3-motion.timing-standard(m3-text-field-outlined-label-slide-out);
   }
 
   &_filled &__outline-notch,
   &_focused &__outline-notch {
-    border-top-color: transparent !important;
-    border-top-width: 1px;
+    border-block-start-color: transparent !important;
+    border-block-start-width: 1px;
     padding-inline: 4px;
   }
 
@@ -215,14 +214,14 @@
 
   &:not(&_outlined):not(&_disabled):not(&_readonly):hover &__content::before {
     content: ' ';
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     background: var(--m3-sys-on-surface);
     border-radius: inherit;
     opacity: 0.08;
     position: absolute;
-    top: 0;
-    left: 0;
+    inset-block-start: 0;
+    inset-inline-start: 0;
   }
 
   &_disabled &__content {
@@ -232,11 +231,11 @@
   &:not(&_outlined) &__label {
     position: absolute;
     inset-inline-start: 16px;
-    top: 16px; // 50% - 12px
+    inset-block-start: 16px; // 50% - 12px
   }
 
   &_has-leading:not(&_outlined) &__label {
-    left: 48px;
+    inset-inline-start: 48px;
     animation: m3-motion.timing-standard(m3-text-field-label-slide-out);
   }
 
@@ -248,32 +247,32 @@
 
   &__icon {
     flex-shrink: 0;
-    width: 48px;
-    height: 48px;
+    inline-size: 48px;
+    block-size: 48px;
     padding: 12px;
 
     > *, .nuxt-icon {
-      width: 100%;
-      height: 100%;
+      inline-size: 100%;
+      block-size: 100%;
     }
   }
 
   &__underline {
-    width: 100%;
-    height: var(--m3-text-field-border-width);
+    inline-size: 100%;
+    block-size: var(--m3-text-field-border-width);
     background: var(--m3-sys-on-surface-variant);
-    transition: m3-motion.timing-standard(height, 'short2');
+    transition: m3-motion.timing-standard(block-size, 'short2');
     position: absolute;
-    bottom: 0;
+    inset-block-end: 0;
 
     &::after {
       content: '';
-      width: 0;
-      height: 100%;
+      inline-size: 0;
+      block-size: 100%;
       background: var(--m3-sys-primary);
       position: absolute;
-      left: 50%;
-      bottom: 0;
+      inset-inline-start: 50%;
+      inset-block-end: 0;
       transition: m3-motion.timing-standard(all);
     }
   }
@@ -283,8 +282,8 @@
   }
 
   &_focused &__underline::after {
-    width: 100%;
-    left: 0;
+    inline-size: 100%;
+    inset-inline-start: 0;
   }
 
   &_invalid:not(&_disabled):not(&_readonly) &__underline,
@@ -301,8 +300,9 @@
 
 .m3-text-field-support-text {
   display: flex;
-  width: 210px;
-  padding: 4px 16px 0 16px;
+  inline-size: 210px;
+  padding-block: 4px 0;
+  padding-inline: 16px;
   align-items: flex-start;
   gap: 10px;
   color: var(--m3-sys-on-surface-variant);

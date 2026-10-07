@@ -4,8 +4,8 @@
 .m3-date-picker {
   @include m3-shape.corner(28px);
 
-  width: 360px;
-  max-width: 100%;
+  inline-size: 360px;
+  max-inline-size: 100%;
   display: flex;
   flex-direction: column;
   background: var(--m3-sys-surface-container-high);
@@ -13,8 +13,9 @@
   box-sizing: border-box;
 
   &__header {
-    min-height: 80px;
-    padding: 16px 24px 12px;
+    min-block-size: 80px;
+    padding-block: 16px 12px;
+    padding-inline: 24px;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -22,11 +23,11 @@
   }
 
   &__header-copy {
-    min-width: 0;
+    min-inline-size: 0;
   }
 
   &__header-action {
-    min-height: 48px;
+    min-block-size: 48px;
     display: inline-flex;
     align-items: center;
     align-self: flex-start;
@@ -41,27 +42,28 @@
   &__headline {
     @include m3-typography.title-large;
 
-    margin-top: 8px;
+    margin-block-start: 8px;
     color: var(--m3-sys-on-surface);
   }
 
   &_input {
-    width: 328px;
-    min-height: 218px;
+    inline-size: 328px;
+    min-block-size: 218px;
   }
 
   &_input &__header {
-    min-height: 136px;
-    padding: 24px 24px 10px;
+    min-block-size: 136px;
+    padding-block: 24px 10px;
+    padding-inline: 24px;
     align-items: flex-end;
-    border-bottom: 1px solid var(--m3-sys-outline-variant);
+    border-block-end: 1px solid var(--m3-sys-outline-variant);
     box-sizing: border-box;
   }
 
   &_input &__headline {
     @include m3-typography.display-small;
 
-    margin-top: 36px;
+    margin-block-start: 36px;
   }
 
   &_input &__header-action {
@@ -69,11 +71,12 @@
   }
 
   &_input .m3-text-field {
-    width: 100%;
+    inline-size: 100%;
   }
 
   &__input-content {
-    padding: 10px 24px 16px;
+    padding-block: 10px 16px;
+    padding-inline: 24px;
   }
 
   &__input-fields {
@@ -87,7 +90,7 @@
   }
 
   &_navigation-inline &__header {
-    border-bottom: 1px solid var(--m3-sys-outline-variant);
+    border-block-end: 1px solid var(--m3-sys-outline-variant);
   }
 
   &_docked {
@@ -95,23 +98,23 @@
   }
 
   &_docked#{&}_weeks-4 &__month-viewport {
-    height: 252px;
+    block-size: 252px;
   }
 
   &_docked#{&}_weeks-5 &__month-viewport {
-    height: 300px;
+    block-size: 300px;
   }
 
   &_docked#{&}_weeks-6 &__month-viewport {
-    height: 348px;
+    block-size: 348px;
   }
 
   &_docked .m3-year-picker_list {
-    height: 404px;
+    block-size: 404px;
   }
 
   &__month-navigation {
-    height: 56px;
+    block-size: 56px;
     padding: 0 12px;
     display: flex;
     align-items: center;
@@ -139,7 +142,7 @@
   &__navigation-label {
     @include m3-typography.label-large;
 
-    min-width: 48px;
+    min-inline-size: 48px;
     padding: 10px 4px;
     color: var(--m3-sys-on-surface);
     text-align: center;
@@ -161,9 +164,8 @@
 
   &__month-button .m3-button__content,
   &__year-button .m3-button__content {
-    min-width: 72px;
-    padding-right: 8px;
-    padding-left: 8px;
+    min-inline-size: 72px;
+    padding-inline: 8px;
     gap: 4px;
   }
 
@@ -176,7 +178,7 @@
   }
 
   &__inline-navigation {
-    height: 56px;
+    block-size: 56px;
     padding: 0 24px;
     display: flex;
     align-items: center;
@@ -197,8 +199,7 @@
   }
 
   &__inline-month-button .m3-button__content {
-    padding-right: 8px;
-    padding-left: 8px;
+    padding-inline: 8px;
     gap: 4px;
   }
 
@@ -233,13 +234,13 @@
   }
 
   &__month-viewport {
-    width: 100%;
+    inline-size: 100%;
     overflow: hidden;
   }
 
   &__month-track {
     display: flex;
-    width: 300%;
+    inline-size: 300%;
     transform: translateX(calc(-33.333333% + var(--m3-date-picker-slide-offset, 0px)));
 
     &_animating {
@@ -252,8 +253,9 @@
   }
 
   &__footer {
-    min-height: 56px;
-    padding: 4px 12px 12px;
+    min-block-size: 56px;
+    padding-block: 4px 12px;
+    padding-inline: 12px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -283,16 +285,16 @@
   &_circle {
     @include m3-typography.body-large;
 
-    width: 40px;
-    height: 40px;
+    inline-size: 40px;
+    block-size: 40px;
     border-radius: 999px;
     justify-self: center;
     color: var(--m3-sys-on-surface);
   }
 
   &_pill {
-    width: 88px;
-    min-height: 40px;
+    inline-size: 88px;
+    min-block-size: 40px;
     border-radius: 999px;
   }
 
@@ -358,7 +360,7 @@
   --m3-list-item-selected-container-color: var(--m3-sys-surface-variant);
   --m3-list-item-selected-label-color: var(--m3-sys-on-surface);
 
-  width: 100%;
+  inline-size: 100%;
   padding: 8px 0;
 
   &__check {
@@ -369,8 +371,9 @@
 }
 
 .m3-month-picker {
-  height: 348px;
-  padding: 16px 24px 24px;
+  block-size: 348px;
+  padding-block: 16px 24px;
+  padding-inline: 24px;
   box-sizing: border-box;
 
   &_animating {
@@ -384,7 +387,7 @@
   }
 
   &__row {
-    height: 56px;
+    block-size: 56px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
@@ -392,19 +395,20 @@
   }
 
   &_list {
-    height: 404px;
+    block-size: 404px;
     padding: 0;
     overflow-y: auto;
   }
 }
 
 .m3-year-picker {
-  height: 348px;
+  block-size: 348px;
   overflow-y: auto;
   box-sizing: border-box;
 
   &_grid {
-    padding: 0 24px 24px;
+    padding-block: 0 24px;
+    padding-inline: 24px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 56px;
@@ -420,7 +424,7 @@
 
 .m3-date-picker-dialog {
   &.m3-dialog {
-    width: 360px;
+    inline-size: 360px;
     overflow: hidden;
   }
 
@@ -429,18 +433,19 @@
   }
 
   .m3-dialog__footer {
-    padding-top: 8px;
+    padding-block-start: 8px;
   }
 
   &_input .m3-dialog__footer {
-    padding: 0 24px 12px;
+    padding-block: 0 12px;
+    padding-inline: 24px;
   }
 
   .m3-date-picker {
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+    border-end-end-radius: 0;
+    border-end-start-radius: 0;
   }
 }
 
@@ -449,14 +454,15 @@
   flex-direction: column;
 
   .m3-text-field {
-    width: 100%;
+    inline-size: 100%;
   }
 
   &__supporting-text {
     @include m3-typography.body-small;
 
-    min-height: 20px;
-    padding: 4px 16px 0;
+    min-block-size: 20px;
+    padding-block: 4px 0;
+    padding-inline: 16px;
     color: var(--m3-sys-on-surface-variant);
     box-sizing: border-box;
   }
@@ -487,26 +493,27 @@
   }
 
   &__week {
-    min-height: 48px;
+    min-block-size: 48px;
     align-items: center;
   }
 
   &__weekday {
-    height: 48px;
+    block-size: 48px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
   }
 
   &__grid {
-    padding: 0 12px 12px;
+    padding-block: 0 12px;
+    padding-inline: 12px;
     display: flex;
     flex-direction: column;
   }
 
   &__day-cell {
-    width: 48px;
-    height: 48px;
+    inline-size: 48px;
+    block-size: 48px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -515,21 +522,21 @@
 
     &_in-range::before {
       content: '';
-      height: 40px;
+      block-size: 40px;
       display: block;
       position: absolute;
-      top: 4px;
-      right: 0;
-      left: 0;
+      inset-block-start: 4px;
+      inset-inline-end: 0;
+      inset-inline-start: 0;
       background: var(--m3-sys-secondary-container);
     }
 
     &_range-start::before {
-      left: 24px;
+      inset-inline-start: 24px;
     }
 
     &_range-end::before {
-      right: 24px;
+      inset-inline-end: 24px;
     }
 
     &_range-start#{&}_range-end::before {

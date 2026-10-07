@@ -21,8 +21,7 @@
 
 @mixin m3-navigation-rail {
   inline-size: $m3-navigation-rail-width;
-  padding-block-start: 44px;
-  padding-block-end: 56px;
+  padding-block: 44px 56px;
   gap: 40px;
 }
 
@@ -75,8 +74,7 @@
   &_rail-expanded {
     inline-size: $m3-navigation-rail-expanded-size;
     max-inline-size: 100vw;
-    padding-block-start: 44px;
-    padding-block-end: 20px;
+    padding-block: 44px 20px;
     gap: 40px;
     background: var(--m3-sys-surface);
   }
@@ -221,8 +219,7 @@
     inline-size: 100%;
     block-size: 56px;
     padding-block: 8px;
-    padding-inline-start: 28px;
-    padding-inline-end: 20px;
+    padding-inline: 28px 20px;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -557,8 +554,7 @@
 
   &_in-drawer &__state {
     padding-block: 16px;
-    padding-inline-start: 16px;
-    padding-inline-end: 24px;
+    padding-inline: 16px 24px;
     gap: 12px;
   }
 

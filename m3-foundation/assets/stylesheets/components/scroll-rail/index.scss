@@ -6,41 +6,41 @@
   $slider-thickness-on-hover: var(--m3-scroll-slider-thickness-on-hover, 8px);
 
   display: flex;
-  width: $rail-thickness;
-  height: 100%;
+  inline-size: $rail-thickness;
+  block-size: 100%;
   flex-direction: column;
   align-items: center;
   user-select: none;
   position: absolute;
-  top: 0;
-  right: 0;
+  inset-block-start: 0;
+  inset-inline-end: 0;
 
   &_disabled {
-    width: 0;
+    inline-size: 0;
     opacity: 0;
   }
 
   &_horizontal {
-    width: 100%;
-    height: $rail-thickness;
+    inline-size: 100%;
+    block-size: $rail-thickness;
     flex-direction: row;
-    top: auto;
-    left: 0;
-    right: auto;
-    bottom: 0;
+    inset-block-start: auto;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+    inset-block-end: 0;
   }
 
   &_horizontal#{&}_disabled {
-    height: 0;
+    block-size: 0;
   }
 
   &__slider {
-    width: $slider-thickness;
+    inline-size: $slider-thickness;
     background: var(--m3-state-layers-on-surface-opacity-012);
     border-radius: var(--m3-scroll-slider-rounding, 4px);
     cursor: pointer;
     transition:
-      m3-motion.timing-standard(width),
+      m3-motion.timing-standard(inline-size),
       m3-motion.timing-standard(background-color),
       m3-motion.timing-standard(opacity)
     ;
@@ -48,9 +48,9 @@
   }
 
   &_horizontal &__slider {
-    height: $slider-thickness;
+    block-size: $slider-thickness;
     transition:
-      m3-motion.timing-standard(height),
+      m3-motion.timing-standard(block-size),
       m3-motion.timing-standard(background-color),
       m3-motion.timing-standard(opacity)
     ;
@@ -58,12 +58,12 @@
 
   &:hover  &__slider,
   &_active &__slider {
-    width: $slider-thickness-on-hover;
+    inline-size: $slider-thickness-on-hover;
     background: var(--m3-state-layers-on-surface-opacity-020);
   }
 
   &_horizontal:hover      &__slider,
   &_horizontal#{&}_active &__slider {
-    height: $slider-thickness-on-hover;
+    block-size: $slider-thickness-on-hover;
   }
 }
