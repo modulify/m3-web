@@ -124,7 +124,7 @@ const meta = {
 
           {renderDestinations(text)}
         </M3Navigation>
-        <NavigationStoryContent locale={globals.locale} appearance={appearance} />
+        <NavigationStoryContent locale={globals.locale} />
       </>
     )
   },
@@ -170,7 +170,7 @@ export const NavigationRailExpanded: Story = {
           </M3Navigation.Top>
           {renderDestinations(text)}
         </M3Navigation>
-        <NavigationStoryContent locale={globals.locale} appearance={appearance} />
+        <NavigationStoryContent locale={globals.locale} />
       </>
     )
   },
@@ -192,7 +192,7 @@ export const ModalNavigationRail: Story = {
           </M3Navigation.Top>
           {renderDestinations(text)}
         </M3Navigation>
-        <NavigationStoryContent locale={globals.locale} appearance="rail" />
+        <NavigationStoryContent locale={globals.locale} />
       </>
     )
   },
@@ -221,7 +221,7 @@ export const ImmersiveNavigationRail: Story = {
           </M3Navigation.Top>
           {renderDestinations(text)}
         </M3Navigation>
-        <NavigationStoryContent locale={globals.locale} appearance="rail" topAction />
+        <NavigationStoryContent locale={globals.locale} topAction />
       </>
     )
   },
@@ -276,7 +276,7 @@ export const ModalNavigationDrawer: Story = {
 
           {renderDestinations(text)}
         </M3Navigation>
-        <NavigationStoryContent locale={globals.locale} appearance="rail" />
+        <NavigationStoryContent locale={globals.locale} />
       </>
     )
   },

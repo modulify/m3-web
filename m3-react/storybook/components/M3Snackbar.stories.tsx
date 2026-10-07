@@ -130,7 +130,7 @@ function SnackbarInteraction({ scenario, locale }: { scenario: Scenario; locale:
         <M3NavigationTab label={text.browse}><M3Icon name="explore" /></M3NavigationTab>
         <M3NavigationTab label={text.library}><M3Icon name="library_music" /></M3NavigationTab>
       </M3Navigation>
-      <main className="m3-has-navigation_bar" style={{ minHeight: '100vh', padding: 32, background: 'var(--m3-sys-surface)' }}>
+      <main className="m3-has-navigation" style={{ minHeight: '100vh', padding: 32, background: 'var(--m3-sys-surface)' }}>
         {content}
         <M3FabButton
           variant="tertiary"

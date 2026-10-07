@@ -3,6 +3,7 @@ import { page } from 'vitest/browser'
 import { render, waitFor } from '@testing-library/react'
 
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
+import { M3SnackbarHost } from '@/components/snackbar'
 
 const destinations = ['Inbox', 'Outbox', 'Favorites', 'Trash']
 
@@ -19,8 +20,9 @@ test('flexible bar centers its horizontal items and grows with text', async () =
   await page.viewport(320, 800)
 
   const content = document.createElement('main')
-  content.className = 'm3-has-navigation_bar'
+  content.className = 'm3-has-navigation'
   document.body.append(content)
+  const hostView = render(<M3SnackbarHost />, { container: content })
 
   const view = render(
     <M3Navigation appearance="bar">
@@ -37,12 +39,16 @@ test('flexible bar centers its horizontal items and grows with text', async () =
 
   try {
     const nav = query<HTMLElement>('nav.m3-navigation_bar')
+    const host = query<HTMLElement>('.m3-snackbar-host')
     const icon = query<HTMLElement>('.m3-navigation-tab__icon')
     expect(nav.getBoundingClientRect().height).toBe(64)
     expect(icon.getBoundingClientRect().width).toBe(56)
+    expect(getComputedStyle(host).left).toBe('16px')
+    expect(getComputedStyle(host).bottom).toBe('80px')
 
     await act(async () => { await page.viewport(700, 800) })
     await waitFor(() => expect(icon.getBoundingClientRect().width).toBe(24))
+    expect(getComputedStyle(host).left).toBe('24px')
 
     const section = query<HTMLElement>('.m3-navigation__section')
     const button = query<HTMLElement>('.m3-navigation-tab__button')
@@ -63,10 +69,15 @@ test('flexible bar centers its horizontal items and grows with text', async () =
     document.head.append(scaledText)
 
     await waitFor(() => expect(nav.getBoundingClientRect().height).toBeGreaterThan(64))
-    await waitFor(() => expect(Number.parseFloat(getComputedStyle(content).paddingBottom)).toBe(nav.getBoundingClientRect().height))
+    await waitFor(() => expect(Number.parseFloat(getComputedStyle(content).paddingBottom)).toBeCloseTo(nav.getBoundingClientRect().height, 0))
+
+    await act(async () => { await page.viewport(1300, 800) })
+    await waitFor(() => expect(getComputedStyle(content).paddingLeft).toBe('0px'))
+    expect(Number.parseFloat(getComputedStyle(host).bottom)).toBeCloseTo(nav.getBoundingClientRect().height + 16, 0)
   } finally {
     scaledText.remove()
     view.unmount()
+    hostView.unmount()
     content.remove()
   }
 })
@@ -278,8 +289,9 @@ test('places rail and drawer at the leading edge in RTL and keeps rail labels vi
   const previousDirection = document.documentElement.dir
   document.documentElement.dir = 'rtl'
   const content = document.createElement('main')
-  content.className = 'm3-has-navigation_rail'
+  content.className = 'm3-has-navigation'
   document.body.append(content)
+  const hostView = render(<M3SnackbarHost />, { container: content })
   const scaledText = document.createElement('style')
   scaledText.textContent = '.m3-navigation-tab__state .m3-navigation-tab__label { font-size: 24px !important; line-height: 32px !important; }'
   document.head.append(scaledText)
@@ -293,23 +305,26 @@ test('places rail and drawer at the leading edge in RTL and keeps rail labels vi
 
   try {
     const rail = query<HTMLElement>('nav.m3-navigation_rail')
+    const host = query<HTMLElement>('.m3-snackbar-host')
     const items = [...rail.querySelectorAll<HTMLElement>('.m3-navigation-tab')]
     const label = items[0].querySelector<HTMLElement>('.m3-navigation-tab__state .m3-navigation-tab__label')!
 
     expect(rail.getBoundingClientRect().right).toBe(900)
     expect(getComputedStyle(content).paddingRight).toBe('96px')
+    expect(getComputedStyle(host).right).toBe('120px')
     expect(items[0].getBoundingClientRect().height).toBeGreaterThan(56)
     expect(label.scrollHeight).toBeLessThanOrEqual(label.clientHeight)
     expect(items[1].getBoundingClientRect().top).toBeGreaterThanOrEqual(items[0].getBoundingClientRect().bottom)
 
-    content.className = 'm3-has-navigation_drawer'
     view.rerender(tabs('drawer'))
     const drawer = query<HTMLElement>('nav.m3-navigation_drawer')
     expect(drawer.getBoundingClientRect().right).toBe(900)
     expect(getComputedStyle(drawer).borderTopLeftRadius).toBe('16px')
     await waitFor(() => expect(getComputedStyle(content).paddingRight).toBe('360px'))
+    expect(getComputedStyle(host).right).toBe('384px')
   } finally {
     view.unmount()
+    hostView.unmount()
     scaledText.remove()
     content.remove()
     document.documentElement.dir = previousDirection
@@ -402,7 +417,7 @@ test('uses expressive rail geometry and keeps the whole expanded row interactive
 test('uses a scrim only for modal rail expansion and leaves page inset at collapsed width', async () => {
   await page.viewport(900, 800)
   const content = document.createElement('main')
-  content.className = 'm3-has-navigation_rail'
+  content.className = 'm3-has-navigation'
   document.body.append(content)
   const view = render(
     <M3Navigation appearance="rail" railExpandedMode="modal" expanded>
@@ -426,8 +441,9 @@ test('uses a scrim only for modal rail expansion and leaves page inset at collap
 test('animates a standard rail expansion and resizes page content', async () => {
   await page.viewport(900, 800)
   const content = document.createElement('main')
-  content.className = 'm3-has-navigation_rail'
+  content.className = 'm3-has-navigation'
   document.body.append(content)
+  const hostView = render(<M3SnackbarHost />, { container: content })
   const renderRail = (expanded: boolean) => (
     <M3Navigation appearance="rail" expanded={expanded} railExpandedMode="standard">
       <M3NavigationTab label="Inbox">★</M3NavigationTab>
@@ -437,7 +453,10 @@ test('animates a standard rail expansion and resizes page content', async () => 
 
   try {
     const nav = query<HTMLElement>('nav.m3-navigation')
+    const host = query<HTMLElement>('.m3-snackbar-host')
     expect(nav.getBoundingClientRect().width).toBe(96)
+    expect(getComputedStyle(host).left).toBe('120px')
+    expect(getComputedStyle(host).bottom).toBe('24px')
     const transitionProperties = new Set<string>()
     nav.addEventListener('transitionrun', event => {
       if (event.target === nav) transitionProperties.add(event.propertyName)
@@ -447,9 +466,11 @@ test('animates a standard rail expansion and resizes page content', async () => 
     await waitFor(() => expect([...transitionProperties]).toContain('width'), { timeout: 2000 })
     await waitFor(() => expect(nav.getBoundingClientRect().width).toBe(220), { timeout: 2000 })
     expect(getComputedStyle(content).paddingLeft).toBe('220px')
+    expect(getComputedStyle(host).left).toBe('244px')
     expect(document.querySelector('[aria-modal="true"]')).toBeNull()
   } finally {
     view.unmount()
+    hostView.unmount()
     content.remove()
   }
 })
@@ -459,8 +480,9 @@ test('hides an immersive collapsed rail while keeping an external menu trigger a
   const trigger = document.createElement('button')
   trigger.textContent = 'Open menu'
   const content = document.createElement('main')
-  content.className = 'm3-has-navigation_rail'
+  content.className = 'm3-has-navigation'
   document.body.append(trigger, content)
+  const hostView = render(<M3SnackbarHost />, { container: content })
   trigger.focus()
   const renderRail = (expanded: boolean) => (
     <M3Navigation appearance="rail" expanded={expanded} hideWhenCollapsed>
@@ -471,22 +493,32 @@ test('hides an immersive collapsed rail while keeping an external menu trigger a
 
   try {
     const nav = query<HTMLElement>('nav.m3-navigation')
+    const host = query<HTMLElement>('.m3-snackbar-host')
     await waitFor(() => expect(nav.getBoundingClientRect().right).toBeLessThanOrEqual(0))
     expect(nav.inert).toBe(true)
-    expect(getComputedStyle(content).paddingLeft).toBe('0px')
+    await waitFor(() => expect(getComputedStyle(content).paddingLeft).toBe('0px'), { timeout: 2000 })
+    expect(getComputedStyle(host).left).toBe('24px')
+    expect(getComputedStyle(host).bottom).toBe('24px')
     expect(trigger.inert).toBe(false)
 
     view.rerender(renderRail(true))
     await waitFor(() => expect(nav.getBoundingClientRect().x).toBe(0))
     expect(nav.classList.contains('m3-navigation_modal')).toBe(true)
     expect(getComputedStyle(content).paddingLeft).toBe('0px')
+    expect(getComputedStyle(host).left).toBe('24px')
     expect(trigger.inert).toBe(true)
 
     view.rerender(renderRail(false))
     await waitFor(() => expect(nav.getBoundingClientRect().right).toBeLessThanOrEqual(0))
     await waitFor(() => expect(trigger.inert).toBe(false))
+
+    await act(async () => { await page.viewport(500, 800) })
+    expect(getComputedStyle(content).paddingLeft).toBe('0px')
+    expect(getComputedStyle(host).left).toBe('24px')
+    expect(getComputedStyle(host).bottom).toBe('24px')
   } finally {
     view.unmount()
+    hostView.unmount()
     trigger.remove()
     content.remove()
   }

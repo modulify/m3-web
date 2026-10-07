@@ -1,4 +1,3 @@
-import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
 import type { FC } from 'react'
 
 import { M3SurfacePanel } from '@/components/surface'
@@ -7,7 +6,6 @@ import { localize } from '../../i18n'
 
 type NavigationStoryContentProps = {
   locale: unknown
-  appearance?: Appearance
   inset?: boolean
   topAction?: boolean
 }
@@ -43,15 +41,12 @@ const messages = {
   },
 }
 
-const NavigationStoryContent: FC<NavigationStoryContentProps> = ({ locale, appearance, inset = true, topAction = false }) => {
+const NavigationStoryContent: FC<NavigationStoryContentProps> = ({ locale, inset = true, topAction = false }) => {
   const text = localize(locale, messages)
-  const insetClass = inset
-    ? `m3-has-navigation${appearance && appearance !== 'auto' ? ` m3-has-navigation_${appearance}` : ''}`
-    : ''
 
   return (
     <main
-      className={insetClass}
+      className={inset ? 'm3-has-navigation' : ''}
       style={{ minHeight: '100vh', boxSizing: 'border-box', background: 'var(--m3-sys-surface)', color: 'var(--m3-sys-on-surface)' }}
     >
       <div style={{ maxWidth: 1160, padding: '28px 24px 40px', paddingBlockStart: topAction ? 104 : 28 }}>

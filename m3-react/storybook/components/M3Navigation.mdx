@@ -44,7 +44,7 @@ Classic drawers require explicit `appearance="drawer"`. With this value, `expand
 
 ### Place, scroll, and navigate
 
-Give page content `m3-has-navigation` for automatic insets, or a matching `m3-has-navigation_bar`, `_rail`, `_rail-expanded`, or `_drawer` class for a fixed form. Standard rail expansion changes the leading inset; modal expansion overlays content without adding one. The rail's destination body can scroll while the menu and FAB in `Top` remain visible. Bar destinations stay fixed; place a FAB above the bar rather than over its items.
+Give page content `m3-has-navigation`. The inset follows the rendered navigation, whether its form is selected automatically or explicitly. Standard rail expansion changes the leading inset; modal expansion overlays content without adding one. The rail's destination body can scroll while the menu and FAB in `Top` remain visible. Bar destinations stay fixed; place a FAB above the bar rather than over its items.
 
 The app owns the current route: supply `href` or handle `onNavigate`, set each tab's `active` state, and decide whether switching destinations preserves or resets page state. Reselecting the active destination can scroll its page to the top. Give the navigation landmark an `aria-label` when needed, but keep visible destination labels. A modal rail or drawer traps focus, makes the background inert, closes on Escape or scrim click, and restores focus on dismissal.
 
@@ -64,7 +64,7 @@ The app owns the current route: supply `href` or handle `onNavigate`, set each t
     <M3NavigationTab href="/search" label="Search"><M3Icon name="search" /></M3NavigationTab>
     <M3NavigationTab href="/library" label="Library"><M3Icon name="library_music" /></M3NavigationTab>
   </M3Navigation>
-  <main className="m3-has-navigation_bar">...</main>
+  <main className="m3-has-navigation">...</main>
 </>
 ```
 
@@ -129,10 +129,9 @@ Put the icon in the default children or `M3NavigationTab.Icon`. `M3NavigationTab
 
 | Class on page content | Reserved space |
 | --- | --- |
-| `m3-has-navigation` | Automatic bar, rail, and expanded rail breakpoints. |
-| `m3-has-navigation_bar`, `m3-has-navigation_rail`, `m3-has-navigation_rail-expanded`, `m3-has-navigation_drawer` | Matching explicitly selected persistent form. |
+| `m3-has-navigation` | Follows the navigation form rendered in the document, including explicit forms and modal overlays. Without a rendered navigation, it follows the automatic breakpoints. |
 
-For a modal overlay, keep the inset of the navigation underneath. The bar height is measured for its bottom inset. Rail and drawer widths can be themed with `--m3-navigation-rail-width`, `--m3-navigation-rail-expanded-width`, and `--m3-navigation-drawer-width`.
+For a modal overlay, the inset follows the navigation underneath. The bar height is measured for its bottom inset. Rail and drawer widths can be themed with `--m3-navigation-rail-width`, `--m3-navigation-rail-expanded-width`, and `--m3-navigation-drawer-width`. Set these width variables on `body` so the navigation and page layout use the same values.
 
 ## Examples and sources
 
@@ -183,7 +182,7 @@ For a modal overlay, keep the inset of the navigation underneath. The bar height
 
 ### Расположение, прокрутка и переходы
 
-Добавьте содержимому `m3-has-navigation` для автоматических отступов или соответствующий класс `m3-has-navigation_bar`, `_rail`, `_rail-expanded`, `_drawer` для закреплённого вида. При стандартном раскрытии rail меняется отступ у начального края, при модальном содержимое перекрывается без дополнительного отступа. В rail при нехватке высоты прокручивается область пунктов, а меню и FAB в `Top` остаются видимыми. Пункты bar неподвижны; размещайте FAB над bar, а не поверх него.
+Добавьте содержимому `m3-has-navigation`. Отступ следует за фактически отображаемым видом навигации, выбранным автоматически или явно. При стандартном раскрытии rail меняется отступ у начального края, при модальном содержимое перекрывается без дополнительного отступа. В rail при нехватке высоты прокручивается область пунктов, а меню и FAB в `Top` остаются видимыми. Пункты bar неподвижны; размещайте FAB над bar, а не поверх него.
 
 Приложение хранит текущий маршрут: задайте `href` или обработайте `onNavigate`, выставляйте `active` у пунктов и решайте, сохранять ли состояние раздела при переходе. Повторный выбор активного раздела может прокрутить его страницу наверх. При необходимости задайте landmark понятное `aria-label`, но не заменяйте им видимые подписи. Модальный rail или drawer удерживает фокус внутри, делает фон инертным, закрывается по Escape или нажатию на scrim и восстанавливает фокус после закрытия.
 
@@ -203,7 +202,7 @@ For a modal overlay, keep the inset of the navigation underneath. The bar height
     <M3NavigationTab href="/search" label="Поиск"><M3Icon name="search" /></M3NavigationTab>
     <M3NavigationTab href="/library" label="Библиотека"><M3Icon name="library_music" /></M3NavigationTab>
   </M3Navigation>
-  <main className="m3-has-navigation_bar">...</main>
+  <main className="m3-has-navigation">...</main>
 </>
 ```
 
@@ -268,10 +267,9 @@ For a modal overlay, keep the inset of the navigation underneath. The bar height
 
 | Класс на содержимом страницы | Зарезервированное место |
 | --- | --- |
-| `m3-has-navigation` | Автоматические брейкпоинты bar, rail и раскрытого rail. |
-| `m3-has-navigation_bar`, `m3-has-navigation_rail`, `m3-has-navigation_rail-expanded`, `m3-has-navigation_drawer` | Соответствующий явно выбранный постоянный вид. |
+| `m3-has-navigation` | Следует за видом навигации в документе, в том числе явно выбранным и модальным. Если навигация не отображается, действует схема автоматических брейкпоинтов. |
 
-При модальном перекрытии сохраняйте отступ навигации, которая остаётся под ним. Фактическая высота bar измеряется для нижнего отступа. Ширины rail и drawer можно настроить через `--m3-navigation-rail-width`, `--m3-navigation-rail-expanded-width` и `--m3-navigation-drawer-width`.
+При модальном перекрытии отступ следует за навигацией, которая остаётся под ним. Фактическая высота bar измеряется для нижнего отступа. Ширины rail и drawer можно настроить через `--m3-navigation-rail-width`, `--m3-navigation-rail-expanded-width` и `--m3-navigation-drawer-width`. Задавайте эти переменные на `body`, чтобы навигация и раскладка страницы использовали одинаковые значения.
 
 ## Примеры и источники
 
