@@ -138,7 +138,7 @@ const opened = ref(false)
 
 <style scoped>
 .surface-inspector-sheet {
-    min-height: 100vh;
+    min-block-size: 100vh;
     padding: 24px;
     box-sizing: border-box;
     color: var(--m3-sys-on-surface);
@@ -159,7 +159,7 @@ const opened = ref(false)
 
 .surface-inspector-sheet__topbar-content strong {
     display: block;
-    margin-bottom: 6px;
+    margin-block-end: 6px;
 }
 
 .surface-inspector-sheet__topbar-content p,
@@ -175,19 +175,21 @@ const opened = ref(false)
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
-    margin-top: 16px;
+    margin-block-start: 16px;
 }
 
 .surface-inspector-sheet__panel h3,
 .surface-inspector-sheet__sheet h3 {
-    margin: 0 0 8px;
+    margin-block: 0 8px;
+    margin-inline: 0;
 }
 
 .surface-inspector-sheet__form {
     display: grid;
     gap: 12px;
-    width: 100%;
-    padding: 0 24px 24px;
+    inline-size: 100%;
+    padding-block: 0 24px;
+    padding-inline: 24px;
 }
 
 .surface-inspector-sheet__actions {

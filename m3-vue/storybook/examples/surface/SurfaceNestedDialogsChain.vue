@@ -324,7 +324,7 @@ async function closeFrom(level: number) {
     --surface-accent-a: color-mix(in srgb, var(--m3-sys-primary, var(--md-sys-color-primary, #6750a4)) 18%, transparent);
     --surface-accent-b: color-mix(in srgb, var(--m3-sys-secondary, var(--md-sys-color-secondary, #625b71)) 16%, transparent);
     --surface-layout-bg: var(--m3-sys-surface-container, var(--md-sys-color-surface-container, #f3edf7));
-    min-height: 100vh;
+    min-block-size: 100vh;
     background:
         radial-gradient(circle at 8% 0%, var(--surface-accent-a), transparent 42%),
         radial-gradient(circle at 92% 0%, var(--surface-accent-b), transparent 44%),
@@ -345,25 +345,26 @@ async function closeFrom(level: number) {
 }
 
 .surface-dialog-chain__topbar-content p {
-    margin: 4px 0 0;
+    margin-block: 4px 0;
+    margin-inline: 0;
     font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
     opacity: 0.82;
 }
 
 .surface-dialog-chain__body {
     display: flex;
-    height: calc(100vh - 72px);
-    padding-left: var(--m3-navigation-rail-width, 80px);
+    block-size: calc(100vh - 72px);
+    padding-inline-start: var(--m3-navigation-rail-width, 80px);
 }
 
 :global(.surface-dialog-chain__nav.m3-navigation) {
-    top: 72px;
-    height: calc(100vh - 72px);
+    inset-block-start: 72px;
+    block-size: calc(100vh - 72px);
 }
 
 .surface-dialog-chain__workspace {
     flex: 1 1 auto;
-    min-width: 0;
+    min-inline-size: 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -380,7 +381,8 @@ async function closeFrom(level: number) {
 
 .surface-dialog-chain__workspace h3,
 .surface-dialog-chain__workspace h4 {
-    margin: 0 0 8px;
+    margin-block: 0 8px;
+    margin-inline: 0;
     font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
@@ -391,7 +393,7 @@ async function closeFrom(level: number) {
 
 .surface-dialog-chain__canvas {
     flex: 1 1 auto;
-    min-height: 220px;
+    min-block-size: 220px;
     padding: 18px;
     background: var(--surface-layout-bg);
 }
@@ -429,12 +431,13 @@ async function closeFrom(level: number) {
 }
 
 :global(.surface-dialog-chain__dialog p) {
-    margin: 8px 0 0;
+    margin-block: 8px 0;
+    margin-inline: 0;
     font: 400 13px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
 :global(.surface-dialog-chain__dialog-actions) {
-    margin-top: 14px;
+    margin-block-start: 14px;
     display: flex;
     align-items: center;
     gap: 10px;

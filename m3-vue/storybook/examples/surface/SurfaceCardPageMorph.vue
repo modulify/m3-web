@@ -268,7 +268,7 @@ const overlayActive = computed(() => busy.value || expanded.value)
     --surface-shadow: var(--m3-elevation-1, 0 2px 6px rgba(0, 0, 0, 0.14));
     --surface-canvas-bg: var(--m3-sys-surface-container-low, var(--m3-sys-surface, #fef7ff));
     --surface-origin-slot: color-mix(in srgb, var(--m3-sys-primary, #6750a4) 12%, transparent);
-    min-height: 100vh;
+    min-block-size: 100vh;
     background:
         radial-gradient(circle at 14% 4%, var(--surface-accent-a), transparent 38%),
         radial-gradient(circle at 90% 8%, var(--surface-accent-b), transparent 38%),
@@ -294,32 +294,33 @@ const overlayActive = computed(() => busy.value || expanded.value)
 }
 
 .surface-card-page__topbar-content p {
-    margin: 4px 0 0;
+    margin-block: 4px 0;
+    margin-inline: 0;
     font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
     opacity: 0.8;
 }
 
 .surface-card-page__body {
     display: flex;
-    height: calc(100vh - 72px);
-    padding-left: var(--m3-navigation-rail-width, 80px);
+    block-size: calc(100vh - 72px);
+    padding-inline-start: var(--m3-navigation-rail-width, 80px);
 }
 
 @media (min-width: 1200px) {
     .surface-card-page__body {
-        padding-left: var(--m3-navigation-drawer-width, 360px);
+        padding-inline-start: var(--m3-navigation-drawer-width, 360px);
     }
 }
 
 :global(.surface-card-page__nav.m3-navigation) {
-    top: 72px;
-    height: calc(100vh - 72px);
+    inset-block-start: 72px;
+    block-size: calc(100vh - 72px);
 }
 
 .surface-card-page__workspace {
     flex: 1 1 auto;
-    min-width: 0;
-    min-height: 0;
+    min-inline-size: 0;
+    min-block-size: 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -335,7 +336,8 @@ const overlayActive = computed(() => busy.value || expanded.value)
 }
 
 .surface-card-page__header-card h3 {
-    margin: 0 0 8px;
+    margin-block: 0 8px;
+    margin-inline: 0;
     font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
@@ -347,7 +349,7 @@ const overlayActive = computed(() => busy.value || expanded.value)
 .surface-card-page__canvas {
     flex: 1 1 auto;
     position: relative;
-    min-height: 0;
+    min-block-size: 0;
     border-radius: 20px;
     overflow: hidden;
     background: var(--surface-canvas-bg);
@@ -366,7 +368,8 @@ const overlayActive = computed(() => busy.value || expanded.value)
 }
 
 .surface-card-page__grid p {
-    margin: 6px 0 0;
+    margin-block: 6px 0;
+    margin-inline: 0;
     font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
@@ -422,13 +425,15 @@ const overlayActive = computed(() => busy.value || expanded.value)
 }
 
 .surface-card-page__morph-surface h3 {
-    margin: 0 0 8px;
+    margin-block: 0 8px;
+    margin-inline: 0;
     font: 700 18px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
 .surface-card-page__morph-surface p {
-    margin: 0 0 12px;
+    margin-block: 0 12px;
+    margin-inline: 0;
     font: 400 13px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif;
-    max-width: 70ch;
+    max-inline-size: 70ch;
 }
 </style>

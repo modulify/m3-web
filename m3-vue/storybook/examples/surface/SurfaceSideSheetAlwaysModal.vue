@@ -332,7 +332,7 @@ onBeforeUnmount(() => {
     --surface-shadow-color: color-mix(in srgb, var(--m3-sys-shadow, #000000) 22%, transparent);
     --surface-layout-bg: var(--m3-sys-surface-container, var(--md-sys-color-surface-container, #f3edf7));
     --surface-grid-bg: var(--m3-sys-surface-container-low, var(--md-sys-color-surface-container-low, #f7f2fa));
-    min-height: 100vh;
+    min-block-size: 100vh;
     background:
         radial-gradient(circle at 8% 0%, var(--surface-accent-a), transparent 42%),
         radial-gradient(circle at 92% 0%, var(--surface-accent-b), transparent 44%),
@@ -353,31 +353,32 @@ onBeforeUnmount(() => {
 }
 
 .surface-side-sheet__topbar-content p {
-    margin: 4px 0 0;
+    margin-block: 4px 0;
+    margin-inline: 0;
     font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
     opacity: 0.82;
 }
 
 .surface-side-sheet__body {
     display: flex;
-    height: calc(100vh - 72px);
-    padding-left: var(--m3-navigation-rail-width, 80px);
+    block-size: calc(100vh - 72px);
+    padding-inline-start: var(--m3-navigation-rail-width, 80px);
 }
 
 @media (min-width: 1200px) {
     .surface-side-sheet__body {
-        padding-left: var(--m3-navigation-drawer-width, 360px);
+        padding-inline-start: var(--m3-navigation-drawer-width, 360px);
     }
 }
 
 :global(.surface-side-sheet__nav.m3-navigation) {
-    top: 72px;
-    height: calc(100vh - 72px);
+    inset-block-start: 72px;
+    block-size: calc(100vh - 72px);
 }
 
 .surface-side-sheet__workspace {
     flex: 1 1 auto;
-    min-width: 0;
+    min-inline-size: 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -393,7 +394,8 @@ onBeforeUnmount(() => {
 }
 
 .surface-side-sheet__header-card h3 {
-    margin: 0 0 8px;
+    margin-block: 0 8px;
+    margin-inline: 0;
     font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
@@ -403,7 +405,7 @@ onBeforeUnmount(() => {
 }
 
 .surface-side-sheet__layout {
-    min-height: 440px;
+    min-block-size: 440px;
     display: flex;
     overflow: hidden;
     border-radius: 20px;
@@ -413,7 +415,7 @@ onBeforeUnmount(() => {
 
 .surface-side-sheet__content-grid {
     flex: 1 1 auto;
-    min-width: 0;
+    min-inline-size: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: min-content;
@@ -429,12 +431,14 @@ onBeforeUnmount(() => {
 }
 
 .surface-side-sheet__content-grid p {
-    margin: 6px 0 0;
+    margin-block: 6px 0;
+    margin-inline: 0;
     font: 400 12px/1.35 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
 :global(.surface-side-sheet__sheet h3) {
-    margin: 0 0 8px;
+    margin-block: 0 8px;
+    margin-inline: 0;
     font: 700 17px/1.3 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
@@ -454,12 +458,13 @@ onBeforeUnmount(() => {
 }
 
 :global(.surface-side-sheet__sheet p) {
-    margin: 0 0 8px;
+    margin-block: 0 8px;
+    margin-inline: 0;
     font: 400 13px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
 :global(.surface-side-sheet__sheet .surface-side-sheet__meta) {
-    margin-top: 14px;
+    margin-block-start: 14px;
     font: 600 11px/1.2 'Trebuchet MS', 'Segoe UI', sans-serif;
     letter-spacing: 0.04em;
     opacity: 0.76;

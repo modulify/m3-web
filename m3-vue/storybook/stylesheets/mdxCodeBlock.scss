@@ -34,7 +34,8 @@ pre.m3-docs-code-block > code.hljs {
   display: block;
   overflow-x: auto;
   margin: 0;
-  padding: 52px 16px 16px;
+  padding-block: 52px 16px;
+  padding-inline: 16px;
   background: transparent;
   color: var(--m3-docs-code-plain);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !important;
@@ -52,8 +53,8 @@ pre.m3-docs-code-block > code.hljs * {
 
 pre.m3-docs-code-block .m3-docs-code-language {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  inset-block-start: 12px;
+  inset-inline-start: 12px;
   border-radius: 999px;
   padding: 4px 10px;
   background: var(--m3-docs-code-chip-background);
@@ -67,12 +68,12 @@ pre.m3-docs-code-block .m3-docs-code-language {
 
 pre.m3-docs-code-block .m3-docs-code-copy {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  inset-block-start: 8px;
+  inset-inline-end: 8px;
   border: 0;
   border-radius: 999px;
-  min-height: 32px;
-  min-width: 92px;
+  min-block-size: 32px;
+  min-inline-size: 92px;
   padding: 0 14px;
   background: var(--m3-docs-code-copy-background);
   color: var(--m3-docs-code-copy-color);
@@ -96,7 +97,7 @@ pre.m3-docs-code-block .m3-docs-code-copy:focus-visible {
 }
 
 pre.m3-docs-code-block .m3-docs-code-copy[data-copied='true'] {
-  min-width: 82px;
+  min-inline-size: 82px;
 }
 
 pre.m3-docs-code-block .hljs-comment,
