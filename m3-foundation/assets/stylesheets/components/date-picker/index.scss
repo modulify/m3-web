@@ -562,6 +562,11 @@
     &__mode-enter {
       animation: none;
     }
+
+    &__year-button-icon,
+    &__month-track_animating {
+      transition: none;
+    }
   }
 
   .m3-month-picker {

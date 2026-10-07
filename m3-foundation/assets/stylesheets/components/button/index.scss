@@ -18,7 +18,7 @@
   outline: none;
   overflow: hidden;
   transition:
-    m3-motion.timing-standard(background),
+    m3-motion.timing-standard(background-color),
     m3-motion.timing-standard(color)
   ;
   position: relative;
@@ -110,7 +110,7 @@
     overflow: hidden;
     opacity: 0;
     transition:
-      m3-motion.timing-standard(background),
+      m3-motion.timing-standard(background-color),
       m3-motion.timing-standard(opacity)
     ;
     position: absolute;

@@ -52,3 +52,9 @@ $m3-surface-on-surface-color: var(--m3-sys-on-surface, #{light.$m3-sys-light-on-
     background: color-mix(in srgb, var(--m3-sys-shadow, #{palette.$m3-palette-neutral-0}) 38%, transparent);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-surface {
+    transition-duration: 0ms !important;
+  }
+}

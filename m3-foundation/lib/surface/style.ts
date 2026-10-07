@@ -120,6 +120,10 @@ export const getSurfaceTransition = (
     `opacity ${duration} ${transitionTiming}`,
     `background-color ${duration} ${transitionTiming}`,
     `box-shadow ${duration} ${transitionTiming}`,
+    `border-top-left-radius ${duration} ${transitionTiming}`,
+    `border-top-right-radius ${duration} ${transitionTiming}`,
+    `border-bottom-right-radius ${duration} ${transitionTiming}`,
+    `border-bottom-left-radius ${duration} ${transitionTiming}`,
   ].join(', ')
 }
 
