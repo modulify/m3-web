@@ -436,7 +436,7 @@ test('can exclude bar from automatic navigation and open a hidden modal rail', a
 
   try {
     const nav = query<HTMLElement>('nav.m3-navigation')
-    expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true)
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true))
     expect(nav.classList.contains('m3-navigation_bar')).toBe(false)
 
     expanded.value = true
