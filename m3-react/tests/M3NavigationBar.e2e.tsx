@@ -2,6 +2,9 @@ import { act } from '@testing-library/react'
 import { page } from 'vitest/browser'
 import { render, waitFor } from '@testing-library/react'
 
+import { M3Adaptive } from '@/components/adaptive'
+import { M3FabButton } from '@/components/fab-button'
+import { M3Icon } from '@/components/icon'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3SnackbarHost } from '@/components/snackbar'
 
@@ -16,7 +19,7 @@ const query = <T extends Element>(selector: string) => {
   return element
 }
 
-test('flexible bar centers its horizontal items and grows with text', async () => {
+test('flexible bar centers its horizontal items and keeps its geometry with larger text', async () => {
   await page.viewport(320, 800)
 
   const content = document.createElement('main')
@@ -68,7 +71,8 @@ test('flexible bar centers its horizontal items and grows with text', async () =
     scaledText.textContent = '.m3-navigation-tab__label { font-size: 24px !important; line-height: 32px !important; }'
     document.head.append(scaledText)
 
-    await waitFor(() => expect(nav.getBoundingClientRect().height).toBeGreaterThan(64))
+    await waitFor(() => expect(getComputedStyle(query<HTMLElement>('.m3-navigation-tab__label')).fontSize).toBe('24px'))
+    expect(nav.getBoundingClientRect().height).toBe(64)
     await waitFor(() => expect(Number.parseFloat(getComputedStyle(content).paddingBottom)).toBeCloseTo(nav.getBoundingClientRect().height, 0))
 
     await act(async () => { await page.viewport(1300, 800) })
@@ -107,7 +111,7 @@ test('slides the hidden modal rail offscreen at its expanded width', async () =>
   await page.viewport(900, 800)
 
   const navigation = (expanded: boolean) => (
-    <M3Navigation appearance="rail" expanded={expanded} railExpandedMode="modal" hideWhenCollapsed>
+    <M3Navigation appearance="rail" expanded={expanded} expansion="modal" collapse="hidden">
       <M3Navigation.Top><button type="button">Menu</button></M3Navigation.Top>
       <M3NavigationTab label="Inbox">★</M3NavigationTab>
     </M3Navigation>
@@ -134,11 +138,59 @@ test('slides the hidden modal rail offscreen at its expanded width', async () =>
     await waitFor(() => expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true), { timeout: 2000 })
     expect(nav.getBoundingClientRect().right).toBeLessThanOrEqual(0)
     expect(nav.getBoundingClientRect().width).toBe(expandedWidth)
+    expect([...transitionProperties]).toEqual(['transform'])
 
     document.documentElement.dir = 'rtl'
     await waitFor(() => expect(nav.getBoundingClientRect().left).toBeGreaterThanOrEqual(window.innerWidth))
   } finally {
     document.documentElement.dir = ''
+    view.unmount()
+  }
+})
+
+test('keeps the rail FAB icon anchored while revealing its label', async () => {
+  await page.viewport(1280, 800)
+
+  const navigation = (appearance: 'rail' | 'rail-expanded', label = 'Compose') => (
+    <M3Navigation appearance={appearance}>
+      <M3Navigation.Top>
+        <M3FabButton variant="tertiary"><M3Icon name="edit" />{label}</M3FabButton>
+      </M3Navigation.Top>
+      <M3NavigationTab label="Inbox">★</M3NavigationTab>
+    </M3Navigation>
+  )
+  const view = render(navigation('rail'))
+
+  try {
+    const fab = query<HTMLElement>('.m3-navigation .m3-fab-button')
+    const icon = query<HTMLElement>('.m3-navigation .m3-fab-button__icon')
+    const text = query<HTMLElement>('.m3-navigation .m3-fab-button__text')
+    const iconX = icon.getBoundingClientRect().x
+
+    const sample = async () => {
+      const start = performance.now()
+      let middleOpacity = false
+      while (performance.now() - start < 550) {
+        await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+        expect(fab.getBoundingClientRect().width).toBeGreaterThanOrEqual(55.5)
+        expect(Math.abs(icon.getBoundingClientRect().x - iconX)).toBeLessThan(1)
+        const opacity = Number.parseFloat(getComputedStyle(text).opacity)
+        middleOpacity ||= opacity > 0.05 && opacity < 0.95
+      }
+      expect(middleOpacity).toBe(true)
+    }
+
+    view.rerender(navigation('rail-expanded'))
+    await sample()
+    expect(getComputedStyle(text).opacity).toBe('1')
+    view.rerender(navigation('rail-expanded', 'Compose an exceptionally long message'))
+    expect(fab.getBoundingClientRect().height).toBe(56)
+    expect(text.scrollWidth).toBeGreaterThan(text.clientWidth)
+
+    view.rerender(navigation('rail', 'Compose an exceptionally long message'))
+    await sample()
+    expect(getComputedStyle(text).opacity).toBe('0')
+  } finally {
     view.unmount()
   }
 })
@@ -186,14 +238,14 @@ test.each(['rail', 'rail-expanded'] as const)('scrolls %s destinations without m
 test('anchors each badge to the icon and keeps vertical labels available at medium width', async () => {
   await page.viewport(700, 800)
 
-  const tabs = (barLayout: 'auto' | 'vertical') => (
-    <M3Navigation appearance="bar" barLayout={barLayout}>
+  const tabs = (appearance: 'bar' | 'bar-vertical') => (
+    <M3Navigation appearance={appearance}>
       <M3NavigationTab label="Inbox" active><span>★</span><M3NavigationTab.Badge>24</M3NavigationTab.Badge></M3NavigationTab>
       <M3NavigationTab label="Outbox" badged><span>★</span></M3NavigationTab>
       <M3NavigationTab label="Favorites"><span>★</span></M3NavigationTab>
     </M3Navigation>
   )
-  const view = render(tabs('auto'))
+  const view = render(tabs('bar'))
 
   try {
     const items = [...document.querySelectorAll<HTMLElement>('.m3-navigation-tab_in-bar')]
@@ -209,7 +261,7 @@ test('anchors each badge to the icon and keeps vertical labels available at medi
     expect(smallBadge.getBoundingClientRect().height).toBe(6)
     expect(largeLabel.getBoundingClientRect().left - largeBadge.getBoundingClientRect().right).toBeGreaterThanOrEqual(4)
 
-    view.rerender(tabs('vertical'))
+    view.rerender(tabs('bar-vertical'))
     await waitFor(() => expect(largeIcon.getBoundingClientRect().width).toBe(56))
 
     const label = items[0].querySelector<HTMLElement>('.m3-navigation-tab__state .m3-navigation-tab__label')!
@@ -220,6 +272,126 @@ test('anchors each badge to the icon and keeps vertical labels available at medi
     await page.getByRole('button', { name: 'Inbox' }).hover()
     expect(getComputedStyle(items[0].querySelector<HTMLElement>('.m3-navigation-tab__state')!).backgroundColor).toBe('rgba(0, 0, 0, 0)')
     expect(getComputedStyle(largeIcon).boxShadow).not.toBe('none')
+  } finally {
+    view.unmount()
+  }
+})
+
+test('keeps long bar labels on one line with an ellipsis and resolves breakpoint labels', async () => {
+  await page.viewport(700, 800)
+
+  const tabs = (mediumLabel: string) => (
+    <M3Navigation appearance="bar">
+      <M3NavigationTab
+        active
+      >
+        ★
+        <M3NavigationTab.Label>
+          <M3Adaptive
+            regular="Входящие сообщения"
+            compact="Входящие"
+            medium={mediumLabel}
+            large="Широкие"
+            extraLarge="Максимум"
+          />
+        </M3NavigationTab.Label>
+      </M3NavigationTab>
+      <M3NavigationTab label="Черновики">★</M3NavigationTab>
+      <M3NavigationTab label="Исходящие">★</M3NavigationTab>
+      <M3NavigationTab label="Избранное">★</M3NavigationTab>
+      <M3NavigationTab label="Корзина">★</M3NavigationTab>
+    </M3Navigation>
+  )
+  const view = render(tabs('Входящие сообщения'))
+
+  try {
+    const nav = query<HTMLElement>('nav.m3-navigation_bar')
+    const label = query<HTMLElement>('.m3-navigation-tab__label')
+    const mediumHeight = nav.getBoundingClientRect().height
+
+    expect(getComputedStyle(label).whiteSpace).toBe('nowrap')
+    expect(getComputedStyle(label).textOverflow).toBe('ellipsis')
+    expect(label.scrollWidth).toBeGreaterThan(label.clientWidth)
+    expect(nav.getBoundingClientRect().height).toBe(mediumHeight)
+    expect(query<HTMLElement>('.m3-navigation-tab__button').getAttribute('aria-labelledby')).toBe(label.id)
+
+    view.rerender(tabs('Почта'))
+    await waitFor(() => expect(label.textContent).toBe('Почта'))
+
+    await act(async () => { await page.viewport(360, 800) })
+    await waitFor(() => expect(label.textContent).toBe('Входящие'))
+    expect(getComputedStyle(label).textOverflow).toBe('ellipsis')
+
+    await act(async () => { await page.viewport(900, 800) })
+    await waitFor(() => expect(label.textContent).toBe('Входящие сообщения'))
+    await act(async () => { await page.viewport(1300, 800) })
+    await waitFor(() => expect(label.textContent).toBe('Широкие'))
+    await act(async () => { await page.viewport(1700, 800) })
+    await waitFor(() => expect(label.textContent).toBe('Максимум'))
+  } finally {
+    view.unmount()
+  }
+})
+
+test('can exclude bar from automatic navigation and open a hidden modal rail', async () => {
+  await page.viewport(360, 800)
+
+  const navigation = (expanded: boolean, appearance: 'auto' | 'bar' = 'auto') => (
+    <M3Navigation
+      appearance={appearance}
+      appearances={['rail', 'rail-expanded']}
+      expansion="modal"
+      expanded={expanded}
+      collapse="hidden"
+    >
+      <M3NavigationTab label="Inbox">★</M3NavigationTab>
+    </M3Navigation>
+  )
+  const view = render(navigation(false))
+
+  try {
+    const nav = query<HTMLElement>('nav.m3-navigation')
+    expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true)
+    expect(nav.classList.contains('m3-navigation_bar')).toBe(false)
+
+    view.rerender(navigation(true))
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_rail-expanded')).toBe(true))
+    expect(nav.classList.contains('m3-navigation_modal')).toBe(true)
+
+    view.rerender(navigation(false))
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true))
+
+    await act(async () => { await page.viewport(900, 800) })
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true))
+    await act(async () => { await page.viewport(1300, 800) })
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_rail-expanded')).toBe(true))
+    expect(nav.classList.contains('m3-navigation_bar')).toBe(false)
+    await act(async () => { await page.viewport(360, 800) })
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true))
+
+    view.rerender(navigation(false, 'bar'))
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_bar')).toBe(true))
+  } finally {
+    view.unmount()
+  }
+})
+
+test('keeps the vertical bar when it is the allowed bar form', async () => {
+  await page.viewport(700, 800)
+  const view = render(
+    <M3Navigation appearance="auto" appearances={['bar-vertical', 'rail']}>
+      <M3NavigationTab label="Inbox">★</M3NavigationTab>
+    </M3Navigation>
+  )
+
+  try {
+    const nav = query<HTMLElement>('nav.m3-navigation')
+    expect(nav.classList.contains('m3-navigation_bar')).toBe(true)
+    expect(nav.classList.contains('m3-navigation_bar-vertical')).toBe(true)
+    expect(query<HTMLElement>('.m3-navigation-tab').classList.contains('m3-navigation-tab_in-bar')).toBe(true)
+
+    await act(async () => { await page.viewport(900, 800) })
+    await waitFor(() => expect(nav.classList.contains('m3-navigation_rail')).toBe(true))
   } finally {
     view.unmount()
   }
@@ -420,7 +592,7 @@ test('uses a scrim only for modal rail expansion and leaves page inset at collap
   content.className = 'm3-has-navigation'
   document.body.append(content)
   const view = render(
-    <M3Navigation appearance="rail" railExpandedMode="modal" expanded>
+    <M3Navigation appearance="rail" expansion="modal" expanded>
       <M3NavigationTab label="Inbox">★</M3NavigationTab>
     </M3Navigation>
   )
@@ -445,7 +617,7 @@ test('animates a standard rail expansion and resizes page content', async () => 
   document.body.append(content)
   const hostView = render(<M3SnackbarHost />, { container: content })
   const renderRail = (expanded: boolean) => (
-    <M3Navigation appearance="rail" expanded={expanded} railExpandedMode="standard">
+    <M3Navigation appearance="rail" expanded={expanded} expansion="standard">
       <M3NavigationTab label="Inbox">★</M3NavigationTab>
     </M3Navigation>
   )
@@ -485,7 +657,7 @@ test('hides an immersive collapsed rail while keeping an external menu trigger a
   const hostView = render(<M3SnackbarHost />, { container: content })
   trigger.focus()
   const renderRail = (expanded: boolean) => (
-    <M3Navigation appearance="rail" expanded={expanded} hideWhenCollapsed>
+    <M3Navigation appearance="rail" expanded={expanded} collapse="hidden">
       <M3NavigationTab label="Inbox">★</M3NavigationTab>
     </M3Navigation>
   )
