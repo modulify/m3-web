@@ -1,7 +1,9 @@
-export type Appearance = 'auto' | 'bar' | 'drawer' | 'rail' | 'rail-expanded'
+export type Appearance = 'auto' | 'bar' | 'bar-vertical' | 'drawer' | 'rail' | 'rail-expanded'
+
+export type AutoAppearance = 'bar' | 'bar-vertical' | 'rail' | 'rail-expanded'
 
 export type RailExpandedMode = 'auto' | 'standard' | 'modal'
 
-export type Alignment = 'top' | 'middle' | 'bottom'
+export type RailCollapse = 'rail' | 'hidden'
 
-export type BarLayout = 'auto' | 'vertical'
+export type Alignment = 'top' | 'middle' | 'bottom'
