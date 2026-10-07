@@ -22,7 +22,7 @@ On the web, a timed snackbar must not be the only place to find its information.
 
 ### Place it with the page
 
-Put the host inside the content region. It uses fixed bottom placement, leaving space for navigation when the ancestor has `m3-has-navigation` or a specific navigation class. The [navigation and FAB story](?path=/story/components-m3snackbar--with-navigation-and-fab) sets `--m3-snackbar-inset-block-end` so the snackbar stays above the FAB. Keep it clear of navigation, focused controls, and important actions. For other layouts, override `--m3-snackbar-inset-inline-start` and `--m3-snackbar-inset-block-end` on the host.
+Put the host inside the content region. It uses fixed bottom placement, leaving space for the rendered navigation when an ancestor has `m3-has-navigation`. The [navigation and FAB story](?path=/story/components-m3snackbar--with-navigation-and-fab) sets `--m3-snackbar-inset-block-end` so the snackbar stays above the FAB. Keep it clear of navigation, focused controls, and important actions. For other layouts, override `--m3-snackbar-inset-inline-start` and `--m3-snackbar-inset-block-end` on the host.
 
 The default placement is leading aligned, 16 px from the viewport edges in compact layouts and 24 px in wider layouts. Its width is bounded by available viewport space and 560 px. Material specifies the placement principle, not these exact package offsets. The container uses inverse color roles, `body-medium` text, `label-large` action text, extra-small corners, elevation 3, and 48/68 px minimum heights. Material's prose says 64 dp for compact two-line messages while its token says 68 dp; this implementation follows the token and allows content to grow.
 
@@ -130,7 +130,7 @@ Snackbar коротко сообщает о процессе приложени�
 
 ### Размещение
 
-Расположите host внутри области содержимого. Он фиксируется снизу и учитывает навигацию, если у предка есть `m3-has-navigation` или её явный вариант. В [истории с навигацией и FAB](?path=/story/components-m3snackbar--with-navigation-and-fab) через `--m3-snackbar-inset-block-end` сообщение поднято над FAB. Оно не должно перекрывать навигацию, фокус и важные действия. Для своего layout можно задать `--m3-snackbar-inset-inline-start` и `--m3-snackbar-inset-block-end`.
+Расположите host внутри области содержимого. Он фиксируется снизу и учитывает фактически отображаемую навигацию, если у предка есть `m3-has-navigation`. В [истории с навигацией и FAB](?path=/story/components-m3snackbar--with-navigation-and-fab) через `--m3-snackbar-inset-block-end` сообщение поднято над FAB. Оно не должно перекрывать навигацию, фокус и важные действия. Для своего layout можно задать `--m3-snackbar-inset-inline-start` и `--m3-snackbar-inset-block-end`.
 
 По умолчанию отступ от начального и нижнего края — 16 px на компактном экране и 24 px на широком; ширина ограничена доступной областью и 560 px. Это значения библиотеки: Material указывает принцип размещения, но не эти точные отступы. Контейнер использует инверсные цвета, типографику `body-medium`/`label-large`, малый радиус, подъём 3 и минимальную высоту 48/68 px. В тексте Material для двух строк сказано 64 dp, а в токене — 68 dp; здесь взят токен, при увеличении текста высота растёт.
 
