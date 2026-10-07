@@ -4,7 +4,7 @@
             <div
                 v-show="modalExpanded"
                 ref="scrim"
-                :style="appearanceBase === 'bar' ? { display: 'none' } : undefined"
+                :style="isBarAppearance(appearanceBase) ? { display: 'none' } : undefined"
                 class="m3-scrim"
                 @click="emit('update:expanded', false)"
             />
@@ -14,7 +14,7 @@
             ref="modalDialog"
             :role="modalActive ? 'dialog' : undefined"
             :aria-modal="modalActive ? 'true' : undefined"
-            :aria-label="modalActive ? getModalLabel() : undefined"
+            :aria-label="modalActive ? modalLabel : undefined"
             tabindex="-1"
         >
             <nav
@@ -25,10 +25,10 @@
                 :class="{
                     ['m3-navigation']: true,
                     ['m3-navigation_' + appearanceActual]: true,
-                    ['m3-navigation_bar-vertical']: appearanceActual === 'bar' && barLayout === 'vertical',
+                    ['m3-navigation_bar']: isBarAppearance(appearanceActual),
                     ['m3-navigation_' + alignment]: true,
                     ['m3-navigation_modal']: modalActive,
-                    ['m3-navigation_hide-collapsed']: appearanceBase === 'rail' && hideWhenCollapsed,
+                    ['m3-navigation_hide-collapsed']: appearanceBase === 'rail' && collapse === 'hidden',
                     ['m3-navigation_rail-leaving']: railLeaving,
                     ['m3-navigation_rail-hidden']: railHidden && !railLeaving,
                 }"
@@ -60,20 +60,26 @@
 <script lang="ts" setup>
 import type {
   Appearance,
-  BarLayout,
+  AutoAppearance,
 } from '@modulify/m3-foundation/types/components/navigation'
 import type { PropType } from 'vue'
+import type { RailCollapse } from '@modulify/m3-foundation/types/components/navigation'
 import type {
   RailExpandedMode,
 } from '@modulify/m3-foundation/types/components/navigation'
 
 import { activateModalFocus } from '@modulify/m3-foundation/lib/modal'
+import { computed } from 'vue'
 import {
-  computed,
-  ref,
-  useAttrs,
-  watch,
-} from 'vue'
+  isBarAppearance,
+  isExpandableAppearance,
+  isExpandedRail,
+  isHiddenRail,
+  isModalExpansion,
+} from '@modulify/m3-foundation/lib/navigation'
+import { ref } from 'vue'
+import { resolveNavigationAppearance } from '@modulify/m3-foundation/lib/navigation'
+import { useAttrs, watch } from 'vue'
 
 import { useBreakpoint } from '@/composables/breakpoint'
 
@@ -87,19 +93,19 @@ const props = defineProps({
     default: 'auto',
   },
 
-  barLayout: {
-    type: String as PropType<BarLayout>,
-    default: 'auto',
+  appearances: {
+    type: Array as unknown as PropType<readonly [AutoAppearance, ...AutoAppearance[]]>,
+    default: undefined,
   },
 
-  railExpandedMode: {
+  expansion: {
     type: String as PropType<RailExpandedMode>,
     default: 'auto',
   },
 
-  hideWhenCollapsed: {
-    type: Boolean,
-    default: false,
+  collapse: {
+    type: String as PropType<RailCollapse>,
+    default: 'rail',
   },
 
   /** Works with appearances 'auto' & 'rail' */
@@ -122,24 +128,29 @@ const attrs = useAttrs()
 const breakpoint = useBreakpoint()
 
 const appearanceBase = computed(() => props.appearance === 'auto'
-  ? breakpoint.value.ge('large') ? 'rail-expanded' : breakpoint.value.ge('expanded') ? 'rail' : 'bar'
+  ? resolveNavigationAppearance(breakpoint.value.name, props.appearances)
   : props.appearance)
-const railExpanded = computed(() => appearanceBase.value === 'rail' && props.expanded)
-const railHidden = computed(() => appearanceBase.value === 'rail' && props.hideWhenCollapsed && !props.expanded)
-const navAriaHidden = computed(() => railHidden.value
-  ? 'true'
-  : attrs['aria-hidden'] === true || attrs['aria-hidden'] === 'true' ? 'true' : attrs['aria-hidden'] === false || attrs['aria-hidden'] === 'false' ? 'false' : undefined)
-const navInert = computed(() => railHidden.value || attrs.inert === true || attrs.inert === '' || attrs.inert === 'true' ? true : undefined)
-const modalExpanded = computed(() => (appearanceBase.value === 'drawer' && props.expanded)
-  || (railExpanded.value && (props.railExpandedMode === 'modal' || (props.railExpandedMode === 'auto' && !breakpoint.value.ge('large')))))
-const transitioning = ref(modalExpanded.value)
-const railLeaving = computed(() => railHidden.value && transitioning.value)
-const appearanceActual = computed(() => railExpanded.value || railLeaving.value
+const transitioning = ref(isModalExpansion(appearanceBase.value, props.expanded, props.expansion, breakpoint.value.ge('large')))
+
+const appearanceActual = computed(() => isExpandedRail(appearanceBase.value, props.expanded)
+  || isHiddenRail(appearanceBase.value, props.expanded, props.collapse) && transitioning.value
   ? 'rail-expanded'
   : appearanceBase.value)
 
 const modalDialog = ref<HTMLElement | null>(null)
-const modalActive = computed(() => (appearanceBase.value === 'drawer' || appearanceBase.value === 'rail') && (modalExpanded.value || transitioning.value))
+const modalExpanded = computed(() => isModalExpansion(appearanceBase.value, props.expanded, props.expansion, breakpoint.value.ge('large')))
+const modalActive = computed(() => isExpandableAppearance(appearanceBase.value)
+  && (isModalExpansion(appearanceBase.value, props.expanded, props.expansion, breakpoint.value.ge('large')) || transitioning.value))
+const modalLabel = computed(() => typeof attrs['aria-label'] === 'string' ? attrs['aria-label'] : 'Navigation')
+
+const railHidden = computed(() => isHiddenRail(appearanceBase.value, props.expanded, props.collapse))
+const railLeaving = computed(() => isHiddenRail(appearanceBase.value, props.expanded, props.collapse) && transitioning.value)
+
+const navAriaHidden = computed(() => isHiddenRail(appearanceBase.value, props.expanded, props.collapse)
+  ? 'true'
+  : attrs['aria-hidden'] === true || attrs['aria-hidden'] === 'true' ? 'true' : attrs['aria-hidden'] === false || attrs['aria-hidden'] === 'false' ? 'false' : undefined)
+const navInert = computed(() => isHiddenRail(appearanceBase.value, props.expanded, props.collapse)
+  || attrs.inert === true || attrs.inert === '' || attrs.inert === 'true' ? true : undefined)
 
 const scrim = ref<HTMLElement | null>(null)
 const navigation = ref<HTMLElement | null>(null)
@@ -153,12 +164,10 @@ watch(modalExpanded, expanded => {
 })
 
 watch([appearanceBase, () => props.expanded], ([appearance, expanded], previous) => {
-  if (appearance !== 'rail' && appearance !== 'drawer'
+  if (!isExpandableAppearance(appearance)
     || (previous && previous[0] !== appearance && !modalExpanded.value)) transitioning.value = false
-  if (appearance === 'bar' && expanded) emit('update:expanded', false)
+  if (isBarAppearance(appearance) && expanded) emit('update:expanded', false)
 }, { immediate: true })
-
-const getModalLabel = () => typeof attrs['aria-label'] === 'string' ? attrs['aria-label'] : 'Navigation'
 
 watch([modalDialog, modalActive], ([dialog, active], _, onCleanup) => {
   if (!dialog || !active) return
@@ -171,7 +180,7 @@ watch([modalDialog, modalActive], ([dialog, active], _, onCleanup) => {
 }, { immediate: true, flush: 'post' })
 
 watch([navigation, appearanceActual], ([element, appearance], _, onCleanup) => {
-  if (!element || appearance !== 'bar' || typeof ResizeObserver === 'undefined') {
+  if (!element || !isBarAppearance(appearance) || typeof ResizeObserver === 'undefined') {
     return
   }
 

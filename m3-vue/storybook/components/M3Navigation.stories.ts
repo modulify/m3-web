@@ -1,8 +1,9 @@
 import type { Appearance } from '@modulify/m3-foundation/types/components/navigation'
 import type { Meta, StoryObj } from '@storybook/vue3'
 
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
+import { m3Adaptive } from '@/composables/adaptive'
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
 import { M3IconButton } from '@/components/icon-button'
@@ -17,19 +18,23 @@ import { localize } from '../i18n'
 import NavigationStoryContent from '../examples/navigation/NavigationStoryContent.vue'
 
 const messages = {
-  'en-US': { close: 'Close menu', compose: 'Compose', drafts: 'Drafts', family: 'Family', favorites: 'Favorites', inbox: 'Inbox', mail: 'Mail', open: 'Open menu', outbox: 'Outbox', personalFolders: 'Personal folders', trash: 'Trash', wedding: 'Wedding', work: 'Work' },
-  'ru-RU': { close: 'Закрыть меню', compose: 'Написать', drafts: 'Черновики', family: 'Семья', favorites: 'Избранное', inbox: 'Входящие', mail: 'Почта', open: 'Открыть меню', outbox: 'Исходящие', personalFolders: 'Личные папки', trash: 'Корзина', wedding: 'Свадьба', work: 'Работа' },
+  'en-US': { bar: { drafts: 'Drafts', favorites: 'Favorites', inbox: 'Inbox', outbox: 'Outbox', trash: 'Trash' }, close: 'Close menu', compose: 'Compose', drafts: 'Drafts', family: 'Family', favorites: 'Favorites', inbox: 'Inbox', mail: 'Mail', open: 'Open menu', outbox: 'Outbox', personalFolders: 'Personal folders', trash: 'Trash', wedding: 'Wedding', work: 'Work' },
+  'ru-RU': { bar: { drafts: 'Черн.', favorites: 'Избр.', inbox: 'Почта', outbox: 'Исход.', trash: 'Корзина' }, close: 'Закрыть меню', compose: 'Написать', drafts: 'Черновики', family: 'Семья', favorites: 'Избранное', inbox: 'Входящие', mail: 'Почта', open: 'Открыть меню', outbox: 'Исходящие', personalFolders: 'Личные папки', trash: 'Корзина', wedding: 'Свадьба', work: 'Работа' },
 }
 
-type Destination = { label: string; icon: string; active?: boolean; badge?: string; badged?: boolean }
+type StoryText = typeof messages['en-US']
+type DestinationLabels = Pick<StoryText, 'inbox' | 'drafts' | 'outbox' | 'favorites' | 'trash'>
+type Destination = { label: string; ariaLabel?: string; icon: string; active?: boolean; badge?: string; badged?: boolean }
 
-const getDestinations = (text: typeof messages['en-US']): { primary: Destination[]; folders: Destination[] } => ({
+const accessibleLabel = (label: string, full: string) => label === full ? undefined : `${label} — ${full}`
+
+const getDestinations = (text: StoryText, labels: DestinationLabels = text): { primary: Destination[]; folders: Destination[] } => ({
   primary: [
-    { label: text.inbox, icon: 'inbox', active: true, badge: '24' },
-    { label: text.drafts, icon: 'drafts' },
-    { label: text.outbox, icon: 'send', badged: true },
-    { label: text.favorites, icon: 'favorite' },
-    { label: text.trash, icon: 'delete' },
+    { label: labels.inbox, ariaLabel: accessibleLabel(labels.inbox, text.inbox), icon: 'inbox', active: true, badge: '24' },
+    { label: labels.drafts, ariaLabel: accessibleLabel(labels.drafts, text.drafts), icon: 'drafts' },
+    { label: labels.outbox, ariaLabel: accessibleLabel(labels.outbox, text.outbox), icon: 'send', badged: true },
+    { label: labels.favorites, ariaLabel: accessibleLabel(labels.favorites, text.favorites), icon: 'favorite' },
+    { label: labels.trash, ariaLabel: accessibleLabel(labels.trash, text.trash), icon: 'delete' },
   ],
   folders: [
     { label: text.family, icon: 'folder' },
@@ -41,8 +46,9 @@ const getDestinations = (text: typeof messages['en-US']): { primary: Destination
 const destinationsTemplate = `
   <M3NavigationTab
       v-for="destination in destinations.primary"
-      :key="destination.label"
+      :key="destination.icon"
       :label="destination.label"
+      :aria-label="destination.ariaLabel"
       :active="destination.active"
       :badged="destination.badged"
   >
@@ -72,7 +78,7 @@ const meta = {
   argTypes: {
     appearance: {
       control: 'select',
-      options: ['auto', 'bar', 'rail', 'rail-expanded', 'drawer'],
+      options: ['auto', 'bar', 'bar-vertical', 'rail', 'rail-expanded', 'drawer'],
     },
 
     alignment: {
@@ -80,12 +86,7 @@ const meta = {
       options: ['top', 'middle', 'bottom'],
     },
 
-    barLayout: {
-      control: 'select',
-      options: ['auto', 'vertical'],
-    },
-
-    railExpandedMode: {
+    expansion: {
       control: 'select',
       options: ['auto', 'standard', 'modal'],
     },
@@ -94,7 +95,6 @@ const meta = {
   args: {
     appearance: 'auto',
     alignment: 'top',
-    barLayout: 'auto',
   },
 
   // eslint-disable-next-line max-lines-per-function
@@ -117,6 +117,12 @@ const meta = {
       const breakpoint = useBreakpoint()
       const text = localize(globals.locale, messages)
       const storyArgs = args as { appearance: Appearance }
+      const barLabels = { ...text, ...text.bar }
+      const labels = computed(() => storyArgs.appearance === 'bar'
+        ? m3Adaptive(barLabels, { compact: text })
+        : storyArgs.appearance === 'auto'
+          ? m3Adaptive(text, { medium: barLabels })
+          : text)
       const expandedByAppearance = computed(() => storyArgs.appearance === 'rail-expanded'
         || (storyArgs.appearance === 'auto' && breakpoint.value.ge('large')))
       const appearance = computed(() => expandedByAppearance.value && collapsed.value ? 'rail' : storyArgs.appearance)
@@ -135,7 +141,7 @@ const meta = {
       return {
         args,
         appearance,
-        destinations: getDestinations(text),
+        destinations: computed(() => getDestinations(text, labels.value)),
         expanded,
         locale: globals.locale,
         railExpanded,
@@ -231,7 +237,7 @@ export const NavigationRailExpanded: Story = {
 }
 
 export const ModalNavigationRail: Story = {
-  args: { appearance: 'rail', railExpandedMode: 'modal' },
+  args: { appearance: 'rail', expansion: 'modal' },
   render: (_args, { globals }) => ({
     components: { M3Icon, M3IconButton, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
     setup () {
@@ -240,7 +246,7 @@ export const ModalNavigationRail: Story = {
     },
     template: `
       <div>
-      <M3Navigation appearance="rail" rail-expanded-mode="modal" v-model:expanded="expanded">
+      <M3Navigation appearance="rail" expansion="modal" v-model:expanded="expanded">
         <template #top>
           <M3IconButton :aria-label="expanded ? text.close : text.open" @click="expanded = !expanded">
             <M3Icon :name="expanded ? 'menu_open' : 'menu'" />
@@ -255,7 +261,7 @@ export const ModalNavigationRail: Story = {
 }
 
 export const ImmersiveNavigationRail: Story = {
-  args: { appearance: 'rail', hideWhenCollapsed: true, railExpandedMode: 'modal' },
+  args: { appearance: 'rail', collapse: 'hidden', expansion: 'modal' },
   render: (_args, { globals }) => ({
     components: { M3Icon, M3IconButton, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
     setup () {
@@ -271,7 +277,7 @@ export const ImmersiveNavigationRail: Story = {
       >
         <M3Icon name="menu" />
       </M3IconButton>
-      <M3Navigation appearance="rail" rail-expanded-mode="modal" hide-when-collapsed v-model:expanded="expanded">
+      <M3Navigation appearance="rail" expansion="modal" collapse="hidden" v-model:expanded="expanded">
         <template #top>
           <M3IconButton :aria-label="text.close" @click="expanded = false">
             <M3Icon name="menu_open" />
@@ -293,8 +299,7 @@ export const NavigationBar: Story = {
 
 export const VerticalNavigationBar: Story = {
   args: {
-    appearance: 'bar',
-    barLayout: 'vertical',
+    appearance: 'bar-vertical',
   },
 }
 
@@ -302,6 +307,68 @@ export const AdaptiveNavigation: Story = {
   args: {
     appearance: 'auto',
   },
+}
+
+export const AdaptiveWithoutBar: Story = {
+  args: {
+    appearance: 'auto',
+    appearances: ['rail', 'rail-expanded'],
+    expansion: 'modal',
+  },
+  // eslint-disable-next-line max-lines-per-function
+  render: (_args, { globals }) => ({
+    components: { M3Icon, M3IconButton, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
+    setup () {
+      const text = localize(globals.locale, messages)
+      const breakpoint = useBreakpoint()
+      const wide = computed(() => breakpoint.value.ge('large'))
+      const expanded = ref(false)
+      const collapsed = ref(false)
+
+      watch(wide, isWide => {
+        if (isWide) expanded.value = false
+      })
+
+      return {
+        appearance: computed(() => wide.value && collapsed.value ? 'rail' : 'auto'),
+        collapse: computed(() => wide.value ? 'rail' : 'hidden'),
+        destinations: getDestinations(text),
+        expanded,
+        locale: globals.locale,
+        railExpanded: computed(() => wide.value ? !collapsed.value : expanded.value),
+        showTrigger: computed(() => !wide.value),
+        text,
+        toggleRail: () => wide.value ? collapsed.value = !collapsed.value : expanded.value = false,
+      }
+    },
+    template: `
+      <div>
+      <M3IconButton
+          v-if="showTrigger"
+          :aria-label="text.open"
+          style="position: fixed; inset-inline-start: 28px; inset-block-start: 44px"
+          @click="expanded = true"
+      >
+        <M3Icon name="menu" />
+      </M3IconButton>
+      <M3Navigation
+          :appearance="appearance"
+          :appearances="['rail', 'rail-expanded']"
+          expansion="modal"
+          :collapse="collapse"
+          v-model:expanded="expanded"
+      >
+        <template #top>
+          <M3IconButton :aria-label="railExpanded ? text.close : text.open" @click="toggleRail">
+            <M3Icon :name="railExpanded ? 'menu_open' : 'menu'" />
+          </M3IconButton>
+        </template>
+        ${destinationsTemplate}
+      </M3Navigation>
+      <NavigationStoryContent :locale="locale" :top-action="showTrigger" />
+      </div>
+    `,
+  }),
 }
 
 export const ModalNavigationDrawer: Story = {

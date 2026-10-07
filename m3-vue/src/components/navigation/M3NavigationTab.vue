@@ -126,9 +126,10 @@ const _id = useId('m3-navigation-item', computed(() => props.id))
 
 const requestedAppearance = inject<Ref<Appearance>>(M3NavigationAppearance, ref('auto'))
 const breakpoint = useBreakpoint()
-const appearance = computed(() => requestedAppearance.value === 'auto'
+const resolvedAppearance = computed(() => requestedAppearance.value === 'auto'
   ? breakpoint.value.ge('large') ? 'rail-expanded' : breakpoint.value.ge('expanded') ? 'rail' : 'bar'
   : requestedAppearance.value)
+const appearance = computed(() => resolvedAppearance.value === 'bar-vertical' ? 'bar' : resolvedAppearance.value)
 const button = ref<M3LinkInstance | null>(null)
 const root = ref<HTMLDivElement | null>(null)
 const rippleSurface = ref<HTMLElement | null>(null)
