@@ -84,15 +84,16 @@ const text = computed(() => localize(props.locale, {
 
 <style scoped>
 .navigation-story-content {
-    min-height: 100vh;
+    min-block-size: 100vh;
     box-sizing: border-box;
     background: var(--m3-sys-surface);
     color: var(--m3-sys-on-surface);
 }
 
 .navigation-story-content__inner {
-    max-width: 1160px;
-    padding: 28px 24px 40px;
+    max-inline-size: 1160px;
+    padding-block: 28px 40px;
+    padding-inline: 24px;
 }
 
 .navigation-story-content__inner_with-top-action {
@@ -133,7 +134,7 @@ const text = computed(() => localize(props.locale, {
 }
 
 .navigation-story-content__tile {
-    min-height: 168px;
+    min-block-size: 168px;
     padding: 20px;
 }
 

@@ -118,7 +118,7 @@ const opened = ref(false)
 
 <style scoped>
 .surface-workspace-dialog {
-    min-height: 100vh;
+    min-block-size: 100vh;
     padding: 24px;
     box-sizing: border-box;
     color: var(--m3-sys-on-surface);
@@ -140,7 +140,7 @@ const opened = ref(false)
 
 .surface-workspace-dialog__topbar-content strong {
     display: block;
-    margin-bottom: 6px;
+    margin-block-end: 6px;
 }
 
 .surface-workspace-dialog__topbar-content p,
@@ -156,19 +156,20 @@ const opened = ref(false)
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 16px;
-    margin-top: 16px;
+    margin-block-start: 16px;
 }
 
 .surface-workspace-dialog__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
-    margin-top: 16px;
+    margin-block-start: 16px;
 }
 
 .surface-workspace-dialog__panel h3,
 .surface-workspace-dialog__dialog h3 {
-    margin: 0 0 8px;
+    margin-block: 0 8px;
+    margin-inline: 0;
 }
 
 .surface-workspace-dialog__dialog {
@@ -176,13 +177,13 @@ const opened = ref(false)
 }
 
 .surface-workspace-dialog__notice {
-    margin-top: 16px;
+    margin-block-start: 16px;
 }
 
 .surface-workspace-dialog__actions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-    margin-top: 16px;
+    margin-block-start: 16px;
 }
 </style>
