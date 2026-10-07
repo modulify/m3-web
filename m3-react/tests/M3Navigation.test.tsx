@@ -206,7 +206,7 @@ describe('m3-react/navigation', () => {
 
   test('offers standard and modal rail expansion without changing explicit drawer', () => {
     const { rerender } = render(
-      <M3Navigation appearance="rail" railExpandedMode="standard" expanded>
+      <M3Navigation appearance="rail" expansion="standard" expanded>
         <M3NavigationTab label="Home" />
         <M3NavigationSection><M3NavigationTab label="Settings" /></M3NavigationSection>
       </M3Navigation>
@@ -215,7 +215,7 @@ describe('m3-react/navigation', () => {
     expect(document.querySelector('nav.m3-navigation_rail-expanded:not(.m3-navigation_modal)')).not.toBeNull()
     expect(document.querySelector('.m3-navigation-tab_in-rail-expanded')).not.toBeNull()
 
-    rerender(<M3Navigation appearance="rail" railExpandedMode="modal" expanded><M3NavigationTab label="Home" /></M3Navigation>)
+    rerender(<M3Navigation appearance="rail" expansion="modal" expanded><M3NavigationTab label="Home" /></M3Navigation>)
     expect(document.querySelector('nav.m3-navigation_rail-expanded.m3-navigation_modal')).not.toBeNull()
 
     rerender(<M3Navigation appearance="drawer"><M3NavigationTab label="Home" /></M3Navigation>)
@@ -240,14 +240,14 @@ describe('m3-react/navigation', () => {
   })
 
   test('makes a collapsed immersive rail inert and restores it on expansion', () => {
-    const { rerender } = render(<M3Navigation appearance="rail" hideWhenCollapsed><M3NavigationTab label="Home" /></M3Navigation>)
+    const { rerender } = render(<M3Navigation appearance="rail" collapse="hidden"><M3NavigationTab label="Home" /></M3Navigation>)
     const nav = document.querySelector('nav.m3-navigation') as HTMLElement
 
     expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true)
     expect(nav.hasAttribute('inert')).toBe(true)
     expect(nav.getAttribute('aria-hidden')).toBe('true')
 
-    rerender(<M3Navigation appearance="rail" railExpandedMode="standard" hideWhenCollapsed expanded><M3NavigationTab label="Home" /></M3Navigation>)
+    rerender(<M3Navigation appearance="rail" expansion="standard" collapse="hidden" expanded><M3NavigationTab label="Home" /></M3Navigation>)
     expect(nav.classList.contains('m3-navigation_rail-expanded')).toBe(true)
     expect(nav.hasAttribute('inert')).toBe(false)
     expect(nav.hasAttribute('aria-hidden')).toBe(false)

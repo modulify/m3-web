@@ -32,13 +32,19 @@ These distinctions follow Material's [bar](https://m3.material.io/components/nav
 
 Navigation goes to a place; a compose or create action belongs in a FAB or another action control. Avoid using a bar for a single task, hiding its labels, or scrolling and reordering its destinations.
 
+Material's [bar guidelines](https://m3.material.io/components/navigation-bar/guidelines) ask for short labels that fit without wrapping, truncation, or a smaller font. This library nevertheless applies a one-line ellipsis in both bar layouts as a **layout safeguard**: an unexpectedly long translation cannot split a word or distort the bar. The ellipsis is not a recommended final design. If it appears, revise the wording or use a layout with enough room. Check every locale and enlarged text size; Material's [accessibility guidance](https://m3.material.io/components/navigation-bar/accessibility) asks for the full visible label through 2× text scaling, which a truncated bar label cannot satisfy.
+
+For labels that differ by window-size class, put `M3Adaptive` inside `M3NavigationTab.Label`, or call `useM3Adaptive()` when a plain string is enough. Unspecified classes use the regular content. Keep alternatives semantically equivalent. If a shorter label is ambiguous, provide an `aria-label` that includes its visible wording and clarifies the destination. See the [M3Adaptive guide](?path=/docs/components-m3adaptive--docs).
+
 ### Adapt and expand
 
-With `appearance="auto"`, this package uses a bar below 840 CSS px, a collapsed rail from 840 to 1199 CSS px, and a standard expanded rail from 1200 CSS px. Bar items are vertical below 600 CSS px and horizontal from 600 CSS px. These are package breakpoints; Material presents the patterns as layout guidance rather than fixed thresholds for every product.
+With `appearance="auto"`, this package uses a bar below 840 CSS px, a collapsed rail from 840 to 1199 CSS px, and a standard expanded rail from 1200 CSS px. The `bar` appearance places items vertically below 600 CSS px and horizontally from 600 CSS px; `bar-vertical` keeps them vertical at every width. These are package breakpoints; Material presents the patterns as layout guidance rather than fixed thresholds for every product.
 
-Set `appearance` explicitly to keep one form at any width. `appearance="rail"` and controlled `expanded` transition between collapsed and expanded rail. `railExpandedMode="auto"` makes expansion modal below 1200 CSS px and standard at larger widths; `"modal"` and `"standard"` override that choice. Fixed `appearance="rail-expanded"` is always standard: switch `appearance` to `"rail"` to collapse it. A bar does not expand.
+Use `appearances` to limit the automatic forms without changing explicit `appearance`. It accepts a nonempty list of `bar`, `bar-vertical`, `rail`, and `rail-expanded`. The normal width-based form wins when allowed; the other bar form wins before moving to a wider allowed form, falling back to the widest narrower form if needed. For example, `appearances={['rail', 'rail-expanded']}` prevents a bar even in compact windows. Pair it with `collapse="hidden"`, controlled `expanded`, and `expansion="modal"` to open a modal expanded rail from a button outside the navigation, such as a future top app bar button. The opening button must stay available while the rail is hidden.
 
-Provide a menu button in `M3Navigation.Top` and change `expanded` or `appearance` when it is activated. Change the icon and accessible name from “open” to “close” in the expanded state. The component does not create a menu button or a route. For an immersive modal rail, combine `appearance="rail"`, `railExpandedMode="modal"`, and `hideWhenCollapsed`; keep the opening button **outside** the hidden navigation. Hiding the ordinary collapsed rail is not the normal rail pattern.
+Set `appearance` explicitly to keep one form at any width. `appearance="rail"` and controlled `expanded` transition between collapsed and expanded rail. `expansion="auto"` makes expansion modal below 1200 CSS px and standard at larger widths; `"modal"` and `"standard"` override that choice. Fixed `appearance="rail-expanded"` is always standard: switch `appearance` to `"rail"` to collapse it. A bar does not expand.
+
+Provide a menu button in `M3Navigation.Top` and change `expanded` or `appearance` when it is activated. Change the icon and accessible name from “open” to “close” in the expanded state. The component does not create a menu button or a route. For an immersive modal rail, combine `appearance="rail"`, `expansion="modal"`, and `collapse="hidden"`; keep the opening button **outside** the hidden navigation. Hiding the ordinary collapsed rail is not the normal rail pattern.
 
 Classic drawers require explicit `appearance="drawer"`. With this value, `expanded={false}` leaves a standard drawer and `expanded={true}` shows a modal drawer. To close a modal drawer into a rail, control **both** `expanded` and `appearance`, as in [Modal Navigation Drawer](?path=/story/components-m3navigation--modal-navigation-drawer). Expanding a bar never opens a drawer.
 
@@ -88,12 +94,12 @@ In an app, derive `active` from the route and render the actual page in `main`.
 
 | Prop | Values and default | Effect |
 | --- | --- | --- |
-| `appearance` | `auto` (default), `bar`, `rail`, `rail-expanded`, `drawer` | Adaptive or fixed form. `auto` follows the width rules above. |
+| `appearance` | `auto` (default), `bar`, `bar-vertical`, `rail`, `rail-expanded`, `drawer` | Adaptive or fixed form. `auto` follows the width rules above. |
+| `appearances` | nonempty list of `bar`, `bar-vertical`, `rail`, `rail-expanded`; all four by default | Allowed forms only for `appearance="auto"`. The alternate bar form is preferred before moving to a wider form; `drawer` stays explicit. |
 | `expanded` | `boolean`, default `false` | Controlled expansion for `rail`; modal state for explicit `drawer`. Ignored by fixed `rail-expanded`; a bar requests a reset to `false`. |
-| `railExpandedMode` | `auto` (default), `standard`, `modal` | How an expanded `rail` uses layout space. Has no effect on other forms. |
-| `barLayout` | `auto` (default), `vertical` | `auto` uses vertical items below 600 CSS px, horizontal above; `vertical` keeps labels below the icon. |
+| `expansion` | `auto` (default), `standard`, `modal` | How an expanded `rail` uses layout space. Has no effect on other forms. |
 | `alignment` | `top` (default), `middle`, `bottom` | Aligns destinations in a rail; menu and FAB remain at the top. |
-| `hideWhenCollapsed` | `boolean`, default `false` | Hides the collapsed `rail` and its inset. Pair with a modal rail and external trigger. |
+| `collapse` | `rail` (default), `hidden` | How the unexpanded `rail` is presented. `hidden` removes its inset; use a modal expansion and an external trigger. |
 | `onToggle` | `(expanded: boolean) => void` | Requests a controlled change, including scrim/Escape dismissal and a bar reset. The parent must update `expanded`. |
 | `children`, HTML attributes | React nodes; standard attributes | Children form the slots below. Attributes such as `id` and `aria-label` reach the `nav` landmark. |
 
@@ -135,7 +141,7 @@ For a modal overlay, the inset follows the navigation underneath. The bar height
 
 ## Examples and sources
 
-- [Adaptive Navigation](?path=/story/components-m3navigation--adaptive-navigation), [Navigation Bar](?path=/story/components-m3navigation--navigation-bar), [Vertical Navigation Bar](?path=/story/components-m3navigation--vertical-navigation-bar)
+- [Adaptive Navigation](?path=/story/components-m3navigation--adaptive-navigation), [Adaptive Without Bar](?path=/story/components-m3navigation--adaptive-without-bar), [Navigation Bar](?path=/story/components-m3navigation--navigation-bar), [Vertical Navigation Bar](?path=/story/components-m3navigation--vertical-navigation-bar)
 - [Navigation Rail](?path=/story/components-m3navigation--navigation-rail), [Expanded Navigation Rail](?path=/story/components-m3navigation--navigation-rail-expanded), [Modal Navigation Rail](?path=/story/components-m3navigation--modal-navigation-rail), [Immersive Navigation Rail](?path=/story/components-m3navigation--immersive-navigation-rail)
 - [Navigation Drawer](?path=/story/components-m3navigation--navigation-drawer), [Modal Navigation Drawer](?path=/story/components-m3navigation--modal-navigation-drawer)
 - [Material 3 bar guidelines](https://m3.material.io/components/navigation-bar/guidelines), [rail guidelines](https://m3.material.io/components/navigation-rail/guidelines), [drawer overview](https://m3.material.io/components/navigation-drawer/overview)
@@ -170,13 +176,19 @@ For a modal overlay, the inset follows the navigation underneath. The bar height
 
 Пункт навигации ведёт в раздел, а не выполняет действие. Например, кнопке создания письма место в FAB или другом элементе действий. Не используйте bar для одной задачи, не убирайте подписи и не прокручивайте или переставляйте его пункты.
 
+[Рекомендации Material для bar](https://m3.material.io/components/navigation-bar/guidelines) требуют короткие подписи без переноса, обрезки и уменьшения шрифта. Библиотека всё же включает однострочное троеточие в обоих вариантах bar как **страховку для вёрстки**: слишком длинный перевод не разорвёт слово и не перекосит панель. Троеточие — сигнал, что интерфейс пора пересмотреть, а не нормальный итоговый вид. Подберите другую формулировку или более просторную компоновку; проверьте все локали и увеличение текста. [Правила доступности Material](https://m3.material.io/components/navigation-bar/accessibility) требуют показывать полную подпись до масштаба 2×, чего обрезанная подпись не обеспечивает.
+
+Для подписей, зависящих от класса ширины, поместите `M3Adaptive` внутрь `M3NavigationTab.Label` или вызовите `useM3Adaptive()`, если нужна только строка. На неуказанных классах действует обычное содержимое. Сохраняйте смысл раздела. Если сокращение неоднозначно, задайте `aria-label`, включающий видимый текст и пояснение. Подробнее — в [гайде M3Adaptive](?path=/docs/components-m3adaptive--docs).
+
 ### Адаптация и раскрытие
 
-При `appearance="auto"` библиотека выбирает bar при ширине меньше 840 CSS px, свернутый rail от 840 до 1199 CSS px и стандартный раскрытый rail от 1200 CSS px. В bar пункты вертикальные до 600 CSS px и горизонтальные от 600 CSS px. Это брейкпоинты библиотеки; Material описывает выбор вида как рекомендацию по компоновке, а не требует от каждого продукта ровно этих порогов.
+При `appearance="auto"` библиотека выбирает bar при ширине меньше 840 CSS px, свернутый rail от 840 до 1199 CSS px и стандартный раскрытый rail от 1200 CSS px. Вариант `bar` размещает пункты вертикально до 600 CSS px и горизонтально от 600 CSS px; `bar-vertical` сохраняет вертикальное расположение при любой ширине. Это брейкпоинты библиотеки; Material описывает выбор вида как рекомендацию по компоновке, а не требует от каждого продукта ровно этих порогов.
 
-Явный `appearance` закрепляет вид независимо от ширины. `appearance="rail"` вместе с управляемым `expanded` переключает свернутый и раскрытый rail. `railExpandedMode="auto"` выбирает modal до 1200 CSS px и standard на более широком экране; `"modal"` и `"standard"` задают режим явно. Закреплённый `appearance="rail-expanded"` всегда standard: для сворачивания поменяйте `appearance` на `"rail"`. Bar не раскрывается.
+`appearances` ограничивает только автоматический выбор: передайте непустой список из `bar`, `bar-vertical`, `rail`, `rail-expanded`. Если обычный вид bar запрещён, сначала выбирается другой вариант bar; затем ближайший более широкий разрешённый вид, а если такого нет — самый широкий из более узких. Например, `appearances={['rail', 'rail-expanded']}` исключит bar и на компактном экране. Вместе с `collapse="hidden"`, управляемым `expanded` и `expansion="modal"` это позволяет открывать модальный раскрытый rail внешней кнопкой, например в будущем top app bar. Кнопка открытия должна оставаться доступной, пока rail скрыт.
 
-Кнопку меню передайте через `M3Navigation.Top` и по нажатию меняйте `expanded` или `appearance`. В раскрытом состоянии иконка и доступное имя должны говорить о закрытии. Компонент не создаёт кнопку меню и не управляет маршрутом. Для полноэкранного модального rail используйте `appearance="rail"`, `railExpandedMode="modal"` и `hideWhenCollapsed`; кнопку открытия оставьте **вне** скрытой навигации. Скрытый свернутый rail не является обычным состоянием rail.
+Явный `appearance` закрепляет вид независимо от ширины. `appearance="rail"` вместе с управляемым `expanded` переключает свернутый и раскрытый rail. `expansion="auto"` выбирает modal до 1200 CSS px и standard на более широком экране; `"modal"` и `"standard"` задают режим явно. Закреплённый `appearance="rail-expanded"` всегда standard: для сворачивания поменяйте `appearance` на `"rail"`. Bar не раскрывается.
+
+Кнопку меню передайте через `M3Navigation.Top` и по нажатию меняйте `expanded` или `appearance`. В раскрытом состоянии иконка и доступное имя должны говорить о закрытии. Компонент не создаёт кнопку меню и не управляет маршрутом. Для полноэкранного модального rail используйте `appearance="rail"`, `expansion="modal"` и `collapse="hidden"`; кнопку открытия оставьте **вне** скрытой навигации. Скрытый свернутый rail не является обычным состоянием rail.
 
 Классический drawer включается только явным `appearance="drawer"`. При нём `expanded={false}` оставляет стандартный drawer, а `expanded={true}` показывает модальный. Чтобы после закрытия модального drawer получить rail, управляйте **и** `expanded`, **и** `appearance`, как в [Modal Navigation Drawer](?path=/story/components-m3navigation--modal-navigation-drawer). Раскрытие bar не открывает drawer.
 
@@ -226,12 +238,12 @@ For a modal overlay, the inset follows the navigation underneath. The bar height
 
 | Prop | Значения и умолчание | Действие |
 | --- | --- | --- |
-| `appearance` | `auto` (по умолчанию), `bar`, `rail`, `rail-expanded`, `drawer` | Адаптивный или закреплённый вид. Пороги `auto` указаны выше. |
+| `appearance` | `auto` (по умолчанию), `bar`, `bar-vertical`, `rail`, `rail-expanded`, `drawer` | Адаптивный или закреплённый вид. Пороги `auto` указаны выше. |
+| `appearances` | непустой список из `bar`, `bar-vertical`, `rail`, `rail-expanded`; по умолчанию все четыре | Разрешённые виды только для `appearance="auto"`. Второй вариант bar выбирается перед переходом к более широкому виду; `drawer` выбирается только явно. |
 | `expanded` | `boolean`, по умолчанию `false` | Управляемое раскрытие `rail` или модальное состояние явного `drawer`. Не влияет на закреплённый `rail-expanded`; bar запрашивает сброс в `false`. |
-| `railExpandedMode` | `auto` (по умолчанию), `standard`, `modal` | Определяет, занимает ли раскрытый `rail` место в компоновке. На другие виды не влияет. |
-| `barLayout` | `auto` (по умолчанию), `vertical` | `auto` размещает подпись под иконкой до 600 CSS px и рядом с ней от 600 CSS px; `vertical` всегда оставляет подпись снизу. |
+| `expansion` | `auto` (по умолчанию), `standard`, `modal` | Определяет, занимает ли раскрытый `rail` место в компоновке. На другие виды не влияет. |
 | `alignment` | `top` (по умолчанию), `middle`, `bottom` | Выравнивает группу пунктов в rail; меню и FAB остаются сверху. |
-| `hideWhenCollapsed` | `boolean`, по умолчанию `false` | Для `rail` убирает свернутую рейку и её отступ. Сочетайте с модальным rail и внешней кнопкой. |
+| `collapse` | `rail` (по умолчанию), `hidden` | Как выглядит нераскрытый `rail`. Значение `hidden` убирает его отступ; используйте модальное раскрытие и внешнюю кнопку. |
 | `onToggle` | `(expanded: boolean) => void` | Запрос на изменение управляемого `expanded`, в том числе по scrim/Escape и при сбросе bar. Родитель обновляет prop. |
 | `children`, HTML-атрибуты | React-элементы; стандартные атрибуты | Дочерние элементы образуют слоты ниже. `id` и `aria-label` передаются в `nav`. |
 
@@ -273,7 +285,7 @@ For a modal overlay, the inset follows the navigation underneath. The bar height
 
 ## Примеры и источники
 
-- [Адаптивная навигация](?path=/story/components-m3navigation--adaptive-navigation), [нижняя панель](?path=/story/components-m3navigation--navigation-bar), [панель с подписями под иконками](?path=/story/components-m3navigation--vertical-navigation-bar)
+- [Адаптивная навигация](?path=/story/components-m3navigation--adaptive-navigation), [адаптивная навигация без bar](?path=/story/components-m3navigation--adaptive-without-bar), [нижняя панель](?path=/story/components-m3navigation--navigation-bar), [панель с подписями под иконками](?path=/story/components-m3navigation--vertical-navigation-bar)
 - [Свернутый rail](?path=/story/components-m3navigation--navigation-rail), [раскрытый rail](?path=/story/components-m3navigation--navigation-rail-expanded), [модальный rail](?path=/story/components-m3navigation--modal-navigation-rail), [полноэкранный modal rail](?path=/story/components-m3navigation--immersive-navigation-rail)
 - [Стандартный drawer](?path=/story/components-m3navigation--navigation-drawer), [модальный drawer](?path=/story/components-m3navigation--modal-navigation-drawer)
 - [Рекомендации Material 3 для bar](https://m3.material.io/components/navigation-bar/guidelines), [rail](https://m3.material.io/components/navigation-rail/guidelines), [обзор drawer](https://m3.material.io/components/navigation-drawer/overview)

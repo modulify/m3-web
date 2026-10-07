@@ -90,9 +90,10 @@ export default defineComponent(function M3NavigationTab({
 
   const requestedAppearance = useM3NavigationAppearance()
   const breakpoint = useBreakpoint()
-  const appearance = requestedAppearance === 'auto'
+  const resolvedAppearance = requestedAppearance === 'auto'
     ? breakpoint.ge('large') ? 'rail-expanded' : breakpoint.ge('expanded') ? 'rail' : 'bar'
     : requestedAppearance
+  const appearance = resolvedAppearance === 'bar-vertical' ? 'bar' : resolvedAppearance
   const inDrawer = appearance === 'drawer'
 
   const hasLabel = hasSlot('label') || label.length > 0

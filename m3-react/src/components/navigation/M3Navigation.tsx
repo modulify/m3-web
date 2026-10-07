@@ -1,19 +1,27 @@
 import type {
   Alignment,
   Appearance,
-  BarLayout,
+  AutoAppearance,
 } from '@modulify/m3-foundation/types/components/navigation'
 import type { ComponentSetupContext } from '@/utils/component'
 import type { FC, HTMLAttributes } from 'react'
+import type { RailCollapse } from '@modulify/m3-foundation/types/components/navigation'
 import type {
   RailExpandedMode,
 } from '@modulify/m3-foundation/types/components/navigation'
 import type { Ref } from 'react'
 
 import { activateModalFocus } from '@modulify/m3-foundation/lib/modal'
-import { CSSTransition } from 'react-transition-group'
-
 import { createPortal } from 'react-dom'
+import { CSSTransition } from 'react-transition-group'
+import {
+  isBarAppearance,
+  isExpandableAppearance,
+  isExpandedRail,
+  isHiddenRail,
+  isModalExpansion,
+  resolveNavigationAppearance,
+} from '@modulify/m3-foundation/lib/navigation'
 import {
   useEffect,
   useLayoutEffect,
@@ -33,10 +41,10 @@ import M3NavigationSection from './M3NavigationSection'
 export interface M3NavigationProps extends Omit<HTMLAttributes<HTMLElement>, 'onToggle'> {
   ref?: Ref<M3NavigationExposed>;
   appearance?: Appearance;
+  appearances?: readonly [AutoAppearance, ...AutoAppearance[]];
   alignment?: Alignment;
-  barLayout?: BarLayout;
-  railExpandedMode?: RailExpandedMode;
-  hideWhenCollapsed?: boolean;
+  expansion?: RailExpandedMode;
+  collapse?: RailCollapse;
   expanded?: boolean;
   onToggle?: (expanded: boolean) => void;
 }
@@ -81,10 +89,10 @@ const Subheader: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Navigation.Subh
 export default defineComponent(function M3Navigation({
   ref: _ref,
   appearance = 'auto',
+  appearances,
   alignment = 'top',
-  barLayout = 'auto',
-  railExpandedMode = 'auto',
-  hideWhenCollapsed = false,
+  expansion = 'auto',
+  collapse = 'rail',
   expanded = false,
   className = '',
   children = [],
@@ -95,26 +103,29 @@ export default defineComponent(function M3Navigation({
   const breakpoint = useBreakpoint()
 
   const appearanceBase = appearance === 'auto'
-    ? breakpoint.ge('large') ? 'rail-expanded' : breakpoint.ge('expanded') ? 'rail' : 'bar'
+    ? resolveNavigationAppearance(breakpoint.name, appearances)
     : appearance
   const previousAppearanceBase = useRef(appearanceBase)
+  const state = useRecord({
+    transitioning: isModalExpansion(appearanceBase, expanded, expansion, breakpoint.ge('large')),
+  }, ['transitioning'])
 
-  const railExpanded = appearanceBase === 'rail' && expanded
-  const railHidden = appearanceBase === 'rail' && hideWhenCollapsed && !expanded
-
-  const modalExpanded = (appearanceBase === 'drawer' && expanded)
-    || (railExpanded && (railExpandedMode === 'modal' || (railExpandedMode === 'auto' && !breakpoint.ge('large'))))
-  const state = useRecord({ transitioning: modalExpanded }, ['transitioning'])
-  const railLeaving = railHidden && state.transitioning
-  const appearanceActual = railExpanded || railLeaving
+  const appearanceActual = isExpandedRail(appearanceBase, expanded)
+    || isHiddenRail(appearanceBase, expanded, collapse) && state.transitioning
     ? 'rail-expanded'
     : appearanceBase
 
   const modalDialog = useRef<HTMLDivElement | null>(null)
-  const modalActive = (appearanceBase === 'drawer' || appearanceBase === 'rail') && (modalExpanded || state.transitioning)
+  const modalExpanded = isModalExpansion(appearanceBase, expanded, expansion, breakpoint.ge('large'))
+  const modalActive = isExpandableAppearance(appearanceBase)
+    && (isModalExpansion(appearanceBase, expanded, expansion, breakpoint.ge('large')) || state.transitioning)
+
+  const railHidden = isHiddenRail(appearanceBase, expanded, collapse)
+  const railLeaving = isHiddenRail(appearanceBase, expanded, collapse) && state.transitioning
 
   const scrim = useRef<HTMLDivElement | null>(null)
   const navigation = useRef<HTMLElement | null>(null)
+
   const { 'aria-hidden': ariaHidden, inert, ...navigationAttrs } = attrs
 
   const parsed = useMemo(() => distinct(children, {
@@ -127,19 +138,16 @@ export default defineComponent(function M3Navigation({
       sections: M3NavigationSection,
     },
   }), [children])
-
-  const handlers = useRecord({
-    onToggle,
-  })
+  const handlers = useRecord({ onToggle })
 
   useWatch(onToggle, onToggle => handlers.onToggle = onToggle)
 
   expose({
     expand: () => {
-      if (appearanceBase === 'rail' || appearanceBase === 'drawer') handlers.onToggle(true)
+      if (isExpandableAppearance(appearanceBase)) handlers.onToggle(true)
     },
     collapse: () => {
-      if (appearanceBase === 'rail' || appearanceBase === 'drawer') handlers.onToggle(false)
+      if (isExpandableAppearance(appearanceBase)) handlers.onToggle(false)
     },
   })
 
@@ -150,20 +158,20 @@ export default defineComponent(function M3Navigation({
   })
 
   useEffect(() => {
-    if (appearanceBase !== 'rail' && appearanceBase !== 'drawer'
+    if (!isExpandableAppearance(appearanceBase)
       || (previousAppearanceBase.current !== appearanceBase && !modalExpanded)) {
       state.transitioning = false
     }
     previousAppearanceBase.current = appearanceBase
 
-    if (expanded && appearanceBase === 'bar') {
+    if (expanded && isBarAppearance(appearanceBase)) {
       handlers.onToggle(false)
     }
   }, [appearanceBase, expanded, modalExpanded])
 
   useEffect(() => {
     const element = navigation.current
-    if (appearanceActual !== 'bar' || !element || typeof ResizeObserver === 'undefined') {
+    if (!isBarAppearance(appearanceActual) || !element || typeof ResizeObserver === 'undefined') {
       return
     }
 
@@ -205,7 +213,7 @@ export default defineComponent(function M3Navigation({
       >
         <div
           ref={scrim}
-          style={appearanceBase === 'bar' || (!modalExpanded && !state.transitioning) ? { display: 'none' } : undefined}
+          style={isBarAppearance(appearanceBase) || (!modalExpanded && !state.transitioning) ? { display: 'none' } : undefined}
           className="m3-scrim"
           onClick={() => handlers.onToggle(false)}
         />
@@ -223,10 +231,10 @@ export default defineComponent(function M3Navigation({
           className={toClassName([className, {
             ['m3-navigation']: true,
             ['m3-navigation_' + appearanceActual]: true,
-            ['m3-navigation_bar-vertical']: appearanceActual === 'bar' && barLayout === 'vertical',
+            ['m3-navigation_bar']: isBarAppearance(appearanceActual),
             ['m3-navigation_' + alignment]: true,
             ['m3-navigation_modal']: modalActive,
-            ['m3-navigation_hide-collapsed']: appearanceBase === 'rail' && hideWhenCollapsed,
+            ['m3-navigation_hide-collapsed']: appearanceBase === 'rail' && collapse === 'hidden',
             ['m3-navigation_rail-leaving']: railLeaving,
             ['m3-navigation_rail-hidden']: railHidden && !railLeaving,
           }])}
