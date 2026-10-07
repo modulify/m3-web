@@ -1,5 +1,6 @@
 export { default as useAnimationFrame } from './useAnimationFrame'
 export { default as useBreakpoint } from './useBreakpoint'
+export { default as useM3Adaptive } from './useM3Adaptive'
 export { default as useClickable } from './useClickable'
 export { default as useElementEffect } from './useElementEffect'
 export { default as useElementReference } from './useElementReference'

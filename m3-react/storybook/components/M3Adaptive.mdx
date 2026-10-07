@@ -1,0 +1,101 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as M3AdaptiveStories from './M3Adaptive.stories'
+
+<Meta of={M3AdaptiveStories} />
+
+<Localized locale="en-US">
+
+# Adaptive content
+
+`M3Adaptive` chooses content for the current viewport breakpoint. It can adapt navigation labels, headings, or other content without adding breakpoint props to each component. Only the exact matching breakpoint replaces the regular content. Resize the [example](?path=/story/components-m3adaptive--breakpoint-content) to see all three forms.
+
+Do not use `M3Adaptive` throughout an app by default. Breakpoint-specific content is a last resort when a component cannot meet Material 3 guidance across supported widths or languages. First reconsider how the affected component is used, or replace it with a more suitable one where possible. Any variants should preserve the same meaning and function.
+
+| Breakpoint | Viewport width |
+| --- | --- |
+| `compact` | below 600px |
+| `medium` | 600–839px |
+| `expanded` | 840–1199px |
+| `large` | 1200–1599px |
+| `extra-large` | 1600px and above |
+
+## React API
+
+Use `useM3Adaptive()` for a simple value. Call its selector while rendering so a viewport change updates the result.
+
+```tsx
+const adaptive = useM3Adaptive()
+const label = adaptive('Incoming messages', { compact: 'Inbox', medium: 'Mail' })
+```
+
+For content, use props or named slots. A selected function prop is called only when its breakpoint is active. The component adds no wrapper element.
+
+```tsx
+<M3Adaptive regular="Incoming messages" compact="Inbox" />
+
+<M3Adaptive regular={() => <>Incoming<br />messages</>} large="Inbox" />
+
+<M3Adaptive>
+  Incoming messages
+  <M3Adaptive.Compact>Inbox</M3Adaptive.Compact>
+</M3Adaptive>
+```
+
+| Props | Purpose |
+| --- | --- |
+| `regular` | Fallback content when the current breakpoint has no override. |
+| `compact`, `medium`, `expanded`, `large`, `extraLarge` | Exact breakpoint overrides. Each accepts a React node or a function returning one. |
+| `children` | Default content and optional named slots. Default content takes priority over `regular`. |
+
+Named slots are `Compact`, `Medium`, `Expanded`, `Large`, and `ExtraLarge`. They take priority over matching props. For navigation, place `M3Adaptive` inside `M3NavigationTab.Label`. Keep labels short enough to fit without truncation in every supported language.
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Адаптивное содержимое
+
+`M3Adaptive` выбирает содержимое по текущему классу ширины окна. Его можно использовать для подписей навигации, заголовков и других элементов без специальных props в каждом компоненте. Замена действует только на указанном классе ширины; иначе показывается обычное содержимое. Измените ширину [примера](?path=/story/components-m3adaptive--breakpoint-content), чтобы увидеть три формы записи.
+
+Не используйте `M3Adaptive` повсеместно по умолчанию. Разное содержимое для разных классов ширины — крайнее средство, когда компонент не удаётся привести в соответствие с рекомендациями Material 3 на поддерживаемых ширинах или языках. Сначала пересмотрите способ применения проблемного компонента или, если ситуация позволяет, замените его более подходящим. Все варианты должны сохранять одинаковый смысл и назначение.
+
+| Класс ширины | Ширина окна |
+| --- | --- |
+| `compact` | меньше 600px |
+| `medium` | 600–839px |
+| `expanded` | 840–1199px |
+| `large` | 1200–1599px |
+| `extra-large` | от 1600px |
+
+## API React
+
+Для простого значения используйте `useM3Adaptive()`. Вызывайте селектор при рендере, чтобы результат обновлялся при изменении ширины.
+
+```tsx
+const adaptive = useM3Adaptive()
+const label = adaptive('Входящие сообщения', { compact: 'Входящие', medium: 'Почта' })
+```
+
+Для содержимого используйте props или именованные слоты. Функция из prop вызывается, только когда выбран соответствующий класс ширины. Компонент не добавляет обёртку в DOM.
+
+```tsx
+<M3Adaptive regular="Входящие сообщения" compact="Входящие" />
+
+<M3Adaptive regular={() => <>Входящие<br />сообщения</>} large="Входящие" />
+
+<M3Adaptive>
+  Входящие сообщения
+  <M3Adaptive.Compact>Входящие</M3Adaptive.Compact>
+</M3Adaptive>
+```
+
+| Props | Назначение |
+| --- | --- |
+| `regular` | Содержимое по умолчанию при отсутствии замены для текущей ширины. |
+| `compact`, `medium`, `expanded`, `large`, `extraLarge` | Замены для точного класса ширины; принимают React node или функцию, возвращающую его. |
+| `children` | Обычное содержимое и именованные слоты. Обычное содержимое имеет приоритет над `regular`. |
+
+Именованные слоты: `Compact`, `Medium`, `Expanded`, `Large`, `ExtraLarge`. Они имеют приоритет над соответствующими props. Для навигации поместите `M3Adaptive` внутрь `M3NavigationTab.Label`. Подбирайте подписи так, чтобы они помещались без обрезки на каждом поддерживаемом языке.
+
+</Localized>
