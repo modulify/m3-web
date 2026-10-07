@@ -1,0 +1,319 @@
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/typography' as m3-typography;
+
+.m3-search {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 720px;
+  color: var(--m3-sys-on-surface);
+
+  &__bar {
+    display: flex;
+    block-size: 56px;
+    box-sizing: border-box;
+    align-items: center;
+    border-radius: 28px;
+    background: var(--m3-sys-surface-container-high);
+    overflow: hidden;
+  }
+
+  &_open &__bar {
+    visibility: hidden;
+  }
+
+  &__trigger {
+    display: flex;
+    min-inline-size: 0;
+    block-size: 100%;
+    padding-block: 0;
+    padding-inline: 4px;
+    border: 0;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    color: var(--m3-sys-on-surface-variant);
+    cursor: text;
+    text-align: start;
+    @include m3-typography.body-large;
+  }
+
+  &__trigger:hover {
+    background: color-mix(in srgb, var(--m3-sys-on-surface) 8%, transparent);
+  }
+
+  &__trigger:active {
+    background: color-mix(in srgb, var(--m3-sys-on-surface) 12%, transparent);
+  }
+
+  &__trigger:focus-visible {
+    outline: 2px solid var(--m3-sys-secondary);
+    outline-offset: -4px;
+  }
+
+  &__trigger-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__trigger-text_filled {
+    color: var(--m3-sys-on-surface);
+  }
+
+  &__trigger-icon {
+    display: flex;
+    inline-size: 48px;
+    block-size: 48px;
+    flex: 0 0 48px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__leading,
+  &__trailing,
+  &__actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+  }
+
+  &__leading .m3-icon-button,
+  &__trailing .m3-icon-button,
+  &__actions .m3-icon-button,
+  &__header > .m3-icon-button {
+    inline-size: 48px;
+    block-size: 48px;
+  }
+
+  &__leading {
+    min-inline-size: 52px;
+    padding-inline-start: 4px;
+    justify-content: center;
+  }
+
+  &__trailing {
+    padding-inline-end: 4px;
+  }
+
+  &__trailing > .m3-icon {
+    margin-inline: 12px;
+  }
+
+  &__overlay {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: var(--m3-search-z-index, 1200);
+  }
+
+  &__scrim {
+    background: color-mix(in srgb, var(--m3-sys-on-surface) 32%, transparent);
+    pointer-events: auto;
+    position: absolute;
+    inset: 0;
+  }
+
+  &__view {
+    display: flex;
+    box-sizing: border-box;
+    min-inline-size: 0;
+    max-block-size: 100dvh;
+    flex-direction: column;
+    background: var(--m3-sys-surface-container-high);
+    box-shadow: var(--m3-elevation-3);
+    color: var(--m3-sys-on-surface);
+    overflow: hidden;
+    pointer-events: auto;
+    position: absolute;
+  }
+
+  &__view_full-screen {
+    inline-size: 100%;
+    block-size: 100%;
+    inset: 0;
+  }
+
+  &__view_docked {
+    inline-size: var(--m3-search-docked-width, 360px);
+    min-block-size: min(240px, calc(100dvh - var(--m3-search-docked-top, 12px) - 12px));
+    max-block-size: min(66.667dvh, calc(100dvh - var(--m3-search-docked-top, 12px) - 12px));
+    border-radius: 28px;
+    left: var(--m3-search-docked-left, 12px);
+    top: var(--m3-search-docked-top, 12px);
+  }
+
+  &__view_contained {
+    gap: 2px;
+    clip-path: inset(0 0 0 0 round 0px);
+  }
+
+  &__view_contained.m3-search__view_full-screen {
+    padding: 12px;
+    background: var(--m3-sys-surface-container-low);
+    box-shadow: none;
+  }
+
+  &__view_contained.m3-search__view_docked {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &__header {
+    display: flex;
+    block-size: 56px;
+    min-block-size: 56px;
+    padding-inline: 4px;
+    align-items: center;
+    background: var(--m3-sys-surface-container-high);
+  }
+
+  &__view_contained &__header {
+    border-radius: 28px;
+  }
+
+  &__view_divided.m3-search__view_full-screen &__header {
+    block-size: 72px;
+    min-block-size: 72px;
+  }
+
+  &__input {
+    min-inline-size: 0;
+    block-size: 100%;
+    padding-block: 0;
+    padding-inline: 4px;
+    border: 0;
+    flex: 1 1 auto;
+    background: transparent;
+    color: var(--m3-sys-on-surface);
+    outline: 0;
+    @include m3-typography.body-large;
+  }
+
+  &__input::placeholder {
+    color: var(--m3-sys-on-surface-variant);
+    opacity: 1;
+  }
+
+  &__input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  &__results {
+    min-block-size: 0;
+    padding-block: 8px;
+    flex: 1 1 auto;
+    overflow: auto;
+    overscroll-behavior: contain;
+    outline: 0;
+  }
+
+  &__results .m3-list {
+    inline-size: 100%;
+    background: transparent;
+  }
+
+  &__view_contained &__results {
+    border-radius: 16px;
+    background: var(--m3-sys-surface-container-high);
+  }
+
+  &__view_divided &__results {
+    border-block-start: 1px solid var(--m3-sys-outline);
+  }
+
+  &__status {
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    position: absolute;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.m3-search-enter .m3-search__view_divided,
+.m3-search-enter-from .m3-search__view_divided,
+.m3-search-exit-active .m3-search__view_divided,
+.m3-search-leave-to .m3-search__view_divided {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+}
+
+.m3-search-enter-active:not(.m3-search-enter-from) .m3-search__view_divided {
+  opacity: 1;
+  transform: none;
+}
+
+.m3-search-enter-active .m3-search__view_divided,
+.m3-search-exit-active .m3-search__view_divided,
+.m3-search-leave-active .m3-search__view_divided {
+  transition:
+    opacity #{m3-motion.duration('medium2')} #{m3-motion.easing('standard')},
+    transform #{m3-motion.duration('medium2')} #{m3-motion.easing('standard')};
+}
+
+.m3-search-enter .m3-search__view_contained.m3-search__view_full-screen,
+.m3-search-enter-from .m3-search__view_contained.m3-search__view_full-screen,
+.m3-search-exit-active .m3-search__view_contained.m3-search__view_full-screen,
+.m3-search-leave-to .m3-search__view_contained.m3-search__view_full-screen {
+  clip-path: inset(12px var(--m3-search-origin-right) calc(100% - 68px) var(--m3-search-origin-left) round 28px);
+  transform: translateY(var(--m3-search-origin-offset-y));
+}
+
+.m3-search-enter .m3-search__view_contained.m3-search__view_docked,
+.m3-search-enter-from .m3-search__view_contained.m3-search__view_docked,
+.m3-search-exit-active .m3-search__view_contained.m3-search__view_docked,
+.m3-search-leave-to .m3-search__view_contained.m3-search__view_docked {
+  clip-path: inset(0px var(--m3-search-origin-right) calc(100% - 56px) var(--m3-search-origin-left) round 28px);
+  transform: translateY(var(--m3-search-origin-offset-y));
+}
+
+.m3-search-enter-active:not(.m3-search-enter-from) .m3-search__view_contained.m3-search__view_full-screen,
+.m3-search-enter-active:not(.m3-search-enter-from) .m3-search__view_contained.m3-search__view_docked {
+  clip-path: inset(0 0 0 0 round 0px);
+  transform: none;
+}
+
+.m3-search-enter-active .m3-search__view_contained,
+.m3-search-exit-active .m3-search__view_contained,
+.m3-search-leave-active .m3-search__view_contained {
+  transition:
+    clip-path #{m3-motion.duration('medium2')} #{m3-motion.easing('standard')},
+    transform #{m3-motion.duration('medium2')} #{m3-motion.easing('standard')};
+}
+
+.m3-search-enter .m3-search__scrim,
+.m3-search-enter-from .m3-search__scrim,
+.m3-search-exit-active .m3-search__scrim,
+.m3-search-leave-to .m3-search__scrim {
+  opacity: 0;
+}
+
+.m3-search-enter-active:not(.m3-search-enter-from) .m3-search__scrim {
+  opacity: 1;
+}
+
+.m3-search-enter-active .m3-search__scrim,
+.m3-search-exit-active .m3-search__scrim,
+.m3-search-leave-active .m3-search__scrim {
+  transition: m3-motion.timing-standard(opacity, 'short4');
+}
+
+.m3-search-exit-active .m3-search__view,
+.m3-search-exit-active .m3-search__scrim,
+.m3-search-leave-active .m3-search__view,
+.m3-search-leave-active .m3-search__scrim {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-search-enter-active .m3-search__view,
+  .m3-search-exit-active .m3-search__view,
+  .m3-search-leave-active .m3-search__view,
+  .m3-search-enter-active .m3-search__scrim,
+  .m3-search-exit-active .m3-search__scrim,
+  .m3-search-leave-active .m3-search__scrim {
+    transition-duration: 0ms;
+  }
+}
