@@ -116,11 +116,11 @@ describe('m3-vue/navigation', () => {
   })
 
   test('offers standard and modal rail expansion without changing explicit drawer', async () => {
-    const view = render(M3Navigation, { props: { appearance: 'rail', expanded: true, railExpandedMode: 'standard' } })
+    const view = render(M3Navigation, { props: { appearance: 'rail', expanded: true, expansion: 'standard' } })
 
     expect(document.querySelector('nav.m3-navigation_rail-expanded:not(.m3-navigation_modal)')).not.toBeNull()
 
-    await view.rerender({ appearance: 'rail', expanded: true, railExpandedMode: 'modal' })
+    await view.rerender({ appearance: 'rail', expanded: true, expansion: 'modal' })
     expect(document.querySelector('nav.m3-navigation_rail-expanded.m3-navigation_modal')).not.toBeNull()
 
     await view.rerender({ appearance: 'drawer', expanded: false })
@@ -135,14 +135,14 @@ describe('m3-vue/navigation', () => {
   })
 
   test('makes a collapsed immersive rail inert and restores it on expansion', async () => {
-    const view = render(M3Navigation, { props: { appearance: 'rail', hideWhenCollapsed: true } })
+    const view = render(M3Navigation, { props: { appearance: 'rail', collapse: 'hidden' } })
     const nav = document.querySelector('nav.m3-navigation') as HTMLElement
 
     expect(nav.classList.contains('m3-navigation_rail-hidden')).toBe(true)
     expect(nav.hasAttribute('inert')).toBe(true)
     expect(nav.getAttribute('aria-hidden')).toBe('true')
 
-    await view.rerender({ appearance: 'rail', hideWhenCollapsed: true, expanded: true, railExpandedMode: 'standard' })
+    await view.rerender({ appearance: 'rail', collapse: 'hidden', expanded: true, expansion: 'standard' })
     expect(nav.classList.contains('m3-navigation_rail-expanded')).toBe(true)
     expect(nav.hasAttribute('inert')).toBe(false)
     expect(nav.hasAttribute('aria-hidden')).toBe(false)
