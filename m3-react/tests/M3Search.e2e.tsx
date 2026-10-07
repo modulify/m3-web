@@ -30,7 +30,7 @@ test('adapts an open search without losing the query or overflowing the viewport
     fireEvent.change(input, { target: { value: 'notes' } })
 
     const dialog = screen.getByRole('dialog', { name: 'Search messages' })
-    expect(dialog.classList.contains('m3-search__view_full-screen')).toBe(true)
+    await waitFor(() => expect(dialog.classList.contains('m3-search__view_full-screen')).toBe(true))
     expect(getComputedStyle(document.querySelector('.m3-search__bar')!).visibility).toBe('hidden')
     expect(dialog.offsetWidth).toBe(390)
     expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(390)
