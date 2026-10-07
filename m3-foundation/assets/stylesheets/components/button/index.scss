@@ -11,7 +11,7 @@
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
-  height: 40px;
+  block-size: 40px;
   border-radius: var(--m3-button-rounding, 100px);
   color: var(--m3-sys-primary);
   text-decoration: none;
@@ -64,13 +64,13 @@
 
     &::before {
       content: ' ';
-      width: 100%;
-      height: 100%;
+      inline-size: 100%;
+      block-size: 100%;
       border: 1px solid var(--m3-sys-outline);
       border-radius: inherit;
       position: absolute;
-      top: 0;
-      left: 0;
+      inset-block-start: 0;
+      inset-inline-start: 0;
     }
 
     &:not(:disabled):focus::before  { border-color: var(--m3-sys-primary); }
@@ -103,8 +103,8 @@
   &__state {
     @include m3-typography.label-large;
 
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     background: var(--state-color);
     border-radius: inherit;
     overflow: hidden;
@@ -114,8 +114,8 @@
       m3-motion.timing-standard(opacity)
     ;
     position: absolute;
-    top: 0;
-    left: 0;
+    inset-block-start: 0;
+    inset-inline-start: 0;
   }
 
   &:hover    &__state { opacity: 0.08 }
@@ -128,8 +128,8 @@
 
     display: flex;
     flex: 1 0 0;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     padding: 10px 24px;
     align-items: center;
     align-self: stretch;
@@ -140,24 +140,23 @@
     position: relative;
   }
 
-  &_has-leading-icon  &__content { padding-left: 16px; }
-  &_has-trailing-icon &__content { padding-right: 16px; }
+  &_has-leading-icon  &__content { padding-inline-start: 16px; }
+  &_has-trailing-icon &__content { padding-inline-end: 16px; }
 
   &_text &__content {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-inline: 12px;
   }
 
-  &_text#{&}_has-leading-icon  &__content { padding-right: 16px; }
-  &_text#{&}_has-trailing-icon &__content { padding-left: 16px; }
+  &_text#{&}_has-leading-icon  &__content { padding-inline-end: 16px; }
+  &_text#{&}_has-trailing-icon &__content { padding-inline-start: 16px; }
 
   &__icon {
     display: inline-flex;
   }
 
   &__icon svg {
-    width: 18px;
-    height: 18px;
+    inline-size: 18px;
+    block-size: 18px;
   }
 
   &:disabled &__icon,

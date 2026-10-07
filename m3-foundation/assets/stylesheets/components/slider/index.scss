@@ -2,7 +2,7 @@
 @use '../../basics/shape' as m3-shape;
 
 .m3-slider {
-  min-width: 120px;
+  min-inline-size: 120px;
   padding-inline: 6px;
 
   @include m3-shape.reset-box-sizing;
@@ -14,17 +14,17 @@
 
   &__scale {
     display: flex;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     align-items: center;
     position: absolute;
     left: 0;
-    top: 0;
+    inset-block-start: 0;
   }
 
   &__notch {
     display: flex;
-    width: 0;
+    inline-size: 0;
     align-items: center;
     justify-content: center;
     z-index: 1;
@@ -40,8 +40,8 @@
   &__notch-control {
     display: flex;
     flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+    inline-size: 16px;
+    block-size: 16px;
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -50,8 +50,8 @@
       content: '';
       display: inline-block;
       flex-shrink: 0;
-      width: 4px;
-      height: 4px;
+      inline-size: 4px;
+      block-size: 4px;
       background: var(--m3-sys-primary);
       border-radius: 50%;
       transition:
@@ -82,8 +82,8 @@
 
   &__filler {
     display: flex;
-    width: calc(var(--percentage, 50%) + 6px);
-    height: var(--m3-slider-track-thickness, 16px);
+    inline-size: calc(var(--percentage, 50%) + 6px);
+    block-size: var(--m3-slider-track-thickness, 16px);
     position: relative;
 
     &_min,
@@ -98,13 +98,13 @@
 
     &::before {
       content: ' ';
-      width: calc(100% - 8px);
-      height: 100%;
+      inline-size: calc(100% - 8px);
+      block-size: 100%;
       background: var(--m3-sys-primary-container);
       border-radius: 2px;
       opacity: 1;
       position: absolute;
-      top: 0;
+      inset-block-start: 0;
       transition:
         m3-motion.timing-standard(background),
         m3-motion.timing-standard(opacity)
@@ -130,17 +130,17 @@
     }
 
     &_min + &_active::before {
-      width: calc(100% - 16px);
+      inline-size: calc(100% - 16px);
       left: 8px;
     }
   }
 
   &_range &__filler {
-    width: calc(var(--percentage, 50%) + 6px);
+    inline-size: calc(var(--percentage, 50%) + 6px);
   }
 
   &_range &__filler_active {
-    width: var(--percentage, 50%);
+    inline-size: var(--percentage, 50%);
     margin-left: 0;
   }
 
@@ -150,7 +150,7 @@
 
   &_stepped &__filler {
     transition:
-      m3-motion.timing-standard(width),
+      m3-motion.timing-standard(inline-size),
       m3-motion.timing-standard(left)
     ;
   }
@@ -159,7 +159,7 @@
     transition:
       m3-motion.timing-standard(background),
       m3-motion.timing-standard(opacity),
-      m3-motion.timing-standard(width),
+      m3-motion.timing-standard(inline-size),
       m3-motion.timing-standard(left)
     ;
   }
@@ -175,14 +175,14 @@
 
   &__value {
     display: flex;
-    width: 0;
-    height: 100%;
+    inline-size: 0;
+    block-size: 100%;
     align-items: center;
     justify-content: center;
     z-index: 1;
     position: absolute;
     left: var(--percentage, 25%);
-    top: 0;
+    inset-block-start: 0;
 
     &_min { left: var(--percentage, 25%); }
     &_max { left: var(--percentage, 75%); }
@@ -195,8 +195,8 @@
   &__handle {
     display: flex;
     flex-shrink: 0;
-    width: 16px;
-    height: 44px;
+    inline-size: 16px;
+    block-size: 44px;
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -205,8 +205,8 @@
     &::before {
       content: '';
       display: block;
-      width: 4px;
-      height: 100%;
+      inline-size: 4px;
+      block-size: 100%;
       background: var(--m3-sys-primary);
       border-radius: 2px;
       transition:
@@ -238,32 +238,32 @@
   }
 
   &:not(&_disabled) &__value:active &__handle {
-    width: 14px;
+    inline-size: 14px;
 
     &:not([aria-disabled="true"])::before {
-      width: 2px;
+      inline-size: 2px;
       border-radius: 1px;
     }
   }
 
   &:not(&_disabled) &__value_min:active ~ &__filler_min::before {
-    width: calc(100% - 7px);
+    inline-size: calc(100% - 7px);
   }
 
   &:not(&_disabled) &__value_min:active ~ &__filler_active::before {
-    width: calc(100% - 15px);
+    inline-size: calc(100% - 15px);
     left: 7px;
   }
 
   &:not(&_disabled) &__value_max:active ~ &__filler_max::before {
-    width: calc(100% - 7px);
+    inline-size: calc(100% - 7px);
   }
 
   &:not(&_disabled) &__value_max:active ~ &__filler_active::before {
-    width: calc(100% - 7px);
+    inline-size: calc(100% - 7px);
   }
 
   &_range:not(&_disabled) &__value_max:active ~ &__filler_active::before {
-    width: calc(100% - 15px);
+    inline-size: calc(100% - 15px);
   }
 }

@@ -67,15 +67,15 @@
   }
 
   &__state {
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     background: var(--state-color);
     border-radius: inherit;
     overflow: hidden;
     opacity: 0;
     position: absolute;
-    top: 0;
-    left: 0;
+    inset-block-start: 0;
+    inset-inline-start: 0;
     transition:
       m3-motion.timing-standard(background),
       m3-motion.timing-standard(opacity)
@@ -90,8 +90,8 @@
   &__content {
     display: flex;
     flex: 1 0 0;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     padding: 16px;
     border-radius: inherit;
     overflow: hidden;
@@ -109,20 +109,20 @@
   &_sm &__content { padding: 8px;  gap: 6px; }
   &_lg &__content { padding: 30px; gap: 18px; }
 
-  &_has-leading-icon        &__content { padding-right: 20px; }
-  &_has-leading-icon#{&}_sm &__content { padding-right: 10px; }
-  &_has-leading-icon#{&}_lg &__content { padding-right: 37.5px; }
+  &_has-leading-icon        &__content { padding-inline-end: 20px; }
+  &_has-leading-icon#{&}_sm &__content { padding-inline-end: 10px; }
+  &_has-leading-icon#{&}_lg &__content { padding-inline-end: 37.5px; }
 
-  &_has-trailing-icon        &__content { padding-left: 20px; }
-  &_has-trailing-icon#{&}_sm &__content { padding-left: 10px; }
-  &_has-trailing-icon#{&}_lg &__content { padding-left: 37.5px; }
+  &_has-trailing-icon        &__content { padding-inline-start: 20px; }
+  &_has-trailing-icon#{&}_sm &__content { padding-inline-start: 10px; }
+  &_has-trailing-icon#{&}_lg &__content { padding-inline-start: 37.5px; }
 
   &__icon {
     display: inline-flex;
     @include m3-shape.square(var(--m3-icon-size));
     transition:
-      m3-motion.timing-standard(width),
-      m3-motion.timing-standard(height)
+      m3-motion.timing-standard(inline-size),
+      m3-motion.timing-standard(block-size)
     ;
 
     & > * {

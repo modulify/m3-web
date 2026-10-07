@@ -11,8 +11,8 @@
   --m3-ripple-opacity: 0.2;
 
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  inline-size: 40px;
+  block-size: 40px;
   background: var(--background-color);
   border-radius: 50%;
   color: var(--content-color);
@@ -58,13 +58,13 @@
   &_outlined {
     &::before {
       content: ' ';
-      width: 100%;
-      height: 100%;
+      inline-size: 100%;
+      block-size: 100%;
       border: 1px solid var(--m3-sys-outline);
       border-radius: inherit;
       position: absolute;
-      top: 0;
-      left: 0;
+      inset-block-start: 0;
+      inset-inline-start: 0;
     }
 
     &:disabled::before {
@@ -112,8 +112,8 @@
   }
 
   &__state {
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     background: var(--state-color);
     border-radius: inherit;
     overflow: hidden;
@@ -123,8 +123,8 @@
       m3-motion.timing-standard(opacity)
     ;
     position: absolute;
-    top: 0;
-    left: 0;
+    inset-block-start: 0;
+    inset-inline-start: 0;
   }
 
   &:hover    &__state { opacity: 0.08 }
@@ -134,8 +134,8 @@
 
   &__content {
     display: flex;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     padding: 8px;
     background: transparent;
     border-radius: inherit;
@@ -148,7 +148,7 @@
   }
 
   svg {
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
   }
 }

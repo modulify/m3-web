@@ -2,7 +2,7 @@
 @use '../../basics/typography' as m3-typography;
 
 .m3-plane-tooltip {
-  min-height: 24px;
+  min-block-size: 24px;
   padding: 4px 8px;
   background: var(--m3-sys-inverse-surface);
   @include m3-shape.corner('extra-small');

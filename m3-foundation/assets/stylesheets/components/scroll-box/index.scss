@@ -4,12 +4,12 @@
   display: flex;
   position: relative;
 
-  &_scroll-x { padding-bottom: $rail-thickness; }
-  &_scroll-y { padding-right: $rail-thickness; }
+  &_scroll-x { padding-block-end: $rail-thickness; }
+  &_scroll-y { padding-inline-end: $rail-thickness; }
 
   &__content {
-    width: 100%;
-    max-height: 100%;
+    inline-size: 100%;
+    max-block-size: 100%;
     -ms-overflow-style: none;
     scrollbar-width: none;
   }

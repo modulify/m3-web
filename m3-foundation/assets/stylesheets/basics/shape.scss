@@ -45,13 +45,13 @@ $m3-sys-shape-corner-map: (
 }
 
 @mixin square($size) {
-  width: $size;
-  height: $size;
+  inline-size: $size;
+  block-size: $size;
 }
 
 @mixin circle($diameter) {
-  width: $diameter;
-  height: $diameter;
+  inline-size: $diameter;
+  block-size: $diameter;
   border-radius: 50%;
 }
 

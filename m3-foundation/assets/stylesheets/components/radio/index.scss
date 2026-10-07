@@ -13,8 +13,8 @@
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  inline-size: 40px;
+  block-size: 40px;
   padding: 8px;
   border-radius: 50%;
   overflow: hidden;
@@ -36,22 +36,22 @@
   }
 
   &__input {
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     appearance: none;
     cursor: inherit;
     outline: none;
     position: absolute;
-    left: 0;
-    top: 0;
+    inset-inline-start: 0;
+    inset-block-start: 0;
     margin: 0;
     z-index: 1;
   }
 
   &__icon {
     display: inline-block;
-    width: 24px;
-    height: 24px;
+    inline-size: 24px;
+    block-size: 24px;
     position: relative;
     z-index: 0;
 
@@ -69,19 +69,19 @@
     }
 
     &::before {
-      width: 20px;
-      height: 20px;
+      inline-size: 20px;
+      block-size: 20px;
       border: 2px solid var(--outline-color);
-      left: 2px;
-      top: 2px;
+      inset-inline-start: 2px;
+      inset-block-start: 2px;
       box-sizing: border-box;
     }
 
     &::after {
-      width: 10px;
-      height: 10px;
-      left: 7px;
-      top: 7px;
+      inline-size: 10px;
+      block-size: 10px;
+      inset-inline-start: 7px;
+      inset-block-start: 7px;
       background-color: var(--state-color);
       transform: scale(var(--dot-scale));
     }
@@ -89,8 +89,8 @@
 
   &__state {
     display: inline-block;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     border-radius: inherit;
     opacity: 0;
     overflow: hidden;
@@ -98,19 +98,19 @@
     animation-fill-mode: forwards;
     z-index: 0;
     position: absolute;
-    left: 0;
-    top: 0;
+    inset-inline-start: 0;
+    inset-block-start: 0;
 
     &::before {
       content: ' ';
-      width: 100%;
-      height: 100%;
+      inline-size: 100%;
+      block-size: 100%;
       background: var(--state-color);
       border-radius: inherit;
       opacity: 0;
       position: absolute;
-      left: 0;
-      top: 0;
+      inset-inline-start: 0;
+      inset-block-start: 0;
       transition: m3-motion.timing-standard(opacity);
     }
   }

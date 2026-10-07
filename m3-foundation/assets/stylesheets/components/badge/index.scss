@@ -10,8 +10,8 @@
   justify-content: center;
 
   &_labelled {
-    width: auto;
-    height: 16px;
+    inline-size: auto;
+    block-size: 16px;
     padding: 4px;
     @include m3-shape.corner('small');
     @include m3-typography.label-small;

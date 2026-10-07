@@ -11,8 +11,8 @@
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  inline-size: 40px;
+  block-size: 40px;
   padding: 8px;
   border-radius: 50%;
   overflow: hidden;
@@ -40,35 +40,35 @@
   }
 
   &__input {
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     appearance: none;
     cursor: inherit;
     outline: none;
     position: absolute;
-    left: 0;
-    top: 0;
+    inset-inline-start: 0;
+    inset-block-start: 0;
     margin: 0;
     z-index: 1;
   }
 
   &__checkmark {
     display: inline-block;
-    width: 24px;
-    height: 24px;
+    inline-size: 24px;
+    block-size: 24px;
     position: relative;
     z-index: 0;
 
     &::before {
       content: ' ';
       display: inline-block;
-      width: 18px;
-      height: 18px;
+      inline-size: 18px;
+      block-size: 18px;
       border: 2px solid var(--m3-sys-on-surface-variant);
       border-radius: 2px;
       position: absolute;
-      left: 3px;
-      top: 3px;
+      inset-inline-start: 3px;
+      inset-block-start: 3px;
       transition:
         m3-motion.timing-standard(background-color),
         m3-motion.timing-standard(border-color)
@@ -76,11 +76,11 @@
     }
 
     svg {
-      width: 100%;
-      height: 100%;
+      inline-size: 100%;
+      block-size: 100%;
       position: absolute;
-      left: 0;
-      top: 0;
+      inset-inline-start: 0;
+      inset-block-start: 0;
     }
   }
 
@@ -96,8 +96,8 @@
 
   &__state {
     display: inline-block;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     border-radius: inherit;
     opacity: 0;
     overflow: hidden;
@@ -105,19 +105,19 @@
     animation-fill-mode: forwards;
     z-index: 0;
     position: absolute;
-    left: 0;
-    top: 0;
+    inset-inline-start: 0;
+    inset-block-start: 0;
 
     &::before {
       content: ' ';
-      width: 100%;
-      height: 100%;
+      inline-size: 100%;
+      block-size: 100%;
       background: var(--state-color);
       border-radius: inherit;
       opacity: 0;
       position: absolute;
-      left: 0;
-      top: 0;
+      inset-inline-start: 0;
+      inset-block-start: 0;
       transition: m3-motion.timing-standard(opacity);
     }
   }

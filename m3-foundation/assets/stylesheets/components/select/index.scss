@@ -2,7 +2,7 @@
 
 .m3-select {
   &__field {
-    width: 100%;
+    inline-size: 100%;
   }
 
   &__caret {
@@ -14,9 +14,9 @@
   }
 
   &__scroll-box {
-    width: 100%;
-    max-height: 6 * 56px;
-    padding-right: 12px;
+    inline-size: 100%;
+    max-block-size: 6 * 56px;
+    padding-inline-end: 12px;
     overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -26,7 +26,7 @@
     }
 
     &:has(.m3-scroll-rail_disabled) {
-      padding-right: 0;
+      padding-inline-end: 0;
     }
   }
 }
