@@ -97,6 +97,10 @@
     inline-size: $m3-navigation-rail-expanded-size;
   }
 
+  &_hide-collapsed {
+    transition: m3-motion.timing-emphasized(transform);
+  }
+
   &_hide-collapsed#{&}_rail-hidden,
   &_hide-collapsed#{&}_rail-leaving {
     transform: translateX(-100%);
@@ -306,7 +310,7 @@
     box-shadow: none;
     interpolate-size: allow-keywords;
     transition:
-      m3-motion.timing-standard(background),
+      m3-motion.timing-standard(background-color),
       m3-motion.timing-standard(border-radius),
       m3-motion.timing-standard(color),
       m3-motion.timing-emphasized(inline-size)
@@ -315,17 +319,37 @@
 
   &_rail .m3-fab-button {
     inline-size: 56px;
+    min-inline-size: 56px;
+    margin-inline-start: 20px;
+    align-self: flex-start;
+  }
+
+  &_rail-expanded .m3-fab-button {
+    min-inline-size: 56px;
+    margin-inline-start: 0;
+    align-self: flex-start;
+  }
+
+  .m3-fab-button__content {
+    gap: 12px;
+    justify-content: flex-start;
+  }
+
+  .m3-fab-button__icon {
+    flex-shrink: 0;
   }
 
   &_rail .m3-fab-button__content {
     padding: 16px;
-    gap: 0;
   }
 
   &_rail .m3-fab-button__text {
-    max-inline-size: 0;
     opacity: 0;
-    overflow: hidden;
+    transform: translateX(-8px);
+  }
+
+  &_rail .m3-fab-button__text:dir(rtl) {
+    transform: translateX(8px);
   }
 
   &_rail-expanded .m3-fab-button {
@@ -334,25 +358,47 @@
   }
 
   &_rail-expanded .m3-fab-button__text {
-    max-inline-size: 200px;
     opacity: 1;
+    transform: none;
   }
 
   &_rail .m3-fab-button__text,
   &_rail-expanded .m3-fab-button__text {
+    min-inline-size: 0;
+    max-inline-size: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     transition:
-      m3-motion.timing-emphasized(max-inline-size),
-      m3-motion.timing-emphasized(opacity)
+      m3-motion.timing-emphasized(opacity),
+      m3-motion.timing-emphasized(transform)
     ;
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  &_hide-collapsed &__section,
+  &_hide-collapsed .m3-fab-button,
+  &_hide-collapsed .m3-fab-button__content,
+  &_hide-collapsed .m3-fab-button__text {
     transition: none;
+  }
 
-    &__top,
-    &__header,
-    &__section {
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &_modal,
+    &_hide-collapsed {
+      transition: none;
+    }
+
+    & &__top,
+    & &__header,
+    & &__section {
       animation: none;
+    }
+
+    &__section,
+    .m3-fab-button,
+    .m3-fab-button__text {
+      transition: none;
     }
   }
 }
@@ -559,6 +605,7 @@
   }
 
   &_in-bar &__state {
+    min-inline-size: 0;
     padding-block: 0;
     padding-inline: 4px;
     flex-direction: column;
@@ -788,10 +835,12 @@
   &_in-bar &__state &__label {
     flex: 0 1 auto;
     min-inline-size: 0;
+    max-inline-size: 100%;
     text-align: center;
     color: var(--m3-sys-on-surface-variant);
-    white-space: normal;
-    overflow-wrap: anywhere;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     @include m3-typography.label-medium;
   }
 
