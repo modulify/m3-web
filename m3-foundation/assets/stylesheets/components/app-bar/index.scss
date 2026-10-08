@@ -1,0 +1,295 @@
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/typography' as m3-typography;
+
+.m3-app-bar {
+  display: grid;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 64px;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
+  align-items: center;
+  background: var(--m3-sys-surface);
+  color: var(--m3-sys-on-surface);
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+  transition:
+    #{m3-motion.timing-standard(background-color, 'short4')},
+    #{m3-motion.timing-standard(block-size, 'medium2')},
+    #{m3-motion.timing-standard(transform, 'medium2')};
+
+  &_under {
+    background: var(--m3-sys-surface-container);
+  }
+
+  &_transparent#{&}_under {
+    background: transparent;
+  }
+
+  &_hidden {
+    transform: translateY(-100%);
+  }
+
+  &__leading,
+  &__trailing {
+    display: flex;
+    min-inline-size: 0;
+    align-items: center;
+  }
+
+  &__leading {
+    grid-column: 1;
+    grid-row: 1;
+    margin-inline-start: 4px;
+  }
+
+  &__trailing {
+    grid-column: 3;
+    grid-row: 1;
+    justify-content: flex-end;
+    margin-inline-end: 4px;
+  }
+
+  &__trailing > * {
+    flex: 0 0 auto;
+  }
+
+  &__leading  .m3-icon-button,
+  &__trailing .m3-icon-button {
+    inline-size: 48px;
+    block-size: 48px;
+  }
+
+  &__leading .m3-icon-button__content,
+  &__trailing .m3-icon-button__content {
+    padding: 12px;
+  }
+
+  &__leading .m3-icon-button:where(:not(.m3-icon-button_filled, .m3-icon-button_tonal)) {
+    --content-color: var(--m3-sys-on-surface);
+    --state-color: var(--m3-sys-on-surface);
+    --m3-ripple-color: var(--m3-sys-on-surface);
+  }
+
+  &__title {
+    display: flex;
+    min-inline-size: 0;
+    grid-column: 2;
+    grid-row: 1;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  &__headline {
+    @include m3-typography.title-large;
+
+    margin: 0;
+    overflow-wrap: normal;
+  }
+
+  &__image {
+    display: flex;
+    min-block-size: 0;
+    align-items: center;
+  }
+
+  &_center &__image {
+    justify-content: center;
+  }
+
+  &__image img {
+    display: block;
+    max-inline-size: 100%;
+    max-block-size: 40px;
+    object-fit: contain;
+  }
+
+  &__subtitle {
+    @include m3-typography.label-medium;
+
+    margin: 0;
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &__search {
+    min-inline-size: 0;
+    inline-size: min(100%, max(312px, 50%));
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  &__search .m3-search {
+    max-inline-size: none;
+  }
+
+  &__search .m3-search__bar {
+    background: var(--m3-sys-surface-container);
+  }
+
+  &_under &__search .m3-search__bar {
+    background: var(--m3-sys-surface-container-highest);
+  }
+
+  &_search {
+    column-gap: 8px;
+  }
+
+  &_search &__trailing {
+    gap: 4px;
+  }
+
+  &_search#{&}_center .m3-search__trigger {
+    justify-content: center;
+    text-align: center;
+  }
+
+  &_center &__title {
+    text-align: center;
+  }
+
+  &_small &__headline {
+    overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  &_small#{&}_center &__title {
+    justify-self: center;
+  }
+
+  &_small#{&}_center,
+  &_collapsed#{&}_center {
+    grid-template-columns: minmax(104px, 1fr) minmax(0, max-content) minmax(104px, 1fr);
+  }
+
+  &_medium,
+  &_medium-flexible,
+  &_large,
+  &_large-flexible {
+    grid-template-rows: 56px minmax(0, 1fr);
+  }
+
+  &_medium &__title,
+  &_medium-flexible &__title,
+  &_large &__title,
+  &_large-flexible &__title {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    align-self: end;
+    padding-inline: 16px;
+    padding-block-end: 12px;
+  }
+
+  &_medium,
+  &_medium-flexible {
+    block-size: 112px;
+  }
+
+  &_medium &__headline {
+    @include m3-typography.headline-small;
+  }
+
+  &_large {
+    block-size: 152px;
+  }
+
+  &_large &__headline {
+    @include m3-typography.headline-medium;
+  }
+
+  &_medium-flexible &__headline {
+    @include m3-typography.headline-medium;
+  }
+
+  &_medium-flexible,
+  &_large-flexible {
+    block-size: var(--m3-app-bar-measured-height, auto);
+    grid-template-rows: 56px minmax(min-content, 1fr);
+  }
+
+  &_medium-flexible &__title,
+  &_large-flexible &__title {
+    overflow: visible;
+  }
+
+  &_medium-flexible &__subtitle {
+    @include m3-typography.label-large;
+  }
+
+  &_medium-flexible#{&}_has-subtitle {
+    min-block-size: 136px;
+  }
+
+  &_large-flexible {
+    min-block-size: 120px;
+  }
+
+  &_large-flexible &__headline {
+    @include m3-typography.display-small;
+  }
+
+  &_large-flexible &__subtitle {
+    @include m3-typography.title-medium;
+  }
+
+  &_large-flexible#{&}_has-subtitle {
+    min-block-size: 152px;
+  }
+
+  &_medium-flexible {
+    min-block-size: 112px;
+  }
+
+  &_medium &__title { padding-block-end: 24px; }
+  &_large  &__title { padding-block-end: 28px; }
+
+  &_medium-flexible &__headline,
+  &_large-flexible &__headline {
+    text-wrap: balance;
+  }
+
+  &_collapsed {
+    block-size: 64px;
+    min-block-size: 64px;
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  &_collapsed#{&}_has-subtitle {
+    min-block-size: 64px;
+  }
+
+  &_collapsed &__title {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    padding: 0;
+  }
+
+  &_collapsed &__subtitle {
+    display: none;
+  }
+
+  &_collapsed &__headline {
+    @include m3-typography.title-large;
+
+    display: block;
+    overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  &_collapsed#{&}_center &__title {
+    justify-self: center;
+  }
+
+  &_transparent#{&}_under &__leading  .m3-icon-button,
+  &_transparent#{&}_under &__trailing .m3-icon-button {
+    background: var(--m3-sys-surface-container);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
