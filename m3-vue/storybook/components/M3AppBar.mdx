@@ -1,0 +1,156 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as M3AppBarStories from './M3AppBar.stories'
+
+<Meta of={M3AppBarStories} />
+
+<Localized locale="en-US">
+
+# App bar
+
+An app bar identifies the current page and provides navigation and one or two essential actions. This library implements all six variants documented in the current [Material App bars specification](https://m3.material.io/components/app-bars/specs). The current Material 3 Expressive set and the older baseline set have different recommendations:
+
+| Appearance | Material 3 Expressive | Use |
+| --- | --- | --- |
+| `search` | Yes | A prominent search entry point on a home page. |
+| `small` | Yes | Dense pages and the collapsed state of a flexible bar. Centered text is an alignment option, not a separate variant. |
+| `medium-flexible` | Yes | A larger title, optional subtitle, and optional collapse on scroll. |
+| `large-flexible` | Yes | The strongest title emphasis, optional subtitle, and optional collapse on scroll. |
+| `medium` | **No: baseline M3** | Existing designs that still need the former medium geometry. Material recommends medium flexible for new Expressive designs. |
+| `large` | **No: baseline M3** | Existing designs that still need the former large geometry. Material recommends large flexible for new Expressive designs. |
+
+## Guide
+
+### Content and actions
+
+Keep the headline brief and specific to the page. `small` keeps it on one line; flexible variants can grow with a second line and must not be deliberately truncated. If a translated headline cannot fit, revise the copy or select a flexible appearance. Subtitles belong to small and flexible variants. For a logo or custom headline, use the `#headline` slot. Flexible bars can also show an image above the title through `#image`; it disappears in the collapsed state. Provide a real page heading; adjust `headingLevel` if the page already contains an earlier heading. Center alignment moves only the headline and subtitle; leading and trailing actions stay at the app bar edges.
+
+Pass a leading Back or Menu button in `#leading`, and up to two page actions in `#trailing`. Name icon buttons by their action. A Menu button can control an external `M3Navigation` with `appearance="rail"`, `collapse="hidden"`, and `expansion="modal"`; the app bar does not own the navigation state. Use one filled or tonal action if it needs extra emphasis. Put larger action collections in a toolbar. [Material guidelines](https://m3.material.io/components/app-bars/guidelines).
+
+### Search and scrolling
+
+For `appearance="search"`, put the existing `M3Search` in `#search` with `layout="full-screen"`. Search keeps ownership of its query, expanded view, focus, and results. The app bar positions its collapsed trigger and adapts its width: it fills the available space up to 312 px, then grows at 50% of that space. The hint should include “Search.” A logo in this variant should not open the expanded rail.
+
+`scroll="pinned"` keeps the bar visible and changes its container from surface to surface-container after scrolling. `hide` hides on forward scroll and reveals on reverse scroll. `collapse` reduces a flexible bar to the small layout until the scroll position returns to the top. `transparent` keeps controls visible over content, giving icon buttons their own filled surfaces. Pass `scrollTarget` when an element rather than `window` scrolls; use that same element to contain the sticky bar. A scroll mode is independent of the selected appearance, but `collapse` changes layout only for flexible appearances. The motion respects reduced-motion preferences.
+
+The app bar occupies the width of its containing layout. Place it in the page shell beside a rail, and provide the surrounding layout in the application. Use `tag="div"` if the page already has a banner landmark; a body-level `<header>` normally creates one. [WAI banner guidance](https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/examples/banner.html).
+
+## API
+
+| Export | Purpose |
+| --- | --- |
+| `M3AppBar` | Six app bar appearances, content zones, and scroll response. |
+| Vue props and exposed `el` | Public controls and element reference. |
+
+| Prop | Default | Effect |
+| --- | --- | --- |
+| `appearance` | `small` | `search`, `small`, `medium`, `medium-flexible`, `large`, `large-flexible`. |
+| `alignment` | `start` | `start` or `center` for the headline/search hint. Centered baseline medium/large is outside the Expressive recommendation. |
+| `headline`, `subtitle` | — | Title content; subtitle is rendered for small/flexible appearances. Named children override these props. |
+| `headingLevel` | `1` | Native heading level from 1 to 6. |
+| `scroll` | `pinned` | `pinned`, `hide`, `collapse`, or `transparent`. |
+| `scrollTarget` | `window` | Scrollable `HTMLElement` or `Window` to observe. |
+| `tag` | `header` | Root `header` or `div` to fit page landmark structure. |
+| HTML attributes | — | Passed to the root element. |
+
+| Named child | Purpose |
+| --- | --- |
+| `#leading` | Back, Menu, or appropriate leading control. |
+| `#headline` | Custom headline content inside the semantic heading. |
+| `#image` | Optional image above a flexible headline; hidden while collapsed. |
+| `#subtitle` | Supporting text for small/flexible variants. |
+| `#trailing` | Page actions, ordered in the supplied DOM sequence. |
+| `#search` | Search trigger and view owner for the search variant. |
+
+The ref exposes `el`. Unslotted children act as the headline for ordinary appearances and as search content for `search`.
+
+```vue
+<M3AppBar appearance="medium-flexible" headline="Library" subtitle="Recently added" scroll="collapse" :scroll-target="scroller">
+  <template #leading>
+    <M3IconButton aria-label="Open navigation" @click="navigationOpen = true">
+      <M3Icon name="menu" />
+    </M3IconButton>
+  </template>
+  <template #trailing>
+    <M3IconButton aria-label="Favorites"><M3Icon name="favorite" /></M3IconButton>
+  </template>
+</M3AppBar>
+```
+
+## Sources
+
+- [Material App bars overview](https://m3.material.io/components/app-bars/overview)
+- [Specs](https://m3.material.io/components/app-bars/specs)
+- [Guidelines](https://m3.material.io/components/app-bars/guidelines)
+- [Accessibility](https://m3.material.io/components/app-bars/accessibility)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Верхняя панель приложения
+
+App bar показывает, какая страница открыта, и содержит навигацию и одно-два важнейших действия. Библиотека реализует все шесть вариантов из текущей [спецификации Material](https://m3.material.io/components/app-bars/specs). К актуальному Material 3 Expressive относятся не все:
+
+| Вид | Входит в M3 Expressive | Применение |
+| --- | --- | --- |
+| `search` | Да | Заметная точка входа в поиск на главной странице. |
+| `small` | Да | Плотная компоновка и свёрнутое состояние flexible. Центрирование заголовка — настройка, а не отдельный вид. |
+| `medium-flexible` | Да | Более крупный заголовок, подзаголовок и возможное сворачивание при прокрутке. |
+| `large-flexible` | Да | Максимальный акцент на заголовке, подзаголовок и возможное сворачивание. |
+| `medium` | **Нет: базовый M3** | Совместимость с прежней геометрией; для нового Expressive интерфейса Material рекомендует medium flexible. |
+| `large` | **Нет: базовый M3** | Совместимость с прежней геометрией; для нового Expressive интерфейса Material рекомендует large flexible. |
+
+## Руководство
+
+### Содержимое и действия
+
+Заголовок должен коротко описывать текущую страницу. В `small` он однострочный; flexible может вырасти для второй строки без намеренного усечения. Если перевод не помещается, пересмотрите формулировку или выберите flexible вид. Подзаголовок поддерживается в small и flexible. Для особой разметки заголовка используйте `#headline`. Изображение над заголовком flexible передайте через `#image`; при сворачивании оно скрывается. Сам заголовок остаётся настоящим heading; `headingLevel` позволяет согласовать его с иерархией страницы. При центрировании смещаются только заголовок и подзаголовок: ведущие и завершающие действия остаются у краёв панели.
+
+В `#leading` разместите Back или Menu, в `#trailing` — максимум два действия страницы. Дайте иконочным кнопкам названия по их действию. Menu может управлять внешним `M3Navigation` с `appearance="rail"`, `collapse="hidden"`, `expansion="modal"`; app bar не владеет состоянием навигации. Для акцента используйте одну filled/tonal кнопку. Большое число действий вынесите в toolbar. [Рекомендации Material](https://m3.material.io/components/app-bars/guidelines).
+
+### Поиск и прокрутка
+
+Для `appearance="search"` передайте существующий `M3Search` в `#search` с `layout="full-screen"`. Search управляет запросом, раскрытым видом, фокусом и результатами; app bar только размещает свёрнутую строку. До ширины 312 px она занимает всё доступное место, затем растёт как 50% доступного места. В подсказке должно быть слово «Поиск». Логотип в этом виде не должен открывать раскрытый rail.
+
+`scroll="pinned"` оставляет панель на экране и после прокрутки меняет `surface` на `surface-container`. `hide` скрывает её при прокрутке вперёд и возвращает при обратной. `collapse` сворачивает flexible в small до возвращения страницы к началу. `transparent` оставляет действия поверх контента на собственных заполненных поверхностях. Если прокручивается элемент, а не `window`, передайте его через `scrollTarget` и поместите липкую панель в тот же контейнер. Режим `collapse` меняет layout только у flexible видов. При ограничении движения анимация отключается.
+
+Панель занимает ширину своего контейнера. Приложение размещает её в компоновке страницы рядом с rail. Если в документе уже есть landmark `banner`, используйте `tag="div"`: `<header>` на уровне страницы обычно создаёт такой landmark. [WAI о banner](https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/examples/banner.html).
+
+## API
+
+| Экспорт | Назначение |
+| --- | --- |
+| `M3AppBar` | Шесть вариантов панели, области содержимого и реакция на прокрутку. |
+| Props Vue и `el` | Публичные настройки и ссылка на элемент. |
+
+| Prop | Значение по умолчанию | Действие |
+| --- | --- | --- |
+| `appearance` | `small` | `search`, `small`, `medium`, `medium-flexible`, `large`, `large-flexible`. |
+| `alignment` | `start` | `start` или `center` для заголовка/подсказки. Центрирование baseline medium/large вне рекомендации Expressive. |
+| `headline`, `subtitle` | — | Текст заголовка и подзаголовка; последний рисуется только в small/flexible. Именованные элементы имеют приоритет. |
+| `headingLevel` | `1` | Уровень настоящего заголовка от 1 до 6. |
+| `scroll` | `pinned` | `pinned`, `hide`, `collapse` или `transparent`. |
+| `scrollTarget` | `window` | Прокручиваемый `HTMLElement` или `Window`. |
+| `tag` | `header` | Корневой `header` или `div` для структуры landmarks страницы. |
+| HTML-атрибуты | — | Передаются корневому элементу. |
+
+| Именованный элемент | Назначение |
+| --- | --- |
+| `#leading` | Back, Menu или другое уместное ведущее действие. |
+| `#headline` | Своя разметка внутри семантического заголовка. |
+| `#image` | Изображение над заголовком flexible, скрываемое при сворачивании. |
+| `#subtitle` | Контекст для small/flexible. |
+| `#trailing` | Действия страницы в заданном порядке DOM. |
+| `#search` | Поисковая строка и управляющий Search. |
+
+Ref предоставляет `el`. Дочерние элементы без имени становятся заголовком обычного варианта или содержимым поисковой области для `search`.
+
+## Источники
+
+- [Обзор Material App bars](https://m3.material.io/components/app-bars/overview)
+- [Спецификация](https://m3.material.io/components/app-bars/specs)
+- [Рекомендации](https://m3.material.io/components/app-bars/guidelines)
+- [Доступность](https://m3.material.io/components/app-bars/accessibility)
+
+</Localized>
