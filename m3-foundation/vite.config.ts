@@ -7,6 +7,7 @@ import { dependencies } from './package.json'
 
 const entries = {
   'lib/Scheduler': resolve(__dirname, 'lib/Scheduler.ts'),
+  'lib/appBar': resolve(__dirname, 'lib/appBar.ts'),
   'lib/calendar': resolve(__dirname, 'lib/calendar/index.ts'),
   'lib/dom': resolve(__dirname, 'lib/dom.ts'),
   'lib/motion': resolve(__dirname, 'lib/motion/index.ts'),
