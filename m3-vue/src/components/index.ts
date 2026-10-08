@@ -1,4 +1,5 @@
 export * from './adaptive'
+export * from './app-bar'
 export * from './badge'
 export * from './button'
 export * from './card'
