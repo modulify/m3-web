@@ -12,7 +12,6 @@
   flex-direction: column;
   background: var(--m3-sys-surface-container);
   box-shadow: var(--m3-elevation-2);
-  z-index: 3;
 }
 
 .m3-menu-item {
@@ -86,5 +85,6 @@
     align-items: flex-start;
     flex: 1 0 0;
     color: var(--m3-sys-on-surface);
+    text-align: start;
   }
 }
