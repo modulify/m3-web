@@ -285,6 +285,8 @@ import { createRef } from 'react'
 import { ref } from 'vue'
 
 import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
+import { getToolbarVisibleCount } from '@modulify/m3-foundation/lib/toolbar'
+import type { ToolbarAction } from '@modulify/m3-foundation/types/components/toolbar'
 import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import {
   durations,
@@ -312,6 +314,8 @@ import {
   type M3LinkExposed,
   type M3NavigationExposed,
   type M3SideSheetExposed,
+  M3Toolbar as ReactToolbar,
+  type M3ToolbarProps,
 } from '@modulify/m3-react/components'
 import {
   useAnimationFrame as useReactAnimationFrame,
@@ -331,7 +335,7 @@ import { useBreakpoint as useRootVueBreakpoint } from '@modulify/m3-vue'
 import { useMutationObserver as useRootVueMutationObserver } from '@modulify/m3-vue'
 import { useResizeObserver as useRootVueResizeObserver } from '@modulify/m3-vue'
 import { useTimeout as useRootVueTimeout } from '@modulify/m3-vue'
-import { M3Select, type M3SelectOption } from '@modulify/m3-vue/components'
+import { M3Select, M3Toolbar as VueToolbar, type M3SelectOption } from '@modulify/m3-vue/components'
 import {
   useAnimationFrame as useVueAnimationFrame,
   useBreakpoint as useVueBreakpoint,
@@ -349,6 +353,8 @@ const buttonProps: M3ButtonProps = { appearance: 'filled', ref: buttonRef }
 const duration: M3MotionDuration = 'medium2'
 const easingName: M3MotionEasing = 'standard'
 const options: M3SelectOption<number>[] = [{ value: 1, label: 'One' }]
+const toolbarActions: ToolbarAction[] = [{ id: 'save', label: 'Save', icon: 'save', onClick: () => {} }]
+const toolbarProps: M3ToolbarProps = { label: 'Editor actions', actions: toolbarActions }
 const reactObserverTarget = createRef<HTMLDivElement>()
 const reactMutationObserverTargets: Parameters<typeof useReactMutationObserver>[0] = [reactObserverTarget]
 const reactResizeObserverTargets: Parameters<typeof useReactResizeObserver>[0] = [reactObserverTarget]
@@ -363,6 +369,8 @@ void [
   CalendarDay,
   M3Button,
   M3Select,
+  ReactToolbar,
+  VueToolbar,
   RootM3Button,
   RootM3Select,
   buttonRef,
@@ -377,6 +385,9 @@ void [
   linkElement,
   navigationRef,
   options,
+  toolbarActions,
+  toolbarProps,
+  getToolbarVisibleCount,
   reactMutationObserverTargets,
   reactResizeObserverTargets,
   sideSheetRef,
@@ -420,6 +431,7 @@ import { access } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 
 import { CalendarDay } from '@modulify/m3-foundation/lib/calendar'
+import { getToolbarVisibleCount } from '@modulify/m3-foundation/lib/toolbar'
 import { durations, easing, timing } from '@modulify/m3-foundation/lib/motion'
 import { M3Button as RootM3Button } from '@modulify/m3-react'
 import { useAnimationFrame as useRootReactAnimationFrame } from '@modulify/m3-react'
@@ -431,7 +443,7 @@ import { useInteractable as useRootReactInteractable } from '@modulify/m3-react'
 import { useMutationObserver as useRootReactMutationObserver } from '@modulify/m3-react'
 import { useResizeObserver as useRootReactResizeObserver } from '@modulify/m3-react'
 import { useTimeout as useRootReactTimeout } from '@modulify/m3-react'
-import { M3Button } from '@modulify/m3-react/components'
+import { M3Button, M3Toolbar as ReactToolbar } from '@modulify/m3-react/components'
 import {
   useAnimationFrame as useReactAnimationFrame,
   useBreakpoint as useReactBreakpoint,
@@ -450,7 +462,7 @@ import { useBreakpoint as useRootVueBreakpoint } from '@modulify/m3-vue'
 import { useMutationObserver as useRootVueMutationObserver } from '@modulify/m3-vue'
 import { useResizeObserver as useRootVueResizeObserver } from '@modulify/m3-vue'
 import { useTimeout as useRootVueTimeout } from '@modulify/m3-vue'
-import { M3Select } from '@modulify/m3-vue/components'
+import { M3Select, M3Toolbar as VueToolbar } from '@modulify/m3-vue/components'
 import {
   useAnimationFrame as useVueAnimationFrame,
   useBreakpoint as useVueBreakpoint,
@@ -485,6 +497,9 @@ if (
   || !easing
   || !M3Button
   || !M3Select
+  || !ReactToolbar
+  || !VueToolbar
+  || getToolbarVisibleCount(200, 3) !== 3
   || !RootM3Button
   || !RootM3Select
   || !useReactAnimationFrame
@@ -524,6 +539,7 @@ if (
 `)
   writeFileSync(resolve(temporaryDirectory, 'consumer.cjs'), `
 const { CalendarDay } = require('@modulify/m3-foundation/lib/calendar')
+const { getToolbarVisibleCount } = require('@modulify/m3-foundation/lib/toolbar')
 const { durations, easing, timing } = require('@modulify/m3-foundation/lib/motion')
 const { M3Button: RootM3Button } = require('@modulify/m3-react')
 const { useAnimationFrame: useRootReactAnimationFrame } = require('@modulify/m3-react')
@@ -535,7 +551,7 @@ const { useInteractable: useRootReactInteractable } = require('@modulify/m3-reac
 const { useMutationObserver: useRootReactMutationObserver } = require('@modulify/m3-react')
 const { useResizeObserver: useRootReactResizeObserver } = require('@modulify/m3-react')
 const { useTimeout: useRootReactTimeout } = require('@modulify/m3-react')
-const { M3Button } = require('@modulify/m3-react/components')
+const { M3Button, M3Toolbar: ReactToolbar } = require('@modulify/m3-react/components')
 const {
   useAnimationFrame: useReactAnimationFrame,
   useBreakpoint: useReactBreakpoint,
@@ -554,7 +570,7 @@ const { useBreakpoint: useRootVueBreakpoint } = require('@modulify/m3-vue')
 const { useMutationObserver: useRootVueMutationObserver } = require('@modulify/m3-vue')
 const { useResizeObserver: useRootVueResizeObserver } = require('@modulify/m3-vue')
 const { useTimeout: useRootVueTimeout } = require('@modulify/m3-vue')
-const { M3Select } = require('@modulify/m3-vue/components')
+const { M3Select, M3Toolbar: VueToolbar } = require('@modulify/m3-vue/components')
 const {
   useAnimationFrame: useVueAnimationFrame,
   useBreakpoint: useVueBreakpoint,
@@ -570,6 +586,9 @@ if (
   || !easing
   || !M3Button
   || !M3Select
+  || !ReactToolbar
+  || !VueToolbar
+  || getToolbarVisibleCount(200, 3) !== 3
   || !RootM3Button
   || !RootM3Select
   || !useReactAnimationFrame
