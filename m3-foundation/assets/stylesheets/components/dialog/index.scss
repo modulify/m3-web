@@ -1,3 +1,4 @@
+@use '../../basics/layers' as m3-layers;
 @use '../../basics/motion' as m3-motion;
 @use '../../basics/shape' as m3-shape;
 
@@ -7,7 +8,7 @@
   block-size: 100%;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: m3-layers.level('modal');
   position: fixed;
   inset-inline-start: 0;
   inset-block-start: 0;
