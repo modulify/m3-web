@@ -1,4 +1,5 @@
 @use '../../basics/layout' as m3-layout;
+@use '../../basics/layers' as m3-layers;
 @use '../../basics/motion' as m3-motion;
 @use '../../basics/shape' as m3-shape;
 @use '../../basics/typography' as m3-typography;
@@ -63,7 +64,7 @@
       m3-motion.timing-emphasized(padding),
       m3-motion.timing-emphasized(gap)
     ;
-    z-index: 1000;
+    z-index: m3-layers.level('modal');
   }
 
   &_rail {

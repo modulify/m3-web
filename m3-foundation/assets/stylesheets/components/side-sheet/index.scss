@@ -1,3 +1,4 @@
+@use '../../basics/layers' as m3-layers;
 @use '../../basics/shape' as m3-shape;
 @use '../../basics/typography' as m3-typography;
 
@@ -14,7 +15,7 @@
   position: fixed;
   inset-block-start: 0;
   right: 0;
-  z-index: 1000;
+  z-index: m3-layers.level('modal');
 
   background: var(--m3-sys-surface-container-low);
   color: var(--m3-sys-on-surface-variant);

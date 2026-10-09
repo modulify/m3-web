@@ -8,5 +8,4 @@
   @include m3-shape.corner('extra-small');
   color: var(--m3-sys-inverse-on-surface);
   @include m3-typography.body-small;
-  z-index: 11;
 }

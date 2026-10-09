@@ -1,4 +1,5 @@
 @use '../../basics/layout' as m3-layout;
+@use '../../basics/layers' as m3-layers;
 @use '../../basics/motion' as m3-motion;
 @use '../../basics/typography' as m3-typography;
 
@@ -9,7 +10,7 @@
   position: fixed;
   inset-inline-start: var(--m3-snackbar-inset-inline-start);
   inset-block-end: var(--m3-snackbar-inset-block-end);
-  z-index: 900;
+  z-index: m3-layers.level('snackbar');
   max-inline-size: calc(100vw - var(--m3-snackbar-inset-inline-start) - 16px);
   pointer-events: none;
 

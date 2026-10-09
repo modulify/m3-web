@@ -1,0 +1,20 @@
+@use 'sass:map';
+
+// Page-level layers. Small z-index values inside a component remain local.
+$levels: (
+  'app-bar': 10,
+  'toolbar': 100,
+  'snackbar': 900,
+  'scrim': 1000,
+  'modal': 1001,
+  'popover': 1100,
+  'search': 1200,
+);
+
+@function level($name) {
+  @if not map.has-key($levels, $name) {
+    @error 'Unknown Material layer: #{$name}';
+  }
+
+  @return map.get($levels, $name);
+}

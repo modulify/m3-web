@@ -1,3 +1,4 @@
+@use '../../basics/layers' as m3-layers;
 @use '../../basics/motion' as m3-motion;
 @use '../../basics/typography' as m3-typography;
 
@@ -13,7 +14,7 @@
   color: var(--m3-sys-on-surface);
   position: sticky;
   inset-block-start: 0;
-  z-index: 10;
+  z-index: m3-layers.level('app-bar');
   transition:
     #{m3-motion.timing-standard(background-color, 'short4')},
     #{m3-motion.timing-standard(block-size, 'medium2')},
