@@ -27,6 +27,7 @@ const entries = {
   'lib/surface/descriptor': resolve(__dirname, 'lib/surface/descriptor.ts'),
   'lib/surface/orchestration': resolve(__dirname, 'lib/surface/orchestration.ts'),
   'lib/surface/style': resolve(__dirname, 'lib/surface/style.ts'),
+  'lib/toolbar': resolve(__dirname, 'lib/toolbar.ts'),
 }
 
 const externalPackages = Object.keys(dependencies)
