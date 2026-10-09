@@ -24,6 +24,7 @@ const entries = {
   'lib/popper/scheduling': resolve(__dirname, 'lib/popper/scheduling.ts'),
   'lib/predicates': resolve(__dirname, 'lib/predicates.ts'),
   'lib/scroll': resolve(__dirname, 'lib/scroll.ts'),
+  'lib/search': resolve(__dirname, 'lib/search.ts'),
   'lib/surface/descriptor': resolve(__dirname, 'lib/surface/descriptor.ts'),
   'lib/surface/orchestration': resolve(__dirname, 'lib/surface/orchestration.ts'),
   'lib/surface/style': resolve(__dirname, 'lib/surface/style.ts'),
