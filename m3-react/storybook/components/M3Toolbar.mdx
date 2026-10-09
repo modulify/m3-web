@@ -1,0 +1,157 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as M3ToolbarStories from './M3Toolbar.stories'
+
+<Meta of={M3ToolbarStories} />
+
+<Localized locale="en-US">
+
+# Toolbar
+
+Toolbars group actions related to the current page or content. `M3Toolbar` implements the two [Material 3 Expressive variants](https://m3.material.io/components/toolbars/overview): **docked** and **floating**. The former bottom app bar is a baseline variant that Material still lists but no longer recommends; use a docked toolbar for a new Expressive design.
+
+## Guide
+
+| Variant | Use | Placement |
+| --- | --- | --- |
+| `docked` | Actions shared across several pages | Full width at the bottom; do not show beside a bottom navigation bar. |
+| `floating`, horizontal | Actions for the current page or selection | Above content, at least 16 px from the window edge. A FAB may sit beside it. |
+| `floating`, vertical | Compact action group on a larger window | Along a side, at least 24 px from the edge; place it opposite a navigation rail. |
+
+Use `color="standard"` to keep attention on content and `vibrant` to emphasize controls or a temporary mode. Keep one prominent action. Put an emphasized action inside a docked toolbar; a FAB beside a floating toolbar is a separate slot. The toolbar does not create or manage that FAB. Both orientations support an accessible toolbar label. [Material guidelines](https://m3.material.io/components/toolbars/guidelines).
+
+### Actions and overflow
+
+Pass icon actions through `actions` for automatic overflow. Each action needs a stable `id`, a localized `label`, an icon name, and `onClick`; optional `disabled` and `selected` states follow it into the menu. The toolbar measures its containing element and keeps the last actions in the overflow menu when space runs out. Translate `overflowLabel` as well. Actions must remain understandable when shown as text in the menu.
+
+Use ordinary children for buttons, text fields, images, or other custom content. The toolbar lays them out, but only entries in `actions` participate in automatic overflow. Keep custom content small enough for the available space; manage its responsive presentation yourself. Avoid a vertical toolbar with wide controls and avoid too many unrelated control types. [Material flexibility and resizing](https://m3.material.io/components/toolbars/guidelines).
+
+### Scrolling and accessibility
+
+`scroll="pinned"` leaves the toolbar on screen. `hide` moves it offscreen while scrolling forward and restores it while scrolling back. On a floating toolbar with a `M3Toolbar.Fab` child, `collapse` keeps only that primary action visible while scrolling forward. It does not combine collapse with hide. Pass `scrollTarget` for a nested scroll area. Focusing the toolbar restores its controls. When reduced motion is requested, transitions stop.
+
+The root has `role="toolbar"`, an accessible label and orientation. Tab reaches native controls; the direction's arrow keys move among them, Home/End move to the ends, and arrow keys inside text fields keep their native behavior. Name every icon control. The toolbar has no click behavior of its own. [Material accessibility](https://m3.material.io/components/toolbars/accessibility).
+
+```tsx
+<M3Toolbar
+  label="Editing tools"
+  overflowLabel="More editing tools"
+  variant="floating"
+  color="vibrant"
+  scroll="collapse"
+  scrollTarget={editorScroller}
+  actions={[{ id: 'bold', label: 'Bold', icon: 'format_bold', selected: bold, onClick: toggleBold }]}
+>
+  <M3Toolbar.Fab>
+    <M3FabButton aria-label="Add section" onClick={addSection}><M3Icon name="add" /></M3FabButton>
+  </M3Toolbar.Fab>
+</M3Toolbar>
+```
+
+## API
+
+| Export | Purpose |
+| --- | --- |
+| `M3Toolbar` | Container, layout, scroll response, and icon-action overflow. |
+| `M3ToolbarProps`, `M3ToolbarExposed` | Public React props and element reference. |
+| `ToolbarAction`, `ToolbarVariant`, `ToolbarOrientation`, `ToolbarColor`, `ToolbarScroll`, `ToolbarSide` | Shared foundation types. |
+
+| Prop | Default | Effect |
+| --- | --- | --- |
+| `label` | Required | Accessible name of this toolbar. |
+| `variant` | `docked` | `docked` or `floating`. |
+| `orientation` | `horizontal` | `vertical` applies to floating. |
+| `color` | `standard` | `standard` or `vibrant` container/action colors. |
+| `side` | `end` | `start` or `end` for vertical floating. |
+| `scroll` | `pinned` | `pinned`, `hide`, or `collapse` (floating with FAB). |
+| `scrollTarget` | `window` | Scrollable element or window to observe. |
+| `actions` | `[]` | Icon actions eligible for automatic overflow. |
+| `overflowLabel` | `More actions` | Accessible overflow trigger name; translate for the app locale. |
+| HTML attributes | — | Passed to the toolbar root. |
+
+`M3Toolbar.Fab` places a FAB beside the floating container. Unslotted children fill the custom-content area. The ref exposes `el`.
+
+## Sources
+
+- [Material overview](https://m3.material.io/components/toolbars/overview)
+- [Specs](https://m3.material.io/components/toolbars/specs)
+- [Guidelines](https://m3.material.io/components/toolbars/guidelines)
+- [Accessibility](https://m3.material.io/components/toolbars/accessibility)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Панель инструментов
+
+Toolbar объединяет действия текущей страницы или её содержимого. `M3Toolbar` реализует два варианта [Material 3 Expressive](https://m3.material.io/components/toolbars/overview): **docked** и **floating**. Прежний bottom app bar остался в baseline, но Material больше не рекомендует его; для нового Expressive-интерфейса используйте docked toolbar.
+
+## Руководство
+
+| Вариант | Когда использовать | Положение |
+| --- | --- | --- |
+| `docked` | Действия, общие для нескольких страниц | На всю ширину снизу; не показывать одновременно с нижним navigation bar. |
+| `floating`, горизонтальный | Действия текущей страницы или выделения | Поверх содержимого, не ближе 16 px к краю. Рядом возможен FAB. |
+| `floating`, вертикальный | Компактная группа действий на широком экране | У бокового края с отступом от 24 px; напротив navigation rail. |
+
+`color="standard"` сохраняет внимание на содержимом; `vibrant` выделяет контролы или временный режим. Делайте акцент на одном действии. В docked добавьте его внутрь панели; FAB рядом с floating передаётся отдельным слотом. Toolbar не управляет действием FAB. Каждому toolbar требуется доступное имя. [Рекомендации Material](https://m3.material.io/components/toolbars/guidelines).
+
+### Действия и overflow
+
+Передайте иконочные действия в `actions` для автоматического переноса в overflow. Каждому нужен стабильный `id`, локализованное `label`, имя иконки и `onClick`; `disabled` и `selected` сохраняются в меню. Toolbar измеряет родительский контейнер и переносит последние действия, когда места не хватает. Переведите и `overflowLabel`. Название действия должно быть понятным без иконки.
+
+Обычные children подходят для кнопок, текстовых полей, изображений и другого произвольного содержимого. Toolbar располагает их, но автоматически переносит в меню **только** элементы `actions`. Для пользовательского содержимого подберите собственную адаптивную компоновку. Избегайте широких элементов в вертикальной панели и множества несвязанных видов контролов. [Гибкость и адаптивность в спеке](https://m3.material.io/components/toolbars/guidelines).
+
+### Прокрутка и доступность
+
+`scroll="pinned"` оставляет toolbar на экране. `hide` уводит его при прокрутке вперёд и возвращает при обратной. Для floating с `M3Toolbar.Fab` режим `collapse` оставляет только главное действие. Скрытие и сворачивание не совмещаются. Для вложенной прокрутки укажите `scrollTarget`. При получении фокуса контролы возвращаются. При reduced motion переходы отключены.
+
+Корень имеет `role="toolbar"`, доступное имя и ориентацию. Tab проходит по обычным контролам, стрелки вдоль оси перемещают фокус, Home/End переводят его к краям. Стрелки внутри текстового поля сохраняют обычное поведение. Давайте названия иконочным кнопкам. Сам контейнер не обрабатывает нажатие. [Доступность Material](https://m3.material.io/components/toolbars/accessibility).
+
+```tsx
+<M3Toolbar
+  label="Инструменты редактирования"
+  overflowLabel="Другие инструменты"
+  variant="floating"
+  color="vibrant"
+  scroll="collapse"
+  scrollTarget={editorScroller}
+  actions={[{ id: 'bold', label: 'Полужирный', icon: 'format_bold', selected: bold, onClick: toggleBold }]}
+>
+  <M3Toolbar.Fab>
+    <M3FabButton aria-label="Добавить раздел" onClick={addSection}><M3Icon name="add" /></M3FabButton>
+  </M3Toolbar.Fab>
+</M3Toolbar>
+```
+
+## API
+
+| Экспорт | Назначение |
+| --- | --- |
+| `M3Toolbar` | Контейнер, компоновка, реакция на прокрутку и overflow иконочных действий. |
+| `M3ToolbarProps`, `M3ToolbarExposed` | Публичные React props и ссылка на элемент. |
+| `ToolbarAction`, `ToolbarVariant`, `ToolbarOrientation`, `ToolbarColor`, `ToolbarScroll`, `ToolbarSide` | Общие типы foundation. |
+
+| Prop | По умолчанию | Назначение |
+| --- | --- | --- |
+| `label` | Обязателен | Доступное имя toolbar. |
+| `variant` | `docked` | `docked` или `floating`. |
+| `orientation` | `horizontal` | `vertical` действует для floating. |
+| `color` | `standard` | Цветовая схема `standard` или `vibrant`. |
+| `side` | `end` | `start` или `end` для вертикального floating. |
+| `scroll` | `pinned` | `pinned`, `hide`, `collapse` (floating с FAB). |
+| `scrollTarget` | `window` | Наблюдаемое окно или прокручиваемый элемент. |
+| `actions` | `[]` | Иконочные действия с автоматическим overflow. |
+| `overflowLabel` | `More actions` | Имя кнопки меню; переведите его под язык приложения. |
+| HTML-атрибуты | — | Передаются корневому элементу. |
+
+`M3Toolbar.Fab` располагает FAB рядом с floating-контейнером. Обычные children попадают в область пользовательского содержимого. Ref предоставляет `el`.
+
+## Источники
+
+- [Обзор](https://m3.material.io/components/toolbars/overview)
+- [Спецификация](https://m3.material.io/components/toolbars/specs)
+- [Рекомендации](https://m3.material.io/components/toolbars/guidelines)
+- [Доступность](https://m3.material.io/components/toolbars/accessibility)
+
+</Localized>
