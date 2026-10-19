@@ -43,4 +43,27 @@ describe('m3-react/checkbox', () => {
 
     expect(onChange).toHaveBeenCalledWith(['a', 'b'])
   })
+
+  test('removes equivalent objects from an array model using a custom comparator', () => {
+    const onChange = vi.fn()
+    const equalsFn = (left: unknown, right: unknown) => (
+      (left as { id?: string } | undefined)?.id === (right as { id?: string } | undefined)?.id
+    )
+    const items = [{ id: 'a' }, { id: 'b' }]
+    render(<M3Checkbox model={items} value={{ id: 'b' }} equalsFn={equalsFn} onChange={onChange} />)
+    const input = screen.getByRole('checkbox') as HTMLInputElement
+    expect(input.checked).toBe(true)
+    fireEvent.click(input)
+    expect(onChange).toHaveBeenCalledWith([{ id: 'a' }])
+  })
+
+  test('keeps a disabled indeterminate checkbox non-interactive', () => {
+    const onChange = vi.fn()
+    const { container } = render(<M3Checkbox model={false} indeterminate disabled onChange={onChange} />)
+    const input = screen.getByRole('checkbox') as HTMLInputElement
+    expect(input.disabled).toBe(true)
+    expect(container.querySelector('.m3-checkbox_indeterminate')).not.toBeNull()
+    input.click()
+    expect(onChange).not.toHaveBeenCalled()
+  })
 })

@@ -460,6 +460,17 @@ describe('m3-react/date-picker', () => {
     })
   })
 
+  test('ignores a pointer release without a matching calendar swipe', () => {
+    const { container } = render(<M3DatePicker value={new Date(2026, 6, 10)} />)
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+
+    fireEvent.pointerUp(calendar, { pointerId: 7, clientX: 0, clientY: 0 })
+    fireEvent.pointerDown(calendar, { button: 0, pointerId: 1, clientX: 100, clientY: 20 })
+    fireEvent.pointerUp(calendar, { pointerId: 2, clientX: 20, clientY: 20 })
+
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+  })
+
   test('ignores swipe toward unavailable month', () => {
     const { container } = render(
       <M3DatePicker
@@ -535,5 +546,40 @@ describe('m3-react/date-picker', () => {
     })
 
     expect(calendar.style.getPropertyValue('--m3-date-picker-slide-offset')).toBe('0px')
+  })
+
+  test('swipes toward the previous month and ignores a predominantly vertical gesture', async () => {
+    const { container } = render(<M3DatePicker value={new Date(2026, 6, 10)} />)
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+    fireEvent.pointerDown(calendar, { button: 0, clientX: 100, clientY: 20, pointerId: 1 })
+    fireEvent.pointerMove(calendar, { clientX: 180, clientY: 22, pointerId: 1 })
+    fireEvent.pointerUp(calendar, { clientX: 180, clientY: 22, pointerId: 1 })
+    await waitFor(() => expect(screen.getByRole('grid', { name: 'June 2026' })).toBeTruthy())
+
+    fireEvent.pointerDown(calendar, { button: 0, clientX: 100, clientY: 20, pointerId: 2 })
+    fireEvent.pointerMove(calendar, { clientX: 110, clientY: 80, pointerId: 2 })
+    fireEvent.pointerUp(calendar, { clientX: 110, clientY: 80, pointerId: 2 })
+    expect(screen.getByRole('grid', { name: 'June 2026' })).toBeTruthy()
+  })
+
+  test('resets a canceled swipe without selecting a day', () => {
+    const onChange = vi.fn()
+    const { container } = render(<M3DatePicker value={new Date(2026, 6, 10)} onChange={onChange} />)
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+    fireEvent.pointerDown(calendar, { button: 0, clientX: 100, clientY: 20, pointerId: 1 })
+    fireEvent.pointerMove(calendar, { clientX: 130, clientY: 21, pointerId: 1 })
+    fireEvent.pointerCancel(calendar, { pointerId: 1 })
+    expect(calendar.style.getPropertyValue('--m3-date-picker-slide-offset')).toBe('0px')
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  test('shows an empty-date headline and disables gestures when picker is disabled', () => {
+    const { container } = render(<M3DatePicker value={null} cursor={new Date(2026, 6, 1)} disabled />)
+    expect(screen.getByText('No date selected')).not.toBeNull()
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+    fireEvent.pointerDown(calendar, { button: 0, clientX: 100, clientY: 20, pointerId: 1 })
+    fireEvent.pointerMove(calendar, { clientX: 180, clientY: 22, pointerId: 1 })
+    fireEvent.pointerUp(calendar, { clientX: 180, clientY: 22, pointerId: 1 })
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
   })
 })
