@@ -189,9 +189,6 @@ describe('m3-vue/surface e2e', () => {
     click('[data-testid="card-to-page"]')
     await nextTick()
 
-    await delay(120)
-    await capture('scenario-b-card-mid')
-
     const rectSeries = await collectRectSeries(overlayWrap, 380, 32)
     await delay(240)
     const afterRect = overlayWrap.getBoundingClientRect()
