@@ -166,6 +166,7 @@ jobs:
           yarn nyc report
           yarn nyc report --reporter=json-summary >/dev/null
           yarn node --experimental-strip-types scripts/show-total-coverage.ts
+          yarn nyc check-coverage
 
       - name: Upload Playwright/Vitest artifacts on failure
         if: failure() && matrix.node-version == '24.x'

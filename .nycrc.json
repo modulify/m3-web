@@ -1,7 +1,12 @@
 {
   "all": false,
   "cache": false,
-  "check-coverage": false,
+  "check-coverage": true,
+  "branches": 90,
+  "functions": 90,
+  "lines": 90,
+  "statements": 90,
+  "exclude": ["**/storybook/**"],
   "temp-dir": ".nyc_output",
   "report-dir": "coverage",
   "reporter": [
