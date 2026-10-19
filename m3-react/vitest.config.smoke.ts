@@ -16,7 +16,7 @@ export default mergeConfig(common, defineConfig({
     'import.meta.env.VITEST_STORYBOOK': JSON.stringify('false'),
   },
   optimizeDeps: {
-    include: ['storybook/test'],
+    include: ['storybook/test', '@modulify/validator/assertions'],
   },
   test: {
     name: 'm3-react-smoke',

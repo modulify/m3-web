@@ -71,6 +71,7 @@ test('restores the full floating width after collapsing to the FAB', async () =>
   try {
     const toolbar = screen.getByRole('toolbar', { name: 'Editing' })
     const container = toolbar.querySelector<HTMLElement>('.m3-toolbar__container')!
+    await document.fonts.ready
     const expandedWidth = container.getBoundingClientRect().width
     scroller.scrollTop = 100
     await waitFor(() => expect(toolbar.classList.contains('m3-toolbar_collapsed')).toBe(true))
