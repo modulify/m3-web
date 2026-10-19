@@ -1,5 +1,65 @@
 # Changelog
 
+## 0.2.0
+
+### ⚠ BREAKING CHANGE* **m3-vue:** Components were moved into shared UI layers
+* **m3-vue:** M3Surface.zIndex was removed; modal stacking now follows layer activation order.
+* **m3-react:** Components were moved into shared UI layers
+* **m3-react:** M3Surface.zIndex was removed; modal stacking now follows layer activation order.
+* **m3-foundation:** Shared UI layer management was added
+* **m3-foundation:** The layers.scss level names were replaced with floating, feedback, popover, and modal; --m3-search-z-index no longer controls the search overlay.
+* **m3-vue:** Navigation appearance controls were expanded
+* **m3-vue:** M3Navigation replaced barLayout, railExpandedMode, and hideWhenCollapsed with bar-vertical appearance, expansion, and collapse. Automatic forms are limited through appearances.
+* **m3-react:** Navigation appearance controls were expanded
+* **m3-react:** M3Navigation replaced barLayout, railExpandedMode, and hideWhenCollapsed with bar-vertical appearance, expansion, and collapse. Automatic forms are limited through appearances.
+* **m3-foundation:** Adaptive navigation appearances were added
+* **m3-foundation:** BarLayout was removed from navigation types. The bar-vertical appearance and RailCollapse type now describe these options.
+* **m3-foundation:** Navigation layout offsets were centralized
+* **m3-foundation:** Replace m3-has-navigation_bar, m3-has-navigation_rail, m3-has-navigation_rail-expanded, and m3-has-navigation_drawer with m3-has-navigation.
+* **m3-vue:** Adaptive navigation and examples were completed
+* **m3-vue:** M3Navigation auto mode now selects bar, rail, or rail-expanded; expanded no longer opens a drawer. Set appearance="drawer" for drawer navigation and update tab DOM selectors.
+* **m3-react:** Adaptive navigation and examples were completed
+* **m3-react:** M3Navigation auto mode now selects bar, rail, or rail-expanded; expanded no longer opens a drawer. Set appearance="drawer" for drawer navigation and update tab DOM selectors.
+* **m3-foundation:** Adaptive navigation styles and modal focus were completed
+* **m3-foundation:** Automatic navigation now uses a bottom bar, a 96px rail, and an expanded rail across width classes. Update custom rail widths and m3-has-navigation page insets.
+
+
+### Features
+
+* **m3-foundation:** Adaptive navigation styles and modal focus were completed ([f6fdd07](https://github.com/modulify/m3-web/commit/f6fdd07c077efde8b4dede0bc37731d5cb87cc8b))
+* **m3-react:** Adaptive navigation and examples were completed ([2ed6fe5](https://github.com/modulify/m3-web/commit/2ed6fe57db28044b5df0ebf19f239e95a659f875))
+* **m3-vue:** Adaptive navigation and examples were completed ([be08e87](https://github.com/modulify/m3-web/commit/be08e87022463691e55fd5c81db2508e5462944c))
+* **m3-foundation:** Snackbar styles and shared types were added ([fa80e53](https://github.com/modulify/m3-web/commit/fa80e53342fb9cd91651aba4fa4f8d519155cf8b))
+* **m3-react:** Snackbar components and examples were added ([05ba0ae](https://github.com/modulify/m3-web/commit/05ba0aee4c813fe10662707714967792458fa298))
+* **m3-vue:** Snackbar components and examples were added ([3f58d9e](https://github.com/modulify/m3-web/commit/3f58d9e4bcbe5a7d4c2bcf90494a17294936273c))
+* **m3-foundation:** Adaptive navigation appearances were added ([a29fc8d](https://github.com/modulify/m3-web/commit/a29fc8dc8b63f805f3638ada419f3979be2523e1))
+* **m3-react:** Adaptive content was added ([094e32f](https://github.com/modulify/m3-web/commit/094e32faeb4776a424e78da3b9bd341f60aeb594))
+* **m3-vue:** Adaptive content was added ([08fda59](https://github.com/modulify/m3-web/commit/08fda59696b3b8f608d9feb8c0222aa685f97fb6))
+* **m3-react:** Navigation appearance controls were expanded ([5e4a2bc](https://github.com/modulify/m3-web/commit/5e4a2bc8ef42ea230fcf0e969720df492edde39b))
+* **m3-vue:** Navigation appearance controls were expanded ([5733384](https://github.com/modulify/m3-web/commit/5733384608dc476b4acc9a64f907920f595c2efd))
+* **m3-foundation:** Search styles and layout primitives were added ([d349bde](https://github.com/modulify/m3-web/commit/d349bde554e3b1ae75f1d0c7e8b33eed7f9f87a7))
+* **m3-react:** Search component and examples were added ([38354d2](https://github.com/modulify/m3-web/commit/38354d2e0e9e9e782b86734a1bda3b7c957c9b45))
+* **m3-vue:** Search component and examples were added ([86fef16](https://github.com/modulify/m3-web/commit/86fef1638e6fda80755d64e4a9f3fae2efaddb43)), closes [#21]({{host}}/{{owner}}/{{repository}}/issues/{{id}})
+* **m3-foundation:** App bar styles and scroll primitives were added ([1d2371c](https://github.com/modulify/m3-web/commit/1d2371cc4e77c1c12a34cabbe5def9c3c0b951b2))
+* **m3-react:** App bar component and examples were added ([49653d7](https://github.com/modulify/m3-web/commit/49653d7659f6f4016540316089f3b462c6a05b82))
+* **m3-vue:** App bar component and examples were added ([54c9491](https://github.com/modulify/m3-web/commit/54c94917fbc297b4b2d315e8266000205a0d1611)), closes [#26]({{host}}/{{owner}}/{{repository}}/issues/{{id}})
+* **m3-foundation:** Toolbar styles and layout helpers were added ([e4dadc1](https://github.com/modulify/m3-web/commit/e4dadc177cbf46b6946cdd311448a87332a57f8a))
+* **m3-react:** Toolbar component and examples were added ([3dd791a](https://github.com/modulify/m3-web/commit/3dd791a643b4249eeca88506987d3ade8a2131c4))
+* **m3-vue:** Toolbar component and examples were added ([e24d734](https://github.com/modulify/m3-web/commit/e24d7341b743f6496f4a0e6b00ded365e8535c7e))
+* **m3-foundation:** Shared UI layer management was added ([b17400d](https://github.com/modulify/m3-web/commit/b17400de067ffc5bceb298e03564b5ffeba1ddcb))
+* **m3-react:** Components were moved into shared UI layers ([3cec611](https://github.com/modulify/m3-web/commit/3cec611f4969b2575b50a6c19173bc09b92d4099))
+* **m3-vue:** Components were moved into shared UI layers ([5d55d94](https://github.com/modulify/m3-web/commit/5d55d94cac6e756f1303024d329902920c2ed42e))
+
+### Bug Fixes
+
+* **m3-vue:** Localized Radio docs rendering was fixed ([62e61d4](https://github.com/modulify/m3-web/commit/62e61d451754c24c4f60b07cc06707a4d37b36d5))
+* **m3-foundation:** Component motion and reduced motion behavior were corrected ([ac71f29](https://github.com/modulify/m3-web/commit/ac71f2945fe3ed9fa252b4a733bd79a093f73999))
+* **m3-react:** Surface morph transitions were smoothed ([1884fff](https://github.com/modulify/m3-web/commit/1884fff9bb4cad46c3f6eb96d888de1918816fa8))
+* **m3-vue:** Surface morph transitions were smoothed ([efef28e](https://github.com/modulify/m3-web/commit/efef28e6f004f62aa258045eebaa91dbfbba196a))
+* **m3-foundation:** Navigation motion and bar labels were corrected ([cdfbfe3](https://github.com/modulify/m3-web/commit/cdfbfe3c6c9f9bbea4c94ba578ef9fe6b2e2a4c6))
+* **m3-vue:** Navigation viewport test was stabilized ([0b76863](https://github.com/modulify/m3-web/commit/0b768635bbad5eb1a027d5265136b7439841693a))
+* **m3-foundation:** Search helper export was restored ([75743d2](https://github.com/modulify/m3-web/commit/75743d2f8b725e9c83fe505bb2aaff1842d8e800))
+
 ## 0.1.2
 
 ### Features
