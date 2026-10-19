@@ -105,7 +105,6 @@
                 :inset-top="24"
                 :inset-bottom="24"
                 :rounding="dialog.rounding"
-                :z-index="dialogZIndex(level)"
                 :elevation="dialogElevation(level)"
                 :style="dialogInlineStyle(level)"
                 :class="[
@@ -176,8 +175,6 @@ import { localize } from '../../i18n'
 const DIALOG_TRANSITION_MS = durations.medium2
 const DIALOG_TRANSITION_EASING = easing.standard
 const DIALOG_ENTRY_OFFSET_PX = 24
-const DIALOG_Z_INDEX_BASE = 560
-const DIALOG_Z_INDEX_STEP = 40
 
 type DialogSpec = {
   id: string,
@@ -242,10 +239,6 @@ function dialogMode(level: number): 'standard' | 'modal' {
   return isTopDialog(level) ? 'modal' : 'standard'
 }
 
-function dialogZIndex(level: number) {
-  return DIALOG_Z_INDEX_BASE + (level * DIALOG_Z_INDEX_STEP)
-}
-
 function dialogElevation(level: number) {
   return Math.min(5, 2 + level)
 }
@@ -257,7 +250,6 @@ function dialogInlineStyle(level: number) {
     position: 'fixed',
     top: '50%',
     left: '50%',
-    zIndex: dialogZIndex(level),
     opacity: visible ? 1 : 0,
     transform: visible
       ? 'translate(-50%, -50%)'

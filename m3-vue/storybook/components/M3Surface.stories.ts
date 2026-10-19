@@ -6,6 +6,7 @@ import M3Surface from '@/components/surface/M3Surface.vue'
 import { resolveStorybookLocale } from '../i18n'
 import SurfaceCardPageMorph from '../examples/surface/SurfaceCardPageMorph.vue'
 import SurfaceInspectorSheet from '../examples/surface/SurfaceInspectorSheet.vue'
+import SurfaceLayerStack from '../examples/surface/SurfaceLayerStack.vue'
 import SurfaceNestedDialogsChain from '../examples/surface/SurfaceNestedDialogsChain.vue'
 import SurfaceSideSheetAlwaysModal from '../examples/surface/SurfaceSideSheetAlwaysModal.vue'
 import SurfaceSideSheetDismissToRemove from '../examples/surface/SurfaceSideSheetDismissToRemove.vue'
@@ -54,6 +55,10 @@ export const SideSheetModalToWindow: Story = {
 
 export const NestedDialogsChain: Story = {
   render: (_args, { globals }) => localizedSurfaceStory(SurfaceNestedDialogsChain, globals.locale),
+}
+
+export const LayerStack: Story = {
+  render: (_args, { globals }) => localizedSurfaceStory(SurfaceLayerStack, globals.locale),
 }
 
 export const WorkspaceModalDialog: Story = {

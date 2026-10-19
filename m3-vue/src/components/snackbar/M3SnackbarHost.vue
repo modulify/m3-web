@@ -1,32 +1,35 @@
 <template>
-    <div
-        ref="root"
-        class="m3-snackbar-host"
-        v-bind="$attrs"
-        @mouseenter="pause('hover')"
-        @mouseleave="resume('hover')"
-        @focusin="pause('focus')"
-        @focusout="onFocusOut"
-    >
-        <span class="m3-snackbar-host__announcement" role="status" aria-live="polite" aria-atomic="true">
-            {{ announcement }}
-        </span>
-        <M3Snackbar
-            v-if="display"
-            :message="display.entry.options.message"
-            :layout="display.entry.options.layout"
-            :closable="closable"
-            :close-label="display.entry.options.closeLabel"
-            :leaving="display.leaving"
-            :announce="false"
-            @action="finish('action')"
-            @dismiss="finish('dismiss')"
+    <span ref="anchor" hidden />
+    <Teleport :to="feedbackTarget ?? 'body'" :disabled="!feedbackTarget">
+        <div
+            ref="root"
+            class="m3-snackbar-host"
+            v-bind="$attrs"
+            @mouseenter="pause('hover')"
+            @mouseleave="resume('hover')"
+            @focusin="pause('focus')"
+            @focusout="onFocusOut"
         >
-            <template v-if="display.entry.action" #action="actionContext">
-                <RenderAction :render="display.entry.action" :context="actionContext" />
-            </template>
-        </M3Snackbar>
-    </div>
+            <span class="m3-snackbar-host__announcement" role="status" aria-live="polite" aria-atomic="true">
+                {{ announcement }}
+            </span>
+            <M3Snackbar
+                v-if="display"
+                :message="display.entry.options.message"
+                :layout="display.entry.options.layout"
+                :closable="closable"
+                :close-label="display.entry.options.closeLabel"
+                :leaving="display.leaving"
+                :announce="false"
+                @action="finish('action')"
+                @dismiss="finish('dismiss')"
+            >
+                <template v-if="display.entry.action" #action="actionContext">
+                    <RenderAction :render="display.entry.action" :context="actionContext" />
+                </template>
+            </M3Snackbar>
+        </div>
+    </Teleport>
 </template>
 
 <script lang="ts" setup>
@@ -41,12 +44,10 @@ import type { SnackbarResult } from '@modulify/m3-foundation/types/components/sn
 
 import { computed, defineComponent } from 'vue'
 import { isElement, isHTMLElement } from '@modulify/m3-foundation/lib/predicates'
-import {
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  shallowRef,
-} from 'vue'
+import { LAYER_DEACTIVATED_EVENT } from '@modulify/m3-foundation/lib/layers'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { resolveFeedbackContainer } from '@modulify/m3-foundation/lib/layers'
+import { shallowRef } from 'vue'
 
 import { useTimeout } from '@/composables/timing'
 
@@ -59,6 +60,7 @@ interface Entry {
 
   trigger: HTMLElement | null;
   nextFocus: HTMLElement | null;
+  feedbackTarget: HTMLElement | null;
 
   remaining: number | null;
   startedAt: number;
@@ -110,6 +112,9 @@ const RenderAction = defineComponent({
 })
 
 const root = ref<HTMLDivElement | null>(null)
+const anchor = ref<HTMLElement | null>(null)
+const feedbackTarget = ref<HTMLElement | null>(null)
+let layerObserver: MutationObserver | null = null
 const display = shallowRef<Display | null>(null)
 const announcement = ref('')
 
@@ -120,6 +125,7 @@ let leaving: Entry | null = null
 let timerRunning = false
 const paused = { hover: false, focus: false }
 let disposed = false
+let detachOwner = () => {}
 
 const durationTimeout = useTimeout(() => {
   timerRunning = false
@@ -176,9 +182,28 @@ const restoreFocus = (entry: Entry) => {
 }
 
 const begin = (entry: Entry) => {
+  if (entry.feedbackTarget && !entry.feedbackTarget.closest('[data-m3-layer-active="true"]')) {
+    entry.resolve('disposed')
+    const next = queue.shift()
+    if (next) begin(next)
+    else {
+      display.value = null
+      announcement.value = ''
+    }
+    return
+  }
+
   active = entry
   paused.hover = false
   paused.focus = false
+  detachOwner()
+  const layer = entry.feedbackTarget?.closest<HTMLElement>('.m3-layer')
+  if (layer) {
+    const onDeactivate = () => finish('disposed')
+    layer.addEventListener(LAYER_DEACTIVATED_EVENT, onDeactivate)
+    detachOwner = () => layer.removeEventListener(LAYER_DEACTIVATED_EVENT, onDeactivate)
+  }
+  feedbackTarget.value = entry.feedbackTarget?.isConnected ? entry.feedbackTarget : null
   display.value = { entry, leaving: false }
   announcement.value = entry.options.message
   if (entry.remaining !== null) {
@@ -193,6 +218,8 @@ const finish = (result: SnackbarResult) => {
   if (!entry) return
   stopTimer()
   active = null
+  detachOwner()
+  detachOwner = () => {}
   leaving = entry
   entry.resolve(result)
   display.value = { entry, leaving: true }
@@ -214,6 +241,7 @@ const makeEntry = (options: SnackbarOptions, resolve: Entry['resolve']): Entry =
     resolve,
     trigger,
     nextFocus: getNextFocusable(trigger),
+    feedbackTarget: resolveFeedbackContainer(trigger) ?? resolveFeedbackContainer(anchor.value),
     remaining: duration,
     startedAt: 0,
   }
@@ -272,8 +300,19 @@ const onKeyDown = (event: KeyboardEvent) => {
 const closable = computed(() => display.value?.entry.options.closable
   ?? Boolean(display.value?.entry.action || display.value?.entry.remaining === null))
 
-onMounted(() => document.addEventListener('keydown', onKeyDown))
+onMounted(() => {
+  document.addEventListener('keydown', onKeyDown)
+  const update = () => feedbackTarget.value = resolveFeedbackContainer(anchor.value)
+  const layer = anchor.value?.closest('.m3-layer')
+  if (layer) {
+    layerObserver = new MutationObserver(update)
+    layerObserver.observe(layer, { attributes: true, attributeFilter: ['data-m3-layer'] })
+  }
+  update()
+})
 onBeforeUnmount(() => {
+  layerObserver?.disconnect()
+  detachOwner()
   document.removeEventListener('keydown', onKeyDown)
   disposed = true
   stopTimer()

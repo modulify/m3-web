@@ -33,12 +33,11 @@
         </div>
     </div>
 
-    <Teleport to="body">
-        <Transition :duration="SEARCH_TRANSITION_MS" name="m3-search">
+    <Teleport v-if="layerReady" :to="layerHost">
+        <Transition :duration="SEARCH_TRANSITION_MS" name="m3-search" @after-leave="overlayMounted = false">
             <div v-if="open" class="m3-search__overlay">
                 <div
                     v-if="resolvedLayout === 'docked'"
-                    ref="scrim"
                     class="m3-search__scrim"
                     @click="close"
                 />
@@ -125,6 +124,7 @@ import { M3IconButton } from '@/components/icon-button'
 
 import { useBreakpoint } from '@/composables/breakpoint'
 import { useId } from '@/composables/id'
+import { useLayerHost } from '@/composables/layers'
 
 defineOptions({ inheritAttrs: false })
 
@@ -191,7 +191,8 @@ const bar = ref<HTMLElement | null>(null)
 const dialog = ref<HTMLElement | null>(null)
 const input = ref<HTMLInputElement | null>(null)
 const results = ref<HTMLElement | null>(null)
-const scrim = ref<HTMLElement | null>(null)
+const overlayMounted = ref(props.open)
+const { host: layerHost, ready: layerReady } = useLayerHost(() => props.open || overlayMounted.value)
 const position = ref<SearchDockedPosition>({ left: 12, top: 12, width: 360 })
 const anchor = ref<SearchAnchorRect>({ left: 12, top: 12, width: 360 })
 const viewport = ref<SearchViewport>({ width: 384, height: 640 })
@@ -212,6 +213,10 @@ const viewStyle = computed(() => ({
   '--m3-search-origin-right': `${origin.value.right}px`,
   '--m3-search-origin-offset-y': `${origin.value.offsetY}px`,
 }))
+
+watch(() => props.open, open => {
+  if (open) overlayMounted.value = true
+})
 
 const close = () => emit('update:open', false)
 const submit = () => {
@@ -283,11 +288,11 @@ watch([() => props.open, resolvedLayout, bar], ([open, layout], _, onCleanup) =>
   })
 }, { immediate: true, flush: 'post' })
 
-watch([() => props.open, dialog], ([open, element], _, onCleanup) => {
-  if (!open || !element) return
+watch([() => props.open, dialog, layerReady], ([open, element, ready], _, onCleanup) => {
+  if (!open || !element || !ready || !layerHost) return
   onCleanup(activateModalFocus({
     dialog: element,
-    exempt: () => [scrim.value],
+    layer: layerHost,
     onEscape: close,
   }))
   input.value?.focus()

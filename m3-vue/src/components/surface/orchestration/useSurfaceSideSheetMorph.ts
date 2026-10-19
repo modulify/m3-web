@@ -236,7 +236,6 @@ export function useSurfaceSideSheetMorph() {
     roundingTopRight: MODAL_SIDE_SHEET_DESCRIPTOR.rounding.topRight,
     roundingBottomRight: MODAL_SIDE_SHEET_DESCRIPTOR.rounding.bottomRight,
     transitionMs: modalTransitionMs.value,
-    zIndex: 520,
     variant: modalRole.value,
     elevation: modalElevation.value,
     overflow: MODAL_SIDE_SHEET_DESCRIPTOR.overflow,

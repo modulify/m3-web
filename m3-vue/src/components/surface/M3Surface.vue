@@ -1,10 +1,9 @@
 <template>
-    <Teleport v-if="isModal" :to="teleportTo">
+    <Teleport v-if="isModal && layerReady" :to="layerHost">
         <Transition v-if="scrim" name="m3-transition-fade">
             <div
                 v-show="resolvedScrimShown"
-                ref="scrimElement"
-                :style="{ zIndex: zIndex - 1 }"
+                :style="{ zIndex: 0 }"
                 class="m3-surface__scrim"
                 @click="onScrimClick"
             />
@@ -41,7 +40,7 @@
     </Teleport>
 
     <M3SurfacePanel
-        v-else
+        v-else-if="!isModal"
         :id="_id"
         :tag="tag"
         :overflow="overflow"
@@ -88,6 +87,7 @@ import {
 import { activateModalFocus } from '@modulify/m3-foundation/lib/modal'
 
 import { useId } from '@/composables/id'
+import { useLayerHost } from '@/composables/layers'
 
 import { getModalAnchorStyle } from './shared'
 import M3SurfacePanel from './M3SurfacePanel.vue'
@@ -150,10 +150,6 @@ const props = defineProps({
     default: 0,
   },
 
-  zIndex: {
-    type: Number,
-    default: 400,
-  },
 })
 
 const emit = defineEmits([
@@ -163,7 +159,6 @@ const emit = defineEmits([
 
 const attrs = useAttrs()
 const modalPanel = ref<InstanceType<typeof M3SurfacePanel> | null>(null)
-const scrimElement = ref<HTMLElement | null>(null)
 
 const _id = useId('m3-surface', computed(() => props.id))
 
@@ -177,6 +172,11 @@ const surfaceAttrs = computed(() => {
     ...attrs,
   } : attrs
 })
+const { host: layerHost, ready: layerReady } = useLayerHost(
+  () => isModal.value && String(surfaceAttrs.value['aria-modal']) !== 'false',
+  () => props.teleportTo,
+  () => isModal.value
+)
 
 const surfaceClass = computed(() => ({
   ['m3-surface_modal']: isModal.value,
@@ -192,7 +192,7 @@ const surfaceStyle = computed(() => {
       left: toLength(props.insetLeft, '0px'),
     }),
     position: isModal.value ? 'fixed' : 'relative',
-    zIndex: isModal.value ? props.zIndex : undefined,
+    zIndex: isModal.value ? 1 : undefined,
     display: props.shown ? undefined : 'none',
   }
 })
@@ -202,13 +202,13 @@ function onScrimClick() {
   emit('dismiss')
 }
 
-watch([modalPanel, isModal, () => props.shown, () => surfaceAttrs.value['aria-modal'], () => props.tag], ([panel, modal, shown, ariaModal], _, onCleanup) => {
+watch([modalPanel, isModal, () => props.shown, () => surfaceAttrs.value['aria-modal'], () => props.tag, layerReady], ([panel, modal, shown, ariaModal, , ready], _, onCleanup) => {
   const dialog = panel?.el
-  if (!dialog || !modal || !shown || String(ariaModal) === 'false') return
+  if (!dialog || !modal || !shown || String(ariaModal) === 'false' || !ready || !layerHost) return
 
   onCleanup(activateModalFocus({
     dialog,
-    exempt: () => [scrimElement.value],
+    layer: layerHost,
     onEscape: onScrimClick,
   }))
 }, { immediate: true, flush: 'post' })
