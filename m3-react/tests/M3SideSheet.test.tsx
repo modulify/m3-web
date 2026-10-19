@@ -132,4 +132,37 @@ describe('m3-react/side-sheet', () => {
       vi.useRealTimers()
     }
   })
+
+  test('uses docked sizing and accepts explicit surface geometry', () => {
+    const view = render(
+      <M3SideSheet aria-label="Filters" shown docked>
+        <M3SideSheet.Title>Filters</M3SideSheet.Title>
+      </M3SideSheet>
+    )
+    const dialog = screen.getByRole('dialog', { name: 'Filters' })
+    expect(dialog.getAttribute('aria-modal')).toBe('false')
+    expect(dialog.getAttribute('aria-labelledby')).toBeNull()
+    expect(dialog.classList.contains('m3-side-sheet_docked')).toBe(true)
+    expect(document.body.querySelector('.m3-surface__scrim')).toBeNull()
+
+    view.rerender(
+      <M3SideSheet
+        width={340}
+        minWidth={300}
+        maxWidth={360}
+        roundingTopLeft={8}
+        roundingBottomLeft={8}
+        aria-modal="true"
+        aria-label="Filters"
+        shown
+      >
+        <M3SideSheet.Title>Filters</M3SideSheet.Title>
+      </M3SideSheet>
+    )
+    expect(dialog.getAttribute('aria-modal')).toBe('true')
+    expect(dialog.classList.contains('m3-side-sheet_docked')).toBe(false)
+    expect(dialog.style.width).toBe('340px')
+    expect(dialog.style.minWidth).toBe('300px')
+    expect(dialog.style.maxWidth).toBe('360px')
+  })
 })

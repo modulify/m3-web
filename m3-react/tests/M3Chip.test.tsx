@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 
 import { M3Chip } from '@/components/chip'
+import { M3Icon } from '@/components/icon'
 
 describe('m3-react/chip', () => {
   test('toggles selected state for filter chips via aria-pressed', () => {
@@ -52,5 +53,40 @@ describe('m3-react/chip', () => {
     )
 
     expect(container.querySelector('.m3-chip__icon_selection')).not.toBeNull()
+  })
+
+  test('uses a supplied leading icon instead of the filter checkmark', () => {
+    const onClick = vi.fn(event => event.preventDefault())
+    const onToggle = vi.fn()
+    const { container } = render(
+      <M3Chip variant="filter" aria-label="Assigned" selected showCheckmark onClick={onClick} onToggle={onToggle}>
+        <M3Icon name="person" />
+        Assigned
+      </M3Chip>
+    )
+    expect(container.querySelector('.m3-chip_has-leading-icon')).not.toBeNull()
+    expect(container.querySelector('.m3-chip__icon_selection')).toBeNull()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Assigned' }))
+    expect(onClick).toHaveBeenCalledTimes(1)
+    expect(onToggle).not.toHaveBeenCalled()
+  })
+
+  test('supports a custom dismiss label and keyboard activation of both actions', () => {
+    const onDismiss = vi.fn()
+    const onToggle = vi.fn()
+    const { container } = render(
+      <M3Chip variant="filter" aria-label="Filter" dismissLabel="Remove filter" selected onDismiss={onDismiss} onToggle={onToggle}>
+        Filter
+      </M3Chip>
+    )
+
+    fireEvent.keyUp(screen.getByRole('button', { name: 'Filter' }), { code: 'Enter' })
+    const dismiss = screen.getByRole('button', { name: 'Remove filter' })
+    fireEvent.keyUp(dismiss, { code: 'Enter' })
+    fireEvent.click(dismiss)
+    expect(onDismiss).toHaveBeenCalledTimes(1)
+    expect(onToggle).not.toHaveBeenCalled()
+    expect(container.querySelector('.m3-chip_dismissible')).not.toBeNull()
   })
 })

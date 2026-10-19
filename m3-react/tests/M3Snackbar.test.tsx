@@ -149,6 +149,50 @@ describe('m3-react/snackbar', () => {
     await expect(result).resolves.toBe('timeout')
   })
 
+  test('focus pauses the countdown until it leaves the snackbar', async () => {
+    vi.useFakeTimers()
+    const host = createRef<SnackbarHostMethods>()
+    render(<M3SnackbarHost ref={host} />)
+    let result!: Promise<SnackbarResult>
+    act(() => { result = host.current!.show({ message: 'Saved', duration: 1000, closable: true }) })
+
+    const close = screen.getByRole('button', { name: 'Close notification' })
+    fireEvent.focus(close)
+    act(() => vi.advanceTimersByTime(2000))
+    expect(visibleMessage()).toBe('Saved')
+
+    fireEvent.blur(close, { relatedTarget: document.body })
+    act(() => vi.advanceTimersByTime(1000))
+    await expect(result).resolves.toBe('timeout')
+  })
+
+  test('rejects invalid durations without replacing the current message', async () => {
+    const host = createRef<SnackbarHostMethods>()
+    render(<M3SnackbarHost ref={host} />)
+    act(() => { void host.current!.show({ message: 'Current', duration: null }) })
+
+    await expect(host.current!.replace({ message: 'Invalid', duration: -1 })).rejects.toThrow(RangeError)
+    expect(visibleMessage()).toBe('Current')
+  })
+
+  test('restores focus to the next available control when the trigger disappears', () => {
+    vi.useFakeTimers()
+    const host = createRef<SnackbarHostMethods>()
+    const trigger = document.createElement('button')
+    const next = document.createElement('button')
+    document.body.append(trigger, next)
+    render(<M3SnackbarHost ref={host} />)
+    trigger.focus()
+    act(() => { void host.current!.show({ message: 'Removed', action: action('Undo') }) })
+    act(() => host.current!.focus())
+    trigger.remove()
+
+    act(() => host.current!.dismiss())
+    act(() => vi.advanceTimersByTime(150))
+    expect(document.activeElement).toBe(next)
+    next.remove()
+  })
+
   test('unmount settles the active and queued requests', async () => {
     const host = createRef<SnackbarHostMethods>()
     const view = render(<M3SnackbarHost ref={host} />)
@@ -184,5 +228,62 @@ describe('m3-react/snackbar', () => {
     expect(visibleMessage()).toBe('Restored')
     fireEvent.click(screen.getByRole('button', { name: 'Open' }))
     await expect(updated).resolves.toBe('action')
+  })
+
+  test('replace starts feedback without an existing message and focus is inert when empty', async () => {
+    const host = createRef<SnackbarHostMethods>()
+    render(<M3SnackbarHost ref={host} />)
+    act(() => host.current!.focus())
+    act(() => host.current!.dismiss())
+
+    let result!: Promise<SnackbarResult>
+    act(() => { result = host.current!.replace({ message: 'Ready', duration: null, closable: false }) })
+    expect(visibleMessage()).toBe('Ready')
+    expect(screen.queryByRole('button', { name: 'Close notification' })).toBeNull()
+    act(() => host.current!.clear())
+    await expect(result).resolves.toBe('cleared')
+  })
+
+  test('reports disposal for calls made after the host unmounts', async () => {
+    const host = createRef<SnackbarHostMethods>()
+    const view = render(<M3SnackbarHost ref={host} />)
+    const methods = host.current!
+    view.unmount()
+    await Promise.resolve()
+
+    await expect(methods.show({ message: 'Too late' })).resolves.toBe('disposed')
+    await expect(methods.replace({ message: 'Too late' })).resolves.toBe('disposed')
+  })
+
+  test('forwards host interaction callbacks while retaining pause and shortcut behavior', () => {
+    vi.useFakeTimers()
+    const onMouseEnter = vi.fn()
+    const onMouseLeave = vi.fn()
+    const onFocusCapture = vi.fn()
+    const onBlurCapture = vi.fn()
+    const host = createRef<SnackbarHostMethods>()
+    render(
+      <M3SnackbarHost
+        ref={host}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onFocusCapture={onFocusCapture}
+        onBlurCapture={onBlurCapture}
+      />
+    )
+    act(() => { void host.current!.show({ message: 'Saved', action: action('Undo') }) })
+    const root = document.querySelector('.m3-snackbar-host')!
+    const actionButton = screen.getByRole('button', { name: 'Undo' })
+    fireEvent.mouseEnter(root)
+    fireEvent.mouseLeave(root)
+    fireEvent.focus(actionButton)
+    fireEvent.blur(actionButton, { relatedTarget: document.body })
+    expect(onMouseEnter).toHaveBeenCalledTimes(1)
+    expect(onMouseLeave).toHaveBeenCalledTimes(1)
+    expect(onFocusCapture).toHaveBeenCalledTimes(1)
+    expect(onBlurCapture).toHaveBeenCalledTimes(1)
+
+    fireEvent.keyDown(document, { key: 'g', altKey: true, ctrlKey: true })
+    expect(document.activeElement).not.toBe(actionButton)
   })
 })

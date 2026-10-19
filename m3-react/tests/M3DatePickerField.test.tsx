@@ -137,6 +137,55 @@ describe('m3-react/date-picker-field', () => {
     expect(input.getAttribute('aria-invalid')).toBe('true')
   })
 
+  test('clears a typed date and rejects dates outside its bounds or availability', () => {
+    const onChange = vi.fn()
+
+    render(
+      <M3DatePickerField
+        value={new Date(2026, 6, 10)}
+        min={new Date(2026, 6, 5)}
+        max={new Date(2026, 6, 20)}
+        availability={{ isDateSelectable: (date) => date.getDate() !== 15 }}
+        onChange={onChange}
+      />
+    )
+
+    const input = screen.getByRole('textbox', { name: 'Select date' }) as HTMLInputElement
+
+    fireEvent.input(input, { target: { value: '' } })
+    fireEvent.change(input, { target: { value: '' } })
+    expect(onChange).toHaveBeenLastCalledWith(null)
+    expect(input.getAttribute('aria-invalid')).toBe('false')
+
+    for (const date of ['07/25/2026', '07/15/2026']) {
+      fireEvent.input(input, { target: { value: date } })
+      fireEvent.change(input, { target: { value: date } })
+      expect(input.getAttribute('aria-invalid')).toBe('true')
+    }
+
+    expect(onChange).toHaveBeenCalledTimes(1)
+
+    fireEvent.input(input, { target: { value: '07/18/2026' } })
+    fireEvent.change(input, { target: { value: '07/18/2026' } })
+    expect(onChange).toHaveBeenLastCalledWith(new Date(2026, 6, 18))
+    expect(input.getAttribute('aria-invalid')).toBe('false')
+  })
+
+  test('keeps an empty calendar draft unconfirmed', async () => {
+    const onChange = vi.fn()
+
+    render(<M3DatePickerField onChange={onChange} />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Choose date' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'OK' }).hasAttribute('disabled')).toBe(true)
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }))
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
   test('supports field composition classes and rich supporting text', async () => {
     const { container } = render(
       <M3DatePickerField
