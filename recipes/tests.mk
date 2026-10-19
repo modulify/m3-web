@@ -48,6 +48,7 @@ test-coverage: node_modules ## [Tests][docker][coverage][heavy] Runs merged cove
 	$(YARN) nyc report
 	@$(YARN) nyc report --reporter=json-summary >/dev/null
 	@$(YARN) node --experimental-strip-types scripts/show-total-coverage.ts
+	$(YARN) nyc check-coverage
 
 .PHONY: test-e2e
 test-e2e: node_modules ## [Tests][docker][e2e][playwright] Runs Playwright-based e2e tests (Vitest browser mode)
