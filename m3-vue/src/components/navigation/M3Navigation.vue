@@ -1,5 +1,5 @@
 <template>
-    <Teleport to="body">
+    <Teleport v-if="layerReady" :to="layerHost">
         <Transition name="m3-transition-fade" @after-leave="transitioning = false">
             <div
                 v-show="modalExpanded"
@@ -82,6 +82,7 @@ import { resolveNavigationAppearance } from '@modulify/m3-foundation/lib/navigat
 import { useAttrs, watch } from 'vue'
 
 import { useBreakpoint } from '@/composables/breakpoint'
+import { useLayerHost } from '@/composables/layers'
 
 import M3NavigationSection from './M3NavigationSection.vue'
 
@@ -141,6 +142,7 @@ const modalDialog = ref<HTMLElement | null>(null)
 const modalExpanded = computed(() => isModalExpansion(appearanceBase.value, props.expanded, props.expansion, breakpoint.value.ge('large')))
 const modalActive = computed(() => isExpandableAppearance(appearanceBase.value)
   && (isModalExpansion(appearanceBase.value, props.expanded, props.expansion, breakpoint.value.ge('large')) || transitioning.value))
+const { host: layerHost, ready: layerReady } = useLayerHost(() => modalActive.value)
 const modalLabel = computed(() => typeof attrs['aria-label'] === 'string' ? attrs['aria-label'] : 'Navigation')
 
 const railHidden = computed(() => isHiddenRail(appearanceBase.value, props.expanded, props.collapse))
@@ -169,12 +171,12 @@ watch([appearanceBase, () => props.expanded], ([appearance, expanded], previous)
   if (isBarAppearance(appearance) && expanded) emit('update:expanded', false)
 }, { immediate: true })
 
-watch([modalDialog, modalActive], ([dialog, active], _, onCleanup) => {
-  if (!dialog || !active) return
+watch([modalDialog, modalActive, layerReady], ([dialog, active, ready], _, onCleanup) => {
+  if (!dialog || !active || !ready || !layerHost) return
 
   onCleanup(activateModalFocus({
     dialog,
-    exempt: () => [scrim.value],
+    layer: layerHost,
     onEscape: () => emit('update:expanded', false),
   }))
 }, { immediate: true, flush: 'post' })

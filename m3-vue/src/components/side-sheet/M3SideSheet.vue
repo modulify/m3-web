@@ -9,7 +9,6 @@
         :width="docked ? 256 : undefined"
         :min-width="docked ? 256 : 320"
         :max-width="docked ? 256 : 400"
-        :z-index="DOCKED_Z_INDEX"
         :rounding-top-left="docked ? 0 : 16"
         :rounding-bottom-left="docked ? 0 : 16"
         :rounding-top-right="0"
@@ -78,7 +77,6 @@ import { useAnimationFrame } from '@/composables/animation'
 import { useId } from '@/composables/id'
 import { useTimeout } from '@/composables/timing'
 
-const DOCKED_Z_INDEX = 1000
 const SIDE_SHEET_TRANSITION_MS = durations['extra-long2']
 
 type TransitionState = 'idle' | 'pre-enter' | 'entering' | 'pre-exit' | 'exiting'

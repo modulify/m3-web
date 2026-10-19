@@ -1,7 +1,7 @@
 <template>
     <Teleport
-        v-if="state.attached"
-        :to="container"
+        v-if="state.attached && portalHost"
+        :to="portalHost"
     >
         <div
             ref="positioner"
@@ -36,7 +36,13 @@ import type {
   TriggerSchema,
 } from '@modulify/m3-foundation/types/components/popper'
 
+import { activatePopover } from '@modulify/m3-foundation/lib/layers'
 import { Listener } from '@modulify/m3-foundation/lib/popper'
+import {
+  mountPopoverHost,
+  raisePopover,
+  resolvePopoverContainer,
+} from '@modulify/m3-foundation/lib/layers'
 import Scheduler from '@modulify/m3-foundation/lib/Scheduler'
 
 import { computed } from 'vue'
@@ -115,7 +121,7 @@ const props = defineProps({
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
     validator: Or(isString, isHTMLElement) as (value: unknown) => boolean,
-    default: 'body',
+    default: undefined,
   },
 
   offsetMainAxis: {
@@ -173,6 +179,7 @@ const emit = defineEmits([
 const target = computed(() => typeof props.target === 'function' ? props.target() : props.target?.value)
 const positioner = ref<HTMLElement | null>(null)
 const popper = ref<HTMLElement | null>(null)
+const portalHost = typeof document === 'undefined' ? null : document.createElement('div')
 
 const positioning = computed(() => ({
   placement: props.placement,
@@ -274,7 +281,10 @@ const globalTouchFrame = useAnimationFrame()
 const showingTimeout = useTimeout(() => state.showing = false, 0)
 const touchedTimeout = useTimeout(() => state.touched = false, 300)
 
-const detach = () => state.attached = false
+const detach = () => {
+  state.attached = false
+  portalHost?.remove()
+}
 
 const doShow = () => {
   detachScheduler.abort()
@@ -317,6 +327,10 @@ const show = (immediately = false) => {
   }
 
   state.hiding = false
+  if (portalHost) {
+    mountPopoverHost(portalHost, target.value ?? null, props.container)
+    raisePopover(portalHost)
+  }
   state.attached = true
 
   showingScheduler.schedule(doShow, immediately ? 0 : delay.value.show)
@@ -424,6 +438,14 @@ const dispose = () => {
 }
 
 watch(() => props.shown, shown => shown ? show() : hide())
+watch(() => state.shown, (shown, _, onCleanup) => {
+  if (shown && portalHost) onCleanup(activatePopover(portalHost, () => hide(true)))
+})
+watch([target, () => props.container], ([element, container]) => {
+  if (!state.attached || !portalHost) return
+  const destination = resolvePopoverContainer(element ?? null, container)
+  if (portalHost.parentElement !== destination) destination.append(portalHost)
+})
 watch(() => target.value, async (newTarget, oldTarget) => {
   if (newTarget !== oldTarget) {
     targetListener.target = newTarget

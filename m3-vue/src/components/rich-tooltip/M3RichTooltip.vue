@@ -128,7 +128,7 @@ defineProps({
   container: {
     type: null as unknown as PropType<string | HTMLElement>,
     validator: Or(isString, isHTMLElement) as (value: unknown) => boolean,
-    default: 'body',
+    default: undefined,
   },
 
   offsetMainAxis: {

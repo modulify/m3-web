@@ -23,7 +23,7 @@ export const useAutoUpdate = (
       if (target.value && popper.value) {
         stop = autoUpdate(target.value, popper.value, adjust, {
           animationFrame: true,
-          elementResize: true,
+          elementResize: typeof ResizeObserver !== 'undefined',
         })
       }
     },
