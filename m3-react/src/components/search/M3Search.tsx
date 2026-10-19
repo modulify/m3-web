@@ -37,7 +37,7 @@ import { M3IconButton } from '@/components/icon-button'
 import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useBreakpoint, useId } from '@/hooks'
+import { useBreakpoint, useId, useLayerHost } from '@/hooks'
 
 export interface SearchResultsContext {
   query: string;
@@ -120,13 +120,14 @@ export default defineComponent(function M3Search({
   const dialog = useRef<HTMLDivElement | null>(null)
   const input = useRef<HTMLInputElement | null>(null)
   const results = useRef<HTMLDivElement | null>(null)
-  const scrim = useRef<HTMLDivElement | null>(null)
   const callbacks = useRef({ onOpenChange, onQueryChange, onSubmit })
   callbacks.current = { onOpenChange, onQueryChange, onSubmit }
 
   const [position, setPosition] = useState<SearchDockedPosition>({ left: 12, top: 12, width: 360 })
   const [anchor, setAnchor] = useState<SearchAnchorRect>({ left: 12, top: 12, width: 360 })
   const [viewport, setViewport] = useState<SearchViewport>({ width: 384, height: 640 })
+  const [overlayMounted, setOverlayMounted] = useState(open)
+  const layerHost = useLayerHost(open || overlayMounted)
   const parsed = useMemo(() => distinct(children, {
     slots: { leading: Leading, trailing: Trailing, actions: Actions, results: Results },
   }), [children])
@@ -172,15 +173,19 @@ export default defineComponent(function M3Search({
   }, [open, resolvedLayout])
 
   useLayoutEffect(() => {
-    if (!open || !dialog.current) return
+    if (!open || !dialog.current || !layerHost) return
 
     const deactivate = activateModalFocus({
       dialog: dialog.current,
-      exempt: () => [scrim.current],
+      layer: layerHost,
       onEscape: () => callbacks.current.onOpenChange(false),
     })
     input.current?.focus()
     return deactivate
+  }, [open, layerHost])
+
+  useLayoutEffect(() => {
+    if (open) setOverlayMounted(true)
   }, [open])
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -235,7 +240,7 @@ export default defineComponent(function M3Search({
         </div>
       </div>
 
-      {typeof document !== 'undefined' ? createPortal(
+      {layerHost ? createPortal(
         <CSSTransition
           nodeRef={overlay}
           in={open}
@@ -243,10 +248,11 @@ export default defineComponent(function M3Search({
           classNames="m3-search"
           mountOnEnter
           unmountOnExit
+          onExited={() => setOverlayMounted(false)}
         >
           <div ref={overlay} className="m3-search__overlay" aria-hidden={!open}>
             {resolvedLayout === 'docked' ? (
-              <div ref={scrim} className="m3-search__scrim" onClick={close} />
+              <div className="m3-search__scrim" onClick={close} />
             ) : null}
             <div
               ref={dialog}
@@ -321,7 +327,7 @@ export default defineComponent(function M3Search({
             </div>
           </div>
         </CSSTransition>,
-        document.body
+        layerHost
       ) : null}
     </>
   )

@@ -80,7 +80,7 @@ test('closing a nested modal restores focus to the modal below it', async () => 
     view.rerender(surfaces(true))
     const upper = [...document.querySelectorAll<HTMLButtonElement>('.m3-surface button')].at(-1)!
     expect(document.activeElement).toBe(upper)
-    expect(lower.closest<HTMLElement>('.m3-surface')!.inert).toBe(true)
+    expect(lower.closest<HTMLElement>('.m3-layer')!.inert).toBe(true)
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }))
     expect(topToggle).toHaveBeenCalledWith(false)

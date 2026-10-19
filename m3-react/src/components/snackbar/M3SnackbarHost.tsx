@@ -7,8 +7,18 @@ import type {
 } from './types'
 import type { SnackbarResult } from '@modulify/m3-foundation/types/components/snackbar'
 
+import { createPortal } from 'react-dom'
 import { isElement, isHTMLElement } from '@modulify/m3-foundation/lib/predicates'
-import { useEffect, useRef, useState } from 'react'
+import {
+  LAYER_DEACTIVATED_EVENT,
+  resolveFeedbackContainer,
+} from '@modulify/m3-foundation/lib/layers'
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import defineComponent from '@/utils/component'
 import { toClassName } from '@/utils/styling'
@@ -23,6 +33,7 @@ interface Entry {
 
   trigger: HTMLElement | null;
   nextFocus: HTMLElement | null;
+  feedbackTarget: HTMLElement | null;
 
   remaining: number | null;
   startedAt: number;
@@ -73,6 +84,8 @@ export default defineComponent(function M3SnackbarHost({
 }: M3SnackbarHostProps, { expose }: ComponentSetupContext<SnackbarHostMethods>) {
   const [display, setDisplay] = useState<Display | null>(null)
   const [announcement, setAnnouncement] = useState('')
+  const [feedbackTarget, setFeedbackTarget] = useState<HTMLElement | null>(null)
+  const anchor = useRef<HTMLSpanElement | null>(null)
   const root = useRef<HTMLDivElement | null>(null)
 
   const active = useRef<Entry | null>(null)
@@ -82,6 +95,7 @@ export default defineComponent(function M3SnackbarHost({
   const timerRunning = useRef(false)
   const paused = useRef({ hover: false, focus: false })
   const disposed = useRef(false)
+  const detachOwner = useRef<() => void>(() => {})
 
   const durationTimeout = useTimeout(() => {
     timerRunning.current = false
@@ -129,8 +143,27 @@ export default defineComponent(function M3SnackbarHost({
   }
 
   const begin = (entry: Entry) => {
+    if (entry.feedbackTarget && !entry.feedbackTarget.closest('[data-m3-layer-active="true"]')) {
+      entry.resolve('disposed')
+      const next = queue.current.shift()
+      if (next) begin(next)
+      else {
+        setDisplay(null)
+        setAnnouncement('')
+      }
+      return
+    }
+
     active.current = entry
     paused.current = { hover: false, focus: false }
+    detachOwner.current()
+    const layer = entry.feedbackTarget?.closest<HTMLElement>('.m3-layer')
+    if (layer) {
+      const onDeactivate = () => finish('disposed')
+      layer.addEventListener(LAYER_DEACTIVATED_EVENT, onDeactivate)
+      detachOwner.current = () => layer.removeEventListener(LAYER_DEACTIVATED_EVENT, onDeactivate)
+    }
+    setFeedbackTarget(entry.feedbackTarget?.isConnected ? entry.feedbackTarget : null)
     setDisplay({ entry, leaving: false })
     setAnnouncement(entry.options.message)
     if (entry.remaining !== null) {
@@ -145,6 +178,8 @@ export default defineComponent(function M3SnackbarHost({
     if (!entry) return
     stopTimer()
     active.current = null
+    detachOwner.current()
+    detachOwner.current = () => {}
     leaving.current = entry
     entry.resolve(result)
     setDisplay({ entry, leaving: true })
@@ -166,6 +201,7 @@ export default defineComponent(function M3SnackbarHost({
       resolve,
       trigger,
       nextFocus: getNextFocusable(trigger),
+      feedbackTarget: resolveFeedbackContainer(trigger) ?? resolveFeedbackContainer(anchor.current),
       remaining: duration,
       startedAt: 0,
     }
@@ -211,6 +247,15 @@ export default defineComponent(function M3SnackbarHost({
 
   expose({ show, replace, dismiss: () => finish('dismiss'), clear, focus })
 
+  useLayoutEffect(() => {
+    const update = () => setFeedbackTarget(resolveFeedbackContainer(anchor.current))
+    const layer = anchor.current?.closest('.m3-layer')
+    const observer = layer ? new MutationObserver(update) : null
+    if (layer) observer?.observe(layer, { attributes: true, attributeFilter: ['data-m3-layer'] })
+    update()
+    return () => observer?.disconnect()
+  }, [])
+
   useEffect(() => {
     disposed.current = false
     const onKeyDown = (event: KeyboardEvent) => {
@@ -224,6 +269,7 @@ export default defineComponent(function M3SnackbarHost({
     return () => {
       document.removeEventListener('keydown', onKeyDown)
       disposed.current = true
+      detachOwner.current()
       queueMicrotask(() => {
         if (!disposed.current) return
         stopTimer()
@@ -239,7 +285,7 @@ export default defineComponent(function M3SnackbarHost({
   const options = display?.entry.options
   const closable = options?.closable ?? Boolean(display?.entry.action || display?.entry.remaining === null)
 
-  return (
+  const host = (
     <div
       ref={root}
       className={toClassName(['m3-snackbar-host', className])}
@@ -271,4 +317,9 @@ export default defineComponent(function M3SnackbarHost({
       )}
     </div>
   )
+
+  return <>
+    <span ref={anchor} hidden />
+    {feedbackTarget ? createPortal(host, feedbackTarget) : host}
+  </>
 })

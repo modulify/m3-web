@@ -6,6 +6,7 @@ import { M3Surface } from '@/components/surface'
 
 import SurfaceCardPageMorph from '../examples/surface/SurfaceCardPageMorph'
 import SurfaceInspectorSheet from '../examples/surface/SurfaceInspectorSheet'
+import SurfaceLayerStack from '../examples/surface/SurfaceLayerStack'
 import SurfaceNestedDialogsChain from '../examples/surface/SurfaceNestedDialogsChain'
 import SurfaceSideSheetAlwaysModal from '../examples/surface/SurfaceSideSheetAlwaysModal'
 import SurfaceSideSheetDismissToRemove from '../examples/surface/SurfaceSideSheetDismissToRemove'
@@ -48,6 +49,10 @@ export const SideSheetModalToWindow: Story = {
 
 export const NestedDialogsChain: Story = {
   render: (_args, { globals }) => <SurfaceNestedDialogsChain locale={globals.locale} />,
+}
+
+export const LayerStack: Story = {
+  render: (_args, { globals }) => <SurfaceLayerStack locale={globals.locale} />,
 }
 
 export const WorkspaceModalDialog: Story = {

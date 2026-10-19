@@ -30,7 +30,7 @@ export const useAutoAdjust = (
     if (targetRef.current && popperRef.current) {
       stop = autoUpdate(targetRef.current, popperRef.current, adjust, {
         animationFrame: true,
-        elementResize: true,
+        elementResize: typeof ResizeObserver !== 'undefined',
       })
     }
   }, off]

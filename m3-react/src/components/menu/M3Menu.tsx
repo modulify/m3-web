@@ -23,7 +23,7 @@ export default defineComponent(function M3Menu({
   placement = 'bottom',
   strategy = 'absolute',
   boundary = 'clippingAncestors',
-  container = 'body',
+  container,
   offsetMainAxis = 0,
   offsetCrossAxis = 0,
   overflow = ['flip', 'shift', 'hide'],

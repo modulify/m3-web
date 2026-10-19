@@ -34,7 +34,12 @@ import M3NavigationAppearance from '@/components/navigation/M3NavigationAppearan
 import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useBreakpoint, useRecord, useWatch } from '@/hooks'
+import {
+  useBreakpoint,
+  useLayerHost,
+  useRecord,
+  useWatch,
+} from '@/hooks'
 
 import M3NavigationSection from './M3NavigationSection'
 
@@ -119,6 +124,7 @@ export default defineComponent(function M3Navigation({
   const modalExpanded = isModalExpansion(appearanceBase, expanded, expansion, breakpoint.ge('large'))
   const modalActive = isExpandableAppearance(appearanceBase)
     && (isModalExpansion(appearanceBase, expanded, expansion, breakpoint.ge('large')) || state.transitioning)
+  const layerHost = useLayerHost(modalActive)
 
   const railHidden = isHiddenRail(appearanceBase, expanded, collapse)
   const railLeaving = isHiddenRail(appearanceBase, expanded, collapse) && state.transitioning
@@ -188,14 +194,16 @@ export default defineComponent(function M3Navigation({
 
   useLayoutEffect(() => {
     const dialog = modalDialog.current
-    if (!modalActive || !dialog) return
+    if (!modalActive || !dialog || !layerHost) return
 
     return activateModalFocus({
       dialog,
-      exempt: () => [scrim.current],
+      layer: layerHost,
       onEscape: () => handlers.onToggle(false),
     })
-  }, [modalActive])
+  }, [modalActive, layerHost])
+
+  if (!layerHost) return null
 
   return createPortal(
     <>
@@ -257,7 +265,7 @@ export default defineComponent(function M3Navigation({
         </nav>
       </div>
     </>,
-    document.body
+    layerHost
   )
 }, {
   slots: { Header, Subheader, Top },

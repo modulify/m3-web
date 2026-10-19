@@ -14,6 +14,7 @@ import { useTransition } from 'react-transition-state'
 
 import { toClassName } from '@/utils/styling'
 import { useId } from '@/hooks'
+import { useLayerHost } from '@/hooks'
 
 import { getModalAnchorStyle } from './shared'
 import M3SurfacePanel from './M3SurfacePanel'
@@ -34,7 +35,6 @@ export interface M3SurfaceProps extends Omit<M3SurfacePanelOptions, 'onToggle'> 
   insetRight?: SurfaceLength;
   insetBottom?: SurfaceLength;
   insetLeft?: SurfaceLength;
-  zIndex?: number;
   onToggle?: (shown: boolean) => void;
   onDismiss?: () => void;
 }
@@ -52,7 +52,6 @@ const M3Surface: FC<M3SurfaceProps> = ({
   insetBottom = 0,
   insetLeft = 0,
   transitionMs = 220,
-  zIndex = 400,
   role,
   'aria-modal': ariaModal,
   className = '',
@@ -63,8 +62,8 @@ const M3Surface: FC<M3SurfaceProps> = ({
   ...panelProps
 }) => {
   const isModal = mode === 'modal'
+  const layerHost = useLayerHost(isModal && String(ariaModal) !== 'false', teleportTo, isModal)
   const panel = useRef<M3SurfacePanelExposed | null>(null)
-  const scrimElement = useRef<HTMLDivElement | null>(null)
   const dismiss = useRef<() => void>(() => {})
   dismiss.current = () => {
     onToggle(false)
@@ -73,14 +72,14 @@ const M3Surface: FC<M3SurfaceProps> = ({
 
   useLayoutEffect(() => {
     const dialog = panel.current?.el
-    if (!isModal || !shown || String(ariaModal) === 'false' || !dialog) return
+    if (!isModal || !shown || String(ariaModal) === 'false' || !dialog || !layerHost) return
 
     return activateModalFocus({
       dialog,
-      exempt: () => [scrimElement.current],
+      layer: layerHost,
       onEscape: () => dismiss.current(),
     })
-  }, [isModal, shown, ariaModal, teleportTo, panelProps.tag])
+  }, [isModal, shown, ariaModal, layerHost, panelProps.tag])
 
   const resolvedScrimShown = scrimShown ?? shown
   const [modalTransition, toggleModalTransition, endModalTransition] = useTransition({
@@ -115,7 +114,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
       style={{
         ...anchorStyle,
         position: isModal ? 'fixed' : 'relative',
-        zIndex: isModal ? zIndex : undefined,
+        zIndex: isModal ? 1 : undefined,
         display: shown ? undefined : 'none',
         ...style,
       }}
@@ -133,11 +132,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
     return surfaceNode
   }
 
-  const portalTarget = typeof document === 'undefined'
-    ? null
-    : (teleportTo === 'body' ? document.body : (document.querySelector(teleportTo) || document.body))
-
-  if (!portalTarget) {
+  if (!layerHost) {
     return null
   }
 
@@ -149,9 +144,8 @@ const M3Surface: FC<M3SurfaceProps> = ({
     <>
       {scrim && modalTransition.isMounted ? (
         <div
-          ref={scrimElement}
           style={{
-            zIndex: zIndex - 1,
+            zIndex: 0,
           }}
           className={toClassName(['m3-surface__scrim', {
             'm3-transition-fade-enter': modalTransition.status === 'preEnter' || modalTransition.status === 'entering',
@@ -164,7 +158,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
       ) : null}
       {surfaceNode}
     </>,
-    portalTarget
+    layerHost
   )
 }
 

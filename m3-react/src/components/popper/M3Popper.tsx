@@ -2,6 +2,12 @@ import type { CloserEvent } from '@modulify/m3-foundation/types/components/poppe
 import type { ComponentSetupContext } from '@/utils/component'
 import type { M3PopperExposed, M3PopperProps } from './types'
 
+import {
+  activatePopover,
+  mountPopoverHost,
+  raisePopover,
+  resolvePopoverContainer,
+} from '@modulify/m3-foundation/lib/layers'
 import Scheduler from '@modulify/m3-foundation/lib/Scheduler'
 
 import { computePosition } from '@modulify/m3-foundation/lib/popper/floating'
@@ -9,6 +15,7 @@ import { createPortal } from 'react-dom'
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
 } from 'react'
@@ -91,8 +98,11 @@ export default defineComponent(function M3Popper({
   useWatch(onDispose, onDispose => handlers.onDispose = onDispose)
 
   const targetRef = useRef(target)
+  const containerRef = useRef(container)
+  containerRef.current = container
   const positionerRef = useRef<HTMLDivElement | null>(null)
   const popperRef = useRef<HTMLDivElement | null>(null)
+  const portalHost = useMemo(() => typeof document === 'undefined' ? null : document.createElement('div'), [])
 
   const applyAnimationSide = useCallback((side: 'top' | 'bottom' | 'left' | 'right') => {
     if (!popperRef.current) {
@@ -248,6 +258,10 @@ export default defineComponent(function M3Popper({
     }
 
     state.hiding = false
+    if (portalHost) {
+      mountPopoverHost(portalHost, targetRef.current, containerRef.current)
+      raisePopover(portalHost)
+    }
     state.attached = true
 
     scheduler.showing.schedule(doShow, immediately ? 0 : state.showDelay)
@@ -332,6 +346,7 @@ export default defineComponent(function M3Popper({
     hide(true)
 
     state.attached = false
+    portalHost?.remove()
 
     handlers.onDispose()
   }, [])
@@ -367,6 +382,21 @@ export default defineComponent(function M3Popper({
       attachedTimeout.schedule()
     }
   })
+
+  useEffect(() => {
+    if (!state.attached || !portalHost) {
+      portalHost?.remove()
+      return
+    }
+
+    const destination = resolvePopoverContainer(targetRef.current, container)
+    if (portalHost.parentElement !== destination) destination.append(portalHost)
+  }, [state.attached, target, container, portalHost])
+
+  useLayoutEffect(() => {
+    if (!state.shown || !portalHost) return
+    return activatePopover(portalHost, () => hide(true))
+  }, [state.shown, portalHost])
 
   useWatch(disabled, disabled => {
     if (disabled) {
@@ -419,7 +449,7 @@ export default defineComponent(function M3Popper({
     }
   }, [])
 
-  return state.attached ? createPortal(
+  return state.attached && portalHost ? createPortal(
     <div
       ref={positionerRef}
       className="m3-popper-positioner"
@@ -436,6 +466,6 @@ export default defineComponent(function M3Popper({
         {children}
       </div>
     </div>,
-    (typeof container === 'string' ? document.querySelector(container) : container) ?? document.body
+    portalHost
   ) : null
 })
