@@ -1,5 +1,4 @@
 @use '../../basics/layout' as m3-layout;
-@use '../../basics/layers' as m3-layers;
 @use '../../basics/motion' as m3-motion;
 @use '../../basics/shape' as m3-shape;
 @use '../../basics/typography' as m3-typography;
@@ -52,6 +51,7 @@
   inset-inline-start: 0;
   inset-block-end: 0;
   overflow: hidden;
+  pointer-events: auto;
 
   @include m3-shape.reset-box-sizing;
 
@@ -64,7 +64,7 @@
       m3-motion.timing-emphasized(padding),
       m3-motion.timing-emphasized(gap)
     ;
-    z-index: m3-layers.level('modal');
+    z-index: 1;
   }
 
   &_rail {

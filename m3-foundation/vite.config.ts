@@ -10,6 +10,7 @@ const entries = {
   'lib/appBar': resolve(__dirname, 'lib/appBar.ts'),
   'lib/calendar': resolve(__dirname, 'lib/calendar/index.ts'),
   'lib/dom': resolve(__dirname, 'lib/dom.ts'),
+  'lib/layers': resolve(__dirname, 'lib/layers.ts'),
   'lib/motion': resolve(__dirname, 'lib/motion/index.ts'),
   'lib/motion/values': resolve(__dirname, 'lib/motion/values.ts'),
   'lib/modal': resolve(__dirname, 'lib/modal.ts'),

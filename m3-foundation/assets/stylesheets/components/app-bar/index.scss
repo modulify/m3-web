@@ -14,7 +14,7 @@
   color: var(--m3-sys-on-surface);
   position: sticky;
   inset-block-start: 0;
-  z-index: m3-layers.level('app-bar');
+  z-index: m3-layers.level('floating');
   transition:
     #{m3-motion.timing-standard(background-color, 'short4')},
     #{m3-motion.timing-standard(block-size, 'medium2')},

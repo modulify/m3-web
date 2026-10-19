@@ -1,14 +1,11 @@
 @use 'sass:map';
 
-// Page-level layers. Small z-index values inside a component remain local.
+// UI groups repeat inside each isolated modal layer.
 $levels: (
-  'app-bar': 10,
-  'toolbar': 100,
-  'snackbar': 900,
-  'scrim': 1000,
-  'modal': 1001,
-  'popover': 1100,
-  'search': 1200,
+  'floating': 10,
+  'feedback': 50,
+  'popover': 100,
+  'modal': 1000,
 );
 
 @function level($name) {

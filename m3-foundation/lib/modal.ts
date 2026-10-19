@@ -1,10 +1,14 @@
+import { activateModalLayer } from './layers'
+
 interface ModalFocusOptions {
   dialog: HTMLElement;
+  layer?: HTMLElement;
   exempt?: () => Array<HTMLElement | null>;
   onEscape: () => void;
 }
 
 interface ModalScope extends ModalFocusOptions {
+  focusRoot: HTMLElement;
   previousFocus: HTMLElement | null;
   addedTabIndex: boolean;
 }
@@ -46,7 +50,7 @@ function updateInert(document: Document, manager: ModalManager) {
   const scope = manager.scopes.at(-1)
   if (!scope) return
 
-  const allowed = [scope.dialog, ...(scope.exempt?.() ?? [])]
+  const allowed = [scope.focusRoot, ...(scope.exempt?.() ?? [])]
     .filter((element): element is HTMLElement => !!element && element.isConnected)
 
   const paths = new Set<HTMLElement>()
@@ -77,16 +81,9 @@ function registerModalListeners(document: Document, manager: ModalManager) {
     const scope = manager.scopes.at(-1)
     if (!scope) return
 
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      event.stopPropagation()
-      scope.onEscape()
-      return
-    }
-
     if (event.key !== 'Tab') return
 
-    const items = focusableIn(scope.dialog)
+    const items = focusableIn(scope.focusRoot)
     const first = items[0]
     const last = items.at(-1)
     const active = document.activeElement
@@ -94,10 +91,10 @@ function registerModalListeners(document: Document, manager: ModalManager) {
     if (!first || !last) {
       event.preventDefault()
       scope.dialog.focus()
-    } else if (event.shiftKey && (active === first || !scope.dialog.contains(active))) {
+    } else if (event.shiftKey && (active === first || !scope.focusRoot.contains(active))) {
       event.preventDefault()
       last.focus()
-    } else if (!event.shiftKey && (active === last || !scope.dialog.contains(active))) {
+    } else if (!event.shiftKey && (active === last || !scope.focusRoot.contains(active))) {
       event.preventDefault()
       first.focus()
     }
@@ -105,7 +102,7 @@ function registerModalListeners(document: Document, manager: ModalManager) {
 
   document.addEventListener('focusin', event => {
     const scope = manager.scopes.at(-1)
-    if (scope && !scope.dialog.contains(event.target as Node)) focusFirst(scope.dialog)
+    if (scope && !scope.focusRoot.contains(event.target as Node)) focusFirst(scope.dialog)
   }, { capture: true, signal: manager.listeners.signal })
 }
 
@@ -128,9 +125,11 @@ function createManager(document: Document): ModalManager {
   return manager
 }
 
-function createScope({ dialog, exempt, onEscape }: ModalFocusOptions): ModalScope {
+function createScope({ dialog, layer, exempt, onEscape }: ModalFocusOptions): ModalScope {
   return {
     dialog,
+    layer,
+    focusRoot: layer ?? dialog,
     exempt,
     onEscape,
     previousFocus: dialog.ownerDocument.activeElement instanceof HTMLElement ? dialog.ownerDocument.activeElement : null,
@@ -139,10 +138,11 @@ function createScope({ dialog, exempt, onEscape }: ModalFocusOptions): ModalScop
 }
 
 /** Activate modal focus management and return an idempotent disposal function. */
-export function activateModalFocus({ dialog, exempt, onEscape }: ModalFocusOptions): () => void {
+export function activateModalFocus({ dialog, layer, exempt, onEscape }: ModalFocusOptions): () => void {
   const document = dialog.ownerDocument
   const manager = managers.get(document) ?? createManager(document)
-  const scope = createScope({ dialog, exempt, onEscape })
+  const scope = createScope({ dialog, layer, exempt, onEscape })
+  const deactivateLayer = activateModalLayer(scope.focusRoot, onEscape, Boolean(layer))
 
   if (scope.addedTabIndex) dialog.tabIndex = -1
   manager.scopes.push(scope)
@@ -160,6 +160,7 @@ export function activateModalFocus({ dialog, exempt, onEscape }: ModalFocusOptio
 
     const wasTop = index === manager.scopes.length - 1
     manager.scopes.splice(index, 1)
+    deactivateLayer()
     if (scope.addedTabIndex) dialog.removeAttribute('tabindex')
     updateInert(document, manager)
 
@@ -170,7 +171,7 @@ export function activateModalFocus({ dialog, exempt, onEscape }: ModalFocusOptio
       queueMicrotask(() => {
         if (manager.scopes.at(-1) !== nextTop) return
         const active = document.activeElement
-        if (active !== document.body && !dialog.contains(active)) return
+        if (active !== document.body && !scope.focusRoot.contains(active)) return
 
         if (scope.previousFocus?.isConnected && !scope.previousFocus.inert) {
           scope.previousFocus.focus()
