@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{$ as t,s as n}from"./iframe-B19RV9Pc.js";function r(e,n){let r=null,i=()=>{r!==null&&(clearTimeout(r),r=null)},a=(t,...n)=>{i(),r=setTimeout(()=>{r=null,e(...n)},t)};return t(i),{schedule:(...e)=>a(n,...e),scheduleWithDelay:a,cancel:i}}function i(){return(i=e((()=>{n()})))()}export{r as n,i as t};
