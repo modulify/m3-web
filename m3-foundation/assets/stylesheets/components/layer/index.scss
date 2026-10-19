@@ -1,0 +1,27 @@
+@use '../../basics/layers' as m3-layers;
+
+.m3-layer {
+  position: fixed;
+  inset: 0;
+  isolation: isolate;
+  z-index: m3-layers.level('floating');
+  pointer-events: none;
+
+  &[data-m3-layer='modal'] {
+    z-index: m3-layers.level('modal');
+  }
+
+  &__feedback {
+    position: fixed;
+    inset: 0;
+    z-index: m3-layers.level('feedback');
+    pointer-events: none;
+  }
+
+  &__popovers {
+    position: absolute;
+    inset: 0;
+    z-index: m3-layers.level('popover');
+    pointer-events: none;
+  }
+}

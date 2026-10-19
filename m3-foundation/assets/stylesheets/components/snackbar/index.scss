@@ -10,7 +10,7 @@
   position: fixed;
   inset-inline-start: var(--m3-snackbar-inset-inline-start);
   inset-block-end: var(--m3-snackbar-inset-block-end);
-  z-index: m3-layers.level('snackbar');
+  z-index: m3-layers.level('feedback');
   max-inline-size: calc(100vw - var(--m3-snackbar-inset-inline-start) - 16px);
   pointer-events: none;
 

@@ -29,6 +29,7 @@ $m3-surface-on-surface-color: var(--m3-sys-on-surface, #{light.$m3-sys-light-on-
   &_modal {
     max-inline-size: 100vw;
     max-block-size: 100vh;
+    pointer-events: auto;
   }
 
   &_dim               { background-color: $m3-surface-dim-color; }
@@ -50,6 +51,7 @@ $m3-surface-on-surface-color: var(--m3-sys-on-surface, #{light.$m3-sys-light-on-
     position: fixed;
     inset: 0;
     background: color-mix(in srgb, var(--m3-sys-shadow, #{palette.$m3-palette-neutral-0}) 38%, transparent);
+    pointer-events: auto;
   }
 }
 

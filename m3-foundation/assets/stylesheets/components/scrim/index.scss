@@ -1,4 +1,3 @@
-@use '../../basics/layers' as m3-layers;
 @use '../../basics/palette' as *;
 
 .m3-scrim {
@@ -6,7 +5,8 @@
   inline-size: 100%;
   block-size: 100%;
   background: rgba($m3-palette-neutral-variant-20, 0.4);
-  z-index: m3-layers.level('scrim');
+  z-index: 0;
+  pointer-events: auto;
   position: fixed;
   inset-inline-start: 0;
   inset-block-start: 0;
