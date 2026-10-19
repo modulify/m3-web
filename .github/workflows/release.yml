@@ -1,5 +1,5 @@
 name: Release
-run-name: Release ${{ inputs.prerelease }} from ${{ github.ref_name }}
+run-name: Release ${{ inputs.prerelease == 'none' && 'stable' || inputs.prerelease }} from ${{ github.ref_name }}
 
 on:
   workflow_dispatch:
