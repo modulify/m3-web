@@ -52,7 +52,6 @@ const DOCKED_WIDTH = 256
 const MODAL_MIN_WIDTH = 320
 const MODAL_MAX_WIDTH = 400
 const MODAL_RADIUS = 16
-const SIDE_SHEET_Z_INDEX = 1000
 const SIDE_SHEET_TRANSITION_MS = durations['extra-long2']
 
 export default defineComponent(function M3SideSheet({
@@ -78,7 +77,6 @@ export default defineComponent(function M3SideSheet({
   transitionTiming,
   overflow = 'hidden',
   role = 'dialog',
-  zIndex = SIDE_SHEET_Z_INDEX,
   className = '',
   style,
   children = [],
@@ -147,7 +145,6 @@ export default defineComponent(function M3SideSheet({
       transitionMs={transitionMs}
       transitionTiming={transitionTiming}
       overflow={overflow}
-      zIndex={zIndex}
       elevation={elevation}
       variant={variant}
       style={style}

@@ -37,6 +37,14 @@ Use `variant` when the surface role is explicit. Use `auto` only when you intent
 
 The component does not prescribe content anatomy. Dialogs, side sheets, and custom orchestrated surfaces build that structure on top.
 
+### UI layers
+
+Each open modal surface owns one isolated layer: scrim and content at local levels `0` and `1`, snackbar at `50`, and popovers at `100`. The page uses `10` for floating UI and `100` for popovers; every modal layer uses `1000`. Modal layers share that value and follow opening order in the DOM. Search and modal navigation use the same stack. Escape closes the top popover before the top modal, and focus is confined to the top layer.
+
+Popovers choose their layer from the trigger. Keep a custom `container` inside the same layer when overriding the default portal. A snackbar follows the layer of the focused trigger when `show()` is called; a host mounted inside a modal also defaults to that modal. A later modal covers earlier snackbar content. `M3Surface` no longer accepts a numeric `zIndex`: open order determines the modal order.
+
+Closing a modal closes its popovers and disposes snackbar messages owned by that modal. The snackbar promise resolves to `disposed` in that case.
+
 ## Story guide
 
 - [Side Sheet Docked To Modal](?path=/story/components-m3surface--side-sheet-docked-to-modal)
@@ -51,6 +59,8 @@ The component does not prescribe content anatomy. Dialogs, side sheets, and cust
   Morphs a right-edge modal sheet into a centered dialog window while keeping one modal surface vocabulary.
 - [Nested Dialogs Chain](?path=/story/components-m3surface--nested-dialogs-chain)
   Demonstrates layered modal surfaces, topmost scrim ownership, and per-layer enter/exit motion.
+- [Layer Stack](?path=/story/components-m3surface--layer-stack)
+  Lets you open a modal menu, snackbar, and another modal to inspect their order and Escape behavior.
 - [Workspace Modal Dialog](?path=/story/components-m3surface--workspace-modal-dialog)
   Shows a centered blocking decision surface in a realistic workspace scene without morph choreography.
 - [Inspector Side Sheet](?path=/story/components-m3surface--inspector-side-sheet)
@@ -131,6 +141,14 @@ The `Inspector Side Sheet` story shows this anatomy with the standard `m3-side-s
 
 `M3Surface` управляет переносом модального элемента, затемнением, позиционированием, скруглением, размерами и отступами при morph-переходах. Структуру содержимого задают построенные поверх него диалоги, side sheet и пользовательские поверхности.
 
+### Слои интерфейса
+
+Каждая открытая модальная поверхность владеет изолированным слоем: scrim и содержимое имеют локальные уровни `0` и `1`, snackbar — `50`, popover — `100`. На странице floating UI использует `10`, а popover — `100`; каждый модальный слой использует `1000`. Одинаковые значения у модальных слоёв сочетаются с DOM-порядком открытия. Search и модальная навигация входят в тот же стек. Escape сначала закрывает верхний popover, затем верхний модал; фокус остаётся в верхнем слое.
+
+Popover определяет владельца по кнопке вызова. При явном `container` размещайте его внутри того же слоя. Snackbar следует слою элемента в фокусе при вызове `show()`; host внутри модала по умолчанию принадлежит этому модалу. Позднее открытый модал перекрывает прежний snackbar. Числовой `zIndex` больше не является prop `M3Surface`: порядок модалов задаётся открытием.
+
+При закрытии модала его popover закрываются, а принадлежащие ему сообщения snackbar завершаются. Promise такого snackbar возвращает `disposed`.
+
 ## Примеры в Storybook
 
 - [Закреплённая панель в модальную](?path=/story/components-m3surface--side-sheet-docked-to-modal)
@@ -139,6 +157,7 @@ The `Inspector Side Sheet` story shows this anatomy with the standard `m3-side-s
 - [Всегда модальная панель](?path=/story/components-m3surface--side-sheet-always-modal-toggle)
 - [Модальная панель в окно](?path=/story/components-m3surface--side-sheet-modal-to-window)
 - [Цепочка вложенных диалогов](?path=/story/components-m3surface--nested-dialogs-chain)
+- [Стек слоёв](?path=/story/components-m3surface--layer-stack)
 - [Модальный диалог рабочего пространства](?path=/story/components-m3surface--workspace-modal-dialog)
 - [Панель инспектора](?path=/story/components-m3surface--inspector-side-sheet)
 

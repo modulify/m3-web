@@ -37,7 +37,6 @@ const DIALOG_MAX_WIDTH = 560
 const DIALOG_ROUNDING = 28
 const DIALOG_ENTRY_OFFSET_PX = 24
 const DIALOG_ELEVATION = 0
-const DIALOG_Z_INDEX = 1000
 const DIALOG_TRANSITION_MS = durations.medium2
 const DIALOG_TRANSITION_TIMING = easing.standard
 
@@ -157,7 +156,6 @@ export default defineComponent(function M3Dialog({
       maxWidth={fullscreen ? '100vw' : DIALOG_MAX_WIDTH}
       maxHeight={fullscreen ? '100vh' : null}
       rounding={fullscreen ? 0 : DIALOG_ROUNDING}
-      zIndex={DIALOG_Z_INDEX}
       elevation={DIALOG_ELEVATION}
       style={dialogStyle}
       className={toClassName(['m3-dialog', className])}

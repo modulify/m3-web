@@ -406,7 +406,6 @@ const SurfaceSideSheetDismissToRemove: FC<{ locale: StorybookLocale }> = ({ loca
                 roundingBottomRight={0}
                 transitionMs={PANEL_TRANSITION_MS}
                 transitionTiming={PANEL_TRANSITION_EASING}
-                zIndex={520}
                 variant={modalRole}
                 elevation={modalElevation}
                 overflow="auto"

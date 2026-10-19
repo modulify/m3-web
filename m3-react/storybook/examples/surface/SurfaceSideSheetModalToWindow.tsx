@@ -433,7 +433,6 @@ const SurfaceSideSheetModalToWindow: FC<{ locale: StorybookLocale }> = ({ locale
                 roundingBottomRight={panelRoundingBottomRight}
                 transitionMs={panelTransitionMs}
                 transitionTiming={panelTransitionTiming}
-                zIndex={520}
                 variant={panelSurfaceRole}
                 elevation={panelElevation}
                 style={panelInlineStyle}

@@ -304,7 +304,6 @@ const SurfaceSideSheetAlwaysModal: FC<{ locale: StorybookLocale }> = ({ locale }
                 roundingBottomRight={0}
                 transitionMs={PANEL_TRANSITION_MS}
                 transitionTiming={PANEL_TRANSITION_EASING}
-                zIndex={520}
                 variant="surface-container-high"
                 elevation={modalElevation}
                 overflow="auto"

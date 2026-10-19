@@ -20,8 +20,6 @@ import { localize } from '../../i18n'
 const DIALOG_TRANSITION_MS = durations.medium2
 const DIALOG_TRANSITION_EASING = easing.standard
 const DIALOG_ENTRY_OFFSET_PX = 24
-const DIALOG_Z_INDEX_BASE = 560
-const DIALOG_Z_INDEX_STEP = 40
 
 type NavTab = 'inbox' | 'boards' | 'archive' | 'lab'
 
@@ -86,8 +84,6 @@ const SurfaceNestedDialogsChain: FC<{ locale: StorybookLocale }> = ({ locale }) 
     return isTopDialog(level) ? 'modal' : 'standard'
   }
 
-  const dialogZIndex = (level: number) => DIALOG_Z_INDEX_BASE + (level * DIALOG_Z_INDEX_STEP)
-
   const dialogElevation = (level: number) => Math.min(5, 2 + level)
 
   const dialogInlineStyle = (level: number): CSSProperties => {
@@ -97,7 +93,6 @@ const SurfaceNestedDialogsChain: FC<{ locale: StorybookLocale }> = ({ locale }) 
       position: 'fixed',
       top: '50%',
       left: '50%',
-      zIndex: dialogZIndex(level),
       opacity: visible ? 1 : 0,
       transform: visible
         ? 'translate(-50%, -50%)'
@@ -302,7 +297,6 @@ const SurfaceNestedDialogsChain: FC<{ locale: StorybookLocale }> = ({ locale }) 
             rounding={dialog.rounding}
             transitionMs={DIALOG_TRANSITION_MS}
             transitionTiming={DIALOG_TRANSITION_EASING}
-            zIndex={dialogZIndex(level)}
             variant="surface-container-highest"
             elevation={dialogElevation(level)}
             overflow="visible"
