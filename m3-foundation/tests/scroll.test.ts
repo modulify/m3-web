@@ -10,14 +10,18 @@ import {
 
 import {
   createRail,
+  getClientHeight,
   getClientSize,
   getClientWidth,
   getScrollDistance,
+  getScrollDistanceX,
   getScrollDistanceY,
   getScrollRatio,
   getScrollRatioX,
+  getScrollRatioY,
   getSliderHeight,
   getSliderSize,
+  getSliderWidth,
   syncSlider,
 } from '../lib/scroll'
 
@@ -83,8 +87,12 @@ describe('scroll utilities', () => {
     expect(getScrollRatioX(null)).toBe(0)
     expect(getScrollRatioX(box)).toBe(0)
     expect(getScrollDistanceY(null)).toBe(0)
+    expect(getScrollDistanceX(null)).toBe(0)
     expect(getClientWidth(null)).toBe(0)
+    expect(getClientHeight(null)).toBe(0)
     expect(getSliderHeight(null)).toBe(0)
+    expect(getSliderWidth(null)).toBe(0)
+    expect(getScrollRatioY(null)).toBe(0)
   })
 
   test('synchronizes slider geometry with vertical and horizontal scrolling', () => {
@@ -194,11 +202,20 @@ describe('scroll rail', () => {
     expect(slider.style.left).toBe('20px')
     expect(slider.style.width).toBe('80px')
 
+    dispatchMouseEvent(slider, 'mousedown', 10, 20)
+    dispatchMouseEvent(window, 'mousemove', 20, 20)
+    dispatchMouseEvent(window, 'mouseup', 20, 20)
+    expect(box.scrollLeft).toBeGreaterThan(50)
+
+    rail.sync()
+    rail.horizontal = true
+
     rail.disabled = true
 
     expect(rail.disabled).toBe(true)
     expect(onToggle).toHaveBeenLastCalledWith(false)
 
+    rail.disabled = false
     rail.disabled = false
 
     expect(rail.disabled).toBe(false)
