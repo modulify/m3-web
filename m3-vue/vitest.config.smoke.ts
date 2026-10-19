@@ -21,7 +21,7 @@ export default mergeConfig(viteConfig, defineConfig({
     'import.meta.env.VITEST_STORYBOOK': JSON.stringify('false'),
   },
   optimizeDeps: {
-    include: ['storybook/test'],
+    include: ['storybook/test', '@modulify/validator/assertions'],
   },
   resolve: {
     alias: [
