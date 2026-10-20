@@ -1,6 +1,6 @@
 # Acknowledgements
 
-## Tatyana Komolyh
+## [Tatyana Komolyh](https://github.com/Arianr0d)
 
 Special thanks to Tatyana Komolyh for the foundational testing work in this repository.
 
