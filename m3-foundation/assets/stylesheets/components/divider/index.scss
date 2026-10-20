@@ -1,0 +1,40 @@
+.m3-divider {
+  box-sizing: border-box;
+  display: block;
+  flex-shrink: 0;
+  align-self: stretch;
+  block-size: var(--m3-divider-thickness, 1px);
+  margin: 0;
+  border: 0;
+  background-color: var(--m3-divider-color, var(--m3-sys-outline-variant));
+
+  &_inset-start,
+  &_inset-middle {
+    margin-inline-start: 16px;
+  }
+
+  &_inset-end,
+  &_inset-middle {
+    margin-inline-end: 16px;
+  }
+
+  &_vertical {
+    inline-size: var(--m3-divider-thickness, 1px);
+    block-size: auto;
+    margin-inline: 0;
+
+    &.m3-divider_inset-start,
+    &.m3-divider_inset-middle {
+      margin-block-start: 16px;
+    }
+
+    &.m3-divider_inset-end,
+    &.m3-divider_inset-middle {
+      margin-block-end: 16px;
+    }
+  }
+
+  @media (forced-colors: active) {
+    background-color: CanvasText;
+  }
+}
