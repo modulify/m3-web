@@ -139,10 +139,7 @@ continuing.
   be analyzed and closed without adding artificial tests.
 - `docs-parity`: Use when creating or editing files under `docs/`. Keeps
   English-first edits, locale parity, and locale index updates aligned.
-- `exploration-workflow`: [reread] Use only when the user explicitly switches
-  the task into exploration mode: autonomous hypothesis-driven work on
-  uncertain functionality, with timeboxing, milestone logging, and tightly
-  controlled pre-agreed escalation windows, plus `drafts/current.yml` and a
-  dedicated `drafts/` activity directory for logs, facts, and artifact links.
+- `research-workflow`: Use when researching JavaScript-rendered web
+  documentation with Playwright and collecting source evidence in `drafts/`.
 - `yarn-lock-conflict-resolution`: Use when resolving merge or rebase conflicts
   in `yarn.lock` according to repository policy.

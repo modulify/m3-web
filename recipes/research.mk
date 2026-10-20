@@ -15,7 +15,7 @@ research-fetch: ## [Research][network][fetch] Fetches a raw URL or page-data JSO
 	$(TARGET_OK)
 
 # Example:
-#   make research-fetch-batch format=json manifest=recipes/research/packs/surfaces.page-data.tsv out_dir=/tmp/m3-research
+#   make research-fetch-batch format=json manifest=drafts/research/page-data.tsv out_dir=drafts/research/page-data
 # Manifest format for format=json:
 #   <slug>\t<collection>\t<document_id>
 .PHONY: research-fetch-batch
@@ -72,8 +72,7 @@ research-capture: ## [Research][docker][playwright][capture] Captures screenshot
 	$(TARGET_OK)
 
 # Example:
-#   make research-capture-batch manifest=recipes/research/packs/surfaces.urls.txt out_dir=drafts/screenshots/surfaces
-#   make research-capture-batch in=drafts/explorations/20260307-2015-surface-layer/inputs/surfaces.urls.txt out_dir=drafts/screenshots/custom
+#   make research-capture-batch in=drafts/research/pages.urls.txt out_dir=drafts/research/screenshots
 # Input format:
 #   One URL per line; empty lines and #comments are ignored.
 .PHONY: research-capture-batch
@@ -89,6 +88,21 @@ research-capture-batch: ## [Research][docker][playwright][capture] Captures scre
 		$(if $(wait_until),--wait-until "$(wait_until)",) \
 		$(if $(full_page),--full-page "$(full_page)",) \
 		$(if $(wait_selector),--wait-selector "$(wait_selector)",)
+	$(TARGET_OK)
+
+.PHONY: research-page-document
+research-page-document: ## [Research][docker][playwright][capture] Saves rendered web documentation text, links, headings, HTML, and media references
+	$(TARGET_HEADER)
+	@$(PLAYWRIGHT_NODE_CMD) scripts/playwright-research.mjs \
+		--action page-document \
+		--url "$(url)" \
+		$(if $(selector),--selector "$(selector)",) \
+		$(if $(out),--out "$(out)",) \
+		$(if $(out_dir),--out-dir "$(out_dir)",) \
+		$(if $(wait_ms),--wait-ms "$(wait_ms)",) \
+		$(if $(wait_until),--wait-until "$(wait_until)",) \
+		$(if $(wait_selector),--wait-selector "$(wait_selector)",) \
+		$(if $(timeout),--timeout "$(timeout)",)
 	$(TARGET_OK)
 
 .PHONY: research-dom-snapshot

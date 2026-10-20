@@ -49,7 +49,6 @@ entries="$(
 			if (g=="Tests") return 6;
 			if (g=="CI") return 7;
 			if (g=="Research") return 8;
-			if (g=="Experiment") return 9;
 			return 99;
 		}
 		/^[a-zA-Z0-9_./-]+:.*##[[:space:]]+/ {
@@ -106,7 +105,7 @@ printf '%sQuick Start%s\n' "$C_HEAD" "$C_RST"
 printf '  make up\n'
 printf '  make test\n'
 printf '  make eslint\n'
-printf '  make help filter=experiment\n'
+printf '  make help filter=research\n'
 
 printf '\n'
 printf '%sExamples%s\n' "$C_HEAD" "$C_RST"
