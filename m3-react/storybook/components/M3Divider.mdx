@@ -1,0 +1,103 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as Stories from './M3Divider.stories'
+
+<Meta of={Stories} />
+
+<Localized locale="en-US">
+
+# Dividers
+
+A divider is a thin line that groups content and clarifies its hierarchy. Use one when spacing alone does not make the relationship clear. A full-width line separates larger sections; an inset line separates related items within one section. Avoid drawing a line after every item. [Material 3 guidelines](https://m3.material.io/components/divider/guidelines).
+
+## Choose a layout
+
+| Layout | Use |
+| --- | --- |
+| Full width | Separate larger or unrelated sections, including interactive and non-interactive areas of a card. |
+| Start inset | Align a divider with text following an icon or avatar. |
+| Middle inset | Separate related content while leaving space at both edges. |
+| Vertical | Separate adjacent content areas on a wide layout. |
+
+The M3 measurements distinguish a 16dp start inset from a 16dp inset at both ends. This API names the latter `middle` to make the difference explicit. The `end` option provides the matching trailing-edge variant for web layouts. In RTL, start and end follow the writing direction. [Material 3 specs](https://m3.material.io/components/divider/specs).
+
+<Canvas of={Stories.FullWidth} />
+<Canvas of={Stories.StartInset} />
+<Canvas of={Stories.MiddleInset} />
+<Canvas of={Stories.Vertical} />
+
+## Accessibility
+
+Dividers are decorative by default: `M3Divider` renders an `<hr role="presentation">` without a tab stop. Set `role="separator"` only if the boundary is meaningful to assistive technology. A vertical semantic divider also receives `aria-orientation="vertical"`. This component is not a draggable window splitter. [Material 3 accessibility](https://m3.material.io/components/divider/accessibility), [WAI-ARIA separator](https://www.w3.org/TR/wai-aria-1.2/#separator).
+
+Keep the HTML content structure valid: do not place an `<hr>` directly inside a `<ul>` or `<ol>`. For a vertical divider, give its parent a definite height or a flex/grid layout that stretches the line.
+
+## API
+
+| Prop | Values | Default | Purpose |
+| --- | --- | --- | --- |
+| `orientation` | `horizontal`, `vertical` | `horizontal` | Direction of the line. |
+| `inset` | `none`, `start`, `end`, `middle` | `none` | Logical 16px edge inset. |
+| `role` | `presentation`, `separator` | `presentation` | Whether the line is announced as a structural boundary. |
+
+Other native `<hr>` attributes, including `aria-*`, `class`/`className`, and `style`, pass through to the root. A component reference exposes `el`, the `<hr>` element; there are no methods or slots. Customize `--m3-divider-color` and `--m3-divider-thickness` on the element or a parent. The default is the theme's `outline-variant` color and 1px thickness.
+
+## Examples
+
+- [Full width](?path=/story/components-m3divider--full-width)
+- [Start inset](?path=/story/components-m3divider--start-inset)
+- [Middle inset](?path=/story/components-m3divider--middle-inset)
+- [End inset](?path=/story/components-m3divider--end-inset)
+- [Vertical](?path=/story/components-m3divider--vertical)
+- [Semantic](?path=/story/components-m3divider--semantic)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Разделители
+
+Разделитель — тонкая линия для группировки содержимого и обозначения иерархии. Используйте её, когда одного свободного пространства недостаточно. Линия на всю ширину разделяет крупные секции, а линия с отступом — связанные элементы внутри секции. Не проводите линию после каждого элемента. [Рекомендации Material 3](https://m3.material.io/components/divider/guidelines).
+
+## Выбор компоновки
+
+| Вид | Применение |
+| --- | --- |
+| На всю ширину | Разделение крупных или несвязанных областей, в том числе интерактивной и неинтерактивной части карточки. |
+| Отступ в начале | Выравнивание линии по тексту после иконки или аватара. |
+| Отступ с двух сторон | Разделение связанных элементов с пространством по обоим краям. |
+| Вертикальный | Разделение соседних областей на широком экране. |
+
+В таблице размеров M3 различаются отступ 16dp от начального края и отступ 16dp с обеих сторон. В API второй вариант назван `middle`, чтобы их не путать. Вариант `end` симметрично дополняет API для web. При RTL логические начало и конец меняются местами. [Размеры Material 3](https://m3.material.io/components/divider/specs).
+
+<Canvas of={Stories.FullWidth} />
+<Canvas of={Stories.StartInset} />
+<Canvas of={Stories.MiddleInset} />
+<Canvas of={Stories.Vertical} />
+
+## Доступность
+
+По умолчанию линия декоративна: `M3Divider` рисует `<hr role="presentation">` без остановки фокуса. Укажите `role="separator"`, только если граница действительно выражает структуру документа. Вертикальный семантический разделитель также получает `aria-orientation="vertical"`. Этот компонент не является перетаскиваемым разделителем окон. [Material 3 accessibility](https://m3.material.io/components/divider/accessibility), [WAI-ARIA separator](https://www.w3.org/TR/wai-aria-1.2/#separator).
+
+Сохраняйте допустимую структуру HTML: не вставляйте `<hr>` непосредственно внутрь `<ul>` или `<ol>`. Для вертикальной линии задайте родителю высоту либо flex/grid-компоновку, которая её растянет.
+
+## API
+
+| Prop | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- |
+| `orientation` | `horizontal`, `vertical` | `horizontal` | Направление линии. |
+| `inset` | `none`, `start`, `end`, `middle` | `none` | Логический отступ 16px от краёв. |
+| `role` | `presentation`, `separator` | `presentation` | Объявлять ли линию структурной границей. |
+
+Остальные атрибуты `<hr>`, в том числе `aria-*`, `class`/`className` и `style`, передаются корню. Ссылка на компонент предоставляет `el` — элемент `<hr>`; методов и слотов нет. Цвет и толщину можно изменить через `--m3-divider-color` и `--m3-divider-thickness`. По умолчанию применяются `outline-variant` темы и толщина 1px.
+
+## Примеры
+
+- [На всю ширину](?path=/story/components-m3divider--full-width)
+- [Отступ в начале](?path=/story/components-m3divider--start-inset)
+- [Отступ с двух сторон](?path=/story/components-m3divider--middle-inset)
+- [Отступ в конце](?path=/story/components-m3divider--end-inset)
+- [Вертикальный](?path=/story/components-m3divider--vertical)
+- [Семантический](?path=/story/components-m3divider--semantic)
+
+</Localized>
