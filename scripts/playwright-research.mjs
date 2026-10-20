@@ -11,6 +11,7 @@ function usage() {
     '  node scripts/playwright-research.mjs --action style-dump --url https://... [options]',
     '',
     'actions:',
+    '  page-document',
     '  dom-snapshot',
     '  style-dump',
     '  layout-metrics',
@@ -318,6 +319,101 @@ async function runDomSnapshot(page, args, meta) {
     title: meta.navigation.title,
     selector,
     snapshot,
+  })
+
+  console.log(outPath)
+}
+
+async function runPageDocument(page, args, meta) {
+  const selector = getArg(args, 'selector', 'main')
+  const outPath = defaultOutputPath({
+    action: 'page-document',
+    parsedUrl: meta.parsedUrl,
+    rawUrl: meta.url,
+    out: getArg(args, 'out'),
+    outDir: getArg(args, 'out-dir'),
+    extension: 'json',
+  })
+
+  const documentContent = await page.evaluate((targetSelector) => {
+    const root = document.querySelector(targetSelector)
+
+    if (!root) {
+      throw new Error(`selector not found: ${targetSelector}`)
+    }
+
+    const absoluteUrl = (value) => {
+      if (!value) {
+        return null
+      }
+
+      try {
+        return new URL(value, document.baseURI).href
+      } catch {
+        return null
+      }
+    }
+
+    const headings = [...root.querySelectorAll('h1, h2, h3, h4, h5, h6')].map((element) => ({
+      level: Number(element.tagName.slice(1)),
+      text: element.textContent?.trim() ?? '',
+      id: element.id || null,
+    }))
+    const links = [...root.querySelectorAll('a[href]')].map((element) => ({
+      text: element.textContent?.trim() ?? '',
+      url: absoluteUrl(element.getAttribute('href')),
+    }))
+    const assetReferences = [...root.querySelectorAll('img, video, audio, source, iframe, svg image')].flatMap((element) => {
+      const tag = element.tagName.toLowerCase()
+      const srcset = element.getAttribute('srcset')
+      const candidates = [
+        ['src', element.getAttribute('src')],
+        ['href', element.getAttribute('href') ?? element.getAttribute('xlink:href')],
+        ['poster', element.getAttribute('poster')],
+        ['currentSrc', element.currentSrc],
+        ...((srcset ?? '').split(',').map((entry) => ['srcset', entry.trim().split(/\s+/)[0]])),
+      ]
+
+      return candidates
+        .filter(([, value]) => Boolean(value))
+        .map(([attribute, value]) => ({
+          tag,
+          attribute,
+          url: absoluteUrl(value),
+          alt: element.getAttribute('alt'),
+          title: element.getAttribute('title'),
+        }))
+    })
+    const seenAssets = new Set()
+    const assets = assetReferences.filter(({ url }) => {
+      if (!url || seenAssets.has(url)) {
+        return false
+      }
+
+      seenAssets.add(url)
+      return true
+    })
+
+    return {
+      text: root.innerText ?? root.textContent ?? '',
+      html: root.outerHTML,
+      headings,
+      links,
+      assets,
+      canonical_url: absoluteUrl(document.querySelector('link[rel="canonical"]')?.getAttribute('href')),
+      description: document.querySelector('meta[name="description"]')?.getAttribute('content') ?? null,
+    }
+  }, selector)
+
+  await writeJson(outPath, {
+    action: 'page-document',
+    captured_at: new Date().toISOString(),
+    url_requested: meta.url,
+    url_final: meta.navigation.finalUrl,
+    title: meta.navigation.title,
+    selector,
+    navigation: meta.navigation,
+    document: documentContent,
   })
 
   console.log(outPath)
@@ -954,6 +1050,11 @@ async function main() {
     }
 
     meta.navigation = await navigate(runtime.page, args)
+
+    if (action === 'page-document') {
+      await runPageDocument(runtime.page, args, meta)
+      return
+    }
 
     if (action === 'dom-snapshot') {
       await runDomSnapshot(runtime.page, args, meta)

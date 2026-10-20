@@ -40,7 +40,6 @@ include recipes/storybook.mk
 include recipes/release.mk
 include recipes/ci.mk
 include recipes/research.mk
-include recipes/exploration.mk
 
 .PHONY: help
 help: ## [General] Shows grouped command help
