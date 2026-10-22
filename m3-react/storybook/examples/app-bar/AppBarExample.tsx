@@ -6,8 +6,8 @@ import type {
 import { useState } from 'react'
 
 import { M3AppBar } from '@/components/app-bar'
+import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Search } from '@/components/search'
 
@@ -55,7 +55,7 @@ export default function AppBarExample({ appearance, scroll, centered = false, su
         subtitle={subtitle ? text.subtitle : undefined}
       >
         <M3AppBar.Leading>
-          <M3IconButton aria-label={text.menu} onClick={() => setNavigationOpen(true)}><M3Icon name="menu" /></M3IconButton>
+          <M3Button appearance="standard" aria-label={text.menu} width="medium" onClick={() => setNavigationOpen(true)}><M3Icon name="menu" /></M3Button>
         </M3AppBar.Leading>
         {appearance === 'search' && <M3AppBar.Search>
           <M3Search
@@ -76,8 +76,8 @@ export default function AppBarExample({ appearance, scroll, centered = false, su
           </M3Search>
         </M3AppBar.Search>}
         <M3AppBar.Trailing>
-          <M3IconButton aria-label={text.favorite}><M3Icon name="favorite" /></M3IconButton>
-          <M3IconButton aria-label={text.notifications}><M3Icon name="notifications" /></M3IconButton>
+          <M3Button appearance="standard" aria-label={text.favorite} width="medium"><M3Icon name="favorite" /></M3Button>
+          <M3Button appearance="standard" aria-label={text.notifications} width="medium"><M3Icon name="notifications" /></M3Button>
         </M3AppBar.Trailing>
       </M3AppBar>
 

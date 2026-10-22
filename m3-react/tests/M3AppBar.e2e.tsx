@@ -3,7 +3,7 @@ import { page } from 'vitest/browser'
 import { render, waitFor } from '@testing-library/react'
 
 import { M3AppBar } from '@/components/app-bar'
-import { M3IconButton } from '@/components/icon-button'
+import { M3Button } from '@/components/button'
 
 test('renders the six documented heights and grows flexible content without truncation', async () => {
   await page.viewport(900, 800)
@@ -33,18 +33,18 @@ test('renders the six documented heights and grows flexible content without trun
 
 test.each(['ltr', 'rtl'] as const)('centers a small title while keeping actions at the %s edges', direction => {
   const view = render(<M3AppBar headline="Library" subtitle="Recent" alignment="center" dir={direction}>
-    <M3AppBar.Leading><M3IconButton aria-label="Back">←</M3IconButton></M3AppBar.Leading>
+    <M3AppBar.Leading><M3Button aria-label="Back" width="medium">←</M3Button></M3AppBar.Leading>
     <M3AppBar.Trailing>
-      <M3IconButton aria-label="Favorites">★</M3IconButton>
-      <M3IconButton aria-label="Settings">⚙</M3IconButton>
+      <M3Button aria-label="Favorites" width="medium">★</M3Button>
+      <M3Button aria-label="Settings" width="medium">⚙</M3Button>
     </M3AppBar.Trailing>
   </M3AppBar>)
 
   try {
     const bar = view.container.querySelector('.m3-app-bar')!.getBoundingClientRect()
     const title = view.container.querySelector('.m3-app-bar__title')!.getBoundingClientRect()
-    const leading = view.container.querySelector('.m3-app-bar__leading .m3-icon-button')!.getBoundingClientRect()
-    const trailing = view.container.querySelector('.m3-app-bar__trailing .m3-icon-button:last-child')!.getBoundingClientRect()
+    const leading = view.container.querySelector('.m3-app-bar__leading .m3-button_fixed')!.getBoundingClientRect()
+    const trailing = view.container.querySelector('.m3-app-bar__trailing .m3-button_fixed:last-child')!.getBoundingClientRect()
 
     expect(Math.abs((title.left + title.right) / 2 - (bar.left + bar.right) / 2)).toBeLessThan(1)
     expect(direction === 'ltr' ? leading.left - bar.left : bar.right - leading.right).toBe(4)

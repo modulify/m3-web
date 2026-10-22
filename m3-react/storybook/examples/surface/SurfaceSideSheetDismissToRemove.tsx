@@ -11,7 +11,6 @@ import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Surface } from '@/components/surface'
 
@@ -243,12 +242,12 @@ const SurfaceSideSheetDismissToRemove: FC<{ locale: StorybookLocale }> = ({ loca
         onToggle={setNavExpanded}
       >
         <M3Navigation.Top>
-          <M3IconButton
-            aria-label={text.openNavigation}
+          <M3Button appearance="standard" aria-label={text.openNavigation}
+            width="medium"
             onClick={() => setNavExpanded(true)}
           >
             <M3Icon name="menu" />
-          </M3IconButton>
+          </M3Button>
         </M3Navigation.Top>
 
         <M3NavigationTab
@@ -415,15 +414,15 @@ const SurfaceSideSheetDismissToRemove: FC<{ locale: StorybookLocale }> = ({ loca
                   <h3>{text.modal}</h3>
 
                   {sideSheetModal ? (
-                    <M3IconButton
-                      className="surface-side-sheet__modal-close"
+                    <M3Button className="surface-side-sheet__modal-close"
                       appearance="standard"
                       aria-label={text.close}
                       disabled={transitioning}
+                      width="medium"
                       onClick={() => void closeModalFromPanel()}
                     >
                       <M3Icon name="close" />
-                    </M3IconButton>
+                    </M3Button>
                   ) : null}
                 </div>
 

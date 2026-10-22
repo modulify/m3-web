@@ -31,8 +31,8 @@ import {
   useState,
 } from 'react'
 
+import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 
 import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
@@ -269,9 +269,9 @@ export default defineComponent(function M3Search({
               }])}
             >
               <form role="search" className="m3-search__header" onSubmit={handleSubmit}>
-                <M3IconButton aria-label={backLabel} onClick={close}>
+                <M3Button appearance="standard" aria-label={backLabel} width="medium" onClick={close}>
                   <M3Icon name="arrow_back" />
-                </M3IconButton>
+                </M3Button>
                 <input
                   ref={input}
                   type="search"
@@ -293,12 +293,12 @@ export default defineComponent(function M3Search({
                 />
                 <div className="m3-search__actions">
                   {query ? (
-                    <M3IconButton aria-label={clearLabel} onClick={() => {
+                    <M3Button appearance="standard" aria-label={clearLabel} width="medium" onClick={() => {
                       callbacks.current.onQueryChange('')
                       input.current?.focus()
                     }}>
                       <M3Icon name="close" />
-                    </M3IconButton>
+                    </M3Button>
                   ) : null}
                   {parsed.slots.actions}
                 </div>

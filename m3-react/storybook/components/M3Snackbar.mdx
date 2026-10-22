@@ -30,7 +30,7 @@ The default placement is leading aligned, 16 px from the viewport edges in compa
 
 The host keeps a persistent polite live region and never moves focus just because a message appears. `Alt+G` moves focus to the active snackbar action or close button; document this shortcut in the app's keyboard help. `Tab` follows the ordinary page order, and `Escape` dismisses the snackbar when its button is focused. Closing a focused snackbar returns focus to its trigger, or the next focusable element captured when it opened if the trigger is gone. Hovering or focusing pauses an actionless timer.
 
-For a standalone visual `M3Snackbar`, supply `onAction` and `onDismiss`. Render its single action as `M3Snackbar.Action` containing an `M3Button` with `appearance="text"`. The action render function receives `buttonProps`, which connects the button to the message and activation event. The close control is an `M3IconButton` described by the message. Use the host for real notifications, sequencing, and reliable live updates. Translate `closeLabel` for the app locale.
+For a standalone visual `M3Snackbar`, supply `onAction` and `onDismiss`. Render its single action as `M3Snackbar.Action` containing an `M3Button` with `appearance="text"`. The action render function receives `buttonProps`, which connects the button to the message and activation event. The close control is an `M3Button width="medium"` described by the message. Use the host for real notifications, sequencing, and reliable live updates. Translate `closeLabel` for the app locale.
 
 ### Avoid
 
@@ -138,7 +138,7 @@ Snackbar коротко сообщает о процессе приложени�
 
 Host держит постоянно смонтированную polite live region и не переводит фокус при появлении. `Alt+G` переводит фокус на действие или закрытие активного snackbar; укажите сочетание в справке приложения. `Tab` следует обычному порядку страницы, `Escape` закрывает snackbar, когда его кнопка в фокусе. После закрытия фокус возвращается к инициатору, а если его нет — к следующему элементу, запомненному при открытии. Наведение и фокус приостанавливают таймер временного сообщения.
 
-Для отдельно используемого `M3Snackbar` передайте `onAction` и `onDismiss`. Единственное действие передайте через `M3Snackbar.Action` как `M3Button` с `appearance="text"`. Функция отрисовки получает `buttonProps`, связывающие кнопку с сообщением и обработчиком действия. Закрытие рисуется через `M3IconButton` и связано с сообщением. Для настоящих уведомлений, очереди и надёжного объявления используйте host. Переводите `closeLabel` для языка приложения.
+Для отдельно используемого `M3Snackbar` передайте `onAction` и `onDismiss`. Единственное действие передайте через `M3Snackbar.Action` как `M3Button` с `appearance="text"`. Функция отрисовки получает `buttonProps`, связывающие кнопку с сообщением и обработчиком действия. Закрытие рисуется через `M3Button width="medium"` и связано с сообщением. Для настоящих уведомлений, очереди и надёжного объявления используйте host. Переводите `closeLabel` для языка приложения.
 
 ### Чего избегать
 

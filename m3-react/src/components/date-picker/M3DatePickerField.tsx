@@ -22,7 +22,6 @@ import { useEffect, useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Popper } from '@/components/popper'
 import { M3TextField } from '@/components/text-field'
 
@@ -183,16 +182,16 @@ export default defineComponent(function M3DatePickerField({
         onChange={commitInput}
       >
         <M3TextField.TrailingIcon>
-          <M3IconButton
-            disabled={!interactive}
+          <M3Button appearance="standard" disabled={!interactive}
             aria-label="Choose date"
+            width="medium"
             onClick={(event) => {
               event.stopPropagation()
               toggleExpanded(!expanded)
             }}
           >
             <M3Icon name="calendar_month" />
-          </M3IconButton>
+          </M3Button>
         </M3TextField.TrailingIcon>
       </M3TextField>
 

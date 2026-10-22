@@ -11,7 +11,6 @@ import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Surface } from '@/components/surface'
 
@@ -162,12 +161,12 @@ const SurfaceSideSheetAlwaysModal: FC<{ locale: StorybookLocale }> = ({ locale }
         onToggle={setNavExpanded}
       >
         <M3Navigation.Top>
-          <M3IconButton
-            aria-label={text.openNavigation}
+          <M3Button appearance="standard" aria-label={text.openNavigation}
+            width="medium"
             onClick={() => setNavExpanded(true)}
           >
             <M3Icon name="menu" />
-          </M3IconButton>
+          </M3Button>
         </M3Navigation.Top>
 
         <M3NavigationTab
@@ -313,16 +312,16 @@ const SurfaceSideSheetAlwaysModal: FC<{ locale: StorybookLocale }> = ({ locale }
                 <div className="surface-side-sheet__modal-header">
                   <h3>{text.modal}</h3>
 
-                  <M3IconButton
-                    className="surface-side-sheet__modal-close"
+                  <M3Button className="surface-side-sheet__modal-close"
                     appearance="standard"
                     aria-label={text.close}
                     disabled={transitioning}
                     data-testid="surface-always-close"
+                    width="medium"
                     onClick={() => void closeModal()}
                   >
                     <M3Icon name="close" />
-                  </M3IconButton>
+                  </M3Button>
                 </div>
 
                 <p>{text.modalDescription}</p><p>{text.closeActions}</p>

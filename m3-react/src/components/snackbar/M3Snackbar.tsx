@@ -2,8 +2,8 @@ import type { HTMLAttributes, ReactNode } from 'react'
 import type { SnackbarActionContext, SnackbarActionRenderer } from './types'
 import type { SnackbarLayout } from '@modulify/m3-foundation/types/components/snackbar'
 
+import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 
 import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
@@ -91,14 +91,14 @@ export default defineComponent(function M3Snackbar({
         <span className="m3-snackbar__actions">
           {slots.action && action}
           {closable && (
-            <M3IconButton
-              className="m3-snackbar__close"
+            <M3Button appearance="standard" className="m3-snackbar__close"
               aria-label={closeLabel}
               aria-describedby={messageId}
+              width="medium"
               onClick={onDismiss}
             >
               <M3Icon name="close" aria-hidden="true" />
-            </M3IconButton>
+            </M3Button>
           )}
         </span>
       )}

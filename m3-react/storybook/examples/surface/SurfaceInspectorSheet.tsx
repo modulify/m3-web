@@ -7,7 +7,6 @@ import { useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'
@@ -103,9 +102,9 @@ const SurfaceInspectorSheet: FC<{ locale: StorybookLocale }> = ({ locale }) => {
           <div className="m3-side-sheet__title">{text.title}</div>
 
           <div className="m3-side-sheet__affordance">
-            <M3IconButton appearance="standard" onClick={() => setOpened(false)}>
+            <M3Button appearance="standard" width="medium" onClick={() => setOpened(false)}>
               <M3Icon name="close" />
-            </M3IconButton>
+            </M3Button>
           </div>
         </header>
 

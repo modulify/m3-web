@@ -4,7 +4,6 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { M3Button } from '@/components/button'
 import { M3Card } from '@/components/card'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 
 import { localize } from '../i18n'
 
@@ -82,9 +81,9 @@ export const LandscapeWithoutMedia: Story = {
         <div className="m3-card__subheading">{text.subhead}</div>
       </div>
 
-      <M3IconButton className="ml-auto">
+      <M3Button appearance="standard" className="ml-auto" width="medium">
         <M3Icon name="more_vert" />
-      </M3IconButton>
+      </M3Button>
     </M3Card>
   },
 }

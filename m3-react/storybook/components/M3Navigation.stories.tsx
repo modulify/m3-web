@@ -3,9 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { useEffect, useState } from 'react'
 
+import { M3Button } from '@/components/button'
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import {
   M3Navigation,
   M3NavigationSection,
@@ -114,9 +114,9 @@ const meta = {
           onToggle={setExpanded}
         >
           <M3Navigation.Top>
-            <M3IconButton aria-label={railExpanded ? text.close : text.open} onClick={toggleRail}>
+            <M3Button appearance="standard" aria-label={railExpanded ? text.close : text.open} width="medium" onClick={toggleRail}>
               <M3Icon name={railExpanded ? 'menu_open' : 'menu'} />
-            </M3IconButton>
+            </M3Button>
 
             <M3FabButton variant="tertiary">
               <M3Icon name="edit" />
@@ -166,12 +166,12 @@ export const NavigationRailExpanded: Story = {
       <>
         <M3Navigation appearance={appearance}>
           <M3Navigation.Top>
-            <M3IconButton
-              aria-label={appearance === 'rail-expanded' ? text.close : text.open}
+            <M3Button aria-label={appearance === 'rail-expanded' ? text.close : text.open}
+              width="medium"
               onClick={() => setAppearance(appearance === 'rail-expanded' ? 'rail' : 'rail-expanded')}
             >
               <M3Icon name={appearance === 'rail-expanded' ? 'menu_open' : 'menu'} />
-            </M3IconButton>
+            </M3Button>
             <M3FabButton variant="tertiary"><M3Icon name="edit" />{text.compose}</M3FabButton>
           </M3Navigation.Top>
           {renderDestinations(text)}
@@ -192,9 +192,9 @@ export const ModalNavigationRail: Story = {
       <>
         <M3Navigation appearance="rail" expansion="modal" expanded={expanded} onToggle={setExpanded}>
           <M3Navigation.Top>
-            <M3IconButton aria-label={expanded ? text.close : text.open} onClick={() => setExpanded(!expanded)}>
+            <M3Button appearance="standard" aria-label={expanded ? text.close : text.open} width="medium" onClick={() => setExpanded(!expanded)}>
               <M3Icon name={expanded ? 'menu_open' : 'menu'} />
-            </M3IconButton>
+            </M3Button>
           </M3Navigation.Top>
           {renderDestinations(text)}
         </M3Navigation>
@@ -212,18 +212,18 @@ export const ImmersiveNavigationRail: Story = {
 
     return (
       <>
-        <M3IconButton
-          aria-label={text.open}
+        <M3Button appearance="standard" aria-label={text.open}
           style={{ position: 'fixed', insetInlineStart: 28, insetBlockStart: 44 }}
+          width="medium"
           onClick={() => setExpanded(true)}
         >
           <M3Icon name="menu" />
-        </M3IconButton>
+        </M3Button>
         <M3Navigation appearance="rail" expansion="modal" expanded={expanded} collapse="hidden" onToggle={setExpanded}>
           <M3Navigation.Top>
-            <M3IconButton aria-label={text.close} onClick={() => setExpanded(false)}>
+            <M3Button appearance="standard" aria-label={text.close} width="medium" onClick={() => setExpanded(false)}>
               <M3Icon name="menu_open" />
-            </M3IconButton>
+            </M3Button>
           </M3Navigation.Top>
           {renderDestinations(text)}
         </M3Navigation>
@@ -273,13 +273,13 @@ export const AdaptiveWithoutBar: Story = {
     return (
       <>
         {!wide ? (
-          <M3IconButton
-            aria-label={text.open}
+          <M3Button appearance="standard" aria-label={text.open}
             style={{ position: 'fixed', insetInlineStart: 28, insetBlockStart: 44 }}
+            width="medium"
             onClick={() => setExpanded(true)}
           >
             <M3Icon name="menu" />
-          </M3IconButton>
+          </M3Button>
         ) : null}
         <M3Navigation
           appearance={wide && collapsed ? 'rail' : 'auto'}
@@ -290,12 +290,12 @@ export const AdaptiveWithoutBar: Story = {
           onToggle={setExpanded}
         >
           <M3Navigation.Top>
-            <M3IconButton
-              aria-label={railExpanded ? text.close : text.open}
+            <M3Button appearance="standard" aria-label={railExpanded ? text.close : text.open}
+              width="medium"
               onClick={() => wide ? setCollapsed(!collapsed) : setExpanded(false)}
             >
               <M3Icon name={railExpanded ? 'menu_open' : 'menu'} />
-            </M3IconButton>
+            </M3Button>
           </M3Navigation.Top>
           {renderDestinations(text)}
         </M3Navigation>
@@ -324,9 +324,9 @@ export const ModalNavigationDrawer: Story = {
           onToggle={setExpanded}
         >
           <M3Navigation.Top>
-            <M3IconButton aria-label={expanded ? text.close : text.open} onClick={() => setExpanded(!expanded)}>
+            <M3Button appearance="standard" aria-label={expanded ? text.close : text.open} width="medium" onClick={() => setExpanded(!expanded)}>
               <M3Icon name={expanded ? 'menu_open' : 'menu'} />
-            </M3IconButton>
+            </M3Button>
           </M3Navigation.Top>
 
           <M3Navigation.Header>

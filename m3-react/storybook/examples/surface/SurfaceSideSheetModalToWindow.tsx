@@ -13,7 +13,6 @@ import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
@@ -286,12 +285,12 @@ const SurfaceSideSheetModalToWindow: FC<{ locale: StorybookLocale }> = ({ locale
         onToggle={setNavExpanded}
       >
         <M3Navigation.Top>
-          <M3IconButton
-            aria-label={text.openNavigation}
+          <M3Button appearance="standard" aria-label={text.openNavigation}
+            width="medium"
             onClick={() => setNavExpanded(true)}
           >
             <M3Icon name="menu" />
-          </M3IconButton>
+          </M3Button>
         </M3Navigation.Top>
 
         <M3NavigationTab
@@ -450,27 +449,27 @@ const SurfaceSideSheetModalToWindow: FC<{ locale: StorybookLocale }> = ({ locale
                     <h3>{panelAsWindow ? text.window : text.modal}</h3>
 
                     <div className="surface-side-sheet-window__modal-actions">
-                      <M3IconButton
-                        className="surface-side-sheet-window__modal-action"
+                      <M3Button className="surface-side-sheet-window__modal-action"
                         appearance="standard"
                         aria-label={panelAsWindow ? text.dock : text.openWindow}
                         disabled={transitioning}
                         data-testid="surface-window-toggle-mode"
+                        width="medium"
                         onClick={() => void toggleWindowMode()}
                       >
                         <M3Icon name={panelAsWindow ? 'close_fullscreen' : 'open_in_new'} />
-                      </M3IconButton>
+                      </M3Button>
 
-                      <M3IconButton
-                        className="surface-side-sheet-window__modal-action"
+                      <M3Button className="surface-side-sheet-window__modal-action"
                         appearance="standard"
                         aria-label={text.close}
                         disabled={transitioning}
                         data-testid="surface-window-close"
+                        width="medium"
                         onClick={() => void closeModal()}
                       >
                         <M3Icon name="close" />
-                      </M3IconButton>
+                      </M3Button>
                     </div>
                   </div>
 
