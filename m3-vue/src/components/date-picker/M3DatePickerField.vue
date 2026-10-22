@@ -30,13 +30,15 @@
             </template>
 
             <template #trailing-icon>
-                <M3IconButton
+                <M3Button
                     :disabled="!interactive"
+                    appearance="standard"
                     aria-label="Choose date"
+                    width="medium"
                     @click.stop="toggleExpanded(!expanded)"
                 >
                     <M3Icon name="calendar_month" />
-                </M3IconButton>
+                </M3Button>
             </template>
         </M3TextField>
 
@@ -109,7 +111,6 @@ import { DEFAULT_CALENDAR_DATE_INPUT_FORMAT } from '@modulify/m3-foundation/lib/
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Popper } from '@/components/popper'
 import { M3TextField } from '@/components/text-field'
 
@@ -230,7 +231,7 @@ const root = shallowRef<HTMLElement | null>(null)
 
 defineExpose({
   get el () { return root.value },
-} satisfies ElementReference<HTMLElement>)
+} satisfies ElementReference)
 const expanded = ref(false)
 const draftValue = ref<Date | null>(props.value)
 const inputValue = ref(formatCalendarDateInput(props.value))

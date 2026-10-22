@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { M3Button } from '@/components/button'
 import { M3Card } from '@/components/card'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 
 import { localize } from '../i18n'
 
@@ -86,7 +85,6 @@ export const LandscapeWithoutMedia: Story = {
       M3Button,
       M3Card,
       M3Icon,
-      M3IconButton,
     },
 
     setup () {
@@ -104,9 +102,9 @@ export const LandscapeWithoutMedia: Story = {
                 <div class="m3-card__subheading">{{ text.subhead }}</div>
             </div>
 
-            <M3IconButton class="ml-auto">
+            <M3Button width="medium" appearance="standard" class="ml-auto">
                 <M3Icon name="more_vert" />
-            </M3IconButton>
+            </M3Button>
         </M3Card>
     `,
   }),
@@ -118,7 +116,6 @@ export const Portrait: Story = {
       M3Button,
       M3Card,
       M3Icon,
-      M3IconButton,
     },
 
     setup () {

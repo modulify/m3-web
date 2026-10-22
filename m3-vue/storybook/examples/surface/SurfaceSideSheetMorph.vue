@@ -34,12 +34,14 @@
             class="surface-side-sheet__nav"
         >
             <template #top>
-                <M3IconButton
+                <M3Button
                     :aria-label="text.openNavigation"
+                    appearance="standard"
+                    width="medium"
                     @click="navExpanded = true"
                 >
                     <M3Icon name="menu" />
-                </M3IconButton>
+                </M3Button>
             </template>
 
             <M3NavigationTab
@@ -185,16 +187,17 @@
                             <div class="surface-side-sheet__modal-header">
                                 <h3>{{ text.modal }}</h3>
 
-                                <M3IconButton
+                                <M3Button
                                     :disabled="transitioning"
                                     :aria-label="text.close"
                                     data-testid="surface-morph-close"
                                     appearance="standard"
                                     class="surface-side-sheet__modal-close"
+                                    width="medium"
                                     @click="closeModalFromPanel"
                                 >
                                     <M3Icon name="close" />
-                                </M3IconButton>
+                                </M3Button>
                             </div>
 
                             <p>{{ text.layer }}</p><p>{{ text.modalDescription }}</p>
@@ -218,7 +221,6 @@ import { easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 

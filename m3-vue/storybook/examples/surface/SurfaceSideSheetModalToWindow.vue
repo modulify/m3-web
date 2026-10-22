@@ -35,12 +35,14 @@
             class="surface-side-sheet-window__nav"
         >
             <template #top>
-                <M3IconButton
+                <M3Button
                     :aria-label="text.openNavigation"
+                    appearance="standard"
+                    width="medium"
                     @click="navExpanded = true"
                 >
                     <M3Icon name="menu" />
-                </M3IconButton>
+                </M3Button>
             </template>
 
             <M3NavigationTab
@@ -186,27 +188,29 @@
                                 <h3>{{ panelAsWindow ? text.window : text.modal }}</h3>
 
                                 <div class="surface-side-sheet-window__modal-actions">
-                                    <M3IconButton
+                                    <M3Button
                                         :aria-label="panelAsWindow ? text.dock : text.openWindow"
                                         :disabled="transitioning"
                                         data-testid="surface-window-toggle-mode"
                                         appearance="standard"
                                         class="surface-side-sheet-window__modal-action"
+                                        width="medium"
                                         @click="toggleWindowMode"
                                     >
                                         <M3Icon :name="panelAsWindow ? 'close_fullscreen' : 'open_in_new'" />
-                                    </M3IconButton>
+                                    </M3Button>
 
-                                    <M3IconButton
+                                    <M3Button
                                         :disabled="transitioning"
                                         :aria-label="text.close"
                                         data-testid="surface-window-close"
                                         appearance="standard"
                                         class="surface-side-sheet-window__modal-action"
+                                        width="medium"
                                         @click="closeModal"
                                     >
                                         <M3Icon name="close" />
-                                    </M3IconButton>
+                                    </M3Button>
                                 </div>
                             </div>
 
@@ -306,7 +310,6 @@ import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'

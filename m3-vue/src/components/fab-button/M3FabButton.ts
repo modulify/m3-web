@@ -64,7 +64,7 @@ export default defineComponent({
       click: () => root.value?.click(),
       focus: () => root.value?.focus(),
       blur: () => root.value?.blur(),
-    } satisfies ElementReference<HTMLElement> & Interactable)
+    } satisfies ElementReference & Interactable)
 
     const onKeyup = (event: KeyboardEvent) => {
       if (event.code === 'Enter') {

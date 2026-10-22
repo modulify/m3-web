@@ -9,9 +9,9 @@
             :subtitle="subtitle ? text.subtitle : undefined"
         >
             <template #leading>
-                <M3IconButton :aria-label="text.menu" @click="navigationOpen = true">
+                <M3Button :aria-label="text.menu" appearance="standard" width="medium" @click="navigationOpen = true">
                     <M3Icon name="menu" />
-                </M3IconButton>
+                </M3Button>
             </template>
 
             <template v-if="appearance === 'search'" #search>
@@ -34,12 +34,12 @@
             </template>
 
             <template #trailing>
-                <M3IconButton :aria-label="text.favorite">
+                <M3Button :aria-label="text.favorite" appearance="standard" width="medium">
                     <M3Icon name="favorite" />
-                </M3IconButton>
-                <M3IconButton :aria-label="text.notifications">
+                </M3Button>
+                <M3Button :aria-label="text.notifications" appearance="standard" width="medium">
                     <M3Icon name="notifications" />
-                </M3IconButton>
+                </M3Button>
             </template>
         </M3AppBar>
 
@@ -81,8 +81,8 @@ import type { PropType } from 'vue'
 import { computed, ref } from 'vue'
 
 import { M3AppBar } from '@/components/app-bar'
+import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3Search } from '@/components/search'
 

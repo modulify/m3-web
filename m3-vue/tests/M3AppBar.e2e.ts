@@ -2,7 +2,7 @@ import { createApp, h, nextTick } from 'vue'
 import { page } from 'vitest/browser'
 
 import { M3AppBar } from '@/components/app-bar'
-import { M3IconButton } from '@/components/icon-button'
+import { M3Button } from '@/components/button'
 
 const waitFor = async (assertion: () => void) => {
   const startedAt = performance.now()
@@ -59,10 +59,10 @@ test.each(['ltr', 'rtl'] as const)('centers a small title while keeping actions 
   document.body.append(mountPoint)
   const app = createApp({
     render: () => h(M3AppBar, { headline: 'Library', subtitle: 'Recent', alignment: 'center', dir: direction }, {
-      leading: () => h(M3IconButton, { 'aria-label': 'Back' }, () => '←'),
+      leading: () => h(M3Button, { width: 'medium', 'aria-label': 'Back' }, () => '←'),
       trailing: () => [
-        h(M3IconButton, { 'aria-label': 'Favorites' }, () => '★'),
-        h(M3IconButton, { 'aria-label': 'Settings' }, () => '⚙'),
+        h(M3Button, { width: 'medium', 'aria-label': 'Favorites' }, () => '★'),
+        h(M3Button, { width: 'medium', 'aria-label': 'Settings' }, () => '⚙'),
       ],
     }),
   })
@@ -71,8 +71,8 @@ test.each(['ltr', 'rtl'] as const)('centers a small title while keeping actions 
   try {
     const bar = mountPoint.querySelector('.m3-app-bar')!.getBoundingClientRect()
     const title = mountPoint.querySelector('.m3-app-bar__title')!.getBoundingClientRect()
-    const leading = mountPoint.querySelector('.m3-app-bar__leading .m3-icon-button')!.getBoundingClientRect()
-    const trailing = mountPoint.querySelector('.m3-app-bar__trailing .m3-icon-button:last-child')!.getBoundingClientRect()
+    const leading = mountPoint.querySelector('.m3-app-bar__leading .m3-button_fixed')!.getBoundingClientRect()
+    const trailing = mountPoint.querySelector('.m3-app-bar__trailing .m3-button_fixed:last-child')!.getBoundingClientRect()
 
     expect(Math.abs((title.left + title.right) / 2 - (bar.left + bar.right) / 2)).toBeLessThan(1)
     expect(direction === 'ltr' ? leading.left - bar.left : bar.right - leading.right).toBe(4)

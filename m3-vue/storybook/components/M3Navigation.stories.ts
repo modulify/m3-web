@@ -4,9 +4,9 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { computed, ref, watch } from 'vue'
 
 import { m3Adaptive } from '@/composables/adaptive'
+import { M3Button } from '@/components/button'
 import { M3FabButton } from '@/components/fab-button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import {
   M3Navigation,
   M3NavigationSection,
@@ -104,7 +104,7 @@ const meta = {
     components: {
       M3FabButton,
       M3Icon,
-      M3IconButton,
+      M3Button,
       M3Navigation,
       M3NavigationSection,
       M3NavigationTab,
@@ -158,12 +158,12 @@ const meta = {
             :appearance="appearance"
         >
             <template #top>
-                <M3IconButton
+                <M3Button width="medium" appearance="standard"
                     :aria-label="railExpanded ? text.close : text.open"
                     @click="toggleRail"
                 >
                     <M3Icon :name="railExpanded ? 'menu_open' : 'menu'" />
-                </M3IconButton>
+                </M3Button>
 
                 <M3FabButton variant="tertiary">
                     <M3Icon name="edit" />
@@ -206,7 +206,7 @@ export const NavigationRail: Story = {
 export const NavigationRailExpanded: Story = {
   args: { appearance: 'rail-expanded' },
   render: (_args, { globals }) => ({
-    components: { M3FabButton, M3Icon, M3IconButton, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
+    components: { M3FabButton, M3Icon, M3Button, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
     setup () {
       const text = localize(globals.locale, messages)
       return {
@@ -220,12 +220,12 @@ export const NavigationRailExpanded: Story = {
       <div>
       <M3Navigation :appearance="appearance">
         <template #top>
-          <M3IconButton
+          <M3Button width="medium"
               :aria-label="appearance === 'rail-expanded' ? text.close : text.open"
               @click="appearance = appearance === 'rail-expanded' ? 'rail' : 'rail-expanded'"
           >
             <M3Icon :name="appearance === 'rail-expanded' ? 'menu_open' : 'menu'" />
-          </M3IconButton>
+          </M3Button>
           <M3FabButton variant="tertiary"><M3Icon name="edit" />{{ text.compose }}</M3FabButton>
         </template>
         ${destinationsTemplate}
@@ -239,7 +239,7 @@ export const NavigationRailExpanded: Story = {
 export const ModalNavigationRail: Story = {
   args: { appearance: 'rail', expansion: 'modal' },
   render: (_args, { globals }) => ({
-    components: { M3Icon, M3IconButton, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
+    components: { M3Icon, M3Button, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
     setup () {
       const text = localize(globals.locale, messages)
       return { destinations: getDestinations(text), expanded: ref(true), locale: globals.locale, text }
@@ -248,9 +248,9 @@ export const ModalNavigationRail: Story = {
       <div>
       <M3Navigation appearance="rail" expansion="modal" v-model:expanded="expanded">
         <template #top>
-          <M3IconButton :aria-label="expanded ? text.close : text.open" @click="expanded = !expanded">
+          <M3Button width="medium" appearance="standard" :aria-label="expanded ? text.close : text.open" @click="expanded = !expanded">
             <M3Icon :name="expanded ? 'menu_open' : 'menu'" />
-          </M3IconButton>
+          </M3Button>
         </template>
         ${destinationsTemplate}
       </M3Navigation>
@@ -263,25 +263,25 @@ export const ModalNavigationRail: Story = {
 export const ImmersiveNavigationRail: Story = {
   args: { appearance: 'rail', collapse: 'hidden', expansion: 'modal' },
   render: (_args, { globals }) => ({
-    components: { M3Icon, M3IconButton, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
+    components: { M3Icon, M3Button, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
     setup () {
       const text = localize(globals.locale, messages)
       return { destinations: getDestinations(text), expanded: ref(false), locale: globals.locale, text }
     },
     template: `
       <div>
-      <M3IconButton
+      <M3Button width="medium" appearance="standard"
           :aria-label="text.open"
           style="position: fixed; inset-inline-start: 28px; inset-block-start: 44px"
           @click="expanded = true"
       >
         <M3Icon name="menu" />
-      </M3IconButton>
+      </M3Button>
       <M3Navigation appearance="rail" expansion="modal" collapse="hidden" v-model:expanded="expanded">
         <template #top>
-          <M3IconButton :aria-label="text.close" @click="expanded = false">
+          <M3Button width="medium" appearance="standard" :aria-label="text.close" @click="expanded = false">
             <M3Icon name="menu_open" />
-          </M3IconButton>
+          </M3Button>
         </template>
         ${destinationsTemplate}
       </M3Navigation>
@@ -317,7 +317,7 @@ export const AdaptiveWithoutBar: Story = {
   },
   // eslint-disable-next-line max-lines-per-function
   render: (_args, { globals }) => ({
-    components: { M3Icon, M3IconButton, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
+    components: { M3Icon, M3Button, M3Navigation, M3NavigationSection, M3NavigationTab, NavigationStoryContent },
     setup () {
       const text = localize(globals.locale, messages)
       const breakpoint = useBreakpoint()
@@ -343,14 +343,14 @@ export const AdaptiveWithoutBar: Story = {
     },
     template: `
       <div>
-      <M3IconButton
+      <M3Button width="medium" appearance="standard"
           v-if="showTrigger"
           :aria-label="text.open"
           style="position: fixed; inset-inline-start: 28px; inset-block-start: 44px"
           @click="expanded = true"
       >
         <M3Icon name="menu" />
-      </M3IconButton>
+      </M3Button>
       <M3Navigation
           :appearance="appearance"
           :appearances="['rail', 'rail-expanded']"
@@ -359,9 +359,9 @@ export const AdaptiveWithoutBar: Story = {
           v-model:expanded="expanded"
       >
         <template #top>
-          <M3IconButton :aria-label="railExpanded ? text.close : text.open" @click="toggleRail">
+          <M3Button width="medium" appearance="standard" :aria-label="railExpanded ? text.close : text.open" @click="toggleRail">
             <M3Icon :name="railExpanded ? 'menu_open' : 'menu'" />
-          </M3IconButton>
+          </M3Button>
         </template>
         ${destinationsTemplate}
       </M3Navigation>
@@ -377,7 +377,7 @@ export const ModalNavigationDrawer: Story = {
 
     components: {
       M3Icon,
-      M3IconButton,
+      M3Button,
       M3Navigation,
       M3NavigationSection,
       M3NavigationTab,
@@ -403,12 +403,12 @@ export const ModalNavigationDrawer: Story = {
             :appearance="expanded ? 'drawer' : 'rail'"
         >
             <template #top>
-                <M3IconButton
+                <M3Button width="medium" appearance="standard"
                     :aria-label="expanded ? text.close : text.open"
                     @click="expanded = !expanded"
                 >
                     <M3Icon :name="expanded ? 'menu_open' : 'menu'" />
-                </M3IconButton>
+                </M3Button>
             </template>
 
             <template #header>

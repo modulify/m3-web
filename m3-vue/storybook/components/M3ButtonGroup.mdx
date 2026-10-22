@@ -1,0 +1,157 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as Stories from './M3ButtonGroup.stories'
+
+<Meta of={Stories} />
+
+<Localized locale="en-US">
+
+# Button groups
+
+Button groups organize related actions and choices. Material 3 Expressive has **standard** and **connected** groups. [Overview](https://m3.material.io/components/button-groups/overview).
+
+## Choose a variant
+
+| Variant | Use | Interaction |
+| --- | --- | --- |
+| Standard | Related actions, or toggle actions that should influence their neighbors. | The activated button changes shape; neighboring buttons participate in the width response. |
+| Connected | Related choices, view switching, or sorting. | Selection changes the button shape and color without shifting adjacent buttons. |
+
+Material recommends connected groups for toggleable choices and advises against them when none of the buttons can be toggled. The component also supports connected action groups with `selection="none"`; use that option deliberately. Keep one color style throughout a connected group. Standard groups may combine filled, tonal, outlined, and elevated buttons to express hierarchy. Keep one size throughout by default. Mix sizes in a standard group only for a hero interaction; connected groups use one shared size. [Guidelines](https://m3.material.io/components/button-groups/guidelines).
+
+<Canvas of={Stories.ConnectedSingle} />
+<Canvas of={Stories.ConnectedMultiple} />
+<Canvas of={Stories.ConnectedActions} />
+<Canvas of={Stories.StandardActions} />
+<Canvas of={Stories.IconKinds} />
+
+## Selection and layout
+
+`selection="none"` makes either variant an action group without toggle state or `aria-pressed`. `single` selects at most one item; `multiple` selects any number. `required` prevents the last choice from being cleared; initialize a required group with `value` or `defaultValue`. Without a `value` prop the group keeps its own state from `defaultValue`. Use `v-model:value` to control it from Vue.
+
+The group supports `xs`, `sm`, `md`, `lg`, and `xl` sizes and round or square default shapes. Its `size` is inherited by each ordinary or icon button; an explicit item `size` overrides it in a standard group. Connected groups fill their parent and use one shared size; cap their width with `--m3-button-group-max-inline-size` on larger surfaces. Keep a group on one line; shorten labels, use a smaller size, or move trailing actions to an overflow menu at compact widths. [Specs](https://m3.material.io/components/button-groups/specs), [guidelines](https://m3.material.io/components/button-groups/guidelines).
+
+| Size | XS | S | M | L | XL |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Standard spacing | 18px | 12px | 8px | 8px | 8px |
+| Connected spacing | 2px | 2px | 2px | 2px | 2px |
+
+### Touch targets and spacing
+
+Material requires a target of at least 48×48px for **each** button in a group, even when its visible container is only 32px (`xs`) or 40px (`sm`) high. The group gives these items a 48px-tall interaction area while keeping their visible shapes compact. In a standard group, the larger XS/S spacing leaves room for adjacent targets; do not reduce it just to pack buttons more tightly. Once the visible buttons are at least 56px high, the spacing stays at 8px. This space also lets standard buttons animate their width and shape without shifting the surrounding layout. Connected groups keep a 2px visual gap at every size; their XS/S items still need the larger target area. [Group specs](https://m3.material.io/components/button-groups/specs), [accessibility](https://m3.material.io/components/button-groups/accessibility), [guidelines](https://m3.material.io/components/button-groups/guidelines).
+
+<Canvas of={Stories.ConnectedSquare} />
+<Canvas of={Stories.ConnectedLarge} />
+<Canvas of={Stories.MixedSizes} />
+
+## Accessibility
+
+The group is not focusable. Tab enters at the selected or first enabled button, arrows move between enabled buttons (respecting RTL), and Space/Enter activates the focused button. Toggle buttons expose `aria-pressed`; action buttons do not. Name each icon-only item with `aria-label`, and add an accessible group name when the purpose is not clear from context. [Accessibility](https://m3.material.io/components/button-groups/accessibility).
+
+## API
+
+### `M3ButtonGroup`
+
+| Prop | Values | Default | Purpose |
+| --- | --- | --- | --- |
+| `variant` | `standard`, `connected` | `standard` | Layout and interaction style. |
+| `size` | `xs`, `sm`, `md`, `lg`, `xl` | `sm` | Inherited button size and group spacing. |
+| `rounding` | `round`, `square` | `round` | Resting button shape. |
+| `selection` | `none`, `single`, `multiple` | `none` for standard; `single` for connected | Selection model. |
+| `required` | boolean | `false` | Retain at least one choice. |
+| `value` | string, string array, `null` | uncontrolled | Controlled selected value. |
+| `defaultValue` | string, string array, `null` | `null` | Initial uncontrolled selection. |
+| `update:value`, `change` | Vue events | — | Selection change events. |
+
+Native `<div>` attributes, including `aria-label`, `class`, and `style`, pass through to the group. Its ref exposes `el`. The default slot contains `M3ButtonGroupItem` components; the group itself renders no buttons by default.
+
+### `M3ButtonGroupItem`
+
+| Prop | Values | Default | Purpose |
+| --- | --- | --- | --- |
+| `value` | string | required | Stable choice/action identifier. |
+| `appearance` | `filled`, `tonal`, `outlined`, `elevated`, `standard`, `text` | `tonal` | Container color style. |
+| `kind` | `button`, `icon` | `button` | Ordinary button or icon button geometry. |
+| `size` | `xs`, `sm`, `md`, `lg`, `xl` | inherited | Override size for a standard-group hero item. |
+| `width` | `narrow`, `medium`, `wide` | `medium` | Icon button width when `kind="icon"`. |
+| `disabled` | boolean | `false` | Prevent activation and skip arrow navigation. |
+
+The default slot may contain a label, `M3Icon`, or both. Give icon-only items an `aria-label`. Selected toggle items render their icons filled. Native button attributes pass through. Use `kind="icon"` for an actual icon button with its own width rules, or leave `kind="button"` for an ordinary icon-only button. The visible button has one state layer and clips its ripple to its container. An item ref exposes `el`, `click`, `focus`, and `blur`. For an action group, handle `@click` on each item.
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Группы кнопок
+
+Группы объединяют связанные действия и варианты выбора. В Material 3 Expressive есть **обычная** (`standard`) и **соединённая** (`connected`) группы. [Обзор](https://m3.material.io/components/button-groups/overview).
+
+## Выбор варианта
+
+| Вариант | Применение | Поведение |
+| --- | --- | --- |
+| Standard | Связанные действия или переключатели, влияющие на соседние кнопки. | Активная кнопка меняет форму; соседние участвуют в изменении ширины. |
+| Connected | Связанные варианты выбора, переключение видов или сортировки. | Выбор меняет форму и цвет кнопки, не сдвигая соседние. |
+
+Material рекомендует `connected` для переключаемых вариантов выбора и советует не применять её, когда ни одна кнопка не переключается. Компонент также поддерживает группу связанных действий с `selection="none"`; выбирайте этот вариант осознанно. Внутри `connected` сохраняйте единый цветовой стиль. В `standard` можно сочетать filled, tonal, outlined и elevated для иерархии. По умолчанию сохраняйте один размер кнопок. Смешивайте размеры в `standard` только для особо важного действия; в `connected` размер общий. [Рекомендации](https://m3.material.io/components/button-groups/guidelines).
+
+<Canvas of={Stories.ConnectedSingle} />
+<Canvas of={Stories.ConnectedMultiple} />
+<Canvas of={Stories.ConnectedActions} />
+<Canvas of={Stories.StandardActions} />
+<Canvas of={Stories.IconKinds} />
+
+## Выбор и компоновка
+
+`selection="none"` создаёт группу действий без toggle-состояния и `aria-pressed` в обоих вариантах. `single` выбирает не более одного пункта, `multiple` — несколько. `required` не даёт снять последний выбор; при его использовании задайте начальный `value` или `defaultValue`. Без `value` группа хранит состояние сама, начиная с `defaultValue`. Для управляемого выбора используйте `v-model:value`.
+
+Доступны размеры XS, S, M, L, XL и исходная форма round/square. `size` группы наследуется обычными и иконочными кнопками; явный `size` пункта переопределяет его в `standard`. Соединённая группа использует один общий размер и занимает ширину родителя; на широкой поверхности ограничьте её через `--m3-button-group-max-inline-size`. Группа остаётся в одной строке: на узком экране сократите подписи, уменьшите размер или перенесите крайние действия в overflow-меню. [Размеры](https://m3.material.io/components/button-groups/specs), [рекомендации](https://m3.material.io/components/button-groups/guidelines).
+
+| Размер | XS | S | M | L | XL |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Промежуток standard | 18px | 12px | 8px | 8px | 8px |
+| Промежуток connected | 2px | 2px | 2px | 2px | 2px |
+
+### Область нажатия и промежутки
+
+Material требует область не меньше 48×48px для **каждой** кнопки группы, даже если её видимый контейнер имеет высоту всего 32px (`xs`) или 40px (`sm`). Группа оставляет для таких пунктов интерактивную область высотой 48px, сохраняя компактную видимую форму. У `standard` увеличенные промежутки XS/S дают место соседним областям нажатия; не уменьшайте их ради плотной компоновки. Начиная с M, высота видимой кнопки составляет не менее 56px, а промежуток остаётся 8px. Он также даёт кнопкам `standard` место для анимации ширины и формы без смещения окружающей компоновки. У `connected` видимый промежуток всегда 2px, но пунктам XS/S по-прежнему нужна увеличенная область нажатия. [Размеры групп](https://m3.material.io/components/button-groups/specs), [доступность](https://m3.material.io/components/button-groups/accessibility), [рекомендации](https://m3.material.io/components/button-groups/guidelines).
+
+<Canvas of={Stories.ConnectedSquare} />
+<Canvas of={Stories.ConnectedLarge} />
+<Canvas of={Stories.MixedSizes} />
+
+## Доступность
+
+Контейнер не фокусируется. Tab входит в группу через выбранную или первую доступную кнопку, стрелки перемещают фокус между доступными кнопками с учётом RTL, Space/Enter активируют пункт. Кнопки выбора сообщают `aria-pressed`, кнопки действий — нет. Кнопке только с иконкой обязательно задайте `aria-label`; группе дайте доступное имя, когда её назначение не очевидно из контекста. [Доступность](https://m3.material.io/components/button-groups/accessibility).
+
+## API
+
+### `M3ButtonGroup`
+
+| Prop | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- |
+| `variant` | `standard`, `connected` | `standard` | Компоновка и взаимодействие. |
+| `size` | `xs`, `sm`, `md`, `lg`, `xl` | `sm` | Наследуемый размер кнопок и промежуток группы. |
+| `rounding` | `round`, `square` | `round` | Исходная форма кнопок. |
+| `selection` | `none`, `single`, `multiple` | `none` для standard; `single` для connected | Режим выбора. |
+| `required` | boolean | `false` | Сохранение хотя бы одного выбранного пункта. |
+| `value` | string, массив строк, `null` | неуправляемое состояние | Управляемый выбор. |
+| `defaultValue` | string, массив строк, `null` | `null` | Начальный выбор. |
+| `update:value`, `change` | события Vue | — | Изменение выбора. |
+
+Атрибуты `<div>`, включая `aria-label`, `class` и `style`, передаются контейнеру. Ссылка на группу предоставляет `el`. Слот по умолчанию содержит `M3ButtonGroupItem`; сама группа не создаёт кнопок автоматически.
+
+### `M3ButtonGroupItem`
+
+| Prop | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- |
+| `value` | string | обязательно | Устойчивый идентификатор пункта. |
+| `appearance` | `filled`, `tonal`, `outlined`, `elevated`, `standard`, `text` | `tonal` | Цветовой стиль контейнера. |
+| `kind` | `button`, `icon` | `button` | Геометрия обычной кнопки или кнопки с иконкой. |
+| `size` | `xs`, `sm`, `md`, `lg`, `xl` | наследуется | Изменение размера особо важного пункта в `standard`. |
+| `width` | `narrow`, `medium`, `wide` | `medium` | Ширина при `kind="icon"`. |
+| `disabled` | boolean | `false` | Блокировка активации и пропуск при навигации стрелками. |
+
+Слот по умолчанию может включать подпись, `M3Icon` или оба элемента. Пункту с одной иконкой задайте `aria-label`. Иконка выбранного переключаемого пункта становится заполненной. Нативные атрибуты кнопки передаются ей. Ссылка на пункт предоставляет `el`, `click`, `focus`, `blur`. Для группы действий используйте `@click` на отдельных пунктах.
+
+</Localized>

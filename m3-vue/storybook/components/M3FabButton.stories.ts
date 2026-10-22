@@ -34,8 +34,8 @@ const meta = {
   },
 
   args: {
-    variant: 'primary',
-    size: 'md',
+    variant: 'primary-container',
+    size: 'sm',
     disabled: false,
   },
 
