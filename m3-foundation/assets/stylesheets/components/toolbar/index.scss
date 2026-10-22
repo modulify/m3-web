@@ -171,16 +171,16 @@
     justify-content: center;
   }
 
-  &__action .m3-icon-button {
-    --content-color: var(--m3-toolbar-content);
+  &__action .m3-button_fixed {
+    --m3-button-fixed-color: var(--m3-toolbar-content);
     --state-color: var(--m3-toolbar-content);
     --m3-ripple-color: var(--m3-toolbar-content);
   }
 
-  &__action .m3-icon-button_tonal,
-  &__action .m3-icon-button_toggleable.m3-icon-button_selected {
-    --background-color: var(--m3-toolbar-selected-container);
-    --content-color: var(--m3-toolbar-selected-content);
+  &__action .m3-button_fixed.m3-button_tonal,
+  &__action .m3-button_fixed.m3-button_toggleable.m3-button_selected {
+    --m3-button-fixed-background: var(--m3-toolbar-selected-container);
+    --m3-button-fixed-color: var(--m3-toolbar-selected-content);
     --state-color: var(--m3-toolbar-selected-content);
     --m3-ripple-color: var(--m3-toolbar-selected-content);
   }

@@ -2,24 +2,36 @@
 @use '../../basics/typography' as m3-typography;
 
 .m3-button {
-  --m3-icon-size: 18px;
+  --m3-button-size: 40px;
+  --m3-button-padding: 16px;
+  --m3-button-gap: 8px;
+  --m3-button-square-corner: 12px;
+  --m3-button-pressed-corner: 8px;
+  --m3-button-full-corner: calc(var(--m3-button-size) / 2);
+  --m3-button-corner: var(--m3-button-full-corner);
+  --m3-button-fixed-width: var(--m3-button-size);
+  --m3-button-fixed-narrow-width: 32px;
+  --m3-button-fixed-wide-width: 52px;
+  --m3-icon-size: 20px;
   --m3-ripple-color: var(--m3-sys-primary);
   --m3-ripple-opacity: 0.2;
+  --m3-button-focus-ring-color: var(--m3-sys-secondary);
   --state-color:          var(--m3-sys-primary);
   --state-color-disabled: var(--m3-sys-on-surface);
 
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
-  block-size: 40px;
-  border-radius: var(--m3-button-rounding, 100px);
+  block-size: var(--m3-button-size);
+  border-radius: var(--m3-button-corner);
   color: var(--m3-sys-primary);
   text-decoration: none;
   outline: none;
   overflow: hidden;
   transition:
-    m3-motion.timing-standard(background-color),
-    m3-motion.timing-standard(color)
+    m3-motion.timing-expressive-fast-spatial(border-radius),
+    m3-motion.timing-expressive-fast-effects(background-color),
+    m3-motion.timing-expressive-fast-effects(color)
   ;
   position: relative;
 
@@ -34,6 +46,56 @@
     color: var(--m3-sys-on-surface);
     cursor: default;
   }
+
+  &:focus-visible { outline: 3px solid var(--m3-button-focus-ring-color); outline-offset: 2px; }
+
+  &_xs {
+    --m3-button-size: 32px;
+    --m3-button-padding: 12px;
+    --m3-button-gap: 4px;
+    --m3-button-fixed-narrow-width: 28px;
+    --m3-button-fixed-wide-width: 40px;
+  }
+
+  &_md {
+    --m3-button-size: 56px;
+    --m3-button-padding: 24px;
+    --m3-button-square-corner: 16px;
+    --m3-button-pressed-corner: 12px;
+    --m3-icon-size: 24px;
+    --m3-button-fixed-narrow-width: 48px;
+    --m3-button-fixed-wide-width: 72px;
+  }
+
+  &_lg {
+    --m3-button-size: 96px;
+    --m3-button-padding: 48px;
+    --m3-button-gap: 12px;
+    --m3-button-square-corner: 28px;
+    --m3-button-pressed-corner: 16px;
+    --m3-icon-size: 32px;
+    --m3-button-fixed-narrow-width: 64px;
+    --m3-button-fixed-wide-width: 128px;
+  }
+
+  &_xl {
+    --m3-button-size: 136px;
+    --m3-button-padding: 64px;
+    --m3-button-gap: 16px;
+    --m3-button-square-corner: 28px;
+    --m3-button-pressed-corner: 16px;
+    --m3-icon-size: 40px;
+    --m3-button-fixed-narrow-width: 104px;
+    --m3-button-fixed-wide-width: 184px;
+  }
+
+  &_fixed#{&}_narrow { --m3-button-fixed-width: var(--m3-button-fixed-narrow-width); }
+  &_fixed#{&}_wide { --m3-button-fixed-width: var(--m3-button-fixed-wide-width); }
+
+  &_square { --m3-button-corner: var(--m3-button-square-corner); }
+  &_toggleable#{&}_selected { --m3-button-corner: var(--m3-button-square-corner); }
+  &_square#{&}_toggleable#{&}_selected { --m3-button-corner: var(--m3-button-full-corner); }
+  &:active:not(:disabled) { --m3-button-corner: var(--m3-button-pressed-corner); }
 
   &_elevated {
     &:not(:disabled) {
@@ -86,6 +148,14 @@
     --state-color-disabled: transparent;
   }
 
+  // Available for library composition; Material does not list a standard text button.
+  &_standard {
+    --m3-ripple-color: var(--m3-sys-on-surface-variant);
+    --state-color: var(--m3-sys-on-surface-variant);
+    --state-color-disabled: transparent;
+    color: var(--m3-sys-on-surface-variant);
+  }
+
   &_tonal {
     --m3-ripple-color: var(--m3-sys-on-secondary-container);
     --state-color:          var(--m3-sys-on-secondary-container);
@@ -100,6 +170,47 @@
     &:not(:disabled):active { box-shadow: none; }
   }
 
+  &_toggleable#{&}_filled:not(#{&}_selected):not(#{&}_fixed):not(:disabled) {
+    --m3-ripple-color: var(--m3-sys-on-surface-variant);
+    --state-color: var(--m3-sys-on-surface-variant);
+    background: var(--m3-sys-surface-container-highest);
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &_toggleable#{&}_tonal:not(#{&}_selected):not(#{&}_fixed):not(:disabled) {
+    --m3-ripple-color: var(--m3-sys-on-surface-variant);
+    --state-color: var(--m3-sys-on-surface-variant);
+    background: var(--m3-sys-surface-container-highest);
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &_toggleable#{&}_outlined:not(#{&}_selected):not(#{&}_fixed):not(:disabled) {
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &_toggleable#{&}_outlined#{&}_selected:not(#{&}_fixed):not(:disabled) {
+    --m3-ripple-color: var(--m3-sys-inverse-on-surface);
+    --state-color: var(--m3-sys-inverse-on-surface);
+    background: var(--m3-sys-inverse-surface);
+    color: var(--m3-sys-inverse-on-surface);
+  }
+
+  &_toggleable#{&}_outlined#{&}_selected:not(#{&}_fixed):not(:disabled)::before { border-color: transparent; }
+
+  &_toggleable#{&}_tonal#{&}_selected:not(#{&}_fixed):not(:disabled) {
+    --m3-ripple-color: var(--m3-sys-on-secondary);
+    --state-color: var(--m3-sys-on-secondary);
+    background: var(--m3-sys-secondary);
+    color: var(--m3-sys-on-secondary);
+  }
+
+  &_toggleable#{&}_elevated#{&}_selected:not(#{&}_fixed):not(:disabled) {
+    --m3-ripple-color: var(--m3-sys-on-primary);
+    --state-color: var(--m3-sys-on-primary);
+    background: var(--m3-sys-primary);
+    color: var(--m3-sys-on-primary);
+  }
+
   &__state {
     @include m3-typography.label-large;
 
@@ -110,17 +221,25 @@
     overflow: hidden;
     opacity: 0;
     transition:
-      m3-motion.timing-standard(background-color),
-      m3-motion.timing-standard(opacity)
+      m3-motion.timing-expressive-fast-effects(background-color),
+      m3-motion.timing-expressive-fast-effects(opacity)
     ;
     position: absolute;
     inset-block-start: 0;
     inset-inline-start: 0;
   }
 
-  &:hover    &__state { opacity: 0.08 }
-  &:focus    &__state,
-  &:active   &__state { opacity: 0.12 }
+  &__ripple {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  &:hover:not(:disabled) &__state { opacity: 0.08 }
+  &:focus-visible:not(:disabled) &__state,
+  &:active:not(:disabled) &__state { opacity: 0.1 }
   &:disabled &__state { background: var(--state-color-disabled); opacity: 0.12 }
 
   &__content {
@@ -130,37 +249,123 @@
     flex: 1 0 0;
     inline-size: 100%;
     block-size: 100%;
-    padding: 10px 24px;
+    padding-inline: var(--m3-button-padding);
     align-items: center;
     align-self: stretch;
     justify-content: center;
-    gap: 8px;
+    gap: var(--m3-button-gap);
     border-radius: inherit;
     overflow: hidden;
     position: relative;
   }
 
-  &_has-leading-icon  &__content { padding-inline-start: 16px; }
-  &_has-trailing-icon &__content { padding-inline-end: 16px; }
-
   &_text &__content {
     padding-inline: 12px;
   }
 
-  &_text#{&}_has-leading-icon  &__content { padding-inline-end: 16px; }
-  &_text#{&}_has-trailing-icon &__content { padding-inline-start: 16px; }
+  &_xs &__content { @include m3-typography.label-medium; }
+  &_lg &__content { @include m3-typography.title-medium; }
+  &_xl &__content { @include m3-typography.headline-small; }
 
   &__icon {
     display: inline-flex;
   }
 
   &__icon svg {
-    inline-size: 18px;
-    block-size: 18px;
+    inline-size: var(--m3-icon-size);
+    block-size: var(--m3-icon-size);
   }
 
   &:disabled &__icon,
   &:disabled &__text {
     opacity: 0.38;
   }
+
+  &_fixed {
+    --m3-button-full-corner: calc(min(var(--m3-button-size), var(--m3-button-fixed-width)) / 2);
+    --m3-icon-size: 24px;
+    --m3-ripple-effect-duration: #{m3-motion.duration('extra-long1')};
+    --m3-button-fixed-background: transparent;
+    --m3-button-fixed-color: var(--m3-sys-on-surface-variant);
+    --m3-ripple-color: var(--m3-button-fixed-color);
+    --state-color: var(--m3-button-fixed-color);
+    --state-color-disabled: transparent;
+
+    inline-size: var(--m3-button-fixed-width);
+    font-size: 0;
+    overflow: visible;
+  }
+
+  &_fixed:not(:disabled) {
+    background: var(--m3-button-fixed-background);
+    color: var(--m3-button-fixed-color);
+  }
+
+  &_fixed::after {
+    content: '';
+    position: absolute;
+    inset-inline: calc((var(--m3-button-fixed-width) - max(48px, var(--m3-button-fixed-width))) / 2);
+    inset-block: calc((var(--m3-button-size) - max(48px, var(--m3-button-size))) / 2);
+  }
+
+  &_fixed:disabled {
+    background: transparent;
+    color: var(--m3-sys-on-surface);
+  }
+  &_fixed#{&}_xs { --m3-icon-size: 20px; }
+  &_fixed#{&}_lg { --m3-icon-size: 32px; }
+  &_fixed#{&}_xl { --m3-icon-size: 40px; }
+  &_fixed#{&}_square { --m3-button-corner: var(--m3-button-square-corner); }
+  &_fixed#{&}_toggleable#{&}_selected { --m3-button-corner: var(--m3-button-square-corner); }
+  &_fixed#{&}_square#{&}_toggleable#{&}_selected { --m3-button-corner: var(--m3-button-full-corner); }
+  &_fixed:active:not(:disabled) { --m3-button-corner: var(--m3-button-pressed-corner); }
+
+  &_fixed#{&}_filled {
+    --m3-button-fixed-background: var(--m3-sys-primary);
+    --m3-button-fixed-color: var(--m3-sys-on-primary);
+  }
+
+  &_fixed#{&}_tonal {
+    --m3-button-fixed-background: var(--m3-sys-secondary-container);
+    --m3-button-fixed-color: var(--m3-sys-on-secondary-container);
+  }
+
+  &_fixed#{&}_elevated {
+    --m3-button-fixed-background: var(--m3-sys-surface-container-low);
+    --m3-button-fixed-color: var(--m3-sys-primary);
+  }
+
+  &_fixed#{&}_text { --m3-button-fixed-color: var(--m3-sys-primary); }
+
+  &_fixed#{&}_toggleable#{&}_selected#{&}_standard {
+    --m3-button-fixed-color: var(--m3-sys-primary);
+  }
+
+  &_fixed#{&}_toggleable#{&}_filled:not(#{&}_selected) {
+    --m3-button-fixed-background: var(--m3-sys-surface-container-highest);
+    --m3-button-fixed-color: var(--m3-sys-primary);
+    --m3-ripple-color: var(--m3-sys-on-secondary-container);
+  }
+
+  &_fixed#{&}_toggleable#{&}_tonal:not(#{&}_selected) {
+    --m3-button-fixed-background: var(--m3-sys-surface-container-highest);
+    --m3-button-fixed-color: var(--m3-sys-on-secondary-container);
+    --state-color: var(--m3-sys-on-surface-variant);
+  }
+
+  &_fixed#{&}_toggleable#{&}_outlined#{&}_selected {
+    --m3-button-fixed-background: var(--m3-sys-inverse-surface);
+    --m3-button-fixed-color: var(--m3-sys-inverse-on-surface);
+  }
+
+  &_fixed#{&}_toggleable#{&}_outlined#{&}_selected::before { opacity: 0; }
+
+  &_fixed &__content { padding-inline: 0; }
+  &_fixed:disabled &__icon,
+  &_fixed:disabled &__text { opacity: 0.38; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-button,
+  .m3-button__state { transition: none; }
 }

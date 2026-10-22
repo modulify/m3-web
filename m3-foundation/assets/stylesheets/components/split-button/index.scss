@@ -1,0 +1,113 @@
+@use '../../basics/motion' as m3-motion;
+
+.m3-split-button {
+  --m3-split-button-size: 40px;
+  --m3-split-button-trailing-width: 48px;
+  --m3-split-button-inner-corner: 4px;
+  --m3-split-button-icon-offset: 1px;
+
+  display: inline-flex;
+  max-inline-size: 100%;
+  align-items: center;
+  gap: 2px;
+  direction: inherit;
+
+  &,
+  *,
+  *::before,
+  *::after { box-sizing: border-box; }
+
+  &_xs {
+    --m3-split-button-size: 32px;
+  }
+
+  &_md {
+    --m3-split-button-size: 56px;
+    --m3-split-button-trailing-width: 56px;
+    --m3-split-button-icon-offset: 2px;
+  }
+
+  &_lg {
+    --m3-split-button-size: 96px;
+    --m3-split-button-trailing-width: 96px;
+    --m3-split-button-inner-corner: 8px;
+    --m3-split-button-icon-offset: 3px;
+  }
+
+  &_xl {
+    --m3-split-button-size: 136px;
+    --m3-split-button-trailing-width: 136px;
+    --m3-split-button-inner-corner: 12px;
+    --m3-split-button-icon-offset: 6px;
+  }
+
+  &__segment {
+    display: inline-flex;
+    min-block-size: max(48px, var(--m3-split-button-size));
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+  }
+
+  &__segment:first-child { min-inline-size: 48px; }
+  &__segment:has(> button:disabled) { cursor: default; }
+  &__segment:has(> button:focus-visible) { z-index: 1; }
+
+  &__segment:last-child {
+    flex: 0 0 var(--m3-split-button-trailing-width);
+    inline-size: var(--m3-split-button-trailing-width);
+  }
+
+  &__main,
+  &__trailing {
+    --m3-button-corner: var(--m3-split-button-inner-corner);
+    flex: 0 0 auto;
+  }
+
+  &__main:is(:hover, :focus-visible):not(:disabled),
+  &__trailing:is(:hover, :focus-visible):not(:disabled) {
+    --m3-button-corner: var(--m3-button-pressed-corner);
+  }
+
+  &__main {
+    border-start-start-radius: var(--m3-button-full-corner);
+    border-end-start-radius: var(--m3-button-full-corner);
+  }
+
+  &__trailing {
+    --m3-icon-size: 24px;
+    inline-size: var(--m3-split-button-trailing-width);
+    border-start-end-radius: var(--m3-button-full-corner);
+    border-end-end-radius: var(--m3-button-full-corner);
+    transition:
+      m3-motion.timing-standard(inline-size),
+      m3-motion.timing-standard(border-radius),
+      m3-motion.timing-expressive-fast-effects(background-color),
+      m3-motion.timing-expressive-fast-effects(color);
+  }
+
+  &__trailing .m3-button__content { padding-inline: 0; }
+
+  &__trailing .m3-button__icon {
+    translate: calc(-1 * var(--m3-split-button-icon-offset)) 0;
+    transition:
+      m3-motion.timing-standard(rotate),
+      m3-motion.timing-standard(translate);
+  }
+
+  &:dir(rtl) &__trailing .m3-button__icon { translate: var(--m3-split-button-icon-offset) 0; }
+
+  &_open &__trailing {
+    --m3-button-corner: var(--m3-button-full-corner);
+    inline-size: var(--m3-split-button-size);
+    border-radius: var(--m3-button-full-corner);
+  }
+
+  &_open &__trailing .m3-button__icon { rotate: 180deg; translate: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-split-button__trailing,
+  .m3-split-button__trailing .m3-button__icon { transition: none; }
+}
