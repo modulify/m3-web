@@ -56,19 +56,14 @@
     flex: 0 0 auto;
   }
 
-  &__leading  .m3-icon-button,
-  &__trailing .m3-icon-button {
+  &__leading  .m3-button_fixed,
+  &__trailing .m3-button_fixed {
     inline-size: 48px;
     block-size: 48px;
   }
 
-  &__leading .m3-icon-button__content,
-  &__trailing .m3-icon-button__content {
-    padding: 12px;
-  }
-
-  &__leading .m3-icon-button:where(:not(.m3-icon-button_filled, .m3-icon-button_tonal)) {
-    --content-color: var(--m3-sys-on-surface);
+  &__leading .m3-button_fixed:where(:not(.m3-button_filled, .m3-button_tonal)) {
+    --m3-button-fixed-color: var(--m3-sys-on-surface);
     --state-color: var(--m3-sys-on-surface);
     --m3-ripple-color: var(--m3-sys-on-surface);
   }
@@ -285,8 +280,8 @@
     justify-self: center;
   }
 
-  &_transparent#{&}_under &__leading  .m3-icon-button,
-  &_transparent#{&}_under &__trailing .m3-icon-button {
+  &_transparent#{&}_under &__leading  .m3-button_fixed,
+  &_transparent#{&}_under &__trailing .m3-button_fixed {
     background: var(--m3-sys-surface-container);
   }
 

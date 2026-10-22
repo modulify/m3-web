@@ -117,3 +117,11 @@ $m3-sys-motion-easing-map: (
 @function timing-standard-decelerate($property, $duration: 'medium1') {
   @return #{$property} + ' ' + #{timing($duration, 'standard-decelerate')}
 }
+
+@function timing-expressive-fast-spatial($property) {
+  @return #{$property} + ' 350ms cubic-bezier(0.42, 1.67, 0.21, 0.90)'
+}
+
+@function timing-expressive-fast-effects($property) {
+  @return #{$property} + ' 150ms cubic-bezier(0.31, 0.94, 0.34, 1.00)'
+}
