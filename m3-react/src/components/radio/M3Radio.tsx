@@ -31,7 +31,7 @@ export interface M3RadioProps<Value = boolean>
   onChange?: (value: Value) => void;
 }
 
-export interface M3RadioExposed extends M3RadioMethods, ElementReference<HTMLElement> {}
+export interface M3RadioExposed extends M3RadioMethods, ElementReference {}
 
 export interface M3RadioMethods extends Interactable {}
 

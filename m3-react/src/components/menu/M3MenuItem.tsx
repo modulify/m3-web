@@ -27,7 +27,7 @@ export interface M3MenuItemProps extends HTMLAttributes<HTMLElement> {
   disabled?: boolean;
 }
 
-export interface M3MenuItemExposed extends ElementReference<HTMLElement> {}
+export interface M3MenuItemExposed extends ElementReference {}
 
 const Leading = defineSlot('M3MenuItem.Leading')
 const Trailing = defineSlot('M3MenuItem.Trailing')

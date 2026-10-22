@@ -192,7 +192,7 @@ const rootWidth = ref(0)
 
 defineExpose({
   get el () { return root.value },
-} satisfies ElementReference<HTMLElement>)
+} satisfies ElementReference)
 
 const expanded = ref(false)
 const shouldBeExpanded = ref(false)

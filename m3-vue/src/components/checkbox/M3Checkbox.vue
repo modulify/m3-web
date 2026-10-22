@@ -71,7 +71,7 @@ defineExpose({
   click: () => _input.value?.click(),
   focus: () => _input.value?.focus(),
   blur: () => _input.value?.blur(),
-} satisfies ElementReference<HTMLElement> & Interactable)
+} satisfies ElementReference & Interactable)
 
 const equals = (a: unknown, b: unknown) => props.equalsFn?.call(null, a, b) ?? a === b
 const contains = (array: unknown[], value: unknown) => array.some(v => equals(v, value))

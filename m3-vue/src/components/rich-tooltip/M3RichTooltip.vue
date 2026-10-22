@@ -191,5 +191,5 @@ const rootAttrs = computed(() => {
 
 defineExpose({
   get el () { return root.value?.el ?? null },
-} satisfies ElementReference<HTMLElement>)
+} satisfies ElementReference)
 </script>

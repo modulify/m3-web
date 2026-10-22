@@ -17,5 +17,5 @@ const root = ref<HTMLElement | null>(null)
 
 defineExpose({
   get el () { return root.value },
-} satisfies ElementReference<HTMLElement>)
+} satisfies ElementReference)
 </script>

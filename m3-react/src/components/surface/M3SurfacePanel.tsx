@@ -18,7 +18,7 @@ export interface M3SurfacePanelProps extends M3SurfacePanelOptions {
   ref?: Ref<M3SurfacePanelExposed>;
 }
 
-export interface M3SurfacePanelExposed extends ElementReference<HTMLElement> {}
+export interface M3SurfacePanelExposed extends ElementReference {}
 
 export default defineComponent(function M3SurfacePanel({
   ref: _ref,

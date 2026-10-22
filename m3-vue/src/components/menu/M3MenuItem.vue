@@ -77,7 +77,7 @@ const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
 
 defineExpose({
   get el () { return rootElement.value },
-} satisfies ElementReference<HTMLElement>)
+} satisfies ElementReference)
 
 const onKeyUp = (event: KeyboardEvent) => ripple.value?.activate(event)
 </script>

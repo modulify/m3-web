@@ -7,7 +7,7 @@ import M3Popper from './M3Popper.vue'
 
 type None = Record<string, never>
 
-export interface M3PopperMethods extends ElementReference<HTMLElement> {
+export interface M3PopperMethods extends ElementReference {
   contains (el: Element | null): boolean;
   adjust (): Promise<void>;
   show (): Promise<void>;

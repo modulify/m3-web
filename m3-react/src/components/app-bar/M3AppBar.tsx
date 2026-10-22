@@ -37,7 +37,7 @@ export interface M3AppBarProps extends HTMLAttributes<HTMLElement> {
   tag?: 'header' | 'div';
 }
 
-export interface M3AppBarExposed extends ElementReference<HTMLElement> {}
+export interface M3AppBarExposed extends ElementReference {}
 
 const Leading = defineSlot('M3AppBar.Leading')
 const Headline = defineSlot('M3AppBar.Headline')

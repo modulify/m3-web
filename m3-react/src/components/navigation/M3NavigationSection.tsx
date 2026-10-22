@@ -13,7 +13,7 @@ export interface M3NavigationSectionProps extends HTMLAttributes<HTMLElement> {
   ref?: Ref<M3NavigationSectionExposed>;
 }
 
-export interface M3NavigationSectionExposed extends ElementReference<HTMLElement> {}
+export interface M3NavigationSectionExposed extends ElementReference {}
 
 const Header: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3NavigationSection.Header', ({
   className = '',
