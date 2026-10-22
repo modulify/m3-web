@@ -34,7 +34,7 @@ const tabIndex = computed(() => attrs.tabindex ?? (
 
 defineExpose({
   get el () { return root.value },
-} satisfies ElementReference<HTMLElement>)
+} satisfies ElementReference)
 
 const surfaceClass = computed(() => getSurfacePanelClass(props.elevation, props.variant))
 const surfaceStyle = computed(() => getSurfacePanelStyle({

@@ -59,7 +59,7 @@ defineExpose({
   click: () => _input.value?.click(),
   focus: () => _input.value?.focus(),
   blur: () => _input.value?.blur(),
-} satisfies ElementReference<HTMLElement> & Interactable)
+} satisfies ElementReference & Interactable)
 
 const equals = (a: Value | undefined, b: Value) => props.equalsFn?.call(null, a, b) ?? a === b
 const checked = computed(() => equals(props.model, value.value))

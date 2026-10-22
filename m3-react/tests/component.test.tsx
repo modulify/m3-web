@@ -16,7 +16,7 @@ interface TestComponentProps {
   ref?: Ref<TestComponentExposed>;
 }
 
-interface TestComponentExposed extends ElementReference<HTMLElement> {}
+interface TestComponentExposed extends ElementReference {}
 
 const Component = defineComponent(function TestComponent(
   props: TestComponentProps,
@@ -34,7 +34,7 @@ const Component = defineComponent(function TestComponent(
   slots: { Header },
 })
 
-interface GenericComponentExposed<Value> extends ElementReference<HTMLElement> {
+interface GenericComponentExposed<Value> extends ElementReference {
   value: Value;
 }
 

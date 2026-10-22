@@ -120,5 +120,5 @@ const ripple = ref<InstanceType<typeof M3Ripple> | null>(null)
 
 defineExpose({
   get el () { return root.value },
-} satisfies ElementReference<HTMLElement>)
+} satisfies ElementReference)
 </script>

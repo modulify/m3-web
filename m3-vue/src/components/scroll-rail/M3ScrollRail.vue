@@ -45,7 +45,7 @@ const enabled = ref(false)
 defineExpose({
   get el () { return root.value },
   sync: () => rail.value?.sync(),
-} satisfies ElementReference<HTMLElement> & { sync: () => void })
+} satisfies ElementReference & { sync: () => void })
 
 watch(() => props.horizontal, horizontal => {
   if (rail.value) { rail.value.horizontal = horizontal }

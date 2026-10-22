@@ -50,7 +50,7 @@ export type M3LinkProps = {
   href?: string;
 }
 
-export interface M3LinkMethods extends ElementReference<HTMLElement>, Interactable {}
+export interface M3LinkMethods extends ElementReference, Interactable {}
 
 export type M3LinkInstance = ComponentPublicInstance & M3LinkMethods
 

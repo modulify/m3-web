@@ -30,7 +30,7 @@ export interface M3CardProps extends HTMLAttributes<HTMLElement> {
   landscape?: boolean;
 }
 
-export interface M3CardExposed extends ElementReference<HTMLElement> {}
+export interface M3CardExposed extends ElementReference {}
 
 const Content = defineSlot('M3Card.Content')
 

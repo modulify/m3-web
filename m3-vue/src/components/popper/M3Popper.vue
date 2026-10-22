@@ -355,7 +355,7 @@ defineExpose({
   contains,
   show,
   hide,
-} satisfies ElementReference<HTMLElement> & {
+} satisfies ElementReference & {
   adjust: () => Promise<void>;
   contains: (el: Element | null) => boolean;
   show: (immediately?: boolean) => void;

@@ -159,7 +159,7 @@ const observeScroll = () => {
   listeners = controller
 }
 
-defineExpose({ get el () { return root.value } } satisfies ElementReference<HTMLElement>)
+defineExpose({ get el () { return root.value } } satisfies ElementReference)
 
 onMounted(() => {
   observeScroll()

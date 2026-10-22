@@ -36,7 +36,7 @@ export interface M3CheckboxProps<Model = boolean, Value = unknown>
   onChange?: (value: Model) => void;
 }
 
-export interface M3CheckboxExposed extends M3CheckboxMethods, ElementReference<HTMLElement> {}
+export interface M3CheckboxExposed extends M3CheckboxMethods, ElementReference {}
 
 export interface M3CheckboxMethods extends Interactable {}
 

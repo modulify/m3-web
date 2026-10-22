@@ -122,7 +122,7 @@ const root = ref<M3PopperInstance | null>(null)
 
 defineExpose({
   get el () { return root.value?.el ?? null },
-} satisfies ElementReference<HTMLElement>)
+} satisfies ElementReference)
 
 defineEmits([
   'shown',
