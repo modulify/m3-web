@@ -30,13 +30,15 @@
             @update:value="syncDraftValue"
         >
             <template v-if="switchable" #header-action>
-                <M3IconButton
+                <M3Button
                     :aria-label="modeToggleLabel"
                     :disabled="disabled"
+                    appearance="standard"
+                    width="medium"
                     @click="setAppearance('input')"
                 >
                     <M3Icon name="edit" />
-                </M3IconButton>
+                </M3Button>
             </template>
         </M3DatePicker>
 
@@ -60,13 +62,15 @@
                     </div>
                 </div>
                 <div v-if="switchable" class="m3-date-picker__header-action">
-                    <M3IconButton
+                    <M3Button
                         :aria-label="modeToggleLabel"
                         :disabled="disabled"
+                        appearance="standard"
+                        width="medium"
                         @click="setAppearance('picker')"
                     >
                         <M3Icon name="calendar_today" />
-                    </M3IconButton>
+                    </M3Button>
                 </div>
             </header>
 
@@ -136,7 +140,6 @@ import { ref, watch } from 'vue'
 import { M3Button } from '@/components/button'
 import { M3Dialog } from '@/components/dialog'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3TextField } from '@/components/text-field'
 
 import M3DatePicker from './M3DatePicker.vue'

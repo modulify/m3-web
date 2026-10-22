@@ -16,15 +16,17 @@
         >{{ message }}</span>
         <span v-if="slots.action || closable" class="m3-snackbar__actions">
             <slot name="action" v-bind="actionContext" />
-            <M3IconButton
+            <M3Button
                 v-if="closable"
                 :aria-label="closeLabel"
                 :aria-describedby="messageId"
+                appearance="standard"
                 class="m3-snackbar__close"
+                width="medium"
                 @click="dismiss"
             >
                 <M3Icon name="close" aria-hidden="true" />
-            </M3IconButton>
+            </M3Button>
         </span>
     </div>
 </template>
@@ -37,8 +39,8 @@ import type { VNode } from 'vue'
 
 import { computed } from 'vue'
 
+import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 
 import { useId } from '@/composables/id'
 

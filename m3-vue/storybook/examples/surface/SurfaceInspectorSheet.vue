@@ -62,9 +62,9 @@
                 </div>
 
                 <div class="m3-side-sheet__affordance">
-                    <M3IconButton appearance="standard" @click="opened = false">
+                    <M3Button appearance="standard" width="medium" @click="opened = false">
                         <M3Icon name="close" />
-                    </M3IconButton>
+                    </M3Button>
                 </div>
             </header>
 
@@ -114,7 +114,6 @@ import { ref } from 'vue'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Select } from '@/components/select'
 import { M3Surface, M3SurfacePanel } from '@/components/surface'
 import { M3TextField } from '@/components/text-field'

@@ -38,7 +38,7 @@ describe('m3-vue/snackbar', () => {
     const closeButton = screen.getByRole('button', { name: 'Close notification' })
     const message = document.querySelector('.m3-snackbar__message')!
     expect(actionButton.classList.contains('m3-button_text')).toBe(true)
-    expect(closeButton.classList.contains('m3-icon-button')).toBe(true)
+    expect(closeButton.classList.contains('m3-button_fixed')).toBe(true)
     expect(actionButton.getAttribute('aria-describedby')).toBe(message.id)
     expect(closeButton.getAttribute('aria-describedby')).toBe(message.id)
     expect(document.querySelector('.m3-snackbar_layout-stacked')).not.toBeNull()

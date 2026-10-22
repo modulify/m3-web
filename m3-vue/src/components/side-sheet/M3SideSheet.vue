@@ -34,9 +34,9 @@
             </div>
 
             <div class="m3-side-sheet__affordance">
-                <M3IconButton @click="emit('update:shown', false)">
+                <M3Button appearance="standard" width="medium" @click="emit('update:shown', false)">
                     <slot name="close-icon" />
-                </M3IconButton>
+                </M3Button>
             </div>
         </header>
 
@@ -69,7 +69,7 @@ import {
 
 import { durations } from '@modulify/m3-foundation/lib/motion'
 
-import { M3IconButton } from '@/components/icon-button'
+import { M3Button } from '@/components/button'
 import { M3ScrollRail } from '@/components/scroll-rail'
 import { M3Surface } from '@/components/surface'
 

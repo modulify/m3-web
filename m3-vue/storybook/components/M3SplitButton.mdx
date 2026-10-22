@@ -1,0 +1,95 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as Stories from './M3SplitButton.stories'
+
+<Meta of={Stories} />
+
+<Localized locale="en-US">
+
+# Split buttons
+
+A split button pairs a primary action with a separate control for related actions. It uses two `M3Button` surfaces with a 2px gap. The trailing control opens a menu and rotates its expand icon when open. Unlike a connected button group, both controls are independent Tab stops; the split button has no selection model or arrow-key navigation. [Material guidelines](https://m3.material.io/components/split-button/guidelines).
+
+<Canvas of={Stories.Filled} />
+<Canvas of={Stories.Open} />
+
+## Choose a style and size
+
+Material 3 Expressive specifies `elevated`, `filled`, `tonal`, and `outlined` split buttons at sizes `xs`, `sm`, `md`, `lg`, and `xl`. The inner gap stays 2px; inner corners use 4px for XS/S/M, 8px for L, and 12px for XL. The library also accepts `standard` and `text` because both halves use the common `M3Button` implementation. These combinations are library extensions outside the Material specification and are not recommended for Material-conformant interfaces. [Split button specs](https://m3.material.io/components/split-button/specs).
+
+<Canvas of={Stories.Elevated} />
+<Canvas of={Stories.Tonal} />
+<Canvas of={Stories.Outlined} />
+<Canvas of={Stories.Medium} />
+<Canvas of={Stories.ExtraLarge} />
+
+## API
+
+| Prop | Values | Default | Purpose |
+| --- | --- | --- | --- |
+| `appearance` | Button appearances | `filled` | Color style of both buttons. |
+| `size` | `xs`, `sm`, `md`, `lg`, `xl` | `sm` | Shared size of both buttons. |
+| `menuLabel` | string | required | Accessible name of the trailing button. |
+| `open` | boolean | `false` | Initial menu state and a command when the prop changes; interactions update state internally. |
+| `action` | event | — | Primary button click. |
+| `toggle` | event with boolean | — | State change notification. |
+| `update:open` | event with boolean | — | Emits the requested state for `v-model:open`. |
+| `disabled` | boolean | `false` | Disable both controls. |
+| Default slot | content | — | Leading button label and optional icon. |
+| `menu` slot | content | — | Menu content, usually `M3MenuItem`s; the slot receives `close()` to dismiss the menu. |
+
+A static `open` starts with the menu shown and still allows it to close. To open or close it later, change the prop value. Native div attributes go to the group. The trailing button exposes `aria-haspopup`, `aria-expanded`, and `aria-controls`. Label it for the related options, not merely “More”. Both controls support Enter and Space independently. Keep the primary label brief and keep the menu visually aligned to the trailing side where space permits. [Accessibility](https://m3.material.io/components/split-button/accessibility).
+
+```html
+<M3SplitButton menu-label="More sending options" @action="send">
+  Send
+  <template #menu="{ close }"><M3MenuItem @click="close">Schedule send</M3MenuItem></template>
+</M3SplitButton>
+```
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Разделённые кнопки
+
+Разделённая кнопка сочетает основное действие и отдельное управление связанными действиями. Она состоит из двух поверхностей `M3Button` с зазором 2 px. Правая кнопка открывает меню, а её значок поворачивается при раскрытии. В отличие от соединённой группы кнопок, здесь две независимые остановки Tab; выбора и перемещения стрелками нет. [Рекомендации Material](https://m3.material.io/components/split-button/guidelines).
+
+<Canvas of={Stories.Filled} />
+<Canvas of={Stories.Open} />
+
+## Вид и размер
+
+Material 3 Expressive описывает варианты `elevated`, `filled`, `tonal` и `outlined` в размерах `xs`, `sm`, `md`, `lg`, `xl`. Зазор всегда 2 px; внутренние скругления составляют 4 px для XS/S/M, 8 px для L и 12 px для XL. Библиотека допускает также `standard` и `text`, поскольку обе части используют общий `M3Button`. Эти сочетания являются расширением библиотеки за пределами спецификации Material; для интерфейса по Material они не рекомендуются. [Размеры split button](https://m3.material.io/components/split-button/specs).
+
+<Canvas of={Stories.Elevated} />
+<Canvas of={Stories.Tonal} />
+<Canvas of={Stories.Outlined} />
+<Canvas of={Stories.Medium} />
+<Canvas of={Stories.ExtraLarge} />
+
+## API
+
+| Prop | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- |
+| `appearance` | Варианты `M3Button` | `filled` | Общий цветовой стиль двух кнопок. |
+| `size` | `xs`, `sm`, `md`, `lg`, `xl` | `sm` | Общий размер двух кнопок. |
+| `menuLabel` | строка | обязательно | Доступное имя кнопки меню. |
+| `open` | boolean | `false` | Начальное состояние меню и команда при изменении пропса; действия обновляют внутреннее состояние. |
+| `action` | событие | — | Нажатие основной кнопки. |
+| `toggle` | событие с boolean | — | Уведомление о смене состояния. |
+| `update:open` | событие с boolean | — | Передаёт запрошенное состояние для `v-model:open`. |
+| `disabled` | boolean | `false` | Отключение обеих кнопок. |
+| Слот по умолчанию | содержимое | — | Подпись и значок основного действия. |
+| Слот `menu` | содержимое | — | Пункты меню, обычно `M3MenuItem`; слот получает функцию `close()` для закрытия меню. |
+
+Статический `open` открывает меню при создании компонента, но не мешает закрыть его. Чтобы позднее открыть или закрыть меню программно, измените значение пропса. Атрибуты div передаются группе. Кнопка меню задаёт `aria-haspopup`, `aria-expanded` и `aria-controls`. В имени укажите, какие именно дополнительные действия она открывает. Обе кнопки независимо поддерживают Enter и Space. Подпись основного действия должна быть короткой; при наличии места меню выравнивается по стороне второй кнопки. [Доступность](https://m3.material.io/components/split-button/accessibility).
+
+```html
+<M3SplitButton menu-label="Другие варианты отправки" @action="send">
+  Отправить
+  <template #menu="{ close }"><M3MenuItem @click="close">Запланировать отправку</M3MenuItem></template>
+</M3SplitButton>
+```
+
+</Localized>

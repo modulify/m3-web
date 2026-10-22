@@ -24,15 +24,16 @@
                     :key="action.id"
                     class="m3-toolbar__action"
                 >
-                    <M3IconButton
+                    <M3Button
                         :aria-label="action.label"
                         :aria-pressed="action.selected"
                         :appearance="action.selected ? 'tonal' : 'standard'"
                         :disabled="action.disabled"
+                        width="medium"
                         @click="action.onClick"
                     >
                         <M3Icon :name="action.icon" />
-                    </M3IconButton>
+                    </M3Button>
                 </span>
 
                 <div ref="custom" class="m3-toolbar__custom">
@@ -40,14 +41,16 @@
                 </div>
 
                 <span v-if="excess.length" class="m3-toolbar__action">
-                    <M3IconButton
+                    <M3Button
                         ref="overflowButton"
                         :aria-label="overflowLabel"
                         :aria-expanded="menuOpen"
+                        appearance="standard"
                         aria-haspopup="menu"
+                        width="medium"
                     >
                         <M3Icon name="more_vert" />
-                    </M3IconButton>
+                    </M3Button>
                 </span>
             </div>
         </div>
@@ -103,8 +106,8 @@ import {
   watch,
 } from 'vue'
 
+import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Menu, M3MenuItem } from '@/components/menu'
 
 import { useResizeObserver } from '@/composables/observer'
@@ -127,7 +130,7 @@ const slots = useSlots()
 const root = ref<HTMLDivElement | null>(null)
 const actionGroup = ref<HTMLDivElement | null>(null)
 const custom = ref<HTMLDivElement | null>(null)
-const overflowButton = ref<InstanceType<typeof M3IconButton> | null>(null)
+const overflowButton = ref<(ElementReference & { click: () => void }) | null>(null)
 const visibleCount = ref(props.actions.length)
 const scrollActive = ref(false)
 const menuOpen = ref(false)

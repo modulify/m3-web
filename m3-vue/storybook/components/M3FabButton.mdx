@@ -14,6 +14,14 @@ Floating action buttons emphasize the highest-priority action on a surface. Mate
 
 ## API
 
+| Prop | Values | Default | Purpose |
+| --- | --- | --- | --- |
+| `variant` | `primary-container`, `secondary-container`, `tertiary-container`, `primary`, `secondary`, `tertiary` | `primary-container` | Paired container and content colors. |
+| `size` | `sm`, `md`, `lg` | `sm` | FAB geometry: 56, 80, or 96px. |
+| `disabled` | boolean | `false` | Prevent activation; prefer omitting an unavailable FAB. |
+
+Pass an icon and optional text as children or in the default slot. Native button attributes and event handlers pass through.
+
 ### When to use
 
 Use `M3FabButton` for the primary action of a screen or large section, especially when that action should remain easy to reach while content scrolls.
@@ -27,7 +35,11 @@ The extended form is usually easier to scan when the action is not universally o
 
 ### Variants
 
-This implementation exposes Material 3 tonal variants such as `surface`, `primary`, `secondary`, and `tertiary`, which let the FAB stay prominent without always defaulting to the same tone.
+Choose a color role with `variant`: `primary-container` (default), `secondary-container`, `tertiary-container`, `primary`, `secondary`, or `tertiary`. The container role and its on-color stay paired.
+
+### Sizes
+
+`size="sm"` is the 56px default FAB, `md` is 80px, and `lg` is 96px. Keep it anchored over scrollable content with sufficient edge clearance.
 
 ## Accessibility semantics
 
@@ -38,19 +50,19 @@ This implementation exposes Material 3 tonal variants such as `surface`, `primar
 ### Standard FABs
 
 <p style={{ display: 'flex', gap: '16px' }}>
-  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Edit'} variant={'surface'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Edit'} variant={'primary-container'} />
   <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Edit'} />
-  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Edit'} variant={'secondary'} />
-  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Edit'} variant={'tertiary'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Edit'} variant={'secondary-container'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Edit'} variant={'tertiary-container'} />
 </p>
 
 ### Extended FABs
 
 <p style={{ display: 'flex', gap: '16px' }}>
-  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'New task'} variant={'surface'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'New task'} variant={'primary-container'} />
   <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'New task'} />
-  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'New task'} variant={'secondary'} />
-  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'New task'} variant={'tertiary'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'New task'} variant={'secondary-container'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'New task'} variant={'tertiary-container'} />
 </p>
 
 ## Story guide
@@ -96,6 +108,14 @@ If users need to stop and decode the icon, show the label. The slight increase i
 
 ## API
 
+| Prop | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- |
+| `variant` | `primary-container`, `secondary-container`, `tertiary-container`, `primary`, `secondary`, `tertiary` | `primary-container` | Цвета контейнера и содержимого. |
+| `size` | `sm`, `md`, `lg` | `sm` | Геометрия FAB: 56, 80 или 96px. |
+| `disabled` | boolean | `false` | Отключить действие; недоступную FAB лучше не показывать. |
+
+Передайте иконку и необязательный текст через children или слот по умолчанию. Атрибуты и обработчики нативной кнопки передаются компоненту.
+
 ### Когда использовать
 
 Используйте `M3FabButton` для основного действия экрана или крупного раздела, особенно если оно должно оставаться доступным при прокрутке.
@@ -107,7 +127,11 @@ If users need to stop and decode the icon, show the label. The slight increase i
 
 ### Варианты
 
-Доступны тона Material 3 `surface`, `primary`, `secondary` и `tertiary`, позволяющие сохранить акцент без единственного фиксированного цвета.
+Пара `variant` задаёт цвет контейнера и текста: `primary-container` (по умолчанию), `secondary-container`, `tertiary-container`, `primary`, `secondary` или `tertiary`.
+
+### Размеры
+
+`size="sm"` — стандартная FAB высотой 56px, `md` — 80px, `lg` — 96px. Размещайте её над прокручиваемым содержимым с достаточным отступом от края.
 
 ## Доступность
 
@@ -118,19 +142,19 @@ If users need to stop and decode the icon, show the label. The slight increase i
 ### Обычные плавающие кнопки
 
 <p style={{ display: 'flex', gap: '16px' }}>
-  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Изменить'} variant={'surface'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Изменить'} variant={'primary-container'} />
   <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Изменить'} />
-  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Изменить'} variant={'secondary'} />
-  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Изменить'} variant={'tertiary'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Изменить'} variant={'secondary-container'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'edit'} aria-label={'Изменить'} variant={'tertiary-container'} />
 </p>
 
 ### Расширенные плавающие кнопки
 
 <p style={{ display: 'flex', gap: '16px' }}>
-  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'Новая задача'} variant={'surface'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'Новая задача'} variant={'primary-container'} />
   <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'Новая задача'} />
-  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'Новая задача'} variant={'secondary'} />
-  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'Новая задача'} variant={'tertiary'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'Новая задача'} variant={'secondary-container'} />
+  <Inline tag={'span'} is={ButtonExample} icon={'add'} label={'Новая задача'} variant={'tertiary-container'} />
 </p>
 
 ## Примеры в Storybook

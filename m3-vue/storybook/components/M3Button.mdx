@@ -1,6 +1,7 @@
 import { Meta } from '@storybook/addon-docs/blocks'
 import Inline from './Inline'
 import M3Button from '../examples/button/ButtonExample.vue'
+import IconButtonExample from '../examples/button/IconButtonExample.vue'
 import { Localized } from '../i18n'
 import * as M3ButtonStories from './M3Button.stories'
 
@@ -14,6 +15,18 @@ Buttons communicate available actions and establish hierarchy on a surface. Mate
 
 ## API
 
+| Prop | Values | Default | Purpose |
+| --- | --- | --- | --- |
+| `appearance` | `filled`, `elevated`, `tonal`, `outlined`, `text`, `standard` | `filled` | Visual emphasis. |
+| `size` | `xs`, `sm`, `md`, `lg`, `xl` | `sm` or inherited | Expressive size scale; inherits a surrounding button group's size when omitted. |
+| `rounding` | `round`, `square` | `round` | Resting shape. |
+| `width` | `auto`, `narrow`, `medium`, `wide` | `auto` | `auto` follows content width; other values select compact, fixed-width geometry and an enlarged target. |
+| `toggleable` | boolean | `false` | Enable persistent selection. Not available for `text`. |
+| `selected` | boolean | `false` | Controlled selection state; update it in the click handler. |
+| `disabled` | boolean | `false` | Prevent activation. |
+
+Native button attributes and event handlers pass through. `aria-pressed` follows `selected` when `toggleable` is enabled.
+
 ### When to use
 
 Use `M3Button` for explicit actions such as save, submit, share, or continue. Prefer buttons over links when the result changes UI state or triggers an in-app operation.
@@ -25,6 +38,16 @@ Use `M3Button` for explicit actions such as save, submit, share, or continue. Pr
 - `tonal` for prominent but secondary emphasis
 - `outlined` for lower-emphasis alternatives
 - `text` for lightweight supporting actions
+
+### Size, shape, and selection
+
+`standard` is available for shared button composition, but Material does not define it as an ordinary text-button style. Use it for icon buttons where the specification calls for it.
+
+The default `sm` size is 40px high. Use `xs` (32px), `md` (56px), `lg` (96px), or `xl` (136px) when the action hierarchy calls for a different scale. `rounding="round"` makes a pill; `square` uses the Expressive corner for that size. A toggle button uses `toggleable` and `selected`; selection reverses its resting shape and is exposed through `aria-pressed`. Text buttons do not support toggle selection. The pressed shape changes briefly during activation.
+
+### Visible size and touch target
+
+`size` sets the visible container, not a universal touch-target size. A standalone `M3Button` is clickable within that container, so its `xs` and `sm` heights are 32px and 40px. Material requires at least a 48×48px target for small icon buttons and for every button in a group. For an icon-only action, set `width="medium"` on `M3Button`; this extends the target without enlarging its visible shape. `M3ButtonGroup` reserves target space for its items. If a standalone small text button needs a 48px-high target in your layout, provide a larger interactive area or choose a larger button size; empty space around the button alone does not enlarge its target. [Button specs](https://m3.material.io/components/buttons/specs), [icon button accessibility](https://m3.material.io/components/icon-buttons/accessibility), [group accessibility](https://m3.material.io/components/button-groups/accessibility).
 
 ### Icons and labels
 
@@ -52,12 +75,43 @@ Leading icons help scanning when the metaphor is widely understood. Keep the tex
   <Inline tag={'span'} is={M3Button} icon={'edit'} label={'Edit'} appearance={'tonal'} />
 </p>
 
+## Icon buttons
+
+Use `M3Button width="medium"` for compact, repeated actions whose icon is widely understood, such as toolbar controls or trailing row actions. The same button implementation supplies the icon geometry, state layer, ripple, and toggle behavior. When the action is consequential or the icon is ambiguous, prefer a button with a visible text label. Every icon-only button needs an accessible name such as `aria-label`.
+
+Material 3 Expressive specifies `filled`, `tonal`, `outlined`, and `standard` icon buttons. The shared API also accepts `elevated` and `text`, but these are library extensions, not specified Material icon-button variants. Avoid them in Material-conformant UI. Select `rounding="square"` when that shape fits the layout. `size` determines the visible height (32, 40, 56, 96, or 136px), while `width` chooses `narrow`, `medium`, or `wide` proportions at that size. Selection reverses the resting corner shape; the icon changes from outline to filled when selected.
+
+### Icon touch target
+
+The visible container and interactive target are distinct. Material requires an icon-button target of at least 48×48px even inside other components. At `xs` and `sm`, and for narrow widths, `M3Button width="medium"` extends its hit area invisibly beyond the visible shape. Leave space between neighboring targets and screen edges; clipping overflow on a parent can cut off the extension. Choose the visible size for the layout rather than inflating the shape solely to meet the target rule. [Icon button specs](https://m3.material.io/components/icon-buttons/specs), [accessibility](https://m3.material.io/components/icon-buttons/accessibility).
+
+### Icon selection
+
+Use `toggleable` only for a persistent state such as a saved favorite. Keep `selected` synchronized with application state; `aria-pressed` reflects it. Do not use a toggle to signal a one-time action.
+
+```html
+<M3Button width="medium" appearance="tonal" toggleable :selected="favorite" aria-label="Favorite" @click="favorite = !favorite">
+  <M3Icon name="favorite" />
+</M3Button>
+```
+
+<Inline tag={'p'} is={IconButtonExample} favoriteLabel={'Mark as favorite'} toggleLabel={'Toggle favorite'} />
+
 ## Story guide
 
 - [With Text Only](?path=/story/components-m3button--with-text-only)
 - [With Leading Icon](?path=/story/components-m3button--with-leading-icon)
 - [Appearance Matrix](?path=/story/components-m3button--appearance-matrix)
+- [Size Matrix](?path=/story/components-m3button--size-matrix)
+- [Square](?path=/story/components-m3button--square)
+- [Toggleable](?path=/story/components-m3button--toggleable)
 - [Disabled States](?path=/story/components-m3button--disabled-states)
+- [Icon Standard](?path=/story/components-m3button--icon-standard)
+- [Icon Square](?path=/story/components-m3button--icon-square)
+- [Icon Size Matrix](?path=/story/components-m3button--icon-size-matrix)
+- [Icon Width Matrix](?path=/story/components-m3button--icon-width-matrix)
+- [Icon Toggleable](?path=/story/components-m3button--icon-toggleable)
+- [Icon Appearance Matrix](?path=/story/components-m3button--icon-appearance-matrix)
 
 ## Usage guidance
 
@@ -81,6 +135,8 @@ Use `disabled` only when the action is genuinely unavailable. If the action is a
 
 - [M3 Buttons overview](https://m3.material.io/components/buttons/overview)
 - [M3 Buttons guidelines](https://m3.material.io/components/buttons/guidelines)
+- [M3 Icon Buttons overview](https://m3.material.io/components/icon-buttons/overview)
+- [M3 Icon Buttons guidelines](https://m3.material.io/components/icon-buttons/guidelines)
 - [WAI-ARIA APG: Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
 
 </Localized>
@@ -93,6 +149,18 @@ Use `disabled` only when the action is genuinely unavailable. If the action is a
 
 ## API
 
+| Prop | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- |
+| `appearance` | `filled`, `elevated`, `tonal`, `outlined`, `text`, `standard` | `filled` | Степень акцента. |
+| `size` | `xs`, `sm`, `md`, `lg`, `xl` | `sm` или наследуется | Размерный ряд Expressive; без явного значения наследует размер группы кнопок. |
+| `rounding` | `round`, `square` | `round` | Исходная форма. |
+| `width` | `auto`, `narrow`, `medium`, `wide` | `auto` | `auto` подбирает ширину по содержимому; остальные значения задают компактную постоянную ширину и увеличенную область нажатия. |
+| `toggleable` | boolean | `false` | Устойчивое выбранное состояние; не для `text`. |
+| `selected` | boolean | `false` | Управляемый выбор; обновляйте в обработчике нажатия. |
+| `disabled` | boolean | `false` | Отключить действие. |
+
+Атрибуты и обработчики нативной кнопки передаются компоненту. При `toggleable` значение `aria-pressed` следует за `selected`.
+
 ### Когда использовать
 
 Используйте `M3Button` для явных действий: сохранения, отправки, публикации или продолжения. Если результат меняет состояние интерфейса или запускает операцию внутри приложения, кнопка предпочтительнее ссылки.
@@ -104,6 +172,16 @@ Use `disabled` only when the action is genuinely unavailable. If the action is a
 - `tonal` для заметного вторичного действия
 - `outlined` для менее приоритетных альтернатив
 - `text` для лёгких вспомогательных действий
+
+### Размер, форма и выбор
+
+`standard` доступен для общей реализации кнопок, но Material не описывает его как оформление обычной текстовой кнопки. Используйте его для иконочных кнопок, для которых этот вариант предусмотрен спецификацией.
+
+По умолчанию `size="sm"` задаёт высоту 40px. Доступны также `xs` (32px), `md` (56px), `lg` (96px) и `xl` (136px). `rounding="round"` задаёт форму капсулы, `square` — скругление Expressive для выбранного размера. Для переключателя используйте `toggleable` и `selected`: выбранное состояние обращает исходную форму и отражается через `aria-pressed`. Текстовая кнопка не поддерживает toggle-состояние. При нажатии форма кратковременно меняется.
+
+### Видимый размер и область нажатия
+
+`size` задаёт видимый контейнер, но не универсальный размер области нажатия. У отдельной `M3Button` нажимается сам контейнер: его высота составляет 32px для `xs` и 40px для `sm`. Material требует область не меньше 48×48px для небольших иконочных кнопок и каждого пункта группы. Для действия только с иконкой укажите `width="medium"` на `M3Button`: область нажатия расширяется без увеличения видимой формы. `M3ButtonGroup` оставляет место для области нажатия своих пунктов. Если отдельной небольшой текстовой кнопке в вашем интерфейсе требуется область высотой 48px, увеличьте интерактивную область при компоновке или выберите более крупный размер: один лишь пустой отступ вокруг кнопки не расширит область нажатия. [Размеры кнопок](https://m3.material.io/components/buttons/specs), [доступность иконочных кнопок](https://m3.material.io/components/icon-buttons/accessibility), [доступность групп](https://m3.material.io/components/button-groups/accessibility).
 
 ### Иконки и подписи
 
@@ -131,12 +209,40 @@ Use `disabled` only when the action is genuinely unavailable. If the action is a
   <Inline tag={'span'} is={M3Button} icon={'edit'} label={'Изменить'} appearance={'tonal'} />
 </p>
 
+## Кнопки только с иконкой
+
+Используйте `M3Button width="medium"` для компактных повторяющихся действий с понятной иконкой: например, на панели инструментов или в конце строки. Общая реализация кнопки задаёт геометрию, слой состояния, ripple и переключаемое состояние. Если действие важно или смысл иконки неочевиден, предпочтительна кнопка с видимой подписью. Кнопке только с иконкой обязательно нужно доступное имя, например `aria-label`.
+
+Material 3 Expressive описывает для иконочных кнопок `filled`, `tonal`, `outlined` и `standard`. Общий API позволяет также `elevated` и `text`, но это расширения библиотеки за пределами спецификации иконочных кнопок Material. Для интерфейса по Material их использовать не рекомендуется. `rounding="square"` задаёт альтернативную форму. `size` определяет видимую высоту (32, 40, 56, 96 или 136px), а `width` — пропорции `narrow`, `medium` или `wide` для выбранного размера. При выборе исходная форма скругления обращается, а иконка меняется с контурной на залитую.
+
+### Область нажатия иконочной кнопки
+
+Видимый контейнер и интерактивная область различаются. Material требует для иконочной кнопки область не меньше 48×48px даже внутри другого компонента. При размерах `xs` и `sm`, а также при узкой ширине `M3Button width="medium"` невидимо расширяет область нажатия за пределы формы. Оставляйте место между соседними областями и краями экрана; родитель с обрезкой переполнения может отсечь расширение. Видимый размер выбирайте по компоновке, не увеличивая форму только ради области нажатия. [Размеры иконочных кнопок](https://m3.material.io/components/icon-buttons/specs), [доступность](https://m3.material.io/components/icon-buttons/accessibility).
+
+### Переключаемое состояние
+
+Используйте `toggleable` для устойчивого состояния, например отметки «Избранное». Синхронизируйте `selected` с состоянием приложения; `aria-pressed` отражает выбор. Для однократного действия переключатель не нужен.
+
+```html
+<M3Button width="medium" appearance="tonal" toggleable :selected="favorite" aria-label="Избранное" @click="favorite = !favorite">
+  <M3Icon name="favorite" />
+</M3Button>
+```
+
+<Inline tag={'p'} is={IconButtonExample} favoriteLabel={'Добавить в избранное'} toggleLabel={'Переключить избранное'} />
+
 ## Примеры в Storybook
 
 - [Только текст](?path=/story/components-m3button--with-text-only)
 - [С ведущей иконкой](?path=/story/components-m3button--with-leading-icon)
 - [Матрица оформления](?path=/story/components-m3button--appearance-matrix)
 - [Недоступные состояния](?path=/story/components-m3button--disabled-states)
+- [Иконочная: standard](?path=/story/components-m3button--icon-standard)
+- [Иконочная: квадратная](?path=/story/components-m3button--icon-square)
+- [Иконочная: размеры](?path=/story/components-m3button--icon-size-matrix)
+- [Иконочная: ширина](?path=/story/components-m3button--icon-width-matrix)
+- [Иконочная: переключатель](?path=/story/components-m3button--icon-toggleable)
+- [Иконочная: варианты оформления](?path=/story/components-m3button--icon-appearance-matrix)
 
 ## Рекомендации
 
@@ -160,6 +266,8 @@ Use `disabled` only when the action is genuinely unavailable. If the action is a
 
 - [Обзор M3 Buttons](https://m3.material.io/components/buttons/overview)
 - [Рекомендации M3 Buttons](https://m3.material.io/components/buttons/guidelines)
+- [Обзор M3 Icon Buttons](https://m3.material.io/components/icon-buttons/overview)
+- [Рекомендации M3 Icon Buttons](https://m3.material.io/components/icon-buttons/guidelines)
 - [WAI-ARIA APG: шаблон Button](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
 
 </Localized>

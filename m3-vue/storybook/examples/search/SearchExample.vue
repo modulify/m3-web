@@ -21,9 +21,9 @@
                 @update:query="submitted = false"
             >
                 <template #actions>
-                    <M3IconButton :aria-label="text.example" @click="query = text.cards[0]">
+                    <M3Button :aria-label="text.example" appearance="standard" width="medium" @click="query = text.cards[0]">
                         <M3Icon name="history" />
-                    </M3IconButton>
+                    </M3Button>
                 </template>
                 <template #results>
                     <p class="search-example__section">
@@ -65,7 +65,6 @@ import { computed, ref } from 'vue'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3List, M3ListItem } from '@/components/list'
 import { M3Search } from '@/components/search'
 

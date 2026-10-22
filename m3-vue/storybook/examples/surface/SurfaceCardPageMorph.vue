@@ -34,12 +34,14 @@
             class="surface-card-page__nav"
         >
             <template #top>
-                <M3IconButton
+                <M3Button
                     :aria-label="text.openNavigation"
+                    appearance="standard"
+                    width="medium"
                     @click="navExpanded = true"
                 >
                     <M3Icon name="menu" />
-                </M3IconButton>
+                </M3Button>
             </template>
 
             <M3NavigationTab
@@ -223,7 +225,6 @@ import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3SurfacePanel } from '@/components/surface'
 

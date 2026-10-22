@@ -44,7 +44,7 @@
             }"
         >
             <div class="m3-date-picker__navigation-group">
-                <M3IconButton
+                <M3Button
                     :aria-label="isPickerView ? undefined : 'Previous month'"
                     :aria-hidden="isPickerView ? true : undefined"
                     :tabindex="isPickerView ? -1 : undefined"
@@ -52,10 +52,12 @@
                     :class="{
                         'm3-date-picker__navigation-control_hidden': isPickerView,
                     }"
+                    appearance="standard"
+                    width="medium"
                     @click="startMonthSlide(-1)"
                 >
                     <M3Icon name="chevron_left" />
-                </M3IconButton>
+                </M3Button>
 
                 <M3Button
                     v-if="hasMonthView"
@@ -87,7 +89,7 @@
                     {{ formatDay(displayedMonth, 'MMM') }}
                 </div>
 
-                <M3IconButton
+                <M3Button
                     :aria-label="isPickerView ? undefined : 'Next month'"
                     :aria-hidden="isPickerView ? true : undefined"
                     :tabindex="isPickerView ? -1 : undefined"
@@ -95,14 +97,16 @@
                     :class="{
                         'm3-date-picker__navigation-control_hidden': isPickerView,
                     }"
+                    appearance="standard"
+                    width="medium"
                     @click="startMonthSlide(1)"
                 >
                     <M3Icon name="chevron_right" />
-                </M3IconButton>
+                </M3Button>
             </div>
 
             <div class="m3-date-picker__navigation-group">
-                <M3IconButton
+                <M3Button
                     :aria-label="isDockedPickerView ? undefined : 'Previous year'"
                     :aria-hidden="isDockedPickerView || undefined"
                     :tabindex="isDockedPickerView ? -1 : undefined"
@@ -110,10 +114,12 @@
                     :class="{
                         'm3-date-picker__navigation-control_hidden': isDockedPickerView,
                     }"
+                    appearance="standard"
+                    width="medium"
                     @click="moveCursorByYear(-1)"
                 >
                     <M3Icon name="chevron_left" />
-                </M3IconButton>
+                </M3Button>
 
                 <M3Button
                     v-if="hasYearView"
@@ -139,7 +145,7 @@
                     {{ formatDay(displayedMonth, 'yyyy') }}
                 </div>
 
-                <M3IconButton
+                <M3Button
                     :aria-label="isDockedPickerView ? undefined : 'Next year'"
                     :aria-hidden="isDockedPickerView || undefined"
                     :tabindex="isDockedPickerView ? -1 : undefined"
@@ -147,10 +153,12 @@
                     :class="{
                         'm3-date-picker__navigation-control_hidden': isDockedPickerView,
                     }"
+                    appearance="standard"
+                    width="medium"
                     @click="moveCursorByYear(1)"
                 >
                     <M3Icon name="chevron_right" />
-                </M3IconButton>
+                </M3Button>
             </div>
         </div>
 
@@ -253,23 +261,27 @@
                             </div>
 
                             <div class="m3-date-picker__inline-arrows">
-                                <M3IconButton
+                                <M3Button
                                     :aria-label="page.active ? 'Previous month' : undefined"
                                     :disabled="disabled || !canMoveToPreviousMonthFrom(page.month)"
                                     :tabindex="page.active ? undefined : -1"
+                                    appearance="standard"
+                                    width="medium"
                                     @click="page.active && startMonthSlide(-1)"
                                 >
                                     <M3Icon name="chevron_left" />
-                                </M3IconButton>
+                                </M3Button>
 
-                                <M3IconButton
+                                <M3Button
                                     :aria-label="page.active ? 'Next month' : undefined"
                                     :disabled="disabled || !canMoveToNextMonthFrom(page.month)"
                                     :tabindex="page.active ? undefined : -1"
+                                    appearance="standard"
+                                    width="medium"
                                     @click="page.active && startMonthSlide(1)"
                                 >
                                     <M3Icon name="chevron_right" />
-                                </M3IconButton>
+                                </M3Button>
                             </div>
                         </div>
 
@@ -343,7 +355,6 @@ import { watch } from 'vue'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 
 import { useTimeout } from '@/composables/timing'
 
@@ -548,7 +559,7 @@ const clickSuppressionEnd = useTimeout(
 
 defineExpose({
   get el () { return root.value },
-} satisfies ElementReference<HTMLElement>)
+} satisfies ElementReference)
 
 const getMonthPages = (): MonthPage[] => {
   return [

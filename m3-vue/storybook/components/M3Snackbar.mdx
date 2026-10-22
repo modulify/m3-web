@@ -30,7 +30,7 @@ Package defaults are 16 px leading/bottom inset in compact layouts, 24 px on wid
 
 The host keeps a persistent polite live region and does not move focus on appearance. `Alt+G` focuses its action or close button; document the shortcut in app help. `Tab` uses normal page navigation; `Escape` dismisses when a snackbar button is focused. Focus returns to the trigger or the next captured focusable element if the trigger was removed. Hovering or focusing pauses a timed message.
 
-For a standalone `M3Snackbar`, listen for `action` and `dismiss`. Render one `M3Button appearance="text"` in its `#action` slot; the slot's `buttonProps` connect it to the message and action event. The close control is an `M3IconButton` described by the message. Use the host for actual notifications, sequencing, and reliable live updates. Translate `closeLabel`.
+For a standalone `M3Snackbar`, listen for `action` and `dismiss`. Render one `M3Button appearance="text"` in its `#action` slot; the slot's `buttonProps` connect it to the message and action event. The close control is an `M3Button width="medium"` described by the message. Use the host for actual notifications, sequencing, and reliable live updates. Translate `closeLabel`.
 
 ### Avoid
 
@@ -148,7 +148,7 @@ Snackbar коротко сообщает о процессе приложени�
 
 Host держит постоянно смонтированную polite live region и не переносит фокус при появлении. `Alt+G` переводит фокус на действие или закрытие; укажите сочетание в справке приложения. `Tab` следует обычному порядку; `Escape` закрывает snackbar, когда его кнопка в фокусе. Затем фокус возвращается к инициатору либо к следующему элементу, запомненному при открытии, если инициатор удалён. Наведение или фокус приостанавливают таймер.
 
-При отдельном использовании `M3Snackbar` обработайте события `action` и `dismiss`. В его слот `#action` поместите одну `M3Button appearance="text"`; `buttonProps` слота связывают кнопку с сообщением и событием действия. Закрытие рисуется через `M3IconButton` и связано с сообщением. Для реальных уведомлений, очереди и надёжного объявления используйте host. Переводите `closeLabel`.
+При отдельном использовании `M3Snackbar` обработайте события `action` и `dismiss`. В его слот `#action` поместите одну `M3Button appearance="text"`; `buttonProps` слота связывают кнопку с сообщением и событием действия. Закрытие рисуется через `M3Button width="medium"` и связано с сообщением. Для реальных уведомлений, очереди и надёжного объявления используйте host. Переводите `closeLabel`.
 
 ### Чего избегать
 

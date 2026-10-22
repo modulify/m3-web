@@ -67,12 +67,12 @@ The ref exposes `el`. Unslotted children act as the headline for ordinary appear
 ```vue
 <M3AppBar appearance="medium-flexible" headline="Library" subtitle="Recently added" scroll="collapse" :scroll-target="scroller">
   <template #leading>
-    <M3IconButton aria-label="Open navigation" @click="navigationOpen = true">
+    <M3Button width="medium" appearance="standard" aria-label="Open navigation" @click="navigationOpen = true">
       <M3Icon name="menu" />
-    </M3IconButton>
+    </M3Button>
   </template>
   <template #trailing>
-    <M3IconButton aria-label="Favorites"><M3Icon name="favorite" /></M3IconButton>
+    <M3Button width="medium" appearance="standard" aria-label="Favorites"><M3Icon name="favorite" /></M3Button>
   </template>
 </M3AppBar>
 ```

@@ -56,9 +56,9 @@
                     tabindex="-1"
                 >
                     <form role="search" class="m3-search__header" @submit.prevent="submit">
-                        <M3IconButton :aria-label="backLabel" @click="close">
+                        <M3Button :aria-label="backLabel" appearance="standard" width="medium" @click="close">
                             <M3Icon name="arrow_back" />
-                        </M3IconButton>
+                        </M3Button>
                         <input
                             ref="input"
                             :value="query"
@@ -71,9 +71,15 @@
                             @keydown="onInputKeyDown"
                         />
                         <div class="m3-search__actions">
-                            <M3IconButton v-if="query" :aria-label="clearLabel" @click="clear">
+                            <M3Button
+                                v-if="query"
+                                :aria-label="clearLabel"
+                                appearance="standard"
+                                width="medium"
+                                @click="clear"
+                            >
                                 <M3Icon name="close" />
-                            </M3IconButton>
+                            </M3Button>
                             <slot name="actions" />
                         </div>
                     </form>
@@ -119,8 +125,8 @@ import { ref } from 'vue'
 import { resolveSearchLayout } from '@modulify/m3-foundation/lib/search'
 import { watch } from 'vue'
 
+import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 
 import { useBreakpoint } from '@/composables/breakpoint'
 import { useId } from '@/composables/id'

@@ -119,13 +119,14 @@
                 <div class="surface-dialog-chain__dialog-head">
                     <h3>{{ text.dialog }} {{ level + 1 }} {{ text.of }} {{ dialogChain.length }}</h3>
 
-                    <M3IconButton
+                    <M3Button
                         :aria-label="`${text.closeDialog} ${level + 1}`"
                         appearance="standard"
+                        width="medium"
                         @click="closeFrom(level)"
                     >
                         <M3Icon name="close" />
-                    </M3IconButton>
+                    </M3Button>
                 </div>
 
                 <p>{{ text.descriptions[level] }}</p>
@@ -166,7 +167,6 @@ import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import M3Surface from '@/components/surface/M3Surface.vue'
 
