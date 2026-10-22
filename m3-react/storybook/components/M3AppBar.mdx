@@ -67,12 +67,12 @@ The ref exposes `el`. Unslotted children act as the headline for ordinary appear
 ```tsx
 <M3AppBar appearance="medium-flexible" headline="Library" subtitle="Recently added" scroll="collapse" scrollTarget={scroller}>
   <M3AppBar.Leading>
-    <M3IconButton aria-label="Open navigation" onClick={() => setNavigationOpen(true)}>
+    <M3Button width="medium" appearance="standard" aria-label="Open navigation" onClick={() => setNavigationOpen(true)}>
       <M3Icon name="menu" />
-    </M3IconButton>
+    </M3Button>
   </M3AppBar.Leading>
   <M3AppBar.Trailing>
-    <M3IconButton aria-label="Favorites"><M3Icon name="favorite" /></M3IconButton>
+    <M3Button width="medium" appearance="standard" aria-label="Favorites"><M3Icon name="favorite" /></M3Button>
   </M3AppBar.Trailing>
 </M3AppBar>
 ```

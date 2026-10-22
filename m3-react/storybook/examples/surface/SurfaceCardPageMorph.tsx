@@ -6,7 +6,6 @@ import { durations, easing } from '@modulify/m3-foundation/lib/motion'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Navigation, M3NavigationTab } from '@/components/navigation'
 import { M3SurfacePanel } from '@/components/surface'
 
@@ -118,12 +117,12 @@ const SurfaceCardPageMorph: FC<{ locale: StorybookLocale }> = ({ locale }) => {
         onToggle={setNavExpanded}
       >
         <M3Navigation.Top>
-          <M3IconButton
-            aria-label={text.openNavigation}
+          <M3Button appearance="standard" aria-label={text.openNavigation}
+            width="medium"
             onClick={() => setNavExpanded(true)}
           >
             <M3Icon name="menu" />
-          </M3IconButton>
+          </M3Button>
         </M3Navigation.Top>
 
         <M3NavigationTab

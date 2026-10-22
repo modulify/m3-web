@@ -15,7 +15,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { M3Button } from '@/components/button'
 import { M3Dialog } from '@/components/dialog'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3TextField } from '@/components/text-field'
 
 import { toClassName } from '@/utils/styling'
@@ -247,13 +246,13 @@ const M3DatePickerDialog: FC<M3DatePickerDialogProps> = (props) => {
   }
 
   const modeToggle = switchable ? (
-    <M3IconButton
-      aria-label={appearance === 'picker' ? 'Switch to text input' : 'Switch to calendar input'}
+    <M3Button aria-label={appearance === 'picker' ? 'Switch to text input' : 'Switch to calendar input'}
       disabled={props.disabled}
+      width="medium"
       onClick={() => setAppearance(appearance === 'picker' ? 'input' : 'picker')}
     >
       <M3Icon name={appearance === 'picker' ? 'edit' : 'calendar_today'} />
-    </M3IconButton>
+    </M3Button>
   ) : null
 
   const inputPanel = (

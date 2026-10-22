@@ -43,7 +43,6 @@ import {
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 
 import defineComponent from '@/utils/component'
 import { defineSlot, distinct } from '@/utils/content'
@@ -106,7 +105,7 @@ export interface M3DatePickerRangeProps extends M3DatePickerBaseProps {
 
 export type M3DatePickerProps = M3DatePickerSingleProps | M3DatePickerRangeProps
 
-export interface M3DatePickerExposed extends ElementReference<HTMLElement> {}
+export interface M3DatePickerExposed extends ElementReference {}
 
 const MONTH_SWIPE = {
   activationThreshold: 8,
@@ -523,18 +522,18 @@ export default defineComponent(function M3DatePicker({
           })}
         >
           <div className="m3-date-picker__navigation-group">
-            <M3IconButton
-              aria-label={isPickerView ? undefined : 'Previous month'}
+            <M3Button appearance="standard" aria-label={isPickerView ? undefined : 'Previous month'}
               aria-hidden={isPickerView}
               tabIndex={isPickerView ? -1 : undefined}
               disabled={disabled || isPickerView || !canMoveToPreviousMonth}
               className={toClassName({
                 'm3-date-picker__navigation-control_hidden': isPickerView,
               })}
+              width="medium"
               onClick={() => startMonthSlide(-1)}
             >
               <M3Icon name="chevron_left" />
-            </M3IconButton>
+            </M3Button>
 
             {hasMonthView ? (
               <M3Button
@@ -566,33 +565,33 @@ export default defineComponent(function M3DatePicker({
               </div>
             )}
 
-            <M3IconButton
-              aria-label={isPickerView ? undefined : 'Next month'}
+            <M3Button appearance="standard" aria-label={isPickerView ? undefined : 'Next month'}
               aria-hidden={isPickerView}
               tabIndex={isPickerView ? -1 : undefined}
               disabled={disabled || isPickerView || !canMoveToNextMonth}
               className={toClassName({
                 'm3-date-picker__navigation-control_hidden': isPickerView,
               })}
+              width="medium"
               onClick={() => startMonthSlide(1)}
             >
               <M3Icon name="chevron_right" />
-            </M3IconButton>
+            </M3Button>
           </div>
 
           <div className="m3-date-picker__navigation-group">
-            <M3IconButton
-              aria-label={isDockedPickerView ? undefined : 'Previous year'}
+            <M3Button appearance="standard" aria-label={isDockedPickerView ? undefined : 'Previous year'}
               aria-hidden={isDockedPickerView || undefined}
               tabIndex={isDockedPickerView ? -1 : undefined}
               disabled={disabled || isDockedPickerView || !canMoveToPreviousYear}
               className={toClassName({
                 'm3-date-picker__navigation-control_hidden': isDockedPickerView,
               })}
+              width="medium"
               onClick={() => moveCursorByYear(-1)}
             >
               <M3Icon name="chevron_left" />
-            </M3IconButton>
+            </M3Button>
 
             {hasYearView ? (
               <M3Button
@@ -619,18 +618,18 @@ export default defineComponent(function M3DatePicker({
               </div>
             )}
 
-            <M3IconButton
-              aria-label={isDockedPickerView ? undefined : 'Next year'}
+            <M3Button appearance="standard" aria-label={isDockedPickerView ? undefined : 'Next year'}
               aria-hidden={isDockedPickerView || undefined}
               tabIndex={isDockedPickerView ? -1 : undefined}
               disabled={disabled || isDockedPickerView || !canMoveToNextYear}
               className={toClassName({
                 'm3-date-picker__navigation-control_hidden': isDockedPickerView,
               })}
+              width="medium"
               onClick={() => moveCursorByYear(1)}
             >
               <M3Icon name="chevron_right" />
-            </M3IconButton>
+            </M3Button>
           </div>
         </div>
       )}
@@ -733,23 +732,23 @@ export default defineComponent(function M3DatePicker({
                       )}
 
                       <div className="m3-date-picker__inline-arrows">
-                        <M3IconButton
-                          aria-label={page.active ? 'Previous month' : undefined}
+                        <M3Button appearance="standard" aria-label={page.active ? 'Previous month' : undefined}
                           disabled={disabled || !canMoveToPreviousMonthFrom(page.month)}
                           tabIndex={page.active ? undefined : -1}
+                          width="medium"
                           onClick={page.active ? () => startMonthSlide(-1) : undefined}
                         >
                           <M3Icon name="chevron_left" />
-                        </M3IconButton>
+                        </M3Button>
 
-                        <M3IconButton
-                          aria-label={page.active ? 'Next month' : undefined}
+                        <M3Button appearance="standard" aria-label={page.active ? 'Next month' : undefined}
                           disabled={disabled || !canMoveToNextMonthFrom(page.month)}
                           tabIndex={page.active ? undefined : -1}
+                          width="medium"
                           onClick={page.active ? () => startMonthSlide(1) : undefined}
                         >
                           <M3Icon name="chevron_right" />
-                        </M3IconButton>
+                        </M3Button>
                       </div>
                     </div>
                   )}

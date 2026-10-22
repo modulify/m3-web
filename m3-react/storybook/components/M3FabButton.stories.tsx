@@ -37,8 +37,8 @@ const meta: Meta<typeof M3FabButton> = {
   },
 
   args: {
-    variant: 'primary',
-    size: 'md',
+    variant: 'primary-container',
+    size: 'sm',
     disabled: false,
   },
 

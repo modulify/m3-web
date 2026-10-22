@@ -22,8 +22,8 @@ import {
   useState,
 } from 'react'
 
+import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3Menu, M3MenuItem } from '@/components/menu'
 
 import defineComponent from '@/utils/component'
@@ -172,29 +172,29 @@ export default defineComponent(function M3Toolbar({
     <div className="m3-toolbar__container" inert={collapsed}>
       <div ref={actionGroup} className="m3-toolbar__actions">
         {shown.map(action => <span key={action.id} className="m3-toolbar__action">
-          <M3IconButton
-            aria-label={action.label}
+          <M3Button aria-label={action.label}
             aria-pressed={action.selected}
             appearance={action.selected ? 'tonal' : 'standard'}
             disabled={action.disabled}
+            width="medium"
             onClick={action.onClick}
           >
             <M3Icon name={action.icon} />
-          </M3IconButton>
+          </M3Button>
         </span>)}
         {content && <div ref={custom} className="m3-toolbar__custom">{content}</div>}
         {excess.length > 0 && <span className="m3-toolbar__action">
-          <M3IconButton
-            ref={instance => {
-              overflow.current = instance?.el ?? null
-              setOverflowTarget(current => current === overflow.current ? current : overflow.current)
-            }}
-            aria-label={overflowLabel}
-            aria-expanded={menuOpen}
-            aria-haspopup="menu"
+          <M3Button ref={instance => {
+            overflow.current = instance?.el ?? null
+            setOverflowTarget(current => current === overflow.current ? current : overflow.current)
+          }} appearance="standard"
+          aria-label={overflowLabel}
+          aria-expanded={menuOpen}
+          aria-haspopup="menu"
+          width="medium"
           >
             <M3Icon name="more_vert" />
-          </M3IconButton>
+          </M3Button>
         </span>}
       </div>
     </div>

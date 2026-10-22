@@ -6,7 +6,6 @@ import { useCallback, useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3List, M3ListItem } from '@/components/list'
 import { M3Menu, M3MenuItem } from '@/components/menu'
 import { M3SurfacePanel } from '@/components/surface'
@@ -209,9 +208,9 @@ const ListMenuScene: FC = () => {
         >
           <M3ListItem.Trailing>
             <span ref={bindMenuTarget} className="m3-local-theme-showcase__menu-anchor">
-              <M3IconButton aria-label={text.actions}>
+              <M3Button appearance="standard" aria-label={text.actions} width="medium">
                 <M3Icon name="more_vert" />
-              </M3IconButton>
+              </M3Button>
 
               <M3Menu
                 shown={true}

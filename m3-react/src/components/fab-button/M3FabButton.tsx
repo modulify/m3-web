@@ -35,8 +35,8 @@ export default defineComponent(function M3FabButton({
   ref: _ref,
   type = 'button',
   href = '',
-  variant = 'primary',
-  size = 'md',
+  variant = 'primary-container',
+  size = 'sm',
   disabled = false,
   className = '',
   children = [],
@@ -66,8 +66,8 @@ export default defineComponent(function M3FabButton({
       className={toClassName({
         [className]: className.length > 0,
         ['m3-fab-button']: true,
-        ['m3-fab-button_' + variant]: variant !== 'primary',
-        ['m3-fab-button_' + size]: size !== 'md',
+        ['m3-fab-button_' + variant]: variant !== 'primary-container',
+        ['m3-fab-button_' + size]: size !== 'sm',
         ['m3-fab-button_has-leading-icon']: hasText && hasLeadingIcon,
         ['m3-fab-button_has-trailing-icon']: hasText && hasTrailingIcon,
       })}

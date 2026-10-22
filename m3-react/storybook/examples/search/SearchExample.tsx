@@ -7,7 +7,6 @@ import { useState } from 'react'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
-import { M3IconButton } from '@/components/icon-button'
 import { M3List, M3ListItem } from '@/components/list'
 import { M3Search } from '@/components/search'
 
@@ -96,7 +95,7 @@ export default function SearchExample({
           onSubmit={() => setSubmitted(true)}
         >
           <M3Search.Actions>
-            <M3IconButton aria-label={text.example} onClick={() => updateQuery(text.cards[0])}><M3Icon name="history" /></M3IconButton>
+            <M3Button appearance="standard" aria-label={text.example} width="medium" onClick={() => updateQuery(text.cards[0])}><M3Icon name="history" /></M3Button>
           </M3Search.Actions>
           <M3Search.Results render={({ close }) => (
             <>
