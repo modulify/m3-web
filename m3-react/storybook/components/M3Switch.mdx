@@ -1,8 +1,9 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
+import { Meta } from '@storybook/addon-docs/blocks'
 
 import SwitchExample from '../examples/switch/SwitchExample'
 import { Localized } from '../i18n'
 import * as M3SwitchStories from './M3Switch.stories'
+import Panel from './Panel'
 
 <Meta of={M3SwitchStories} />
 
@@ -30,12 +31,10 @@ Material 3 switches imply direct state change. The control should reflect the ne
 
 ### Demo
 
-<Unstyled>
-  <div className="m3-panel m3-panel_elevated-1 my-4" style={{ maxWidth: '360px' }}>
-    <SwitchExample label="Wi-Fi" className="mb-4" />
-    <SwitchExample label="Bluetooth" />
-  </div>
-</Unstyled>
+<Panel className="my-4" style={{ maxWidth: '360px' }}>
+  <SwitchExample label="Wi-Fi" className="mb-4" />
+  <SwitchExample label="Bluetooth" />
+</Panel>
 
 ## Story guide
 
@@ -79,12 +78,10 @@ Material 3 подразумевает прямое изменение состо
 
 ### Демонстрация
 
-<Unstyled>
-  <div className="m3-panel m3-panel_elevated-1 my-4" style={{ maxWidth: '360px' }}>
-    <SwitchExample label="Wi-Fi" className="mb-4" />
-    <SwitchExample label="Bluetooth" />
-  </div>
-</Unstyled>
+<Panel className="my-4" style={{ maxWidth: '360px' }}>
+  <SwitchExample label="Wi-Fi" className="mb-4" />
+  <SwitchExample label="Bluetooth" />
+</Panel>
 
 ## Примеры в Storybook
 

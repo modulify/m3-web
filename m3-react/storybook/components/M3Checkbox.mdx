@@ -1,8 +1,9 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
+import { Meta } from '@storybook/addon-docs/blocks'
 
 import CheckboxList from '../examples/checkbox/CheckboxList'
 import { Localized } from '../i18n'
 import * as M3CheckboxStories from './M3Checkbox.stories'
+import Panel from './Panel'
 
 <Meta of={M3CheckboxStories} />
 
@@ -38,7 +39,7 @@ In nested lists, the parent checkbox should summarize descendant state:
 
 ### Regular list
 
-<Unstyled className="m3-panel m3-panel_elevated-1">
+<Panel>
   <CheckboxList
     options={[{
       label: 'Apples',
@@ -51,11 +52,11 @@ In nested lists, the parent checkbox should summarize descendant state:
       value: 'oranges',
     }]}
   />
-</Unstyled>
+</Panel>
 
 ### Nested list
 
-<Unstyled className="m3-panel m3-panel_elevated-1">
+<Panel>
   <CheckboxList
     options={[{
       label: 'Remind',
@@ -72,7 +73,7 @@ In nested lists, the parent checkbox should summarize descendant state:
       }],
     }]}
   />
-</Unstyled>
+</Panel>
 
 ## Story guide
 
@@ -129,13 +130,13 @@ Do not present `indeterminate` as a user-selectable third state. It should only 
 
 ### Обычный список
 
-<Unstyled className="m3-panel m3-panel_elevated-1">
+<Panel>
   <CheckboxList options={[{ label: 'Яблоки', value: 'apples' }, { label: 'Бананы', value: 'bananas' }, { label: 'Апельсины', value: 'oranges' }]} />
-</Unstyled>
+</Panel>
 
 ### Вложенный список
 
-<Unstyled className="m3-panel m3-panel_elevated-1">
+<Panel>
   <CheckboxList options={[{
     label: 'Напоминать',
     value: 'remind',
@@ -145,7 +146,7 @@ Do not present `indeterminate` as a user-selectable third state. It should only 
       { label: 'Ежемесячно', value: 'monthly' },
     ],
   }]} />
-</Unstyled>
+</Panel>
 
 ## Примеры в Storybook
 

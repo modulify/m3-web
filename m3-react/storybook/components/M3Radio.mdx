@@ -1,8 +1,9 @@
-import { Meta, Unstyled } from '@storybook/addon-docs/blocks'
+import { Meta } from '@storybook/addon-docs/blocks'
 
 import RadioGroup from '../examples/radio/RadioGroup'
 import { Localized } from '../i18n'
 import * as M3RadioStories from './M3Radio.stories'
+import Panel from './Panel'
 
 <Meta of={M3RadioStories} />
 
@@ -35,7 +36,7 @@ For native keyboard and form semantics, related radios should share the same `na
 
 ### Preference group
 
-<Unstyled className="m3-panel m3-panel_elevated-1">
+<Panel>
   <RadioGroup
     legend="Theme preference"
     options={[{
@@ -49,7 +50,7 @@ For native keyboard and form semantics, related radios should share the same `na
       value: 'dark',
     }]}
   />
-</Unstyled>
+</Panel>
 
 ## Story guide
 
@@ -103,7 +104,7 @@ If the choice is simply on/off, prefer a switch or checkbox. Radios communicate 
 
 ### Группа предпочтений
 
-<Unstyled className="m3-panel m3-panel_elevated-1">
+<Panel>
   <RadioGroup
     legend="Тема оформления"
     options={[{
@@ -117,7 +118,7 @@ If the choice is simply on/off, prefer a switch or checkbox. Radios communicate 
       value: 'dark',
     }]}
   />
-</Unstyled>
+</Panel>
 
 ## Примеры в Storybook
 
