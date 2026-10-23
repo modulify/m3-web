@@ -2,19 +2,21 @@ import type { ComponentSetupContext } from '@/utils/component'
 import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { HTMLAttributes } from 'react'
 import type { Interactable } from '@modulify/m3-foundation/types/dom'
+import type { M3LinkExposed } from '@/components/link'
 import type { M3RippleExposed } from '@/components/ripple'
 import type { Ref } from 'react'
 import type { Size, Variant } from '@modulify/m3-foundation/types/components/fab-button'
 
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
+import { M3Link } from '@/components/link'
 import { M3Ripple } from '@/components/ripple'
 
 import { compose } from '@/utils/events'
 import defineComponent from '@/utils/component'
 import { normalize } from '@/utils/content'
 import { toClassName } from '@/utils/styling'
-import { useElementEffect, useInteractable, useTarget } from '@/hooks'
+import { useTarget } from '@/hooks'
 
 type RootElement = HTMLAnchorElement | HTMLButtonElement
 
@@ -27,7 +29,7 @@ export interface M3FabButtonProps extends HTMLAttributes<RootElement> {
   disabled?: boolean;
 }
 
-export interface M3FabButtonExposed extends M3FabButtonMethods, ElementReference<HTMLButtonElement> {}
+export interface M3FabButtonExposed extends M3FabButtonMethods, ElementReference<RootElement> {}
 
 export interface M3FabButtonMethods extends Interactable {}
 
@@ -43,14 +45,20 @@ export default defineComponent(function M3FabButton({
   onKeyUp = () => {},
   ...attrs
 }: M3FabButtonProps, { expose }: ComponentSetupContext<M3FabButtonExposed>) {
-  const root = useRef<HTMLButtonElement | null>(null)
+  const root = useRef<M3LinkExposed | null>(null)
   const ripple = useRef<M3RippleExposed | null>(null)
   const [rippleTarget, setRippleTarget] = useTarget<HTMLElement>()
-  const interactable = useInteractable(root)
+  expose({
+    get el () { return root.current?.el ?? null },
+    click: () => root.current?.click(),
+    focus: () => root.current?.focus(),
+    blur: () => root.current?.blur(),
+  })
 
-  expose(interactable)
-
-  useElementEffect(root, setRippleTarget)
+  useEffect(() => {
+    const element = root.current?.el
+    return element ? setRippleTarget(element) : undefined
+  }, [href, disabled, setRippleTarget])
 
   const content = normalize(children)
 
@@ -59,9 +67,10 @@ export default defineComponent(function M3FabButton({
   const [, hasTrailingIcon] = content[content.length - 1] ?? [null, false]
 
   return (
-    <button
+    <M3Link
       ref={root}
       type={type}
+      href={disabled ? '' : href}
       disabled={disabled}
       className={toClassName({
         [className]: className.length > 0,
@@ -93,6 +102,6 @@ export default defineComponent(function M3FabButton({
           </span>
         ))}
       </span>
-    </button>
+    </M3Link>
   )
 })
