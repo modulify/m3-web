@@ -52,7 +52,8 @@ const DOCKED_WIDTH = 256
 const MODAL_MIN_WIDTH = 320
 const MODAL_MAX_WIDTH = 400
 const MODAL_RADIUS = 16
-const SIDE_SHEET_TRANSITION_MS = durations['extra-long2']
+const SIDE_SHEET_TRANSITION_MS = durations.long2
+const SIDE_SHEET_LEAVE_MS = durations['extra-long2']
 
 export default defineComponent(function M3SideSheet({
   ref: _ref,
@@ -73,7 +74,7 @@ export default defineComponent(function M3SideSheet({
   roundingTopRight = 0,
   roundingBottomRight = 0,
   roundingBottomLeft = null,
-  transitionMs = 220,
+  transitionMs = SIDE_SHEET_TRANSITION_MS,
   transitionTiming,
   overflow = 'hidden',
   role = 'dialog',
@@ -104,7 +105,7 @@ export default defineComponent(function M3SideSheet({
   const surfaceBottomLeft = roundingBottomLeft ?? (docked ? 0 : MODAL_RADIUS)
 
   const [transition, toggle, endTransition] = useTransition({
-    timeout: SIDE_SHEET_TRANSITION_MS,
+    timeout: { enter: transitionMs, exit: SIDE_SHEET_LEAVE_MS },
     preEnter: true,
     preExit: true,
     mountOnEnter: true,
@@ -151,9 +152,7 @@ export default defineComponent(function M3SideSheet({
       className={toClassName([className, {
         'm3-side-sheet': true,
         'm3-side-sheet_docked': docked,
-        'm3-transition-slide-right-enter': transition.status === 'preEnter' || transition.status === 'entering',
-        'm3-transition-slide-right-enter-active': transition.status === 'entering',
-        'm3-transition-slide-right-leave-active': transition.status === 'preExit' || transition.status === 'exiting',
+        'm3-transition-slide-right-enter': transition.status === 'preEnter',
         'm3-transition-slide-right-leave-to': transition.status === 'exiting',
       }])}
       tag="div"
