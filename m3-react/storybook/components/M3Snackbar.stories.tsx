@@ -96,7 +96,7 @@ function SnackbarInteraction({ scenario, locale }: { scenario: Scenario; locale:
 
   const content = (
     <>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
+      <div className="flex-row flex-wrap gap-4">
         {(scenario === 'feedback' || scenario === 'navigation') && <M3Button onClick={showFeedback}>{text.feedback}</M3Button>}
         {scenario === 'undo' && <M3Button onClick={showUndo}>{text.archive}</M3Button>}
         {scenario === 'queue' && (
@@ -117,7 +117,7 @@ function SnackbarInteraction({ scenario, locale }: { scenario: Scenario; locale:
 
   if (scenario !== 'navigation') {
     return (
-      <main style={{ minHeight: 360, padding: 32, background: 'var(--m3-sys-surface)' }}>
+      <main className="p-8" style={{ minHeight: 360, background: 'var(--m3-sys-surface)' }}>
         {content}
       </main>
     )
@@ -130,7 +130,7 @@ function SnackbarInteraction({ scenario, locale }: { scenario: Scenario; locale:
         <M3NavigationTab label={text.browse}><M3Icon name="explore" /></M3NavigationTab>
         <M3NavigationTab label={text.library}><M3Icon name="library_music" /></M3NavigationTab>
       </M3Navigation>
-      <main className="m3-has-navigation" style={{ minHeight: '100vh', padding: 32, background: 'var(--m3-sys-surface)' }}>
+      <main className="m3-has-navigation p-8" style={{ minHeight: '100vh', background: 'var(--m3-sys-surface)' }}>
         {content}
         <M3FabButton
           variant="tertiary"

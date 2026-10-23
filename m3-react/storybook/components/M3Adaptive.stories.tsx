@@ -27,7 +27,7 @@ function AdaptiveExample ({ notice }: { notice: string }) {
   const adaptive = useM3Adaptive()
 
   return (
-    <div style={{ display: 'grid', gap: 16, padding: 24 }}>
+    <div className="d-grid gap-4 p-6">
       <p>{notice}</p>
       <div>Hook: {adaptive('Inbox', { compact: 'Mail', large: 'Incoming messages' })}</div>
       <div>Props: <M3Adaptive regular="Inbox" compact="Mail" large="Incoming messages" /></div>

@@ -259,7 +259,7 @@ const SurfaceSideSheetDismissToRemove: FC<{ locale: StorybookLocale }> = ({ loca
   return (
     <div className="surface-side-sheet">
       <M3Surface
-        className="surface-side-sheet__topbar"
+        className="p-4"
         fillHeight={false}
         height={72}
         variant="surface-container"

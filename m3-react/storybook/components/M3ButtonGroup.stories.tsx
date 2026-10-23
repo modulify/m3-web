@@ -51,7 +51,6 @@ const messages = {
 const surfaceStyle = {
   background: 'var(--m3-sys-surface-container-low)',
   borderRadius: '24px',
-  padding: '24px',
 }
 
 const meta = {
@@ -68,7 +67,7 @@ const meta = {
     const text = localize(globals.locale, messages)
 
     return (
-      <div style={{ ...surfaceStyle, width: 'min(560px, 90vw)' }}>
+      <div className="p-6" style={{ ...surfaceStyle, width: 'min(560px, 90vw)' }}>
         <M3ButtonGroup aria-label={text.calendarView} {...args}>
           <M3ButtonGroupItem value="day">
             <M3Icon name="calendar_today" />{text.day}
@@ -97,7 +96,7 @@ export const ConnectedActions: Story = {
     const text = localize(globals.locale, messages)
 
     return (
-      <div style={{ ...surfaceStyle, width: 'min(560px, 90vw)' }}>
+      <div className="p-6" style={{ ...surfaceStyle, width: 'min(560px, 90vw)' }}>
         <M3ButtonGroup variant="connected" selection="none" aria-label={text.documentActions}>
           <M3ButtonGroupItem value="copy">
             <M3Icon name="content_copy" />{text.copy}
@@ -121,7 +120,7 @@ export const StandardActions: Story = {
     const text = localize(globals.locale, messages)
 
     return (
-      <div style={surfaceStyle}>
+      <div className="p-6" style={surfaceStyle}>
         <M3ButtonGroup variant="standard" size={args.size} rounding={args.rounding} aria-label={text.editingActions}>
           <M3ButtonGroupItem value="save" appearance="filled">
             <M3Icon name="save" />{text.save}

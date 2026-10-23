@@ -33,7 +33,7 @@ const meta = {
         <M3MenuItem onClick={close}>{text.draft}</M3MenuItem>
       </>,
     }
-    return <div style={{ padding: 32, minHeight: 240 }}>
+    return <div className="p-8" style={{ minHeight: 240 }}>
       <M3SplitButton {...props}>
         <M3Icon name="send" />{text.send}
       </M3SplitButton>

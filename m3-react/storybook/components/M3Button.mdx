@@ -60,7 +60,7 @@ Leading icons help scanning when the metaphor is widely understood. Keep the tex
 - Keep disabled actions unavailable through the `disabled` state.
 
 <Unstyled>
-  <p style={{ display: 'flex', gap: '16px' }}>
+  <p className="d-flex gap-4">
     <M3Button>Edit</M3Button>
     <M3Button appearance={'elevated'}>Edit</M3Button>
     <M3Button appearance={'outlined'}>Edit</M3Button>
@@ -68,7 +68,7 @@ Leading icons help scanning when the metaphor is widely understood. Keep the tex
     <M3Button appearance={'tonal'}>Edit</M3Button>
   </p>
 
-  <p style={{ display: 'flex', gap: '16px' }}>
+  <p className="d-flex gap-4">
     <M3Button><M3Icon name={'edit'} /> Edit</M3Button>
     <M3Button appearance={'elevated'}><M3Icon name={'edit'} /> Edit</M3Button>
     <M3Button appearance={'outlined'}><M3Icon name={'edit'} /> Edit</M3Button>
@@ -98,7 +98,7 @@ Use `toggleable` only for a persistent state such as a saved favorite. Keep `sel
 ```
 
 <Unstyled>
-  <p style={{ display: 'flex', gap: '16px' }}>
+  <p className="d-flex gap-4">
     <M3Button width="medium" aria-label="Mark as favorite"><M3Icon name="favorite" /></M3Button>
     <M3Button width="medium" toggleable={true} selected={true} aria-label="Toggle favorite"><M3Icon name="favorite" /></M3Button>
   </p>
@@ -203,7 +203,7 @@ export const EditButton = () => (
 - Недоступные действия помечайте состоянием `disabled`.
 
 <Unstyled>
-  <p style={{ display: 'flex', gap: '16px' }}>
+  <p className="d-flex gap-4">
     <M3Button>Изменить</M3Button>
     <M3Button appearance={'elevated'}>Изменить</M3Button>
     <M3Button appearance={'outlined'}>Изменить</M3Button>
@@ -211,7 +211,7 @@ export const EditButton = () => (
     <M3Button appearance={'tonal'}>Изменить</M3Button>
   </p>
 
-  <p style={{ display: 'flex', gap: '16px' }}>
+  <p className="d-flex gap-4">
     <M3Button><M3Icon name={'edit'} /> Изменить</M3Button>
     <M3Button appearance={'elevated'}><M3Icon name={'edit'} /> Изменить</M3Button>
     <M3Button appearance={'outlined'}><M3Icon name={'edit'} /> Изменить</M3Button>
@@ -241,7 +241,7 @@ Material 3 Expressive описывает для иконочных кнопок 
 ```
 
 <Unstyled>
-  <p style={{ display: 'flex', gap: '16px' }}>
+  <p className="d-flex gap-4">
     <M3Button width="medium" aria-label="Добавить в избранное"><M3Icon name="favorite" /></M3Button>
     <M3Button width="medium" toggleable={true} selected={true} aria-label="Переключить избранное"><M3Icon name="favorite" /></M3Button>
   </p>

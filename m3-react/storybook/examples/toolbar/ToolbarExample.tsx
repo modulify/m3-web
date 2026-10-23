@@ -58,10 +58,11 @@ export default function ToolbarExample({ variant, orientation, color, scroll, si
     <div style={{ maxInlineSize: 1120, marginInline: 'auto', padding: 24, paddingBlockEnd: 160 }}>
       <h1>{text.title}</h1>
       <p>{text.hint} {text.last}: {last}</p>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+      <div className="flex-container gap-4">
         {[...text.cards, ...text.cards].map((card, index) => <article
           key={`${card}-${index}`}
-          style={{ boxSizing: 'border-box', flex: '1 1 max-content', minInlineSize: 'min(180px, 100%)', maxInlineSize: 'min(360px, 100%)', minBlockSize: 150, padding: 24, borderRadius: 24, background: 'var(--m3-sys-surface-container)' }}
+          className="p-6"
+          style={{ boxSizing: 'border-box', flex: '1 1 max-content', minInlineSize: 'min(180px, 100%)', maxInlineSize: 'min(360px, 100%)', minBlockSize: 150, borderRadius: 24, background: 'var(--m3-sys-surface-container)' }}
         >
           <h2 style={{ marginBlockStart: 0, fontSize: 22, lineHeight: '28px', overflowWrap: 'break-word' }}>{card}</h2>
           <p>Material 3</p>
