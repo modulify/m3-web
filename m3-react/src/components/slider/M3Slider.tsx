@@ -130,7 +130,7 @@ export default defineComponent(function M3Slider({
       return 0
     }
 
-    return 100 * Math.abs(restrict(value, [min, max]) / denominator)
+    return 100 * (restrict(value, [min, max]) - min) / denominator
   }, [
     max,
     min,
