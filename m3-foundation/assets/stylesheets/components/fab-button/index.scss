@@ -7,6 +7,7 @@
   --m3-fab-padding: 16px;
   --m3-fab-gap: 8px;
   --m3-fab-corner: 16px;
+  --m3-fab-focus-ring-color: var(--m3-sys-secondary);
   --background-color:     var(--m3-sys-primary-container);
   --content-color:        var(--m3-sys-on-primary-container);
   --state-color:          var(--content-color);
@@ -45,6 +46,11 @@
     box-shadow: var(--m3-elevation-3);
   }
 
+  &:focus-visible:not(:disabled) {
+    outline: 3px solid var(--m3-fab-focus-ring-color);
+    outline-offset: 2px;
+  }
+
   &:disabled {
     box-shadow: var(--m3-elevation-3);
     cursor: default;
@@ -78,13 +84,15 @@
   &_md {
     --m3-fab-size: 80px;
     --m3-fab-padding: 26px;
+    --m3-fab-gap: 12px;
     --m3-fab-corner: 20px;
     --m3-icon-size: 28px;
   }
 
   &_lg {
     --m3-fab-size: 96px;
-    --m3-fab-padding: 30px;
+    --m3-fab-padding: 28px;
+    --m3-fab-gap: 16px;
     --m3-fab-corner: 28px;
     --m3-icon-size: 36px;
     --m3-ripple-effect-duration: 1s;
@@ -133,9 +141,6 @@
 
   &_lg &__content { @include m3-typography.title-medium; }
 
-  &_has-leading-icon &__content { padding-inline-end: calc(var(--m3-fab-padding) + 4px); }
-  &_has-trailing-icon &__content { padding-inline-start: calc(var(--m3-fab-padding) + 4px); }
-
   &__icon {
     display: inline-flex;
     @include m3-shape.square(var(--m3-icon-size));
@@ -152,13 +157,17 @@
 
   &__text {
     display: inline-flex;
-    @include m3-typography.label-large;
+    @include m3-typography.title-medium;
     align-items: center;
     transition: m3-motion.timing-standard(font-size);
   }
 
-  &_lg &__text {
+  &_md &__text {
     @include m3-typography.title-large;
+  }
+
+  &_lg &__text {
+    @include m3-typography.headline-small;
   }
 
   &:disabled &__content {
