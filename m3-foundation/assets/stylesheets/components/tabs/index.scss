@@ -1,0 +1,163 @@
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/typography' as m3-typography;
+
+.m3-tab-group {
+  --m3-tab-group-indicator-height: 3px;
+  --m3-tab-group-active-color: var(--m3-sys-primary);
+
+  min-inline-size: 0;
+  color: var(--m3-sys-on-surface);
+
+  &,
+  *,
+  *::before,
+  *::after { box-sizing: border-box; }
+
+  &_secondary {
+    --m3-tab-group-indicator-height: 2px;
+    --m3-tab-group-active-color: var(--m3-sys-on-surface);
+  }
+
+  &__scroll {
+    inline-size: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__track {
+    display: flex;
+    min-inline-size: 100%;
+    inline-size: max-content;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset-inline: 0;
+      inset-block-end: 0;
+      block-size: 1px;
+      background: var(--m3-tab-group-divider-color, var(--m3-sys-outline-variant));
+      pointer-events: none;
+    }
+  }
+
+  &_fixed &__track { inline-size: 100%; }
+  &_scrollable &__track { padding-inline-start: 52px; }
+
+  &__tab {
+    --m3-tab-group-state-color: var(--m3-sys-on-surface);
+    --m3-ripple-color: color-mix(in srgb, var(--m3-tab-group-state-color) 20%, transparent);
+
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 48px;
+    min-block-size: 48px;
+    padding-inline: 16px;
+    border: 0;
+    background: transparent;
+    color: var(--m3-sys-on-surface-variant);
+    cursor: pointer;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    transition: m3-motion.timing-standard(color, 'short4');
+
+    @include m3-typography.title-small;
+
+    &:hover::before { background: color-mix(in srgb, var(--m3-tab-group-state-color) 8%, transparent); }
+    &:focus-visible::before,
+    &:active::before { background: color-mix(in srgb, var(--m3-tab-group-state-color) 12%, transparent); }
+    &:focus-visible { outline: 2px solid var(--m3-sys-secondary); outline-offset: -4px; }
+    &:disabled { opacity: 0.38; cursor: default; }
+    &:disabled::before { display: none; }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+  }
+
+  &_fixed &__tab { flex: 1 1 0; min-inline-size: 0; }
+  &_with-icons#{&}_primary &__tab { min-block-size: 64px; }
+  &_with-icons#{&}_primary &__tab_icon-only { min-block-size: 48px; }
+  &_with-icons &__tab { gap: 2px; }
+  &_secondary &__tab { min-block-size: 48px; }
+  &_primary &__tab[aria-selected='true'],
+  &_secondary &__tab[aria-selected='true'] { color: var(--m3-tab-group-active-color); }
+  &__tab[aria-selected='true'] { --m3-tab-group-state-color: var(--m3-tab-group-active-color); }
+
+  &__icon {
+    display: flex;
+    inline-size: 24px;
+    block-size: 24px;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    position: relative;
+  }
+
+  &__icon &__badge {
+    position: absolute;
+    inset-block-start: -6px;
+    inset-inline-start: calc(100% - 6px);
+  }
+
+  &__label-row {
+    display: flex;
+    max-inline-size: 100%;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__label {
+    display: -webkit-box;
+    max-inline-size: 100%;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  &__badge { flex: none; }
+
+  &__indicator {
+    inline-size: var(--m3-tab-group-indicator-width, 0px);
+    block-size: var(--m3-tab-group-indicator-height);
+    border-start-start-radius: var(--m3-tab-group-indicator-height);
+    border-start-end-radius: var(--m3-tab-group-indicator-height);
+    background: var(--m3-sys-primary);
+    position: absolute;
+    left: 0;
+    inset-block-end: 0;
+    z-index: 1;
+    transform: translateX(var(--m3-tab-group-indicator-offset, 0px));
+    transition:
+      m3-motion.timing-emphasized(transform),
+      m3-motion.timing-emphasized(inline-size);
+    pointer-events: none;
+  }
+  &_secondary &__indicator { border-radius: 0; }
+
+  &__panel { outline: none; }
+  &__panel:focus-visible { outline: 2px solid var(--m3-sys-secondary); }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__tab,
+    &__indicator { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    &__indicator { background: Highlight; }
+    &__tab:focus-visible { outline-color: Highlight; }
+  }
+}
