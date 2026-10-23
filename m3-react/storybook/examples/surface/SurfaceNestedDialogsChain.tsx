@@ -227,7 +227,7 @@ const SurfaceNestedDialogsChain: FC<{ locale: StorybookLocale }> = ({ locale }) 
       data-top-level={String(topDialogLevel)}
     >
       <M3Surface
-        className="surface-dialog-chain__topbar"
+        className="p-4"
         fillHeight={false}
         height={72}
         variant="surface-container"

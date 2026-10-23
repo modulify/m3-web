@@ -50,16 +50,16 @@ const SurfaceLayerStack: FC<{ locale: StorybookLocale }> = ({ locale }) => {
     snackbar.current?.dismiss()
   }
 
-  const dialogStyle = { display: 'grid', alignContent: 'start', gap: 16, padding: 24 }
+  const dialogStyle = { alignContent: 'start' }
 
-  return <main style={{ minHeight: '100vh', padding: 32, background: 'var(--m3-sys-surface)' }}>
+  return <main className="p-8" style={{ minHeight: '100vh', background: 'var(--m3-sys-surface)' }}>
     <h1>{text.title}</h1>
     <p>{text.description}</p>
     <button onClick={() => setFirst(true)}>{text.open}</button>
     <M3SnackbarHost ref={snackbar} />
 
     <M3Surface mode="modal" shown={first} anchor="center" width={360} height={280} rounding={28} variant="surface-container-high" onToggle={shown => { if (!shown) closeFirst() }}>
-      <div style={dialogStyle}>
+      <div className="d-grid gap-4 p-6" style={dialogStyle}>
         <h2>{text.first}</h2>
         <button ref={setMenuTarget}>{text.menu}</button>
         <M3Popper target={menuTarget} detachTimeout={null} animated>
@@ -72,7 +72,7 @@ const SurfaceLayerStack: FC<{ locale: StorybookLocale }> = ({ locale }) => {
     </M3Surface>
 
     <M3Surface mode="modal" shown={second} anchor="center" width={320} height={180} rounding={28} variant="surface-container-high" onToggle={setSecond}>
-      <div style={dialogStyle}>
+      <div className="d-grid gap-4 p-6" style={dialogStyle}>
         <h2>{text.second}</h2>
         <button onClick={() => setSecond(false)}>{text.close}</button>
       </div>

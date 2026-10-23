@@ -102,7 +102,7 @@ export const Toggleable: Story = {
 
 export const SizeMatrix: Story = {
   render: (_args, { globals }) => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
+    <div className="flex-row flex-wrap gap-4">
       {values.sizes.map(size => (
         <M3Button key={size} size={size}>
           <M3Icon name="share" /> {localize(globals.locale, messages).share}
@@ -189,7 +189,7 @@ export const IconSquare: Story = {
 
 export const IconSizeMatrix: Story = {
   render: (_args, { globals }) => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}>
+    <div className="flex-row flex-wrap gap-4">
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map(size => (
         <M3Button key={size} size={size} appearance="tonal" aria-label={localize(globals.locale, messages).favorite} width="medium">
           <M3Icon name="favorite" />
@@ -201,7 +201,7 @@ export const IconSizeMatrix: Story = {
 
 export const IconWidthMatrix: Story = {
   render: (_args, { globals }) => (
-    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+    <div className="flex-row gap-4">
       {(['narrow', 'medium', 'wide'] as const).map(width => (
         <M3Button key={width} width={width} appearance="tonal" aria-label={localize(globals.locale, messages).favorite}>
           <M3Icon name="favorite" />

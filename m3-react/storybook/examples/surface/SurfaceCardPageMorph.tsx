@@ -124,7 +124,7 @@ const SurfaceCardPageMorph: FC<{ locale: StorybookLocale }> = ({ locale }) => {
       data-testid="surface-card-page-root"
     >
       <M3SurfacePanel
-        className="surface-card-page__topbar"
+        className="p-4"
         fillHeight={false}
         height={72}
         variant="surface-container"

@@ -93,11 +93,11 @@ export default function AppBarExample({ appearance, scroll, centered = false, su
         <M3NavigationTab label={text.settings}><M3Icon name="settings" /></M3NavigationTab>
       </M3Navigation>
 
-      <div style={{ padding: 24, maxWidth: 1100, marginInline: 'auto' }}>
+      <div className="p-6" style={{ maxWidth: 1100, marginInline: 'auto' }}>
         <h2 style={{ marginBlock: '16px 24px' }}>{text.section}</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+        <div className="d-grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
           {text.cards.concat(text.cards, text.cards).map((card, index) => (
-            <article key={`${card}-${index}`} style={{ minBlockSize: 120, padding: 24, borderRadius: 24, background: 'var(--m3-sys-surface-container)' }}>
+            <article key={`${card}-${index}`} className="p-6" style={{ minBlockSize: 120, borderRadius: 24, background: 'var(--m3-sys-surface-container)' }}>
               {card}
             </article>
           ))}

@@ -96,7 +96,7 @@ const SurfaceSideSheetMorph: FC<{ locale: StorybookLocale }> = ({ locale }) => {
       data-testid="surface-morph-root"
     >
       <M3SurfacePanel
-        className="surface-side-sheet__topbar"
+        className="p-4"
         fillHeight={false}
         height={72}
         variant="surface-container"

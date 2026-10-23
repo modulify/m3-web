@@ -24,15 +24,14 @@ const meta = {
     const item = localize(globals.locale, { 'en-US': 'Item', 'ru-RU': 'Элемент' })
     const scrollArea = localize(globals.locale, { 'en-US': 'Scrollable items', 'ru-RU': 'Прокручиваемые элементы' })
     return (
-      <div className="m3-panel m3-panel_elevated-1" style={{ padding: '4px' }}>
+      <div className="m3-panel m3-panel_elevated-1 p-1">
         <div
           className="m3-scroll-box m3-scroll-box_scroll-x m3-scroll-box_scroll-y"
           style={{ maxWidth: '360px', maxHeight: '360px' }}
         >
           <div
             aria-label={scrollArea}
-            className="m3-scroll-box__content"
-            style={{ padding: '0 8px' }}
+            className="m3-scroll-box__content px-2 py-0"
             tabIndex={0}
           >
             <M3ScrollRail {...args} />

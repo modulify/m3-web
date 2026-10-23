@@ -111,9 +111,9 @@ export default function SearchExample({
           )} />
         </M3Search>
         <h2 style={{ marginBlock: '32px 16px' }}>{text.inbox}</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
+        <div className="d-grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
           {text.cards.map(card => (
-            <article key={card} style={{ minHeight: 96, padding: 20, borderRadius: 24, background: 'var(--m3-sys-surface-container)' }}>
+            <article key={card} className="p-5" style={{ minHeight: 96, borderRadius: 24, background: 'var(--m3-sys-surface-container)' }}>
               {card}
             </article>
           ))}

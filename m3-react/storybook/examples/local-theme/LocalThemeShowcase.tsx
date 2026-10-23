@@ -124,7 +124,7 @@ type NotificationProps = {
 const ColorStrip: FC = () => {
   const text = useText()
 
-  return <div className="m3-local-theme-showcase__palette" aria-label={text.tokenSample}>
+  return <div className="flex-container gap-3" aria-label={text.tokenSample}>
     <span className="m3-local-theme-showcase__palette-item">
       <span className="m3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_surface" />
       <span>{text.surface}</span>
