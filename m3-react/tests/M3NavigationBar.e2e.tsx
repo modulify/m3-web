@@ -148,6 +148,50 @@ test('slides the hidden modal rail offscreen at its expanded width', async () =>
   }
 })
 
+test('opens the expanded modal rail with its width transition', async () => {
+  await page.viewport(900, 800)
+
+  const navigation = (expanded: boolean) => (
+    <M3Navigation appearance="rail" expanded={expanded} expansion="modal">
+      <M3NavigationTab label="Inbox">★</M3NavigationTab>
+    </M3Navigation>
+  )
+  const view = render(navigation(false))
+
+  try {
+    const nav = query<HTMLElement>('nav.m3-navigation')
+    expect(nav.getBoundingClientRect().width).toBe(96)
+    const events: string[] = []
+    let openingWidth = 0
+    let duration = 0
+    nav.addEventListener('transitionstart', event => {
+      if (event.target === nav && event.propertyName === 'width') {
+        events.push('start')
+        openingWidth = nav.getBoundingClientRect().width
+      }
+    })
+    nav.addEventListener('transitioncancel', event => {
+      if (event.target === nav && event.propertyName === 'width') events.push('cancel')
+    })
+    nav.addEventListener('transitionend', event => {
+      if (event.target === nav && event.propertyName === 'width') {
+        events.push('end')
+        duration = event.elapsedTime
+      }
+    })
+
+    view.rerender(navigation(true))
+    await waitFor(() => expect(events).toContain('start'), { timeout: 2000 })
+    await waitFor(() => expect(events).toContain('end'), { timeout: 2000 })
+    expect(events).toEqual(['start', 'end'])
+    expect(openingWidth).toBeLessThan(220)
+    expect(duration).toBeGreaterThanOrEqual(0.45)
+    expect(nav.getBoundingClientRect().width).toBe(220)
+  } finally {
+    view.unmount()
+  }
+})
+
 test('keeps the rail FAB icon anchored while revealing its label', async () => {
   await page.viewport(1280, 800)
 

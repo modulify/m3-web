@@ -187,7 +187,8 @@ test('a page popover becomes inert beneath a newly opened modal', async () => {
     view.rerender(scene(true))
     await waitFor(() => expect(popperHost.inert).toBe(true))
     const modalLayer = document.querySelector<HTMLElement>('.m3-layer[data-m3-layer="modal"]')!
-    expect(popperHost.nextElementSibling).toBe(modalLayer)
+    const popover = popperHost.querySelector<HTMLElement>('.m3-popper-positioner')!
+    expect(Number(getComputedStyle(modalLayer).zIndex)).toBeGreaterThan(Number(getComputedStyle(popover).zIndex))
   } finally {
     view.unmount()
     target.remove()
