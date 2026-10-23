@@ -3,7 +3,7 @@
         ref="root"
         :class="{
             'm3-list': true,
-            'm3-list_divided': divided,
+            [`m3-list_${appearance}`]: appearance !== 'standard',
         }"
         role="list"
     >
@@ -12,14 +12,17 @@
 </template>
 
 <script lang="ts" setup>
+import type { Appearance } from '@modulify/m3-foundation/types/components/list'
 import type { ElementReference } from '@modulify/m3-foundation/types/dom'
+import type { PropType } from 'vue'
 
 import { ref } from 'vue'
 
 defineProps({
-  divided: {
-    type: Boolean,
-    default: false,
+  appearance: {
+    type: String as PropType<Appearance>,
+    validator: (value: string) => ['standard', 'segmented'].includes(value),
+    default: 'standard',
   },
 })
 

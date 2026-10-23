@@ -215,6 +215,7 @@ const renderListItem = (
   class: [attrs.className, {
     'm3-list-item': true,
     'm3-list-item_multiline': state.lines > 1,
+    'm3-list-item_three-line': state.lines > 2,
     'm3-list-item_interactive': state.interactive,
     'm3-list-item_selected': props.selected,
     'm3-list-item_disabled': props.disabled,
