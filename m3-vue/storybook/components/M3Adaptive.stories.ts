@@ -28,7 +28,7 @@ export const BreakpointContent: Story = {
     components: { M3Adaptive },
     setup: () => ({ m3Adaptive, notice: localize(globals.locale, messages).notice }),
     template: `
-        <div style="display: grid; gap: 16px; padding: 24px">
+        <div class="d-grid gap-4 p-6">
             <p>{{ notice }}</p>
             <div>Utility: {{ m3Adaptive('Inbox', { compact: 'Mail', large: 'Incoming messages' }) }}</div>
             <div>Props: <M3Adaptive regular="Inbox" compact="Mail" large="Incoming messages" /></div>

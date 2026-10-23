@@ -57,7 +57,7 @@ const meta = {
     }),
 
     template: `
-      <label style="display: flex; align-items: center; gap: 12px;">
+      <label class="flex-row gap-3">
           <M3Radio
               :id="id"
               :name="name"

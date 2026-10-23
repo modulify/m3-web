@@ -62,7 +62,7 @@ const meta = {
     components: { M3ButtonGroup, M3ButtonGroupItem, M3Icon },
     setup: () => ({ args, text: localize(globals.locale, messages) }),
     template: `
-        <div style="width: min(560px, 90vw); padding: 24px; background: var(--m3-sys-surface-container-low); border-radius: 24px">
+        <div class="p-6" style="width: min(560px, 90vw); background: var(--m3-sys-surface-container-low); border-radius: 24px">
             <M3ButtonGroup v-bind="args" :aria-label="text.calendarView">
                 <M3ButtonGroupItem value="day">
                     <M3Icon name="calendar_today" />{{ text.day }}
@@ -91,7 +91,7 @@ export const ConnectedActions: Story = {
     components: { M3ButtonGroup, M3ButtonGroupItem, M3Icon },
     setup: () => ({ text: localize(globals.locale, messages) }),
     template: `
-        <div style="width: min(560px, 90vw); padding: 24px; background: var(--m3-sys-surface-container-low); border-radius: 24px">
+        <div class="p-6" style="width: min(560px, 90vw); background: var(--m3-sys-surface-container-low); border-radius: 24px">
             <M3ButtonGroup variant="connected" selection="none" :aria-label="text.documentActions">
                 <M3ButtonGroupItem value="copy">
                     <M3Icon name="content_copy" />{{ text.copy }}
@@ -115,7 +115,7 @@ export const StandardActions: Story = {
     components: { M3ButtonGroup, M3ButtonGroupItem, M3Icon },
     setup: () => ({ args, text: localize(globals.locale, messages) }),
     template: `
-        <div style="padding: 24px; background: var(--m3-sys-surface-container-low); border-radius: 24px">
+        <div class="p-6" style="background: var(--m3-sys-surface-container-low); border-radius: 24px">
             <M3ButtonGroup variant="standard" :size="args.size" :rounding="args.rounding" :aria-label="text.editingActions">
                 <M3ButtonGroupItem value="save" appearance="filled">
                     <M3Icon name="save" />{{ text.save }}

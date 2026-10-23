@@ -48,7 +48,7 @@ const meta = {
             :rounding="16"
             :elevation="0"
             variant="surface-container"
-            style="padding: 4px;"
+            class="p-1"
         >
             <div
                 class="m3-scroll-box m3-scroll-box_scroll-x m3-scroll-box_scroll-y"
@@ -56,8 +56,7 @@ const meta = {
             >
                 <div
                     :aria-label="scrollArea"
-                    class="m3-scroll-box__content"
-                    style="padding: 0 8px;"
+                    class="m3-scroll-box__content px-2 py-0"
                     tabindex="0"
                 >
                     <M3ScrollRail v-bind="args" />

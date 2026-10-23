@@ -9,7 +9,7 @@
     >
         <template v-for="(o, i) in options" :key="id + '-option-' + i">
             <template v-if="o.subordinates">
-                <div :class="$style['line']">
+                <div class="flex-row">
                     <M3Checkbox
                         :id="id + '-option-' + i"
                         :model="isSelected(o)"
@@ -22,11 +22,11 @@
                     </label>
                 </div>
 
-                <div style="padding-left: 32px">
+                <div class="pl-8">
                     <div
                         v-for="(s, j) in o.subordinates"
                         :key="id + '-option-' + i + '-' + j"
-                        :class="$style['line']"
+                        class="flex-row"
                     >
                         <M3Checkbox
                             :id="id + '-option-' + i + '-' + j"
@@ -43,7 +43,7 @@
 
             <div
                 v-else
-                :class="$style['line']"
+                class="flex-row"
             >
                 <M3Checkbox
                     :id="id + '-option-' + i"
@@ -112,10 +112,5 @@ const toggle = (option: OptionWithSubordinates, checked: boolean) => {
 .panel {
     padding: 32px;
     color: var(--m3-sys-on-surface);
-}
-
-.line {
-    display: flex;
-    align-items: center;
 }
 </style>

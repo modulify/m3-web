@@ -26,7 +26,7 @@
                     layout="full-screen"
                 >
                     <template #results>
-                        <div class="app-bar-example__results">
+                        <div class="p-6">
                             {{ results.join(' · ') }}
                         </div>
                     </template>
@@ -148,9 +148,5 @@ const query = ref('')
   padding: 24px;
   border-radius: 24px;
   background: var(--m3-sys-surface-container);
-}
-
-.app-bar-example__results {
-  padding: 24px;
 }
 </style>

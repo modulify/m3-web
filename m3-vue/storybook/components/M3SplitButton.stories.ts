@@ -36,7 +36,7 @@ const meta = {
       return { args, text: localize(globals.locale, messages) }
     },
     template: `
-        <div style="padding: 32px; min-height: 240px">
+        <div class="p-8" style="min-height: 240px">
             <M3SplitButton v-bind="args" :menu-label="text.more">
                 <M3Icon name="send" />{{ text.send }}
                 <template #menu="{ close }">

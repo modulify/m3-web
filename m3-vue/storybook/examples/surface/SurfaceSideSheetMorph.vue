@@ -8,7 +8,7 @@
             :fill-height="false"
             :height="72"
             :elevation="0"
-            class="surface-side-sheet__topbar"
+            class="p-4"
             variant="surface-container"
         >
             <div class="surface-side-sheet__topbar-content">
@@ -367,10 +367,6 @@ const {
     display: flex;
     flex-direction: column;
     gap: 14px;
-}
-
-.surface-side-sheet__topbar {
-    padding: 16px;
 }
 
 .surface-side-sheet__header-card {
