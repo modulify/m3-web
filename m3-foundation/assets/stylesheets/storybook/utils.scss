@@ -21,8 +21,12 @@ $m3-storybook-container-max-widths: (
 .d-block { display: block !important; }
 .d-inline { display: inline !important; }
 .d-inline-block { display: inline-block !important; }
+.d-inline-flex { display: inline-flex !important; }
 .d-none { display: none !important; }
 .d-flex { display: flex !important; }
+.d-grid { display: grid !important; }
+
+.align-items-center { align-items: center !important; }
 
 .flex-wrap {
   flex-wrap: wrap !important;
@@ -66,6 +70,8 @@ $m3-storybook-container-max-widths: (
 .pr-0, .px-0, .p-0 { padding-right: 0 !important; }
 
 @each $value in $m3-storybook-multipliers {
+  .gap-#{$value} { gap: 0.5 * $value * $m3-storybook-base-space !important; }
+
   .mt-#{$value}, .my-#{$value}, .m-#{$value} { margin-top:    0.5 * $value * $m3-storybook-base-space !important; }
   .mb-#{$value}, .my-#{$value}, .m-#{$value} { margin-bottom: 0.5 * $value * $m3-storybook-base-space !important; }
   .ml-#{$value}, .mx-#{$value}, .m-#{$value} { margin-left:   0.5 * $value * $m3-storybook-base-space !important; }
