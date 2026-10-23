@@ -367,10 +367,10 @@ const onGlobalTap = (event: CloserEvent, touch = false) => {
   const frame = touch ? globalTouchFrame : globalClickFrame
 
   frame.request(() => {
-    if (!state.showing && state.shown && (
-      props.hideOnMissClick && !captures ||
-      event.m3PopperClose && captures ||
-      event.m3PopperCloseAll
+    if (state.shown && (
+      event.m3PopperCloseAll ||
+      event.m3PopperClose && (captures || props.hideOnMissClick) ||
+      !state.showing && props.hideOnMissClick && !captures
     )) {
       hide()
 
