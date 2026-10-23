@@ -10,7 +10,21 @@ import * as M3MenuStories from './M3Menu.stories'
 
 Menus present a short list of actions or choices anchored to a trigger. Material 3 menus are lightweight, contextual, and best for options that belong to the current place in the interface.
 
+M3 Expressive uses a rounded vertical menu. It has `standard` surface colors by default and an optional `vibrant` tertiary color scheme for stronger emphasis.
+
 ## API
+
+| Component | Prop | Values | Default | Purpose |
+| --- | --- | --- | --- | --- |
+| `M3Menu` | `target` | HTMLElement or null | required | Positioning anchor and focus return target. |
+| `M3Menu` | `color` | `standard`, `vibrant` | `standard` | Expressive color mapping. |
+| `M3Menu` | `density` | `0`, `-1`, `-2`, `-3` | `0` | Vertical item spacing on web. |
+| `M3Menu` | `shown` | boolean | `false` | Programmatic visibility. |
+| `M3MenuItem` | `selected` | boolean | `false` | Selection highlight. |
+| `M3MenuItem` | `selection` | `single`, `multiple` | none | `menuitemradio` or `menuitemcheckbox` semantics. |
+| `M3MenuItem` | `disabled`, `href` | boolean, URL | `false`, none | Unavailable action or destination. |
+
+`M3MenuItem.Leading`, `.Trailing`, and `.Submenu` provide optional content. Use `M3Divider` between groups on web. `onToggle` reports visibility changes; `onShow` and `onHide` report transition events.
 
 ### When to use
 
@@ -22,29 +36,35 @@ Menus should open from a clearly related trigger and preserve that relationship 
 
 ### Selection
 
-Selected rows can communicate the current choice inside the menu, but the menu itself should still remain compact and easy to scan.
+Use `selection="single"` for one choice or `selection="multiple"` for independently checked choices, and control `selected` from application state. A plain selected action may be highlighted without choice semantics. Only one selection mode should be used in a group.
 
 ## Accessibility semantics
 
-- Connect the trigger and popup with menu-button semantics.
+- Give the trigger `aria-haspopup="menu"`. If you control visibility, keep `aria-expanded` in sync and connect it with `aria-controls`.
 - Keep item labels concise and action-oriented.
-- Return focus to the trigger when the menu closes.
+- Arrow keys, Home, End, and Escape support menu navigation; Escape returns focus to the trigger.
+- Submenus open beside their parent on hover, click, or the forward arrow key. Keep each item a single action, including when its slots contain custom visuals.
 
 ## Story guide
 
 - [Standard](?path=/story/components-m3menu--standard)
+- [Vibrant](?path=/story/components-m3menu--vibrant)
+- [Grouped With Submenu](?path=/story/components-m3menu--grouped-with-submenu)
 - [With Leading And Trailing Content](?path=/story/components-m3menu--with-leading-and-trailing-content)
 
 ## Demo
 
 <Canvas of={M3MenuStories.Standard} />
+<Canvas of={M3MenuStories.Vibrant} />
 <Canvas of={M3MenuStories.WithLeadingAndTrailingContent} />
 
 ## Usage guidance
 
 ### Keep menus short
 
-If users need to scroll, compare dense descriptions, or understand complex consequences, the control has probably outgrown the menu pattern.
+Menus can scroll when their items do not fit. Material recommends a persistent scrollbar; this implementation styles the native scrollbar, whose visibility also follows browser and operating system settings. If choices need long descriptions, comparison, or form controls, use a more spacious pattern.
+
+Use dividers to group items on web, especially in scrollable menus; do not add expressive gaps to a scrolling menu. Keep custom slots accessible and preserve a comfortable target size when choosing a denser menu.
 
 ### Prefer clear verbs
 
@@ -64,7 +84,21 @@ Menu items work best when each row starts with a distinct action or state label.
 
 Меню показывает короткий список действий или вариантов рядом с элементом, который его открыл. Меню Material 3 лёгкие, контекстные и лучше всего подходят для действий текущей области интерфейса.
 
+M3 Expressive использует вертикальное меню со скруглёнными углами. По умолчанию применяется цветовая схема `standard` на основе surface; схема `vibrant` на основе tertiary даёт более сильный акцент.
+
 ## API
+
+| Компонент | Свойство | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- | --- |
+| `M3Menu` | `target` | HTMLElement или null | обязательно | Якорь позиционирования и возврата фокуса. |
+| `M3Menu` | `color` | `standard`, `vibrant` | `standard` | Цветовая схема Expressive. |
+| `M3Menu` | `density` | `0`, `-1`, `-2`, `-3` | `0` | Плотность строк на web. |
+| `M3Menu` | `shown` | boolean | `false` | Программное отображение. |
+| `M3MenuItem` | `selected` | boolean | `false` | Подсветка выбора. |
+| `M3MenuItem` | `selection` | `single`, `multiple` | нет | Семантика `menuitemradio` или `menuitemcheckbox`. |
+| `M3MenuItem` | `disabled`, `href` | boolean, URL | `false`, нет | Недоступное действие или ссылка. |
+
+`M3MenuItem.Leading`, `.Trailing` и `.Submenu` добавляют содержимое. Для групп на web используйте `M3Divider`. `onToggle` сообщает об изменении видимости, `onShow` и `onHide` — о переходах.
 
 ### Когда использовать
 
@@ -76,29 +110,35 @@ Menu items work best when each row starts with a distinct action or state label.
 
 ### Выбор
 
-Выбранная строка может показывать текущее значение, но само меню должно оставаться компактным и легко читаемым.
+Используйте `selection="single"` для единственного выбора или `selection="multiple"` для независимых пунктов. Состояние `selected` задавайте из приложения. Обычное действие тоже можно визуально подсветить без семантики выбора. В одной группе придерживайтесь одного режима выбора.
 
 ## Доступность
 
-- Свяжите кнопку и всплывающее меню семантикой menu button.
+- Укажите кнопке `aria-haspopup="menu"`. При программном управлении синхронизируйте `aria-expanded` и при необходимости свяжите меню через `aria-controls`.
 - Делайте подписи краткими и ориентированными на действие.
-- После закрытия возвращайте фокус на управляющий элемент.
+- Стрелки, Home, End и Escape управляют фокусом; Escape возвращает его кнопке.
+- Вложенное меню открывается рядом с пунктом по наведению, нажатию или стрелке вперёд. Даже с произвольным содержимым слота пункт должен оставаться одним действием.
 
 ## Примеры в Storybook
 
 - [Стандартное меню](?path=/story/components-m3menu--standard)
+- [Яркая схема](?path=/story/components-m3menu--vibrant)
+- [Группы и вложенное меню](?path=/story/components-m3menu--grouped-with-submenu)
 - [Ведущее и завершающее содержимое](?path=/story/components-m3menu--with-leading-and-trailing-content)
 
 ## Демонстрация
 
 <Canvas of={M3MenuStories.Standard} />
+<Canvas of={M3MenuStories.Vibrant} />
 <Canvas of={M3MenuStories.WithLeadingAndTrailingContent} />
 
 ## Рекомендации
 
 ### Делайте меню короткими
 
-Если пользователю приходится прокручивать меню или сравнивать длинные описания, лучше выбрать другой паттерн.
+Если пункты не помещаются, меню можно прокручивать. Material рекомендует постоянно видимую полосу прокрутки; здесь стилизована нативная полоса, видимость которой также зависит от браузера и настроек ОС. Для выбора с длинными описаниями, сравнением или элементами формы нужен более просторный паттерн.
+
+На web разделяйте группы линиями, особенно в прокручиваемом меню; промежутки между группами в нём не используйте. Произвольные слоты должны оставаться доступными, а плотность не должна делать пункты неудобными для нажатия.
 
 ### Используйте ясные глаголы
 
