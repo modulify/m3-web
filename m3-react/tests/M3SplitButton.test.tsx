@@ -8,6 +8,10 @@ import {
 import { M3MenuItem } from '@/components/menu'
 import { M3SplitButton } from '@/components/split-button'
 
+vi.mock('@modulify/m3-foundation/lib/popper/floating', () => ({
+  computePosition: vi.fn(async () => ({ placement: 'bottom-end', side: 'bottom' })),
+}))
+
 describe('m3-react/split-button', () => {
   test('uses open as an initial state and reacts to changed commands', async () => {
     const menu = <M3MenuItem>Another action</M3MenuItem>
@@ -20,6 +24,7 @@ describe('m3-react/split-button', () => {
     expect(trailing.getAttribute('aria-expanded')).toBe('true')
     await waitFor(() => expect(screen.getByText('Another action')).toBeTruthy())
     expect(document.getElementById('save-actions-menu')).toBeTruthy()
+    await waitFor(() => expect(document.getElementById('save-actions-menu')?.classList.contains('m3-popper_shown')).toBe(true))
 
     fireEvent.click(trailing)
     await waitFor(() => expect(trailing.getAttribute('aria-expanded')).toBe('false'))
