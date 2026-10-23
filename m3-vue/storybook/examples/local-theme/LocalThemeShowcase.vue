@@ -108,7 +108,7 @@
                 </div>
 
                 <div ref="menuContainer" class="m3-local-theme-showcase__list-area">
-                    <M3List class="m3-local-theme-showcase__list" divided>
+                    <M3List class="m3-local-theme-showcase__list">
                         <M3ListItem
                             :headline="text.billing"
                             :supporting-text="text.billingCopy"
