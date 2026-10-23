@@ -1,6 +1,6 @@
 import type { VNode } from 'vue'
 
-import { Comment, Text } from 'vue'
+import { Comment, Fragment, Text } from 'vue'
 
 export const SHAPE_FLAG_ARRAY_CHILDREN = 16
 export const SHAPE_FLAG_TEXT = 8
@@ -24,6 +24,12 @@ export const isEmpty = (node: VNode) => {
     || isEmptyString(children)
     || isEmptyArray(children)
 }
+
+export const flattenVNodes = (nodes: VNode[]): VNode[] => nodes.flatMap(node =>
+  node.type === Fragment && Array.isArray(node.children)
+    ? flattenVNodes(node.children as VNode[])
+    : node.type === Comment ? [] : [node]
+)
 
 export const normalize = (content: VNode[]): [VNode, boolean][] => {
   const normalized: [VNode, boolean][] = []
