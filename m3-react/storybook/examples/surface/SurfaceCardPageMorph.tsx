@@ -24,8 +24,46 @@ type NavTab = 'files' | 'timeline' | 'tasks' | 'analytics'
 
 const SurfaceCardPageMorph: FC<{ locale: StorybookLocale }> = ({ locale }) => {
   const text = localize(locale, {
-    'en-US': { analytics: 'Analytics', compact: 'In compact mode this surface behaves like a card. In expanded mode it replaces the page work area while keeping top bar and rail reserved.', description: 'The same surface morphs between compact card and page-like container.', expand: 'Expand card to page state', files: 'Files', heading: 'Surface orchestration: card replacing page', morph: 'Morph target surface', nested: 'Nested surface demonstrates composability in both states.', openNavigation: 'Open navigation', playground: 'Card-to-page transition playground', playgroundDescription: 'Original slot remains reserved while the morphing surface overlays the page area.', return: 'Return to card state', staticA: 'Static card A', staticADescription: 'Background content remains in flow.', staticB: 'Static card B', staticBDescription: 'Independent surface in the same scene.', tasks: 'Tasks', timeline: 'Timeline' },
-    'ru-RU': { analytics: 'Аналитика', compact: 'В компактном режиме поверхность ведёт себя как карточка. В развёрнутом она заменяет рабочую область, сохраняя верхнюю панель и рейку.', description: 'Одна поверхность преобразуется между компактной карточкой и контейнером страницы.', expand: 'Развернуть карточку в страницу', files: 'Файлы', heading: 'Управление поверхностью: карточка заменяет страницу', morph: 'Преобразуемая поверхность', nested: 'Вложенная поверхность показывает композицию в обоих состояниях.', openNavigation: 'Открыть навигацию', playground: 'Переход карточки в страницу', playgroundDescription: 'Исходное место остаётся зарезервированным, пока поверхность перекрывает рабочую область.', return: 'Вернуть состояние карточки', staticA: 'Статичная карточка A', staticADescription: 'Фоновое содержимое остаётся в потоке.', staticB: 'Статичная карточка B', staticBDescription: 'Независимая поверхность в той же сцене.', tasks: 'Задачи', timeline: 'Хронология' },
+    'en-US': {
+      analytics: 'Analytics',
+      compact: 'In compact mode this surface behaves like a card. In expanded mode it replaces the page work area while keeping top bar and rail reserved.',
+      description: 'The same surface morphs between compact card and page-like container.',
+      expand: 'Expand card to page state',
+      files: 'Files',
+      heading: 'Surface orchestration: card replacing page',
+      morph: 'Morph target surface',
+      nested: 'Nested surface demonstrates composability in both states.',
+      openNavigation: 'Open navigation',
+      playground: 'Card-to-page transition playground',
+      playgroundDescription: 'Original slot remains reserved while the morphing surface overlays the page area.',
+      return: 'Return to card state',
+      staticA: 'Static card A',
+      staticADescription: 'Background content remains in flow.',
+      staticB: 'Static card B',
+      staticBDescription: 'Independent surface in the same scene.',
+      tasks: 'Tasks',
+      timeline: 'Timeline',
+    },
+    'ru-RU': {
+      analytics: 'Аналитика',
+      compact: 'В компактном режиме поверхность ведёт себя как карточка. В развёрнутом она заменяет рабочую область, сохраняя верхнюю панель и рейку.',
+      description: 'Одна поверхность преобразуется между компактной карточкой и контейнером страницы.',
+      expand: 'Развернуть карточку в страницу',
+      files: 'Файлы',
+      heading: 'Управление поверхностью: карточка заменяет страницу',
+      morph: 'Преобразуемая поверхность',
+      nested: 'Вложенная поверхность показывает композицию в обоих состояниях.',
+      openNavigation: 'Открыть навигацию',
+      playground: 'Переход карточки в страницу',
+      playgroundDescription: 'Исходное место остаётся зарезервированным, пока поверхность перекрывает рабочую область.',
+      return: 'Вернуть состояние карточки',
+      staticA: 'Статичная карточка A',
+      staticADescription: 'Фоновое содержимое остаётся в потоке.',
+      staticB: 'Статичная карточка B',
+      staticBDescription: 'Независимая поверхность в той же сцене.',
+      tasks: 'Задачи',
+      timeline: 'Хронология',
+    },
   })
   const [navExpanded, setNavExpanded] = useStateRef(false)
   const [activeNavTab, setActiveNavTab] = useStateRef<NavTab>('files')

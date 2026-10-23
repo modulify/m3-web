@@ -13,8 +13,19 @@ const ShortcutTooltip: FC<{ locale: StorybookLocale }> = ({ locale }) => {
   const [target, setTarget] = useState<HTMLElement | null>(null)
   const tooltipId = 'shortcut-tooltip-description'
   const text = localize(locale, {
-    'en-US': { description: <>Press <strong>G</strong>, then <strong>I</strong> to open the inbox from anywhere in the workspace.</>, heading: 'Jump to inbox', trigger: 'Keyboard shortcut' },
-    'ru-RU': { description: <>Нажмите <strong>G</strong>, затем <strong>I</strong>, чтобы открыть входящие из любой части рабочего пространства.</>, heading: 'Перейти к входящим', trigger: 'Сочетание клавиш' },
+    'en-US': {
+      description: <>Press <strong>G</strong>,
+      then <strong>I</strong> to open the inbox from anywhere in the workspace.</>,
+      heading: 'Jump to inbox',
+      trigger: 'Keyboard shortcut',
+    },
+    'ru-RU': {
+      description: <>Нажмите <strong>G</strong>,
+      затем <strong>I</strong>,
+      чтобы открыть входящие из любой части рабочего пространства.</>,
+      heading: 'Перейти к входящим',
+      trigger: 'Сочетание клавиш',
+    },
   })
 
   return (
