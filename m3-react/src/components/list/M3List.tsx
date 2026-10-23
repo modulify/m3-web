@@ -1,3 +1,4 @@
+import type { Appearance } from '@modulify/m3-foundation/types/components/list'
 import type { ComponentSetupContext } from '@/utils/component'
 import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { HTMLAttributes, Ref } from 'react'
@@ -10,14 +11,14 @@ import { useElementReference } from '@/hooks'
 
 export interface M3ListProps extends HTMLAttributes<HTMLDivElement> {
   ref?: Ref<M3ListExposed>;
-  divided?: boolean;
+  appearance?: Appearance;
 }
 
 export interface M3ListExposed extends ElementReference<HTMLDivElement> {}
 
 export default defineComponent(function M3List({
   ref: _ref,
-  divided = false,
+  appearance = 'standard',
   className = '',
   children = [],
   ...attrs
@@ -31,7 +32,7 @@ export default defineComponent(function M3List({
       role="list"
       className={toClassName([className, {
         'm3-list': true,
-        'm3-list_divided': divided,
+        [`m3-list_${appearance}`]: appearance !== 'standard',
       }])}
       {...attrs}
     >

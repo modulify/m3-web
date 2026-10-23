@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import { M3Divider } from '@/components/divider'
 import { M3Icon } from '@/components/icon'
 import { M3List, M3ListItem } from '@/components/list'
 
@@ -8,17 +9,19 @@ import { localize } from '../i18n'
 const messages = {
   'en-US': {
     archive: 'Archive', bluetoothSupport: 'Connected to office network', folders: 'Folders',
-    inbox: 'Inbox', messages: 'Messages', notifications: 'Notifications', on: 'On',
+    inbox: 'Inbox', messages: 'Messages', notifications: 'Notifications',
     planning: 'Planning meeting', planningSupport: 'Design sync moved to 15:00. Review the agenda before joining.',
     review: 'Review updates', reviewSupport: 'Two unread comments in the component review thread.',
-    sent: 'Sent', settings: 'Settings', today: 'Today',
+    privacy: 'Privacy', profile: 'Profile', sent: 'Sent', settings: 'Settings',
+    signOut: 'Sign out', today: 'Today',
   },
   'ru-RU': {
     archive: 'Архив', bluetoothSupport: 'Подключено к офисной сети', folders: 'Папки',
-    inbox: 'Входящие', messages: 'Сообщения', notifications: 'Уведомления', on: 'Включено',
+    inbox: 'Входящие', messages: 'Сообщения', notifications: 'Уведомления',
     planning: 'Планирование', planningSupport: 'Синхронизацию по дизайну перенесли на 15:00. Просмотрите повестку перед встречей.',
     review: 'Обновления ревью', reviewSupport: 'Два непрочитанных комментария в обсуждении компонентов.',
-    sent: 'Отправленные', settings: 'Настройки', today: 'Сегодня',
+    privacy: 'Конфиденциальность', profile: 'Профиль', sent: 'Отправленные',
+    settings: 'Настройки', signOut: 'Выйти', today: 'Сегодня',
   },
 }
 
@@ -28,11 +31,7 @@ const meta = {
   component: M3List,
 
   argTypes: {
-    divided: { control: 'boolean' },
-  },
-
-  args: {
-    divided: false,
+    appearance: { control: 'select', options: ['standard', 'segmented'] },
   },
 
   render: (args, { globals }) => {
@@ -45,7 +44,7 @@ const meta = {
         </M3ListItem.Leading>
         Wi-Fi
         <M3ListItem.Trailing>
-          {text.on}
+          <M3Icon name="check" />
         </M3ListItem.Trailing>
       </M3ListItem>
 
@@ -56,7 +55,7 @@ const meta = {
         Bluetooth
       </M3ListItem>
 
-      <M3ListItem href="#notifications">
+      <M3ListItem href="javascript:void(0);">
         <M3ListItem.Leading>
           <M3Icon name="notifications" />
         </M3ListItem.Leading>
@@ -78,6 +77,42 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Standard: Story = {}
+
+export const Segmented: Story = {
+  args: { appearance: 'segmented' },
+}
+
+export const WithDivider: Story = {
+  render: (args, { globals }) => {
+    const text = localize(globals.locale, messages)
+    const listProps = { ...args, appearance: 'standard' as const }
+
+    return <M3List aria-label={text.settings} {...listProps}>
+      <M3ListItem interactive={true}>
+        <M3ListItem.Leading>
+          <M3Icon name="account_circle" />
+        </M3ListItem.Leading>
+        {text.profile}
+      </M3ListItem>
+
+      <M3ListItem interactive={true}>
+        <M3ListItem.Leading>
+          <M3Icon name="lock" />
+        </M3ListItem.Leading>
+        {text.privacy}
+      </M3ListItem>
+
+      <M3Divider />
+
+      <M3ListItem interactive={true}>
+        <M3ListItem.Leading>
+          <M3Icon name="logout" />
+        </M3ListItem.Leading>
+        {text.signOut}
+      </M3ListItem>
+    </M3List>
+  },
+}
 
 export const SupportingText: Story = {
   render: (args, { globals }) => {
@@ -111,15 +146,11 @@ export const SupportingText: Story = {
 }
 
 export const InteractiveSelection: Story = {
-  args: {
-    divided: true,
-  },
-
   render: (args, { globals }) => {
     const text = localize(globals.locale, messages)
 
     return <M3List aria-label={text.folders} {...args}>
-      <M3ListItem selected={true} interactive={true}>
+      <M3ListItem interactive={true} selected={true}>
         <M3ListItem.Leading>
           <M3Icon name="inbox" />
         </M3ListItem.Leading>
@@ -136,7 +167,7 @@ export const InteractiveSelection: Story = {
         {text.sent}
       </M3ListItem>
 
-      <M3ListItem disabled={true} interactive={true}>
+      <M3ListItem interactive={true} disabled={true}>
         <M3ListItem.Leading>
           <M3Icon name="archive" />
         </M3ListItem.Leading>

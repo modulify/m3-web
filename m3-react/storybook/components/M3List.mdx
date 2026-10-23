@@ -10,7 +10,15 @@ import * as M3ListStories from './M3List.stories'
 
 Lists present related rows of text and optional visuals. Use them for settings, folders, messages, and other repeated information where each row should remain easy to scan.
 
+M3 Expressive offers `standard` rows on a continuous surface and `segmented` rows with separate rounded containers. `standard` is the default. The visual style does not change selection behavior.
+
 ## API
+
+| Component | Prop | Values | Default | Purpose |
+| --- | --- | --- | --- | --- |
+| `M3List` | `appearance` | `standard`, `segmented` | `standard` | Visual treatment of rows. |
+| `M3ListItem` | `selected` | boolean | `false` | Highlight a selected row. |
+| `M3ListItem` | `interactive`, `disabled` | boolean | `false` | Enable or prevent row interaction. |
 
 `M3List` renders a generic list container. `M3ListItem` renders a generic row with optional leading and trailing content, overline text, headline text, and supporting text.
 
@@ -26,16 +34,26 @@ Use plain children as the headline, or use `M3ListItem.Headline` when the headli
 ## Story guide
 
 - [Standard](?path=/story/components-m3list--standard)
+- [Segmented](?path=/story/components-m3list--segmented)
+- [With Divider](?path=/story/components-m3list--with-divider)
 - [Supporting Text](?path=/story/components-m3list--supporting-text)
 - [Interactive Selection](?path=/story/components-m3list--interactive-selection)
 
 ## Demo
 
 <Canvas of={M3ListStories.Standard} />
+<Canvas of={M3ListStories.Segmented} />
+<Canvas of={M3ListStories.WithDivider} />
 <Canvas of={M3ListStories.SupportingText} />
 <Canvas of={M3ListStories.InteractiveSelection} />
 
 ## Usage guidance
+
+### Separate groups deliberately
+
+Prefer `segmented` spacing and filled rows for contained groups. For an uncontained or complex `standard` list, place `M3Divider` explicitly between rows or groups only when stronger separation is necessary. A divider is a sibling of the rows, not a border on a rounded item. Do not separate every row by default.
+
+[With Divider](?path=/story/components-m3list--with-divider) shows one full-width divider separating account settings from the sign-out action in an uncontained list. The other rows have no lines between them.
 
 ### Keep row content structured
 
@@ -44,6 +62,8 @@ Use overline and supporting text for secondary information instead of packing se
 ### Use trailing content sparingly
 
 Trailing text and icons work best for concise metadata, status, or navigation affordances.
+
+Keep the main action large enough to tap, and use only one selection interaction per row. A secondary action can occupy a trailing slot when the row's primary action remains clear. Swipe to reveal is an Android Views pattern in the current M3 spec; it is not part of this web component.
 
 ## Resources
 
@@ -59,7 +79,15 @@ Trailing text and icons work best for concise metadata, status, or navigation af
 
 Списки представляют связанные строки текста и необязательные визуальные элементы. Используйте их для настроек, папок, сообщений и другой повторяющейся информации, которую важно быстро просматривать.
 
+В M3 Expressive есть `standard` — непрерывный список — и `segmented` с отдельными скруглёнными строками. По умолчанию используется `standard`. Оформление не меняет логику выбора.
+
 ## API
+
+| Компонент | Свойство | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- | --- |
+| `M3List` | `appearance` | `standard`, `segmented` | `standard` | Вид строк. |
+| `M3ListItem` | `selected` | boolean | `false` | Подсветка выбранной строки. |
+| `M3ListItem` | `interactive`, `disabled` | boolean | `false` | Включение и отключение взаимодействия. |
 
 `M3List` создаёт общий контейнер списка. `M3ListItem` создаёт строку с необязательным ведущим и завершающим содержимым, надстрочным заголовком, основным и вспомогательным текстом.
 
@@ -75,16 +103,26 @@ Trailing text and icons work best for concise metadata, status, or navigation af
 ## Примеры в Storybook
 
 - [Стандартный список](?path=/story/components-m3list--standard)
+- [Сегментированный список](?path=/story/components-m3list--segmented)
+- [С разделителем](?path=/story/components-m3list--with-divider)
 - [Вспомогательный текст](?path=/story/components-m3list--supporting-text)
 - [Интерактивный выбор](?path=/story/components-m3list--interactive-selection)
 
 ## Демонстрация
 
 <Canvas of={M3ListStories.Standard} />
+<Canvas of={M3ListStories.Segmented} />
+<Canvas of={M3ListStories.WithDivider} />
 <Canvas of={M3ListStories.SupportingText} />
 <Canvas of={M3ListStories.InteractiveSelection} />
 
 ## Рекомендации
+
+### Разделяйте группы осознанно
+
+Для групп с отдельными контейнерами выбирайте промежутки `segmented` и заливку строк. В списке `standard` без отдельных контейнеров или в сложном списке при необходимости ставьте `M3Divider` явно между строками или группами. Разделитель — соседний элемент списка, а не граница скруглённой строки. По умолчанию не отделяйте линией каждую строку.
+
+[История с разделителем](?path=/story/components-m3list--with-divider) показывает одну линию на всю ширину списка: она отделяет настройки аккаунта от действия выхода. Между остальными строками линий нет.
 
 ### Сохраняйте структуру строки
 
@@ -93,6 +131,8 @@ Trailing text and icons work best for concise metadata, status, or navigation af
 ### Не перегружайте правую часть строки
 
 Текст и иконки в конце строки лучше всего подходят для кратких метаданных, статуса или навигации.
+
+Основное действие должно оставаться удобной целью нажатия. Используйте только одно взаимодействие выбора в каждой строке. Дополнительное действие допустимо справа, если основное остаётся ясным. Свайп для раскрытия действий в актуальном спеке предусмотрен только для Android Views и не входит в этот web-компонент.
 
 ## Полезные ссылки
 

@@ -188,6 +188,7 @@ export default defineComponent(function M3ListItem({
       className={toClassName([className, {
         'm3-list-item': true,
         'm3-list-item_multiline': linesActual > 1,
+        'm3-list-item_three-line': linesActual > 2,
         'm3-list-item_interactive': interactiveActual,
         'm3-list-item_selected': selected,
         'm3-list-item_disabled': disabled,

@@ -195,7 +195,7 @@ const ListMenuScene: FC = () => {
         </div>
       </div>
 
-      <M3List divided={true} className="m3-local-theme-showcase__list">
+      <M3List className="m3-local-theme-showcase__list">
         <M3ListItem
           lines="2"
           headline={text.billing}
