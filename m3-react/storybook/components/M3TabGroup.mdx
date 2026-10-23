@@ -1,0 +1,115 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as Stories from './M3TabGroup.stories'
+
+<Meta of={Stories} />
+
+<Localized locale="en-US">
+
+# Tabs
+
+Tabs switch among related views at the same level. Use **primary** tabs for the main sections of a content pane, usually below an app bar. Use **secondary** tabs within a section when another level is necessary, and place them below primary tabs. Do not turn a sequence that must be read in order into tabs. [Material 3 guidelines](https://m3.material.io/components/tabs/guidelines).
+
+## Choose a layout
+
+| Layout | Use |
+| --- | --- |
+| `fixed` | Two to four short, equally sized tabs visible together. |
+| `scrollable` | More tabs or longer labels. The row scrolls horizontally. |
+
+<Canvas of={Stories.PrimaryFixed} />
+<Canvas of={Stories.SecondaryFixed} />
+
+In the scrollable layout, the first tab begins 52px from the leading edge of the tab row. Each tab's width follows its label with consistent horizontal padding. The bottom divider spans the full width of the container, including the space before the first tab.
+
+<Canvas of={Stories.Scrollable} />
+
+Keep labels short and clear. Labels can occupy two lines, but prefer scrollable tabs to truncation. Use icons consistently across one set; icon-only tabs need a descriptive `aria-label`. A badge may appear on either variant, with no more than four characters including `+`. When the badge conveys information, include it in the tab's `aria-label`; the visual badge itself is hidden from the accessibility tree. Update or remove it after the user views the relevant content. [Material 3 guidelines](https://m3.material.io/components/tabs/guidelines).
+
+<Canvas of={Stories.IconsAndBadges} />
+<Canvas of={Stories.IconOnly} />
+
+## Interaction and accessibility
+
+The component uses `tablist`, `tab`, and `tabpanel`, with linked IDs and one roving Tab stop. Left/Right arrows move focus without selecting; Enter/Space activate the focused native button. Home/End move to the ends. The selected tab and its panel stay linked by `aria-controls` and `aria-labelledby`. Disabled tabs are skipped. In scrollable mode, keyboard focus moves the tab into view. Give the group an `aria-label` or `aria-labelledby` when its purpose is not otherwise clear. Keep the touch target at least 48×48px. [Material 3 accessibility](https://m3.material.io/components/tabs/accessibility), [WAI-ARIA tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
+
+Panel containers remain in the DOM so every `aria-controls` reference resolves. Only the active panel's content is mounted. Store state outside the panel if it must survive a tab change. To make tabs sticky or move them together with an app bar, place the group inside the surrounding layout. Avoid adding an unconditional content swipe handler when the panel contains other horizontal gestures.
+
+## Selection and URL navigation
+
+The group owns its selection. `value` sets the initial tab and selects a new tab when the prop changes; a click does not need a parent rerender. `onChange` reports user selection and browser history changes. Without `value`, the first enabled tab is selected.
+
+Set `navigation="query"` to store the selected tab's `value` in a query parameter, or `navigation="hash"` to store it in the fragment. `queryKey` names the query parameter (default `tab`). A valid URL value takes priority on mount, and Back/Forward restores the selection. Clicking a tab adds a history entry while preserving the rest of the URL. Use stable, URL-safe values; an unknown or disabled URL value falls back to `value` or the first enabled tab. Each group sharing a page should have its own query key. For integration with a router, pass its selected tab through `value` when the router changes the route.
+
+<Canvas of={Stories.UrlNavigation} />
+
+## API
+
+| Component | Prop | Values / default | Purpose |
+| --- | --- | --- | --- |
+| `M3TabGroup` | `variant` | `primary` (default), `secondary` | Visual hierarchy. |
+| `M3TabGroup` | `layout` | `fixed` (default), `scrollable` | Distribution and horizontal scrolling. |
+| `M3TabGroup` | `value` | Tab value / first enabled tab | Initial selection and later programmatic selection signal. |
+| `M3TabGroup` | `navigation`, `queryKey` | No URL navigation; `tab` query key | Sync the selection with the URL fragment or query parameter. |
+| `M3TabGroup` | `onChange` | `(value: string) => void` | Reports user or browser history selection. |
+| `M3Tab` | `value`, `label` | Required | Stable key and visible label; use `label=""` for an icon-only tab. |
+| `M3Tab` | `icon`, `badge`, `disabled`, `aria-label` | Optional | Tab decoration, availability, accessible name. |
+
+`M3Tab` children are the panel content. `M3TabGroup` accepts ordinary `<div>` attributes and exposes `el` through its ref. `M3Tab` is a declaration consumed by `M3TabGroup`; render it only as a direct or Fragment-wrapped child of that group. The root CSS variables `--m3-tab-group-divider-color` and `--m3-tab-group-active-color` can be customized.
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Вкладки
+
+Вкладки переключают связанные представления одного уровня. **Primary** используют для основных разделов области содержимого, обычно под app bar. **Secondary** добавляют вложенный уровень внутри раздела и располагаются ниже primary. Не разбивайте на вкладки последовательный материал, который требуется читать по порядку. [Рекомендации Material 3](https://m3.material.io/components/tabs/guidelines).
+
+## Выбор компоновки
+
+| Компоновка | Применение |
+| --- | --- |
+| `fixed` | От двух до четырёх коротких вкладок равной ширины, видимых одновременно. |
+| `scrollable` | Больше вкладок или длинные названия. Строка прокручивается по горизонтали. |
+
+<Canvas of={Stories.PrimaryFixed} />
+<Canvas of={Stories.SecondaryFixed} />
+
+В прокручиваемой компоновке первая вкладка начинается в 52px от начального края строки. Ширина каждой вкладки определяется длиной подписи с одинаковыми горизонтальными внутренними отступами. Нижняя линия-разделитель проходит по всей ширине контейнера, включая пространство перед первой вкладкой.
+
+<Canvas of={Stories.Scrollable} />
+
+Подписи должны быть короткими и понятными. Допускаются две строки, но прокручиваемая строка предпочтительнее обрезки. Иконки применяйте согласованно ко всем вкладкам набора; вкладке без видимого текста нужен понятный `aria-label`. Бейдж возможен в обоих вариантах, максимум четыре символа вместе с `+`. Если он сообщает важное число, включите его в `aria-label` вкладки: сам визуальный бейдж скрыт из дерева доступности. После просмотра связанного содержимого обновите или уберите бейдж. [Рекомендации Material 3](https://m3.material.io/components/tabs/guidelines).
+
+<Canvas of={Stories.IconsAndBadges} />
+<Canvas of={Stories.IconOnly} />
+
+## Управление и доступность
+
+Компонент использует `tablist`, `tab` и `tabpanel`, связанные идентификаторами, и одну остановку при переходе клавишей Tab. Стрелки влево/вправо перемещают фокус без выбора; Enter/Space активируют сфокусированную кнопку. Home/End переводят фокус к краям. Выбранная вкладка и панель связаны через `aria-controls` и `aria-labelledby`. Недоступные вкладки пропускаются. В режиме `scrollable` сфокусированная вкладка выводится в видимую область. Задайте группе `aria-label` или `aria-labelledby`, если её назначение неочевидно. Область нажатия должна быть не меньше 48×48px. [Доступность Material 3](https://m3.material.io/components/tabs/accessibility), [WAI-ARIA Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
+
+Оболочки панелей остаются в DOM, поэтому каждая ссылка `aria-controls` указывает на существующий элемент. Содержимое монтируется только в активной панели. Состояние, которое должно пережить переключение, храните вне панели. Для закрепления вкладок или совместной прокрутки с app bar поместите группу в соответствующую внешнюю компоновку. Не включайте безусловный свайп содержимого, если в панели есть другие горизонтальные жесты.
+
+## Выбор вкладки и навигация по URL
+
+Группа сама хранит выбранную вкладку. `value` задаёт начальный выбор и переключает вкладку, когда свойство меняется; после клика повторный рендер родителя не требуется. `onChange` сообщает о выборе пользователя и изменениях истории браузера. Без `value` выбирается первая доступная вкладка.
+
+`navigation="query"` хранит `value` вкладки в параметре запроса, а `navigation="hash"` — во фрагменте URL. `queryKey` задаёт имя параметра (по умолчанию `tab`). При монтировании допустимое значение из URL имеет приоритет; переходы назад и вперёд восстанавливают выбор. Клик добавляет запись в историю, сохраняя остальные части URL. Используйте устойчивые значения, пригодные для URL; неизвестное или недоступное значение заменяется `value` либо первой доступной вкладкой. Для нескольких групп на странице задавайте разные ключи запроса. При работе с роутером передавайте выбранную вкладку через `value`, когда роутер меняет маршрут.
+
+<Canvas of={Stories.UrlNavigation} />
+
+## API
+
+| Компонент | Свойство | Значения / умолчание | Назначение |
+| --- | --- | --- | --- |
+| `M3TabGroup` | `variant` | `primary` (умолчание), `secondary` | Визуальная иерархия. |
+| `M3TabGroup` | `layout` | `fixed` (умолчание), `scrollable` | Распределение и горизонтальная прокрутка. |
+| `M3TabGroup` | `value` | Значение вкладки / первая доступная | Начальный выбор и сигнал последующего программного переключения. |
+| `M3TabGroup` | `navigation`, `queryKey` | Без навигации по URL; ключ `tab` | Синхронизация выбора с фрагментом или параметром запроса. |
+| `M3TabGroup` | `onChange` | `(value: string) => void` | Сообщает о выборе пользователя или истории браузера. |
+| `M3Tab` | `value`, `label` | Обязательные | Устойчивый ключ и видимая метка; для вкладки только с иконкой задайте `label=""`. |
+| `M3Tab` | `icon`, `badge`, `disabled`, `aria-label` | Необязательные | Иконка, бейдж, доступность и имя для чтения. |
+
+Дочернее содержимое `M3Tab` составляет панель. `M3TabGroup` принимает обычные атрибуты `<div>` и предоставляет `el` через ref. `M3Tab` — декларация, которую считывает `M3TabGroup`; вставляйте её напрямую в группу либо через Fragment. CSS-переменные корня `--m3-tab-group-divider-color` и `--m3-tab-group-active-color` можно настроить.
+
+</Localized>
