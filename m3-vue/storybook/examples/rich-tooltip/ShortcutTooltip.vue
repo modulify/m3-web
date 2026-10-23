@@ -32,8 +32,20 @@ import { localize } from '../../i18n'
 
 const props = defineProps<{ locale: StorybookLocale }>()
 const text = localize(props.locale, {
-  'en-US': { description: ' to open the inbox from anywhere in the workspace.', heading: 'Jump to inbox', press: 'Press', then: 'then', trigger: 'Keyboard shortcut' },
-  'ru-RU': { description: ', чтобы открыть входящие из любой части рабочего пространства.', heading: 'Перейти к входящим', press: 'Нажмите', then: 'затем', trigger: 'Сочетание клавиш' },
+  'en-US': {
+    description: ' to open the inbox from anywhere in the workspace.',
+    heading: 'Jump to inbox',
+    press: 'Press',
+    then: 'then',
+    trigger: 'Keyboard shortcut',
+  },
+  'ru-RU': {
+    description: ', чтобы открыть входящие из любой части рабочего пространства.',
+    heading: 'Перейти к входящим',
+    press: 'Нажмите',
+    then: 'затем',
+    trigger: 'Сочетание клавиш',
+  },
 })
 
 const uid = useId()

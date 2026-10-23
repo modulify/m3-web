@@ -42,8 +42,20 @@ import { localize } from '../../i18n'
 
 const props = defineProps<{ locale: StorybookLocale }>()
 const text = localize(props.locale, {
-  'en-US': { cancel: 'Cancel', confirm: 'Delete', delete: 'Delete', description: 'The item will move to Trash, where you can restore it.', heading: 'Delete item?' },
-  'ru-RU': { cancel: 'Отмена', confirm: 'Удалить', delete: 'Удалить', description: 'Элемент переместится в корзину, откуда его можно восстановить.', heading: 'Удалить элемент?' },
+  'en-US': {
+    cancel: 'Cancel',
+    confirm: 'Delete',
+    delete: 'Delete',
+    description: 'The item will move to Trash, where you can restore it.',
+    heading: 'Delete item?',
+  },
+  'ru-RU': {
+    cancel: 'Отмена',
+    confirm: 'Удалить',
+    delete: 'Удалить',
+    description: 'Элемент переместится в корзину, откуда его можно восстановить.',
+    heading: 'Удалить элемент?',
+  },
 })
 
 const uid = useId()

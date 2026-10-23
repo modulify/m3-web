@@ -5,6 +5,49 @@ import { M3Icon } from '@/components/icon'
 
 import { localize } from '../i18n'
 
+const messages = {
+  'en-US': {
+    additionalActions: 'More actions',
+    calendarView: 'Calendar view',
+    copy: 'Copy',
+    day: 'Day',
+    documentActions: 'Document actions',
+    download: 'Download',
+    editingActions: 'Editing actions',
+    iconButton: 'Wide icon button',
+    month: 'Month',
+    moreActions: 'More actions',
+    next: 'Next',
+    ordinaryButton: 'Ordinary icon-only button',
+    play: 'Play',
+    playback: 'Playback',
+    previous: 'Previous',
+    save: 'Save',
+    share: 'Share',
+    week: 'Week',
+  },
+  'ru-RU': {
+    additionalActions: 'Дополнительные действия',
+    calendarView: 'Вид календаря',
+    copy: 'Копировать',
+    day: 'День',
+    documentActions: 'Действия с документом',
+    download: 'Скачать',
+    editingActions: 'Действия редактирования',
+    iconButton: 'Широкая кнопка с иконкой',
+    month: 'Месяц',
+    moreActions: 'Другие действия',
+    next: 'Вперёд',
+    ordinaryButton: 'Обычная кнопка с иконкой',
+    play: 'Играть',
+    playback: 'Воспроизведение',
+    previous: 'Назад',
+    save: 'Сохранить',
+    share: 'Поделиться',
+    week: 'Неделя',
+  },
+}
+
 const meta = {
   title: 'Components/M3ButtonGroup',
   component: M3ButtonGroup,
@@ -17,23 +60,21 @@ const meta = {
   args: { variant: 'connected', size: 'sm', rounding: 'round', selection: 'single', defaultValue: 'day' },
   render: (args: unknown, { globals }) => ({
     components: { M3ButtonGroup, M3ButtonGroupItem, M3Icon },
-    setup () {
-      return {
-        args,
-        groupLabel: localize(globals.locale, { 'en-US': 'Calendar view', 'ru-RU': 'Вид календаря' }),
-        day: localize(globals.locale, { 'en-US': 'Day', 'ru-RU': 'День' }),
-        week: localize(globals.locale, { 'en-US': 'Week', 'ru-RU': 'Неделя' }),
-        month: localize(globals.locale, { 'en-US': 'Month', 'ru-RU': 'Месяц' }),
-      }
-    },
+    setup: () => ({ args, text: localize(globals.locale, messages) }),
     template: `
-      <div style="width: min(560px, 90vw); padding: 24px; background: var(--m3-sys-surface-container-low); border-radius: 24px">
-        <M3ButtonGroup v-bind="args" :aria-label="groupLabel">
-          <M3ButtonGroupItem value="day"><M3Icon name="calendar_today" />{{ day }}</M3ButtonGroupItem>
-          <M3ButtonGroupItem value="week"><M3Icon name="date_range" />{{ week }}</M3ButtonGroupItem>
-          <M3ButtonGroupItem value="month"><M3Icon name="calendar_month" />{{ month }}</M3ButtonGroupItem>
-        </M3ButtonGroup>
-      </div>
+        <div style="width: min(560px, 90vw); padding: 24px; background: var(--m3-sys-surface-container-low); border-radius: 24px">
+            <M3ButtonGroup v-bind="args" :aria-label="text.calendarView">
+                <M3ButtonGroupItem value="day">
+                    <M3Icon name="calendar_today" />{{ text.day }}
+                </M3ButtonGroupItem>
+                <M3ButtonGroupItem value="week">
+                    <M3Icon name="date_range" />{{ text.week }}
+                </M3ButtonGroupItem>
+                <M3ButtonGroupItem value="month">
+                    <M3Icon name="calendar_month" />{{ text.month }}
+                </M3ButtonGroupItem>
+            </M3ButtonGroup>
+        </div>
     `,
   }),
   parameters: { layout: 'centered' },
@@ -48,22 +89,21 @@ export const ConnectedMultiple: Story = { args: { selection: 'multiple', default
 export const ConnectedActions: Story = {
   render: (_args, { globals }) => ({
     components: { M3ButtonGroup, M3ButtonGroupItem, M3Icon },
-    setup () {
-      return {
-        groupLabel: localize(globals.locale, { 'en-US': 'Document actions', 'ru-RU': 'Действия с документом' }),
-        copy: localize(globals.locale, { 'en-US': 'Copy', 'ru-RU': 'Копировать' }),
-        download: localize(globals.locale, { 'en-US': 'Download', 'ru-RU': 'Скачать' }),
-        share: localize(globals.locale, { 'en-US': 'Share', 'ru-RU': 'Поделиться' }),
-      }
-    },
+    setup: () => ({ text: localize(globals.locale, messages) }),
     template: `
-      <div style="width: min(560px, 90vw); padding: 24px; background: var(--m3-sys-surface-container-low); border-radius: 24px">
-        <M3ButtonGroup variant="connected" selection="none" :aria-label="groupLabel">
-          <M3ButtonGroupItem value="copy"><M3Icon name="content_copy" />{{ copy }}</M3ButtonGroupItem>
-          <M3ButtonGroupItem value="download"><M3Icon name="download" />{{ download }}</M3ButtonGroupItem>
-          <M3ButtonGroupItem value="share"><M3Icon name="share" />{{ share }}</M3ButtonGroupItem>
-        </M3ButtonGroup>
-      </div>
+        <div style="width: min(560px, 90vw); padding: 24px; background: var(--m3-sys-surface-container-low); border-radius: 24px">
+            <M3ButtonGroup variant="connected" selection="none" :aria-label="text.documentActions">
+                <M3ButtonGroupItem value="copy">
+                    <M3Icon name="content_copy" />{{ text.copy }}
+                </M3ButtonGroupItem>
+                <M3ButtonGroupItem value="download">
+                    <M3Icon name="download" />{{ text.download }}
+                </M3ButtonGroupItem>
+                <M3ButtonGroupItem value="share">
+                    <M3Icon name="share" />{{ text.share }}
+                </M3ButtonGroupItem>
+            </M3ButtonGroup>
+        </div>
     `,
   }),
 }
@@ -73,23 +113,21 @@ export const ConnectedLarge: Story = { args: { size: 'lg' } }
 export const StandardActions: Story = {
   render: (args, { globals }) => ({
     components: { M3ButtonGroup, M3ButtonGroupItem, M3Icon },
-    setup () {
-      return {
-        args,
-        groupLabel: localize(globals.locale, { 'en-US': 'Editing actions', 'ru-RU': 'Действия редактирования' }),
-        save: localize(globals.locale, { 'en-US': 'Save', 'ru-RU': 'Сохранить' }),
-        share: localize(globals.locale, { 'en-US': 'Share', 'ru-RU': 'Поделиться' }),
-        more: localize(globals.locale, { 'en-US': 'More actions', 'ru-RU': 'Другие действия' }),
-      }
-    },
+    setup: () => ({ args, text: localize(globals.locale, messages) }),
     template: `
-      <div style="padding: 24px; background: var(--m3-sys-surface-container-low); border-radius: 24px">
-        <M3ButtonGroup variant="standard" :size="args.size" :rounding="args.rounding" :aria-label="groupLabel">
-          <M3ButtonGroupItem value="save" appearance="filled"><M3Icon name="save" />{{ save }}</M3ButtonGroupItem>
-          <M3ButtonGroupItem value="share" appearance="tonal"><M3Icon name="share" />{{ share }}</M3ButtonGroupItem>
-          <M3ButtonGroupItem value="more" kind="icon" appearance="outlined" :aria-label="more"><M3Icon name="more_vert" /></M3ButtonGroupItem>
-        </M3ButtonGroup>
-      </div>
+        <div style="padding: 24px; background: var(--m3-sys-surface-container-low); border-radius: 24px">
+            <M3ButtonGroup variant="standard" :size="args.size" :rounding="args.rounding" :aria-label="text.editingActions">
+                <M3ButtonGroupItem value="save" appearance="filled">
+                    <M3Icon name="save" />{{ text.save }}
+                </M3ButtonGroupItem>
+                <M3ButtonGroupItem value="share" appearance="tonal">
+                    <M3Icon name="share" />{{ text.share }}
+                </M3ButtonGroupItem>
+                <M3ButtonGroupItem value="more" kind="icon" appearance="outlined" :aria-label="text.moreActions">
+                    <M3Icon name="more_vert" />
+                </M3ButtonGroupItem>
+            </M3ButtonGroup>
+        </div>
     `,
   }),
 }
@@ -98,38 +136,43 @@ export const ExtraSmallActions: Story = { ...StandardActions, args: { size: 'xs'
 export const IconKinds: Story = {
   render: (_args, { globals }) => ({
     components: { M3ButtonGroup, M3ButtonGroupItem, M3Icon },
-    setup () {
-      return {
-        groupLabel: localize(globals.locale, { 'en-US': 'More actions', 'ru-RU': 'Дополнительные действия' }),
-        ordinary: localize(globals.locale, { 'en-US': 'Ordinary icon-only button', 'ru-RU': 'Обычная кнопка с иконкой' }),
-        icon: localize(globals.locale, { 'en-US': 'Wide icon button', 'ru-RU': 'Широкая кнопка с иконкой' }),
-      }
-    },
-    template: `<M3ButtonGroup variant="standard" :aria-label="groupLabel">
-      <M3ButtonGroupItem value="ordinary" :aria-label="ordinary"><M3Icon name="more_vert" /></M3ButtonGroupItem>
-      <M3ButtonGroupItem value="icon" kind="icon" width="wide" :aria-label="icon"><M3Icon name="more_vert" /></M3ButtonGroupItem>
-    </M3ButtonGroup>`,
+    setup: () => ({ text: localize(globals.locale, messages) }),
+    template: `
+        <M3ButtonGroup variant="standard" :aria-label="text.additionalActions">
+            <M3ButtonGroupItem value="ordinary" :aria-label="text.ordinaryButton">
+                <M3Icon name="more_vert" />
+            </M3ButtonGroupItem>
+            <M3ButtonGroupItem value="icon" kind="icon" width="wide" :aria-label="text.iconButton">
+                <M3Icon name="more_vert" />
+            </M3ButtonGroupItem>
+        </M3ButtonGroup>
+    `,
   }),
 }
 
 export const MixedSizes: Story = {
   render: (_args, { globals }) => ({
     components: { M3ButtonGroup, M3ButtonGroupItem, M3Icon },
-    setup () {
-      return {
-        groupLabel: localize(globals.locale, { 'en-US': 'Playback', 'ru-RU': 'Воспроизведение' }),
-        previous: localize(globals.locale, { 'en-US': 'Previous', 'ru-RU': 'Назад' }),
-        play: localize(globals.locale, { 'en-US': 'Play', 'ru-RU': 'Играть' }),
-        next: localize(globals.locale, { 'en-US': 'Next', 'ru-RU': 'Вперёд' }),
-      }
-    },
-    template: `<M3ButtonGroup variant="standard" size="sm" :aria-label="groupLabel">
-      <M3ButtonGroupItem value="previous" kind="icon" appearance="tonal" :aria-label="previous"><M3Icon name="skip_previous" /></M3ButtonGroupItem>
-      <M3ButtonGroupItem value="play" size="md" appearance="filled"><M3Icon name="play_arrow" />{{ play }}</M3ButtonGroupItem>
-      <M3ButtonGroupItem value="next" kind="icon" appearance="tonal" :aria-label="next"><M3Icon name="skip_next" /></M3ButtonGroupItem>
-    </M3ButtonGroup>`,
+    setup: () => ({ text: localize(globals.locale, messages) }),
+    template: `
+        <M3ButtonGroup variant="standard" size="sm" :aria-label="text.playback">
+            <M3ButtonGroupItem value="previous" kind="icon" appearance="tonal" :aria-label="text.previous">
+                <M3Icon name="skip_previous" />
+            </M3ButtonGroupItem>
+            <M3ButtonGroupItem value="play" size="md" appearance="filled">
+                <M3Icon name="play_arrow" />{{ text.play }}
+            </M3ButtonGroupItem>
+            <M3ButtonGroupItem value="next" kind="icon" appearance="tonal" :aria-label="text.next">
+                <M3Icon name="skip_next" />
+            </M3ButtonGroupItem>
+        </M3ButtonGroup>
+    `,
   }),
 }
 
-export const StandardToggle: Story = { args: { variant: 'standard', selection: 'multiple', defaultValue: ['day'] } }
-export const ExtraSmallToggle: Story = { args: { variant: 'standard', size: 'xs', selection: 'multiple', defaultValue: ['day'] } }
+export const StandardToggle: Story = {
+  args: { variant: 'standard', selection: 'multiple', defaultValue: ['day'] },
+}
+export const ExtraSmallToggle: Story = {
+  args: { variant: 'standard', size: 'xs', selection: 'multiple', defaultValue: ['day'] },
+}

@@ -9,7 +9,13 @@ import { localize } from '../i18n'
 
 const labels = {
   'en-US': { about: 'About', email: 'Email', password: 'Password field', summary: 'Add a short summary', text: 'Text field' },
-  'ru-RU': { about: 'О себе', email: 'Электронная почта', password: 'Пароль', summary: 'Добавьте краткое описание', text: 'Текстовое поле' },
+  'ru-RU': {
+    about: 'О себе',
+    email: 'Электронная почта',
+    password: 'Пароль',
+    summary: 'Добавьте краткое описание',
+    text: 'Текстовое поле',
+  },
 }
 
 const meta = {

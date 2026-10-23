@@ -22,20 +22,20 @@ const meta = {
       }
     },
     template: `
-      <div
-        :style="{
-          display: args.orientation === 'vertical' ? 'flex' : 'block',
-          width: '420px',
-          height: args.orientation === 'vertical' ? '160px' : undefined,
-          padding: '24px',
-          borderRadius: '16px',
-          background: 'var(--m3-sys-surface-container-low)',
-        }"
-      >
-        <div :style="{ flex: 1, padding: args.orientation === 'vertical' ? '12px' : '12px 0' }">{{ first }}</div>
-        <M3Divider v-bind="args" />
-        <div :style="{ flex: 1, padding: args.orientation === 'vertical' ? '12px' : '12px 0' }">{{ second }}</div>
-      </div>
+        <div
+            :style="{
+                display: args.orientation === 'vertical' ? 'flex' : 'block',
+                width: '420px',
+                height: args.orientation === 'vertical' ? '160px' : undefined,
+                padding: '24px',
+                borderRadius: '16px',
+                background: 'var(--m3-sys-surface-container-low)',
+            }"
+        >
+            <div :style="{ flex: 1, padding: args.orientation === 'vertical' ? '12px' : '12px 0' }">{{ first }}</div>
+            <M3Divider v-bind="args" />
+            <div :style="{ flex: 1, padding: args.orientation === 'vertical' ? '12px' : '12px 0' }">{{ second }}</div>
+        </div>
     `,
   }),
   parameters: { layout: 'centered' },
