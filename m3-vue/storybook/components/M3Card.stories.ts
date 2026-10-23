@@ -71,7 +71,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof M3Button>
+} satisfies Meta<typeof M3Card>
 
 export default meta
 
