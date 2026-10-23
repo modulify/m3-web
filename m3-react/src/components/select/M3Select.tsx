@@ -18,7 +18,6 @@ import {
 } from 'react'
 
 import { M3Menu, M3MenuItem } from '@/components/menu'
-import { M3ScrollRail } from '@/components/scroll-rail'
 import { M3TextField } from '@/components/text-field'
 
 import defineComponent from '@/utils/component'
@@ -217,6 +216,7 @@ export default defineComponent(function M3Select<Value = unknown>({
 
       <M3Menu
         id={_id + '-menu'}
+        className="m3-select__menu"
         aria-hidden={expanded ? 'false' : 'true'}
         target={root.current}
         shown={shouldBeExpanded}
@@ -229,34 +229,30 @@ export default defineComponent(function M3Select<Value = unknown>({
           setShouldBeExpanded(shown)
         }}
       >
-        <div className="m3-select__scroll-box">
-          <M3ScrollRail />
-
-          {options.map((option, index) => (
-            <M3MenuItem
-              key={index}
-              selected={equalPredicate(option.value, value)}
-              role="option"
-              onClick={() => pick(option)}
-            >
-              {slots.optionLeading ? (
-                <M3MenuItem.Leading>
-                  {renderSlot<SlotContext<Value>>(slots.optionLeading, {
-                    option,
-                    active: shouldBeExpanded,
-                  })}
-                </M3MenuItem.Leading>
-              ) : null}
-
-              {slots.optionContent ? (
-                renderSlot<SlotContext<Value>>(slots.optionContent, {
+        {options.map((option, index) => (
+          <M3MenuItem
+            key={index}
+            selected={equalPredicate(option.value, value)}
+            role="option"
+            onClick={() => pick(option)}
+          >
+            {slots.optionLeading ? (
+              <M3MenuItem.Leading>
+                {renderSlot<SlotContext<Value>>(slots.optionLeading, {
                   option,
                   active: shouldBeExpanded,
-                })
-              ) : option.label}
-            </M3MenuItem>
-          ))}
-        </div>
+                })}
+              </M3MenuItem.Leading>
+            ) : null}
+
+            {slots.optionContent ? (
+              renderSlot<SlotContext<Value>>(slots.optionContent, {
+                option,
+                active: shouldBeExpanded,
+              })
+            ) : option.label}
+          </M3MenuItem>
+        ))}
       </M3Menu>
     </div>
   )
