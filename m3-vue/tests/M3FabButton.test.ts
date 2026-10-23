@@ -48,4 +48,13 @@ describe('m3-vue/fab-button', () => {
     expect(button.classList.contains('m3-fab-button_has-leading-icon')).toBe(false)
     expect(view.container.querySelector('.m3-fab-button__text')).toBeNull()
   })
+
+  test('uses link semantics for a FAB destination', () => {
+    render(M3FabButton, {
+      props: { href: '/new' },
+      slots: { default: 'New task' },
+    })
+
+    expect(screen.getByRole('link', { name: 'New task' }).getAttribute('href')).toBe('/new')
+  })
 })
