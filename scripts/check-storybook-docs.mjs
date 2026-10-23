@@ -38,6 +38,11 @@ const STORYBOOK_LOCALES = [
   'ru-RU',
 ]
 
+const PANEL_DOCS_IDS = new Set([
+  'components-m3chip--docs',
+  'components-m3radio--docs',
+])
+
 const toErrorMessage = value => value instanceof Error ? value.message : String(value)
 
 const normalizeBaseUrl = value => `${value.replace(/\/+$/, '')}/`
@@ -178,6 +183,23 @@ const inspectDocsEntry = async (browser, baseUrl, entry, locale) => {
 
       if (tableCount === 0) {
         runtimeErrors.push('render: navigation Markdown tables are not HTML tables')
+      }
+    }
+
+    if (PANEL_DOCS_IDS.has(entry.id)) {
+      const panel = page.locator('#storybook-docs .m3-panel.m3-panel_elevated-1').first()
+
+      if (await panel.count() === 0) {
+        runtimeErrors.push('render: example panel is missing its Material classes')
+      } else if (entry.id === 'components-m3chip--docs') {
+        const { className, padding } = await panel.evaluate(element => ({
+          className: element.className,
+          padding: getComputedStyle(element).padding,
+        }))
+
+        if (!className.split(/\s+/u).includes('p-4') || padding !== '16px') {
+          runtimeErrors.push(`render: chip panel utility padding is incorrect (${className}, ${padding})`)
+        }
       }
     }
 
