@@ -107,6 +107,10 @@ jobs:
         if: matrix.node-version == '24.x'
         run: yarn tsc:storybook
 
+      - name: Check Storybook component metadata
+        if: matrix.node-version == '24.x'
+        run: yarn test:storybook-meta
+
       - name: Run e2e config type checks
         if: matrix.node-version == '24.x'
         run: yarn tsc:e2e
