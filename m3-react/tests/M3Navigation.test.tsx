@@ -9,6 +9,7 @@ import {
   M3Navigation,
   M3NavigationSection,
   M3NavigationTab,
+  useM3NavigationView,
 } from '@/components/navigation'
 
 describe('m3-react/navigation', () => {
@@ -47,6 +48,48 @@ describe('m3-react/navigation', () => {
 
     expect(onToggle).toHaveBeenNthCalledWith(1, true)
     expect(onToggle).toHaveBeenNthCalledWith(2, false)
+  })
+
+  test('passes the rendered view to every navigation section', () => {
+    const ContentView = ({ id }: { id: string }) => {
+      const view = useM3NavigationView()
+
+      return <output data-testid={id}>{JSON.stringify(view)}</output>
+    }
+    const content = (expanded: boolean) => (
+      <M3Navigation appearance="rail" collapse="hidden" expansion="modal" expanded={expanded}>
+        <M3Navigation.Top>
+          {({ view }) => <output data-testid="top-view">{JSON.stringify(view)}</output>}
+        </M3Navigation.Top>
+        <M3Navigation.Header>
+          {({ view }) => <output data-testid="header-view">{JSON.stringify(view)}</output>}
+        </M3Navigation.Header>
+        <M3Navigation.Subheader>
+          {({ view }) => <output data-testid="subheader-view">{JSON.stringify(view)}</output>}
+        </M3Navigation.Subheader>
+        <ContentView id="content-view" />
+        <M3NavigationSection>
+          <ContentView id="section-view" />
+        </M3NavigationSection>
+      </M3Navigation>
+    )
+    const view = render(content(false))
+
+    const hidden = JSON.stringify({
+      appearance: 'rail', modal: false, hidden: true,
+    })
+    for (const id of ['top-view', 'header-view', 'subheader-view', 'content-view', 'section-view']) {
+      expect(screen.getByTestId(id).textContent).toBe(hidden)
+    }
+
+    view.rerender(content(true))
+
+    const shown = JSON.stringify({
+      appearance: 'rail-expanded', modal: true, hidden: false,
+    })
+    for (const id of ['top-view', 'header-view', 'subheader-view', 'content-view', 'section-view']) {
+      expect(screen.getByTestId(id).textContent).toBe(shown)
+    }
   })
 
   test('renders slots and closes by scrim click', () => {

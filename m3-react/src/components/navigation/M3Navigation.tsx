@@ -5,10 +5,12 @@ import type {
 } from '@modulify/m3-foundation/types/components/navigation'
 import type { ComponentSetupContext } from '@/utils/component'
 import type { FC, HTMLAttributes } from 'react'
+import type { NavigationView } from '@modulify/m3-foundation/types/components/navigation'
 import type { RailCollapse } from '@modulify/m3-foundation/types/components/navigation'
 import type {
   RailExpandedMode,
 } from '@modulify/m3-foundation/types/components/navigation'
+import type { ReactNode } from 'react'
 import type { Ref } from 'react'
 
 import { activateModalFocus } from '@modulify/m3-foundation/lib/modal'
@@ -42,6 +44,7 @@ import {
 } from '@/hooks'
 
 import M3NavigationSection from './M3NavigationSection'
+import M3NavigationView, { useM3NavigationView } from './M3NavigationView'
 
 export interface M3NavigationProps extends Omit<HTMLAttributes<HTMLElement>, 'onToggle'> {
   ref?: Ref<M3NavigationExposed>;
@@ -61,33 +64,43 @@ export interface M3NavigationMethods {
   collapse (): void;
 }
 
-const Top: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Navigation.Top', ({
+type ViewSlotProps = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
+  children?: ReactNode | ((props: { view: NavigationView }) => ReactNode);
+}
+
+const ViewSlotContent: FC<Pick<ViewSlotProps, 'children'>> = ({ children }) => {
+  const view = useM3NavigationView()
+
+  return <>{typeof children === 'function' ? view && children({ view }) : children}</>
+}
+
+const Top: FC<ViewSlotProps> = defineSlot('M3Navigation.Top', ({
   className = '',
   children = [],
   ...attrs
 }) => (
   <div className={toClassName(['m3-navigation__top', className])} {...attrs}>
-    {children}
+    <ViewSlotContent>{children}</ViewSlotContent>
   </div>
 ))
 
-const Header: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Navigation.Header', ({
+const Header: FC<ViewSlotProps> = defineSlot('M3Navigation.Header', ({
   className = '',
   children = [],
   ...attrs
 }) => (
   <div className={toClassName(['m3-navigation__header', className])} {...attrs}>
-    {children}
+    <ViewSlotContent>{children}</ViewSlotContent>
   </div>
 ))
 
-const Subheader: FC<HTMLAttributes<HTMLElement>> = defineSlot('M3Navigation.Subheader', ({
+const Subheader: FC<ViewSlotProps> = defineSlot('M3Navigation.Subheader', ({
   className = '',
   children = [],
   ...attrs
 }) => (
   <M3NavigationSection.Header className={className} {...attrs}>
-    {children}
+    <ViewSlotContent>{children}</ViewSlotContent>
   </M3NavigationSection.Header>
 ))
 
@@ -128,6 +141,11 @@ export default defineComponent(function M3Navigation({
 
   const railHidden = isHiddenRail(appearanceBase, expanded, collapse)
   const railLeaving = isHiddenRail(appearanceBase, expanded, collapse) && state.transitioning
+  const view: NavigationView = {
+    appearance: appearanceActual,
+    modal: modalActive,
+    hidden: railHidden && !railLeaving,
+  }
 
   const scrim = useRef<HTMLDivElement | null>(null)
   const navigation = useRef<HTMLElement | null>(null)
@@ -241,27 +259,29 @@ export default defineComponent(function M3Navigation({
             ['m3-navigation_' + appearanceActual]: true,
             ['m3-navigation_bar']: isBarAppearance(appearanceActual),
             ['m3-navigation_' + alignment]: true,
-            ['m3-navigation_modal']: modalActive,
+            ['m3-navigation_modal']: view.modal,
             ['m3-navigation_hide-collapsed']: appearanceBase === 'rail' && collapse === 'hidden',
             ['m3-navigation_rail-leaving']: railLeaving,
-            ['m3-navigation_rail-hidden']: railHidden && !railLeaving,
+            ['m3-navigation_rail-hidden']: view.hidden,
           }])}
           aria-hidden={railHidden || ariaHidden}
           inert={railHidden || inert}
           {...navigationAttrs}
           onTransitionEnd={onTransitionEnd}
         >
-          {parsed.slots.top}
-          {parsed.slots.header}
-          <div className="m3-navigation__body">
-            <M3NavigationAppearance.Provider value={appearanceActual}>
-              <M3NavigationSection>
-                {parsed.slots.subheader}
-                {parsed.content}
-              </M3NavigationSection>
-              {parsed.collections.sections}
-            </M3NavigationAppearance.Provider>
-          </div>
+          <M3NavigationAppearance.Provider value={appearanceActual}>
+            <M3NavigationView.Provider value={view}>
+              {parsed.slots.top}
+              {parsed.slots.header}
+              <div className="m3-navigation__body">
+                <M3NavigationSection>
+                  {parsed.slots.subheader}
+                  {parsed.content}
+                </M3NavigationSection>
+                {parsed.collections.sections}
+              </div>
+            </M3NavigationView.Provider>
+          </M3NavigationAppearance.Provider>
         </nav>
       </div>
     </>,
