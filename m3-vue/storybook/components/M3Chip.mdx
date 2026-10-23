@@ -1,5 +1,6 @@
 import { Meta } from '@storybook/addon-docs/blocks'
 import Inline from './Inline'
+import Panel from './Panel'
 import ChipShowcase from '../examples/chip/ChipShowcase.vue'
 import { Localized } from '../i18n'
 import * as M3ChipStories from './M3Chip.stories'
@@ -38,21 +39,21 @@ This implementation keeps `filter` chips controlled through `selected` and `upda
 
 ### Variant panel
 
-<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+<Panel className="p-4">
   <Inline is={ChipShowcase} locale="en-US" mode="matrix" />
-</div>
+</Panel>
 
 ### Filter set
 
-<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+<Panel className="p-4">
   <Inline is={ChipShowcase} locale="en-US" mode="filters" />
-</div>
+</Panel>
 
 ### Input tokens
 
-<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+<Panel className="p-4">
   <Inline is={ChipShowcase} locale="en-US" mode="inputs" />
-</div>
+</Panel>
 
 ## Story guide
 
@@ -111,21 +112,21 @@ Use assist and suggestion chips as action affordances. Use filter chips only whe
 
 ### Сравнение вариантов
 
-<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+<Panel className="p-4">
   <Inline is={ChipShowcase} locale="ru-RU" mode="matrix" />
-</div>
+</Panel>
 
 ### Набор фильтров
 
-<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+<Panel className="p-4">
   <Inline is={ChipShowcase} locale="ru-RU" mode="filters" />
-</div>
+</Panel>
 
 ### Введённые значения
 
-<div className="m3-panel m3-panel_elevated-1" style={{ padding: '16px' }}>
+<Panel className="p-4">
   <Inline is={ChipShowcase} locale="ru-RU" mode="inputs" />
-</div>
+</Panel>
 
 ## Примеры в Storybook
 

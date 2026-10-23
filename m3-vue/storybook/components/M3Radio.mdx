@@ -1,5 +1,6 @@
 import { Meta } from '@storybook/addon-docs/blocks'
 import Inline from './Inline'
+import Panel from './Panel'
 import RadioGroup from '../examples/radio/RadioGroup.vue'
 import { Localized } from '../i18n'
 import * as M3RadioStories from './M3Radio.stories'
@@ -35,7 +36,7 @@ For native keyboard and form semantics, related radios should share the same `na
 
 ### Preference group
 
-<div className="m3-panel m3-panel_elevated-1">
+<Panel>
   <Inline is={RadioGroup} legend="Theme preference" options={[{
     label: 'System',
     value: 'system',
@@ -46,7 +47,7 @@ For native keyboard and form semantics, related radios should share the same `na
     label: 'Dark',
     value: 'dark',
   }]} />
-</div>
+</Panel>
 
 ## Story guide
 
@@ -100,7 +101,7 @@ If the choice is simply on/off, prefer a switch or checkbox. Radios communicate 
 
 ### Группа предпочтений
 
-<div className="m3-panel m3-panel_elevated-1">
+<Panel>
   <Inline is={RadioGroup} legend="Тема оформления" options={[{
     label: 'Системная',
     value: 'system',
@@ -111,7 +112,7 @@ If the choice is simply on/off, prefer a switch or checkbox. Radios communicate 
     label: 'Тёмная',
     value: 'dark',
   }]} />
-</div>
+</Panel>
 
 ## Примеры в Storybook
 
