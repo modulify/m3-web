@@ -222,7 +222,11 @@ const dragging = reactive({
 })
 
 const percentageOf = (value: number) => {
-  return 100 * Math.abs(restrict(value, [props.min, props.max]) / (props.max - props.min))
+  const denominator = props.max - props.min
+
+  if (denominator === 0) return 0
+
+  return 100 * (restrict(value, [props.min, props.max]) - props.min) / denominator
 }
 
 const percentage = computed(() => {
