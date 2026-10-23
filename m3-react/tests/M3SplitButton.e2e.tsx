@@ -12,6 +12,7 @@ test('XS split button keeps two targets, a 2px gap, and a stable layout when its
   </div>)
 
   try {
+    await document.fonts.ready
     const group = view.container.querySelector<HTMLElement>('.m3-split-button')!
     const segments = [...group.querySelectorAll<HTMLElement>('.m3-split-button__segment')]
     const buttons = [...group.querySelectorAll<HTMLButtonElement>('button')]
