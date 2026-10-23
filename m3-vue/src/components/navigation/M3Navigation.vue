@@ -3,7 +3,6 @@
         <Transition name="m3-transition-fade" @after-leave="transitioning = false">
             <div
                 v-show="modalExpanded"
-                ref="scrim"
                 :style="isBarAppearance(appearanceBase) ? { display: 'none' } : undefined"
                 class="m3-scrim"
                 @click="emit('update:expanded', false)"
@@ -27,30 +26,30 @@
                     ['m3-navigation_' + appearanceActual]: true,
                     ['m3-navigation_bar']: isBarAppearance(appearanceActual),
                     ['m3-navigation_' + alignment]: true,
-                    ['m3-navigation_modal']: modalActive,
+                    ['m3-navigation_modal']: view.modal,
                     ['m3-navigation_hide-collapsed']: appearanceBase === 'rail' && collapse === 'hidden',
                     ['m3-navigation_rail-leaving']: railLeaving,
-                    ['m3-navigation_rail-hidden']: railHidden && !railLeaving,
+                    ['m3-navigation_rail-hidden']: view.hidden,
                 }"
             >
                 <div v-if="'top' in $slots" class="m3-navigation__top">
-                    <slot name="top" />
+                    <slot :view="view" name="top" />
                 </div>
 
                 <div v-if="'header' in $slots" class="m3-navigation__header">
-                    <slot name="header" />
+                    <slot :view="view" name="header" />
                 </div>
 
                 <div class="m3-navigation__body">
                     <M3NavigationSection>
                         <template v-if="'subheader' in $slots" #header>
-                            <slot name="subheader" />
+                            <slot :view="view" name="subheader" />
                         </template>
 
-                        <slot />
+                        <slot :view="view" />
                     </M3NavigationSection>
 
-                    <slot name="sections" />
+                    <slot :view="view" name="sections" />
                 </div>
             </nav>
         </div>
@@ -61,12 +60,14 @@
 import type {
   Appearance,
   AutoAppearance,
+  NavigationView,
 } from '@modulify/m3-foundation/types/components/navigation'
 import type { PropType } from 'vue'
 import type { RailCollapse } from '@modulify/m3-foundation/types/components/navigation'
 import type {
   RailExpandedMode,
 } from '@modulify/m3-foundation/types/components/navigation'
+import type { VNode } from 'vue'
 
 import { activateModalFocus } from '@modulify/m3-foundation/lib/modal'
 import { computed } from 'vue'
@@ -125,6 +126,14 @@ const emit = defineEmits([
   'update:expanded',
 ])
 
+defineSlots<{
+  default?: (props: { view: NavigationView }) => VNode[]
+  top?: (props: { view: NavigationView }) => VNode[]
+  header?: (props: { view: NavigationView }) => VNode[]
+  subheader?: (props: { view: NavigationView }) => VNode[]
+  sections?: (props: { view: NavigationView }) => VNode[]
+}>()
+
 const attrs = useAttrs()
 const breakpoint = useBreakpoint()
 
@@ -142,11 +151,18 @@ const modalDialog = ref<HTMLElement | null>(null)
 const modalExpanded = computed(() => isModalExpansion(appearanceBase.value, props.expanded, props.expansion, breakpoint.value.ge('large')))
 const modalActive = computed(() => isExpandableAppearance(appearanceBase.value)
   && (isModalExpansion(appearanceBase.value, props.expanded, props.expansion, breakpoint.value.ge('large')) || transitioning.value))
-const { host: layerHost, ready: layerReady } = useLayerHost(() => modalActive.value)
 const modalLabel = computed(() => typeof attrs['aria-label'] === 'string' ? attrs['aria-label'] : 'Navigation')
+
+const { host: layerHost, ready: layerReady } = useLayerHost(() => modalActive.value)
 
 const railHidden = computed(() => isHiddenRail(appearanceBase.value, props.expanded, props.collapse))
 const railLeaving = computed(() => isHiddenRail(appearanceBase.value, props.expanded, props.collapse) && transitioning.value)
+
+const view = computed<NavigationView>(() => ({
+  appearance: appearanceActual.value,
+  modal: modalActive.value,
+  hidden: railHidden.value && !railLeaving.value,
+}))
 
 const navAriaHidden = computed(() => isHiddenRail(appearanceBase.value, props.expanded, props.collapse)
   ? 'true'
@@ -154,7 +170,6 @@ const navAriaHidden = computed(() => isHiddenRail(appearanceBase.value, props.ex
 const navInert = computed(() => isHiddenRail(appearanceBase.value, props.expanded, props.collapse)
   || attrs.inert === true || attrs.inert === '' || attrs.inert === 'true' ? true : undefined)
 
-const scrim = ref<HTMLElement | null>(null)
 const navigation = ref<HTMLElement | null>(null)
 
 provideM3NavigationAppearance(() => appearanceActual.value)

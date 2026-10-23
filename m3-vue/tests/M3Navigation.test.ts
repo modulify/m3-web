@@ -1,10 +1,43 @@
+import type { NavigationView } from '@modulify/m3-foundation/types/components/navigation'
+
 import { fireEvent } from '@testing-library/vue'
-import { nextTick } from 'vue'
+import { h, nextTick } from 'vue'
 import { render, screen } from '@testing-library/vue'
 
 import { M3Navigation } from '@/components/navigation'
 
 describe('m3-vue/navigation', () => {
+  test('passes the rendered view to every navigation slot', async () => {
+    const slot = (id: string) => ({ view }: { view: NavigationView }) =>
+      h('output', { 'data-testid': id }, JSON.stringify(view))
+    const view = render(M3Navigation, {
+      props: { appearance: 'rail', collapse: 'hidden', expansion: 'modal', expanded: false },
+      slots: {
+        top: slot('top-view'),
+        header: slot('header-view'),
+        subheader: slot('subheader-view'),
+        default: slot('content-view'),
+        sections: slot('sections-view'),
+      },
+    })
+
+    const hidden = JSON.stringify({
+      appearance: 'rail', modal: false, hidden: true,
+    })
+    for (const id of ['top-view', 'header-view', 'subheader-view', 'content-view', 'sections-view']) {
+      expect(screen.getByTestId(id).textContent).toBe(hidden)
+    }
+
+    await view.rerender({ appearance: 'rail', collapse: 'hidden', expansion: 'modal', expanded: true })
+
+    const shown = JSON.stringify({
+      appearance: 'rail-expanded', modal: true, hidden: false,
+    })
+    for (const id of ['top-view', 'header-view', 'subheader-view', 'content-view', 'sections-view']) {
+      expect(screen.getByTestId(id).textContent).toBe(shown)
+    }
+  })
+
   test('renders slots and closes by scrim click', async () => {
     const view = render(M3Navigation, {
       props: {
