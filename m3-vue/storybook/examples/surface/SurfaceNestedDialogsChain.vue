@@ -7,7 +7,7 @@
             :fill-height="false"
             :height="72"
             :elevation="0"
-            class="surface-dialog-chain__topbar"
+            class="p-4"
             variant="surface-container"
         >
             <div class="surface-dialog-chain__topbar-content">
@@ -399,10 +399,6 @@ async function closeFrom(level: number) {
     display: flex;
     flex-direction: column;
     gap: 14px;
-}
-
-.surface-dialog-chain__topbar {
-    padding: 16px;
 }
 
 .surface-dialog-chain__workspace-intro {

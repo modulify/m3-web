@@ -14,11 +14,12 @@
         <div style="max-inline-size: 1120px; margin-inline: auto; padding: 24px; padding-block-end: 160px">
             <h1>{{ text.title }}</h1>
             <p>{{ text.hint }} {{ text.last }}: {{ last }}</p>
-            <div style="display: flex; flex-wrap: wrap; gap: 16px">
+            <div class="flex-container gap-4">
                 <article
                     v-for="(card, index) in cards"
                     :key="`${card}-${index}`"
-                    style="box-sizing: border-box; flex: 1 1 max-content; min-inline-size: min(180px, 100%); max-inline-size: min(360px, 100%); min-block-size: 150px; padding: 24px; border-radius: 24px; background: var(--m3-sys-surface-container)"
+                    class="p-6"
+                    style="box-sizing: border-box; flex: 1 1 max-content; min-inline-size: min(180px, 100%); max-inline-size: min(360px, 100%); min-block-size: 150px; border-radius: 24px; background: var(--m3-sys-surface-container)"
                 >
                     <h2 style="margin-block-start: 0; font-size: 22px; line-height: 28px; overflow-wrap: break-word">
                         {{ card }}

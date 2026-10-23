@@ -1,5 +1,5 @@
 <template>
-    <div :lang="props.locale" class="m3-chip-showcase">
+    <div :lang="props.locale" class="flex-container gap-3">
         <template v-if="props.mode === 'filters'">
             <M3Chip
                 v-for="option in filterOptions"
@@ -118,11 +118,3 @@ const removeToken = (token: TokenId) => {
   tokenIds.value = tokenIds.value.filter(value => value !== token)
 }
 </script>
-
-<style scoped>
-.m3-chip-showcase {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-</style>

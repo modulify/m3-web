@@ -1,6 +1,6 @@
 <template>
-    <fieldset :style="fieldsetStyle">
-        <legend :style="legendStyle">
+    <fieldset :style="fieldsetStyle" class="d-grid gap-3">
+        <legend :style="legendStyle" class="p-0 mb-2">
             {{ legend }}
         </legend>
 
@@ -8,7 +8,7 @@
             v-for="option in options"
             :key="option.value"
             :for="name + '-' + option.value"
-            :style="labelStyle"
+            class="flex-row gap-3"
         >
             <M3Radio
                 :id="name + '-' + option.value"
@@ -52,24 +52,14 @@ const model = ref(props.options[0]?.value)
 
 const fieldsetStyle = {
   margin: 0,
-  padding: 0,
   border: 'none',
-  display: 'grid',
-  gap: '12px',
   minWidth: '280px',
 }
 
 const legendStyle = {
-  padding: 0,
-  marginBottom: '8px',
   fontSize: '14px',
   lineHeight: '20px',
   color: 'var(--m3-sys-on-surface-variant)',
 }
 
-const labelStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-}
 </script>

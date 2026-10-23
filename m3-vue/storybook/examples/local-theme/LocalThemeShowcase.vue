@@ -267,7 +267,7 @@ const ColorStrip: Component = defineComponent({
 
   setup: () => () => h('div', {
     'aria-label': text.tokenSample,
-    class: 'm3-local-theme-showcase__palette',
+    class: 'flex-container gap-3',
   }, [
     h('span', { class: 'm3-local-theme-showcase__palette-item' }, [
       h('span', { class: 'm3-local-theme-showcase__palette-chip m3-local-theme-showcase__palette-chip_surface' }),
@@ -459,12 +459,6 @@ onMounted(() => {
 
 .m3-local-theme-showcase__sample > * + * {
     margin-block-start: 12px;
-}
-
-.m3-local-theme-showcase__palette {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
 }
 
 .m3-local-theme-showcase__palette-item {

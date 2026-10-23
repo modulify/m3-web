@@ -130,17 +130,16 @@ Use the local `primary` pair for the action and local surface roles for the surr
 Visual result:
 
 <div
-  className="m3-local-theme m3-local-theme_danger"
+  className="m3-local-theme m3-local-theme_danger p-6"
   style={{
-    padding: '24px',
     borderRadius: '16px',
     background: 'var(--m3-sys-surface)',
     color: 'var(--m3-sys-on-surface)',
   }}
 >
   <div
+    className="p-5"
     style={{
-      padding: '20px',
       border: '1px solid var(--m3-sys-outline-variant)',
       borderRadius: '16px',
       background: 'var(--m3-sys-surface-container-high)',
@@ -149,8 +148,8 @@ Visual result:
     <span style={{ color: 'var(--m3-sys-on-surface-variant)', fontSize: '12px' }}>
       Danger scope
     </span>
-    <h3 style={{ margin: '8px 0', color: 'var(--m3-sys-on-surface)' }}>Delete release</h3>
-    <p style={{ margin: '0 0 16px', color: 'var(--m3-sys-on-surface-variant)' }}>
+    <h3 className="my-2" style={{ color: 'var(--m3-sys-on-surface)' }}>Delete release</h3>
+    <p className="mt-0 mb-4" style={{ color: 'var(--m3-sys-on-surface-variant)' }}>
       Primary action tokens recolor the action while surface tokens keep the panel coherent.
     </p>
     <Inline tag={'span'} is={M3Button} label={'Delete release'} appearance={'filled'} />
@@ -186,27 +185,24 @@ Use container tokens to show hierarchy inside one local scope. The ladder should
 Visual result:
 
 <div
-  className="m3-local-theme m3-local-theme_warm-alert"
+  className="m3-local-theme m3-local-theme_warm-alert d-grid gap-3 p-6"
   style={{
-    display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-    gap: '12px',
-    padding: '24px',
     borderRadius: '16px',
     background: 'var(--m3-sys-surface)',
     color: 'var(--m3-sys-on-surface)',
   }}
 >
-  <div style={{ padding: '16px', borderRadius: '12px', background: 'var(--m3-sys-surface-container-low)' }}>
+  <div className="p-4" style={{ borderRadius: '12px', background: 'var(--m3-sys-surface-container-low)' }}>
     Low container
   </div>
-  <div style={{ padding: '16px', borderRadius: '12px', background: 'var(--m3-sys-surface-container)' }}>
+  <div className="p-4" style={{ borderRadius: '12px', background: 'var(--m3-sys-surface-container)' }}>
     Default container
   </div>
-  <div style={{ padding: '16px', borderRadius: '12px', background: 'var(--m3-sys-surface-container-high)' }}>
+  <div className="p-4" style={{ borderRadius: '12px', background: 'var(--m3-sys-surface-container-high)' }}>
     High container
   </div>
-  <div style={{ padding: '16px', borderRadius: '12px', background: 'var(--m3-sys-surface-container-highest)' }}>
+  <div className="p-4" style={{ borderRadius: '12px', background: 'var(--m3-sys-surface-container-highest)' }}>
     Highest container
   </div>
 </div>

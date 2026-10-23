@@ -8,7 +8,7 @@
             :fill-height="false"
             :height="72"
             :elevation="0"
-            class="surface-card-page__topbar"
+            class="p-4"
             variant="surface-container"
         >
             <div class="surface-card-page__topbar-content">
@@ -365,10 +365,6 @@ const overlayActive = computed(() => busy.value || expanded.value)
     display: flex;
     flex-direction: column;
     gap: 14px;
-}
-
-.surface-card-page__topbar {
-    padding: 16px;
 }
 
 .surface-card-page__header-card {

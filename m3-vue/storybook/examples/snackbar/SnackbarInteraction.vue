@@ -14,9 +14,10 @@
 
         <main
             :class="{ 'm3-has-navigation': scenario === 'navigation' }"
-            :style="{ minHeight: scenario === 'navigation' ? '100vh' : '360px', padding: '32px', background: 'var(--m3-sys-surface)' }"
+            :style="{ minHeight: scenario === 'navigation' ? '100vh' : '360px', background: 'var(--m3-sys-surface)' }"
+            class="p-8"
         >
-            <div :style="{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }">
+            <div class="flex-row flex-wrap gap-4">
                 <M3Button v-if="scenario === 'feedback' || scenario === 'navigation'" @click="showFeedback">
                     {{ text.feedback }}
                 </M3Button>

@@ -1,5 +1,5 @@
 <template>
-    <span class="m3-button-icon-example">
+    <span class="d-inline-flex align-items-center gap-4">
         <M3Button :aria-label="favoriteLabel" appearance="filled" width="medium">
             <M3Icon name="favorite" />
         </M3Button>
@@ -30,11 +30,3 @@ defineProps<{
 
 const selected = ref(false)
 </script>
-
-<style scoped>
-.m3-button-icon-example {
-  display: inline-flex;
-  align-items: center;
-  gap: 16px;
-}
-</style>

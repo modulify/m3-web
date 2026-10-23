@@ -1,5 +1,5 @@
 <template>
-    <span ref="target" :style="{ display: 'inline-block' }">
+    <span ref="target" class="d-inline-block">
         <M3Button :aria-describedby="uid + '-tooltip'">
             {{ text.review }}
         </M3Button>
