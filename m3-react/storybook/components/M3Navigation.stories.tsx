@@ -11,37 +11,79 @@ import {
   M3NavigationSection,
   M3NavigationTab,
 } from '@/components/navigation'
+
 import { useBreakpoint, useM3Adaptive } from '@/hooks'
 
 import { localize } from '../i18n'
+
 import NavigationStoryContent from '../examples/navigation/NavigationStoryContent'
 
-const messages = {
-  'en-US': { bar: { drafts: 'Drafts', favorites: 'Favorites', inbox: 'Inbox', outbox: 'Outbox', trash: 'Trash' }, close: 'Close menu', compose: 'Compose', drafts: 'Drafts', family: 'Family', favorites: 'Favorites', inbox: 'Inbox', mail: 'Mail', open: 'Open menu', outbox: 'Outbox', personalFolders: 'Personal folders', trash: 'Trash', wedding: 'Wedding', work: 'Work' },
-  'ru-RU': { bar: { drafts: 'Черн.', favorites: 'Избр.', inbox: 'Почта', outbox: 'Исход.', trash: 'Корзина' }, close: 'Закрыть меню', compose: 'Написать', drafts: 'Черновики', family: 'Семья', favorites: 'Избранное', inbox: 'Входящие', mail: 'Почта', open: 'Открыть меню', outbox: 'Исходящие', personalFolders: 'Личные папки', trash: 'Корзина', wedding: 'Свадьба', work: 'Работа' },
-}
+import { messages } from './M3Navigation.i18n'
 
 type StoryText = typeof messages['en-US']
 type DestinationLabels = Pick<StoryText, 'inbox' | 'drafts' | 'outbox' | 'favorites' | 'trash'>
+type NavigationStoryState = 'default' | 'expanded' | 'collapsed'
+type NavigationStoryMenuProps = {
+  text: StoryText
+  labels?: DestinationLabels
+}
 
 const accessibleLabel = (label: string, full: string) => label === full ? undefined : `${label} — ${full}`
 
-const renderDestinations = (text: StoryText, labels: DestinationLabels = text) => (
+const NavigationStoryMenu = ({ text, labels = text }: NavigationStoryMenuProps) => (
   <>
-    <M3NavigationTab label={labels.inbox} aria-label={accessibleLabel(labels.inbox, text.inbox)} active>
+    <M3NavigationTab
+      label={labels.inbox}
+      aria-label={accessibleLabel(labels.inbox, text.inbox)}
+      active
+    >
       <M3Icon name="inbox" />
       <M3NavigationTab.Badge>24</M3NavigationTab.Badge>
     </M3NavigationTab>
-    <M3NavigationTab label={labels.drafts} aria-label={accessibleLabel(labels.drafts, text.drafts)}><M3Icon name="drafts" /></M3NavigationTab>
-    <M3NavigationTab label={labels.outbox} aria-label={accessibleLabel(labels.outbox, text.outbox)} badged><M3Icon name="send" /></M3NavigationTab>
-    <M3NavigationTab label={labels.favorites} aria-label={accessibleLabel(labels.favorites, text.favorites)}><M3Icon name="favorite" /></M3NavigationTab>
-    <M3NavigationTab label={labels.trash} aria-label={accessibleLabel(labels.trash, text.trash)}><M3Icon name="delete" /></M3NavigationTab>
+
+    <M3NavigationTab
+      label={labels.drafts}
+      aria-label={accessibleLabel(labels.drafts, text.drafts)}
+    >
+      <M3Icon name="drafts" />
+    </M3NavigationTab>
+
+    <M3NavigationTab
+      label={labels.outbox}
+      aria-label={accessibleLabel(labels.outbox, text.outbox)}
+      badged
+    >
+      <M3Icon name="send" />
+    </M3NavigationTab>
+
+    <M3NavigationTab
+      label={labels.favorites}
+      aria-label={accessibleLabel(labels.favorites, text.favorites)}
+    >
+      <M3Icon name="favorite" />
+    </M3NavigationTab>
+
+    <M3NavigationTab
+      label={labels.trash}
+      aria-label={accessibleLabel(labels.trash, text.trash)}
+    >
+      <M3Icon name="delete" />
+    </M3NavigationTab>
 
     <M3NavigationSection>
       <M3NavigationSection.Header>{text.personalFolders}</M3NavigationSection.Header>
-      <M3NavigationTab label={text.family}><M3Icon name="folder" /></M3NavigationTab>
-      <M3NavigationTab label={text.wedding}><M3Icon name="folder" /></M3NavigationTab>
-      <M3NavigationTab label={text.work}><M3Icon name="folder" /></M3NavigationTab>
+
+      <M3NavigationTab label={text.family}>
+        <M3Icon name="folder" />
+      </M3NavigationTab>
+
+      <M3NavigationTab label={text.wedding}>
+        <M3Icon name="folder" />
+      </M3NavigationTab>
+
+      <M3NavigationTab label={text.work}>
+        <M3Icon name="folder" />
+      </M3NavigationTab>
     </M3NavigationSection>
   </>
 )
@@ -79,57 +121,64 @@ const meta = {
     onToggle: _onToggle,
     ...args
   }, { globals }) => {
-    const [expanded, setExpanded] = useState(false)
-    const [collapsed, setCollapsed] = useState(false)
+    const text = localize(globals.locale, messages)
     const breakpoint = useBreakpoint()
     const adaptive = useM3Adaptive()
-    const text = localize(globals.locale, messages)
-    const barLabels = { ...text, ...text.bar }
-    const labels = requestedAppearance === 'bar'
-      ? adaptive(barLabels, { compact: text })
-      : requestedAppearance === 'auto'
-        ? adaptive(text, { medium: barLabels })
-        : text
-    const expandedByAppearance = requestedAppearance === 'rail-expanded'
-      || (requestedAppearance === 'auto' && breakpoint.ge('large'))
-    const appearance = expandedByAppearance && collapsed ? 'rail' : requestedAppearance
-    const railExpanded = expandedByAppearance && !collapsed
-      || expanded && (appearance === 'rail' || (appearance === 'auto' && breakpoint.ge('expanded')))
 
-    const toggleRail = () => {
-      if (expandedByAppearance) {
-        setCollapsed(!collapsed)
-        setExpanded(false)
+    const [state, setState] = useState<NavigationStoryState>('default')
+
+    let labels: DestinationLabels = text
+    if (requestedAppearance === 'bar') labels = adaptive({ ...text, ...text.bar }, { compact: text })
+    if (requestedAppearance === 'auto') labels = adaptive(text, { medium: { ...text, ...text.bar } })
+    const shouldExpand = requestedAppearance === 'rail-expanded'
+      || requestedAppearance === 'auto' && breakpoint.ge('large')
+    const appearance = shouldExpand && state === 'collapsed' ? 'rail' : requestedAppearance
+
+    useEffect(() => setState('default'), [requestedAppearance, shouldExpand])
+
+    const toggle = () => {
+      if (shouldExpand) {
+        setState(state === 'collapsed' ? 'default' : 'collapsed')
       } else {
-        setExpanded(!expanded)
+        setState(state === 'expanded' ? 'default' : 'expanded')
       }
     }
 
     return (
       <>
         <M3Navigation
-          expanded={expanded}
+          expanded={!shouldExpand && state === 'expanded'}
           appearance={appearance}
           {...args}
-          onToggle={setExpanded}
+          onToggle={value => setState(value ? 'expanded' : 'default')}
         >
           <M3Navigation.Top>
-            <M3Button appearance="standard" aria-label={railExpanded ? text.close : text.open} width="medium" onClick={toggleRail}>
-              <M3Icon name={railExpanded ? 'menu_open' : 'menu'} />
-            </M3Button>
+            {({ view }) => (
+              <>
+                <M3Button
+                  aria-label={view.appearance === 'rail-expanded' ? text.close : text.open}
+                  appearance="standard"
+                  width="medium"
+                  onClick={toggle}
+                >
+                  <M3Icon name={view.appearance === 'rail-expanded' ? 'menu_open' : 'menu'} />
+                </M3Button>
 
-            <M3FabButton variant="tertiary">
-              <M3Icon name="edit" />
-              {text.compose}
-            </M3FabButton>
+                <M3FabButton variant="tertiary">
+                  <M3Icon name="edit" />
+                  {text.compose}
+                </M3FabButton>
+              </>
+            )}
           </M3Navigation.Top>
 
           <M3Navigation.Header>
             {text.mail}
           </M3Navigation.Header>
 
-          {renderDestinations(text, labels)}
+          <NavigationStoryMenu text={text} labels={labels} />
         </M3Navigation>
+
         <NavigationStoryContent locale={globals.locale} />
       </>
     )
@@ -140,24 +189,29 @@ const meta = {
   },
 } satisfies Meta<typeof M3Navigation>
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export default meta
 
 type Story = StoryObj<typeof meta>
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const NavigationDrawer: Story = {
   args: {
     appearance: 'drawer',
   },
 }
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const NavigationRail: Story = {
   args: {
     appearance: 'rail',
   },
 }
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const NavigationRailExpanded: Story = {
   args: { appearance: 'rail-expanded' },
+
   render: (_args, { globals }) => {
     const [appearance, setAppearance] = useState<Appearance>('rail-expanded')
     const text = localize(globals.locale, messages)
@@ -166,24 +220,38 @@ export const NavigationRailExpanded: Story = {
       <>
         <M3Navigation appearance={appearance}>
           <M3Navigation.Top>
-            <M3Button aria-label={appearance === 'rail-expanded' ? text.close : text.open}
-              width="medium"
-              onClick={() => setAppearance(appearance === 'rail-expanded' ? 'rail' : 'rail-expanded')}
-            >
-              <M3Icon name={appearance === 'rail-expanded' ? 'menu_open' : 'menu'} />
-            </M3Button>
-            <M3FabButton variant="tertiary"><M3Icon name="edit" />{text.compose}</M3FabButton>
+            {({ view }) => (
+              <>
+                <M3Button
+                  aria-label={view.appearance === 'rail-expanded' ? text.close : text.open}
+                  appearance="standard"
+                  width="medium"
+                  onClick={() => setAppearance(appearance === 'rail-expanded' ? 'rail' : 'rail-expanded')}
+                >
+                  <M3Icon name={view.appearance === 'rail-expanded' ? 'menu_open' : 'menu'} />
+                </M3Button>
+
+                <M3FabButton variant="tertiary">
+                  <M3Icon name="edit" />
+                  {text.compose}
+                </M3FabButton>
+              </>
+            )}
           </M3Navigation.Top>
-          {renderDestinations(text)}
+
+          <NavigationStoryMenu text={text} />
         </M3Navigation>
+
         <NavigationStoryContent locale={globals.locale} />
       </>
     )
   },
 }
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const ModalNavigationRail: Story = {
   args: { appearance: 'rail', expansion: 'modal' },
+
   render: (_args, { globals }) => {
     const [expanded, setExpanded] = useState(true)
     const text = localize(globals.locale, messages)
@@ -192,119 +260,167 @@ export const ModalNavigationRail: Story = {
       <>
         <M3Navigation appearance="rail" expansion="modal" expanded={expanded} onToggle={setExpanded}>
           <M3Navigation.Top>
-            <M3Button appearance="standard" aria-label={expanded ? text.close : text.open} width="medium" onClick={() => setExpanded(!expanded)}>
-              <M3Icon name={expanded ? 'menu_open' : 'menu'} />
-            </M3Button>
+            {({ view }) => (
+              <M3Button
+                aria-label={view.appearance === 'rail-expanded' ? text.close : text.open}
+                appearance="standard"
+                width="medium"
+                onClick={() => setExpanded(!expanded)}
+              >
+                <M3Icon name={view.appearance === 'rail-expanded' ? 'menu_open' : 'menu'} />
+              </M3Button>
+            )}
           </M3Navigation.Top>
-          {renderDestinations(text)}
+
+          <NavigationStoryMenu text={text} />
         </M3Navigation>
+
         <NavigationStoryContent locale={globals.locale} />
       </>
     )
   },
 }
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const ImmersiveNavigationRail: Story = {
   args: { appearance: 'rail', collapse: 'hidden', expansion: 'modal' },
+
   render: (_args, { globals }) => {
     const [expanded, setExpanded] = useState(false)
     const text = localize(globals.locale, messages)
 
     return (
       <>
-        <M3Button appearance="standard" aria-label={text.open}
+        <M3Button
+          aria-label={text.open}
+          appearance="standard"
           style={{ position: 'fixed', insetInlineStart: 28, insetBlockStart: 44 }}
           width="medium"
           onClick={() => setExpanded(true)}
         >
           <M3Icon name="menu" />
         </M3Button>
-        <M3Navigation appearance="rail" expansion="modal" expanded={expanded} collapse="hidden" onToggle={setExpanded}>
+
+        <M3Navigation
+          appearance="rail"
+          expansion="modal"
+          expanded={expanded}
+          collapse="hidden"
+          onToggle={setExpanded}
+        >
           <M3Navigation.Top>
-            <M3Button appearance="standard" aria-label={text.close} width="medium" onClick={() => setExpanded(false)}>
-              <M3Icon name="menu_open" />
-            </M3Button>
+            {({ view }) => (
+              <M3Button
+                aria-label={view.appearance === 'rail-expanded' ? text.close : text.open}
+                appearance="standard"
+                width="medium"
+                onClick={() => setExpanded(false)}
+              >
+                <M3Icon name={view.appearance === 'rail-expanded' ? 'menu_open' : 'menu'} />
+              </M3Button>
+            )}
           </M3Navigation.Top>
-          {renderDestinations(text)}
+
+          <NavigationStoryMenu text={text} />
         </M3Navigation>
+
         <NavigationStoryContent locale={globals.locale} topAction />
       </>
     )
   },
 }
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const NavigationBar: Story = {
   args: {
     appearance: 'bar',
   },
 }
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const VerticalNavigationBar: Story = {
   args: {
     appearance: 'bar-vertical',
   },
 }
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const AdaptiveNavigation: Story = {
   args: {
     appearance: 'auto',
   },
+  argTypes: {
+    appearance: { control: false },
+  },
 }
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const AdaptiveWithoutBar: Story = {
   args: {
     appearance: 'auto',
     appearances: ['rail', 'rail-expanded'],
     expansion: 'modal',
   },
+
   render: (_args, { globals }) => {
-    const [expanded, setExpanded] = useState(false)
-    const [collapsed, setCollapsed] = useState(false)
+    const text = localize(globals.locale, messages)
     const breakpoint = useBreakpoint()
     const wide = breakpoint.ge('large')
-    const text = localize(globals.locale, messages)
 
-    useEffect(() => {
-      if (wide) setExpanded(false)
-    }, [wide])
+    const [state, setState] = useState<NavigationStoryState>('default')
 
-    const railExpanded = wide ? !collapsed : expanded
+    useEffect(() => setState('default'), [wide])
+
+    const toggle = () => {
+      if (wide) setState(state === 'collapsed' ? 'default' : 'collapsed')
+      else setState('default')
+    }
 
     return (
       <>
         {!wide ? (
-          <M3Button appearance="standard" aria-label={text.open}
+          <M3Button
+            aria-label={text.open}
+            appearance="standard"
             style={{ position: 'fixed', insetInlineStart: 28, insetBlockStart: 44 }}
             width="medium"
-            onClick={() => setExpanded(true)}
+            onClick={() => setState('expanded')}
           >
             <M3Icon name="menu" />
           </M3Button>
         ) : null}
+
         <M3Navigation
-          appearance={wide && collapsed ? 'rail' : 'auto'}
+          appearance={wide && state === 'collapsed' ? 'rail' : 'auto'}
           appearances={['rail', 'rail-expanded']}
           expansion="modal"
-          expanded={expanded}
+          expanded={!wide && state === 'expanded'}
           collapse={wide ? 'rail' : 'hidden'}
-          onToggle={setExpanded}
+          onToggle={value => setState(value ? 'expanded' : 'default')}
         >
           <M3Navigation.Top>
-            <M3Button appearance="standard" aria-label={railExpanded ? text.close : text.open}
-              width="medium"
-              onClick={() => wide ? setCollapsed(!collapsed) : setExpanded(false)}
-            >
-              <M3Icon name={railExpanded ? 'menu_open' : 'menu'} />
-            </M3Button>
+            {({ view }) => (
+              <M3Button
+                aria-label={view.appearance === 'rail-expanded' ? text.close : text.open}
+                appearance="standard"
+                width="medium"
+                onClick={toggle}
+              >
+                <M3Icon name={view.appearance === 'rail-expanded' ? 'menu_open' : 'menu'} />
+              </M3Button>
+            )}
           </M3Navigation.Top>
-          {renderDestinations(text)}
+
+          <NavigationStoryMenu text={text} />
         </M3Navigation>
+
         <NavigationStoryContent locale={globals.locale} topAction={!wide} />
       </>
     )
   },
 }
 
+// noinspection JSUnusedGlobalSymbols Loaded by storybook
 export const ModalNavigationDrawer: Story = {
   render: ({
     appearance: _appearance,
@@ -324,17 +440,25 @@ export const ModalNavigationDrawer: Story = {
           onToggle={setExpanded}
         >
           <M3Navigation.Top>
-            <M3Button appearance="standard" aria-label={expanded ? text.close : text.open} width="medium" onClick={() => setExpanded(!expanded)}>
-              <M3Icon name={expanded ? 'menu_open' : 'menu'} />
-            </M3Button>
+            {({ view }) => (
+              <M3Button
+                aria-label={view.appearance === 'drawer' ? text.close : text.open}
+                appearance="standard"
+                width="medium"
+                onClick={() => setExpanded(!expanded)}
+              >
+                <M3Icon name={view.appearance === 'drawer' ? 'menu_open' : 'menu'} />
+              </M3Button>
+            )}
           </M3Navigation.Top>
 
           <M3Navigation.Header>
             {text.mail}
           </M3Navigation.Header>
 
-          {renderDestinations(text)}
+          <NavigationStoryMenu text={text} />
         </M3Navigation>
+
         <NavigationStoryContent locale={globals.locale} />
       </>
     )
