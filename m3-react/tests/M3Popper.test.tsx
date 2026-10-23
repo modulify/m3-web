@@ -304,7 +304,7 @@ describe('m3-react/popper', () => {
       ['right', 'left', 'center'],
       ['bottom', 'center', 'top'],
     ] as const) {
-      position.mockResolvedValueOnce(result(side))
+      position.mockResolvedValue(result(side))
       await act(async () => {
         await popperRef.current!.adjust()
       })

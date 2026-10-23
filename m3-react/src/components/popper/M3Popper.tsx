@@ -70,7 +70,7 @@ export default defineComponent(function M3Popper({
     attached: false,
     showDelay,
     showing: false,
-    shown,
+    shown: false,
     hideDelay,
     hideOnMissClick,
     hiding: false,
@@ -284,10 +284,10 @@ export default defineComponent(function M3Popper({
     const frame = touch ? globalTouchFrame : globalClickFrame
 
     frame.request(() => {
-      if (!state.showing && state.shown && (
-        state.hideOnMissClick && !captures ||
-        event.m3PopperClose && captures ||
-        event.m3PopperCloseAll
+      if (state.shown && (
+        event.m3PopperCloseAll ||
+        event.m3PopperClose && (captures || state.hideOnMissClick) ||
+        !state.showing && state.hideOnMissClick && !captures
       )) {
         hide()
 
