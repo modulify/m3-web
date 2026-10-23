@@ -7,3 +7,9 @@ export type RailExpandedMode = 'auto' | 'standard' | 'modal'
 export type RailCollapse = 'rail' | 'hidden'
 
 export type Alignment = 'top' | 'middle' | 'bottom'
+
+export interface NavigationView {
+  appearance: Exclude<Appearance, 'auto'>
+  modal: boolean
+  hidden: boolean
+}
