@@ -14,14 +14,19 @@
         :overflow="overflow"
         :offset-main-axis="offsetMainAxis"
         :offset-cross-axis="offsetCrossAxis"
-        class="m3-menu"
+        :class="['m3-menu', {
+            'm3-menu_vibrant': color === 'vibrant',
+            [`m3-menu_density-${density}`]: density !== 0,
+        }]"
+        :role="$attrs.role ?? 'menu'"
         animated
         hide-on-miss-click
         v-bind="$attrs"
+        @keydown="onKeyDown"
         @shown="$emit('shown')"
-        @hide="$emit('hide')"
+        @hide="onHide"
         @hidden="$emit('hidden')"
-        @update:shown="$emit('update:shown', $event)"
+        @update:shown="onToggle"
     >
         <slot />
     </M3Popper>
@@ -29,7 +34,9 @@
 
 <script lang="ts" setup>
 import type { Boundary } from '@floating-ui/dom'
+import type { Color } from '@modulify/m3-foundation/types/components/menu'
 import type { Delay } from '@modulify/m3-foundation/types/components/popper'
+import type { Density } from '@modulify/m3-foundation/types/components/menu'
 import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { M3PopperInstance } from '@/components/popper'
 import type { OverflowBehavior } from '@modulify/m3-foundation/types/components/popper'
@@ -45,11 +52,23 @@ import { isPlacement } from '@modulify/m3-foundation/lib/popper/predicates'
 import { isString } from '@modulify/validator/predicates'
 import { Or } from '@modulify/validator/predicates'
 
-import { ref } from 'vue'
+import { nextTick, ref, useAttrs } from 'vue'
 
 import { M3Popper } from '@/components/popper'
 
-defineProps({
+const props = defineProps({
+  color: {
+    type: String as PropType<Color>,
+    validator: (value: string) => ['standard', 'vibrant'].includes(value),
+    default: 'standard',
+  },
+
+  density: {
+    type: Number as PropType<Density>,
+    validator: (value: number) => [0, -1, -2, -3].includes(value),
+    default: 0,
+  },
+
   target: {
     type: [Function, Object] as PropType<(() => Element | null) | Ref<Element | null>>,
     required: true,
@@ -118,16 +137,80 @@ defineProps({
   },
 })
 
-const root = ref<M3PopperInstance | null>(null)
-
-defineExpose({
-  get el () { return root.value?.el ?? null },
-} satisfies ElementReference)
-
-defineEmits([
+const emit = defineEmits([
   'shown',
   'hide',
   'hidden',
   'update:shown',
 ])
+
+const attrs = useAttrs()
+const root = ref<M3PopperInstance | null>(null)
+
+const targetElement = () => typeof props.target === 'function' ? props.target() : props.target?.value
+
+const onToggle = (open: boolean) => {
+  emit('update:shown', open)
+
+  if (open && (attrs.role ?? 'menu') === 'menu' && document.activeElement === targetElement()) {
+    nextTick(() => requestAnimationFrame(() => {
+      root.value?.el?.querySelector<HTMLElement>('.m3-menu > .m3-menu-item:not([aria-disabled="true"])')?.focus()
+    }))
+  }
+}
+
+const onHide = (reason: string) => {
+  const anchor = targetElement()
+  if (reason === 'generic' && root.value?.el?.contains(document.activeElement) && anchor instanceof HTMLElement) {
+    requestAnimationFrame(() => anchor.focus())
+  }
+
+  emit('hide')
+}
+
+const onKeyDown = (event: KeyboardEvent) => {
+  if ((attrs.role ?? 'menu') !== 'menu') return
+
+  const items = Array.from((event.currentTarget as HTMLElement).querySelectorAll<HTMLElement>(
+    ':scope > .m3-menu-item:not([aria-disabled="true"])'
+  ))
+  const current = items.indexOf(document.activeElement as HTMLElement)
+  const anchor = targetElement()
+  let next = current
+  let handled = false
+
+  switch (event.key) {
+    case 'ArrowDown': next = items.length ? (current + 1) % items.length : current; handled = true; break
+    case 'ArrowUp': next = items.length ? (current + items.length - 1) % items.length : current; handled = true; break
+    case 'Home': next = 0; handled = true; break
+    case 'End': next = items.length - 1; handled = true; break
+    case 'Escape':
+      root.value?.hide()
+      handled = true
+      break
+    case 'ArrowLeft':
+    case 'ArrowRight':
+      if (anchor instanceof HTMLElement
+        && anchor.getAttribute('aria-haspopup') === 'menu'
+        && event.key === (props.placement.startsWith('left') ? 'ArrowRight' : 'ArrowLeft')) {
+        root.value?.hide()
+        handled = true
+      }
+      break
+  }
+
+  if (next !== current && items[next]) {
+    items[next].focus()
+  }
+
+  if (handled) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+}
+
+defineExpose({
+  get el () { return root.value?.el ?? null },
+} satisfies ElementReference)
+
 </script>
