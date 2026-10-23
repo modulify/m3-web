@@ -122,6 +122,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
         ['m3-surface_modal']: isModal,
         [`m3-surface_anchor-${anchor}`]: true,
       }])}
+      transitionMs={transitionMs}
       {...panelProps}
     >
       {children}

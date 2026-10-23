@@ -42,6 +42,13 @@ describe('m3-react/surface', () => {
     expect(surface.style.borderBottomLeftRadius).toBe('16px')
   })
 
+  test('forwards transition duration to the rendered panel', () => {
+    const { container } = render(<M3Surface transitionMs={500} />)
+    const surface = container.querySelector('.m3-surface') as HTMLElement
+
+    expect(surface.style.transition).toContain('transform 500ms')
+  })
+
   test('emits close request and dismiss on scrim click in modal mode', () => {
     const onToggle = vi.fn()
     const onDismiss = vi.fn()
