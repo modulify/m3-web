@@ -12,4 +12,12 @@ describe('m3-react/link', () => {
 
     expect(ref.current?.el).toBe(container.querySelector('button'))
   })
+
+  test('renders a disabled destination as a disabled button', () => {
+    const { container } = render(<M3Link href="/next" disabled>Next</M3Link>)
+
+    const button = container.querySelector('button')
+    expect(button?.disabled).toBe(true)
+    expect(container.querySelector('a')).toBeNull()
+  })
 })

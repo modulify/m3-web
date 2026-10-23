@@ -15,6 +15,7 @@ export interface M3LinkProps extends HTMLAttributes<RootElement> {
   ref?: Ref<M3LinkExposed>;
   type?: HTMLButtonElement['type'];
   href?: string;
+  disabled?: boolean;
   target?: HTMLAnchorElement['target'];
   rel?: string;
 }
@@ -27,6 +28,7 @@ export default defineComponent(function M3Link({
   ref: _ref,
   type = 'button',
   href = '',
+  disabled = false,
   children = [],
   ...attrs
 }: M3LinkProps, { expose }: ComponentSetupContext<M3LinkExposed>) {
@@ -43,7 +45,7 @@ export default defineComponent(function M3Link({
 
   expose(interactable)
 
-  return href.length > 0
+  return href.length > 0 && !disabled
     ? (
       <a
         ref={setAnchor}
@@ -57,6 +59,7 @@ export default defineComponent(function M3Link({
       <button
         ref={setButton}
         type={type}
+        disabled={disabled}
         {...attrs}
       >
         {children}
