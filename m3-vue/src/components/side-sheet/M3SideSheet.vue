@@ -13,6 +13,7 @@
         :rounding-bottom-left="docked ? 0 : 16"
         :rounding-top-right="0"
         :rounding-bottom-right="0"
+        :transition-ms="SIDE_SHEET_TRANSITION_MS"
         :elevation="0"
         :class="surfaceClass"
         role="dialog"
@@ -77,7 +78,8 @@ import { useAnimationFrame } from '@/composables/animation'
 import { useId } from '@/composables/id'
 import { useTimeout } from '@/composables/timing'
 
-const SIDE_SHEET_TRANSITION_MS = durations['extra-long2']
+const SIDE_SHEET_TRANSITION_MS = durations.long2
+const SIDE_SHEET_LEAVE_MS = durations['extra-long2']
 
 type TransitionState = 'idle' | 'pre-enter' | 'entering' | 'pre-exit' | 'exiting'
 
@@ -111,14 +113,12 @@ const enterTimeout = useTimeout(() => transitionState.value = 'idle', SIDE_SHEET
 const leaveTimeout = useTimeout(() => {
   surfaceMounted.value = false
   transitionState.value = 'idle'
-}, SIDE_SHEET_TRANSITION_MS)
+}, SIDE_SHEET_LEAVE_MS)
 
 const surfaceClass = computed(() => ({
   'm3-side-sheet': true,
   'm3-side-sheet_docked': props.docked,
-  'm3-transition-slide-right-enter': transitionState.value === 'pre-enter' || transitionState.value === 'entering',
-  'm3-transition-slide-right-enter-active': transitionState.value === 'entering',
-  'm3-transition-slide-right-leave-active': transitionState.value === 'pre-exit' || transitionState.value === 'exiting',
+  'm3-transition-slide-right-enter': transitionState.value === 'pre-enter',
   'm3-transition-slide-right-leave-to': transitionState.value === 'exiting',
 }))
 
