@@ -35,6 +35,28 @@ afterEach(() => {
 })
 
 describe('UI layer ownership', () => {
+  test('raises an opening modal without detaching its layer host', async () => {
+    const opening = createLayerHost(document)
+    const previous = createLayerHost(document)
+    const background = createLayerHost(document)
+    setLayerModal(opening, true)
+    setLayerModal(previous, true)
+    setLayerModal(background, false)
+    document.body.append(opening, previous, background)
+
+    const records: MutationRecord[] = []
+    const observer = new MutationObserver(changes => records.push(...changes))
+    observer.observe(document.body, { childList: true })
+
+    const close = activateModalLayer(opening, vi.fn())
+    disposals.push(close)
+    await Promise.resolve()
+
+    expect([...document.body.children]).toEqual([previous, opening, background])
+    expect(records.some(record => [...record.addedNodes, ...record.removedNodes].includes(opening))).toBe(false)
+    observer.disconnect()
+  })
+
   test('places popovers and feedback in their modal host unless an explicit container is supplied', () => {
     const layer = createLayerHost(document)
     setLayerModal(layer, true)

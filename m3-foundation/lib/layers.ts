@@ -114,7 +114,17 @@ export function activateModalLayer(host: HTMLElement, onEscape: () => void, rais
   const manager = managerFor(document)
   const entry: ModalEntry = { host, onEscape }
 
-  if (raise) host.parentElement?.append(host)
+  if (raise && host.parentElement) {
+    // Moving the opening host would cancel transitions in its subtree.
+    const parent = host.parentElement
+    for (let sibling = host.nextElementSibling; sibling;) {
+      const next = sibling.nextElementSibling
+      if (sibling instanceof HTMLElement && sibling.dataset.m3Layer === 'modal') {
+        parent.insertBefore(sibling, host)
+      }
+      sibling = next
+    }
+  }
   host.dataset.m3LayerActive = 'true'
   manager.modals.push(entry)
 
