@@ -109,8 +109,38 @@ import { localize } from '../../i18n'
 
 const props = defineProps<{ locale: StorybookLocale }>()
 const text = localize(props.locale, {
-  'en-US': { activity: 'Activity', archive: 'Archive', archiveProject: 'Archive project', cancel: 'Cancel', cards: ['Roadmap', 'Assets', 'Owners'], cardText: 'Supporting surface inside the same workspace scene.', decision: 'Archive this workspace?', decisionText: 'Archiving hides the project from active planning views but keeps its history available for reporting.', description: 'A blocking decision interrupts the current workspace without replacing the layout beneath it.', heading: 'Scenario: workspace confirmation dialog', overview: 'Workspace overview', overviewText: 'Main content remains visible under the dialog, so the user keeps the surrounding context while confirming the action.', retention: 'Team members will retain read access until the workspace is restored.', tasks: '12 tasks updated today' },
-  'ru-RU': { activity: 'Активность', archive: 'Архивировать', archiveProject: 'Архивировать проект', cancel: 'Отмена', cards: ['План', 'Материалы', 'Владельцы'], cardText: 'Вспомогательная поверхность в том же рабочем пространстве.', decision: 'Архивировать рабочее пространство?', decisionText: 'Архивация скроет проект из активного планирования, но сохранит историю для отчётов.', description: 'Блокирующее решение прерывает текущую работу, не заменяя расположенный ниже интерфейс.', heading: 'Сценарий: диалог подтверждения', overview: 'Обзор рабочего пространства', overviewText: 'Основное содержимое остаётся видимым под диалогом, сохраняя контекст во время подтверждения.', retention: 'Участники сохранят доступ на чтение до восстановления рабочего пространства.', tasks: 'Сегодня обновлено 12 задач' },
+  'en-US': {
+    activity: 'Activity',
+    archive: 'Archive',
+    archiveProject: 'Archive project',
+    cancel: 'Cancel',
+    cards: ['Roadmap', 'Assets', 'Owners'],
+    cardText: 'Supporting surface inside the same workspace scene.',
+    decision: 'Archive this workspace?',
+    decisionText: 'Archiving hides the project from active planning views but keeps its history available for reporting.',
+    description: 'A blocking decision interrupts the current workspace without replacing the layout beneath it.',
+    heading: 'Scenario: workspace confirmation dialog',
+    overview: 'Workspace overview',
+    overviewText: 'Main content remains visible under the dialog, so the user keeps the surrounding context while confirming the action.',
+    retention: 'Team members will retain read access until the workspace is restored.',
+    tasks: '12 tasks updated today',
+  },
+  'ru-RU': {
+    activity: 'Активность',
+    archive: 'Архивировать',
+    archiveProject: 'Архивировать проект',
+    cancel: 'Отмена',
+    cards: ['План', 'Материалы', 'Владельцы'],
+    cardText: 'Вспомогательная поверхность в том же рабочем пространстве.',
+    decision: 'Архивировать рабочее пространство?',
+    decisionText: 'Архивация скроет проект из активного планирования, но сохранит историю для отчётов.',
+    description: 'Блокирующее решение прерывает текущую работу, не заменяя расположенный ниже интерфейс.',
+    heading: 'Сценарий: диалог подтверждения',
+    overview: 'Обзор рабочего пространства',
+    overviewText: 'Основное содержимое остаётся видимым под диалогом, сохраняя контекст во время подтверждения.',
+    retention: 'Участники сохранят доступ на чтение до восстановления рабочего пространства.',
+    tasks: 'Сегодня обновлено 12 задач',
+  },
 })
 
 const opened = ref(false)

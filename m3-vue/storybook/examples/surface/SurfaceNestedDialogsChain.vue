@@ -207,8 +207,46 @@ const dialogChain: DialogSpec[] = [{
 
 const props = defineProps<{ locale: StorybookLocale }>()
 const text = localize(props.locale, {
-  'en-US': { archive: 'Archive', background: 'Background content', backgroundDescription: 'Open dialog 1 from top action, then continue through the chain.', boards: 'Boards', chainOpen: 'Dialog chain is open', close: 'Close', closeDialog: 'Close dialog', descriptions: dialogChain.map(dialog => dialog.description), dialog: 'Dialog', heading: 'Surface orchestration: nested dialogs chain', inbox: 'Inbox', lab: 'Lab', of: 'of', open: 'Open dialog chain', openDialog: 'Open dialog', summary: 'Rail layout opens a nested dialog chain with one active scrim on the topmost dialog.', workspace: 'Workspace', workspaceDescription: 'Page composition stays stable while dialogs are stacked progressively.' },
-  'ru-RU': { archive: 'Архив', background: 'Фоновое содержимое', backgroundDescription: 'Откройте диалог 1 верхней кнопкой и последовательно продолжите цепочку.', boards: 'Доски', chainOpen: 'Цепочка диалогов открыта', close: 'Закрыть', closeDialog: 'Закрыть диалог', descriptions: ['Первый слой цепочки открывает диалог 2.', 'Второй слой сохраняет те же элементы управления и открывает следующий диалог.', 'Третий слой открывает последний вложенный диалог.', 'Последний слой сценария можно только закрыть.'], dialog: 'Диалог', heading: 'Управление поверхностью: цепочка вложенных диалогов', inbox: 'Входящие', lab: 'Лаборатория', of: 'из', open: 'Открыть цепочку диалогов', openDialog: 'Открыть диалог', summary: 'Компоновка с рейкой открывает цепочку вложенных диалогов; активный scrim принадлежит верхнему.', workspace: 'Рабочее пространство', workspaceDescription: 'Композиция страницы остаётся стабильной при последовательном наложении диалогов.' },
+  'en-US': {
+    archive: 'Archive',
+    background: 'Background content',
+    backgroundDescription: 'Open dialog 1 from top action, then continue through the chain.',
+    boards: 'Boards',
+    chainOpen: 'Dialog chain is open',
+    close: 'Close',
+    closeDialog: 'Close dialog',
+    descriptions: dialogChain.map(dialog => dialog.description),
+    dialog: 'Dialog',
+    heading: 'Surface orchestration: nested dialogs chain',
+    inbox: 'Inbox',
+    lab: 'Lab',
+    of: 'of',
+    open: 'Open dialog chain',
+    openDialog: 'Open dialog',
+    summary: 'Rail layout opens a nested dialog chain with one active scrim on the topmost dialog.',
+    workspace: 'Workspace',
+    workspaceDescription: 'Page composition stays stable while dialogs are stacked progressively.',
+  },
+  'ru-RU': {
+    archive: 'Архив',
+    background: 'Фоновое содержимое',
+    backgroundDescription: 'Откройте диалог 1 верхней кнопкой и последовательно продолжите цепочку.',
+    boards: 'Доски',
+    chainOpen: 'Цепочка диалогов открыта',
+    close: 'Закрыть',
+    closeDialog: 'Закрыть диалог',
+    descriptions: ['Первый слой цепочки открывает диалог 2.', 'Второй слой сохраняет те же элементы управления и открывает следующий диалог.', 'Третий слой открывает последний вложенный диалог.', 'Последний слой сценария можно только закрыть.'],
+    dialog: 'Диалог',
+    heading: 'Управление поверхностью: цепочка вложенных диалогов',
+    inbox: 'Входящие',
+    lab: 'Лаборатория',
+    of: 'из',
+    open: 'Открыть цепочку диалогов',
+    openDialog: 'Открыть диалог',
+    summary: 'Компоновка с рейкой открывает цепочку вложенных диалогов; активный scrim принадлежит верхнему.',
+    workspace: 'Рабочее пространство',
+    workspaceDescription: 'Композиция страницы остаётся стабильной при последовательном наложении диалогов.',
+  },
 })
 
 const activeNavTab = ref<'inbox' | 'boards' | 'archive' | 'lab'>('inbox')

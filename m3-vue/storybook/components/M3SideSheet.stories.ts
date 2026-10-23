@@ -64,7 +64,12 @@ const meta = {
         shown,
         text: localize(globals.locale, {
           'en-US': { body: 'Choose filters and apply changes.', filter: 'Filters', footer: 'Footer actions', open: 'Open side sheet' },
-          'ru-RU': { body: 'Выберите фильтры и примените изменения.', filter: 'Фильтры', footer: 'Действия', open: 'Открыть боковую панель' },
+          'ru-RU': {
+            body: 'Выберите фильтры и примените изменения.',
+            filter: 'Фильтры',
+            footer: 'Действия',
+            open: 'Открыть боковую панель',
+          },
         }),
       }
     },

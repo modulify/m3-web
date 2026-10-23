@@ -122,8 +122,38 @@ import { localize } from '../../i18n'
 
 const props = defineProps<{ locale: StorybookLocale }>()
 const text = localize(props.locale, {
-  'en-US': { cards: ['Launch plan', 'Dependencies', 'Approvals'], cardDescription: 'Dashboard content keeps its place while the inspector surface is layered above it.', description: 'A supplemental editing surface appears from the edge while the main dashboard stays visible.', dismiss: 'Dismiss', heading: 'Scenario: inspector side sheet', notes: 'Notes', notesValue: 'Coordinate the release notes and schedule rollout approval.', open: 'Open inspector', owner: 'Owner email', priority: 'Priority', priorities: ['Low', 'Normal', 'High'], save: 'Save changes', sheetDescription: 'Use the side sheet for supporting edits that should not replace the dashboard context.', title: 'Release inspector' },
-  'ru-RU': { cards: ['План запуска', 'Зависимости', 'Согласования'], cardDescription: 'Содержимое дашборда остаётся на месте, пока панель инспектора располагается поверх него.', description: 'Вспомогательная панель редактирования появляется с края, а основной дашборд остаётся видимым.', dismiss: 'Закрыть', heading: 'Сценарий: боковая панель инспектора', notes: 'Заметки', notesValue: 'Согласовать заметки к выпуску и запланировать подтверждение запуска.', open: 'Открыть инспектор', owner: 'Почта владельца', priority: 'Приоритет', priorities: ['Низкий', 'Обычный', 'Высокий'], save: 'Сохранить изменения', sheetDescription: 'Используйте боковую панель для вспомогательных правок, которые не должны заменять контекст дашборда.', title: 'Инспектор выпуска' },
+  'en-US': {
+    cards: ['Launch plan', 'Dependencies', 'Approvals'],
+    cardDescription: 'Dashboard content keeps its place while the inspector surface is layered above it.',
+    description: 'A supplemental editing surface appears from the edge while the main dashboard stays visible.',
+    dismiss: 'Dismiss',
+    heading: 'Scenario: inspector side sheet',
+    notes: 'Notes',
+    notesValue: 'Coordinate the release notes and schedule rollout approval.',
+    open: 'Open inspector',
+    owner: 'Owner email',
+    priority: 'Priority',
+    priorities: ['Low', 'Normal', 'High'],
+    save: 'Save changes',
+    sheetDescription: 'Use the side sheet for supporting edits that should not replace the dashboard context.',
+    title: 'Release inspector',
+  },
+  'ru-RU': {
+    cards: ['План запуска', 'Зависимости', 'Согласования'],
+    cardDescription: 'Содержимое дашборда остаётся на месте, пока панель инспектора располагается поверх него.',
+    description: 'Вспомогательная панель редактирования появляется с края, а основной дашборд остаётся видимым.',
+    dismiss: 'Закрыть',
+    heading: 'Сценарий: боковая панель инспектора',
+    notes: 'Заметки',
+    notesValue: 'Согласовать заметки к выпуску и запланировать подтверждение запуска.',
+    open: 'Открыть инспектор',
+    owner: 'Почта владельца',
+    priority: 'Приоритет',
+    priorities: ['Низкий', 'Обычный', 'Высокий'],
+    save: 'Сохранить изменения',
+    sheetDescription: 'Используйте боковую панель для вспомогательных правок, которые не должны заменять контекст дашборда.',
+    title: 'Инспектор выпуска',
+  },
 })
 const priorityOptions = [
   { label: text.priorities[0], value: 'low' }, { label: text.priorities[1], value: 'normal' }, { label: text.priorities[2], value: 'high' },

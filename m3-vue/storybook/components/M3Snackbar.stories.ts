@@ -49,9 +49,9 @@ export const SingleLine: Story = {
     components: { M3Snackbar },
     setup: () => ({ text: localize(globals.locale, messages) }),
     template: `
-      <div style="padding:clamp(16px,4vw,32px)">
-        <M3Snackbar :message="text.saved" />
-      </div>
+        <div style="padding:clamp(16px,4vw,32px)">
+            <M3Snackbar :message="text.saved" />
+        </div>
     `,
   }),
 }
@@ -61,13 +61,13 @@ export const WithAction: Story = {
     components: { M3Button, M3Snackbar },
     setup: () => ({ text: localize(globals.locale, messages) }),
     template: `
-      <div style="padding:clamp(16px,4vw,32px)">
-        <M3Snackbar :message="text.archived" :close-label="text.close" closable>
-          <template #action="{ buttonProps }">
-            <M3Button v-bind="buttonProps">{{ text.action }}</M3Button>
-          </template>
-        </M3Snackbar>
-      </div>
+        <div style="padding:clamp(16px,4vw,32px)">
+            <M3Snackbar :message="text.archived" :close-label="text.close" closable>
+                <template #action="{ buttonProps }">
+                    <M3Button v-bind="buttonProps">{{ text.action }}</M3Button>
+                </template>
+            </M3Snackbar>
+        </div>
     `,
   }),
 }
@@ -77,9 +77,9 @@ export const TwoLines: Story = {
     components: { M3Snackbar },
     setup: () => ({ text: localize(globals.locale, messages) }),
     template: `
-      <div style="padding:clamp(16px,4vw,32px)">
-        <M3Snackbar :message="text.duplicate" style="max-inline-size:336px" />
-      </div>
+        <div style="padding:clamp(16px,4vw,32px)">
+            <M3Snackbar :message="text.duplicate" style="max-inline-size:336px" />
+        </div>
     `,
   }),
 }
@@ -89,19 +89,19 @@ export const LongAction: Story = {
     components: { M3Button, M3Snackbar },
     setup: () => ({ text: localize(globals.locale, messages) }),
     template: `
-      <div style="padding:clamp(16px,4vw,32px)">
-        <M3Snackbar
-            :message="text.duplicate"
-            :close-label="text.close"
-            layout="stacked"
-            closable
-            style="max-inline-size:336px"
-        >
-          <template #action="{ buttonProps }">
-            <M3Button v-bind="buttonProps">{{ text.long }}</M3Button>
-          </template>
-        </M3Snackbar>
-      </div>
+        <div style="padding:clamp(16px,4vw,32px)">
+            <M3Snackbar
+                :message="text.duplicate"
+                :close-label="text.close"
+                layout="stacked"
+                closable
+                style="max-inline-size:336px"
+            >
+                <template #action="{ buttonProps }">
+                    <M3Button v-bind="buttonProps">{{ text.long }}</M3Button>
+                </template>
+            </M3Snackbar>
+        </div>
     `,
   }),
 }

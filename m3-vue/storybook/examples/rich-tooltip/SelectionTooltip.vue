@@ -42,8 +42,20 @@ import { localize } from '../../i18n'
 
 const props = defineProps<{ locale: StorybookLocale }>()
 const text = localize(props.locale, {
-  'en-US': { apply: 'Apply', description: 'Continue editing the selected items or apply labels to them.', edit: 'Continue', heading: '3 items selected', review: 'Review selection' },
-  'ru-RU': { apply: 'Применить', description: 'Продолжите редактирование выбранных элементов или примените к ним метки.', edit: 'Продолжить', heading: 'Выбрано 3 элемента', review: 'Проверить выбор' },
+  'en-US': {
+    apply: 'Apply',
+    description: 'Continue editing the selected items or apply labels to them.',
+    edit: 'Continue',
+    heading: '3 items selected',
+    review: 'Review selection',
+  },
+  'ru-RU': {
+    apply: 'Применить',
+    description: 'Продолжите редактирование выбранных элементов или примените к ним метки.',
+    edit: 'Продолжить',
+    heading: 'Выбрано 3 элемента',
+    review: 'Проверить выбор',
+  },
 })
 
 const uid = useId()
