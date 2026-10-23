@@ -20,6 +20,7 @@ Floating action buttons emphasize the highest-priority action on a surface. Mate
 | `variant` | `primary-container`, `secondary-container`, `tertiary-container`, `primary`, `secondary`, `tertiary` | `primary-container` | Paired container and content colors. |
 | `size` | `sm`, `md`, `lg` | `sm` | FAB geometry: 56, 80, or 96px. |
 | `disabled` | boolean | `false` | Prevent activation; prefer omitting an unavailable FAB. |
+| `href` | URL | none | Render the action as a link when it navigates. |
 
 Pass an icon and optional text as children or in the default slot. Native button attributes and event handlers pass through.
 
@@ -41,6 +42,8 @@ Choose a color role with `variant`: `primary-container` (default), `secondary-co
 ### Sizes
 
 `size="sm"` is the 56px default FAB, `md` is 80px, and `lg` is 96px. Keep it anchored over scrollable content with sufficient edge clearance.
+
+Extended FABs use title-medium text at the small size, with larger type, icon spacing, and inner padding at the medium and large sizes. The spec recommends 16px clearance around an extended FAB. Keyboard focus is marked by an external focus ring.
 
 ## Accessibility semantics
 
@@ -118,6 +121,7 @@ If users need to stop and decode the icon, show the label. The slight increase i
 | `variant` | `primary-container`, `secondary-container`, `tertiary-container`, `primary`, `secondary`, `tertiary` | `primary-container` | Цвета контейнера и содержимого. |
 | `size` | `sm`, `md`, `lg` | `sm` | Геометрия FAB: 56, 80 или 96px. |
 | `disabled` | boolean | `false` | Отключить действие; недоступную FAB лучше не показывать. |
+| `href` | URL | нет | Создать ссылку для действия, ведущего на другую страницу. |
 
 Передайте иконку и необязательный текст через children или слот по умолчанию. Атрибуты и обработчики нативной кнопки передаются компоненту.
 
@@ -139,6 +143,8 @@ If users need to stop and decode the icon, show the label. The slight increase i
 ### Размеры
 
 `size="sm"` — стандартная FAB высотой 56px, `md` — 80px, `lg` — 96px. Размещайте её над прокручиваемым содержимым с достаточным отступом от края.
+
+У малой расширенной FAB текст набран стилем title-medium; с увеличением размера растут шрифт, расстояние до иконки и внутренние отступы. Спек рекомендует оставлять вокруг расширенной FAB 16px. Клавиатурный фокус обозначен внешним кольцом.
 
 ## Доступность
 
