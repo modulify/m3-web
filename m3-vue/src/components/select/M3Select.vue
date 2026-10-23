@@ -11,7 +11,7 @@
             :id="_id"
             :aria-controls="_id + '-menu'"
             :aria-disabled="disabled ? 'true' : 'false'"
-            :aria-expanded="expanded ? 'true' : 'false'"
+            :aria-expanded="shouldBeExpanded ? 'true' : 'false'"
             :aria-readonly="readonly ? 'true' : 'false'"
             :value="text"
             :label="label"
@@ -40,42 +40,37 @@
         <M3Menu
             :id="_id + '-menu'"
             v-model:shown="shouldBeExpanded"
-            :aria-hidden="expanded ? 'false' : 'true'"
+            :aria-hidden="shouldBeExpanded ? 'false' : 'true'"
             :target="ref(root)"
             :disabled="disabled || readonly"
             :placement="placement"
             :style="{ width: rootWidth + 'px' }"
+            class="m3-select__menu"
             role="listbox"
-            @shown="expanded = true"
-            @hide="expanded = false"
         >
-            <div class="m3-select__scroll-box">
-                <M3ScrollRail />
-
-                <M3MenuItem
-                    v-for="(option, index) in options"
-                    :key="index"
-                    :selected="equalPredicate.call(null, option.value, value as Maybe<T>)"
-                    role="option"
-                    @click="pick(option)"
-                >
-                    <template v-if="'option-leading' in $slots" #leading>
-                        <slot
-                            :option="option"
-                            :active="shouldBeExpanded"
-                            name="option-leading"
-                        />
-                    </template>
-
+            <M3MenuItem
+                v-for="(option, index) in options"
+                :key="index"
+                :selected="equalPredicate.call(null, option.value, value as Maybe<T>)"
+                role="option"
+                @click="pick(option)"
+            >
+                <template v-if="'option-leading' in $slots" #leading>
                     <slot
                         :option="option"
                         :active="shouldBeExpanded"
-                        name="option-content"
-                    >
-                        {{ option.label }}
-                    </slot>
-                </M3MenuItem>
-            </div>
+                        name="option-leading"
+                    />
+                </template>
+
+                <slot
+                    :option="option"
+                    :active="shouldBeExpanded"
+                    name="option-content"
+                >
+                    {{ option.label }}
+                </slot>
+            </M3MenuItem>
         </M3Menu>
     </div>
 </template>
@@ -99,7 +94,6 @@ import { useId } from '@/composables/id'
 import { useResizeObserver } from '@/composables/observer'
 
 import { M3Menu, M3MenuItem } from '../menu'
-import { M3ScrollRail } from '../scroll-rail'
 import { M3TextField } from '../text-field'
 import SpriteCaret from './caret.svg'
 
@@ -194,7 +188,6 @@ defineExpose({
   get el () { return root.value },
 } satisfies ElementReference)
 
-const expanded = ref(false)
 const shouldBeExpanded = ref(false)
 
 const text = computed(() => props.options.find((option: M3SelectOption<T>) => {
