@@ -11,8 +11,26 @@ import { localize } from '../i18n'
 import RadioGroup from '../examples/radio/RadioGroup'
 
 const messages = {
-  'en-US': { choice: 'Choice', email: 'Email', notificationChannel: 'Notification channel', preview: 'Preview', push: 'Push', releaseCadence: 'Release cadence', sms: 'SMS', stable: 'Stable' },
-  'ru-RU': { choice: 'Выбор', email: 'Электронная почта', notificationChannel: 'Канал уведомлений', preview: 'Предварительные версии', push: 'Push-уведомления', releaseCadence: 'Канал обновлений', sms: 'SMS', stable: 'Стабильные версии' },
+  'en-US': {
+    choice: 'Choice',
+    email: 'Email',
+    notificationChannel: 'Notification channel',
+    preview: 'Preview',
+    push: 'Push',
+    releaseCadence: 'Release cadence',
+    sms: 'SMS',
+    stable: 'Stable',
+  },
+  'ru-RU': {
+    choice: 'Выбор',
+    email: 'Электронная почта',
+    notificationChannel: 'Канал уведомлений',
+    preview: 'Предварительные версии',
+    push: 'Push-уведомления',
+    releaseCadence: 'Канал обновлений',
+    sms: 'SMS',
+    stable: 'Стабильные версии',
+  },
 }
 
 const meta = {

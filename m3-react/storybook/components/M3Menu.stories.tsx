@@ -11,8 +11,24 @@ import { M3Menu, M3MenuItem } from '@/components/menu'
 import { localize } from '../i18n'
 
 const messages = {
-  'en-US': { archive: 'Archive', editProfile: 'Edit profile', favorite: 'Favorite', items: ['Item 1', 'Item 2', 'Item 3'], open: 'Open menu', selected: 'Selected', more: 'More actions' },
-  'ru-RU': { archive: 'Архивировать', editProfile: 'Изменить профиль', favorite: 'Избранное', items: ['Пункт 1', 'Пункт 2', 'Пункт 3'], open: 'Открыть меню', selected: 'Выбрано', more: 'Другие действия' },
+  'en-US': {
+    archive: 'Archive',
+    editProfile: 'Edit profile',
+    favorite: 'Favorite',
+    items: ['Item 1', 'Item 2', 'Item 3'],
+    open: 'Open menu',
+    selected: 'Selected',
+    more: 'More actions',
+  },
+  'ru-RU': {
+    archive: 'Архивировать',
+    editProfile: 'Изменить профиль',
+    favorite: 'Избранное',
+    items: ['Пункт 1', 'Пункт 2', 'Пункт 3'],
+    open: 'Открыть меню',
+    selected: 'Выбрано',
+    more: 'Другие действия',
+  },
 }
 
 const M3MenuStory = ({ locale, target: _target, ...args }: M3MenuProps & { locale: unknown }) => {
