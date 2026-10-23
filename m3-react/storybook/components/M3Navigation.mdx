@@ -46,6 +46,8 @@ Set `appearance` explicitly to keep one form at any width. `appearance="rail"` a
 
 Provide a menu button in `M3Navigation.Top` and change `expanded` or `appearance` when it is activated. Change the icon and accessible name from “open” to “close” in the expanded state. The component does not create a menu button or a route. For an immersive modal rail, combine `appearance="rail"`, `expansion="modal"`, and `collapse="hidden"`; keep the opening button **outside** the hidden navigation. Hiding the ordinary collapsed rail is not the normal rail pattern.
 
+`M3Navigation.Top`, `Header`, and `Subheader` accept a function child `({ view }) => ...`. Descendants in the primary content and additional sections can read the same value with `useM3NavigationView()`, which returns `null` outside `M3Navigation`. `view.appearance` is the currently rendered form, including rail expansion. `view.modal` follows the active dialog state and can remain true during dismissal. `view.hidden` matches the hidden rail state after its exit transition. Static children remain supported.
+
 Classic drawers require explicit `appearance="drawer"`. With this value, `expanded={false}` leaves a standard drawer and `expanded={true}` shows a modal drawer. To close a modal drawer into a rail, control **both** `expanded` and `appearance`, as in [Modal Navigation Drawer](?path=/story/components-m3navigation--modal-navigation-drawer). Expanding a bar never opens a drawer.
 
 ### Place, scroll, and navigate
@@ -189,6 +191,8 @@ For a modal overlay, the inset follows the navigation underneath. The bar height
 Явный `appearance` закрепляет вид независимо от ширины. `appearance="rail"` вместе с управляемым `expanded` переключает свернутый и раскрытый rail. `expansion="auto"` выбирает modal до 1200 CSS px и standard на более широком экране; `"modal"` и `"standard"` задают режим явно. Закреплённый `appearance="rail-expanded"` всегда standard: для сворачивания поменяйте `appearance` на `"rail"`. Bar не раскрывается.
 
 Кнопку меню передайте через `M3Navigation.Top` и по нажатию меняйте `expanded` или `appearance`. В раскрытом состоянии иконка и доступное имя должны говорить о закрытии. Компонент не создаёт кнопку меню и не управляет маршрутом. Для полноэкранного модального rail используйте `appearance="rail"`, `expansion="modal"` и `collapse="hidden"`; кнопку открытия оставьте **вне** скрытой навигации. Скрытый свернутый rail не является обычным состоянием rail.
+
+`M3Navigation.Top`, `Header` и `Subheader` принимают функцию-ребёнка `({ view }) => ...`. Дочерние элементы основного содержимого и дополнительных секций получают то же значение через `useM3NavigationView()`, который вне `M3Navigation` возвращает `null`. `view.appearance` содержит фактически отображаемый вид, включая раскрытый rail. `view.modal` соответствует состоянию модального диалога и может оставаться истинным во время закрытия. `view.hidden` соответствует состоянию rail после завершения его ухода за край экрана. Обычный статический контент также поддерживается.
 
 Классический drawer включается только явным `appearance="drawer"`. При нём `expanded={false}` оставляет стандартный drawer, а `expanded={true}` показывает модальный. Чтобы после закрытия модального drawer получить rail, управляйте **и** `expanded`, **и** `appearance`, как в [Modal Navigation Drawer](?path=/story/components-m3navigation--modal-navigation-drawer). Раскрытие bar не открывает drawer.
 

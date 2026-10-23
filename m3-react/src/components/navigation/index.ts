@@ -21,3 +21,4 @@ export { default as M3NavigationSection } from './M3NavigationSection'
 export { default as M3NavigationTab } from './M3NavigationTab'
 
 export { useM3NavigationAppearance } from './M3NavigationAppearance'
+export { useM3NavigationView } from './M3NavigationView'
