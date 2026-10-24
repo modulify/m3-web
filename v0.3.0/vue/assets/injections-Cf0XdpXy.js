@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{H as t,s as n,y as r}from"./iframe-DlP_3VDG.js";var i,a;function o(){return(o=e((()=>{n(),i=Symbol(`M3IconAppearance`),a=e=>t(i,r(e))})))()}export{o as n,a as r,i as t};
