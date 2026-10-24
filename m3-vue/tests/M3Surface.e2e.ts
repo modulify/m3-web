@@ -56,22 +56,23 @@ const mountHarness = (): HarnessMount => {
   }
 }
 
-const collectRectSeries = async (element: HTMLElement, durationMs = 380, stepMs = 32) => {
+const collectRectSeries = (element: HTMLElement, durationMs: number) => new Promise<RectPoint[]>((resolve) => {
   const points: RectPoint[] = []
-  const startedAt = performance.now()
 
-  while (performance.now() - startedAt < durationMs) {
+  const sample = (timestamp: number) => {
     const rect = element.getBoundingClientRect()
-    points.push({
-      timestamp: performance.now(),
-      width: rect.width,
-      height: rect.height,
-    })
-    await delay(stepMs)
+    // CSS transitions and rAF timestamps share the frame's animation clock.
+    points.push({ timestamp, width: rect.width, height: rect.height })
+
+    if (timestamp - points[0].timestamp >= durationMs) {
+      resolve(points)
+    } else {
+      requestAnimationFrame(sample)
+    }
   }
 
-  return points
-}
+  requestAnimationFrame(sample)
+})
 
 const deltas = (values: number[]) => values.slice(1).map((value, index) => value - values[index])
 
@@ -81,6 +82,7 @@ const expectSmoothGrowth = (
   totalChange: number,
   transitionMs: number
 ) => {
+  expect(points.length).toBeGreaterThan(2)
   const values = points.map(point => point[dimension])
   const valueDeltas = deltas(values)
   const rates = valueDeltas.map((delta, index) => (
@@ -151,7 +153,7 @@ describe('m3-vue/surface e2e', () => {
     click('[data-testid="sheet-to-modal"]')
     await nextTick()
 
-    const rectSeries = await collectRectSeries(content, 560, 32)
+    const rectSeries = await collectRectSeries(content, 560)
 
     await waitFor(() => {
       const modalSheet = document.querySelector('[data-testid="orchestrated-side-sheet"][role="dialog"]')
@@ -179,6 +181,16 @@ describe('m3-vue/surface e2e', () => {
 
     const canvas = document.querySelector('[data-testid="card-canvas"]') as HTMLElement
     const overlayWrap = document.querySelector('[data-testid="card-overlay-wrap"]') as HTMLElement
+    const origin = document.querySelector('[data-testid="card-origin-slot"]') as HTMLElement
+
+    await waitFor(() => {
+      const rect = overlayWrap.getBoundingClientRect()
+      const originRect = origin.getBoundingClientRect()
+      expect(Math.abs(rect.width - originRect.width)).toBeLessThan(0.5)
+      expect(Math.abs(rect.height - originRect.height)).toBeLessThan(0.5)
+      expect(overlayWrap.getAnimations()).toHaveLength(0)
+    })
+
     const beforeRect = overlayWrap.getBoundingClientRect()
 
     expect(beforeRect.width).toBeGreaterThan(280)
@@ -189,7 +201,7 @@ describe('m3-vue/surface e2e', () => {
     click('[data-testid="card-to-page"]')
     await nextTick()
 
-    const rectSeries = await collectRectSeries(overlayWrap, 380, 32)
+    const rectSeries = await collectRectSeries(overlayWrap, 380)
     await delay(240)
     const afterRect = overlayWrap.getBoundingClientRect()
     const canvasRect = canvas.getBoundingClientRect()
