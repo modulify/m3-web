@@ -1,5 +1,60 @@
 # Changelog
 
+## 0.3.0
+
+### ⚠ BREAKING CHANGE* **m3-vue:** Expressive menu behavior was added
+* **m3-vue:** Expressive lists and divider example were added
+* **m3-react:** Expressive menu behavior was added
+* **m3-react:** Expressive lists and divider example were added
+* **m3-react:** Expressive FAB behavior was added
+* **m3-foundation:** Expressive list styles were added
+* **m3-vue:** Expressive button system was added
+* **m3-vue:** M3IconButton was removed in favor of M3Button width; button and FAB defaults changed to expressive variants.
+* **m3-react:** Expressive button system was added
+* **m3-react:** M3IconButton was removed in favor of M3Button width; button and FAB defaults changed to expressive variants.
+* **m3-foundation:** Expressive button system was added
+* **m3-foundation:** Standalone icon-button styles and types were removed; button geometry is now selected through M3Button width.
+
+
+### Features
+
+* **m3-foundation:** Divider styles and types were added ([ca9d899](https://github.com/modulify/m3-web/commit/ca9d899f7b9e0ac0b6bb430b0cf689e5fa448fad))
+* **m3-react:** Divider component and stories were added ([7bb0481](https://github.com/modulify/m3-web/commit/7bb04811f6b356342ca6a692ac09c4396c14a761))
+* **m3-vue:** Divider component and stories were added ([7484b14](https://github.com/modulify/m3-web/commit/7484b14a21625531344ee88aeb65b8f592ad65bd)), closes [#17]({{host}}/{{owner}}/{{repository}}/issues/{{id}})
+* **m3-foundation:** Expressive button system was added ([474540a](https://github.com/modulify/m3-web/commit/474540a89d1ceef28e8f485fa4cb1fa84931e60d))
+* **m3-react:** Expressive button system was added ([338b99f](https://github.com/modulify/m3-web/commit/338b99f995ce933bbe61e2337627bacc6d674ee2))
+* **m3-vue:** Expressive button system was added ([597fab0](https://github.com/modulify/m3-web/commit/597fab0ef29f8297991114ae1ace4d867b242bff)), closes [#22]({{host}}/{{owner}}/{{repository}}/issues/{{id}})
+* **m3-foundation:** Expressive FAB geometry was refined ([0b1aab1](https://github.com/modulify/m3-web/commit/0b1aab128945cf5d31bdc756a86997ed6742d236))
+* **m3-foundation:** Expressive list styles were added ([2b57ab4](https://github.com/modulify/m3-web/commit/2b57ab457d8008265f82b200a5c3822f9eafee0a))
+* **m3-foundation:** Expressive menu styles and color roles were added ([a444e63](https://github.com/modulify/m3-web/commit/a444e63dc865e43acaac631bf8c975af4cadcc26))
+* **m3-react:** Disabled link behavior was added ([bddd458](https://github.com/modulify/m3-web/commit/bddd45894883e9c3ee4912567b2193bd9f57c778))
+* **m3-react:** Expressive FAB behavior was added ([2b16750](https://github.com/modulify/m3-web/commit/2b16750ee001972019b203772c28e3658442193f))
+* **m3-react:** Expressive lists and divider example were added ([e9a7094](https://github.com/modulify/m3-web/commit/e9a7094741994f6929c4e54e014738a86019fad3))
+* **m3-react:** Expressive menu behavior was added ([bb7757d](https://github.com/modulify/m3-web/commit/bb7757d974352b8df26a9e8271d0e575c6727b96))
+* **m3-vue:** Expressive lists and divider example were added ([759334b](https://github.com/modulify/m3-web/commit/759334b5f66dab66123e7cdc77f2a52e18cd50d9))
+* **m3-vue:** Expressive menu behavior was added ([a5a742d](https://github.com/modulify/m3-web/commit/a5a742d058b8447a6ae92e47625ae834e36c13eb))
+* **m3-foundation:** Navigation view contract was added ([ebb94f0](https://github.com/modulify/m3-web/commit/ebb94f0c73b1df2806e643fa98c0e692a9ca2105))
+* **m3-react:** Navigation view was exposed to content ([ce5eb62](https://github.com/modulify/m3-web/commit/ce5eb623d7fe33533083de41d13a1d0a019d6586))
+* **m3-vue:** Navigation view was exposed to slots ([e795d1a](https://github.com/modulify/m3-web/commit/e795d1abb977bdc5d73d30e27ffbea774cd63569))
+* **m3-foundation:** Added tab geometry and navigation helpers ([a23aaa2](https://github.com/modulify/m3-web/commit/a23aaa2e909172700380abfc1a8b63a68088aa2f))
+* **m3-react:** Added tabs with navigation and Storybook guides ([bedbba0](https://github.com/modulify/m3-web/commit/bedbba0b0088ea698679b37f0c3f4937ce860b70))
+* **m3-vue:** Added tabs with navigation and Storybook guides ([55f4e84](https://github.com/modulify/m3-web/commit/55f4e84e35f2d57cdd4000e445189933c3cdcf5b)), closes [#24]({{host}}/{{owner}}/{{repository}}/issues/{{id}})
+
+### Bug Fixes
+
+* **m3-foundation:** Select popup sizing was aligned with menus ([d297ca5](https://github.com/modulify/m3-web/commit/d297ca58a4623f01839e077c7c2ccd0aabb55174))
+* **m3-react:** Popper close handling was corrected ([965cbd1](https://github.com/modulify/m3-web/commit/965cbd1726c6612022197c8bcf0660eae9f18b5a))
+* **m3-react:** Select menus used native scrolling ([120a614](https://github.com/modulify/m3-web/commit/120a61466bddae51784fe40bb5b1b04794ec9c47))
+* **m3-react:** Slider fill respected nonzero minimums ([e640761](https://github.com/modulify/m3-web/commit/e6407614f3a683c527d41945e5272e34e8a5c7fb))
+* **m3-vue:** Popper close handling was corrected ([df692b6](https://github.com/modulify/m3-web/commit/df692b6339ddbcfd7b876e07d3215ab59a81aba0))
+* **m3-vue:** Select menus used native scrolling ([ee32006](https://github.com/modulify/m3-web/commit/ee32006c37cc9caae61b8aa1e4504d859b89f71e))
+* **m3-vue:** Slider fill respected nonzero minimums ([e9c3f09](https://github.com/modulify/m3-web/commit/e9c3f09d5e7dc5f52d17c9e82f5723e6d29030f6))
+* **m3-foundation:** Modal opening transitions were preserved ([ee02813](https://github.com/modulify/m3-web/commit/ee028131acf5ea02b760d0350f37b30b7bc07ba7))
+* **m3-react:** Surface transition duration was forwarded ([2a80ad6](https://github.com/modulify/m3-web/commit/2a80ad6032e85d43d2a48eda5f1d709144709f80))
+* **m3-react:** Modal side sheet motion was synchronized ([1a034ac](https://github.com/modulify/m3-web/commit/1a034ac2f3df975e8816fa26f649e749cef142a4))
+* **m3-vue:** Modal side sheet motion was synchronized ([57332f2](https://github.com/modulify/m3-web/commit/57332f2d27f4c5c3b8186c141ab9f7ca9820b8dd))
+* **m3-vue:** Card story metadata type was corrected ([fa5c003](https://github.com/modulify/m3-web/commit/fa5c003ab86c116c7ee99edfe4363e8ad9976f02))
+
 ## 0.2.0
 
 ### ⚠ BREAKING CHANGE* **m3-vue:** Components were moved into shared UI layers
