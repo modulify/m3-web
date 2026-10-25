@@ -60,6 +60,22 @@ jobs:
       - name: Using branch ${{ github.ref }} for repository ${{ github.repository }}.
         uses: actions/checkout@v6
 
+      - name: Pull actionlint image
+        run: |
+          image='rhysd/actionlint@sha256:a0383f60d92601e2694e24b24d37df7b6a40bed7cedbc447611c50009bf02d94'
+
+          for attempt in 1 2; do
+            if docker pull "$image"; then
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 2 ]; then
+              exit 1
+            fi
+
+            sleep 5
+          done
+
       - name: Run actionlint
         uses: devops-actions/actionlint@v0.1.10
 
