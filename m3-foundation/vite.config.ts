@@ -24,6 +24,7 @@ const entries = {
   'lib/popper/predicates': resolve(__dirname, 'lib/popper/predicates.ts'),
   'lib/popper/scheduling': resolve(__dirname, 'lib/popper/scheduling.ts'),
   'lib/predicates': resolve(__dirname, 'lib/predicates.ts'),
+  'lib/progress': resolve(__dirname, 'lib/progress.ts'),
   'lib/scroll': resolve(__dirname, 'lib/scroll.ts'),
   'lib/search': resolve(__dirname, 'lib/search.ts'),
   'lib/tabGroup': resolve(__dirname, 'lib/tabGroup.ts'),
