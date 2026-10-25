@@ -1,0 +1,245 @@
+@use '../../basics/motion' as m3-motion;
+
+@property --m3-progress-circular-sweep {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 10;
+}
+
+@property --m3-progress-wave-amplitude {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+
+.m3-progress {
+  --m3-progress-color: var(--m3-sys-primary);
+  --m3-progress-track-color: var(--m3-sys-secondary-container);
+
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  overflow: hidden;
+  color: var(--m3-progress-color);
+
+  &_linear {
+    inline-size: 100%;
+    block-size: var(--m3-progress-container-size, 4px);
+    min-inline-size: 0;
+  }
+
+  &_circular {
+    inline-size: var(--m3-progress-container-size, 40px);
+    block-size: var(--m3-progress-container-size, 40px);
+  }
+
+  &_circular.m3-progress_wavy:not(.m3-progress_indeterminate) {
+    --m3-progress-wave-amplitude: 1;
+
+    transition: m3-motion.timing-standard(--m3-progress-wave-amplitude, 'long2');
+  }
+
+  &_circular.m3-progress_wavy.m3-progress_wave-flat {
+    --m3-progress-wave-amplitude: 0;
+
+    transition-timing-function: m3-motion.easing('emphasized-accelerate');
+  }
+
+  &__track,
+  &__active,
+  &__stop {
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+  }
+
+  &_linear &__track,
+  &_linear &__active {
+    inset-block-start: 50%;
+    block-size: var(--m3-progress-thickness, 4px);
+    border-radius: 999px;
+    transform: translateY(-50%);
+  }
+
+  &_linear &__track {
+    inset-inline-end: 8px;
+    inline-size: max(0px, calc(100% - max(var(--m3-progress-end, 0%), var(--m3-progress-thickness, 4px)) - 12px));
+    background: var(--m3-progress-track-color);
+  }
+
+  &_linear &__active {
+    inset-inline-start: 0;
+    inline-size: max(var(--m3-progress-end, 0%), var(--m3-progress-thickness, 4px));
+    overflow: hidden;
+    background: currentColor;
+    transition: m3-motion.timing-standard(inline-size);
+  }
+
+  &_linear.m3-progress_wavy &__active {
+    block-size: 100%;
+    background: none;
+  }
+
+  &__wave {
+    display: block;
+    inline-size: 8200px;
+    block-size: 100%;
+    transform: translateX(-40px);
+    animation: m3-progress-wave 1s linear infinite;
+  }
+
+  &_linear &__stop {
+    inset-inline-end: 0;
+    inset-block-start: 50%;
+    inline-size: 4px;
+    block-size: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    transform: translateY(-50%);
+  }
+
+  &_linear.m3-progress_empty &__track {
+    inline-size: calc(100% - 8px);
+  }
+
+  &_linear.m3-progress_empty &__active {
+    inline-size: 0;
+  }
+
+  &_linear:dir(rtl) &__wave {
+    animation-direction: reverse;
+  }
+
+  &__linear-motion {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    fill: none;
+  }
+
+  &_linear:dir(rtl) &__linear-motion {
+    transform: scaleX(-1);
+  }
+
+  &__linear-motion-track {
+    stroke: var(--m3-progress-track-color);
+  }
+
+  &__linear-motion-active {
+    stroke: currentColor;
+  }
+
+  &_linear.m3-progress_complete &__stop,
+  &_linear.m3-progress_complete &__track,
+  &_linear.m3-progress_no-track &__track,
+  &_circular.m3-progress_no-track &__circular-track,
+  &_no-stop &__stop {
+    display: none;
+  }
+
+  &__circular {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    fill: none;
+  }
+
+  &__circular-track {
+    stroke: var(--m3-progress-track-color);
+  }
+
+  &__circular-active {
+    stroke: currentColor;
+  }
+
+  &__circular-track,
+  &__circular-active {
+    transition: m3-motion.timing-standard(stroke-dasharray), m3-motion.timing-standard(stroke-dashoffset);
+  }
+
+  &_indeterminate &__circular-track,
+  &_indeterminate &__circular-active {
+    transition: none;
+  }
+
+  &_indeterminate &__circular {
+    animation: m3-progress-circular-rotate 6s linear infinite,
+      m3-progress-circular-sweep 6s m3-motion.easing('standard') infinite;
+  }
+
+  &_indeterminate &__circular-motion {
+    transform-origin: center;
+    transform-box: view-box;
+    animation: m3-progress-circular-advance 6s linear infinite;
+  }
+
+  &_circular.m3-progress_no-track.m3-progress_indeterminate &__circular {
+    animation: m3-progress-circular-button-rotate 2.4s linear infinite,
+      m3-progress-circular-button-sweep 2.4s m3-motion.easing('standard') infinite;
+  }
+
+  &_circular.m3-progress_no-track.m3-progress_indeterminate &__circular-motion {
+    animation: none;
+  }
+
+  @media (forced-colors: active) {
+    --m3-progress-color: CanvasText;
+    --m3-progress-track-color: GrayText;
+  }
+}
+
+@keyframes m3-progress-wave {
+  to { transform: translateX(0); }
+}
+
+@keyframes m3-progress-circular-rotate {
+  to { transform: rotate(1080deg); }
+}
+
+@keyframes m3-progress-circular-button-rotate {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes m3-progress-circular-button-sweep {
+  0%, 100% { --m3-progress-circular-sweep: 10; }
+  50% { --m3-progress-circular-sweep: 65; }
+}
+
+@keyframes m3-progress-circular-sweep {
+  0% { --m3-progress-circular-sweep: 10; }
+  50% { --m3-progress-circular-sweep: 87; }
+  100% { --m3-progress-circular-sweep: 10; }
+}
+
+@keyframes m3-progress-circular-advance {
+  0% { transform: rotate(0); animation-timing-function: #{m3-motion.easing('standard')}; }
+  5% { transform: rotate(90deg); }
+  25% { transform: rotate(90deg); animation-timing-function: #{m3-motion.easing('standard')}; }
+  30% { transform: rotate(180deg); }
+  50% { transform: rotate(180deg); animation-timing-function: #{m3-motion.easing('standard')}; }
+  55% { transform: rotate(270deg); }
+  75% { transform: rotate(270deg); animation-timing-function: #{m3-motion.easing('standard')}; }
+  80%, 100% { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-progress {
+    &_circular.m3-progress_wavy {
+      transition: none;
+    }
+
+    &__wave,
+    &__circular,
+    &__circular-motion,
+    &__active {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    &__wave { transform: none; }
+
+    &_circular.m3-progress_indeterminate &__circular {
+      --m3-progress-circular-sweep: 25;
+    }
+  }
+}
