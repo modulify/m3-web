@@ -1,0 +1,154 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as Stories from './M3Progress.stories'
+
+<Meta of={Stories} />
+
+<Localized locale="en-US">
+
+# Progress indicators
+
+A progress indicator shows the state of an ongoing process. Use one indicator for a group of related tasks and keep the same variant for the same process throughout your product. Material recommends showing content immediately for waits below 200 ms, a loading indicator for a short wait, and a progress indicator for a longer wait. A progress indicator can still suit a short indeterminate action inside a button. [Material 3 guidelines](https://m3.material.io/components/progress-indicators/guidelines).
+
+## Choose a variant
+
+| Variant | Placement |
+| --- | --- |
+| Linear | Along an edge of the content being loaded, or within that content. Give it at least 40px of available width. |
+| Circular | Centered where content will appear. Material recommends a diameter from 24px to 240px. |
+
+Use `value` when progress is known. Set `indeterminate` while the amount remaining is unknown, then remove it when a measured value becomes available. `value` is a percentage from 0 to 100. The indicator may use a flat or wavy active line. A wave increases its overall height; choose it when its more expressive movement suits the product. [Material 3 specs](https://m3.material.io/components/progress-indicators/specs).
+
+<Canvas of={Stories.Linear} />
+<Canvas of={Stories.Circular} />
+<Canvas of={Stories.WavyLinear} />
+<Canvas of={Stories.WavyCircular} />
+<Canvas of={Stories.CircularProgressChanges} />
+<Canvas of={Stories.IndeterminateLinear} />
+<Canvas of={Stories.WavyIndeterminateLinear} />
+<Canvas of={Stories.IndeterminateCircular} />
+<Canvas of={Stories.WavyIndeterminate} />
+
+At a fixed value, the flat circular indicator stays still; the determinate wavy shape moves along its active arc. Near 0% and 100%, the wave becomes flat. Indeterminate linear indicators move two active segments with gaps in the remaining track. Indeterminate circular indicators rotate while the active arc grows and shrinks. The light track stays separated when visible, but can disappear briefly near the longest arc. The larger sizes below make the cycle easier to inspect.
+
+<Canvas of={Stories.WavyCircularMotion} />
+
+## Layout and contrast
+
+The default active and stop color is `primary`; the track uses `secondary-container`. The linear stop dot helps people see the end of a low contrast track. Keep `stop` enabled unless you have confirmed at least 3:1 contrast between the track and its surroundings. For an indicator inside a button, use the button's text/icon color and remove the track with `track={false}`. Check at least 3:1 contrast for the active stroke in every theme. [Material 3 accessibility](https://m3.material.io/components/progress-indicators/accessibility).
+
+Flat linear indicators use a 4px track by default and a 4px gap to the inactive track. The wavy samples use a 40px wavelength and add 6px to the component's height. Linear progress follows the writing direction in RTL; circular progress always begins at the top and moves clockwise. Animation stops when the user requests reduced motion.
+
+<Canvas of={Stories.ThickLinear} />
+<Canvas of={Stories.SmallProgress} />
+<Canvas of={Stories.InButton} />
+
+Click the button to see its label give way to a short, trackless circular indicator; the label returns when the simulated operation finishes.
+
+<Canvas of={Stories.RightToLeft} />
+<Canvas of={Stories.ProgressChanges} />
+
+## Accessibility
+
+The root has `role="progressbar"`. Give each instance an accessible name that identifies the process and affected content, such as `aria-label="Loading news article"`, or refer to a visible label with `aria-labelledby`. Determinate indicators expose `aria-valuemin="0"`, `aria-valuemax="100"`, and the actual clamped `aria-valuenow`. Indeterminate indicators omit numeric values; never announce a fabricated percentage. The graphic itself is hidden from assistive technology. [Material 3 accessibility](https://m3.material.io/components/progress-indicators/accessibility).
+
+## API
+
+`M3Progress` selects the geometry through `variant`. When the geometry is fixed, use `M3ProgressLine` or `M3ProgressCircle` directly. All three provide the same progressbar semantics and expose their root `<div>`.
+
+| Component | Geometry | Specific props |
+| --- | --- | --- |
+| `M3Progress` | Chosen by `variant` | `variant`; forwards `stop` to the line or `size` to the circle. |
+| `M3ProgressLine` | Linear | `stop`. |
+| `M3ProgressCircle` | Circular | `size`. |
+
+The shared props are `shape`, `value`, `indeterminate`, `thickness`, and `track`. The examples for changing linear and circular progress above use the direct components.
+
+| Prop | Values | Default | Purpose |
+| --- | --- | --- | --- |
+| `variant` | `linear`, `circular` | `linear` | Indicator geometry. |
+| `shape` | `flat`, `wavy` | `flat` | Active stroke shape. |
+| `value` | Number, normalized to 0–100 | `0` | Measured percentage. |
+| `indeterminate` | Boolean | `false` | Show unknown progress. |
+| `thickness` | Positive number, px | Scales from 4 at the reference circular size; 4 linear | Explicit stroke thickness overrides circular scaling. |
+| `size` | Number, px; circular only | 40 flat, 48 wavy | Circular container diameter, bounded to 24–240. |
+| `track` | Boolean | `true` | Show the inactive track. |
+| `stop` | Boolean; linear only | `true` | Show the determinate end dot. |
+
+Native `aria-*`, `class`/`className`, and `style` pass to the root. A component reference exposes `el`, the root `<div>`; there are no events or slots. Override `--m3-progress-color` and `--m3-progress-track-color` for context-specific colors. The component does not measure whether removing `stop` is accessible; that decision belongs to the application.
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Индикаторы прогресса
+
+Индикатор показывает состояние продолжающегося процесса. Для группы связанных задач используйте один индикатор и сохраняйте один и тот же вариант для одного процесса во всём продукте. Material советует сразу показывать содержимое при ожидании меньше 200 мс, использовать loading indicator при коротком ожидании и progress indicator при более долгом. В кнопке progress indicator также может показывать короткое действие с неизвестной длительностью. [Рекомендации Material 3](https://m3.material.io/components/progress-indicators/guidelines).
+
+## Выбор варианта
+
+| Вариант | Размещение |
+| --- | --- |
+| Линейный | Вдоль края загружаемого содержимого либо внутри него. Доступная ширина — не менее 40px. |
+| Круговой | По центру области, где появится содержимое. Material рекомендует диаметр от 24px до 240px. |
+
+Передайте `value`, если прогресс известен. Пока оставшееся время неизвестно, включите `indeterminate`; когда появится измеренное значение, отключите его. `value` задаётся в процентах от 0 до 100. Активная линия бывает плоской и волнистой. Волна увеличивает общую высоту; выбирайте её, если более выразительное движение подходит продукту. [Размеры Material 3](https://m3.material.io/components/progress-indicators/specs).
+
+<Canvas of={Stories.Linear} />
+<Canvas of={Stories.Circular} />
+<Canvas of={Stories.WavyLinear} />
+<Canvas of={Stories.WavyCircular} />
+<Canvas of={Stories.CircularProgressChanges} />
+<Canvas of={Stories.IndeterminateLinear} />
+<Canvas of={Stories.WavyIndeterminateLinear} />
+<Canvas of={Stories.IndeterminateCircular} />
+
+При постоянном значении плоский круговой индикатор неподвижен, а волна определённого прогресса движется вдоль активной дуги. Вблизи 0% и 100% волна сглаживается. Линейный индикатор с неизвестным прогрессом перемещает два активных сегмента, оставляя просветы в остальной части трека. В неопределённом режиме круг вращается, а активная дуга удлиняется и укорачивается. Светлый трек отделён от неё, когда виден, но возле максимальной длины дуги может ненадолго исчезнуть. На увеличенных размерах цикл легче рассмотреть.
+
+<Canvas of={Stories.WavyCircularMotion} />
+
+## Компоновка и контраст
+
+Активная часть и конечная точка по умолчанию окрашены в `primary`, трек — в `secondary-container`. Конечная точка линейного индикатора помогает увидеть конец трека при слабом контрасте. Оставляйте `stop` включённым, пока не подтвердили контраст трека с окружением не менее 3:1. Для индикатора в кнопке используйте цвет текста/иконки кнопки и уберите трек с помощью `track={false}`. Проверяйте контраст активной линии не менее 3:1 в каждой теме. [Доступность Material 3](https://m3.material.io/components/progress-indicators/accessibility).
+
+По умолчанию плоская линейная линия имеет толщину 4px и зазор 4px до неактивного трека. В примерах волна имеет длину 40px и добавляет 6px к высоте. Линейный прогресс следует направлению письма в RTL; круговой всегда начинается сверху и движется по часовой стрелке. При запросе уменьшения движения анимация останавливается.
+
+<Canvas of={Stories.ThickLinear} />
+<Canvas of={Stories.SmallProgress} />
+<Canvas of={Stories.InButton} />
+
+Нажмите кнопку: её подпись сменится коротким круговым индикатором без трека и вернётся после завершения имитации операции.
+
+<Canvas of={Stories.RightToLeft} />
+<Canvas of={Stories.ProgressChanges} />
+
+## Доступность
+
+У корня есть `role="progressbar"`. Каждому экземпляру задайте доступное имя, описывающее процесс и затронутое содержимое, например `aria-label="Загрузка статьи"`, либо свяжите его с видимой меткой через `aria-labelledby`. В определённом режиме выставляются `aria-valuemin="0"`, `aria-valuemax="100"` и фактическое ограниченное `aria-valuenow`. В неопределённом режиме числовые значения отсутствуют: нельзя объявлять выдуманный процент. Сама графика скрыта от вспомогательных технологий. [Доступность Material 3](https://m3.material.io/components/progress-indicators/accessibility).
+
+## API
+
+`M3Progress` выбирает геометрию через `variant`. Если вид индикатора зафиксирован, используйте напрямую `M3ProgressLine` или `M3ProgressCircle`. Все три компонента предоставляют одинаковую семантику progressbar и открывают ссылку на корневой `<div>`.
+
+| Компонент | Геометрия | Собственные props |
+| --- | --- | --- |
+| `M3Progress` | По значению `variant` | `variant`; передаёт `stop` линии или `size` кругу. |
+| `M3ProgressLine` | Линейная | `stop`. |
+| `M3ProgressCircle` | Круговая | `size`. |
+
+Общие props: `shape`, `value`, `indeterminate`, `thickness` и `track`. Примеры изменения линейного и кругового прогресса выше используют компоненты напрямую.
+
+| Prop | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- |
+| `variant` | `linear`, `circular` | `linear` | Геометрия индикатора. |
+| `shape` | `flat`, `wavy` | `flat` | Форма активной линии. |
+| `value` | Число, приводится к 0–100 | `0` | Измеренный процент. |
+| `indeterminate` | Boolean | `false` | Неизвестный прогресс. |
+| `thickness` | Положительное число, px | Масштабируется от 4 при базовом circular; 4 для linear | Явное значение заменяет автоматическое масштабирование круговой линии. |
+| `size` | Число, px; только circular | 40 flat, 48 wavy | Диаметр контейнера, ограниченный 24–240. |
+| `track` | Boolean | `true` | Показывать неактивный трек. |
+| `stop` | Boolean; только linear | `true` | Показывать конечную точку в определённом режиме. |
+
+Нативные `aria-*`, `class`/`className` и `style` передаются корню. Ссылка на компонент предоставляет `el` — корневой `<div>`; событий и слотов нет. Цвета можно изменить через `--m3-progress-color` и `--m3-progress-track-color`. Компонент не вычисляет контраст для отключения `stop`; это решение остаётся за приложением.
+
+</Localized>
