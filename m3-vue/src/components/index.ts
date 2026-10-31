@@ -1,6 +1,7 @@
 export * from './adaptive'
 export * from './app-bar'
 export * from './badge'
+export * from './bottom-sheet'
 export * from './button'
 export * from './button-group'
 export * from './split-button'
