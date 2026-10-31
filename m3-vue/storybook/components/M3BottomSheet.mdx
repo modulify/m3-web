@@ -1,0 +1,119 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as Stories from './M3BottomSheet.stories'
+
+<Meta of={Stories} />
+
+<Localized locale="en-US">
+
+# Bottom sheets
+
+A bottom sheet presents supplementary content and actions at the bottom of the window. Use it for a short, contextual task. Keep the main content in the page, not inside the sheet. On a wide layout, a side sheet may be more suitable.
+
+## Choose a variant
+
+| Variant | Main page | Scrim | Typical use |
+| --- | --- | --- | --- |
+| `standard` | Remains interactive | None | Persistent context, such as map details |
+| `modal` | Blocked until dismissal | Present | Temporary choices or actions |
+
+The modal sheet initially occupies at most half the viewport. Its content can expand up to the M3 top margin and then scroll inside the sheet. The handle remains fixed while the body scrolls. On narrow windows the sheet spans the width; on wider windows it is centered and capped at 640px.
+
+## Interaction and accessibility
+
+The optional 48px high handle is a button. Click, Enter, or Space toggles between collapsed and expanded heights. Dragging it snaps to a height or dismisses the sheet when dragged far enough down. Pass a localized `label` for the handle and `aria-label` or `aria-labelledby` for the sheet. If you remove the handle from a resizable sheet, provide another visible single-pointer way to change its height. A full-screen standard sheet needs a collapse action in its own content.
+
+Modal sheets can also close through the scrim or Escape. Provide an explicit close action where useful. In standard mode, surrounding controls remain operable.
+
+## API
+
+| Prop | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `variant` | `'standard' \| 'modal'` | `standard` | Interaction and layer mode |
+| `shown` | `boolean` | `false` | Requests visibility |
+| `expanded` | `boolean` | `false` | Requests the taller position |
+| `peek` | `number` | Auto | Collapsed height in CSS pixels |
+| `handle` | `boolean` | `true` | Shows the drag handle |
+| `label` | `string` | English fallback | Accessible handle name |
+
+The default slot supplies the scrollable body. `update:shown` requests a visibility change; `update:expanded` reports a height change; `dismiss` reports gesture, scrim, or Escape dismissal. The component exposes `el`, `show()`, `hide()`, `expand()`, and `collapse()`. You can bind both states with `v-model`.
+
+```vue
+<M3BottomSheet
+  v-model:shown="shown"
+  variant="modal"
+  aria-label="Choose a destination"
+  label="Resize bottom sheet"
+>
+  <DestinationList />
+</M3BottomSheet>
+```
+
+## Examples
+
+- [Standard](?path=/story/components-m3bottomsheet--standard)
+- [Modal](?path=/story/components-m3bottomsheet--modal)
+- [Without handle](?path=/story/components-m3bottomsheet--without-handle)
+
+## Sources
+
+[Overview](https://m3.material.io/components/bottom-sheets/overview) · [Specs](https://m3.material.io/components/bottom-sheets/specs) · [Guidelines](https://m3.material.io/components/bottom-sheets/guidelines) · [Accessibility](https://m3.material.io/components/bottom-sheets/accessibility)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Нижние панели
+
+Нижняя панель показывает дополнительные сведения и действия у нижнего края окна. Используйте её для короткой контекстной задачи. Основное содержимое оставляйте на странице. На широком экране уместнее может быть боковая панель.
+
+## Выбор варианта
+
+| Вариант | Основная страница | Подложка | Пример |
+| --- | --- | --- | --- |
+| `standard` | Остаётся интерактивной | Нет | Постоянный контекст, например сведения на карте |
+| `modal` | Заблокирована до закрытия | Есть | Временный выбор или действия |
+
+Начальная высота модальной панели не превышает половину экрана. Затем её можно раскрыть до верхнего отступа M3, а содержимое прокручивать внутри. Область перетаскивания остаётся на месте. На узком экране панель занимает всю ширину; на широком она центрируется и ограничивается 640px.
+
+## Взаимодействие и доступность
+
+Необязательная область перетаскивания высотой 48px реализована кнопкой. Нажатие мышью, Enter или Space переключает высоты. Перетаскивание притягивает панель к одному из положений или закрывает при достаточном движении вниз. Передавайте локализованное имя кнопки через `label`, а имя панели — через `aria-label` либо `aria-labelledby`. Если убрать область перетаскивания у панели с несколькими высотами, предоставьте другой видимый способ изменить высоту одним указателем. В содержимом полноэкранной стандартной панели должна быть команда сворачивания.
+
+Модальную панель также можно закрыть через подложку или Escape. При необходимости добавьте явную кнопку закрытия. В режиме `standard` элементы страницы остаются доступны.
+
+## API
+
+| Prop | Тип | Умолчание | Назначение |
+| --- | --- | --- | --- |
+| `variant` | `'standard' \| 'modal'` | `standard` | Режим взаимодействия и слоя |
+| `shown` | `boolean` | `false` | Запрос видимости |
+| `expanded` | `boolean` | `false` | Запрос раскрытого положения |
+| `peek` | `number` | Автоматически | Высота свёрнутой панели в CSS пикселях |
+| `handle` | `boolean` | `true` | Показывает область перетаскивания |
+| `label` | `string` | Английское значение | Доступное имя области перетаскивания |
+
+Слот по умолчанию задаёт прокручиваемое содержимое. `update:shown` запрашивает изменение видимости, `update:expanded` сообщает о смене высоты, `dismiss` сообщает о закрытии жестом, через подложку или Escape. Компонент предоставляет `el`, `show()`, `hide()`, `expand()`, `collapse()`. Для обоих состояний можно использовать `v-model`.
+
+```vue
+<M3BottomSheet
+  v-model:shown="shown"
+  variant="modal"
+  aria-label="Выберите место"
+  label="Изменить высоту панели"
+>
+  <DestinationList />
+</M3BottomSheet>
+```
+
+## Примеры
+
+- [Стандартная](?path=/story/components-m3bottomsheet--standard)
+- [Модальная](?path=/story/components-m3bottomsheet--modal)
+- [Без области перетаскивания](?path=/story/components-m3bottomsheet--without-handle)
+
+## Источники
+
+[Обзор](https://m3.material.io/components/bottom-sheets/overview) · [Размеры](https://m3.material.io/components/bottom-sheets/specs) · [Рекомендации](https://m3.material.io/components/bottom-sheets/guidelines) · [Доступность](https://m3.material.io/components/bottom-sheets/accessibility)
+
+</Localized>
