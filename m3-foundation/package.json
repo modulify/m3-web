@@ -17,6 +17,11 @@
     "types"
   ],
   "exports": {
+    "./lib/bottomSheet": {
+      "types": "./dist/lib/bottomSheet/index.d.ts",
+      "import": "./dist/lib/bottomSheet.mjs",
+      "require": "./dist/lib/bottomSheet.cjs"
+    },
     "./lib/calendar": {
       "types": "./dist/lib/calendar/index.d.ts",
       "import": "./dist/lib/calendar.mjs",
