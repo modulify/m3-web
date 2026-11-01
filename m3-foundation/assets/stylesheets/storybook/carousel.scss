@@ -1,0 +1,87 @@
+@use '../basics/typography' as m3-typography;
+
+.m3-carousel-demo {
+  max-inline-size: 900px;
+  margin-inline: auto;
+
+  &__visual {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  &__tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 100%;
+    min-inline-size: 0;
+    padding: 24px;
+    overflow: hidden;
+    color: white;
+    text-shadow: 0 1px 4px #0008;
+
+    @container (max-width: 220px) {
+      padding: 16px;
+    }
+
+    @container (max-width: 150px) {
+      padding: 8px;
+    }
+  }
+
+  &__title,
+  &__label {
+    display: block;
+    min-inline-size: 0;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__title {
+    @include m3-typography.headline-small;
+
+    @container (max-width: 220px) {
+      @include m3-typography.title-large;
+    }
+
+    @container (max-width: 150px) {
+      display: none;
+    }
+  }
+
+  &__label {
+    @include m3-typography.body-medium;
+
+    @container (max-width: 150px) {
+      @include m3-typography.body-small;
+    }
+  }
+
+  &__label-full {
+    @container (max-width: 72px) {
+      display: none;
+    }
+  }
+
+  &__label-short {
+    display: none;
+
+    @container (max-width: 72px) {
+      display: block;
+      @include m3-typography.label-small;
+    }
+  }
+
+  &__list {
+    display: grid;
+    margin-block-start: 16px;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
