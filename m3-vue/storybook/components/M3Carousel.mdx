@@ -1,0 +1,179 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as Stories from './M3Carousel.stories'
+
+<Meta of={Stories} />
+
+<Localized locale="en-US">
+
+# Carousel
+
+A carousel presents a visual collection in a scrollable area. Choose its layout from the content: use multi-browse to explore many images, uncontained for regular or text-rich cards, and hero to spotlight one image. Full-screen is for immersive, vertically scrolling content on portrait compact or medium layouts.
+
+## Layouts
+
+| `variant` | Arrangement | Recommended scrolling |
+| --- | --- | --- |
+| `multi-browse` | Large, medium, and small items | Snap |
+| `uncontained` | Equal-size items that continue beyond the edge | Free or snap |
+| `uncontained-multi-aspect` | Items of different aspect ratios | Free or snap |
+| `hero` | Large item and a small preview | Snap |
+| `hero-centered` | Centered large item and previews on both sides | Snap |
+| `full-screen` | One edge-to-edge item, vertical axis | Snap |
+
+The contained layouts resize items as they move through the carousel. The small preview remains between 40 and 56px wide. The uncontained layouts keep each item's width stable. `preferred` limits the large item width or sets the uncontained item width; the layout adapts to the available space. Set `height` to the size of the visual area. The full-screen layout defaults to the viewport height; the story uses a shorter demonstration area.
+
+Item text is optional and should be brief. At compact widths, avoid more than two lines unless the background is simple. Text placement depends on the content: the example anchors it to the lower edge of the card. In contained layouts, an item can be small now and grow after scrolling. Adapt the content to its **current item width**: the example shows title and label in a large item, only the label in a medium item, and an abbreviated label in a small item. The fuller text returns when the item grows. Keep the accessible item name complete at every size.
+
+The example applies one-line ellipsis as a layout safeguard; Material does not recommend truncation as the content strategy. If an ellipsis remains when the item is large, shorten or rewrite the copy, use an uncontained layout, or use cards for text-heavy content. Check every locale at the widths where it appears.
+
+## Interaction and accessibility
+
+The carousel is a named region; each item's accessible name includes its position and the total number of items. Give the carousel a localized `aria-label`, and each item a meaningful `aria-label` or descriptive content. Tab can reach enabled items, and arrow keys move between them. Home and End move to the first and last enabled item. Pointer, touch, and trackpad scrolling use the browser's native scroll behavior.
+
+Set `interactive` when the entire item performs an action and handle its `click` event. It then has button semantics: hover adds elevation, keyboard focus shows an outer ring, and pressing slightly changes its corners and produces a ripple. Enter and Space activate the focused item. Set `disabled` to dim an unavailable item and remove it from keyboard navigation and activation. Keep an item passive when its foreground contains separate buttons or links; those controls retain their own interaction states.
+
+On a vertically scrolling page, add a visible way to browse every item in a vertical view, such as the “Show all” action below these examples. The destination page belongs to your application. Avoid placing navigation controls over the carousel content. With reduced motion enabled, items retain a fixed size and the parallax effect stops.
+
+## API
+
+| Prop | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `variant` | Six layouts above | `multi-browse` | Item composition and axis |
+| `scroll` | `'auto' \| 'snap'` | Based on layout | Free or snapping movement |
+| `preferred` | `number` | `280` | Preferred large/item width in pixels |
+| `height` | `number \| string` | `240px`, or `100dvh` for full-screen | Carousel height |
+| `index` | `number` | — | Scroll request when the value changes |
+| `positionLabel` | `(position, total) => string` | English count | Localized item position |
+| `change` event | `number` | — | Reports the nearest item during scrolling |
+
+`M3CarouselItem` is a child descriptor. Its `aspect` prop sets a width-to-height ratio in `uncontained-multi-aspect`; elsewhere item width comes from the layout. Put imagery in its `media` slot so it can move with the parallax effect. The default slot is the stable foreground layer for text and controls. Pass a complete accessible name with `aria-label`; the position is appended using `positionLabel`. The component ref exposes `el` and `goTo(index, smooth?)`. Standard HTML attributes can be passed to the carousel and its items.
+
+| Item prop | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `aspect` | `number` | `1` | Width-to-height ratio for uncontained multi-aspect layout |
+| `interactive` | `boolean` | `false` | Make the whole item actionable with button states |
+| `disabled` | `boolean` | `false` | Dim the item, remove it from the keyboard focus order, and prevent activation |
+| `click` event | `MouseEvent` | — | Action for an interactive item |
+| `media` slot | — | — | Visual layer that participates in parallax |
+
+```vue
+<M3Carousel variant="hero" :preferred="520" aria-label="Featured places">
+  <M3CarouselItem
+    v-for="place in places"
+    :key="place.id"
+    :aria-label="place.name"
+    interactive
+    @click="openPlace(place.id)"
+  >
+    <template #media>
+      <img :src="place.image" alt="" />
+    </template>
+    <span>{{ place.shortLabel }}</span>
+  </M3CarouselItem>
+</M3Carousel>
+<a href="/places">Show all places</a>
+```
+
+## Examples
+
+- [Multi-browse](?path=/story/components-m3carousel--multi-browse)
+- [Uncontained](?path=/story/components-m3carousel--uncontained)
+- [Uncontained multi-aspect](?path=/story/components-m3carousel--uncontained-multi-aspect)
+- [Hero](?path=/story/components-m3carousel--hero)
+- [Center-aligned hero](?path=/story/components-m3carousel--center-aligned-hero)
+- [Full-screen](?path=/story/components-m3carousel--full-screen)
+- [Interaction states](?path=/story/components-m3carousel--interaction-states)
+
+## Sources
+
+[Overview](https://m3.material.io/components/carousel/overview) · [Specs](https://m3.material.io/components/carousel/specs) · [Guidelines](https://m3.material.io/components/carousel/guidelines) · [Accessibility](https://m3.material.io/components/carousel/accessibility)
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Карусель
+
+Карусель показывает визуальную коллекцию в прокручиваемой области. Выбирайте компоновку по содержимому: multi-browse — для просмотра многих изображений, uncontained — для обычных карточек или карточек с текстом, hero — чтобы выделить один материал. Full-screen подходит для погружённого контента с вертикальной прокруткой на компактном или среднем экране в портретной ориентации.
+
+## Компоновки
+
+| `variant` | Расположение | Рекомендуемая прокрутка |
+| --- | --- | --- |
+| `multi-browse` | Большие, средние и малые элементы | С фиксацией |
+| `uncontained` | Элементы одинаковой ширины выходят за край | Свободная или с фиксацией |
+| `uncontained-multi-aspect` | Элементы с разными пропорциями | Свободная или с фиксацией |
+| `hero` | Большой элемент и малая часть следующего | С фиксацией |
+| `hero-centered` | Большой элемент по центру и части соседних | С фиксацией |
+| `full-screen` | Один элемент от края до края, вертикальная ось | С фиксацией |
+
+В ограниченных компоновках размер элементов меняется при прокрутке. Ширина малого элемента остаётся в диапазоне 40–56px. В uncontained ширина элементов постоянна. `preferred` ограничивает ширину большого элемента или задаёт ширину элемента uncontained; компоновка подстраивается под доступное пространство. `height` задаёт высоту визуальной области. Full-screen по умолчанию занимает высоту окна; в истории использована меньшая область для демонстрации.
+
+Текст в элементе необязателен и должен быть кратким. На компактной ширине избегайте более двух строк, если фон не простой. Положение текста зависит от содержимого: в примере он привязан к нижнему краю карточки. В ограниченных компоновках элемент может сначала быть маленьким, а после прокрутки вырасти. Адаптируйте содержимое к **текущей ширине элемента**: в примере большой элемент показывает заголовок и подпись, средний — только подпись, малый — сокращённую подпись. При расширении полный текст возвращается. Доступное имя элемента остаётся полным при любом размере.
+
+В примере однострочное троеточие страхует вёрстку; Material не предлагает обрезку как способ подбора текста. Если троеточие остаётся и на большой карточке, сократите или перепишите текст, выберите uncontained либо используйте карточки для объёмного содержимого. Проверяйте каждый язык на тех размерах, где он показывается.
+
+## Взаимодействие и доступность
+
+Карусель размечена как именованная область; доступное имя каждого элемента содержит его позицию и общее количество элементов. Задайте карусели локализованный `aria-label`, а элементам — содержательные `aria-label` либо описательное содержимое. Tab последовательно достигает доступных элементов, стрелки перемещают фокус, Home и End переходят к первому и последнему доступному элементу. Прокрутка указателем, касанием и трекпадом опирается на нативную механику браузера.
+
+Укажите `interactive`, если вся карточка выполняет действие, и обработайте событие `click`. Тогда она получает семантику кнопки: при наведении появляется тень, при фокусе с клавиатуры — внешнее кольцо, при нажатии слегка меняются углы и возникает ripple. Enter и Space активируют карточку. `disabled` приглушает недоступный элемент и исключает его из навигации с клавиатуры и активации. Если внутри карточки есть отдельные кнопки или ссылки, оставьте саму карточку пассивной: у вложенных элементов будут собственные состояния.
+
+На странице с вертикальной прокруткой добавьте видимый способ просмотреть все элементы вертикальным списком — например, кнопку «Показать все» под каруселью. Страницу назначения создаёт приложение. Не перекрывайте содержимое карусели кнопками навигации. При уменьшении движения размеры элементов остаются постоянными, а параллакс отключается.
+
+## API
+
+| Prop | Тип | Умолчание | Назначение |
+| --- | --- | --- | --- |
+| `variant` | Шесть вариантов выше | `multi-browse` | Компоновка и ось |
+| `scroll` | `'auto' \| 'snap'` | По компоновке | Свободная прокрутка либо фиксация |
+| `preferred` | `number` | `280` | Предпочтительная ширина в пикселях |
+| `height` | `number \| string` | `240px` или `100dvh` для full-screen | Высота карусели |
+| `index` | `number` | — | Запрос прокрутки при изменении значения |
+| `positionLabel` | `(position, total) => string` | Английский счёт | Локализованная позиция элемента |
+| событие `change` | `number` | — | Сообщает ближайший элемент при прокрутке |
+
+`M3CarouselItem` описывает дочерний элемент. Его `aspect` задаёт отношение ширины к высоте в `uncontained-multi-aspect`; в остальных вариантах ширину вычисляет компоновка. Поместите изображение в слот `media`, чтобы оно участвовало в параллаксе. Стандартный слот — неподвижный передний слой для текста и элементов управления. Передайте полное доступное имя через `aria-label`; позиция добавляется через `positionLabel`. Ref предоставляет `el` и `goTo(index, smooth?)`. Карусель и её элементы принимают обычные HTML-атрибуты.
+
+| Prop элемента | Тип | Умолчание | Назначение |
+| --- | --- | --- | --- |
+| `aspect` | `number` | `1` | Отношение ширины к высоте в uncontained multi-aspect |
+| `interactive` | `boolean` | `false` | Действие по всей карточке и состояния кнопки |
+| `disabled` | `boolean` | `false` | Приглушить элемент, исключить из порядка фокуса с клавиатуры и запретить активацию |
+| Событие `click` | `MouseEvent` | — | Действие интерактивной карточки |
+| Слот `media` | — | — | Слой изображения с параллаксом |
+
+```vue
+<M3Carousel variant="hero" :preferred="520" aria-label="Интересные места">
+  <M3CarouselItem
+    v-for="place in places"
+    :key="place.id"
+    :aria-label="place.name"
+    interactive
+    @click="openPlace(place.id)"
+  >
+    <template #media>
+      <img :src="place.image" alt="" />
+    </template>
+    <span>{{ place.shortLabel }}</span>
+  </M3CarouselItem>
+</M3Carousel>
+<a href="/places">Показать все места</a>
+```
+
+## Примеры
+
+- [Multi-browse](?path=/story/components-m3carousel--multi-browse)
+- [Uncontained](?path=/story/components-m3carousel--uncontained)
+- [Uncontained multi-aspect](?path=/story/components-m3carousel--uncontained-multi-aspect)
+- [Hero](?path=/story/components-m3carousel--hero)
+- [Center-aligned hero](?path=/story/components-m3carousel--center-aligned-hero)
+- [Full-screen](?path=/story/components-m3carousel--full-screen)
+- [Состояния карточек](?path=/story/components-m3carousel--interaction-states)
+
+## Источники
+
+[Обзор](https://m3.material.io/components/carousel/overview) · [Размеры](https://m3.material.io/components/carousel/specs) · [Рекомендации](https://m3.material.io/components/carousel/guidelines) · [Доступность](https://m3.material.io/components/carousel/accessibility)
+
+</Localized>

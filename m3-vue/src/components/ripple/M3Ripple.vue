@@ -58,7 +58,8 @@ const activate = (event: KeyboardEvent | MouseEvent) => {
   }
 
   const rect = el.getBoundingClientRect()
-  const center = props.centered || lastKey === 'Space'
+  const center = props.centered || lastKey === 'Space' || lastKey === 'Enter'
+  lastKey = null
 
   diameter.value = Math.max(el.clientWidth, el.clientHeight)
 
