@@ -44,7 +44,7 @@ export default defineComponent(function M3Ripple(
       return
     }
 
-    const center = state.centered || lastKey.current === 'Space'
+    const center = state.centered || lastKey.current === 'Space' || lastKey.current === 'Enter'
 
     lastKey.current = null
 
