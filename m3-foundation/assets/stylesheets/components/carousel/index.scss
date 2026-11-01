@@ -1,0 +1,166 @@
+@use '../../basics/motion' as m3-motion;
+@use '../../basics/shape' as m3-shape;
+
+.m3-carousel {
+  position: relative;
+  inline-size: 100%;
+  block-size: 240px;
+
+  &_full-screen {
+    block-size: 100dvh;
+  }
+
+  &__scroll {
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: auto hidden;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    direction: ltr;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &_full-screen &__scroll {
+    overflow: hidden auto;
+    overscroll-behavior-block: contain;
+  }
+
+  &__track {
+    position: relative;
+  }
+
+  &__stage {
+    position: sticky;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    overflow: hidden;
+  }
+
+  &_multi-browse &__stage,
+  &_hero &__stage,
+  &_hero-centered &__stage {
+    clip-path: inset(0 8px);
+  }
+
+  &__item {
+    --m3-ripple-color: var(--m3-sys-primary);
+    --m3-ripple-opacity: .2;
+
+    position: absolute;
+    inset-block-start: 8px;
+    display: block;
+    inline-size: var(--m3-carousel-size, 0px);
+    block-size: calc(100% - 16px);
+    overflow: hidden;
+    @include m3-shape.corner(28px);
+    container-type: inline-size;
+    background: var(--m3-sys-surface-container-high);
+    color: var(--m3-sys-on-surface);
+    outline: none;
+    transform: translate3d(var(--m3-carousel-offset, 0px), 0, 0);
+    transition: m3-motion.timing-expressive-fast-spatial(border-radius);
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  &__item:not(&__item_disabled):focus-visible {
+    box-shadow: 0 0 0 2px var(--m3-sys-surface), 0 0 0 5px var(--m3-sys-secondary);
+  }
+
+  &__item_interactive {
+    cursor: pointer;
+  }
+
+  &__item_interactive:not(&__item_disabled):hover:not(:focus-visible) {
+    box-shadow: var(--m3-elevation-2);
+  }
+
+  &__item_interactive:not(&__item_disabled):is(:active, &__item_pressed) {
+    @include m3-shape.corner(24px);
+  }
+
+  &__item_disabled {
+    opacity: .38;
+    cursor: default;
+  }
+
+  &__item_disabled:active {
+    cursor: default;
+  }
+
+  &__state {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    @include m3-shape.corner(inherit);
+    pointer-events: none;
+  }
+
+  &__item_interactive:not(&__item_disabled):hover &__state {
+    background: color-mix(in srgb, var(--m3-sys-on-surface) 8%, transparent);
+  }
+
+  &__item_interactive:not(&__item_disabled):focus-visible &__state {
+    background: color-mix(in srgb, var(--m3-sys-on-surface) 10%, transparent);
+  }
+
+  &__item_interactive:not(&__item_disabled):is(:active, &__item_pressed) &__state {
+    background: transparent;
+  }
+
+  &__media {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: calc(100% + 40px);
+    min-inline-size: calc(var(--m3-carousel-large, 0px) + 40px);
+    block-size: 100%;
+    transform: translate3d(calc(-20px + var(--m3-carousel-parallax, 0px)), 0, 0);
+
+    @media (prefers-reduced-motion: reduce) {
+      transform: none;
+    }
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  &_uncontained &__media,
+  &_uncontained-multi-aspect &__media {
+    min-inline-size: calc(100% + 40px);
+  }
+
+  &_full-screen &__item {
+    inset-block-start: 0;
+    inline-size: 100%;
+    block-size: var(--m3-carousel-size, 0px);
+    @include m3-shape.corner(0);
+    transform: translate3d(0, var(--m3-carousel-offset, 0px), 0);
+  }
+
+  &_full-screen &__item_interactive:not(&__item_disabled):is(:active, &__item_pressed) {
+    @include m3-shape.corner(0);
+  }
+
+  &_full-screen &__media {
+    inline-size: 100%;
+    min-inline-size: 100%;
+    block-size: 100%;
+    transform: none;
+  }
+}

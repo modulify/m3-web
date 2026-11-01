@@ -17,6 +17,11 @@
     "types"
   ],
   "exports": {
+    "./lib/carousel": {
+      "types": "./dist/lib/carousel/index.d.ts",
+      "import": "./dist/lib/carousel.mjs",
+      "require": "./dist/lib/carousel.cjs"
+    },
     "./lib/bottomSheet": {
       "types": "./dist/lib/bottomSheet/index.d.ts",
       "import": "./dist/lib/bottomSheet.mjs",
