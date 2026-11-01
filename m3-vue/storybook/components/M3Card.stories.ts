@@ -54,7 +54,7 @@ const meta = {
     template: `
         <M3Card v-bind="args" landscape>
             <template #media>
-                <img alt="" src="/assets/image-80x80.png">
+                <img alt="" src="assets/image-80x80.png">
             </template>
 
             <template #heading>
@@ -125,7 +125,7 @@ export const Portrait: Story = {
     template: `
         <M3Card v-bind="args">
             <template #media>
-                <img alt="" src="/assets/image-720x376.png">
+                <img alt="" src="assets/image-720x376.png">
             </template>
 
             <template #heading>

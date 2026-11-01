@@ -108,7 +108,7 @@ const renderStory = (args: StoryArgs, locale: unknown, disabledIndex = -1) => ({
     const selected = ref<string>()
     const items = text.items.map((title, index) => ({
       title,
-      src: `/storybook-assets/carousel/${images[index]}.webp`,
+      src: `storybook-assets/carousel/${images[index]}.webp`,
       aspect: aspects[index],
       disabled: index === disabledIndex,
     }))
