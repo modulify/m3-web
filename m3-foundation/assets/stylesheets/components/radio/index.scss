@@ -2,20 +2,20 @@
 @use "../../basics/shape" as m3-shape;
 
 .m3-radio {
-  --state-color: var(--m3-sys-primary);
+  --state-color: var(--m3-sys-on-surface);
   --outline-color: var(--m3-sys-on-surface-variant);
   --dot-scale: 0;
 
-  --m3-ripple-color: var(--m3-sys-primary);
+  --m3-ripple-color: var(--state-color);
   --m3-ripple-effect-duration: 0.75s;
   --m3-ripple-opacity: 0.2;
 
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
-  inline-size: 40px;
-  block-size: 40px;
-  padding: 8px;
+  inline-size: 48px;
+  block-size: 48px;
+  padding: 12px;
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
@@ -25,6 +25,7 @@
   @include m3-shape.reset-box-sizing;
 
   &_checked {
+    --state-color: var(--m3-sys-primary);
     --outline-color: var(--state-color);
     --dot-scale: 1;
   }
@@ -32,13 +33,20 @@
   &_invalid {
     --state-color: var(--m3-sys-error);
     --outline-color: var(--m3-sys-error);
-    --m3-ripple-color: var(--m3-sys-error);
+  }
+
+  &_disabled {
+    --state-color: color-mix(in srgb, var(--m3-sys-on-surface) 38%, transparent);
+    --outline-color: var(--state-color);
+
+    cursor: default;
   }
 
   &__input {
     inline-size: 100%;
     block-size: 100%;
     appearance: none;
+    background: transparent;
     cursor: inherit;
     outline: none;
     position: absolute;
@@ -87,19 +95,23 @@
     }
   }
 
+  &__ripple,
   &__state {
     display: inline-block;
-    inline-size: 100%;
-    block-size: 100%;
+    inline-size: 40px;
+    block-size: 40px;
     border-radius: inherit;
-    opacity: 0;
     overflow: hidden;
+    position: absolute;
+    inset-inline-start: 4px;
+    inset-block-start: 4px;
+    z-index: 0;
+  }
+
+  &__state {
+    opacity: 0;
     animation: m3-motion.timing-standard(m3-animation-zoom-out);
     animation-fill-mode: forwards;
-    z-index: 0;
-    position: absolute;
-    inset-inline-start: 0;
-    inset-block-start: 0;
 
     &::before {
       content: ' ';
@@ -115,25 +127,19 @@
     }
   }
 
-  &__input:hover ~ &__state,
-  &__input:focus ~ &__state {
+  &__input:not(:disabled):hover ~ &__state,
+  &__input:not(:disabled):focus-visible ~ &__state,
+  &__input:not(:disabled):active ~ &__state {
     animation: m3-motion.timing-standard(m3-animation-zoom-in);
     animation-fill-mode: forwards;
   }
 
-  &__input:hover ~ &__state::before { opacity: 0.08; }
-  &__input:focus ~ &__state::before { opacity: 0.12; }
+  &__input:not(:disabled):hover ~ &__state::before { opacity: 0.08; }
+  &__input:not(:disabled):focus-visible ~ &__state::before,
+  &__input:not(:disabled):active ~ &__state::before { opacity: 0.12; }
 
-  &_disabled {
-    cursor: default;
-  }
-
-  &_disabled &__icon::before {
-    border-color: color-mix(in srgb, var(--outline-color) 38%, transparent);
-  }
-
-  &_checked#{&}_disabled &__icon::after {
-    background-color: color-mix(in srgb, var(--state-color) 38%, transparent);
+  &__input:not(:disabled):focus-visible ~ &__state {
+    outline: 3px solid var(--m3-sys-secondary);
   }
 
   &_disabled &__state::before {
