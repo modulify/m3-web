@@ -159,6 +159,7 @@ test('submenu keyboard directions follow RTL layout', async () => {
   const previousDirection = document.dir
   document.dir = 'rtl'
   const trigger = document.createElement('button')
+  trigger.textContent = 'Open menu'
   document.body.append(trigger)
   const view = render(<M3Menu target={trigger}>
     <M3MenuItem>
