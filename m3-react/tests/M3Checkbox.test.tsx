@@ -62,8 +62,34 @@ describe('m3-react/checkbox', () => {
     const { container } = render(<M3Checkbox model={false} indeterminate disabled onChange={onChange} />)
     const input = screen.getByRole('checkbox') as HTMLInputElement
     expect(input.disabled).toBe(true)
+    expect(input.indeterminate).toBe(true)
+    expect(input.getAttribute('aria-checked')).toBe('mixed')
     expect(container.querySelector('.m3-checkbox_indeterminate')).not.toBeNull()
+    expect(container.querySelector('.m3-ripple')).toBeNull()
     input.click()
     expect(onChange).not.toHaveBeenCalled()
+  })
+
+  test('syncs the native mixed state and forwards the form name', () => {
+    const { rerender } = render(<M3Checkbox name="topics" model={false} indeterminate />)
+    const input = screen.getByRole('checkbox') as HTMLInputElement
+
+    expect(input.name).toBe('topics')
+    expect(input.indeterminate).toBe(true)
+    expect(input.getAttribute('aria-checked')).toBe('mixed')
+
+    rerender(<M3Checkbox name="topics" model={false} indeterminate={false} />)
+
+    expect(input.indeterminate).toBe(false)
+    expect(input.getAttribute('aria-checked')).toBe('false')
+  })
+
+  test('selects an indeterminate checkbox on activation', () => {
+    const onChange = vi.fn()
+    render(<M3Checkbox model={false} indeterminate onChange={onChange} />)
+
+    fireEvent.click(screen.getByRole('checkbox'))
+
+    expect(onChange).toHaveBeenCalledWith(true)
   })
 })

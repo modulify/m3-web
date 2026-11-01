@@ -37,4 +37,17 @@ describe('m3-react/radio', () => {
 
     expect((screen.getByRole('radio') as HTMLInputElement).checked).toBe(true)
   })
+
+  test('does not activate a disabled radio or its ripple', () => {
+    const onChange = vi.fn()
+    const { container } = render(<M3Radio model={true} disabled onChange={onChange} />)
+    const input = screen.getByRole('radio') as HTMLInputElement
+
+    expect(input.disabled).toBe(true)
+    expect(container.querySelector('.m3-ripple')).toBeNull()
+
+    input.click()
+
+    expect(onChange).not.toHaveBeenCalled()
+  })
 })
