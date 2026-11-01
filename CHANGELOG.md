@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.2
+
+### Bug Fixes
+
+* **m3-react:** Storybook asset URLs were corrected ([bf8f544](https://github.com/modulify/m3-web/commit/bf8f54466be9696c7460eb39ec9f9dc35d6c49f7))
+* **m3-vue:** Storybook asset URLs were corrected ([4a05f67](https://github.com/modulify/m3-web/commit/4a05f67eacd30d2f48d642371aca695167781fb8))
+* Vulnerable toolchain dependencies were updated ([0529469](https://github.com/modulify/m3-web/commit/052946968e63637d8e799ff9179dd372abee845a))
+
 ## 0.3.1
 
 ### Features
