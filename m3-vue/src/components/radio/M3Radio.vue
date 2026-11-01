@@ -9,8 +9,6 @@
         }"
         v-bind="$attrs"
     >
-        <M3Ripple :owner="ref(root)" />
-
         <input
             :id="_id"
             ref="_input"
@@ -26,6 +24,9 @@
         />
 
         <span aria-hidden="true" class="m3-radio__state" />
+        <span ref="rippleSurface" aria-hidden="true" class="m3-radio__ripple">
+            <M3Ripple v-if="!disabled" :owner="ref(root)" :surface="rippleSurface" />
+        </span>
         <span aria-hidden="true" class="m3-radio__icon" />
     </span>
 </template>
@@ -49,6 +50,7 @@ const emit = defineEmits<{
 }>()
 
 const root = ref<HTMLElement | null>(null)
+const rippleSurface = ref<HTMLElement | null>(null)
 
 const _id = useId('m3-radio', computed(() => props.id))
 const _input = ref<HTMLInputElement | null>(null)
@@ -65,7 +67,7 @@ const equals = (a: Value | undefined, b: Value) => props.equalsFn?.call(null, a,
 const checked = computed(() => equals(props.model, value.value))
 
 const onChange = (event: Event) => {
-  if (!(event.target as HTMLInputElement).checked) {
+  if (props.disabled || !(event.target as HTMLInputElement).checked) {
     return
   }
 
