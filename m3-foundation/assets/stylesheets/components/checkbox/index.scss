@@ -3,17 +3,18 @@
 
 .m3-checkbox {
   --state-color: var(--m3-sys-on-surface);
+  --outline-color: var(--m3-sys-on-surface-variant);
 
-  --m3-ripple-color: var(--m3-sys-primary);
+  --m3-ripple-color: var(--state-color);
   --m3-ripple-effect-duration: 0.75s;
   --m3-ripple-opacity: 0.2;
 
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
-  inline-size: 40px;
-  block-size: 40px;
-  padding: 8px;
+  inline-size: 48px;
+  block-size: 48px;
+  padding: 12px;
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
@@ -25,13 +26,11 @@
   &_checked,
   &_indeterminate {
     --state-color: var(--m3-sys-primary);
-    --m3-ripple-color: var(--m3-sys-on-surface);
     color: var(--m3-sys-on-primary);
   }
 
   &_invalid {
     --state-color: var(--m3-sys-error);
-    --m3-ripple-color: var(--m3-sys-error);
   }
 
   &_checked#{&}_invalid,
@@ -39,10 +38,19 @@
     color: var(--m3-sys-on-error);
   }
 
+  &_disabled {
+    --state-color: color-mix(in srgb, var(--m3-sys-on-surface) 38%, transparent);
+    --outline-color: var(--state-color);
+
+    color: var(--m3-sys-surface);
+    cursor: default;
+  }
+
   &__input {
     inline-size: 100%;
     block-size: 100%;
     appearance: none;
+    background: transparent;
     cursor: inherit;
     outline: none;
     position: absolute;
@@ -64,7 +72,7 @@
       display: inline-block;
       inline-size: 18px;
       block-size: 18px;
-      border: 2px solid var(--m3-sys-on-surface-variant);
+      border: 2px solid var(--outline-color);
       border-radius: 2px;
       position: absolute;
       inset-inline-start: 3px;
@@ -94,19 +102,27 @@
     border-color: var(--state-color);
   }
 
+  &_disabled &__checkmark::before {
+    border-color: var(--outline-color);
+  }
+
+  &__ripple,
   &__state {
     display: inline-block;
-    inline-size: 100%;
-    block-size: 100%;
+    inline-size: 40px;
+    block-size: 40px;
     border-radius: inherit;
-    opacity: 0;
     overflow: hidden;
+    position: absolute;
+    inset-inline-start: 4px;
+    inset-block-start: 4px;
+    z-index: 0;
+  }
+
+  &__state {
+    opacity: 0;
     animation: m3-motion.timing-standard(m3-animation-zoom-out);
     animation-fill-mode: forwards;
-    z-index: 0;
-    position: absolute;
-    inset-inline-start: 0;
-    inset-block-start: 0;
 
     &::before {
       content: ' ';
@@ -122,14 +138,20 @@
     }
   }
 
-  &__input:hover ~ &__state,
-  &__input:focus ~ &__state {
+  &__input:not(:disabled):hover ~ &__state,
+  &__input:not(:disabled):focus-visible ~ &__state,
+  &__input:not(:disabled):active ~ &__state {
     animation: m3-motion.timing-standard(m3-animation-zoom-in);
     animation-fill-mode: forwards;
   }
 
-  &__input:hover ~ &__state::before { opacity: 0.08; }
-  &__input:focus ~ &__state::before { opacity: 0.12; }
+  &__input:not(:disabled):hover ~ &__state::before { opacity: 0.08; }
+  &__input:not(:disabled):focus-visible ~ &__state::before,
+  &__input:not(:disabled):active ~ &__state::before { opacity: 0.12; }
+
+  &__input:not(:disabled):focus-visible ~ &__state {
+    outline: 3px solid var(--m3-sys-secondary);
+  }
 
   &_disabled &__state::before {
     background: transparent;
