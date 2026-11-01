@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.3.1
+
+### Features
+
+* **m3-foundation:** Added progress geometry and styles ([8ca4973](https://github.com/modulify/m3-web/commit/8ca4973037c005021785cb287316130285791fc7))
+* **m3-react:** Added progress components and Storybook guides ([d31ed39](https://github.com/modulify/m3-web/commit/d31ed395480992f5f388dffd4d33bb386880b3a6))
+* **m3-vue:** Added progress components and Storybook guides ([43ebb0d](https://github.com/modulify/m3-web/commit/43ebb0dbaa41849069a6d140b4897686a8740f98)), closes [#19]({{host}}/{{owner}}/{{repository}}/issues/{{id}})
+* **m3-foundation:** Bottom sheet geometry and styles were added ([b9dd280](https://github.com/modulify/m3-web/commit/b9dd2800c2fd280b9fbb2c59a69de186a63d0431))
+* **m3-react:** Bottom sheet component and guides were added ([fc38ded](https://github.com/modulify/m3-web/commit/fc38ded89802530dde8ff4c26500cbe698787b6a))
+* **m3-vue:** Bottom sheet component and guides were added ([f4dec27](https://github.com/modulify/m3-web/commit/f4dec2750b828d9801301b38f77169e74a72b5aa)), closes [#13]({{host}}/{{owner}}/{{repository}}/issues/{{id}})
+* **m3-foundation:** Carousel geometry and styles were added ([d83ba55](https://github.com/modulify/m3-web/commit/d83ba55456f58337fbc7006d14e4e51c3860bae4))
+* Carousel story images were added ([15c49d7](https://github.com/modulify/m3-web/commit/15c49d7f2a6fd0bacf1b172ec3f8ee53193163f6))
+* **m3-react:** Carousel component and guides were added ([05a7263](https://github.com/modulify/m3-web/commit/05a72631ac653e142d9c23225a9961279089eadb))
+* **m3-vue:** Carousel component and guides were added ([aa99983](https://github.com/modulify/m3-web/commit/aa999832e4733806741ea16b5ad4063f1ddf22ea)), closes [#14]({{host}}/{{owner}}/{{repository}}/issues/{{id}})
+
+### Bug Fixes
+
+* **m3-foundation:** Selection control states were corrected ([1a169a8](https://github.com/modulify/m3-web/commit/1a169a808e084ec2a290205e12695aa1e8d90c19))
+* **m3-react:** Radio and checkbox states were corrected ([5de8f17](https://github.com/modulify/m3-web/commit/5de8f1729d02e8542f4aa2ee71773939c1e71373))
+* **m3-vue:** Radio and checkbox states were corrected ([e8ed770](https://github.com/modulify/m3-web/commit/e8ed770830e9a830584a5042dcfbd0cf6c4e1042))
+
 ## 0.3.0
 
 ### ⚠ BREAKING CHANGE* **m3-vue:** Expressive menu behavior was added
