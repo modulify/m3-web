@@ -71,7 +71,7 @@ const CarouselStory = ({ locale, disabledIndex = -1, ...args }: StoryProps) => {
   return <div className="m3-carousel-demo" style={{ maxInlineSize: width }}>
     <M3Carousel aria-label={text.label} positionLabel={text.position} {...args}>
       {text.items.map((title, index) => {
-        const src = `/storybook-assets/carousel/${images[index]}.webp`
+        const src = `storybook-assets/carousel/${images[index]}.webp`
 
         return <M3CarouselItem
           key={title}

@@ -49,7 +49,7 @@ const meta = {
 
     return <M3Card landscape {...args}>
       <M3Card.Media>
-        <img alt="" src="/assets/image-80x80.png"/>
+        <img alt="" src="assets/image-80x80.png"/>
       </M3Card.Media>
       <M3Card.Heading>{text.header}</M3Card.Heading>
       <M3Card.Subheading>{text.subhead}</M3Card.Subheading>
@@ -94,7 +94,7 @@ export const Portrait: Story = {
 
     return <M3Card {...args}>
       <M3Card.Media>
-        <img alt="" src="/assets/image-720x376.png" />
+        <img alt="" src="assets/image-720x376.png" />
       </M3Card.Media>
 
       <M3Card.Heading>
