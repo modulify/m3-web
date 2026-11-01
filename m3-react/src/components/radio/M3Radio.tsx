@@ -2,7 +2,6 @@ import type { ComponentSetupContext } from '@/utils/component'
 import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { HTMLAttributes } from 'react'
 import type { Interactable } from '@modulify/m3-foundation/types/dom'
-import type { M3RippleExposed } from '@/components/ripple'
 import type { Ref } from 'react'
 
 import { useCallback, useMemo, useRef } from 'react'
@@ -51,22 +50,24 @@ export default defineComponent(function M3Radio<Value = boolean>({
   const { expose } = requireComponentSetupContext(context)
   const root = useRef<HTMLElement | null>(null)
   const input = useRef<HTMLInputElement | null>(null)
-  const ripple = useRef<M3RippleExposed | null>(null)
+  const rippleElement = useRef<HTMLElement | null>(null)
   const [rippleTarget, setRippleTarget] = useTarget<HTMLElement>()
+  const [rippleSurface, setRippleSurface] = useTarget<HTMLElement>()
   const interactable = useInteractable(root, input)
 
   expose(interactable)
 
   useElementEffect(root, setRippleTarget)
+  useElementEffect(rippleElement, setRippleSurface)
 
   const checked = useMemo(() => equalsFn(model, value), [equalsFn, model, value])
   const inputId = useId(id, 'm3-radio')
 
   const handleChange = useCallback((nextChecked: boolean) => {
-    if (nextChecked) {
+    if (nextChecked && !disabled) {
       onChange(value)
     }
-  }, [onChange, value])
+  }, [disabled, onChange, value])
 
   return (
     <span
@@ -79,8 +80,6 @@ export default defineComponent(function M3Radio<Value = boolean>({
       }])}
       {...args}
     >
-      <M3Ripple ref={ripple} owner={rippleTarget} />
-
       <input
         ref={input}
         id={inputId}
@@ -96,6 +95,9 @@ export default defineComponent(function M3Radio<Value = boolean>({
       />
 
       <span aria-hidden={true} className="m3-radio__state" />
+      <span ref={rippleElement} aria-hidden={true} className="m3-radio__ripple">
+        {!disabled && <M3Ripple owner={rippleTarget} surface={rippleSurface} />}
+      </span>
       <span aria-hidden={true} className="m3-radio__icon" />
     </span>
   )

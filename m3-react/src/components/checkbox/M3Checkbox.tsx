@@ -2,10 +2,14 @@ import type { ComponentSetupContext } from '@/utils/component'
 import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { HTMLAttributes } from 'react'
 import type { Interactable } from '@modulify/m3-foundation/types/dom'
-import type { M3RippleExposed } from '@/components/ripple'
 import type { Ref } from 'react'
 
-import { useCallback, useMemo, useRef } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react'
 
 import { M3Ripple } from '@/components/ripple'
 
@@ -25,6 +29,7 @@ export interface M3CheckboxProps<Model = boolean, Value = unknown>
   extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
   ref?: Ref<M3CheckboxExposed>;
   id?: string;
+  name?: string;
   model?: Model;
   value?: Value;
   indeterminate?: boolean;
@@ -45,6 +50,7 @@ const isArray = Array.isArray
 export default defineComponent(function M3Checkbox<Model = boolean, Value = unknown>({
   ref: _ref,
   id,
+  name,
   model,
   value,
   indeterminate = false,
@@ -60,13 +66,15 @@ export default defineComponent(function M3Checkbox<Model = boolean, Value = unkn
   const { expose } = requireComponentSetupContext(context)
   const root = useRef<HTMLElement | null>(null)
   const input = useRef<HTMLInputElement | null>(null)
-  const ripple = useRef<M3RippleExposed | null>(null)
+  const rippleElement = useRef<HTMLElement | null>(null)
   const [rippleTarget, setRippleTarget] = useTarget<HTMLElement>()
+  const [rippleSurface, setRippleSurface] = useTarget<HTMLElement>()
   const interactable = useInteractable(root, input)
 
   expose(interactable)
 
   useElementEffect(root, setRippleTarget)
+  useElementEffect(rippleElement, setRippleSurface)
 
   const contains = useCallback((array: unknown[], value: unknown) => {
     return array.some(v => equalsFn(v, value))
@@ -74,7 +82,11 @@ export default defineComponent(function M3Checkbox<Model = boolean, Value = unkn
 
   const checked = useMemo(() => {
     return isArray(model) ? contains(model, value) : equalsFn(model, trueValue)
-  }, [model, value, trueValue])
+  }, [model, value, trueValue, contains, equalsFn])
+
+  useEffect(() => {
+    if (input.current) input.current.indeterminate = indeterminate
+  }, [indeterminate])
 
   const calculate = useCallback((checked: boolean): Model => {
     if (isArray(model)) {
@@ -84,7 +96,7 @@ export default defineComponent(function M3Checkbox<Model = boolean, Value = unkn
     }
 
     return checked ? trueValue : falseValue
-  }, [model, contains, checked, trueValue, falseValue])
+  }, [model, contains, value, equalsFn, trueValue, falseValue])
 
   return (
     <span
@@ -98,22 +110,24 @@ export default defineComponent(function M3Checkbox<Model = boolean, Value = unkn
       }])}
       {...args}
     >
-      <M3Ripple ref={ripple} owner={rippleTarget} />
-
       <input
         ref={input}
         id={useId(id, 'm3-checkbox')}
-        aria-checked={checked}
+        name={name}
+        aria-checked={indeterminate ? 'mixed' : checked}
         aria-disabled={disabled}
         aria-invalid={invalid}
         checked={checked}
         disabled={disabled}
         type="checkbox"
         className="m3-checkbox__input"
-        onChange={() => onChange(calculate(!checked))}
+        onChange={() => !disabled && onChange(calculate(!checked))}
       />
 
       <span aria-hidden={true} className="m3-checkbox__state" />
+      <span ref={rippleElement} aria-hidden={true} className="m3-checkbox__ripple">
+        {!disabled && <M3Ripple owner={rippleTarget} surface={rippleSurface} />}
+      </span>
       <span aria-hidden={true} className="m3-checkbox__checkmark">
         {indeterminate
           ? <IconIndeterminate />
