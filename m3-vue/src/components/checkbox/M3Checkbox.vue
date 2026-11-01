@@ -10,13 +10,13 @@
         }"
         v-bind="$attrs"
     >
-        <M3Ripple :owner="ref(root)" />
-
         <input
             :id="_id"
             ref="_input"
+            v-indeterminate="indeterminate"
             :name="_name"
-            :aria-checked="checked ? 'true' : 'false'"
+            :aria-checked="indeterminate ? 'mixed' : checked ? 'true' : 'false'"
+            :aria-disabled="disabled ? 'true' : 'false'"
             :aria-invalid="invalid ? 'true' : 'false'"
             :value="value"
             :checked="checked"
@@ -27,6 +27,9 @@
         />
 
         <span aria-hidden="true" class="m3-checkbox__state" />
+        <span ref="rippleSurface" aria-hidden="true" class="m3-checkbox__ripple">
+            <M3Ripple v-if="!disabled" :owner="ref(root)" :surface="rippleSurface" />
+        </span>
         <span aria-hidden="true" class="m3-checkbox__checkmark">
             <IconIndeterminate v-if="indeterminate" />
             <IconCheckmark v-else-if="checked" />
@@ -37,6 +40,8 @@
 <script lang="ts" setup generic="Model = boolean, Value = unknown">
 import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
 import type { M3CheckboxProps } from './types'
+
+import type { FunctionDirective } from 'vue'
 
 import { computed } from 'vue'
 import { isArray } from '@modulify/validator/predicates'
@@ -59,12 +64,17 @@ const emit = defineEmits<{
 }>()
 
 const root = ref<HTMLElement | null>(null)
+const rippleSurface = ref<HTMLElement | null>(null)
 
 const _id = useId('m3-checkbox', computed(() => props.id))
 const _name = computed(() => props.name ?? _id.value)
 const _input = ref<HTMLInputElement | null>(null)
 const trueValue = computed((): Model => props.trueValue === undefined ? true as Model : props.trueValue)
 const falseValue = computed((): Model => props.falseValue === undefined ? false as Model : props.falseValue)
+
+const vIndeterminate: FunctionDirective<HTMLInputElement, boolean> = (element, binding) => {
+  element.indeterminate = binding.value
+}
 
 defineExpose({
   get el () { return root.value },
@@ -93,6 +103,8 @@ const calculate = (checked: boolean): Model => {
 }
 
 const onChange = (event: Event) => {
+  if (props.disabled) return
+
   const value = calculate((event.target as HTMLInputElement).checked)
 
   emit('change', value)

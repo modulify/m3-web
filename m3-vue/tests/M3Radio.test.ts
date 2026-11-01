@@ -35,4 +35,18 @@ describe('m3-vue/radio', () => {
 
     expect((screen.getByRole('radio') as HTMLInputElement).checked).toBe(true)
   })
+
+  test('does not activate a disabled radio or its ripple', async () => {
+    const view = render(M3Radio, {
+      props: { model: true, disabled: true },
+    })
+    const input = screen.getByRole('radio') as HTMLInputElement
+
+    expect(input.disabled).toBe(true)
+    expect(view.container.querySelector('.m3-ripple')).toBeNull()
+
+    await fireEvent.click(input)
+
+    expect(view.emitted().change).toBeUndefined()
+  })
 })
