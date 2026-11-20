@@ -13,7 +13,7 @@ services:
 
   storybook-react:
     <<: *node
-    command: 'yarn storybook'
+    command: 'yarn storybook --host 0.0.0.0'
     working_dir: /project/m3-react
     environment:
       STORYBOOK_ALLOWED_HOSTS: '.modulify.test'
@@ -27,7 +27,7 @@ services:
 
   storybook-vue:
     <<: *node
-    command: 'yarn storybook'
+    command: 'yarn storybook --host 0.0.0.0'
     working_dir: /project/m3-vue
     environment:
       STORYBOOK_ALLOWED_HOSTS: '.modulify.test'
