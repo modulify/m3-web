@@ -38,14 +38,8 @@
     @include m3-typography.body-large;
   }
 
-  &__trigger:hover {
-    background: color-mix(in srgb, var(--m3-sys-on-surface) 8%, transparent);
-  }
-
-  &__trigger:active {
-    background: color-mix(in srgb, var(--m3-sys-on-surface) 12%, transparent);
-  }
-
+  &__trigger:hover  { background: color-mix(in srgb, var(--m3-sys-on-surface) 8%, transparent); }
+  &__trigger:active { background: color-mix(in srgb, var(--m3-sys-on-surface) 12%, transparent); }
   &__trigger:focus-visible {
     outline: 2px solid var(--m3-sys-secondary);
     outline-offset: -4px;
@@ -55,10 +49,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
 
-  &__trigger-text_filled {
-    color: var(--m3-sys-on-surface);
+    &_filled {
+      color: var(--m3-sys-on-surface);
+    }
   }
 
   &__trigger-icon {
@@ -126,37 +120,37 @@
     overflow: hidden;
     pointer-events: auto;
     position: absolute;
-  }
 
-  &__view_full-screen {
-    inline-size: 100%;
-    block-size: 100%;
-    inset: 0;
-  }
+    &_full-screen {
+      inline-size: 100%;
+      block-size: 100%;
+      inset: 0;
+    }
 
-  &__view_docked {
-    inline-size: var(--m3-search-docked-width, 360px);
-    min-block-size: min(240px, calc(100dvh - var(--m3-search-docked-top, 12px) - 12px));
-    max-block-size: min(66.667dvh, calc(100dvh - var(--m3-search-docked-top, 12px) - 12px));
-    border-radius: 28px;
-    left: var(--m3-search-docked-left, 12px);
-    top: var(--m3-search-docked-top, 12px);
-  }
+    &_docked {
+      inline-size: var(--m3-search-docked-width, 360px);
+      min-block-size: min(240px, calc(100dvh - var(--m3-search-docked-top, 12px) - 12px));
+      max-block-size: min(66.667dvh, calc(100dvh - var(--m3-search-docked-top, 12px) - 12px));
+      border-radius: 28px;
+      left: var(--m3-search-docked-left, 12px);
+      top: var(--m3-search-docked-top, 12px);
+    }
 
-  &__view_contained {
-    gap: 2px;
-    clip-path: inset(0 0 0 0 round 0px);
-  }
+    &_contained {
+      gap: 2px;
+      clip-path: inset(0 0 0 0 round 0px);
+    }
 
-  &__view_contained.m3-search__view_full-screen {
-    padding: 12px;
-    background: var(--m3-sys-surface-container-low);
-    box-shadow: none;
-  }
+    &_contained#{&}_full-screen {
+      padding: 12px;
+      background: var(--m3-sys-surface-container-low);
+      box-shadow: none;
+    }
 
-  &__view_contained.m3-search__view_docked {
-    background: transparent;
-    box-shadow: none;
+    &_contained#{&}_docked {
+      background: transparent;
+      box-shadow: none;
+    }
   }
 
   &__header {
