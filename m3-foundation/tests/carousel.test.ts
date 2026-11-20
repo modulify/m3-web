@@ -289,3 +289,80 @@ test('free scrolling stays free and a native drag is blocked only during a mouse
   expect(viewport.scrollLeft).toBeCloseTo(174.3)
   controller.dispose()
 })
+
+test('vertical panning uses the pointer Y coordinate and honors the release threshold', () => {
+  vi.useFakeTimers()
+  const { root, viewport, items } = createCarousel()
+  const controller = attachCarousel(root, { variant: 'full-screen', scroll: 'snap', preferred: 280 })
+
+  items[0].dispatchEvent(pointer('pointerdown', 200))
+  window.dispatchEvent(pointer('pointermove', 198))
+  expect(viewport.scrollTop).toBe(0)
+  window.dispatchEvent(pointer('pointermove', 140))
+  expect(viewport.scrollTop).toBe(60)
+  window.dispatchEvent(pointer('pointerup', 140))
+  expect(viewport.scrollTop).toBe(256)
+
+  items[1].dispatchEvent(pointer('pointerdown', 140))
+  window.dispatchEvent(pointer('pointermove', 150))
+  window.dispatchEvent(pointer('pointerup', 150))
+  expect(viewport.scrollTop).toBe(246)
+  vi.advanceTimersByTime(100)
+  expect(viewport.scrollTop).toBe(256)
+
+  controller.dispose()
+})
+
+test('keyboard controls respect disabled items, boundaries, and Space activation', () => {
+  const { root, viewport, items } = createCarousel()
+  items[0].classList.add('m3-carousel__item_interactive')
+  items[1].setAttribute('aria-disabled', 'true')
+  const onClick = vi.fn()
+  items[0].addEventListener('click', onClick)
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+
+  items[0].dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }))
+  expect(items[0].classList.contains('m3-carousel__item_pressed')).toBe(true)
+  items[0].dispatchEvent(new KeyboardEvent('keyup', { key: ' ', bubbles: true }))
+  expect(onClick).toHaveBeenCalledOnce()
+
+  items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
+  expect(document.activeElement).toBe(items[2])
+  items[2].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }))
+  expect(document.activeElement).toBe(items[0])
+  items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }))
+  expect(document.activeElement).toBe(items[0])
+  expect(viewport.scrollLeft).toBe(0)
+
+  items[0].setAttribute('aria-disabled', 'true')
+  items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+  expect(items[0].classList.contains('m3-carousel__item_pressed')).toBe(false)
+  items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }))
+  expect(onClick).toHaveBeenCalledOnce()
+
+  controller.dispose()
+})
+
+test('remeasures when items are added and keeps the selected item after a size change', () => {
+  const { root, viewport, items, resize } = createCarousel()
+  const onChange = vi.fn()
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280, onChange })
+
+  controller.goTo(1, false)
+  resize()
+  expect(onChange).toHaveBeenLastCalledWith(1)
+  const current = viewport.scrollLeft
+
+  const extra = document.createElement('div')
+  extra.className = 'm3-carousel__item'
+  extra.tabIndex = 0
+  items[1].after(extra)
+  Object.defineProperty(root, 'clientWidth', { configurable: true, value: 420 })
+  resize()
+
+  expect(extra.dataset.scale).toBeDefined()
+  expect(viewport.scrollLeft).not.toBe(current)
+  expect(onChange).toHaveBeenLastCalledWith(1)
+
+  controller.dispose()
+})
