@@ -107,3 +107,34 @@ test('activates interactive items with pointer and keyboard and skips disabled i
   await fireEvent.keyUp(items[1], { key: 'Enter' })
   expect(disabled).not.toHaveBeenCalled()
 })
+
+test('uses the requested position, height, and item labels as props change', async () => {
+  const view = render(M3Carousel, {
+    props: {
+      variant: 'uncontained',
+      index: 1,
+      height: 240,
+      positionLabel: (position: number, total: number) => `${position}/${total}`,
+    },
+    slots: { default: () => [
+      h(M3CarouselItem, null, { default: () => 'First' }),
+      h(M3CarouselItem, { 'aria-label': 'Second' }, { default: () => 'Second' }),
+      h(M3CarouselItem, { 'aria-label': 'Third' }, { default: () => 'Third' }),
+    ] },
+  })
+  await nextTick()
+
+  const region = screen.getByRole('region', { name: 'Carousel' })
+  Object.defineProperty(region, 'clientHeight', { configurable: true, value: 240 })
+  expect(region.style.height).toBe('240px')
+  expect(screen.getAllByRole('group').map(item => item.getAttribute('aria-label'))).toEqual([
+    '1/3', 'Second, 2/3', 'Third, 3/3',
+  ])
+  expect(HTMLElement.prototype.scrollTo).toHaveBeenCalled()
+
+  await view.rerender({ variant: 'full-screen', height: '20rem', preferred: 300 })
+  await view.rerender({ index: 2 })
+  expect(region.style.height).toBe('20rem')
+  expect(region.classList.contains('m3-carousel_full-screen')).toBe(true)
+  expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledWith({ top: 512, behavior: 'auto' })
+})
