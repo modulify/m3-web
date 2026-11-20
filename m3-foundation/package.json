@@ -32,6 +32,11 @@
       "import": "./dist/lib/calendar.mjs",
       "require": "./dist/lib/calendar.cjs"
     },
+    "./lib/time": {
+      "types": "./dist/lib/time/index.d.ts",
+      "import": "./dist/lib/time.mjs",
+      "require": "./dist/lib/time.cjs"
+    },
     "./lib/motion": {
       "types": "./dist/lib/motion/index.d.ts",
       "import": "./dist/lib/motion.mjs",

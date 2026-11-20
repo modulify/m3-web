@@ -30,6 +30,7 @@ const entries = {
   'lib/scroll': resolve(__dirname, 'lib/scroll.ts'),
   'lib/search': resolve(__dirname, 'lib/search.ts'),
   'lib/tabGroup': resolve(__dirname, 'lib/tabGroup.ts'),
+  'lib/time': resolve(__dirname, 'lib/time/index.ts'),
   'lib/surface/descriptor': resolve(__dirname, 'lib/surface/descriptor.ts'),
   'lib/surface/orchestration': resolve(__dirname, 'lib/surface/orchestration.ts'),
   'lib/surface/style': resolve(__dirname, 'lib/surface/style.ts'),

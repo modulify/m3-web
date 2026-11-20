@@ -1,0 +1,304 @@
+@use '../../basics/typography' as m3-typography;
+
+.m3-time-picker-dialog {
+  &.m3-dialog {
+    inline-size: 328px;
+    overflow: hidden;
+  }
+
+  &_horizontal.m3-dialog {
+    inline-size: 560px;
+  }
+
+  .m3-dialog__content {
+    padding: 0;
+  }
+
+  .m3-dialog__footer {
+    padding-block: 8px 24px;
+    padding-inline: 16px 24px;
+  }
+
+  &__switch {
+    margin-inline-end: auto;
+  }
+}
+
+.m3-time-picker {
+  padding-block: 24px 0;
+  padding-inline: 24px;
+  color: var(--m3-sys-on-surface);
+
+  &__header {
+    @include m3-typography.label-medium;
+
+    margin-block-end: 20px;
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &__body {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__fields {
+    min-inline-size: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  &__value,
+  &__field input {
+    @include m3-typography.display-large;
+
+    inline-size: 96px;
+    block-size: 80px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: var(--m3-sys-on-surface-variant);
+    background: var(--m3-sys-surface-container-highest);
+    text-align: center;
+  }
+
+  &__value {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: inset 0 0 0 100px var(--m3-state-layers-on-surface-opacity-008);
+    }
+
+    &:active {
+      box-shadow: inset 0 0 0 100px var(--m3-state-layers-on-surface-opacity-012);
+    }
+
+    &_selected {
+      color: var(--m3-sys-on-primary-container);
+      background: var(--m3-sys-primary-container);
+    }
+  }
+
+  &__value:focus-visible,
+  &__field input:focus-visible,
+  &__slot:focus-visible,
+  &__period:focus-visible {
+    outline: 2px solid var(--m3-sys-primary);
+    outline-offset: 2px;
+  }
+
+  &__separator {
+    @include m3-typography.display-large;
+
+    inline-size: 16px;
+    block-size: 80px;
+    display: grid;
+    align-items: center;
+  }
+
+  &__field {
+    @include m3-typography.body-small;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--m3-sys-on-surface-variant);
+  }
+
+  &__field input {
+    border: 2px solid var(--m3-sys-outline);
+
+    &[aria-invalid='true'] {
+      border-color: var(--m3-sys-error);
+    }
+  }
+
+  &__periods {
+    inline-size: 52px;
+    block-size: 80px;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    overflow: hidden;
+    border: 1px solid var(--m3-sys-outline);
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  &__period {
+    @include m3-typography.title-medium;
+
+    inline-size: 100%;
+    block-size: 50%;
+    border: 0;
+    color: var(--m3-sys-on-surface-variant);
+    background: transparent;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      box-shadow: inset 0 0 0 100px var(--m3-state-layers-on-surface-opacity-008);
+    }
+
+    &:active:not(:disabled) {
+      box-shadow: inset 0 0 0 100px var(--m3-state-layers-on-surface-opacity-012);
+    }
+
+    & + & {
+      border-block-start: 1px solid var(--m3-sys-outline);
+    }
+
+    &_selected {
+      color: var(--m3-sys-on-tertiary-container);
+      background: var(--m3-sys-tertiary-container);
+    }
+
+    &:disabled {
+      opacity: 0.38;
+      cursor: default;
+    }
+  }
+
+  &__dial {
+    inline-size: 256px;
+    block-size: 256px;
+    position: relative;
+    margin-block: 36px 16px;
+    margin-inline: auto;
+    border-radius: 50%;
+    background: var(--m3-sys-surface-container-highest);
+    touch-action: none;
+  }
+
+  &__track {
+    block-size: 2px;
+    position: absolute;
+    inset-block-start: calc(50% - 1px);
+    inset-inline-start: 50%;
+    background: var(--m3-sys-primary);
+    transform-origin: left center;
+    pointer-events: none;
+  }
+
+  &__center {
+    inline-size: 8px;
+    block-size: 8px;
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    border-radius: 50%;
+    background: var(--m3-sys-primary);
+    transform: translate(-50%, -50%);
+  }
+
+  &__slot,
+  &__handle {
+    @include m3-typography.title-medium;
+
+    inline-size: 48px;
+    block-size: 48px;
+    position: absolute;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: var(--m3-sys-on-surface);
+    background: transparent;
+    transform: translate(-50%, -50%);
+  }
+
+  &__slot {
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      box-shadow: inset 0 0 0 100px var(--m3-state-layers-on-surface-opacity-008);
+    }
+
+    &:active:not(:disabled) {
+      box-shadow: inset 0 0 0 100px var(--m3-state-layers-on-surface-opacity-012);
+    }
+
+    &_selected {
+      color: var(--m3-sys-on-primary);
+      background: var(--m3-sys-primary);
+    }
+
+    &:disabled {
+      opacity: 0.38;
+      cursor: default;
+    }
+  }
+
+  &__handle {
+    color: var(--m3-sys-on-primary);
+    background: var(--m3-sys-primary);
+    pointer-events: none;
+  }
+
+  &_input &__body {
+    align-items: flex-start;
+    margin-block-end: 16px;
+  }
+
+  &_input &__field input {
+    block-size: 72px;
+  }
+
+  &_input &__periods {
+    block-size: 72px;
+  }
+
+  &_24h:not(&_horizontal) &__value {
+    inline-size: 114px;
+  }
+
+  &_24h:not(&_horizontal):not(&_input) &__body {
+    justify-content: center;
+  }
+
+  &_horizontal &__dial {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
+  }
+
+  &_horizontal {
+    display: grid;
+    grid-template-columns: 216px 256px;
+    column-gap: 16px;
+    padding-inline: 24px;
+    padding-block-end: 16px;
+  }
+
+  &_horizontal &__header {
+    grid-column: 1 / -1;
+    margin-block-end: 0;
+  }
+
+  &_horizontal &__body {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    row-gap: 16px;
+    padding-block-start: 24px;
+  }
+
+  &_horizontal &__periods {
+    inline-size: 216px;
+    block-size: 38px;
+    flex-direction: row;
+  }
+
+  &_horizontal &__period {
+    inline-size: 0;
+    block-size: 100%;
+    flex: 1 1 0;
+  }
+
+  &_horizontal &__period + &__period {
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--m3-sys-outline);
+  }
+}
