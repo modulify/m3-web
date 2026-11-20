@@ -1,0 +1,109 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as Stories from './M3TimePicker.stories'
+
+<Meta of={Stories} />
+
+<Localized locale="en-US">
+
+# Time picker
+
+`M3TimePicker` asks for a time of day in a modal dialog. It offers a clock dial and numeric input for hours and minutes. Use it for appointments, reminders, or schedule settings. For very precise intervals, use another form of input. [Material 3 guidelines](https://m3.material.io/components/time-pickers/guidelines).
+
+## Choose a presentation
+
+The dial is the default. People can tap an hour or minute, drag the clock hand, and switch to text input with the keyboard button. Set `appearance="input"` when exact typing is the natural starting point. A 12-hour dial includes AM/PM. In a 24-hour dial, 0–11 are on the outer ring and 12–23 on the inner ring, following the Material illustrations. `layout="horizontal"` places the dial beside the time controls when the available height is limited. The application chooses the layout explicitly for now.
+
+<Canvas of={Stories.Dial} />
+<Canvas of={Stories.TextInput} />
+<Canvas of={Stories.TwentyFourHour} />
+<Canvas of={Stories.Horizontal} />
+
+## Constrain a schedule
+
+`min` and `max` are inclusive times of day. `step` is an optional interval in minutes, measured from `min` or from 00:00 when `min` is absent. A time outside this set cannot be confirmed. The UI keeps the draft inside the dialog and sends a new value only after OK; Cancel and dismiss discard it.
+
+<Canvas of={Stories.ScheduledInterval} />
+
+## Guidance
+
+Give the dialog enough space to show its whole dial without internal scrolling. Use text input when there is too little room for either dial layout. Avoid this picker when the task needs seconds or millisecond precision. Each dial number has a 48 × 48px target; keyboard users can activate a number with Enter or Space. The dialog traps focus and closes on Escape or the scrim. [Material 3 accessibility](https://m3.material.io/components/time-pickers/accessibility).
+
+The built-in interface strings are currently English. `locale` selects the default 12/24-hour format; it does not translate the controls. Localizable component messages are tracked in [issue #44](https://github.com/modulify/m3-web/issues/44).
+
+## API
+
+The public value is `{ hour: number, minute: number }` with `hour` in 0–23 and `minute` in 0–59. It is independent of date and time zone. Vue supports `v-model:value` and `v-model:opened`.
+
+| Prop | Values | Default | Purpose |
+| --- | --- | --- | --- |
+| `value` | Time object | `{ hour: 0, minute: 0 }` | Committed time. |
+| `opened` | Boolean | `false` | Show the modal dialog. |
+| `appearance` | `dial`, `input` | `dial` | Initial/current input mode. |
+| `format` | `12h`, `24h` | From `locale` | Explicit hour cycle. |
+| `locale` | BCP 47 locale | `en-US` | Resolve the hour cycle when `format` is absent. |
+| `layout` | `vertical`, `horizontal` | `vertical` | Dial composition. |
+| `min`, `max` | Time object or null | `null` | Inclusive schedule bounds. |
+| `step` | Positive integer minutes | `1` | Selectable interval, anchored to `min` or midnight. |
+
+| Event | Payload | When |
+| --- | --- | --- |
+| `change`, `update:value` | Time object | OK confirms a valid draft. |
+| `update:opened` | Boolean | OK, Cancel, Escape, or scrim requests close. |
+| `update:appearance` | `dial` or `input` | The mode switch is used. |
+
+The component has no slots or exposed methods. Native attributes such as `aria-label` and `class` pass to the dialog surface. The parent owns the committed value and open state. A mode switch updates the local view immediately and reports its new mode; a subsequent `appearance` prop change can set it again.
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Выбор времени
+
+`M3TimePicker` позволяет выбрать время суток в модальном диалоге. Пользователь может работать с циферблатом или числовыми полями часов и минут. Компонент подходит для встреч, напоминаний и настройки расписания. Для очень точных интервалов лучше выбрать другой способ ввода. [Рекомендации Material 3](https://m3.material.io/components/time-pickers/guidelines).
+
+## Внешний вид
+
+По умолчанию открывается циферблат. Можно нажать на час или минуту, перетащить стрелку и переключиться на числовой ввод кнопкой с клавиатурой. Задайте `appearance="input"`, если удобно сразу вводить точное время. В 12-часовом формате есть AM/PM. На 24-часовом циферблате числа 0–11 находятся на внешнем кольце, 12–23 — на внутреннем, как на иллюстрациях Material. `layout="horizontal"` ставит циферблат рядом с часами и минутами при недостатке высоты. Пока приложение выбирает компоновку явно.
+
+<Canvas of={Stories.Dial} />
+<Canvas of={Stories.TextInput} />
+<Canvas of={Stories.TwentyFourHour} />
+<Canvas of={Stories.Horizontal} />
+
+## Ограничения для расписания
+
+`min` и `max` задают включённые границы времени суток. Необязательный `step` задаёт интервал в минутах от `min`, а без `min` — от 00:00. Время вне допустимого набора подтвердить нельзя. Черновик живёт внутри диалога: OK передаёт новое значение, Cancel и закрытие диалога сбрасывают его.
+
+<Canvas of={Stories.ScheduledInterval} />
+
+## Рекомендации
+
+Оставляйте достаточно места для циферблата целиком, без внутренней прокрутки. Если обе компоновки не помещаются, откройте числовой ввод. Для секунд и миллисекунд используйте другой интерфейс. Каждое число циферблата имеет область нажатия 48 × 48px; с клавиатуры число активируется Enter или Space. Фокус остаётся внутри диалога, Escape и нажатие на подложку закрывают его. [Доступность Material 3](https://m3.material.io/components/time-pickers/accessibility).
+
+Встроенные тексты интерфейса пока английские. `locale` выбирает формат 12/24 часа по умолчанию, но не переводит элементы управления. Возможность локализации сообщений отслеживается в [задаче #44](https://github.com/modulify/m3-web/issues/44).
+
+## API
+
+Значение — объект `{ hour: number, minute: number }`, где час находится в диапазоне 0–23, а минута — 0–59. Дата и часовой пояс в него не входят. Для Vue доступны `v-model:value` и `v-model:opened`.
+
+| Prop | Значения | Умолчание | Назначение |
+| --- | --- | --- | --- |
+| `value` | Объект времени | `{ hour: 0, minute: 0 }` | Подтверждённое время. |
+| `opened` | Boolean | `false` | Показать модальный диалог. |
+| `appearance` | `dial`, `input` | `dial` | Режим ввода. |
+| `format` | `12h`, `24h` | Из `locale` | Явный формат часов. |
+| `locale` | Локаль BCP 47 | `en-US` | Определить формат, если `format` не задан. |
+| `layout` | `vertical`, `horizontal` | `vertical` | Компоновка циферблата. |
+| `min`, `max` | Объект времени или null | `null` | Включённые границы расписания. |
+| `step` | Положительное целое число минут | `1` | Интервал от `min` или полуночи. |
+
+| Событие | Данные | Когда |
+| --- | --- | --- |
+| `change`, `update:value` | Объект времени | OK подтверждает допустимый черновик. |
+| `update:opened` | Boolean | OK, Cancel, Escape или подложка запрашивают закрытие. |
+| `update:appearance` | `dial` или `input` | Использована кнопка смены режима. |
+
+Слотов и exposed-методов нет. Нативные атрибуты, например `aria-label` и `class`, передаются поверхности диалога. Родитель хранит подтверждённое значение и состояние открытия. Смена режима сразу обновляет локальный вид и сообщает новый режим; последующее изменение prop `appearance` может снова задать его.
+
+</Localized>
