@@ -209,4 +209,71 @@ describe('m3-react/time-picker', () => {
 
     expect(screen.getByRole('button', { name: 'Select minutes' }).textContent?.trim()).toBe('15')
   })
+
+  test('selects an hour on the inner 24-hour ring and keeps an exact minute visible', () => {
+    const onChange = vi.fn()
+    render(<M3TimePicker value={{ hour: 9, minute: 17 }} format="24h" opened onChange={onChange} />)
+
+    const dial = screen.getByRole('group', { name: 'Hours' }) as HTMLDivElement
+    dial.getBoundingClientRect = vi.fn().mockReturnValue({ left: 0, top: 0, width: 256, height: 256 })
+    dial.setPointerCapture = vi.fn()
+
+    fireEvent.pointerDown(dial, { pointerId: 1, pointerType: 'mouse', button: 0, clientX: 128, clientY: 64 })
+    fireEvent.pointerUp(dial, { pointerId: 1 })
+
+    expect(screen.getByRole('button', { name: 'Select hours' }).textContent?.trim()).toBe('12')
+    expect(screen.getByRole('group', { name: 'Minutes' })).toBeTruthy()
+    expect(dial.querySelector('.m3-time-picker__handle')?.textContent?.trim()).toBe('17')
+
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }))
+    expect(onChange).toHaveBeenCalledWith({ hour: 12, minute: 17 })
+  })
+
+  test('rejects incomplete text input and an unavailable period before confirmation', () => {
+    const onChange = vi.fn()
+    render(
+      <M3TimePicker
+        appearance="input"
+        value={{ hour: 10, minute: 15 }}
+        format="12h"
+        min={{ hour: 9, minute: 0 }}
+        max={{ hour: 11, minute: 30 }}
+        opened
+        onChange={onChange}
+      />
+    )
+
+    expect(screen.getByRole('radio', { name: 'PM' }).hasAttribute('disabled')).toBe(true)
+    const hour = screen.getByRole('textbox', { name: 'Hour' })
+    const minute = screen.getByRole('textbox', { name: 'Minute' })
+
+    fireEvent.change(hour, { target: { value: '' } })
+    expect(screen.getByRole('button', { name: 'OK' }).hasAttribute('disabled')).toBe(true)
+    fireEvent.change(hour, { target: { value: '12' } })
+    expect(screen.getByRole('button', { name: 'OK' }).hasAttribute('disabled')).toBe(true)
+    fireEvent.change(hour, { target: { value: '11' } })
+    fireEvent.change(minute, { target: { value: '60' } })
+    expect(screen.getByRole('button', { name: 'OK' }).hasAttribute('disabled')).toBe(true)
+    fireEvent.change(minute, { target: { value: '30' } })
+
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }))
+    expect(onChange).toHaveBeenCalledWith({ hour: 11, minute: 30 })
+  })
+
+  test('ignores secondary-button pointer drags on the dial', () => {
+    const onChange = vi.fn()
+    render(<M3TimePicker value={{ hour: 9, minute: 0 }} format="24h" opened onChange={onChange} />)
+
+    const dial = screen.getByRole('group', { name: 'Hours' }) as HTMLDivElement
+    dial.getBoundingClientRect = vi.fn().mockReturnValue({ left: 0, top: 0, width: 256, height: 256 })
+    dial.setPointerCapture = vi.fn()
+
+    fireEvent.pointerDown(dial, { pointerId: 1, pointerType: 'mouse', button: 2, clientX: 128, clientY: 24 })
+    fireEvent.pointerMove(dial, { pointerId: 1, clientX: 232, clientY: 128 })
+    expect(dial.setPointerCapture).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'Select hours' }).textContent?.trim()).toBe('09')
+
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }))
+    expect(onChange).toHaveBeenCalledWith({ hour: 9, minute: 0 })
+  })
 })

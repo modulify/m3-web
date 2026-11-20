@@ -1,4 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+} from '@testing-library/react'
 
 import { M3Slider } from '@/components/slider'
 
@@ -221,5 +226,59 @@ describe('m3-react/slider', () => {
     fireEvent.click(screen.getByRole('button', { name: '60' }))
     expect(onUpdate).not.toHaveBeenCalled()
     expect(container.querySelector('.m3-slider_disabled')).not.toBeNull()
+  })
+
+  test('marks stepped stops covered by the active range and hides stops under the handles', () => {
+    vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame'] })
+
+    try {
+      const { container, rerender } = render(<M3Slider min={0} max={100} step={25} value={50} />)
+      const active = container.querySelector<HTMLElement>('.m3-slider__filler_active')!
+      const handle = screen.getByRole('slider')
+      const notches = screen.getAllByRole('button')
+
+      vi.spyOn(active, 'getBoundingClientRect').mockReturnValue({ left: 0, right: 50 } as DOMRect)
+      vi.spyOn(handle, 'getBoundingClientRect').mockReturnValue({ left: 48, right: 52 } as DOMRect)
+      notches.forEach((notch, index) => {
+        vi.spyOn(notch, 'getBoundingClientRect').mockReturnValue({ left: index * 25 } as DOMRect)
+      })
+
+      act(() => vi.advanceTimersByTime(20))
+
+      expect(notches[1].classList.contains('m3-slider__notch_active')).toBe(true)
+      expect(notches[2].getAttribute('aria-hidden')).toBe('true')
+      expect(notches[3].classList.contains('m3-slider__notch_active')).toBe(false)
+
+      rerender(<M3Slider type="range" min={0} max={100} step={25} value={[25, 75]} />)
+      const [minHandle, maxHandle] = screen.getAllByRole('slider')
+      vi.spyOn(minHandle, 'getBoundingClientRect').mockReturnValue({ left: 23, right: 27 } as DOMRect)
+      vi.spyOn(maxHandle, 'getBoundingClientRect').mockReturnValue({ left: 73, right: 77 } as DOMRect)
+      vi.spyOn(active, 'getBoundingClientRect').mockReturnValue({ left: 25, right: 75 } as DOMRect)
+
+      fireEvent.transitionEnd(container.querySelector('.m3-slider__value_min')!)
+
+      expect(notches[1].getAttribute('aria-hidden')).toBe('true')
+      expect(notches[2].classList.contains('m3-slider__notch_active')).toBe(true)
+      expect(notches[3].getAttribute('aria-hidden')).toBe('true')
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  test('supports touch dragging and stops updating after touchend', () => {
+    const onUpdate = vi.fn()
+    const { container } = render(<M3Slider min={0} max={100} value={25} onUpdate={onUpdate} />)
+    const track = container.querySelector<HTMLElement>('.m3-slider__track')!
+    Object.defineProperty(track, 'offsetWidth', { configurable: true, value: 100 })
+    vi.spyOn(track, 'getBoundingClientRect').mockReturnValue({ left: 10, right: 110 } as DOMRect)
+
+    fireEvent.mouseDown(screen.getByRole('slider'), { button: 0 })
+    fireEvent.touchMove(window, { touches: [{ clientX: 85 }] })
+    expect(onUpdate).toHaveBeenLastCalledWith(75)
+
+    fireEvent.touchEnd(window)
+    onUpdate.mockClear()
+    fireEvent.touchMove(window, { touches: [{ clientX: 100 }] })
+    expect(onUpdate).not.toHaveBeenCalled()
   })
 })
