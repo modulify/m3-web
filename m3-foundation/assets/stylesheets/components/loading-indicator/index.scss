@@ -1,0 +1,29 @@
+.m3-loading-indicator {
+  --m3-loading-indicator-color: var(--m3-sys-primary);
+  --m3-loading-indicator-container-color: var(--m3-sys-primary-container);
+
+  display: block;
+  box-sizing: border-box;
+  inline-size: var(--m3-loading-indicator-size, 48px);
+  block-size: var(--m3-loading-indicator-size, 48px);
+  color: var(--m3-loading-indicator-color);
+
+  &_contained {
+    --m3-loading-indicator-color: var(--m3-sys-on-primary-container);
+
+    border-radius: 50%;
+    background: var(--m3-loading-indicator-container-color);
+  }
+
+  &__shape {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    fill: currentColor;
+  }
+
+  @media (forced-colors: active) {
+    --m3-loading-indicator-color: CanvasText;
+    --m3-loading-indicator-container-color: Canvas;
+  }
+}

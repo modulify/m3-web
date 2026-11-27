@@ -13,6 +13,7 @@ const entries = {
   'lib/carousel': resolve(__dirname, 'lib/carousel/index.ts'),
   'lib/dom': resolve(__dirname, 'lib/dom.ts'),
   'lib/layers': resolve(__dirname, 'lib/layers.ts'),
+  'lib/loading-indicator': resolve(__dirname, 'lib/loading-indicator.ts'),
   'lib/motion': resolve(__dirname, 'lib/motion/index.ts'),
   'lib/motion/values': resolve(__dirname, 'lib/motion/values.ts'),
   'lib/modal': resolve(__dirname, 'lib/modal.ts'),
