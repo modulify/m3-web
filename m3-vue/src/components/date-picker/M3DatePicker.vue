@@ -250,7 +250,7 @@
                                 :tabindex="page.active ? undefined : -1"
                                 appearance="text"
                                 class="m3-date-picker__inline-month-button"
-                                @click="page.active && scheduleInlineViewSwitch(isYearView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)"
+                                @click="page.active && scheduleInlineViewSwitch(DATE_PICKER_VIEW.YEARS)"
                             >
                                 {{ formatDay(page.month, 'MMMM yyyy') }}
                                 <M3Icon name="arrow_drop_down" />
@@ -620,13 +620,7 @@ const scheduleInlineViewSwitch = (view: M3DatePickerView) => {
 const startMonthSlide = (offset: number) => {
   if (monthSliding.value) return
 
-  const canMove = offset > 0 ? canMoveToNextMonth.value : canMoveToPreviousMonth.value
   const width = calendar.value?.getBoundingClientRect().width || MONTH_SWIPE.fallbackWidth
-
-  if (!canMove) {
-    monthDragOffset.value = 0
-    return
-  }
 
   monthDragOffset.value = offset > 0 ? -width : width
   monthSliding.value = true
@@ -734,11 +728,8 @@ const onPointerMove = (event: PointerEvent) => {
     activeSwipe.active = true
     suppressClickAfterSwipe()
 
-    const currentTarget = event.currentTarget
-
-    if (currentTarget instanceof HTMLElement) {
-      currentTarget.setPointerCapture?.(event.pointerId)
-    }
+    const currentTarget = event.currentTarget as HTMLElement
+    currentTarget.setPointerCapture?.(event.pointerId)
   }
 
   const canMove = deltaX < 0 ? canMoveToNextMonth.value : canMoveToPreviousMonth.value
