@@ -2,7 +2,9 @@ include recipes/common.mk
 
 YARN_PLAYWRIGHT=@$(DOCKER_COMPOSE) run --rm playwright yarn
 COVERAGE_PARTS_DIR=coverage/.parts
-COVERAGE_UNIT_DIR=coverage/unit
+COVERAGE_UNIT_FOUNDATION_DIR=coverage/unit-foundation
+COVERAGE_UNIT_REACT_DIR=coverage/unit-react
+COVERAGE_UNIT_VUE_DIR=coverage/unit-vue
 COVERAGE_E2E_REACT_DIR=coverage/e2e-react
 COVERAGE_E2E_VUE_DIR=coverage/e2e-vue
 NYC_OUTPUT_DIR=.nyc_output
@@ -39,14 +41,19 @@ test-coverage: node_modules ## [Tests][docker][coverage][heavy] Runs merged cove
 	$(TARGET_HEADER)
 	@rm -rf coverage $(NYC_OUTPUT_DIR) artifacts
 	@mkdir -p $(COVERAGE_PARTS_DIR) $(NYC_OUTPUT_DIR)
-	$(YARN) test --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.reportsDirectory=$(COVERAGE_UNIT_DIR)
+	$(YARN) test --project m3-foundation --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.include='lib/**/*.ts' --coverage.reportsDirectory=$(COVERAGE_UNIT_FOUNDATION_DIR)
+	$(YARN) test --project m3-react --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.include='src/**/*.{ts,tsx}' --coverage.include='../m3-foundation/lib/**/*.ts' --coverage.allowExternal=true --coverage.reportsDirectory=$(COVERAGE_UNIT_REACT_DIR)
+	$(YARN) test --project m3-vue --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.include='src/**/*.{ts,vue}' --coverage.include='../m3-foundation/lib/**/*.ts' --coverage.allowExternal=true --coverage.reportsDirectory=$(COVERAGE_UNIT_VUE_DIR)
 	$(YARN_PLAYWRIGHT) test:e2e:coverage
-	@cp $(COVERAGE_UNIT_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/unit.json
+	@cp $(COVERAGE_UNIT_FOUNDATION_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/unit-foundation.json
+	@cp $(COVERAGE_UNIT_REACT_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/unit-react.json
+	@cp $(COVERAGE_UNIT_VUE_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/unit-vue.json
 	@cp $(COVERAGE_E2E_REACT_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/e2e-react.json
 	@cp $(COVERAGE_E2E_VUE_DIR)/coverage-final.json $(COVERAGE_PARTS_DIR)/e2e-vue.json
 	@$(YARN) nyc merge $(COVERAGE_PARTS_DIR) $(NYC_OUTPUT_DIR)/coverage-final.json >/dev/null
 	$(YARN) nyc report
 	@$(YARN) nyc report --reporter=json-summary >/dev/null
+	@$(YARN) node scripts/verify-coverage-merge.mjs
 	@$(YARN) node --experimental-strip-types scripts/show-total-coverage.ts
 	$(YARN) nyc check-coverage
 
