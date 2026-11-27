@@ -68,6 +68,7 @@
                     v-bind="ariaOptionsToAttrs(ariaHandleMin)"
                     @keydown="onKeyDownForMin"
                     @mousedown.left="onStartDraggingMin"
+                    @touchstart="onStartDraggingMin"
                 />
             </div>
 
@@ -91,6 +92,7 @@
                     })"
                     @keydown="onKeyDownForMax"
                     @mousedown.left="onStartDraggingMax"
+                    @touchstart="onStartDraggingMax"
                 />
             </div>
 
@@ -330,7 +332,7 @@ const onNotchClick = (value: number, index: number) => {
 }
 
 const getEventX = (event: MouseEvent | TouchEvent) => {
-  return 'clientX' in event ? event.clientX : event.touches[0].clientX
+  return 'clientX' in event ? event.clientX : event.touches[0]?.clientX ?? null
 }
 
 const getEventShare = (event: MouseEvent | TouchEvent) => {
@@ -341,21 +343,28 @@ const getEventShare = (event: MouseEvent | TouchEvent) => {
 
   const distance = _track.offsetWidth
   const { left, right } = _track.getBoundingClientRect()
+  const x = getEventX(event)
 
-  return distance > 0
-    ? (restrict(getEventX(event), [left, right]) - left) / distance
+  return distance > 0 && x !== null
+    ? (restrict(x, [left, right]) - left) / distance
     : null
 }
 
 const getEventValue = (event: MouseEvent | TouchEvent) => {
-  return nearest(props.min + (props.max - props.min) * (getEventShare(event) ?? 0))
+  const share = getEventShare(event)
+
+  if (share === null) {
+    return null
+  }
+
+  return nearest(props.min + (props.max - props.min) * share)
 }
 
 const stepFor = (leap: boolean) => {
   const step = distance(props.min, props.max) / 100
   return props.step > 0 ? props.step : leap ? 10 * step : step
 }
-const nextFor = (value: number, stepOrLeap: number | boolean = false) => {
+const nextFor = (value: number, stepOrLeap: number | boolean) => {
   const step = typeof stepOrLeap === 'boolean' ? stepFor(stepOrLeap) : stepOrLeap
   const next = value + step
 
@@ -387,10 +396,8 @@ const setValueMax = (value: number) => {
 }
 
 const setValueMin = (value: number) => {
-  if (props.type === 'range') {
-    const [, max] = current.value
-    emit('update:value', [Math.min(value, max), max])
-  }
+  const [, max] = current.value
+  emit('update:value', [Math.min(value, max), max])
 }
 
 const onKeyDownForMax = (event: KeyboardEvent) => {
@@ -411,6 +418,8 @@ const onKeyDownForMax = (event: KeyboardEvent) => {
 
 const onMoveMax = (event: MouseEvent | TouchEvent) => {
   const value = getEventValue(event)
+  if (value === null) return
+
   const [min] = current.value
 
   if (props.type === 'single') {
@@ -424,15 +433,21 @@ const onMoveMax = (event: MouseEvent | TouchEvent) => {
   nextTick(() => dragging.max = null)
 }
 
-const stopMouseListeningForMax = () => {
+const stopDraggingMax = () => {
   window.removeEventListener('mousemove', onMoveMax)
-  window.removeEventListener('mouseup', stopMouseListeningForMax)
+  window.removeEventListener('mouseup', stopDraggingMax)
+  window.removeEventListener('touchmove', onMoveMax)
+  window.removeEventListener('touchend', stopDraggingMax)
+  window.removeEventListener('touchcancel', stopDraggingMax)
 }
 
 const onStartDraggingMax = () => {
   if (!props.disabled) {
     window.addEventListener('mousemove', onMoveMax)
-    window.addEventListener('mouseup', stopMouseListeningForMax)
+    window.addEventListener('mouseup', stopDraggingMax)
+    window.addEventListener('touchmove', onMoveMax)
+    window.addEventListener('touchend', stopDraggingMax)
+    window.addEventListener('touchcancel', stopDraggingMax)
   }
 }
 
@@ -458,6 +473,8 @@ const onMoveMin = (event: MouseEvent | TouchEvent) => {
   }
 
   const value = getEventValue(event)
+  if (value === null) return
+
   const [, max] = current.value
 
   dragging.min = percentageOf(Math.min(value, max))
@@ -467,15 +484,21 @@ const onMoveMin = (event: MouseEvent | TouchEvent) => {
   nextTick(() => dragging.min = null)
 }
 
-const stopMouseListeningForMin = () => {
+const stopDraggingMin = () => {
   window.removeEventListener('mousemove', onMoveMin)
-  window.removeEventListener('mouseup', stopMouseListeningForMin)
+  window.removeEventListener('mouseup', stopDraggingMin)
+  window.removeEventListener('touchmove', onMoveMin)
+  window.removeEventListener('touchend', stopDraggingMin)
+  window.removeEventListener('touchcancel', stopDraggingMin)
 }
 
 const onStartDraggingMin = () => {
   if (!props.disabled) {
     window.addEventListener('mousemove', onMoveMin)
-    window.addEventListener('mouseup', stopMouseListeningForMin)
+    window.addEventListener('mouseup', stopDraggingMin)
+    window.addEventListener('touchmove', onMoveMin)
+    window.addEventListener('touchend', stopDraggingMin)
+    window.addEventListener('touchcancel', stopDraggingMin)
   }
 }
 
@@ -491,10 +514,6 @@ const updateNotches = () => {
   const _min = handleMin.value?.getBoundingClientRect()
 
   notches.value.forEach((notch) => {
-    if (!notch) {
-      return
-    }
-
     const { left: x } = notch.getBoundingClientRect()
 
     const hidden = !!_max && (inRange(x - 2, toGap(_max)) || inRange(x + 2, toGap(_max))) ||
@@ -530,8 +549,8 @@ watch([
 
 watch(() => props.disabled, (disabled) => {
   if (disabled) {
-    stopMouseListeningForMax()
-    stopMouseListeningForMin()
+    stopDraggingMax()
+    stopDraggingMin()
   }
 })
 
@@ -546,7 +565,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  stopMouseListeningForMax()
-  stopMouseListeningForMin()
+  stopDraggingMax()
+  stopDraggingMin()
 })
 </script>
