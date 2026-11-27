@@ -154,19 +154,11 @@ export const linearIndeterminateGeometry = (
     .map(({ start, end }) => ({ start: Math.max(0, Math.min(width, start)), end: Math.max(0, Math.min(width, end)) }))
     .filter(({ start, end }) => end - start > .01)
     .sort((first, second) => first.start - second.start)
-  const merged: ProgressInterval[] = []
-
-  for (const segment of active) {
-    const previous = merged.at(-1)
-    if (previous && segment.start <= previous.end) previous.end = Math.max(previous.end, segment.end)
-    else merged.push({ ...segment })
-  }
-
   const track: ProgressInterval[] = []
   const gap = thickness + 4
   let cursor = 0
 
-  for (const segment of merged) {
+  for (const segment of active) {
     const end = Math.max(cursor, segment.start - gap)
     if (end - cursor >= thickness) track.push({ start: cursor, end })
     cursor = Math.max(cursor, segment.end + gap)
@@ -174,7 +166,7 @@ export const linearIndeterminateGeometry = (
 
   if (width - cursor >= thickness) track.push({ start: cursor, end: width })
 
-  return { active: merged, track }
+  return { active, track }
 }
 
 export const linearProgressSegmentPath = (

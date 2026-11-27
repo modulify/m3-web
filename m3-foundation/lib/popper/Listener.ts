@@ -62,7 +62,7 @@ export default class Listener {
       this.stop()
       this._triggers = normalize(triggers)
       if (this._target) {
-        this._subscribe()
+        this._subscribe(this._target)
       }
     }
   }
@@ -70,7 +70,7 @@ export default class Listener {
   start (target: EventTarget, triggers: Trigger[] | TriggerSchema) {
     this._target = target
     this._triggers = normalize(triggers)
-    this._subscribe()
+    this._subscribe(target)
   }
 
   stop (): void {
@@ -78,22 +78,20 @@ export default class Listener {
     this._listeners = []
   }
 
-  _add (type: string, handler: TriggerHandler) {
-    if (this._target) {
-      this._listeners.push({ type, handler })
-      this._target.addEventListener(type, handler, { passive: true })
-    }
+  private _add (target: EventTarget, type: string, handler: TriggerHandler) {
+    this._listeners.push({ type, handler })
+    target.addEventListener(type, handler, { passive: true })
   }
 
-  _subscribe () {
-    this._triggers.show.forEach(t => this._add({
+  private _subscribe (target: EventTarget) {
+    this._triggers.show.forEach(t => this._add(target, {
       hover: 'mouseenter',
       focus: 'focus',
       click: 'click',
       touch: 'touchstart',
     }[t], this._onShow))
 
-    this._triggers.hide.forEach(t => this._add({
+    this._triggers.hide.forEach(t => this._add(target, {
       hover: 'mouseleave',
       focus: 'blur',
       click: 'click',

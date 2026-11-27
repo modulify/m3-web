@@ -1,3 +1,5 @@
+import { describe, expect, test } from 'vitest'
+
 import {
   closestSelectableMinute,
   dialHour,
@@ -73,4 +75,3 @@ describe('time', () => {
     expect(dialMinute(359)).toBe(0)
   })
 })
-import { describe, expect, test } from 'vitest'

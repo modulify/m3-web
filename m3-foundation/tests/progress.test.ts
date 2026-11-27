@@ -20,7 +20,9 @@ test('progress inputs are constrained to visible and accessible ranges', () => {
   expect(progressValue(Number.NaN)).toBe(0)
   expect(progressSize(10)).toBe(24)
   expect(progressSize(300)).toBe(240)
+  expect(progressSize(Number.NaN)).toBe(40)
   expect(progressThickness(0)).toBe(1)
+  expect(progressThickness(Number.NaN)).toBe(4)
 })
 
 test('circular track opens around active progress and disappears when complete', () => {
@@ -83,10 +85,14 @@ test('determinate circular wave has a moving open arc and a flat endpoint', () =
 test('indeterminate linear progress has two moving strokes and separate track segments', () => {
   const initial = linearIndeterminateGeometry(360, 4, 0)
   const middle = linearIndeterminateGeometry(360, 4, 875)
+  const exit = linearIndeterminateGeometry(360, 4, 1000)
+  const late = linearIndeterminateGeometry(360, 4, 1250)
 
   expect(initial.active).toHaveLength(0)
   expect(initial.track).toEqual([{ start: 0, end: 360 }])
   expect(middle.active).toHaveLength(2)
+  expect(exit.track).toHaveLength(1)
+  expect(late.active).toHaveLength(1)
   expect(middle.track.every(track => middle.active.every(active =>
     track.end <= active.start - 8 || track.start >= active.end + 8
   ))).toBe(true)
@@ -96,4 +102,15 @@ test('indeterminate linear progress has two moving strokes and separate track se
   const shifted = linearProgressSegmentPath(middle.active[0], 10, true, 10)
   expect(flat).toContain(' L ')
   expect(wave).not.toBe(shifted)
+})
+
+test('indeterminate linear strokes stay separate throughout their cycle', () => {
+  for (let time = 0; time < 1750; time++) {
+    const { active } = linearIndeterminateGeometry(360, 4, time)
+
+    expect(active.length).toBeLessThanOrEqual(2)
+    if (active.length === 2) {
+      expect(active[0].end).toBeLessThan(active[1].start)
+    }
+  }
 })
