@@ -103,7 +103,7 @@ const M3DatePickerDialog: FC<M3DatePickerDialogProps> = (props) => {
   ])
 
   const isDateAvailable = (day: CalendarDay): boolean => (
-    clampCalendarDay(day, bounds)?.inSameDay(day) ?? false
+    clampCalendarDay(day, bounds).inSameDay(day)
   ) && isCalendarDaySelectable(day, props.availability)
 
   const parseInputValue = (value: string): {
@@ -195,15 +195,7 @@ const M3DatePickerDialog: FC<M3DatePickerDialogProps> = (props) => {
     : singleInputInvalid
 
   const confirm = () => {
-    if (inputInvalid) {
-      return
-    }
-
     if (type === 'range') {
-      if (!Array.isArray(draftValue)) {
-        return
-      }
-
       const onChange = props.onChange as M3DatePickerDialogRangeProps['onChange']
 
       onChange?.(cloneValue(draftValue) as [Date | null, Date | null])
@@ -211,13 +203,9 @@ const M3DatePickerDialog: FC<M3DatePickerDialogProps> = (props) => {
       return
     }
 
-    if (!(draftValue instanceof Date)) {
-      return
-    }
-
     const onChange = props.onChange as M3DatePickerDialogSingleProps['onChange']
 
-    onChange?.(new Date(draftValue))
+    onChange?.(new Date(draftValue as Date))
     onToggle(false)
   }
 

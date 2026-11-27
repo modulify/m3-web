@@ -9,7 +9,6 @@ import {
 import { render } from '@testing-library/vue'
 
 import defineM3Icon from '@/components/icon/defineM3Icon'
-
 import { M3IconAppearance } from '@/components/icon/injections'
 
 const FilledSprite = defineComponent({

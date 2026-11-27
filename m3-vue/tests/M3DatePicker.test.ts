@@ -1,13 +1,27 @@
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/vue'
+import type { Component } from 'vue'
+
+import { defineComponent } from 'vue'
+import { fireEvent } from '@testing-library/vue'
+import { h } from 'vue'
+import { render, screen, waitFor } from '@testing-library/vue'
 
 import { M3DatePicker } from '@/components/date-picker'
 
 describe('m3-vue/date-picker', () => {
+  test('renders an empty month from the requested cursor', () => {
+    const reference = { current: null as { el: HTMLElement } | null }
+    const view = render(defineComponent({
+      setup: () => () => h(M3DatePicker as Component, {
+        ref: (instance: { el: HTMLElement } | null) => { reference.current = instance },
+        cursor: new Date(2026, 6, 1),
+      }),
+    }))
+
+    expect(reference.current?.el).toBe(view.container.firstElementChild)
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+    expect(view.container.querySelector('.m3-date-picker-option_selected')).toBeNull()
+  })
+
   test('renders stable calendar grid and selected date', () => {
     const { container } = render(M3DatePicker, {
       props: {
@@ -55,6 +69,27 @@ describe('m3-vue/date-picker', () => {
 
     expect(screen.getByRole('gridcell', { name: 'Friday, July 10, 2026' }).getAttribute('aria-selected')).toBe('false')
     expect(screen.getByRole('gridcell', { name: 'Wednesday, July 15, 2026' }).getAttribute('aria-selected')).toBe('true')
+  })
+
+  test('follows dates supplied after mount when the cursor is uncontrolled', async () => {
+    const view = render(M3DatePicker, {
+      props: { value: null },
+    })
+
+    await view.rerender({ value: new Date(2026, 6, 10) })
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+
+    await view.rerender({ value: null })
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+
+    await view.rerender({
+      type: 'range',
+      value: [null, new Date(2027, 7, 15)],
+    })
+    expect(screen.getByRole('grid', { name: 'August 2027' })).toBeTruthy()
+
+    await view.rerender({ value: [null, null] })
+    expect(screen.getByRole('grid', { name: 'August 2027' })).toBeTruthy()
   })
 
   test('emits and renders selected date range', async () => {
@@ -126,6 +161,23 @@ describe('m3-vue/date-picker', () => {
     })
   })
 
+  test('ignores repeated month navigation while the first slide is running', async () => {
+    const view = render(M3DatePicker, {
+      props: {
+        value: new Date(2026, 6, 10),
+      },
+    })
+
+    const next = screen.getByRole('button', { name: 'Next month' })
+    await fireEvent.click(next)
+    await fireEvent.click(next)
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid', { name: 'August 2026' })).toBeTruthy()
+    })
+    expect(view.emitted()['update:cursor']).toHaveLength(1)
+  })
+
   test('disables month navigation outside effective range', () => {
     render(M3DatePicker, {
       props: {
@@ -194,6 +246,26 @@ describe('m3-vue/date-picker', () => {
     })
   })
 
+  test('ignores inactive inline controls and navigates with the active page', async () => {
+    const { container } = render(M3DatePicker, {
+      props: {
+        value: new Date(2026, 6, 10),
+        navigation: 'inline',
+      },
+    })
+
+    const inactive = container.querySelector(
+      '.m3-date-picker__month-page[aria-hidden="true"] .m3-date-picker__inline-arrows button'
+    ) as HTMLButtonElement
+    await fireEvent.click(inactive)
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Previous month' }))
+    await waitFor(() => {
+      expect(screen.getByRole('grid', { name: 'June 2026' })).toBeTruthy()
+    })
+  })
+
   test('uses inline month-year button and year grid for inline year selection', async () => {
     const { container, emitted } = render(M3DatePicker, {
       props: {
@@ -216,6 +288,44 @@ describe('m3-vue/date-picker', () => {
     expect(screen.getByRole('grid', { name: 'July 2027' })).toBeTruthy()
     expect(emitted().change).toBeUndefined()
     expect(emitted()['update:value']).toBeUndefined()
+  })
+
+  test('returns from inline year selection through the month heading', async () => {
+    render(M3DatePicker, {
+      props: {
+        value: new Date(2026, 6, 10),
+        navigation: 'inline',
+      },
+    })
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Switch to year selection' }))
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '2027' })).toBeTruthy()
+    })
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Switch to day selection' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+    })
+  })
+
+  test('keeps the selected year when a pending inline view switch finishes', async () => {
+    render(M3DatePicker, {
+      props: {
+        value: new Date(2026, 6, 10),
+        navigation: 'inline',
+      },
+    })
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Switch to year selection' }))
+    await waitFor(() => expect(screen.getByRole('button', { name: '2027' })).toBeTruthy())
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Switch to day selection' }))
+    await fireEvent.click(screen.getByRole('button', { name: '2027' }))
+
+    await new Promise(resolve => setTimeout(resolve, 150))
+    expect(screen.getByRole('grid', { name: 'July 2027' })).toBeTruthy()
   })
 
   test('keeps inline navigation stable while animating back to calendar grid', async () => {
@@ -277,6 +387,47 @@ describe('m3-vue/date-picker', () => {
     expect(screen.queryByRole('button', { name: 'Switch to year selection' })).toBeNull()
   })
 
+  test('uses a fixed month label when month selection is unavailable', () => {
+    const { container } = render(M3DatePicker, {
+      props: {
+        value: new Date(2026, 6, 10),
+        views: ['days', 'years'],
+      },
+    })
+
+    expect(container.querySelector('.m3-date-picker__navigation-label')?.textContent).toContain('Jul')
+    expect(screen.queryByRole('button', { name: 'Switch to month selection' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Switch to year selection' })).toBeTruthy()
+  })
+
+  test('returns from month selection through the month heading', async () => {
+    render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10) },
+    })
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Switch to month selection' }))
+    expect(screen.getByRole('grid', { name: 'Select month' })).toBeTruthy()
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Switch to day selection' }))
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+  })
+
+  test('shows a month label in inline navigation when only day view is available', () => {
+    const { container } = render(M3DatePicker, {
+      props: {
+        value: new Date(2026, 6, 10),
+        navigation: 'inline',
+        views: ['days'],
+      },
+    })
+
+    const activePage = container.querySelector('.m3-date-picker__month-page:not([aria-hidden="true"])')
+    expect(activePage?.querySelector('.m3-date-picker__inline-month-label')?.textContent).toContain('July 2026')
+    expect(screen.queryByRole('button', { name: 'Switch to month selection' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Switch to year selection' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Next month' })).toBeTruthy()
+  })
+
   test('supports controlled cursor navigation', async () => {
     const view = render(M3DatePicker, {
       props: {
@@ -292,6 +443,64 @@ describe('m3-vue/date-picker', () => {
     await waitFor(() => {
       expect(view.emitted()['update:cursor']?.[0]).toEqual([new Date(2026, 7, 1)])
     })
+  })
+
+  test('clamps a controlled cursor to changed bounds without replacing it', async () => {
+    const cursor = new Date(2026, 6, 1)
+    const view = render(M3DatePicker, {
+      props: { cursor },
+    })
+
+    await view.rerender({ min: new Date(2026, 7, 1) })
+    expect(screen.getByRole('grid', { name: 'August 2026' })).toBeTruthy()
+
+    await view.rerender({ min: null })
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+  })
+
+  test('cancels animated navigation when controlled cursor changes externally', async () => {
+    const view = render(M3DatePicker, {
+      props: {
+        value: new Date(2026, 6, 10),
+        cursor: new Date(2026, 8, 1),
+      },
+    })
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Previous month' }))
+    await view.rerender({
+      value: new Date(2026, 6, 10),
+      cursor: new Date(2026, 11, 1),
+    })
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid', { name: 'December 2026' })).toBeTruthy()
+    })
+
+    await new Promise(resolve => window.setTimeout(resolve, 250))
+
+    expect(screen.getByRole('grid', { name: 'December 2026' })).toBeTruthy()
+  })
+
+  test('follows external date and range changes when the cursor is uncontrolled', async () => {
+    const view = render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10) },
+    })
+
+    await view.rerender({ value: new Date(2026, 10, 10) })
+    await waitFor(() => expect(screen.getByRole('grid', { name: 'November 2026' })).toBeTruthy())
+
+    await view.rerender({ type: 'range', value: [new Date(2027, 1, 3), null] })
+    await waitFor(() => expect(screen.getByRole('grid', { name: 'February 2027' })).toBeTruthy())
+  })
+
+  test('clamps the uncontrolled cursor after date bounds change', async () => {
+    const view = render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10) },
+    })
+
+    await view.rerender({ min: new Date(2027, 0, 1) })
+
+    await waitFor(() => expect(screen.getByRole('grid', { name: 'January 2027' })).toBeTruthy())
   })
 
   test('disables non-selectable dates and years', async () => {
@@ -379,7 +588,7 @@ describe('m3-vue/date-picker', () => {
   })
 
   test('keeps calendar view transitions mutually exclusive', async () => {
-    render(M3DatePicker, {
+    const { container } = render(M3DatePicker, {
       props: {
         value: new Date(2026, 6, 10),
       },
@@ -402,6 +611,9 @@ describe('m3-vue/date-picker', () => {
     expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
     expect(screen.queryByRole('list', { name: 'Select year' })).toBeNull()
     expect(screen.queryByRole('grid', { name: 'Select month' })).toBeNull()
+    await waitFor(() => {
+      expect(container.querySelector('.m3-date-picker__mode-enter')).toBeNull()
+    })
   })
 
   test('moves cursor by month with swipe navigation', async () => {
@@ -453,16 +665,23 @@ describe('m3-vue/date-picker', () => {
     })
 
     expect(calendar.style.getPropertyValue('--m3-date-picker-slide-offset')).toBe('0px')
+    await fireEvent.pointerUp(calendar, {
+      clientX: 180,
+      clientY: 22,
+      pointerId: 1,
+    })
+
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
   })
 
-  test('starts swipe from calendar day buttons without selecting the date', async () => {
+  test('suppresses the click after swiping a day button and restores selection afterward', async () => {
     const { container, emitted } = render(M3DatePicker, {
       props: {
         value: new Date(2026, 6, 10),
       },
     })
     const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
-    const day = screen.getByRole('gridcell', { name: 'Friday, July 10, 2026' })
+    const day = screen.getByRole('gridcell', { name: 'Wednesday, July 15, 2026' })
 
     await fireEvent.pointerDown(day, {
       button: 0,
@@ -484,6 +703,10 @@ describe('m3-vue/date-picker', () => {
 
     expect(emitted().change).toBeUndefined()
     expect(emitted()['update:value']).toBeUndefined()
+
+    await new Promise(resolve => setTimeout(resolve, 250))
+    await fireEvent.click(day)
+    expect(emitted().change?.[0]).toEqual([new Date(2026, 6, 15)])
   })
 
   test('does not start swipe from navigation buttons', async () => {
@@ -507,7 +730,198 @@ describe('m3-vue/date-picker', () => {
       clientY: 22,
       pointerId: 1,
     })
+    await fireEvent.pointerUp(calendar, {
+      clientX: 20,
+      clientY: 22,
+      pointerId: 1,
+    })
 
     expect(calendar.style.getPropertyValue('--m3-date-picker-slide-offset')).toBe('0px')
+  })
+
+  test('preserves a day click after a small pointer move', async () => {
+    const { container, emitted } = render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10) },
+    })
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+    const day = screen.getByRole('gridcell', { name: 'Wednesday, July 15, 2026' })
+
+    await fireEvent.pointerDown(day, { button: 0, clientX: 100, clientY: 20, pointerId: 1 })
+    await fireEvent.pointerMove(calendar, { clientX: 95, clientY: 20, pointerId: 1 })
+    await fireEvent.pointerUp(calendar, { clientX: 95, clientY: 20, pointerId: 1 })
+    await fireEvent.click(day)
+
+    expect(emitted().change?.[0]).toEqual([new Date(2026, 6, 15)])
+  })
+
+  test('restores day clicks after an interrupted drag times out', async () => {
+    const { container, emitted } = render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10) },
+    })
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+    const day = screen.getByRole('gridcell', { name: 'Wednesday, July 15, 2026' })
+
+    await fireEvent.pointerDown(day, { button: 0, clientX: 100, clientY: 20, pointerId: 1 })
+    await fireEvent.pointerMove(calendar, { clientX: 80, clientY: 20, pointerId: 1 })
+    await fireEvent.pointerUp(calendar, { clientX: 80, clientY: 20, pointerId: 1 })
+
+    await new Promise(resolve => setTimeout(resolve, 250))
+    await fireEvent.click(day)
+
+    expect(emitted().change?.[0]).toEqual([new Date(2026, 6, 15)])
+  })
+
+  test('cancels an incomplete month drag without moving the calendar', async () => {
+    const { container } = render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10) },
+    })
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+
+    await fireEvent.pointerDown(calendar, {
+      button: 0,
+      clientX: 200,
+      clientY: 20,
+      pointerId: 1,
+    })
+    await fireEvent.pointerMove(calendar, {
+      clientX: 170,
+      clientY: 22,
+      pointerId: 1,
+    })
+    expect(calendar.style.getPropertyValue('--m3-date-picker-slide-offset')).toBe('-30px')
+
+    await fireEvent.pointerCancel(calendar, { pointerId: 1 })
+    await waitFor(() => {
+      expect(calendar.style.getPropertyValue('--m3-date-picker-slide-offset')).toBe('0px')
+    })
+    await waitFor(() => {
+      expect(container.querySelector('.m3-date-picker__month-track_animating')).toBeNull()
+    })
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+  })
+
+  test('ignores vertical movement and a different pointer during a month drag', async () => {
+    const { container } = render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10) },
+    })
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+
+    await fireEvent.pointerDown(calendar, {
+      button: 0,
+      clientX: 200,
+      clientY: 20,
+      pointerId: 1,
+    })
+    await fireEvent.pointerMove(calendar, {
+      clientX: 100,
+      clientY: 22,
+      pointerId: 2,
+    })
+    await fireEvent.pointerMove(calendar, {
+      clientX: 180,
+      clientY: 100,
+      pointerId: 1,
+    })
+    await fireEvent.pointerUp(calendar, {
+      clientX: 100,
+      clientY: 22,
+      pointerId: 2,
+    })
+
+    expect(calendar.style.getPropertyValue('--m3-date-picker-slide-offset')).toBe('0px')
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+
+    await fireEvent.pointerUp(calendar, {
+      clientX: 180,
+      clientY: 100,
+      pointerId: 1,
+    })
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+  })
+
+  test('keeps a day click available when pointer movement stays below the swipe threshold', async () => {
+    const { container, emitted } = render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10) },
+    })
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+    const day = screen.getByRole('gridcell', { name: 'Wednesday, July 15, 2026' })
+
+    await fireEvent.pointerDown(day, {
+      button: 0,
+      clientX: 100,
+      clientY: 20,
+      pointerId: 1,
+    })
+    await fireEvent.pointerMove(calendar, {
+      clientX: 98,
+      clientY: 20,
+      pointerId: 1,
+    })
+    await fireEvent.pointerUp(calendar, {
+      clientX: 98,
+      clientY: 20,
+      pointerId: 1,
+    })
+    await fireEvent.click(day)
+
+    expect(emitted().change?.[0]).toEqual([new Date(2026, 6, 15)])
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+  })
+
+  test('swipes back to the previous month', async () => {
+    const { container } = render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10) },
+    })
+    const calendar = container.querySelector('.m3-date-picker__calendar') as HTMLElement
+
+    await fireEvent.pointerDown(calendar, {
+      button: 0,
+      clientX: 100,
+      clientY: 20,
+      pointerId: 1,
+    })
+    await fireEvent.pointerUp(calendar, {
+      clientX: 200,
+      clientY: 22,
+      pointerId: 1,
+    })
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid', { name: 'June 2026' })).toBeTruthy()
+    })
+  })
+
+  test('does not start a month swipe when disabled or using a secondary pointer button', async () => {
+    const view = render(M3DatePicker, {
+      props: { value: new Date(2026, 6, 10), disabled: true },
+    })
+    const calendar = view.container.querySelector('.m3-date-picker__calendar') as HTMLElement
+
+    await fireEvent.pointerDown(calendar, {
+      button: 0,
+      clientX: 200,
+      clientY: 20,
+      pointerId: 1,
+    })
+    await fireEvent.pointerUp(calendar, {
+      clientX: 100,
+      clientY: 22,
+      pointerId: 1,
+    })
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+
+    await view.rerender({ disabled: false })
+    await fireEvent.pointerDown(calendar, {
+      button: 2,
+      clientX: 200,
+      clientY: 20,
+      pointerId: 2,
+    })
+    await fireEvent.pointerUp(calendar, {
+      clientX: 100,
+      clientY: 22,
+      pointerId: 2,
+    })
+    expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
   })
 })

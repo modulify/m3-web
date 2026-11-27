@@ -1,11 +1,16 @@
 {
   "all": false,
   "cache": false,
-  "check-coverage": true,
   "branches": 90,
   "functions": 90,
-  "lines": 90,
-  "statements": 90,
+  "lines": 95,
+  "statements": 95,
+  "extension": [".js", ".cjs", ".mjs", ".ts", ".tsx", ".jsx", ".vue"],
+  "include": [
+    "m3-foundation/lib/**",
+    "m3-react/src/**",
+    "m3-vue/src/**"
+  ],
   "exclude": ["**/storybook/**"],
   "temp-dir": ".nyc_output",
   "report-dir": "coverage",

@@ -1,5 +1,8 @@
+import type { M3CarouselExposed } from '@/components/carousel'
+
+import { defineComponent } from 'vue'
 import { fireEvent } from '@testing-library/vue'
-import { h, nextTick } from 'vue'
+import { h, nextTick, ref } from 'vue'
 import { render, screen } from '@testing-library/vue'
 
 import { M3Carousel, M3CarouselItem } from '@/components/carousel'
@@ -19,7 +22,7 @@ afterEach(() => {
   delete (HTMLElement.prototype as Partial<HTMLElement>).scrollTo
 })
 
-test('renders named carousel items in slot order and moves focus with arrows', async () => {
+test('renders named carousel items in declaration order and moves focus with arrows', async () => {
   const view = render(M3Carousel, {
     attrs: { 'aria-label': 'Places' },
     slots: { default: () => [
@@ -31,7 +34,9 @@ test('renders named carousel items in slot order and moves focus with arrows', a
   await nextTick()
 
   expect(screen.getByRole('region', { name: 'Places' }).getAttribute('aria-roledescription')).toBe('carousel')
+
   const items = screen.getAllByRole('group')
+
   expect(items.map(item => item.getAttribute('aria-label'))).toEqual([
     'Mountains, 1 of 3',
     'Coast, 2 of 3',
@@ -60,6 +65,79 @@ test('stores different aspect ratios for uncontained items', async () => {
   ])
 })
 
+test('renders an empty carousel and bare items without content', async () => {
+  const empty = render(M3Carousel)
+
+  expect(empty.getByRole('region', { name: 'Carousel' }).querySelector('.m3-carousel__item')).toBeNull()
+
+  empty.unmount()
+
+  const bare = render(M3Carousel, {
+    slots: { default: () => h(M3CarouselItem) },
+  })
+  await nextTick()
+
+  expect(bare.getByRole('group').querySelector('.m3-carousel__content')?.childElementCount).toBe(0)
+})
+
+test('exposes its rendered root and programmatic navigation', async () => {
+  const carousel = ref<M3CarouselExposed | null>(null)
+  const view = render(defineComponent({
+    setup: () => () => h(M3Carousel, { ref: carousel }, {
+      default: () => [h(M3CarouselItem), h(M3CarouselItem)],
+    }),
+  }))
+  await nextTick()
+
+  expect(carousel.value?.el).toBe(view.getByRole('region', { name: 'Carousel' }))
+
+  carousel.value?.goTo(1, false)
+  expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledWith({ left: expect.any(Number), behavior: 'auto' })
+})
+
+test('uses the requested position, height, and item labels as props change', async () => {
+  const view = render(M3Carousel, {
+    props: {
+      variant: 'uncontained',
+      index: 1,
+      height: 240,
+      positionLabel: (position: number, total: number) => `${position}/${total}`,
+    },
+    slots: { default: () => [
+      h(M3CarouselItem, null, { default: () => 'First' }),
+      h(M3CarouselItem, { 'aria-label': 'Second' }, { default: () => 'Second' }),
+      h(M3CarouselItem, { 'aria-label': 'Third' }, { default: () => 'Third' }),
+    ] },
+  })
+  await nextTick()
+
+  const region = screen.getByRole('region', { name: 'Carousel' })
+  Object.defineProperty(region, 'clientHeight', { configurable: true, value: 240 })
+
+  expect(region.style.height).toBe('240px')
+  expect(screen.getAllByRole('group').map(item => item.getAttribute('aria-label'))).toEqual([
+    '1/3', 'Second, 2/3', 'Third, 3/3',
+  ])
+  expect(HTMLElement.prototype.scrollTo).toHaveBeenCalled()
+
+  await view.rerender({ variant: 'full-screen', height: '20rem', preferred: 300 })
+  await view.rerender({ index: 2 })
+
+  expect(region.style.height).toBe('20rem')
+  expect(region.classList.contains('m3-carousel_full-screen')).toBe(true)
+  expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledWith({ top: 512, behavior: 'auto' })
+
+  const calls = vi.mocked(HTMLElement.prototype.scrollTo).mock.calls.length
+  await view.rerender({ index: undefined })
+  expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledTimes(calls)
+})
+
+test('item descriptors do not render outside a carousel', () => {
+  const descriptor = render(M3CarouselItem)
+
+  expect(descriptor.container.childElementCount).toBe(0)
+})
+
 test('activates interactive items with pointer and keyboard and skips disabled items', async () => {
   const activate = vi.fn()
   const disabled = vi.fn()
@@ -84,6 +162,7 @@ test('activates interactive items with pointer and keyboard and skips disabled i
 
   const region = screen.getByRole('region', { name: 'Places' })
   const items = Array.from(region.querySelectorAll<HTMLElement>('.m3-carousel__item'))
+
   expect(screen.getAllByRole('button').map(item => item.getAttribute('aria-label'))).toEqual([
     'Mountains, 1 of 3', 'Museum, 2 of 3', 'Garden, 3 of 3',
   ])

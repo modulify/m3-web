@@ -72,6 +72,21 @@ test('reduced motion uses equal fixed sizes without parallax', () => {
   expect(frames.every(item => item.parallax === 0)).toBe(true)
 })
 
+test('reduced motion also removes parallax from uncontained items and scales hero items', () => {
+  const uncontained = carouselGeometry({ ...base, variant: 'uncontained', reduced: true })
+  const hero = carouselGeometry({ ...base, variant: 'hero', reduced: true })
+
+  expect(uncontained.frames(100).every(item => item.parallax === 0)).toBe(true)
+  expect(hero.frames(0)[0].size).toBeCloseTo((base.width - 32) * .8)
+})
+
+test('non-finite preferred size falls back to the standard item width', () => {
+  const standard = carouselGeometry({ ...base, variant: 'uncontained' })
+  const invalid = carouselGeometry({ ...base, variant: 'uncontained', preferred: Infinity })
+
+  expect(invalid.frames(0)[0].size).toBe(standard.frames(0)[0].size)
+})
+
 const createCarousel = (count = 4) => {
   const root = document.createElement('div')
   const viewport = document.createElement('div')
@@ -108,7 +123,13 @@ const createCarousel = (count = 4) => {
     },
     setPointerCapture: { value: vi.fn((id: number) => captured.add(id)) },
     hasPointerCapture: { value: vi.fn((id: number) => captured.has(id)) },
-    releasePointerCapture: { value: vi.fn((id: number) => captured.delete(id)) },
+    releasePointerCapture: { value: vi.fn((id: number) => {
+      if (!captured.has(id)) {
+        throw new Error('Pointer capture was already released')
+      }
+
+      captured.delete(id)
+    }) },
   })
 
   let resize: ResizeObserverCallback = () => {}
@@ -122,7 +143,7 @@ const createCarousel = (count = 4) => {
   vi.stubGlobal('requestAnimationFrame', () => 1)
   vi.stubGlobal('cancelAnimationFrame', vi.fn())
 
-  return { root, viewport, items, resize: () => resize([], {} as ResizeObserver), disconnect }
+  return { root, viewport, items, captured, resize: () => resize([], {} as ResizeObserver), disconnect }
 }
 
 const pointer = (type: string, x: number, id = 1, pointerType = 'mouse') => Object.assign(
@@ -199,6 +220,61 @@ test('mouse panning captures the pointer, snaps, and suppresses its click', () =
   controller.dispose()
 })
 
+test('finishes panning when pointer capture disappears before release', () => {
+  const { root, viewport, items, captured } = createCarousel()
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+
+  items[0].dispatchEvent(pointer('pointerdown', 200))
+  window.dispatchEvent(pointer('pointermove', 120))
+  expect(captured.has(1)).toBe(true)
+
+  captured.delete(1)
+
+  expect(() => window.dispatchEvent(pointer('pointerup', 120))).not.toThrow()
+  expect(viewport.releasePointerCapture).not.toHaveBeenCalled()
+  expect(viewport.style.userSelect).toBe('')
+
+  controller.dispose()
+})
+
+test('an empty carousel can finish a pan without neighboring positions', () => {
+  const { root, viewport } = createCarousel(0)
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+
+  viewport.dispatchEvent(pointer('pointerdown', 200))
+  window.dispatchEvent(pointer('pointermove', 150))
+  window.dispatchEvent(pointer('pointerup', 150))
+
+  expect(viewport.scrollTo).toHaveBeenCalledWith({ left: 0, behavior: 'smooth' })
+  expect(viewport.style.userSelect).toBe('')
+  controller.dispose()
+})
+
+test('reverse mouse panning snaps to the preceding item and ignores another pointer', () => {
+  const { root, viewport, items } = createCarousel()
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+
+  controller.goTo(2, false)
+  const startingOffset = viewport.scrollLeft
+
+  items[2].dispatchEvent(pointer('pointerdown', 100))
+  window.dispatchEvent(pointer('pointermove', 200))
+  expect(viewport.scrollLeft).toBeLessThan(startingOffset)
+
+  window.dispatchEvent(pointer('pointerup', 200, 2))
+  expect(viewport.hasPointerCapture(1)).toBe(true)
+
+  window.dispatchEvent(pointer('pointerup', 200))
+  expect(viewport.hasPointerCapture(1)).toBe(false)
+  expect(viewport.scrollLeft).toBeCloseTo(carouselGeometry({
+    ...base,
+    variant: 'multi-browse',
+    count: items.length,
+  }).positions[1])
+
+  controller.dispose()
+})
+
 test('keyboard navigation skips disabled items and activates interactive items', () => {
   const { root, viewport, items, resize } = createCarousel()
   root.style.direction = 'rtl'
@@ -211,6 +287,8 @@ test('keyboard navigation skips disabled items and activates interactive items',
   items[2].focus()
   items[2].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
   expect(document.activeElement).toBe(items[0])
+  items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }))
+  expect(document.activeElement).toBe(items[2])
   items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }))
   expect(document.activeElement).toBe(items[3])
   items[3].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
@@ -231,6 +309,56 @@ test('keyboard navigation skips disabled items and activates interactive items',
   controller.dispose()
 })
 
+test('smooth keyboard scrolling is not interrupted by snap during the journey', () => {
+  vi.useFakeTimers()
+  const { root, viewport, items } = createCarousel()
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+  controller.goTo(3, false)
+
+  const scrollTo = vi.mocked(viewport.scrollTo)
+  scrollTo.mockClear()
+  scrollTo.mockImplementation(() => {})
+
+  items[3].dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }))
+  expect(scrollTo).toHaveBeenCalledWith({ left: 0, behavior: 'smooth' })
+
+  viewport.scrollLeft = 400
+  viewport.dispatchEvent(new Event('scroll'))
+  vi.advanceTimersByTime(100)
+  expect(scrollTo).toHaveBeenCalledOnce()
+
+  viewport.scrollLeft = 0
+  viewport.dispatchEvent(new Event('scroll'))
+  vi.advanceTimersByTime(100)
+  expect(scrollTo).toHaveBeenCalledOnce()
+
+  controller.dispose()
+})
+
+test.each(['wheel', 'touchstart'])('native %s scrolling takes over a pending smooth scroll', eventType => {
+  vi.useFakeTimers()
+  const { root, viewport } = createCarousel()
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+  const scrollTo = vi.mocked(viewport.scrollTo)
+
+  scrollTo.mockClear()
+  scrollTo.mockImplementation(() => {})
+  controller.goTo(3)
+  expect(scrollTo).toHaveBeenCalledOnce()
+
+  viewport.scrollLeft = 120
+  viewport.dispatchEvent(new Event('scroll'))
+  vi.advanceTimersByTime(100)
+  expect(scrollTo).toHaveBeenCalledOnce()
+
+  viewport.dispatchEvent(new Event(eventType))
+  viewport.dispatchEvent(new Event('scroll'))
+  vi.advanceTimersByTime(100)
+  expect(scrollTo).toHaveBeenCalledTimes(2)
+
+  controller.dispose()
+})
+
 test('touch and controls do not start a mouse pan, and canceled pans release selection', () => {
   const { root, viewport, items } = createCarousel()
   const button = document.createElement('button')
@@ -247,6 +375,8 @@ test('touch and controls do not start a mouse pan, and canceled pans release sel
   items[0].dispatchEvent(pointer('pointerdown', 200))
   window.dispatchEvent(pointer('pointermove', 150))
   expect(viewport.scrollLeft).toBe(50)
+  window.dispatchEvent(pointer('pointercancel', 150, 2))
+  expect(viewport.style.userSelect).toBe('none')
   window.dispatchEvent(pointer('pointercancel', 150))
   expect(viewport.style.userSelect).toBe('')
   controller.dispose()
@@ -287,5 +417,195 @@ test('free scrolling stays free and a native drag is blocked only during a mouse
   viewport.dispatchEvent(new Event('scroll'))
   vi.advanceTimersByTime(100)
   expect(viewport.scrollLeft).toBeCloseTo(174.3)
+  controller.dispose()
+})
+
+test('vertical panning uses the pointer Y coordinate and honors the release threshold', () => {
+  vi.useFakeTimers()
+  const { root, viewport, items } = createCarousel()
+  const controller = attachCarousel(root, { variant: 'full-screen', scroll: 'snap', preferred: 280 })
+
+  items[0].dispatchEvent(pointer('pointerdown', 200))
+  window.dispatchEvent(pointer('pointermove', 198))
+  expect(viewport.scrollTop).toBe(0)
+  window.dispatchEvent(pointer('pointermove', 140))
+  expect(viewport.scrollTop).toBe(60)
+  window.dispatchEvent(pointer('pointerup', 140))
+  expect(viewport.scrollTop).toBe(256)
+
+  items[1].dispatchEvent(pointer('pointerdown', 140))
+  window.dispatchEvent(pointer('pointermove', 150))
+  window.dispatchEvent(pointer('pointerup', 150))
+  expect(viewport.scrollTop).toBe(246)
+  vi.advanceTimersByTime(100)
+  expect(viewport.scrollTop).toBe(256)
+
+  controller.dispose()
+})
+
+test('keyboard controls respect disabled items, boundaries, and Space activation', () => {
+  const { root, viewport, items } = createCarousel()
+  items[0].classList.add('m3-carousel__item_interactive')
+  items[1].setAttribute('aria-disabled', 'true')
+  const onClick = vi.fn()
+  items[0].addEventListener('click', onClick)
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+
+  items[0].dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }))
+  expect(items[0].classList.contains('m3-carousel__item_pressed')).toBe(true)
+  items[0].dispatchEvent(new KeyboardEvent('keyup', { key: ' ', bubbles: true }))
+  expect(onClick).toHaveBeenCalledOnce()
+  items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }))
+  items[2].dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }))
+  expect(onClick).toHaveBeenCalledOnce()
+
+  items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
+  expect(document.activeElement).toBe(items[2])
+  items[2].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }))
+  expect(document.activeElement).toBe(items[0])
+  items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }))
+  expect(document.activeElement).toBe(items[0])
+  expect(viewport.scrollLeft).toBe(0)
+
+  items[0].setAttribute('aria-disabled', 'true')
+  items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+  expect(items[0].classList.contains('m3-carousel__item_pressed')).toBe(false)
+  items[0].dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }))
+  expect(onClick).toHaveBeenCalledOnce()
+
+  controller.dispose()
+})
+
+test('ignores keyboard input outside its own items', () => {
+  const { root } = createCarousel()
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+
+  root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
+
+  const outerItem = document.createElement('div')
+  outerItem.className = 'm3-carousel__item'
+  root.before(outerItem)
+  outerItem.append(root)
+  root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
+
+  expect(document.activeElement).toBe(document.body)
+  controller.dispose()
+})
+
+test('ignores a focused item inserted before the next measurement', () => {
+  const { root, viewport } = createCarousel()
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+  const lateItem = document.createElement('div')
+  lateItem.className = 'm3-carousel__item'
+  root.querySelector('.m3-carousel__stage')!.append(lateItem)
+  vi.spyOn(lateItem, 'matches').mockImplementation(selector => selector === ':focus-visible')
+
+  lateItem.dispatchEvent(new FocusEvent('focusin', { bubbles: true }))
+
+  expect(viewport.scrollTo).not.toHaveBeenCalled()
+  controller.dispose()
+})
+
+test('remeasures when items are added and keeps the selected item after a size change', () => {
+  const { root, viewport, items, resize } = createCarousel()
+  const onChange = vi.fn()
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280, onChange })
+
+  controller.goTo(1, false)
+  resize()
+  expect(onChange).toHaveBeenLastCalledWith(1)
+  const current = viewport.scrollLeft
+
+  const extra = document.createElement('div')
+  extra.className = 'm3-carousel__item'
+  extra.tabIndex = 0
+  items[1].after(extra)
+  Object.defineProperty(root, 'clientWidth', { configurable: true, value: 420 })
+  resize()
+
+  expect(extra.dataset.scale).toBeDefined()
+  expect(viewport.scrollLeft).not.toBe(current)
+  expect(onChange).toHaveBeenLastCalledWith(1)
+
+  controller.dispose()
+})
+
+test('starts empty and renders items after they arrive', () => {
+  const { root, viewport, resize } = createCarousel(0)
+  const onChange = vi.fn()
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280, onChange })
+
+  expect(onChange).not.toHaveBeenCalled()
+  controller.goTo(3)
+  expect(viewport.scrollTo).toHaveBeenCalledWith({ left: 0, behavior: 'smooth' })
+
+  const item = document.createElement('div')
+  item.className = 'm3-carousel__item'
+  root.querySelector('.m3-carousel__stage')!.append(item)
+  resize()
+
+  expect(item.dataset.scale).toBe('large')
+  expect(onChange).toHaveBeenCalledWith(0)
+  controller.dispose()
+})
+
+test('uses immediate scrolling when reduced motion is requested', () => {
+  const { root, viewport, items } = createCarousel()
+  vi.stubGlobal('matchMedia', () => ({ matches: true, addEventListener: vi.fn() }))
+  const controller = attachCarousel(root, { variant: 'multi-browse', scroll: 'snap', preferred: 280 })
+
+  controller.goTo(2)
+  expect(viewport.scrollTo).toHaveBeenCalledWith({ left: expect.any(Number), behavior: 'auto' })
+  expect(items.every(item => item.style.getPropertyValue('--m3-carousel-parallax') === '0px')).toBe(true)
+
+  controller.dispose()
+})
+
+test('renders the active item after native scrolling', () => {
+  const { root, viewport, items } = createCarousel()
+  let renderFrame: FrameRequestCallback | undefined
+  vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+    renderFrame = callback
+    return 1
+  })
+  const onChange = vi.fn()
+  const controller = attachCarousel(root, {
+    variant: 'multi-browse',
+    scroll: 'auto',
+    preferred: 280,
+    onChange,
+  })
+
+  viewport.scrollLeft = 200
+  viewport.dispatchEvent(new Event('scroll'))
+  renderFrame?.(0)
+
+  expect(onChange).toHaveBeenLastCalledWith(1)
+  expect(items[1].dataset.scale).toBe('large')
+  controller.dispose()
+})
+
+test('remeasures after a reduced motion preference change', () => {
+  const { root, items } = createCarousel()
+  let onChange: EventListener | undefined
+  const preference = {
+    matches: false,
+    addEventListener: vi.fn((_type: string, callback: EventListener) => {
+      onChange = callback
+    }),
+  }
+  vi.stubGlobal('matchMedia', () => preference)
+  const controller = attachCarousel(root, {
+    variant: 'multi-browse',
+    scroll: 'snap',
+    preferred: 280,
+  })
+
+  expect(items.some(item => item.style.getPropertyValue('--m3-carousel-parallax') !== '0px')).toBe(true)
+
+  preference.matches = true
+  onChange?.(new Event('change'))
+
+  expect(items.every(item => item.style.getPropertyValue('--m3-carousel-parallax') === '0px')).toBe(true)
   controller.dispose()
 })

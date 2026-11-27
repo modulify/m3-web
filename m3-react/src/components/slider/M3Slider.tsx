@@ -64,8 +64,8 @@ const withPercentage = (value: number): CSSProperties => {
   return { '--percentage': `${value}%` } as CSSProperties
 }
 
-const getEventX = (event: globalThis.MouseEvent | globalThis.TouchEvent): number => {
-  return 'clientX' in event ? event.clientX : event.touches[0].clientX
+const getEventX = (event: globalThis.MouseEvent | globalThis.TouchEvent): number | null => {
+  return 'clientX' in event ? event.clientX : event.touches[0]?.clientX ?? null
 }
 
 export default defineComponent(function M3Slider({
@@ -197,9 +197,10 @@ export default defineComponent(function M3Slider({
 
     const width = _track.offsetWidth
     const { left, right } = _track.getBoundingClientRect()
+    const x = getEventX(event)
 
-    return width > 0
-      ? (restrict(getEventX(event), [left, right]) - left) / width
+    return width > 0 && x !== null
+      ? (restrict(x, [left, right]) - left) / width
       : null
   }, [])
 
@@ -228,7 +229,7 @@ export default defineComponent(function M3Slider({
     safeStep,
   ])
 
-  const nextFor = useCallback((value: number, stepOrLeap: number | boolean = false): number => {
+  const nextFor = useCallback((value: number, stepOrLeap: number | boolean): number => {
     const step = typeof stepOrLeap === 'boolean' ? stepFor(stepOrLeap) : stepOrLeap
     const next = value + step
 
@@ -284,15 +285,12 @@ export default defineComponent(function M3Slider({
   ])
 
   const setValueMin = useCallback((value: number) => {
-    if (type === 'range') {
-      const [, valueMax] = current
+    const [, valueMax] = current
 
-      onUpdate([Math.min(value, valueMax), valueMax])
-    }
+    onUpdate([Math.min(value, valueMax), valueMax])
   }, [
     current,
     onUpdate,
-    type,
   ])
 
   const onNotchMaxClick = useCallback(() => {
@@ -654,6 +652,11 @@ export default defineComponent(function M3Slider({
                   setDraggingHandle('min')
                 }
               }}
+              onTouchStart={() => {
+                if (!disabled) {
+                  setDraggingHandle('min')
+                }
+              }}
             />
           </div>
         ) : null}
@@ -679,6 +682,11 @@ export default defineComponent(function M3Slider({
             onKeyDown={onKeyDownForMax}
             onMouseDown={(event) => {
               if (!disabled && event.button === 0) {
+                setDraggingHandle('max')
+              }
+            }}
+            onTouchStart={() => {
+              if (!disabled) {
                 setDraggingHandle('max')
               }
             }}

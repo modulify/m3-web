@@ -177,14 +177,19 @@ jobs:
         run: |
           rm -rf coverage .nyc_output artifacts
           mkdir -p coverage/.parts .nyc_output artifacts
-          yarn test --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.reportsDirectory=coverage/unit
+          yarn test --project m3-foundation --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.include='lib/**/*.ts' --coverage.reportsDirectory=coverage/unit-foundation
+          yarn test --project m3-react --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.include='src/**/*.{ts,tsx}' --coverage.include='../m3-foundation/lib/**/*.ts' --coverage.allowExternal=true --coverage.reportsDirectory=coverage/unit-react
+          yarn test --project m3-vue --coverage --coverage.provider=istanbul --coverage.reporter=json --coverage.include='src/**/*.{ts,vue}' --coverage.include='../m3-foundation/lib/**/*.ts' --coverage.allowExternal=true --coverage.reportsDirectory=coverage/unit-vue
           yarn test:e2e:coverage
-          cp coverage/unit/coverage-final.json coverage/.parts/unit.json
+          cp coverage/unit-foundation/coverage-final.json coverage/.parts/unit-foundation.json
+          cp coverage/unit-react/coverage-final.json coverage/.parts/unit-react.json
+          cp coverage/unit-vue/coverage-final.json coverage/.parts/unit-vue.json
           cp coverage/e2e-react/coverage-final.json coverage/.parts/e2e-react.json
           cp coverage/e2e-vue/coverage-final.json coverage/.parts/e2e-vue.json
           yarn nyc merge coverage/.parts .nyc_output/coverage-final.json >/dev/null
           yarn nyc report
           yarn nyc report --reporter=json-summary >/dev/null
+          yarn node scripts/verify-coverage-merge.mjs
           yarn node --experimental-strip-types scripts/show-total-coverage.ts
           yarn nyc check-coverage
 

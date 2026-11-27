@@ -1,3 +1,5 @@
+import type { M3ScrollRailExposed } from '@/components/scroll-rail'
+
 import { act } from '@testing-library/react'
 import { createRef } from 'react'
 import { render } from '@testing-library/react'
@@ -97,5 +99,22 @@ describe('m3-react/scroll-rail', () => {
     expect(rail.sync).toHaveBeenCalledTimes(1)
     expect(ref.current?.el).toBe(container.firstElementChild)
   })
+
+  test('updates rail options from changed props', () => {
+    const rail = {
+      init: vi.fn(),
+      destroy: vi.fn(),
+      sync: vi.fn(),
+      horizontal: false,
+      disabled: false,
+    }
+    createRailMock.mockReturnValue(rail)
+
+    const view = render(<M3ScrollRail horizontal={false} disabled={false} />)
+
+    view.rerender(<M3ScrollRail horizontal={true} disabled={true} />)
+
+    expect(rail.horizontal).toBe(true)
+    expect(rail.disabled).toBe(true)
+  })
 })
-import type { M3ScrollRailExposed } from '@/components/scroll-rail'

@@ -10,7 +10,6 @@ import {
 } from '@testing-library/react'
 
 import { M3Icon } from '@/components/icon'
-
 import { M3SideSheet } from '@/components/side-sheet'
 
 vi.mock('@/components/scroll-rail', () => ({

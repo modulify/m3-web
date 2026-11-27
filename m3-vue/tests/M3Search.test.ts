@@ -1,3 +1,5 @@
+import type { M3SearchMethods } from '@/components/search'
+
 import { defineComponent } from 'vue'
 import { fireEvent } from '@testing-library/vue'
 import { h, nextTick, ref } from 'vue'
@@ -28,7 +30,41 @@ const mountSearch = (onSubmit = vi.fn()) => {
 }
 
 describe('m3-vue/search', () => {
-  test('opens, edits and submits without losing the query', async () => {
+  test('ignores a queued resize after the search bar unmounts', async () => {
+    let notify: ResizeObserverCallback | null = null
+    vi.stubGlobal('ResizeObserver', class {
+      constructor (private readonly callback: ResizeObserverCallback) {}
+
+      observe(element: Element) {
+        if (element.classList.contains('m3-search__bar')) {
+          notify = this.callback
+        }
+      }
+
+      disconnect() {}
+    })
+
+    try {
+      const view = render(M3Search, {
+        props: {
+          query: '',
+          open: true,
+          label: 'Search messages',
+          status: '',
+        },
+      })
+      await nextTick()
+      expect(notify).not.toBeNull()
+
+      view.unmount()
+
+      expect(() => notify!([], {} as ResizeObserver)).not.toThrow()
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
+  test('opens from the bar, edits and submits while keeping the query visible', async () => {
     const { onSubmit } = mountSearch()
     const trigger = screen.getByRole('button', { name: 'Search messages' })
     trigger.focus()
@@ -50,7 +86,7 @@ describe('m3-vue/search', () => {
     expect(document.activeElement).toBe(dialog.querySelector('.m3-search__results'))
   })
 
-  test('navigates results, clears and closes with focus restoration', async () => {
+  test('navigates results, clears input and returns focus after Escape', async () => {
     const { open } = mountSearch()
     const trigger = screen.getByRole('button', { name: 'Search messages' })
     trigger.focus()
@@ -75,6 +111,28 @@ describe('m3-vue/search', () => {
     expect(document.activeElement).toBe(trigger)
   })
 
+  test('navigates upward from the search box and stops at either end of the results', async () => {
+    mountSearch()
+    await fireEvent.click(screen.getByRole('button', { name: 'Search messages' }))
+    await nextTick()
+
+    const input = screen.getByRole('searchbox', { name: 'Search messages' })
+    const first = screen.getByRole('button', { name: 'First result' })
+    const last = screen.getByRole('button', { name: 'Second result' })
+
+    await fireEvent.keyDown(input, { key: 'ArrowUp' })
+    expect(document.activeElement).toBe(last)
+
+    await fireEvent.keyDown(last, { key: 'ArrowUp' })
+    expect(document.activeElement).toBe(first)
+
+    await fireEvent.keyDown(first, { key: 'ArrowUp' })
+    expect(document.activeElement).toBe(first)
+
+    await fireEvent.keyDown(last, { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(last)
+  })
+
   test('renders divided docked geometry when explicitly selected', async () => {
     render(M3Search, {
       props: {
@@ -84,5 +142,37 @@ describe('m3-vue/search', () => {
     })
     await nextTick()
     expect(document.querySelector('.m3-search__view_divided.m3-search__view_docked')).not.toBeNull()
+  })
+
+  test('exposes programmatic opening, closing, and focus', async () => {
+    const open = ref(false)
+    const instance = ref<M3SearchMethods | null>(null)
+    const onOpen = vi.fn((value: boolean) => {
+      open.value = value
+    })
+
+    render(defineComponent({
+      setup: () => () => h(M3Search, {
+        ref: instance,
+        query: '',
+        open: open.value,
+        label: 'Search messages',
+        status: 'No results',
+        'onUpdate:open': onOpen,
+      }),
+    }))
+
+    instance.value?.focus()
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Search messages' }))
+
+    instance.value?.open()
+    await nextTick()
+    expect(onOpen).toHaveBeenCalledWith(true)
+
+    instance.value?.focus()
+    expect(document.activeElement).toBe(screen.getByRole('searchbox', { name: 'Search messages' }))
+
+    instance.value?.close()
+    expect(onOpen).toHaveBeenLastCalledWith(false)
   })
 })

@@ -135,6 +135,9 @@ continuing.
   this repository. Reread it before every commit creation; it standardizes
   commit grouping, Conventional Commits, workspace scopes, and commitlint
   limits.
+- `component-styling`: Use when creating, refactoring, or reviewing component
+  SCSS and Vue/React class bindings. Keeps foundation styling, BEM, and
+  conditional classes consistent across workspaces.
 - `coverage-recovery`: Use when coverage is below target or uncovered code must
   be analyzed and closed without adding artificial tests.
 - `docs-parity`: Use when creating or editing files under `docs/`. Keeps

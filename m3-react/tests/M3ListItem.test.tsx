@@ -3,24 +3,35 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { M3ListItem } from '@/components/list'
 
 describe('m3-react/list-item', () => {
-  test('renders a three-line navigation row with leading and trailing content', () => {
+  test('renders a three-line destination with leading and trailing content', () => {
     const onClick = vi.fn((event: { preventDefault(): void }) => event.preventDefault())
     const onKeyUp = vi.fn()
     const { container } = render(
-      <M3ListItem href="/inbox" overline="Mail" headline="Inbox" supportingText="24 unread" selected onClick={onClick} onKeyUp={onKeyUp}>
+      <M3ListItem
+        href="/inbox"
+        overline="Mail"
+        headline="Inbox"
+        supportingText="24 unread"
+        selected
+        onClick={onClick}
+        onKeyUp={onKeyUp}
+      >
         <M3ListItem.Leading><span>Icon</span></M3ListItem.Leading>
         <M3ListItem.Trailing><span>24</span></M3ListItem.Trailing>
       </M3ListItem>
     )
     const link = screen.getByRole('link', { name: /Inbox/ })
     const item = container.querySelector('.m3-list-item') as HTMLElement
+
     expect(item.classList.contains('m3-list-item_multiline')).toBe(true)
     expect(item.classList.contains('m3-list-item_selected')).toBe(true)
     expect(item.style.getPropertyValue('--m3-list-item-supporting-lines')).toBe('2')
     expect(container.querySelector('.m3-list-item__leading')).not.toBeNull()
     expect(container.querySelector('.m3-list-item__trailing')).not.toBeNull()
+
     fireEvent.click(link)
     fireEvent.keyUp(link, { code: 'Enter' })
+
     expect(onClick).toHaveBeenCalledTimes(1)
     expect(onKeyUp).toHaveBeenCalledTimes(1)
   })
@@ -29,6 +40,7 @@ describe('m3-react/list-item', () => {
     const onClick = vi.fn()
     const { container } = render(<M3ListItem href="/admin" headline="Admin" disabled onClick={onClick} />)
     const anchor = container.querySelector('a') as HTMLAnchorElement
+
     expect(anchor.getAttribute('href')).toBeNull()
     expect(anchor.getAttribute('aria-disabled')).toBe('true')
     expect(anchor.tabIndex).toBe(-1)
@@ -45,8 +57,10 @@ describe('m3-react/list-item', () => {
       </M3ListItem>
     )
     const button = screen.getByRole('button', { name: /Save draft/ }) as HTMLButtonElement
+
     expect(button.type).toBe('submit')
     expect(container.querySelector('.m3-list-item__supporting-text')).not.toBeNull()
+
     fireEvent.click(button)
     expect(onClick).toHaveBeenCalledTimes(1)
   })

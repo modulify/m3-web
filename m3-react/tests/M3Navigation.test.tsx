@@ -2,7 +2,9 @@ import type { M3NavigationExposed } from '@/components/navigation'
 
 import { act } from '@testing-library/react'
 import { createRef } from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
+import { renderToString } from 'react-dom/server'
+import { screen } from '@testing-library/react'
 import { useState } from 'react'
 
 import {
@@ -13,6 +15,32 @@ import {
 } from '@/components/navigation'
 
 describe('m3-react/navigation', () => {
+  test('renders without a layer host during server rendering', () => {
+    const document = globalThis.document
+    vi.stubGlobal('document', undefined)
+
+    try {
+      expect(renderToString(<M3Navigation appearance="rail" />)).toBe('')
+    } finally {
+      vi.stubGlobal('document', document)
+    }
+  })
+
+  test('accepts empty navigation and section slots', () => {
+    render(<M3Navigation appearance="rail">
+      <M3Navigation.Top />
+      <M3Navigation.Header />
+      <M3Navigation.Subheader />
+      <M3NavigationSection>
+        <M3NavigationSection.Header />
+      </M3NavigationSection>
+    </M3Navigation>)
+
+    expect(document.querySelector('.m3-navigation__top')).not.toBeNull()
+    expect(document.querySelector('.m3-navigation__header')).not.toBeNull()
+    expect(document.querySelector('.m3-navigation__section-header')).not.toBeNull()
+  })
+
   test('opens from a trigger without relying on legacy DOM lookup', () => {
     const Navigation = () => {
       const [expanded, setExpanded] = useState(false)

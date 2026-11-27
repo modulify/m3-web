@@ -132,7 +132,7 @@ const waveHeight = computed(() => stroke.value + 6)
 const wavePath = computed(() => linearProgressWavePath(waveHeight.value))
 
 let listeners: AbortController | undefined
-let refreshMotion = () => {}
+let refreshMotion: () => void
 
 const frame = useAnimationFrame()
 const observer = useResizeObserver(root, () => refreshMotion())

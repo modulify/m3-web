@@ -1,5 +1,6 @@
 import type { M3FabButtonExposed } from '@/components/fab-button'
 
+import { act } from '@testing-library/react'
 import { createRef } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 
@@ -63,5 +64,23 @@ describe('m3-react/fab-button', () => {
     expect(button.classList.contains('m3-fab-button_has-leading-icon')).toBe(false)
     expect(container.querySelector('.m3-fab-button__text')).toBeNull()
     expect(action.current?.el).toBe(button)
+  })
+
+  test('exposes button controls and switches the underlying element with a destination', () => {
+    const action = createRef<M3FabButtonExposed>()
+    const onClick = vi.fn()
+    const view = render(<M3FabButton ref={action} onClick={onClick}>Create</M3FabButton>)
+    const button = screen.getByRole('button', { name: 'Create' })
+
+    expect(action.current?.el).toBe(button)
+    action.current?.focus()
+    expect(document.activeElement).toBe(button)
+    action.current?.blur()
+    expect(document.activeElement).not.toBe(button)
+    act(() => action.current?.click())
+    expect(onClick).toHaveBeenCalledOnce()
+
+    view.rerender(<M3FabButton ref={action} href="/new">Create</M3FabButton>)
+    expect(action.current?.el).toBe(screen.getByRole('link', { name: 'Create' }))
   })
 })

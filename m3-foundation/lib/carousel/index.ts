@@ -33,6 +33,7 @@ class NativeCarouselController implements CarouselController {
   private frame = 0
   private snapTimer = 0
   private clickTimer = 0
+  private scrollTarget: number | null = null
   private active = -1
   private rtl = false
   private pointer: { id: number; start: number; offset: number; anchor: number; moved: boolean } | null = null
@@ -116,6 +117,12 @@ class NativeCarouselController implements CarouselController {
 
   private onScroll () {
     this.scheduleRender()
+
+    if (this.scrollTarget !== null) {
+      if (Math.abs(this.offset() - this.scrollTarget) > 1) return
+      this.scrollTarget = null
+    }
+
     window.clearTimeout(this.snapTimer)
     this.snapTimer = window.setTimeout(() => this.snap(), 100)
   }
@@ -126,6 +133,7 @@ class NativeCarouselController implements CarouselController {
     const target = event.target as Element
     if (target.closest('a, button, input, textarea, select')) return
 
+    this.scrollTarget = null
     this.viewport.style.userSelect = 'none'
     this.pointer = {
       id: event.pointerId,
@@ -252,6 +260,8 @@ class NativeCarouselController implements CarouselController {
   private listen () {
     const signal = this.listeners.signal
     this.viewport.addEventListener('scroll', () => this.onScroll(), { passive: true, signal })
+    this.viewport.addEventListener('wheel', () => this.scrollTarget = null, { passive: true, signal })
+    this.viewport.addEventListener('touchstart', () => this.scrollTarget = null, { passive: true, signal })
     this.viewport.addEventListener('pointerdown', event => this.onPointerDown(event), { signal })
     window.addEventListener('pointermove', event => this.onPointerMove(event), { signal })
     window.addEventListener('pointerup', event => this.onPointerUp(event), { signal })
@@ -331,10 +341,14 @@ class NativeCarouselController implements CarouselController {
   goTo (index: number, smooth = true) {
     const item = Math.max(0, Math.min(this.items.length - 1, index))
     const target = Math.min(this.geometry.positions[item] ?? 0, this.limit())
+    const animated = smooth && !this.reducedMotion.matches
+
+    window.clearTimeout(this.snapTimer)
+    this.scrollTarget = animated && Math.abs(this.offset() - target) > 1 ? target : null
 
     this.viewport.scrollTo({
       [this.geometry.vertical ? 'top' : 'left']: target,
-      behavior: smooth && !this.reducedMotion.matches ? 'smooth' : 'auto',
+      behavior: animated ? 'smooth' : 'auto',
     })
     this.scheduleRender()
   }

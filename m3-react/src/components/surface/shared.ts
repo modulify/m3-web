@@ -47,10 +47,10 @@ export interface M3SurfacePanelOptions extends HTMLAttributes<HTMLElement> {
 }
 
 export const getSurfacePanelClassName = ({
-  className = '',
-  elevation = 0,
-  variant = 'auto',
-}: Pick<M3SurfacePanelOptions, 'className' | 'elevation' | 'variant'>): string => {
+  className,
+  elevation,
+  variant,
+}: Required<Pick<M3SurfacePanelOptions, 'className' | 'elevation' | 'variant'>>): string => {
   return toClassName([className, getSurfacePanelClassRecord(elevation, variant)])
 }
 

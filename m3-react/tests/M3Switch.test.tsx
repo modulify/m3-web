@@ -1,3 +1,7 @@
+import type { M3SwitchExposed } from '@/components/switch'
+
+import { act } from '@testing-library/react'
+import { createRef } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { useState } from 'react'
 
@@ -73,5 +77,34 @@ describe('m3-react/switch', () => {
     expect(input.getAttribute('aria-checked')).toBe('true')
     input.click()
     expect(onToggle).toHaveBeenCalledTimes(1)
+  })
+
+  test('exposes programmatic focus, blur, and click', () => {
+    const switchRef = createRef<M3SwitchExposed>()
+    const onToggle = vi.fn()
+    render(<M3Switch ref={switchRef} onToggle={onToggle} />)
+
+    const input = screen.getByRole('switch')
+    expect(switchRef.current?.el).toBe(input.closest('.m3-switch'))
+
+    switchRef.current?.focus()
+    expect(document.activeElement).toBe(input)
+    switchRef.current?.blur()
+    expect(document.activeElement).not.toBe(input)
+
+    act(() => switchRef.current?.click())
+    expect(onToggle).toHaveBeenCalledWith(true)
+  })
+
+  test('stops listening to touch movement after cancellation', () => {
+    const onToggle = vi.fn()
+    render(<M3Switch onToggle={onToggle} />)
+    const input = screen.getByRole('switch')
+
+    fireEvent.touchStart(input, { touches: [{ clientX: 10 }] })
+    fireEvent.touchCancel(window)
+    fireEvent.touchMove(window, { touches: [{ clientX: 30 }] })
+
+    expect(onToggle).not.toHaveBeenCalled()
   })
 })

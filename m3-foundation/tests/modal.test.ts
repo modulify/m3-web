@@ -96,6 +96,25 @@ describe('modal focus', () => {
     dispose()
   })
 
+  test('returns Tab focus to the modal when focus falls back to the document', () => {
+    const dialog = document.createElement('div')
+    const first = button('First')
+    const last = button('Last')
+    dialog.append(first, last)
+    document.body.append(dialog)
+
+    const dispose = activateModalFocus({ dialog, onEscape: vi.fn() })
+    disposals.push(dispose)
+
+    first.blur()
+    expect(tab().defaultPrevented).toBe(true)
+    expect(document.activeElement).toBe(first)
+
+    first.blur()
+    expect(tab(true).defaultPrevented).toBe(true)
+    expect(document.activeElement).toBe(last)
+  })
+
   test('protects siblings along a nested modal path and preserves a supplied tab index', () => {
     const layout = document.createElement('main')
     const sidebar = button('Sidebar')

@@ -1,7 +1,8 @@
 import type { Component } from 'vue'
 
+import { defineComponent } from 'vue'
 import { fireEvent } from '@testing-library/vue'
-import { h, nextTick } from 'vue'
+import { h, nextTick, ref } from 'vue'
 import { render, screen, waitFor } from '@testing-library/vue'
 
 import { M3Select } from '@/components/select'
@@ -62,5 +63,43 @@ describe('m3-vue/select', () => {
     expect(onUpdate).toHaveBeenLastCalledWith('published')
     await waitFor(() => expect(input.getAttribute('aria-expanded')).toBe('false'))
     expect(menu()?.getAttribute('aria-hidden')).toBe('true')
+  })
+
+  test('renders scoped leading and option slots and exposes the root', async () => {
+    vi.stubGlobal('ResizeObserver', class {
+      observe() {}
+      disconnect() {}
+    })
+
+    const select = ref<{ el: HTMLElement | null } | null>(null)
+    render(defineComponent({
+      render: () => h(M3Select as Component, {
+        ref: select,
+        label: 'Status',
+        value: 'draft',
+        options: [
+          { value: 'draft', label: 'Draft' },
+          { value: 'published', label: 'Published' },
+        ],
+      }, {
+        leading: ({ active }: { active: boolean }) => h('span', { 'data-testid': 'leading' }, active ? 'Open' : 'Closed'),
+        'option-leading': ({ option }: { option: { label: string } }) =>
+          h('span', { 'data-testid': 'option-leading' }, option.label[0]),
+        'option-content': ({ option }: { option: { label: string } }) => `${option.label} item`,
+      }),
+    }))
+
+    const input = screen.getByRole('combobox', { name: 'Status' })
+    expect(select.value?.el?.classList.contains('m3-select')).toBe(true)
+    expect(screen.getByTestId('leading').textContent).toBe('Closed')
+
+    await nextTick()
+    await fireEvent.click(input)
+    await waitFor(() => {
+      expect(screen.getByTestId('leading').textContent).toBe('Open')
+      expect(screen.getByText('Draft item')).toBeTruthy()
+      expect(screen.getByText('Published item')).toBeTruthy()
+      expect(screen.getAllByTestId('option-leading')).toHaveLength(2)
+    })
   })
 })

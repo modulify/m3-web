@@ -1,6 +1,8 @@
+import { defineComponent } from 'vue'
 import { fireEvent } from '@testing-library/vue'
-import { h } from 'vue'
-import { render } from '@testing-library/vue'
+import { h, ref } from 'vue'
+import { render, screen } from '@testing-library/vue'
+import { waitFor } from '@testing-library/vue'
 
 import { M3MenuItem } from '@/components/menu'
 
@@ -9,6 +11,15 @@ vi.mock('@modulify/m3-foundation/lib/popper/floating', () => ({
 }))
 
 describe('m3-vue/menu-item', () => {
+  test('exposes the rendered menu item to its parent', () => {
+    const instance = ref<{ el: HTMLElement | null } | null>(null)
+    const view = render(defineComponent({
+      setup: () => () => h(M3MenuItem, { ref: instance }, () => 'Settings'),
+    }))
+
+    expect(instance.value?.el).toBe(view.getByRole('menuitem', { name: 'Settings' }))
+  })
+
   test('renders href link with selected and disabled modifiers', () => {
     const { container } = render(M3MenuItem, {
       props: {
@@ -59,6 +70,10 @@ describe('m3-vue/menu-item', () => {
     expect(item.getAttribute('role')).toBe('menuitemradio')
     expect(item.getAttribute('aria-checked')).toBe('false')
     await fireEvent.click(item)
+    await fireEvent.keyUp(item, { key: 'Enter' })
+    await fireEvent.mouseEnter(item)
+    await fireEvent.mouseLeave(item)
+    await fireEvent.keyDown(item, { key: 'ArrowRight' })
     expect(onClick).toHaveBeenCalledOnce()
   })
 
@@ -73,6 +88,7 @@ describe('m3-vue/menu-item', () => {
     expect(item.getAttribute('href')).toBeNull()
     await fireEvent.click(item)
     await fireEvent.keyUp(item, { code: 'Enter' })
+    await fireEvent.keyUp(item, { key: 'Enter' })
     expect(onClick).not.toHaveBeenCalled()
   })
 
@@ -103,5 +119,93 @@ describe('m3-vue/menu-item', () => {
 
     await fireEvent.click(parent)
     expect(parent.getAttribute('aria-expanded')).toBe('true')
+  })
+
+  test('opens a submenu on hover and closes it after leaving', async () => {
+    const view = render(M3MenuItem, {
+      slots: {
+        default: 'More actions',
+        submenu: () => h(M3MenuItem, null, () => 'Archive'),
+      },
+    })
+    const parent = view.container.querySelector<HTMLElement>('.m3-menu-item')!
+
+    await fireEvent.mouseEnter(parent)
+    expect(parent.getAttribute('aria-expanded')).toBe('true')
+
+    await fireEvent.mouseLeave(parent)
+    await waitFor(() => {
+      expect(parent.getAttribute('aria-expanded')).toBe('false')
+    })
+  })
+
+  test('keeps a submenu open while the pointer moves from its parent into the menu', async () => {
+    const view = render(M3MenuItem, {
+      slots: {
+        default: 'More actions',
+        submenu: () => h(M3MenuItem, null, () => 'Archive'),
+      },
+    })
+    const parent = view.container.querySelector<HTMLElement>('.m3-menu-item')!
+
+    await fireEvent.mouseEnter(parent)
+    const submenu = await screen.findByRole('menu')
+    await fireEvent.mouseLeave(parent)
+    await fireEvent.mouseEnter(submenu)
+
+    await new Promise(resolve => setTimeout(resolve, 250))
+    expect(parent.getAttribute('aria-expanded')).toBe('true')
+
+    await fireEvent.mouseLeave(submenu)
+    await waitFor(() => expect(parent.getAttribute('aria-expanded')).toBe('false'))
+  })
+
+  test('opens a submenu with the leading arrow in RTL and closes on outside focus', async () => {
+    document.dir = 'rtl'
+
+    try {
+      const view = render(M3MenuItem, {
+        slots: {
+          default: 'More actions',
+          submenu: () => h(M3MenuItem, null, () => 'Archive'),
+        },
+      })
+      const parent = view.container.querySelector<HTMLElement>('.m3-menu-item')!
+
+      await fireEvent.keyDown(parent, { key: 'ArrowLeft' })
+      expect(parent.getAttribute('aria-expanded')).toBe('true')
+
+      await fireEvent.blur(parent, { relatedTarget: document.body })
+      expect(parent.getAttribute('aria-expanded')).toBe('false')
+    } finally {
+      document.dir = ''
+    }
+  })
+
+  test('keeps a submenu open while focus moves between its parent and child', async () => {
+    const view = render(M3MenuItem, {
+      slots: {
+        default: 'More actions',
+        submenu: () => h(M3MenuItem, null, () => 'Archive'),
+      },
+    })
+    const parent = view.container.querySelector<HTMLElement>('.m3-menu-item')!
+
+    await fireEvent.blur(parent, { relatedTarget: document.body })
+    await fireEvent.keyDown(parent, { key: 'ArrowUp' })
+    expect(parent.getAttribute('aria-expanded')).toBe('false')
+
+    await fireEvent.mouseEnter(parent)
+    const submenu = await screen.findByRole('menu')
+    const child = screen.getByRole('menuitem', { name: 'Archive' })
+
+    await fireEvent.blur(parent, { relatedTarget: child })
+    expect(parent.getAttribute('aria-expanded')).toBe('true')
+
+    await fireEvent.focusOut(submenu, { relatedTarget: parent })
+    expect(parent.getAttribute('aria-expanded')).toBe('true')
+
+    await fireEvent.focusOut(submenu, { relatedTarget: document.body })
+    expect(parent.getAttribute('aria-expanded')).toBe('false')
   })
 })

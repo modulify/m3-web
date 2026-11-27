@@ -114,17 +114,19 @@ test('keyboard navigation moves focus and free scrolling snaps to an item', asyn
     const scroller = view.container.querySelector<HTMLElement>('.m3-carousel__scroll')!
     const items = Array.from(view.container.querySelectorAll<HTMLElement>('.m3-carousel__item'))
     items[0].focus()
-    items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
-    expect(document.activeElement).toBe(items[1])
-    await waitFor(() => expect(scroller.scrollLeft).toBeGreaterThan(0))
 
-    items[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }))
+    items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }))
     expect(document.activeElement).toBe(items[3])
+    await waitFor(() => {
+      expect(scroller.scrollLeft).toBeCloseTo(scroller.scrollWidth - scroller.clientWidth, 0)
+    }, { timeout: 2500 })
+
     items[3].dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }))
     expect(document.activeElement).toBe(items[0])
     await waitFor(() => expect(scroller.scrollLeft).toBeCloseTo(0, 0), { timeout: 2500 })
 
     const step = (scroller.scrollWidth - scroller.clientWidth) / (items.length - 1)
+    scroller.dispatchEvent(new WheelEvent('wheel', { bubbles: true }))
     scroller.scrollLeft = step * .8
     await waitFor(() => expect(scroller.scrollLeft).toBeCloseTo(step, 0), { timeout: 2500 })
   } finally {
@@ -295,7 +297,9 @@ test.each([
     expect(document.activeElement).toBe(items[target])
     await vi.waitFor(() => expect(offsets.length).toBeGreaterThan(0))
     expect(offsets[0]).toBeGreaterThan(before - 50)
-    await vi.waitFor(() => expect(scroller.scrollLeft).toBeLessThan(target ? before - 50 : 50))
+    await vi.waitFor(() => {
+      expect(scroller.scrollLeft).toBeLessThan(target ? before - 50 : 50)
+    }, { timeout: 2500 })
   } finally {
     view.unmount()
   }

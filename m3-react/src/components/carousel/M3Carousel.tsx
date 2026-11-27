@@ -69,14 +69,12 @@ export default defineComponent(function M3Carousel({
   })
 
   useLayoutEffect(() => {
-    if (!root.current) return
-
-    const active = attachCarousel(root.current, { variant, scroll: mode, preferred, onChange })
+    const active = attachCarousel(root.current!, { variant, scroll: mode, preferred, onChange })
     controller.current = active
 
     return () => {
       active.dispose()
-      if (controller.current === active) controller.current = null
+      controller.current = null
     }
   }, [])
 
@@ -105,7 +103,7 @@ export default defineComponent(function M3Carousel({
             const label = itemLabel ? `${itemLabel}, ${position}` : position
 
             return <CarouselSlide
-              key={item.key ?? itemIndex}
+              key={item.key}
               aria-label={label}
               {...itemAttrs}
             />

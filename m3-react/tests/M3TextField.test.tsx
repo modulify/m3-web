@@ -1,3 +1,7 @@
+import type { M3TextFieldExposed } from '@/components/text-field'
+
+import { act } from '@testing-library/react'
+import { createRef } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 
 import { M3TextField, M3TextFieldSupportText } from '@/components/text-field'
@@ -63,6 +67,11 @@ describe('m3-react/text-field', () => {
     expect(field.getAttribute('aria-describedby')).toBe('hint')
     expect(container.querySelector('.m3-text-field_outlined')).not.toBeNull()
 
+    fireEvent.focus(field)
+    expect(container.querySelector('.m3-text-field_focused')).not.toBeNull()
+    fireEvent.blur(field)
+    expect(container.querySelector('.m3-text-field_focused')).toBeNull()
+
     fireEvent.click(container.querySelector('.m3-text-field')!)
     expect(document.activeElement).toBe(field)
     expect(onClick).toHaveBeenCalledTimes(1)
@@ -72,6 +81,29 @@ describe('m3-react/text-field', () => {
     fireEvent.change(field, { target: { value: 'Final' } })
     expect(onChange).toHaveBeenCalledWith('Final')
     expect(onUpdate).toHaveBeenCalledTimes(1)
+  })
+
+  test('keeps icon clicks separate from field focus and exposes focus controls', () => {
+    const field = createRef<M3TextFieldExposed>()
+    const onClick = vi.fn()
+    const { container } = render(
+      <M3TextField ref={field} label="Search" onClick={onClick}>
+        <M3TextField.LeadingIcon><span>Leading</span></M3TextField.LeadingIcon>
+        <M3TextField.TrailingIcon><span>Trailing</span></M3TextField.TrailingIcon>
+      </M3TextField>
+    )
+    const input = screen.getByRole('textbox', { name: 'Search' })
+    const icons = container.querySelectorAll('.m3-text-field__icon')
+
+    fireEvent.click(icons[0])
+    fireEvent.click(icons[1])
+    expect(onClick).not.toHaveBeenCalled()
+    expect(document.activeElement).not.toBe(input)
+
+    act(() => field.current?.focus())
+    expect(document.activeElement).toBe(input)
+    act(() => field.current?.blur())
+    expect(document.activeElement).not.toBe(input)
   })
 
   test('updates on each input in non-lazy mode and preserves numeric input semantics', () => {

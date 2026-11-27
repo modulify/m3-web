@@ -9,6 +9,7 @@ import { M3Menu, M3MenuItem } from '@/components/menu'
 
 test('switches between standard and vibrant color and density', async () => {
   const trigger = document.createElement('button')
+  trigger.textContent = 'Open menu'
   document.body.append(trigger)
   const mountPoint = document.createElement('div')
   document.body.append(mountPoint)
@@ -48,6 +49,7 @@ test('switches between standard and vibrant color and density', async () => {
 
 test('leaves listbox keyboard handling to its consumer', async () => {
   const trigger = document.createElement('button')
+  trigger.textContent = 'Open options'
   document.body.append(trigger)
   const mountPoint = document.createElement('div')
   document.body.append(mountPoint)

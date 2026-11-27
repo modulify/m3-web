@@ -312,7 +312,7 @@ const modeToggleLabel = computed(() => appearanceActual.value === 'picker'
 )
 
 const isDateAvailable = (day: CalendarDay): boolean => (
-  clampCalendarDay(day, bounds.value)?.inSameDay(day) ?? false
+  clampCalendarDay(day, bounds.value).inSameDay(day)
 ) && isCalendarDaySelectable(day, props.availability)
 
 const parseInputValue = (value: string): {

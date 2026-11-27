@@ -31,6 +31,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   } else {
     window.addEventListener('mousedown', makeListener('mousedown'), true)
     window.addEventListener('click', makeListener('click'), true)
+    window.addEventListener('touchend', makeListener('touchend'), true)
   }
 }
 

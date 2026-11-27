@@ -1,4 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/vue'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
+
+import { defineComponent } from 'vue'
+import { fireEvent } from '@testing-library/vue'
+import { h, ref } from 'vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3Checkbox } from '@/components/checkbox'
 
@@ -75,5 +80,39 @@ describe('m3-vue/checkbox', () => {
     await fireEvent.click(screen.getByRole('checkbox'))
 
     expect(view.emitted().change?.[0]).toEqual([true])
+  })
+
+  test('removes an existing array value using custom equality', async () => {
+    const view = render(M3Checkbox, {
+      props: {
+        model: [{ id: 1 }, { id: 2 }],
+        value: { id: 2 },
+        equalsFn: (left: { id: number }, right: { id: number }) => left.id === right.id,
+      } as Record<string, unknown>,
+    })
+
+    const input = screen.getByRole('checkbox') as HTMLInputElement
+    expect(input.checked).toBe(true)
+
+    await fireEvent.click(input)
+    expect(view.emitted().change?.[0]).toEqual([[{ id: 1 }]])
+  })
+
+  test('exposes click and focus controls through the native input', () => {
+    const checkbox = ref<(ElementReference & Interactable) | null>(null)
+    const onChange = vi.fn()
+    const Harness = defineComponent({
+      setup: () => () => h(M3Checkbox, { ref: checkbox, model: false, onChange }),
+    })
+    render(Harness)
+
+    const input = screen.getByRole('checkbox') as HTMLInputElement
+    expect(checkbox.value?.el?.contains(input)).toBe(true)
+    checkbox.value?.focus()
+    expect(document.activeElement).toBe(input)
+    checkbox.value?.blur()
+    expect(document.activeElement).not.toBe(input)
+    checkbox.value?.click()
+    expect(onChange).toHaveBeenCalledWith(true)
   })
 })

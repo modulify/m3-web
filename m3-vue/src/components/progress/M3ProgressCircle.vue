@@ -160,11 +160,9 @@ const stopMotion = () => {
 const startMotion = () => {
   stopMotion()
 
-  if (!root.value || !activePath.value || !circularTrack.value) return
-
-  const container = root.value
-  const path = activePath.value
-  const trackPath = circularTrack.value
+  const container = root.value!
+  const path = activePath.value!
+  const trackPath = circularTrack.value!
   const svg = path.ownerSVGElement!
   const preference = window.matchMedia?.('(prefers-reduced-motion: reduce)')
 

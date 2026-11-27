@@ -78,7 +78,7 @@ export default defineComponent(function M3NavigationTab({
   const [rippleSurface, setRippleSurface] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
-    const target = link.current?.el ?? null
+    const target = link.current!.el
     setRippleTarget(current => current === target ? current : target)
   })
 

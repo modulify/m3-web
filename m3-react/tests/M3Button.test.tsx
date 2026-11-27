@@ -1,7 +1,9 @@
 import type { ForwardRefRenderFunction } from 'react'
 
 import { act } from '@testing-library/react'
-import { createElement, createRef, forwardRef } from 'react'
+import { createElement, createRef } from 'react'
+import { fireEvent } from '@testing-library/react'
+import { forwardRef } from 'react'
 import { render, screen } from '@testing-library/react'
 import { useImperativeHandle, useState } from 'react'
 
@@ -46,6 +48,20 @@ describe('m3-react/button', () => {
     expect(button.querySelector('.m3-button__state')).toBeTruthy()
     expect(button.querySelector('.m3-button__content')).toBeTruthy()
     expect(button.querySelector('.m3-icon_filled')).toBeTruthy()
+  })
+
+  test('starts a ripple for Enter key release', () => {
+    const onKeyUp = vi.fn()
+    render(<M3Button onKeyUp={onKeyUp}>Action</M3Button>)
+    const button = screen.getByRole('button', { name: 'Action' })
+    const ripple = button.querySelector<HTMLElement>('.m3-ripple')!
+
+    fireEvent.keyUp(button, { code: 'Escape' })
+    expect(ripple.style.width).toBe('')
+
+    fireEvent.keyUp(button, { code: 'Enter' })
+    expect(ripple.style.width).not.toBe('')
+    expect(onKeyUp).toHaveBeenCalledTimes(2)
   })
 
   test('exposes toggle state and filled icon while preserving the button layers', () => {

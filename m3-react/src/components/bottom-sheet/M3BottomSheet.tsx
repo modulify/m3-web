@@ -107,8 +107,8 @@ export default defineComponent(function M3BottomSheet({
       visible,
       expanded,
       peek,
-      onExpand: next => expand(next),
-      onDismiss: () => dismiss(),
+      onExpand: expand,
+      onDismiss: dismiss,
     })
     controller.current = active
 
@@ -124,8 +124,8 @@ export default defineComponent(function M3BottomSheet({
       visible,
       expanded,
       peek,
-      onExpand: next => expand(next),
-      onDismiss: () => dismiss(),
+      onExpand: expand,
+      onDismiss: dismiss,
     })
   }, [variant, visible, expanded, peek])
 

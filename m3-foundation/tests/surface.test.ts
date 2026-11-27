@@ -19,10 +19,9 @@ import {
   measureContainerRect,
   measureRelativeRect,
   raf,
-  toMotionStyle,
-  wait,
-  waitForMotion,
 } from '../lib/surface/orchestration'
+import { toLength } from '../lib/surface/style'
+import { toMotionStyle, wait, waitForMotion } from '../lib/surface/orchestration'
 
 const inset = { top: '8px', right: '16px', bottom: '24px', left: '32px' }
 const scheduleFrame = (callback: FrameRequestCallback) => window.setTimeout(() => callback(0), 16)
@@ -103,6 +102,11 @@ describe('surface style', () => {
     })
   })
 
+  test('falls back when an explicitly cleared panel dimension has no length', () => {
+    expect(toLength(null, 'auto')).toBe('auto')
+    expect(toLength(undefined, '100%')).toBe('100%')
+  })
+
   test('anchors modal panels to the requested viewport edges', () => {
     expect(getModalAnchorStyle('none', inset)).toEqual(inset)
     expect(getModalAnchorStyle('center', inset)).toMatchObject({
@@ -158,5 +162,17 @@ describe('surface orchestration', () => {
     await vi.advanceTimersByTimeAsync(20)
     await expect(frame).resolves.toBeUndefined()
     await expect(delay).resolves.toBeUndefined()
+  })
+
+  test('uses the requested duration when reduced motion is not enabled', async () => {
+    vi.useFakeTimers()
+    vi.stubGlobal('matchMedia', () => ({ matches: false }))
+
+    const motion = waitForMotion(200)
+    await vi.advanceTimersByTimeAsync(199)
+    expect(vi.getTimerCount()).toBe(1)
+
+    await vi.advanceTimersByTimeAsync(1)
+    await expect(motion).resolves.toBeUndefined()
   })
 })

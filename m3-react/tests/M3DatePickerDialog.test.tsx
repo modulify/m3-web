@@ -18,6 +18,34 @@ const getInputByLabel = (label: string): HTMLInputElement => {
 }
 
 describe('m3-react/date-picker-dialog', () => {
+  test('starts closed when opened is omitted', () => {
+    render(<M3DatePickerDialog />)
+
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
+
+  test('forwards calendar cursor changes and closes on Escape', async () => {
+    const onCursorChange = vi.fn()
+    const onToggle = vi.fn()
+
+    render(
+      <M3DatePickerDialog
+        value={new Date(2026, 6, 10)}
+        opened
+        onCursorChange={onCursorChange}
+        onToggle={onToggle}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next month' }))
+    await waitFor(() => {
+      expect(onCursorChange).toHaveBeenCalledWith(new Date(2026, 7, 1))
+    })
+
+    fireEvent.keyDown(document, { key: 'Escape' })
+    await waitFor(() => expect(onToggle).toHaveBeenCalledWith(false))
+  })
+
   test('commits selected date only after confirmation', async () => {
     const onChange = vi.fn()
     const onToggle = vi.fn()
@@ -138,6 +166,23 @@ describe('m3-react/date-picker-dialog', () => {
     })
   })
 
+  test('switches from calendar mode to text input without committing its draft', async () => {
+    const onChange = vi.fn()
+
+    render(
+      <M3DatePickerDialog
+        value={new Date(2026, 6, 10)}
+        opened
+        onChange={onChange}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Switch to text input' }))
+
+    expect(getInputByLabel('Date').value).toBe('07/10/2026')
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
   test('blocks invalid input mode date confirmation', () => {
     const onChange = vi.fn()
 
@@ -216,6 +261,43 @@ describe('m3-react/date-picker-dialog', () => {
     expect(onChange).toHaveBeenCalledWith([new Date(2026, 6, 10), new Date(2026, 6, 15)])
   })
 
+  test('keeps a valid range draft when text entry becomes invalid', () => {
+    const onChange = vi.fn()
+    render(
+      <M3DatePickerDialog
+        appearance="input"
+        type="range"
+        value={[new Date(2026, 6, 10), new Date(2026, 6, 12)]}
+        opened
+        onChange={onChange}
+      />
+    )
+
+    const end = getInputByLabel('End date')
+    fireEvent.input(end, { target: { value: 'not a date' } })
+
+    expect(end.getAttribute('aria-invalid')).toBe('true')
+    expect((screen.getByRole('button', { name: 'OK' }) as HTMLButtonElement).disabled).toBe(true)
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  test('resets text entered without an initial value when cancelled', () => {
+    const onToggle = vi.fn()
+    render(
+      <M3DatePickerDialog
+        appearance="input"
+        opened
+        onToggle={onToggle}
+      />
+    )
+
+    fireEvent.input(getInputByLabel('Date'), { target: { value: '07/15/2026' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+
+    expect(getInputByLabel('Date').value).toBe('')
+    expect(onToggle).toHaveBeenCalledWith(false)
+  })
+
   test('respects date bounds in text mode and recovers after invalid input', () => {
     const onChange = vi.fn()
     render(
@@ -248,6 +330,60 @@ describe('m3-react/date-picker-dialog', () => {
     fireEvent.input(getInputByLabel('Date'), { target: { value: '07/15/2026' } })
     expect((screen.getByRole('button', { name: 'OK' }) as HTMLButtonElement).disabled).toBe(false)
     fireEvent.input(getInputByLabel('Date'), { target: { value: '' } })
+    expect((screen.getByRole('button', { name: 'OK' }) as HTMLButtonElement).disabled).toBe(true)
+  })
+
+  test('opens an empty calendar with confirmation unavailable', async () => {
+    render(<M3DatePickerDialog value={null} cursor={new Date(2026, 6, 1)} opened />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+    })
+    expect((screen.getByRole('button', { name: 'OK' }) as HTMLButtonElement).disabled).toBe(true)
+  })
+
+  test('requires both dates before confirming a range built from empty fields', () => {
+    const onChange = vi.fn()
+
+    render(
+      <M3DatePickerDialog
+        appearance="input"
+        type="range"
+        value={null}
+        opened
+        onChange={onChange}
+      />
+    )
+
+    const start = getInputByLabel('Date')
+    const end = getInputByLabel('End date')
+    const confirm = screen.getByRole('button', { name: 'OK' }) as HTMLButtonElement
+
+    expect(confirm.disabled).toBe(true)
+    fireEvent.input(start, { target: { value: '07/10/2026' } })
+    expect(confirm.disabled).toBe(true)
+    fireEvent.input(end, { target: { value: '07/15/2026' } })
+    expect(confirm.disabled).toBe(false)
+
+    fireEvent.click(confirm)
+    expect(onChange).toHaveBeenCalledWith([
+      new Date(2026, 6, 10),
+      new Date(2026, 6, 15),
+    ])
+  })
+
+  test('keeps a partially selected range pending', () => {
+    render(
+      <M3DatePickerDialog
+        appearance="input"
+        type="range"
+        value={[new Date(2026, 6, 10), null]}
+        opened
+      />
+    )
+
+    expect(getInputByLabel('Date').value).toBe('07/10/2026')
+    expect(getInputByLabel('End date').value).toBe('')
     expect((screen.getByRole('button', { name: 'OK' }) as HTMLButtonElement).disabled).toBe(true)
   })
 

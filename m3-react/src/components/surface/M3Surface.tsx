@@ -64,10 +64,12 @@ const M3Surface: FC<M3SurfaceProps> = ({
   const isModal = mode === 'modal'
   const layerHost = useLayerHost(isModal && String(ariaModal) !== 'false', teleportTo, isModal)
   const panel = useRef<M3SurfacePanelExposed | null>(null)
-  const dismiss = useRef<() => void>(() => {})
-  dismiss.current = () => {
-    onToggle(false)
-    onDismiss()
+  const dismiss = useRef({ onToggle, onDismiss })
+  dismiss.current = { onToggle, onDismiss }
+
+  const requestDismiss = () => {
+    dismiss.current.onToggle(false)
+    dismiss.current.onDismiss()
   }
 
   useLayoutEffect(() => {
@@ -77,7 +79,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
     return activateModalFocus({
       dialog,
       layer: layerHost,
-      onEscape: () => dismiss.current(),
+      onEscape: requestDismiss,
     })
   }, [isModal, shown, ariaModal, layerHost, panelProps.tag])
 
@@ -154,7 +156,7 @@ const M3Surface: FC<M3SurfaceProps> = ({
             'm3-transition-fade-leave-active': modalTransition.status === 'preExit' || modalTransition.status === 'exiting',
             'm3-transition-fade-leave-to': modalTransition.status === 'exiting',
           }])}
-          onClick={() => dismiss.current()}
+          onClick={requestDismiss}
         />
       ) : null}
       {surfaceNode}

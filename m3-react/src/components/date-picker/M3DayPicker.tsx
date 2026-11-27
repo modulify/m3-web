@@ -26,14 +26,14 @@ export interface M3DayPickerProps {
   month: CalendarDay;
   today: CalendarDay;
   bounds: CalendarDayBounds;
-  availability?: CalendarAvailability | null;
+  availability: CalendarAvailability | null;
   locale: string;
   firstDayOfWeek: number;
   fixed: boolean;
   active: boolean;
   disabled: boolean;
   label: string;
-  className?: string;
+  className: string;
   onSelect: (day: CalendarDay) => void;
 }
 
@@ -60,14 +60,14 @@ const M3DayPicker: FC<M3DayPickerProps> = ({
   month,
   today,
   bounds,
-  availability = null,
+  availability,
   locale,
   firstDayOfWeek,
   fixed,
   active,
   disabled,
   label,
-  className = '',
+  className,
   onSelect,
 }) => {
   const selectedDay = value instanceof CalendarDay ? value : null

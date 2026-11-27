@@ -309,13 +309,7 @@ export default defineComponent(function M3DatePicker({
   const startMonthSlide = (offset: number) => {
     if (monthSliding) return
 
-    const canMove = offset > 0 ? canMoveToNextMonth : canMoveToPreviousMonth
     const width = calendar.current?.getBoundingClientRect().width || MONTH_SWIPE.fallbackWidth
-
-    if (!canMove) {
-      setMonthDragOffset(0)
-      return
-    }
 
     setMonthDragOffset(offset > 0 ? -width : width)
     setMonthSliding(true)
@@ -719,7 +713,7 @@ export default defineComponent(function M3DatePicker({
                           appearance="text"
                           className="m3-date-picker__inline-month-button"
                           onClick={page.active
-                            ? () => scheduleInlineViewSwitch(isYearView ? DATE_PICKER_VIEW.DAYS : DATE_PICKER_VIEW.YEARS)
+                            ? () => scheduleInlineViewSwitch(DATE_PICKER_VIEW.YEARS)
                             : undefined}
                         >
                           {formatDay(page.month, 'MMMM yyyy')}

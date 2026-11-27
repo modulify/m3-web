@@ -1,3 +1,6 @@
+import type { M3DatePickerFieldExposed } from '@/components/date-picker'
+
+import { createRef } from 'react'
 import {
   fireEvent,
   render,
@@ -24,6 +27,17 @@ describe('m3-react/date-picker-field', () => {
     } else {
       vi.unstubAllGlobals()
     }
+  })
+
+  test('exposes its root and accepts a valid date without a change handler', () => {
+    const reference = createRef<M3DatePickerFieldExposed>()
+    const { container } = render(<M3DatePickerField ref={reference} value={null} />)
+    const input = screen.getByRole('textbox', { name: 'Select date' }) as HTMLInputElement
+
+    expect(reference.current?.el).toBe(container.firstElementChild)
+
+    fireEvent.change(input, { target: { value: '07/15/2026' } })
+    expect(input.value).toBe('07/15/2026')
   })
 
   test('commits a docked calendar draft only after confirmation', async () => {
@@ -62,6 +76,43 @@ describe('m3-react/date-picker-field', () => {
 
     expect(onChange).toHaveBeenCalledWith(new Date(2026, 6, 15))
     expect(input.value).toBe('07/15/2026')
+  })
+
+  test('opens by clicking the field only while editable', async () => {
+    const value = new Date(2026, 6, 10)
+    const view = render(<M3DatePickerField value={value} readonly />)
+    const input = screen.getByRole('textbox', { name: 'Select date' })
+
+    fireEvent.click(input)
+    expect(screen.queryByRole('grid', { name: 'July 2026' })).toBeNull()
+
+    view.rerender(<M3DatePickerField value={value} />)
+    fireEvent.click(input)
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+    })
+  })
+
+  test('toggles its docked picker with the trailing button', async () => {
+    render(<M3DatePickerField value={new Date(2026, 6, 10)} />)
+    const chooseDate = screen.getByRole('button', { name: 'Choose date' })
+
+    fireEvent.click(chooseDate)
+    await waitFor(() => {
+      expect(screen.getByRole('grid', { name: 'July 2026' })).toBeTruthy()
+    })
+
+    fireEvent.click(chooseDate)
+    await waitFor(() => {
+      expect(document.body.querySelector('.m3-popper_shown')).toBeNull()
+    })
+  })
+
+  test('omits supporting text when explicitly empty', () => {
+    const { container } = render(<M3DatePickerField supportingText="" />)
+
+    expect(container.querySelector('.m3-date-picker-field__supporting-text')).toBeNull()
   })
 
   test('uses month and year lists and discards a cancelled draft', async () => {
@@ -184,6 +235,24 @@ describe('m3-react/date-picker-field', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'OK' }))
     expect(onChange).not.toHaveBeenCalled()
+  })
+
+  test('replaces invalid text and calendar draft when the parent value changes', async () => {
+    const view = render(<M3DatePickerField value={new Date(2026, 6, 10)} />)
+    const input = screen.getByRole('textbox', { name: 'Select date' }) as HTMLInputElement
+
+    fireEvent.input(input, { target: { value: '02/31/2026' } })
+    fireEvent.change(input, { target: { value: '02/31/2026' } })
+    expect(input.getAttribute('aria-invalid')).toBe('true')
+
+    view.rerender(<M3DatePickerField value={new Date(2026, 6, 15)} />)
+    expect(input.value).toBe('07/15/2026')
+    expect(input.getAttribute('aria-invalid')).toBe('false')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Choose date' }))
+    await waitFor(() => {
+      expect(screen.getByRole('gridcell', { name: 'Wednesday, July 15, 2026' }).getAttribute('aria-selected')).toBe('true')
+    })
   })
 
   test('supports field composition classes and rich supporting text', async () => {

@@ -1,8 +1,21 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
+import { renderToString } from 'react-dom/server'
+import { screen } from '@testing-library/react'
 
 import { M3Surface } from '@/components/surface'
 
 describe('m3-react/surface', () => {
+  test('renders no modal host during server rendering', () => {
+    const browserDocument = globalThis.document
+
+    try {
+      vi.stubGlobal('document', undefined)
+      expect(renderToString(<M3Surface mode="modal" shown />)).toBe('')
+    } finally {
+      vi.stubGlobal('document', browserDocument)
+    }
+  })
+
   test('applies deterministic default contract', () => {
     const { container } = render(
       <M3Surface>

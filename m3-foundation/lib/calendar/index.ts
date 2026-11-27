@@ -268,6 +268,8 @@ export function minCalendarDay(a: unknown, b: unknown): CalendarDayOrNull {
       : null
 }
 
+export function clampCalendarDay(day: CalendarDay, bounds: CalendarDayBounds): CalendarDay
+export function clampCalendarDay(day: unknown, bounds: CalendarDayBounds): CalendarDayOrNull
 export function clampCalendarDay(
   day: unknown,
   [

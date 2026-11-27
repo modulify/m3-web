@@ -242,4 +242,39 @@ describe('m3-vue/button-group', () => {
     await fireEvent.click(button)
     expect(button.querySelector('.m3-icon_filled')).toBeTruthy()
   })
+
+  test('forwards item methods and lets the wrapper activate its button', async () => {
+    const item = ref<{
+      el: HTMLElement | null;
+      click(): void;
+      focus(): void;
+      blur(): void;
+        } | null>(null)
+    const onClick = vi.fn()
+
+    render(defineComponent({
+      render: () => h(M3ButtonGroup, { variant: 'connected' }, () => h(
+        M3ButtonGroupItem,
+        { ref: item, value: 'one', onClick },
+        () => 'One'
+      )),
+    }))
+
+    const button = screen.getByRole('button', { name: 'One' })
+    const wrapper = button.parentElement!
+    expect(item.value?.el).toBe(button)
+
+    item.value?.focus()
+    expect(document.activeElement).toBe(button)
+    item.value?.blur()
+    expect(document.activeElement).not.toBe(button)
+
+    item.value?.click()
+    await nextTick()
+    expect(onClick).toHaveBeenCalledTimes(1)
+
+    await fireEvent.click(wrapper)
+    expect(onClick).toHaveBeenCalledTimes(2)
+    expect(button.getAttribute('aria-pressed')).toBe('false')
+  })
 })
