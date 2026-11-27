@@ -99,9 +99,7 @@ export default defineComponent({
     } satisfies M3CarouselExposed)
 
     onMounted(() => {
-      if (!root.value) return
-
-      controller = attachCarousel(root.value, options())
+      controller = attachCarousel(root.value!, options())
       if (props.index !== undefined) controller.goTo(props.index, false)
     })
 

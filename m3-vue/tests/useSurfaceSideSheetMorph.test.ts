@@ -34,6 +34,7 @@ describe('m3-vue/side-sheet morph', () => {
     expect(morph.modalShown.value).toBe(true)
     expect(morph.dockedHostStyle.value.width).toBe('0px')
     expect(morph.modalPanelProps.value.scrimShown).toBe(true)
+    window.dispatchEvent(new Event('resize'))
 
     await morph.closeModalFromPanel()
     expect(morph.sideSheetModal.value).toBe(false)
@@ -95,5 +96,56 @@ describe('m3-vue/side-sheet morph', () => {
     expect(morph.modalPanelProps.value.width).toBe(280)
     await morph.closeModalFromPanel()
     expect(morph.dockedHostStyle.value.width).not.toBe('0px')
+  })
+
+  test('keeps the modal open if its docked destination disappears before closing', async () => {
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockReturnValue(DOMRect.fromRect({ x: 600, width: 320, height: 500 }))
+
+    let morph!: ReturnType<typeof useSurfaceSideSheetMorph>
+    const Harness = defineComponent({
+      setup() {
+        morph = useSurfaceSideSheetMorph()
+        return () => h('div', { ref: morph.dockedHost })
+      },
+    })
+    render(Harness)
+    await waitFor(() => expect(morph.dockedHost.value).not.toBeNull())
+
+    await morph.closeModalFromPanel()
+    const opening = morph.toggleSideSheetMode()
+    await morph.closeModalFromPanel()
+    await opening
+    expect(morph.sideSheetModal.value).toBe(true)
+
+    morph.dockedHost.value = null
+    await morph.closeModalFromPanel()
+
+    expect(morph.sideSheetModal.value).toBe(true)
+    expect(morph.transitioning.value).toBe(false)
+    window.dispatchEvent(new Event('resize'))
+  })
+
+  test('remeasures a docked host without a panel after resizing', async () => {
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockReturnValue(DOMRect.fromRect({ x: 600, width: 320, height: 500 }))
+
+    let morph!: ReturnType<typeof useSurfaceSideSheetMorph>
+    const Harness = defineComponent({
+      setup() {
+        morph = useSurfaceSideSheetMorph()
+        return () => h('div', { ref: morph.dockedHost })
+      },
+    })
+    render(Harness)
+    await waitFor(() => expect(morph.dockedHost.value).not.toBeNull())
+
+    window.dispatchEvent(new Event('resize'))
+    await waitFor(() => expect(morph.modalPanelProps.value.width).toBe(320))
+
+    morph.dockedHost.value = null
+    window.dispatchEvent(new Event('resize'))
+    await new Promise(resolve => setTimeout(resolve, 30))
+    expect(morph.modalPanelProps.value.width).toBe(320)
   })
 })

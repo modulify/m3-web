@@ -41,6 +41,65 @@ describe('m3-vue/toolbar', () => {
     expect(document.activeElement).toBe(input)
   })
 
+  test('supports Home, End, vertical arrows, and RTL navigation among enabled actions', async () => {
+    const view = render(M3Toolbar, {
+      props: {
+        label: 'Editing',
+        variant: 'floating',
+        orientation: 'vertical',
+        actions: [actions[0], { ...actions[1], disabled: true }, actions[2]],
+      },
+    })
+
+    const bold = screen.getByRole('button', { name: 'Bold' })
+    const underline = screen.getByRole('button', { name: 'Underline' })
+    bold.focus()
+
+    await fireEvent.keyDown(bold, { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(underline)
+
+    await fireEvent.keyDown(underline, { key: 'Home' })
+    expect(document.activeElement).toBe(bold)
+
+    await fireEvent.keyDown(bold, { key: 'ArrowUp' })
+    expect(document.activeElement).toBe(underline)
+
+    await fireEvent.keyDown(underline, { key: 'End' })
+    expect(document.activeElement).toBe(underline)
+
+    await view.rerender({
+      label: 'Editing',
+      variant: 'docked',
+      orientation: 'horizontal',
+      actions: actions.slice(0, 2),
+      dir: 'rtl',
+    })
+
+    bold.focus()
+    await fireEvent.keyDown(bold, { key: 'ArrowRight' })
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Italic' }))
+  })
+
+  test('ignores unrelated keys and does not move focus from outside the toolbar', async () => {
+    render(M3Toolbar, {
+      props: {
+        label: 'Editing',
+        actions: [{ ...actions[0], selected: true }, actions[1]],
+      },
+    })
+
+    const bold = screen.getByRole('button', { name: 'Bold' })
+    expect(bold.getAttribute('aria-pressed')).toBe('true')
+
+    bold.focus()
+    await fireEvent.keyDown(bold, { key: 'Escape' })
+    expect(document.activeElement).toBe(bold)
+
+    bold.blur()
+    await fireEvent.keyDown(screen.getByRole('toolbar', { name: 'Editing' }), { key: 'ArrowRight' })
+    expect(document.activeElement).not.toBe(screen.getByRole('button', { name: 'Italic' }))
+  })
+
   test('moves excess actions into an accessible menu at a narrow width', async () => {
     const width = window.innerWidth
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 200 })
@@ -78,5 +137,42 @@ describe('m3-vue/toolbar', () => {
     scroller.scrollTop = 60
     await fireEvent.scroll(scroller)
     await waitFor(() => expect(toolbar.classList.contains('m3-toolbar_hidden')).toBe(true))
+  })
+
+  test('keeps a focused action visible while the page scrolls', async () => {
+    const scroller = document.createElement('div')
+    render(M3Toolbar, {
+      props: {
+        label: 'Editing',
+        variant: 'floating',
+        scroll: 'collapse',
+        scrollTarget: scroller,
+        actions: actions.slice(0, 2),
+      },
+      slots: { fab: () => h('button', 'Add') },
+    })
+
+    const toolbar = screen.getByRole('toolbar', { name: 'Editing' })
+    screen.getByRole('button', { name: 'Bold' }).focus()
+    scroller.scrollTop = 60
+    await fireEvent.scroll(scroller)
+
+    expect(toolbar.classList.contains('m3-toolbar_collapsed')).toBe(false)
+  })
+
+  test('measures available width from its parent and reserves space for custom content', async () => {
+    const view = render(M3Toolbar, {
+      props: { label: 'Editing', variant: 'floating', actions },
+      slots: { default: () => h('span', 'Formatting') },
+    })
+
+    Object.defineProperty(view.container, 'clientWidth', { configurable: true, value: 240 })
+    const custom = view.container.querySelector('.m3-toolbar__custom') as HTMLElement
+    Object.defineProperty(custom, 'scrollWidth', { configurable: true, value: 120 })
+    await view.rerender({ label: 'Editing', variant: 'floating', actions: [...actions] })
+
+    expect(screen.getByRole('button', { name: 'More actions' })).not.toBeNull()
+    expect(screen.getByText('Formatting')).not.toBeNull()
+    expect(screen.queryByRole('button', { name: 'Image' })).toBeNull()
   })
 })

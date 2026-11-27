@@ -191,4 +191,120 @@ describe('m3-vue/time-picker', () => {
 
     expect(screen.getByRole('button', { name: 'Select minutes' }).textContent?.trim()).toBe('15')
   })
+
+  test('selects an hour on the inner 24-hour ring and keeps an exact minute visible', async () => {
+    const view = render(M3TimePicker, {
+      props: {
+        opened: true,
+        value: { hour: 9, minute: 17 },
+        format: '24h',
+      },
+    })
+
+    const dial = screen.getByRole('group', { name: 'Hours' }) as HTMLDivElement
+    dial.getBoundingClientRect = vi.fn().mockReturnValue({ left: 0, top: 0, width: 256, height: 256 })
+    dial.setPointerCapture = vi.fn()
+
+    await fireEvent.pointerDown(dial, { pointerId: 1, pointerType: 'mouse', button: 0, clientX: 128, clientY: 64 })
+    await fireEvent.pointerUp(dial, { pointerId: 1 })
+
+    expect(screen.getByRole('button', { name: 'Select hours' }).textContent?.trim()).toBe('12')
+    expect(screen.getByRole('group', { name: 'Minutes' })).toBeTruthy()
+    expect(dial.querySelector('.m3-time-picker__handle')?.textContent?.trim()).toBe('17')
+
+    await fireEvent.click(screen.getByRole('button', { name: 'OK' }))
+    expect(view.emitted().change?.[0]).toEqual([{ hour: 12, minute: 17 }])
+  })
+
+  test('rejects incomplete text input and an unavailable period before confirmation', async () => {
+    const view = render(M3TimePicker, {
+      props: {
+        opened: true,
+        appearance: 'input',
+        value: { hour: 10, minute: 15 },
+        format: '12h',
+        min: { hour: 9, minute: 0 },
+        max: { hour: 11, minute: 30 },
+      },
+    })
+
+    expect(screen.getByRole('radio', { name: 'PM' }).hasAttribute('disabled')).toBe(true)
+    const hour = screen.getByRole('textbox', { name: 'Hour' })
+    const minute = screen.getByRole('textbox', { name: 'Minute' })
+
+    await fireEvent.update(hour, '')
+    expect(screen.getByRole('button', { name: 'OK' }).hasAttribute('disabled')).toBe(true)
+    await fireEvent.update(hour, '12')
+    expect(screen.getByRole('button', { name: 'OK' }).hasAttribute('disabled')).toBe(true)
+    await fireEvent.update(hour, '11')
+    await fireEvent.update(minute, '60')
+    expect(screen.getByRole('button', { name: 'OK' }).hasAttribute('disabled')).toBe(true)
+    await fireEvent.update(minute, '30')
+
+    await fireEvent.click(screen.getByRole('button', { name: 'OK' }))
+    expect(view.emitted().change?.[0]).toEqual([{ hour: 11, minute: 30 }])
+  })
+
+  test('ignores secondary-button pointer drags on the dial', async () => {
+    const view = render(M3TimePicker, {
+      props: {
+        opened: true,
+        value: { hour: 9, minute: 0 },
+        format: '24h',
+      },
+    })
+
+    const dial = screen.getByRole('group', { name: 'Hours' }) as HTMLDivElement
+    dial.getBoundingClientRect = vi.fn().mockReturnValue({ left: 0, top: 0, width: 256, height: 256 })
+    dial.setPointerCapture = vi.fn()
+
+    await fireEvent.pointerDown(dial, { pointerId: 1, pointerType: 'mouse', button: 2, clientX: 128, clientY: 24 })
+    await fireEvent.pointerMove(dial, { pointerId: 1, clientX: 232, clientY: 128 })
+    expect(dial.setPointerCapture).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'Select hours' }).textContent?.trim()).toBe('09')
+
+    await fireEvent.click(screen.getByRole('button', { name: 'OK' }))
+    expect(view.emitted().change?.[0]).toEqual([{ hour: 9, minute: 0 }])
+  })
+
+  test('lets a horizontal picker switch between hour and minute selection', async () => {
+    render(M3TimePicker, {
+      props: {
+        opened: true,
+        value: { hour: 11, minute: 17 },
+        format: '12h',
+        layout: 'horizontal',
+      },
+    })
+
+    const dialog = screen.getByRole('dialog', { name: 'Select time' })
+    expect(dialog.getAttribute('style')).toContain('width: 560px')
+    expect(dialog.classList.contains('m3-time-picker-dialog_horizontal')).toBe(true)
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Select minutes' }))
+    expect(screen.getByRole('group', { name: 'Minutes' })).toBeTruthy()
+    expect(document.querySelector('.m3-time-picker__handle')?.textContent?.trim()).toBe('17')
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Select hours' }))
+    expect(screen.getByRole('group', { name: 'Hours' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Select hours' }).getAttribute('aria-pressed')).toBe('true')
+  })
+
+  test('follows appearance changes from the parent while open', async () => {
+    const view = render(M3TimePicker, {
+      props: {
+        opened: true,
+        value: { hour: 9, minute: 30 },
+        appearance: 'dial',
+      },
+    })
+
+    expect(screen.getByRole('group', { name: 'Hours' })).toBeTruthy()
+
+    await view.rerender({ appearance: 'input' })
+    expect(screen.getByRole('textbox', { name: 'Hour' })).toBeTruthy()
+
+    await view.rerender({ appearance: 'dial' })
+    expect(screen.getByRole('group', { name: 'Hours' })).toBeTruthy()
+  })
 })

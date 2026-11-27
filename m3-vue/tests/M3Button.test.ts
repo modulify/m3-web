@@ -1,5 +1,6 @@
+import { fireEvent } from '@testing-library/vue'
 import { h, nextTick, ref } from 'vue'
-import { render, screen } from '@testing-library/vue'
+import { render, screen, waitFor } from '@testing-library/vue'
 
 import { M3Button } from '@/components/button'
 import { M3Icon } from '@/components/icon'
@@ -52,6 +53,17 @@ describe('m3-vue/button', () => {
     expect(button.querySelector('.m3-icon_filled')).toBeTruthy()
   })
 
+  test('starts a ripple for Enter key release', async () => {
+    const { container } = render(M3Button, { slots: { default: 'Action' } })
+    const button = screen.getByRole('button', { name: 'Action' })
+
+    await fireEvent.keyUp(button, { code: 'Escape' })
+    expect(container.querySelector('.m3-ripple')).toBeNull()
+
+    await fireEvent.keyUp(button, { code: 'Enter' })
+    await waitFor(() => expect(container.querySelector('.m3-ripple')).not.toBeNull())
+  })
+
   test('exposes toggle state and filled icon while preserving the button layers', async () => {
     const appearance = ref<'tonal' | 'text'>('tonal')
     const { container } = render({
@@ -95,7 +107,7 @@ describe('m3-vue/button', () => {
 
     expect(icon.innerHTML).toEqual('edit')
   })
-    
+
   test('icon and text node is wrapped', () => {
     const { container } = render(M3Button, {
       slots: {

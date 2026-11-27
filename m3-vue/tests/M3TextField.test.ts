@@ -1,4 +1,8 @@
-import { nextTick } from 'vue'
+import type { Focusable } from '@modulify/m3-foundation/types/dom'
+
+import { defineComponent } from 'vue'
+import { fireEvent } from '@testing-library/vue'
+import { h, nextTick, ref } from 'vue'
 import { render, screen } from '@testing-library/vue'
 
 import { M3TextField } from '@/components/text-field'
@@ -94,5 +98,66 @@ describe('m3-vue/text-field', () => {
     await nextTick()
 
     expect(document.activeElement).toBe(input)
+  })
+
+  test('keeps icon clicks separate from field focus and exposes focus controls', async () => {
+    const field = ref<Focusable | null>(null)
+    const { container } = render(defineComponent({
+      setup: () => () => h(M3TextField, { ref: field, label: 'Search' }, {
+        'leading-icon': () => h('span', 'Leading'),
+        'trailing-icon': () => h('span', 'Trailing'),
+      }),
+    }))
+    const input = screen.getByRole('textbox', { name: 'Search' })
+    const icons = container.querySelectorAll('.m3-text-field__icon')
+
+    await fireEvent.click(icons[0])
+    await fireEvent.click(icons[1])
+    expect(document.activeElement).not.toBe(input)
+
+    field.value?.focus()
+    expect(document.activeElement).toBe(input)
+    field.value?.blur()
+    expect(document.activeElement).not.toBe(input)
+  })
+
+  test('renders a numeric value as editable text with outlined and invalid states', async () => {
+    const { container } = render(M3TextField, {
+      props: {
+        type: 'number',
+        value: 42,
+        label: 'Quantity',
+        outlined: true,
+        invalid: true,
+      },
+    })
+
+    const input = screen.getByRole('textbox', { name: 'Quantity' }) as HTMLInputElement
+    const root = container.querySelector('.m3-text-field')!
+    expect(input.type).toBe('text')
+    expect(input.value).toBe('42')
+    expect(input.getAttribute('aria-invalid')).toBe('true')
+    expect(root.classList.contains('m3-text-field_filled')).toBe(true)
+    expect(root.classList.contains('m3-text-field_outlined')).toBe(true)
+
+    await fireEvent.focus(input)
+    expect(root.classList.contains('m3-text-field_focused')).toBe(true)
+    await fireEvent.blur(input)
+    expect(root.classList.contains('m3-text-field_focused')).toBe(false)
+  })
+
+  test('keeps an external accessible name without adding an absent visible label', () => {
+    const { container } = render(M3TextField, {
+      attrs: { 'aria-labelledby': 'section-heading' },
+      slots: {
+        'leading-icon': () => h('span', { 'aria-hidden': 'true' }, '@'),
+        'trailing-icon': () => h('span', { 'aria-hidden': 'true' }, '✓'),
+      },
+    })
+
+    const input = screen.getByRole('textbox')
+    expect(input.getAttribute('aria-labelledby')).toBe('section-heading')
+    expect(container.querySelector('.m3-text-field_has-leading')).not.toBeNull()
+    expect(container.querySelector('.m3-text-field_has-trailing')).not.toBeNull()
   })
 })

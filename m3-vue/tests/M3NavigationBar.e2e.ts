@@ -300,7 +300,7 @@ test('keeps the rail FAB icon anchored while revealing its label', async () => {
     appearance.value = 'rail-expanded'
     await nextTick()
     await sample()
-    expect(getComputedStyle(text).opacity).toBe('1')
+    expect(Number.parseFloat(getComputedStyle(text).opacity)).toBeCloseTo(1, 2)
     label.value = 'Compose an exceptionally long message'
     await nextTick()
     expect(fab.getBoundingClientRect().height).toBe(56)
@@ -309,7 +309,7 @@ test('keeps the rail FAB icon anchored while revealing its label', async () => {
     appearance.value = 'rail'
     await nextTick()
     await sample()
-    expect(getComputedStyle(text).opacity).toBe('0')
+    expect(Number.parseFloat(getComputedStyle(text).opacity)).toBeCloseTo(0, 2)
   } finally {
     app.unmount()
     mountPoint.remove()

@@ -1,6 +1,7 @@
 import { defineComponent } from 'vue'
 import { fireEvent } from '@testing-library/vue'
 import { h } from 'vue'
+import { ref } from 'vue'
 import { render, screen } from '@testing-library/vue'
 
 import { M3Menu } from '@/components/menu'
@@ -27,10 +28,19 @@ vi.mock('@/components/popper', () => ({
       'update:shown',
     ],
 
-    setup: (props, { attrs, emit, slots }) => {
+    setup: (props, { attrs, emit, expose, slots }) => {
+      const root = ref<HTMLDivElement | null>(null)
+
+      expose({
+        get el () { return root.value },
+        hide: vi.fn(),
+      })
+
       return () => h('div', {
+        ref: root,
         'data-testid': 'menu-popper',
         class: attrs.class,
+        onKeydown: attrs.onKeydown,
         'data-target-triggers': JSON.stringify(props.targetTriggers),
         'data-hide-on-miss-click': String(props.hideOnMissClick),
       }, [
@@ -95,5 +105,33 @@ describe('m3-vue/menu', () => {
     expect(view.emitted().hide).toHaveLength(1)
     expect(view.emitted().hidden).toHaveLength(1)
     expect(view.emitted()['update:shown']?.[0]).toEqual([false])
+  })
+
+  test('handles navigation keys when no actions are present', async () => {
+    const view = render(M3Menu, {
+      props: { target: () => document.body },
+      slots: { default: 'No actions available' },
+    })
+    const menu = screen.getByTestId('menu-popper')
+
+    for (const key of ['ArrowDown', 'ArrowUp', 'Escape']) {
+      const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true })
+      menu.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(true)
+    }
+
+    view.unmount()
+  })
+
+  test('exposes the mounted menu root and clears it on unmount', () => {
+    const instance = ref<{ el: HTMLElement | null } | null>(null)
+    const view = render(defineComponent({
+      setup: () => () => h(M3Menu, { ref: instance, target: () => document.body }),
+    }))
+    const exposed = instance.value!
+
+    expect(exposed.el).toBe(screen.getByTestId('menu-popper'))
+    view.unmount()
+    expect(exposed.el).toBeNull()
   })
 })

@@ -1,4 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/vue'
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
+
+import { defineComponent } from 'vue'
+import { fireEvent } from '@testing-library/vue'
+import { h, ref } from 'vue'
+import { render, screen } from '@testing-library/vue'
 
 import { M3Radio } from '@/components/radio'
 
@@ -48,5 +53,25 @@ describe('m3-vue/radio', () => {
     await fireEvent.click(input)
 
     expect(view.emitted().change).toBeUndefined()
+  })
+
+  test('uses true as the default value and exposes native input controls', () => {
+    const radio = ref<(ElementReference & Interactable) | null>(null)
+    const onChange = vi.fn()
+    const Harness = defineComponent({
+      setup: () => () => h(M3Radio, { ref: radio, model: false, onChange }),
+    })
+    render(Harness)
+
+    const input = screen.getByRole('radio') as HTMLInputElement
+    expect(radio.value?.el?.contains(input)).toBe(true)
+    expect(input.checked).toBe(false)
+
+    radio.value?.focus()
+    expect(document.activeElement).toBe(input)
+    radio.value?.blur()
+    expect(document.activeElement).not.toBe(input)
+    radio.value?.click()
+    expect(onChange).toHaveBeenCalledWith(true)
   })
 })

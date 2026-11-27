@@ -9,6 +9,11 @@ import { render } from '@testing-library/vue'
 import { M3Progress, M3ProgressCircle, M3ProgressLine } from '@/components/progress'
 
 describe('m3-vue/progress', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+    vi.unstubAllGlobals()
+  })
+
   test('switches between line and circle without adding a wrapper element', async () => {
     const host = document.createElement('div')
     document.body.append(host)
@@ -114,5 +119,118 @@ describe('m3-vue/progress', () => {
 
     await rerender({ value: 100 })
     expect(indicator.classList.contains('m3-progress_wave-flat')).toBe(true)
+  })
+
+  test('exposes no element after the selected indicator unmounts', () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+    const view = ref<{ el: HTMLDivElement | null } | null>(null)
+    const app = createApp({
+      render: () => h(M3Progress, { ref: view }),
+    })
+    app.mount(host)
+    const exposed = view.value!
+
+    app.unmount()
+    host.remove()
+
+    expect(exposed.el).toBeNull()
+  })
+
+  test('draws reduced-motion line and circular frames without scheduling another frame', () => {
+    const frames: FrameRequestCallback[] = []
+    const changes: Array<() => void> = []
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+      frames.push(callback)
+      return frames.length
+    })
+    vi.stubGlobal('cancelAnimationFrame', vi.fn())
+    vi.stubGlobal('matchMedia', () => ({
+      matches: true,
+      addEventListener: (_type: string, listener: () => void) => changes.push(listener),
+    }))
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockReturnValue(DOMRect.fromRect({ width: 400, height: 10 }))
+
+    const line = render(M3ProgressLine, {
+      props: { shape: 'wavy', indeterminate: true },
+      attrs: { 'aria-label': 'Line' },
+    })
+    const circle = render(M3ProgressCircle, {
+      props: { shape: 'wavy', indeterminate: true },
+      attrs: { 'aria-label': 'Circle' },
+    })
+    const queued = frames.splice(0)
+    queued.forEach(frame => frame(1000))
+
+    const lineBar = line.getByRole('progressbar', { name: 'Line' })
+    const circleBar = circle.getByRole('progressbar', { name: 'Circle' })
+
+    expect(lineBar.querySelector('.m3-progress__linear-motion-active')?.getAttribute('d')).toContain('M ')
+    expect(circleBar.querySelector('.m3-progress__circular-active')?.getAttribute('d')).toContain('M ')
+    expect(frames).toHaveLength(0)
+    changes.forEach(change => change())
+    expect(frames).toHaveLength(2)
+  })
+
+  test('keeps circular wave motion running while it has amplitude', () => {
+    const frames: FrameRequestCallback[] = []
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+      frames.push(callback)
+      return frames.length
+    })
+    vi.stubGlobal('cancelAnimationFrame', vi.fn())
+
+    const view = render(M3ProgressCircle, { props: { shape: 'wavy', value: 50 } })
+    frames.shift()?.(1000)
+
+    expect(view.getByRole('progressbar').querySelector('.m3-progress__circular-active')?.getAttribute('d')).toContain('M ')
+    expect(frames).toHaveLength(1)
+    view.unmount()
+  })
+
+  test('draws a flat circle and freezes a determinate wave in reduced motion', () => {
+    const frames: FrameRequestCallback[] = []
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+      frames.push(callback)
+      return frames.length
+    })
+    vi.stubGlobal('cancelAnimationFrame', vi.fn())
+    vi.stubGlobal('matchMedia', () => ({ matches: true, addEventListener: vi.fn() }))
+
+    const flat = render(M3ProgressCircle, { props: { value: 40 } })
+    const wave = render(M3ProgressCircle, { props: { shape: 'wavy', value: 40 } })
+    const queued = frames.splice(0)
+    queued.forEach(frame => frame(1000))
+
+    expect(flat.container.querySelector('.m3-progress__circular-active')?.getAttribute('stroke-dasharray')).toBe('40 60')
+    expect(wave.container.querySelector('.m3-progress__circular-active')?.getAttribute('d')).toContain('M ')
+    expect(frames).toHaveLength(0)
+    flat.unmount()
+    wave.unmount()
+  })
+
+  test('draws linear motion without a media-query API and tolerates a late resize', () => {
+    let resize!: ResizeObserverCallback
+    const frames: FrameRequestCallback[] = []
+    vi.stubGlobal('matchMedia', undefined)
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+      frames.push(callback)
+      return frames.length
+    })
+    vi.stubGlobal('cancelAnimationFrame', vi.fn())
+    vi.stubGlobal('ResizeObserver', class {
+      constructor (callback: ResizeObserverCallback) { resize = callback }
+      observe () { resize([], this as ResizeObserver) }
+      unobserve () {}
+      disconnect () {}
+    })
+
+    const view = render(M3ProgressLine, { props: { indeterminate: true } })
+    frames.shift()?.(performance.now() + 875)
+    expect(view.getByRole('progressbar').querySelector('.m3-progress__linear-motion-active')?.getAttribute('d')).toContain('M ')
+
+    view.unmount()
+    resize([], {} as ResizeObserver)
   })
 })

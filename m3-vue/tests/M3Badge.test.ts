@@ -14,7 +14,7 @@ describe('m3-vue/badge', () => {
     expect(badge.classList.contains('m3-badge_labelled')).toBe(true)
   })
 
-  test('prefers slot content over label', () => {
+  test('prefers supplied content over the label', () => {
     render(M3Badge, {
       props: { label: '7' },
       slots: { default: '9' },

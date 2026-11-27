@@ -60,7 +60,7 @@ export function useSurfaceCardPageMorph(transitionMs: number) {
       return
     }
 
-    if (!origin || backgroundCollapsed.value) {
+    if (!origin) {
       return
     }
 

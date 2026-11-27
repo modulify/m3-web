@@ -1,12 +1,46 @@
+import type { ElementReference } from '@modulify/m3-foundation/types/dom'
 import type { NavigationView } from '@modulify/m3-foundation/types/components/navigation'
 
+import { defineComponent } from 'vue'
 import { fireEvent } from '@testing-library/vue'
-import { h, nextTick } from 'vue'
+import { h, nextTick, ref } from 'vue'
 import { render, screen } from '@testing-library/vue'
 
-import { M3Navigation } from '@/components/navigation'
+import { M3Navigation, M3NavigationSection } from '@/components/navigation'
 
 describe('m3-vue/navigation', () => {
+  test('exposes the section element', () => {
+    const section = ref<ElementReference | null>(null)
+    const view = render(defineComponent({
+      setup: () => () => h(M3NavigationSection, { ref: section }, () => 'Settings'),
+    }))
+
+    expect(section.value?.el).toBe(view.container.querySelector('.m3-navigation__section'))
+  })
+
+  test('honors explicit hidden and inert attributes on a visible rail', async () => {
+    const hidden = ref<boolean | string>(true)
+    const inert = ref('')
+    render(defineComponent({
+      setup: () => () => h(M3Navigation, {
+        appearance: 'rail',
+        'aria-hidden': hidden.value,
+        inert: inert.value,
+      }),
+    }))
+    const nav = document.querySelector('nav.m3-navigation')!
+
+    expect(nav.getAttribute('aria-hidden')).toBe('true')
+    expect(nav.hasAttribute('inert')).toBe(true)
+
+    hidden.value = false
+    inert.value = 'false'
+    await nextTick()
+
+    expect(nav.getAttribute('aria-hidden')).toBe('false')
+    expect(nav.hasAttribute('inert')).toBe(false)
+  })
+
   test('passes the rendered view to every navigation slot', async () => {
     const slot = (id: string) => ({ view }: { view: NavigationView }) =>
       h('output', { 'data-testid': id }, JSON.stringify(view))

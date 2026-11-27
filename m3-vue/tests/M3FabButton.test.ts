@@ -1,5 +1,8 @@
+import type { ElementReference, Interactable } from '@modulify/m3-foundation/types/dom'
+
+import { defineComponent } from 'vue'
 import { fireEvent } from '@testing-library/vue'
-import { h } from 'vue'
+import { h, ref } from 'vue'
 import { render, screen } from '@testing-library/vue'
 
 import { M3FabButton } from '@/components/fab-button'
@@ -25,7 +28,16 @@ describe('m3-vue/fab-button', () => {
     expect(text?.textContent?.trim()).toBe('Create')
   })
 
-  test('supports trailing icon, alternate size and color, and keyboard activation', async () => {
+  test('uses a link when given a destination', () => {
+    render(M3FabButton, {
+      props: { href: '/new' },
+      slots: { default: 'New task' },
+    })
+
+    expect(screen.getByRole('link', { name: 'New task' }).getAttribute('href')).toBe('/new')
+  })
+
+  test('supports the large secondary action with a trailing icon', async () => {
     const view = render(M3FabButton, {
       props: { size: 'lg', variant: 'secondary' },
       slots: { default: () => ['Compose', h(M3Icon, { name: 'edit' })] },
@@ -49,12 +61,21 @@ describe('m3-vue/fab-button', () => {
     expect(view.container.querySelector('.m3-fab-button__text')).toBeNull()
   })
 
-  test('uses link semantics for a FAB destination', () => {
-    render(M3FabButton, {
-      props: { href: '/new' },
-      slots: { default: 'New task' },
+  test('exposes click and focus controls through the button element', () => {
+    const action = ref<(ElementReference & Interactable) | null>(null)
+    const onClick = vi.fn()
+    const Harness = defineComponent({
+      setup: () => () => h(M3FabButton, { ref: action, onClick }, { default: () => 'Create' }),
     })
+    render(Harness)
 
-    expect(screen.getByRole('link', { name: 'New task' }).getAttribute('href')).toBe('/new')
+    const button = screen.getByRole('button', { name: 'Create' })
+    expect(action.value?.el).toBe(button)
+    action.value?.focus()
+    expect(document.activeElement).toBe(button)
+    action.value?.blur()
+    expect(document.activeElement).not.toBe(button)
+    action.value?.click()
+    expect(onClick).toHaveBeenCalledOnce()
   })
 })

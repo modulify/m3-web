@@ -1,4 +1,9 @@
-import { nextTick } from 'vue'
+import {
+  defineComponent,
+  h,
+  nextTick,
+  ref,
+} from 'vue'
 import { render } from '@testing-library/vue'
 
 import { M3ScrollRail } from '@/components/scroll-rail'
@@ -71,6 +76,27 @@ describe('m3-vue/scroll-rail', () => {
     await nextTick()
 
     expect(root.classList.contains('m3-scroll-rail_active')).toBe(false)
+  })
+
+  test('sync method delegates to rail instance', () => {
+    const rail = {
+      init: vi.fn(),
+      destroy: vi.fn(),
+      sync: vi.fn(),
+      horizontal: false,
+      disabled: false,
+    }
+    createRailMock.mockReturnValue(rail)
+
+    const instance = ref<{ el: HTMLElement | null; sync: () => void } | null>(null)
+    const { container } = render(defineComponent({
+      setup: () => () => h(M3ScrollRail, { ref: instance }),
+    }))
+
+    instance.value?.sync()
+
+    expect(rail.sync).toHaveBeenCalledOnce()
+    expect(instance.value?.el).toBe(container.firstElementChild)
   })
 
   test('updates rail options from reactive props', async () => {
