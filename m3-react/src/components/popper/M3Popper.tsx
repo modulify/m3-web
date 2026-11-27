@@ -201,6 +201,7 @@ export default defineComponent(function M3Popper({
     showing: new Scheduler(),
     detach: new Scheduler(),
   }), [])
+  const showRequest = useRef(0)
   const showFrame = useAnimationFrame()
   const showingFrame = useAnimationFrame()
   const globalClickFrame = useAnimationFrame()
@@ -215,18 +216,26 @@ export default defineComponent(function M3Popper({
     }
   }, 0)
 
-  const doShow = useCallback(() => {
+  const doShow = useCallback((request: number) => {
     scheduler.detach.abort()
     scheduler.showing.abort()
 
     if (!state.shown) {
       showFrame.request(async () => {
-        if (!state.hiding) {
-          await adjust.do()
-          adjust.on()
+        while (request === showRequest.current && !state.hiding && !state.disposed) {
+          const reference = targetRef.current
+          const positioner = positionerRef.current
+          if (!reference?.isConnected || !positioner?.isConnected) return
 
+          await adjust.do()
+          if (request !== showRequest.current || state.hiding || state.disposed) return
+          if (!reference.isConnected || !positioner.isConnected) return
+          if (targetRef.current !== reference || positionerRef.current !== positioner) continue
+
+          adjust.on()
           state.shown = true
           handlers.onToggle(true)
+          return
         }
       })
     }
@@ -258,13 +267,14 @@ export default defineComponent(function M3Popper({
     }
 
     state.hiding = false
-    if (portalHost) {
-      mountPopoverHost(portalHost, targetRef.current, containerRef.current)
-      raisePopover(portalHost)
-    }
+    // show only runs in a client instance, where the popover host exists.
+    const host = portalHost!
+    mountPopoverHost(host, targetRef.current, containerRef.current)
+    raisePopover(host)
     state.attached = true
 
-    scheduler.showing.schedule(doShow, immediately ? 0 : state.showDelay)
+    const request = ++showRequest.current
+    scheduler.showing.schedule(() => doShow(request), immediately ? 0 : state.showDelay)
 
     handlers.onShow()
     state.showing = true
@@ -272,6 +282,7 @@ export default defineComponent(function M3Popper({
   }, [])
 
   const hide = useCallback((immediately = false, reason: HideReason = 'generic'): void => {
+    showRequest.current++
     state.hiding = true
 
     scheduler.showing.schedule(doHide, immediately ? 0 : state.hideDelay)
@@ -324,10 +335,6 @@ export default defineComponent(function M3Popper({
       if (targetRef.current) {
         listening.target.start(targetRef.current, targetTriggers)
       }
-
-      if (positionerRef.current) {
-        listening.popper.start(positionerRef.current, popperTriggers)
-      }
     } else {
       state.disposed = true
     }
@@ -356,6 +363,7 @@ export default defineComponent(function M3Popper({
   useWatch(target, async target => {
     if (targetRef.current) {
       targetRef.current = target
+      listening.target.target = target
 
       if (state.shown) {
         adjust.on()
@@ -374,6 +382,19 @@ export default defineComponent(function M3Popper({
 
   useWatch(targetTriggers, t => listening.target.triggers = t)
   useWatch(popperTriggers, t => listening.popper.triggers = t)
+
+  useLayoutEffect(() => {
+    const element = positionerRef.current
+    if (!element || state.disposed) return
+
+    listening.popper.stop()
+    listening.popper.start(element, popperTriggers)
+
+    return () => {
+      listening.popper.stop()
+      listening.popper.target = null
+    }
+  }, [state.attached])
 
   useWatch(positioning, () => adjust.do(), { deep: true })
 
@@ -401,7 +422,7 @@ export default defineComponent(function M3Popper({
   useWatch(disabled, disabled => {
     if (disabled) {
       dispose()
-    } else if (state.disposed) {
+    } else {
       initialize()
 
       if (shown) {

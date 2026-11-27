@@ -40,7 +40,30 @@ const Probe = ({
   )
 }
 
+const DefaultProbe = () => {
+  const ref = useRef<HTMLButtonElement>(null as unknown as HTMLButtonElement)
+
+  useElementEffect(ref, useM3PopperCloserEffect())
+
+  return <button ref={ref} type="button">Close</button>
+}
+
 describe('m3-react/popper closer effect', () => {
+  test('defaults to an active closer for the current popper', () => {
+    render(<DefaultProbe />)
+
+    const button = screen.getByRole('button', { name: 'Close' })
+    let clickEvent: Event | null = null
+    button.addEventListener('click', event => {
+      clickEvent = event
+    })
+
+    fireEvent.click(button)
+
+    expect((clickEvent as { m3PopperClose?: boolean } | null)?.m3PopperClose).toBe(true)
+    expect((clickEvent as { m3PopperCloseAll?: boolean } | null)?.m3PopperCloseAll).toBe(false)
+  })
+
   test('wires closer listeners when active and forwards all flag', () => {
     const { rerender } = render(<Probe active={true} all={true} />)
 

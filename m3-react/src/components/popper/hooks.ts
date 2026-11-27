@@ -6,7 +6,7 @@ import { Listener } from '@modulify/m3-foundation/lib/popper'
 
 import { autoUpdate } from '@floating-ui/dom'
 import { normalizeDelay } from '@modulify/m3-foundation/lib/popper/scheduling'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 
 export const useAutoAdjust = (
   targetRef: MutableRefObject<Element | null>,
@@ -46,8 +46,17 @@ export const useDelay = (delay: M3PopperProps['delay']) => {
 }
 
 export const useListening = ([onShow, onHide]: [TriggerHandler, TriggerHandler]) => {
+  const handlers = useRef({ onShow, onHide })
+  handlers.current = { onShow, onHide }
+
   return useMemo(() => ({
-    target: new Listener(onShow, onHide),
-    popper: new Listener(onShow, onHide),
-  }), [onShow, onHide])
+    target: new Listener(
+      event => handlers.current.onShow(event),
+      event => handlers.current.onHide(event)
+    ),
+    popper: new Listener(
+      event => handlers.current.onShow(event),
+      event => handlers.current.onHide(event)
+    ),
+  }), [])
 }

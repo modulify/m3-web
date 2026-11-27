@@ -107,6 +107,30 @@ describe('m3-react/popper e2e', () => {
     vi.restoreAllMocks()
   })
 
+  test('does not finish opening when positioning finds the reference hidden', async () => {
+    target = document.createElement('button')
+    target.textContent = 'Hidden trigger'
+    target.style.position = 'fixed'
+    target.style.left = '-10000px'
+    document.body.append(target)
+
+    const popperRef = createRef<M3PopperExposed>()
+    const onHide = vi.fn()
+    const onToggle = vi.fn()
+    const view = render(
+      <M3Popper ref={popperRef} target={target} overflow={['hide']} onHide={onHide} onToggle={onToggle}>
+        <span>Popover</span>
+      </M3Popper>
+    )
+    unmount = view.unmount
+
+    act(() => popperRef.current!.show(true))
+
+    await waitFor(() => expect(onHide).toHaveBeenCalled())
+    expect(onToggle).not.toHaveBeenCalledWith(true)
+    expect(document.body.querySelector('.m3-popper_shown')).toBeNull()
+  })
+
   test('applies bottom placement geometry with main axis offset', async () => {
     target = document.createElement('button')
     document.body.append(target)
