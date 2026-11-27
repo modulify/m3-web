@@ -55,7 +55,6 @@ import { isNumeric } from '@modulify/m3-foundation/lib/predicates'
 import { isOverflowBehavior } from '@modulify/m3-foundation/lib/popper/predicates'
 import { isString } from '@modulify/validator/predicates'
 import { isTriggerOptions } from '@modulify/m3-foundation/lib/popper/predicates'
-import { nextTick } from 'vue'
 import { normalizeDelay } from '@modulify/m3-foundation/lib/popper/scheduling'
 import {
   onActivated,
@@ -274,6 +273,7 @@ const {
 
 const showingScheduler = new Scheduler()
 const detachScheduler = new Scheduler()
+let showRequest = 0
 const showFrame = useAnimationFrame()
 const showingFrame = useAnimationFrame()
 const globalClickFrame = useAnimationFrame()
@@ -286,18 +286,26 @@ const detach = () => {
   portalHost?.remove()
 }
 
-const doShow = () => {
+const doShow = (request: number) => {
   detachScheduler.abort()
   showingScheduler.abort()
 
   if (!state.shown) {
     showFrame.request(async () => {
-      if (!state.hiding) {
-        await adjust()
-        autoAdjustOn()
+      while (request === showRequest && !state.hiding && !state.disposed) {
+        const reference = target.value
+        const element = positioner.value
+        if (!reference?.isConnected || !element?.isConnected) return
 
+        await adjust()
+        if (request !== showRequest || state.hiding || state.disposed) return
+        if (!reference.isConnected || !element.isConnected) return
+        if (target.value !== reference || positioner.value !== element) continue
+
+        autoAdjustOn()
         state.shown = true
         emit('update:shown', true)
+        return
       }
     })
   }
@@ -327,13 +335,14 @@ const show = (immediately = false) => {
   }
 
   state.hiding = false
-  if (portalHost) {
-    mountPopoverHost(portalHost, target.value ?? null, props.container)
-    raisePopover(portalHost)
-  }
+  // show only runs in a client instance, where the popover host exists.
+  const host = portalHost!
+  mountPopoverHost(host, target.value ?? null, props.container)
+  raisePopover(host)
   state.attached = true
 
-  showingScheduler.schedule(doShow, immediately ? 0 : delay.value.show)
+  const request = ++showRequest
+  showingScheduler.schedule(() => doShow(request), immediately ? 0 : delay.value.show)
 
   emit('show')
 
@@ -342,6 +351,7 @@ const show = (immediately = false) => {
 }
 
 const hide = (immediately = false, reason: 'generic' | 'by-closer' | 'by-miss-click' = 'generic'): void => {
+  showRequest++
   state.hiding = true
 
   showingScheduler.schedule(doHide, immediately ? 0 : delay.value.hide)
@@ -411,10 +421,6 @@ const initialize = (disposed = false): void => {
     if (target.value) {
       targetListener.start(target.value, props.targetTriggers)
     }
-
-    if (positioner.value) {
-      popperListener.start(positioner.value, props.popperTriggers)
-    }
   } else {
     state.disposed = true
   }
@@ -446,40 +452,40 @@ watch([target, () => props.container], ([element, container]) => {
   const destination = resolvePopoverContainer(element ?? null, container)
   if (portalHost.parentElement !== destination) destination.append(portalHost)
 })
-watch(() => target.value, async (newTarget, oldTarget) => {
-  if (newTarget !== oldTarget) {
+watch(() => target.value, async (newTarget) => {
+  if (newTarget && !state.disposed) {
+    targetListener.stop()
+    targetListener.start(newTarget, props.targetTriggers)
+  } else {
     targetListener.target = newTarget
+  }
 
-    if (state.shown) {
-      autoAdjustOn()
-      await adjust()
-    }
+  if (state.shown) {
+    autoAdjustOn()
+    await adjust()
   }
 })
 watch(() => props.targetTriggers, () => targetListener.triggers = props.targetTriggers)
 watch(() => props.popperTriggers, () => popperListener.triggers = props.popperTriggers)
+watch(positioner, (element) => {
+  popperListener.stop()
+
+  if (element && !state.disposed) {
+    popperListener.start(element, props.popperTriggers)
+  } else {
+    popperListener.target = element
+  }
+}, { flush: 'post' })
 watch(() => positioning.value, async (newOptions, oldOptions) => {
   if (!isEqual(newOptions, oldOptions)) {
     await adjust()
   }
 })
 
-watch(() => state.attached, (isAttached, wasAttached) => {
-  if (isAttached && !wasAttached) {
-    nextTick(async () => {
-      if (state.shown) {
-        autoAdjustOff()
-        await adjust()
-        autoAdjustOn()
-      }
-    })
-  }
-})
-
 watch(() => props.disabled, disabled => {
   if (disabled) {
     dispose()
-  } else if (state.disposed) {
+  } else {
     initialize()
 
     if (props.shown) {
