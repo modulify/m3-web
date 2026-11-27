@@ -195,6 +195,7 @@
   &__handle {
     display: flex;
     flex-shrink: 0;
+    touch-action: none;
     inline-size: 16px;
     block-size: 44px;
     align-items: center;
