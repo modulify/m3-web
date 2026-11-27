@@ -1,0 +1,73 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks'
+import { Localized } from '../i18n'
+import * as Stories from './M3LoadingIndicator.stories'
+
+<Meta of={Stories} />
+
+<Localized locale="en-US">
+
+# Loading indicator
+
+A loading indicator communicates a short wait with unknown duration. Material recommends showing content immediately for waits under 200 ms, a loading indicator for roughly 200 ms to 5 s, and a progress indicator for longer work. Use `M3Progress` if an operation can switch from unknown to measured progress. [Material 3 guidelines](https://m3.material.io/components/loading-indicator/guidelines).
+
+## Appearance
+
+The active shape morphs through seven silhouettes while rotating. The default variant has no background. Set `contained` to add a round `primary-container` surface with an `on-primary-container` shape; use it on a busy background or for pull-to-refresh. The default active shape uses `primary`. The indicator has no inactive track. [Material 3 specs](https://m3.material.io/components/loading-indicator/specs).
+
+<Canvas of={Stories.Default} />
+<Canvas of={Stories.Contained} />
+
+The default footprint is 48px square, with an active shape fitted into 38px. `size` scales both together and is bounded to 24–240px.
+
+<Canvas of={Stories.Sizes} />
+
+Place the indicator in the center of the area whose content will appear. When content is already visible, place it in the available empty area. A short action may display the indicator inside a button; the button keeps the action's accessible name and busy state. [Material 3 guidelines](https://m3.material.io/components/loading-indicator/guidelines).
+
+<Canvas of={Stories.InButton} />
+
+## Accessibility and API
+
+The root has `role="progressbar"` and no numeric value. Give each visible indicator an accessible name that identifies what is loading, using `aria-label` or `aria-labelledby`. Decorative instances inside a labelled button should use `aria-hidden="true"`. Maintain at least 3:1 contrast between the active shape and its background. The shape stops moving when reduced motion is requested. [Material 3 accessibility](https://m3.material.io/components/loading-indicator/accessibility).
+
+| Prop | Values | Default | Purpose |
+| --- | --- | --- | --- |
+| `contained` | Boolean | `false` | Show the circular container. |
+| `size` | Number in px, clamped to 24–240 | `48` | Scale the whole indicator. |
+
+Native `aria-*`, `class`, and `style` pass to the root. A component reference exposes `el`, the root `<div>`. Override `--m3-loading-indicator-color` and `--m3-loading-indicator-container-color` for context-specific color roles.
+
+</Localized>
+
+<Localized locale="ru-RU">
+
+# Индикатор загрузки
+
+Индикатор показывает короткое ожидание, когда длительность операции неизвестна. Material рекомендует сразу показывать содержимое при ожидании до 200 мс, использовать loading indicator примерно от 200 мс до 5 с, а для более долгой работы — progress indicator. Если неизвестный прогресс может стать измеряемым, используйте `M3Progress`. [Рекомендации Material 3](https://m3.material.io/components/loading-indicator/guidelines).
+
+## Внешний вид
+
+Активная форма вращается и плавно меняется между семью силуэтами. Базовый вариант не имеет фона. `contained` добавляет круглый контейнер цвета `primary-container` и форму цвета `on-primary-container`; он подходит для сложного фона и pull-to-refresh. В базовом варианте форма использует `primary`. Неактивного трека нет. [Размеры Material 3](https://m3.material.io/components/loading-indicator/specs).
+
+<Canvas of={Stories.Default} />
+<Canvas of={Stories.Contained} />
+
+По умолчанию область индикатора занимает 48×48px, активная форма вписана в 38px. `size` масштабирует обе части и ограничивается диапазоном 24–240px.
+
+<Canvas of={Stories.Sizes} />
+
+Размещайте индикатор по центру области, где появится содержимое. Если часть содержимого уже видна, используйте свободное место. Короткое действие может показывать индикатор внутри кнопки; имя действия и состояние занятости остаются у кнопки. [Рекомендации Material 3](https://m3.material.io/components/loading-indicator/guidelines).
+
+<Canvas of={Stories.InButton} />
+
+## Доступность и API
+
+У корня есть `role="progressbar"` без числового значения. Каждому видимому индикатору задавайте имя с описанием загружаемого содержимого через `aria-label` или `aria-labelledby`. Декоративный индикатор внутри подписанной кнопки скрывайте с `aria-hidden="true"`. Обеспечьте контраст активной формы с фоном не менее 3:1. При запросе уменьшения движения анимация останавливается. [Доступность Material 3](https://m3.material.io/components/loading-indicator/accessibility).
+
+| Prop | Значения | По умолчанию | Назначение |
+| --- | --- | --- | --- |
+| `contained` | Boolean | `false` | Показать круглый контейнер. |
+| `size` | Число в px, приводится к 24–240 | `48` | Масштабировать индикатор целиком. |
+
+Нативные `aria-*`, `class` и `style` передаются корню. Ссылка на компонент предоставляет `el` — корневой `<div>`. Цветовые роли можно переопределить через `--m3-loading-indicator-color` и `--m3-loading-indicator-container-color`.
+
+</Localized>
