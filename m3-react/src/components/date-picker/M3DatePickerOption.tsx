@@ -12,26 +12,27 @@ interface M3DatePickerOptionProps extends Omit<
   'children' | 'className' | 'onClick' | 'onSelect' | 'type'
 > {
   appearance: M3DatePickerOptionAppearance;
-  current?: boolean;
-  selected?: boolean;
+  current: boolean;
+  selected: boolean;
   outside?: boolean;
   inRange?: boolean;
   rangeStart?: boolean;
   rangeEnd?: boolean;
+  disabled: boolean;
   children: ReactNode;
   onSelect: () => void;
 }
 
 const M3DatePickerOption: FC<M3DatePickerOptionProps> = ({
   appearance,
-  current = false,
-  selected = false,
+  current,
+  selected,
   outside = false,
   inRange = false,
   rangeStart = false,
   rangeEnd = false,
   'aria-current': ariaCurrent,
-  disabled = false,
+  disabled,
   children,
   onSelect,
   ...attrs

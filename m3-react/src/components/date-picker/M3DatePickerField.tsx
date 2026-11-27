@@ -149,14 +149,12 @@ export default defineComponent(function M3DatePickerField({
   }
 
   const confirm = () => {
-    if (draftValue === null) {
-      return
-    }
+    const selected = draftValue as Date
 
     setInputInvalid(false)
-    setInputValue(formatCalendarDateInput(draftValue))
+    setInputValue(formatCalendarDateInput(selected))
     setExpanded(false)
-    onChange(draftValue)
+    onChange(selected)
   }
 
   const interactive = !disabled && !readonly
@@ -195,9 +193,11 @@ export default defineComponent(function M3DatePickerField({
         </M3TextField.TrailingIcon>
       </M3TextField>
 
-      <div className="m3-date-picker-field__supporting-text">
-        {supportingText}
-      </div>
+      {supportingText ? (
+        <div className="m3-date-picker-field__supporting-text">
+          {supportingText}
+        </div>
+      ) : null}
 
       <M3Popper
         target={root}
