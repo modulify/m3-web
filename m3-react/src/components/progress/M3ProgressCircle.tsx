@@ -74,11 +74,9 @@ export default defineComponent(function M3ProgressCircle({
   const frame = useAnimationFrame()
 
   useEffect(() => {
-    if (!root.current || !activePath.current || !trackPath.current) return
-
-    const container = root.current
-    const path = activePath.current
-    const track = trackPath.current
+    const container = root.current!
+    const path = activePath.current!
+    const track = trackPath.current!
     const svg = path.ownerSVGElement!
     const preference = window.matchMedia?.('(prefers-reduced-motion: reduce)')
 

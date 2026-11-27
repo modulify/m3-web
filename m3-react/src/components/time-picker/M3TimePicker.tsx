@@ -90,7 +90,6 @@ export default defineComponent(function M3TimePicker({
   const formatActual = resolveTimeFormat(locale, format)
   const bounds: TimeBounds = { min, max, step }
   const [state, setState] = useState(() => initialState(value, appearance, formatActual))
-  const dial = useRef<HTMLDivElement>(null)
   const dragging = useRef<Selection | null>(null)
 
   useEffect(() => {
@@ -191,8 +190,7 @@ export default defineComponent(function M3TimePicker({
   }
 
   const selectPoint = (event: PointerEvent<HTMLDivElement>) => {
-    const rect = dial.current?.getBoundingClientRect()
-    if (!rect) return
+    const rect = event.currentTarget.getBoundingClientRect()
 
     const centerX = rect.left + rect.width / 2
     const centerY = rect.top + rect.height / 2
@@ -364,7 +362,6 @@ export default defineComponent(function M3TimePicker({
 
         {state.appearance === 'dial' && (
           <div
-            ref={dial}
             className="m3-time-picker__dial"
             aria-label={state.selection === 'hour' ? 'Hours' : 'Minutes'}
             role="group"

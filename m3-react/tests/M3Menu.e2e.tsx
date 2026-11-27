@@ -4,6 +4,7 @@ import { M3Menu, M3MenuItem } from '@/components/menu'
 
 test('switches between standard and vibrant color and density', async () => {
   const trigger = document.createElement('button')
+  trigger.textContent = 'Open menu'
   document.body.append(trigger)
   const view = render(<M3Menu target={trigger} color="vibrant" density={-2}>
     <M3MenuItem>Rename</M3MenuItem>
@@ -31,6 +32,7 @@ test('switches between standard and vibrant color and density', async () => {
 
 test('leaves listbox keyboard handling to its consumer', async () => {
   const trigger = document.createElement('button')
+  trigger.textContent = 'Open options'
   document.body.append(trigger)
   const view = render(<M3Menu target={trigger} role="listbox">
     <M3MenuItem role="option">Draft</M3MenuItem>

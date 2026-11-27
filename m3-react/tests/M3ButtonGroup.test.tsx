@@ -1,3 +1,7 @@
+import type { M3ButtonGroupItemExposed } from '@/components/button-group'
+
+import { act } from '@testing-library/react'
+import { createRef } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 
 import { M3ButtonGroup, M3ButtonGroupItem } from '@/components/button-group'
@@ -238,5 +242,46 @@ describe('m3-react/button-group', () => {
     expect(button.querySelector('.m3-icon_outlined')).toBeTruthy()
     fireEvent.click(button)
     expect(button.querySelector('.m3-icon_filled')).toBeTruthy()
+  })
+
+  test('forwards item methods and lets the wrapper activate its button', () => {
+    const ref = createRef<M3ButtonGroupItemExposed>()
+    const onClick = vi.fn()
+    render(
+      <M3ButtonGroup variant="connected">
+        <M3ButtonGroupItem ref={ref} value="one" onClick={onClick}>One</M3ButtonGroupItem>
+      </M3ButtonGroup>
+    )
+
+    const button = screen.getByRole('button', { name: 'One' })
+    const wrapper = button.parentElement!
+    expect(ref.current?.el).toBe(button)
+
+    ref.current?.focus()
+    expect(document.activeElement).toBe(button)
+    ref.current?.blur()
+    expect(document.activeElement).not.toBe(button)
+    act(() => ref.current?.click())
+    expect(onClick).toHaveBeenCalledTimes(1)
+
+    fireEvent.click(wrapper)
+    expect(onClick).toHaveBeenCalledTimes(2)
+    expect(button.getAttribute('aria-pressed')).toBe('false')
+  })
+
+  test('rejects group items outside a group and mismatched sizes in a connected group', () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    try {
+      expect(() => render(<M3ButtonGroupItem value="one">One</M3ButtonGroupItem>))
+        .toThrow('M3ButtonGroupItem must be inside M3ButtonGroup')
+      expect(() => render(
+        <M3ButtonGroup variant="connected" size="md">
+          <M3ButtonGroupItem value="one" size="sm">One</M3ButtonGroupItem>
+        </M3ButtonGroup>
+      )).toThrow('Connected M3ButtonGroup items must use the group size')
+    } finally {
+      error.mockRestore()
+    }
   })
 })

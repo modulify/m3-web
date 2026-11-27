@@ -12,7 +12,7 @@ describe('m3-react/badge', () => {
     expect(badge?.classList.contains('m3-badge_labelled')).toBe(true)
   })
 
-  test('prefers children over label', () => {
+  test('prefers supplied content over the label', () => {
     const { container } = render(
       <M3Badge label="7">
         9

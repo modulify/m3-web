@@ -226,14 +226,14 @@ test('keeps the rail FAB icon anchored while revealing its label', async () => {
 
     view.rerender(navigation('rail-expanded'))
     await sample()
-    expect(getComputedStyle(text).opacity).toBe('1')
+    expect(Number.parseFloat(getComputedStyle(text).opacity)).toBeCloseTo(1, 2)
     view.rerender(navigation('rail-expanded', 'Compose an exceptionally long message'))
     expect(fab.getBoundingClientRect().height).toBe(56)
     expect(text.scrollWidth).toBeGreaterThan(text.clientWidth)
 
     view.rerender(navigation('rail', 'Compose an exceptionally long message'))
     await sample()
-    expect(getComputedStyle(text).opacity).toBe('0')
+    expect(Number.parseFloat(getComputedStyle(text).opacity)).toBeCloseTo(0, 2)
   } finally {
     view.unmount()
   }

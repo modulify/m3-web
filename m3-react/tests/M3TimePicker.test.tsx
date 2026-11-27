@@ -276,4 +276,45 @@ describe('m3-react/time-picker', () => {
     fireEvent.click(screen.getByRole('button', { name: 'OK' }))
     expect(onChange).toHaveBeenCalledWith({ hour: 9, minute: 0 })
   })
+
+  test('lets a horizontal picker switch between hour and minute selection', () => {
+    render(
+      <M3TimePicker
+        value={{ hour: 11, minute: 17 }}
+        format="12h"
+        layout="horizontal"
+        opened
+      />
+    )
+
+    const dialog = screen.getByRole('dialog', { name: 'Select time' })
+    expect(dialog.style.width).toBe('560px')
+    expect(dialog.classList.contains('m3-time-picker-dialog_horizontal')).toBe(true)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Select minutes' }))
+    expect(screen.getByRole('group', { name: 'Minutes' })).toBeTruthy()
+    expect(document.querySelector('.m3-time-picker__handle')?.textContent?.trim()).toBe('17')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Select hours' }))
+    expect(screen.getByRole('group', { name: 'Hours' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Select hours' }).getAttribute('aria-pressed')).toBe('true')
+  })
+
+  test('follows appearance changes from the parent while open', () => {
+    const view = render(
+      <M3TimePicker value={{ hour: 9, minute: 30 }} appearance="dial" opened />
+    )
+
+    expect(screen.getByRole('group', { name: 'Hours' })).toBeTruthy()
+
+    view.rerender(
+      <M3TimePicker value={{ hour: 9, minute: 30 }} appearance="input" opened />
+    )
+    expect(screen.getByRole('textbox', { name: 'Hour' })).toBeTruthy()
+
+    view.rerender(
+      <M3TimePicker value={{ hour: 9, minute: 30 }} appearance="dial" opened />
+    )
+    expect(screen.getByRole('group', { name: 'Hours' })).toBeTruthy()
+  })
 })

@@ -1,3 +1,6 @@
+import type { M3SelectExposed } from '@/components/select'
+
+import { createRef } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 
 import { M3Select } from '@/components/select'
@@ -9,7 +12,8 @@ describe('m3-react/select', () => {
   })
 
   test('puts the combobox contract on the focusable input', () => {
-    const { container } = render(<M3Select label="Status" />)
+    const select = createRef<M3SelectExposed>()
+    const { container } = render(<M3Select ref={select} label="Status" />)
 
     const combobox = screen.getByRole('combobox', { name: 'Status' })
     const root = container.querySelector('.m3-select')
@@ -18,6 +22,7 @@ describe('m3-react/select', () => {
     expect(combobox.getAttribute('aria-controls')).toMatch(/-menu$/)
     expect(combobox.getAttribute('aria-expanded')).toBe('false')
     expect(root?.getAttribute('role')).toBeNull()
+    expect(select.current?.el).toBe(root)
   })
 
   test('renders selected values and custom option content while respecting readonly and disabled states', async () => {

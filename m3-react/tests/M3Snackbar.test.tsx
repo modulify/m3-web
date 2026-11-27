@@ -6,8 +6,12 @@ import type {
 } from '@/components/snackbar'
 
 import { act } from '@testing-library/react'
+import { createLayerHost } from '@modulify/m3-foundation/lib/layers'
 import { createRef } from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
+import { LAYER_DEACTIVATED_EVENT } from '@modulify/m3-foundation/lib/layers'
+import { render, screen } from '@testing-library/react'
+import { setLayerModal } from '@modulify/m3-foundation/lib/layers'
 
 import { M3Button } from '@/components/button'
 import { M3Snackbar, M3SnackbarHost } from '@/components/snackbar'
@@ -193,6 +197,28 @@ describe('m3-react/snackbar', () => {
     next.remove()
   })
 
+  test('shows feedback when focus is on an SVG element', async () => {
+    const trigger = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    trigger.setAttribute('tabindex', '0')
+    document.body.append(trigger)
+
+    const host = createRef<SnackbarHostMethods>()
+    const view = render(<M3SnackbarHost ref={host} />)
+    trigger.focus()
+    expect(document.activeElement).toBe(trigger)
+
+    let result!: Promise<SnackbarResult>
+    act(() => {
+      result = host.current!.show({ message: 'Chart saved', duration: null })
+    })
+    expect(visibleMessage()).toBe('Chart saved')
+
+    act(() => host.current!.dismiss())
+    await expect(result).resolves.toBe('dismiss')
+    view.unmount()
+    trigger.remove()
+  })
+
   test('unmount settles the active and queued requests', async () => {
     const host = createRef<SnackbarHostMethods>()
     const view = render(<M3SnackbarHost ref={host} />)
@@ -285,5 +311,76 @@ describe('m3-react/snackbar', () => {
 
     fireEvent.keyDown(document, { key: 'g', altKey: true, ctrlKey: true })
     expect(document.activeElement).not.toBe(actionButton)
+  })
+
+  test('disposes active and queued feedback when their modal layer deactivates', async () => {
+    vi.useFakeTimers()
+    const layer = createLayerHost(document)
+    setLayerModal(layer, true)
+    layer.dataset.m3LayerActive = 'true'
+    document.body.append(layer)
+    const app = document.createElement('div')
+    layer.append(app)
+
+    const host = createRef<SnackbarHostMethods>()
+    const view = render(<><button type="button">Save</button><M3SnackbarHost ref={host} /></>, { container: app })
+    screen.getByRole('button', { name: 'Save' }).focus()
+
+    let active!: Promise<SnackbarResult>
+    let queued!: Promise<SnackbarResult>
+    act(() => {
+      active = host.current!.show({ message: 'Saved', duration: null })
+      queued = host.current!.show({ message: 'Queued', duration: null })
+    })
+    expect(visibleMessage()).toBe('Saved')
+
+    layer.dataset.m3LayerActive = 'false'
+    act(() => layer.dispatchEvent(new Event(LAYER_DEACTIVATED_EVENT)))
+    await expect(active).resolves.toBe('disposed')
+    act(() => vi.advanceTimersByTime(150))
+    await expect(queued).resolves.toBe('disposed')
+    expect(visibleMessage()).toBeUndefined()
+
+    view.unmount()
+    layer.remove()
+  })
+
+  test('disposes queued feedback if its layer deactivates before the queue advances', async () => {
+    vi.useFakeTimers()
+    const layer = createLayerHost(document)
+    setLayerModal(layer, true)
+    layer.dataset.m3LayerActive = 'true'
+    document.body.append(layer)
+    const app = document.createElement('div')
+    layer.append(app)
+
+    const host = createRef<SnackbarHostMethods>()
+    const view = render(
+      <>
+        <button type="button">Save</button>
+        <M3SnackbarHost ref={host} />
+      </>,
+      { container: app }
+    )
+    screen.getByRole('button', { name: 'Save' }).focus()
+
+    let active!: Promise<SnackbarResult>
+    let queued!: Promise<SnackbarResult>
+    act(() => {
+      active = host.current!.show({ message: 'Saved', duration: null })
+      queued = host.current!.show({ message: 'Queued', duration: null })
+    })
+    expect(layer.querySelector('.m3-layer__feedback .m3-snackbar')).not.toBeNull()
+
+    layer.dataset.m3LayerActive = 'false'
+    act(() => host.current!.dismiss())
+    await expect(active).resolves.toBe('dismiss')
+    act(() => vi.advanceTimersByTime(150))
+
+    await expect(queued).resolves.toBe('disposed')
+    expect(visibleMessage()).toBeUndefined()
+
+    view.unmount()
+    layer.remove()
   })
 })

@@ -31,7 +31,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
   const [expanded, setExpanded, expandedRef] = useStateRef(false)
   const [surfaceExpanded, setSurfaceExpanded] = useStateRef(false)
   const [busy, setBusy, busyRef] = useStateRef(false)
-  const [backgroundCollapsed, setBackgroundCollapsed, backgroundCollapsedRef] = useStateRef(false)
+  const [backgroundCollapsed, setBackgroundCollapsed] = useStateRef(false)
   const [originHeight, setOriginHeight] = useStateRef(220)
   const [motion, setMotion] = useStateRef<SurfaceMotionRect>({
     top: 16,
@@ -63,7 +63,7 @@ export function useSurfaceCardPageMorph(transitionMs: number): UseSurfaceCardPag
       return
     }
 
-    if (!origin || backgroundCollapsedRef.current) {
+    if (!origin) {
       return
     }
 

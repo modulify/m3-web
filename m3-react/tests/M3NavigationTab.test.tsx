@@ -1,12 +1,11 @@
 import type { M3NavigationTabExposed } from '@/components/navigation'
 
-import { createRef } from 'react'
+import { act, createRef } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 
 import { M3Icon } from '@/components/icon'
-import { M3NavigationTab } from '@/components/navigation'
-
 import M3NavigationAppearance from '@/components/navigation/M3NavigationAppearance'
+import { M3NavigationTab } from '@/components/navigation'
 
 describe('m3-react/navigation-tab', () => {
   test('renders active tab with filled icon and badge', () => {
@@ -82,7 +81,7 @@ describe('m3-react/navigation-tab', () => {
     expect(screen.getByRole('link', { name: 'Inbox' }).getAttribute('href')).toBe('/inbox')
   })
 
-  test('moves a drawer badge into the row and keeps the icon badge hidden from speech', () => {
+  test('places drawer badges beside labels and hides icon badges from speech', () => {
     const { container } = render(
       <M3NavigationAppearance.Provider value="drawer">
         <M3NavigationTab active>
@@ -92,28 +91,84 @@ describe('m3-react/navigation-tab', () => {
         </M3NavigationTab>
       </M3NavigationAppearance.Provider>
     )
+
     const badge = container.querySelector('.m3-navigation-tab__badge') as HTMLElement
+
     expect(badge.getAttribute('aria-hidden')).toBe('true')
     expect(container.querySelector('.m3-navigation-tab__badge-label')?.textContent).toBe('12')
     expect(screen.getByRole('button', { name: 'Inbox' })).not.toBeNull()
   })
 
-  test('supports programmatic focus and prevents default navigation when requested', () => {
+  test('exposes programmatic focus and click while respecting prevented navigation', () => {
     const tab = createRef<M3NavigationTabExposed>()
     const onNavigate = vi.fn()
     const onKeyUp = vi.fn()
+
     render(
-      <M3NavigationTab ref={tab} href="/inbox" label="Inbox" aria-labelledby="section-heading" prevent onNavigate={onNavigate} onKeyUp={onKeyUp} />
+      <M3NavigationTab
+        ref={tab}
+        href="/inbox"
+        label="Inbox"
+        aria-labelledby="section-heading"
+        prevent
+        onNavigate={onNavigate}
+        onKeyUp={onKeyUp}
+      />
     )
+
     const link = screen.getByRole('link')
+
     expect(link.getAttribute('aria-labelledby')).toContain('section-heading')
+    expect(tab.current?.el).toBe(link.closest('.m3-navigation-tab'))
+
     tab.current!.focus()
     expect(document.activeElement).toBe(link)
+
     fireEvent.keyUp(link, { code: 'Enter' })
     expect(onKeyUp).toHaveBeenCalledTimes(1)
     expect(fireEvent.click(link)).toBe(false)
     expect(onNavigate).toHaveBeenCalledTimes(1)
+
     tab.current!.blur()
     expect(document.activeElement).not.toBe(link)
+
+    tab.current!.click()
+    expect(onNavigate).toHaveBeenCalledTimes(2)
+  })
+
+  test('resolves standalone automatic appearance at compact and large widths', () => {
+    const initialWidth = window.innerWidth
+
+    try {
+      const view = render(<M3NavigationTab aria-label="Inbox">
+        <M3NavigationTab.Icon><M3Icon name="mail" /></M3NavigationTab.Icon>
+      </M3NavigationTab>)
+      const tab = view.container.querySelector('.m3-navigation-tab')!
+
+      for (const [width, appearance] of [[400, 'bar'], [1700, 'rail-expanded']] as const) {
+        act(() => {
+          Object.defineProperty(window, 'innerWidth', { configurable: true, writable: true, value: width })
+          window.dispatchEvent(new Event('resize'))
+        })
+
+        expect(tab.classList.contains(`m3-navigation-tab_in-${appearance}`)).toBe(true)
+      }
+    } finally {
+      act(() => {
+        Object.defineProperty(window, 'innerWidth', { configurable: true, writable: true, value: initialWidth })
+        window.dispatchEvent(new Event('resize'))
+      })
+    }
+  })
+
+  test('supports an icon without a text label or event callbacks', () => {
+    const view = render(<M3NavigationTab aria-label="Inbox">
+      <M3NavigationTab.Icon />
+    </M3NavigationTab>)
+    const button = screen.getByRole('button', { name: 'Inbox' })
+
+    expect(view.container.querySelector('.m3-navigation-tab__label')).toBeNull()
+    fireEvent.keyUp(button, { code: 'Escape' })
+    fireEvent.click(button)
   })
 })

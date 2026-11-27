@@ -35,6 +35,41 @@ const SearchHarness = ({ onSubmit = () => {} }: { onSubmit?: (query: string) => 
 }
 
 describe('m3-react/search', () => {
+  test('ignores a queued resize after the search bar unmounts', () => {
+    let notify: ResizeObserverCallback | null = null
+    vi.stubGlobal('ResizeObserver', class {
+      constructor (private readonly callback: ResizeObserverCallback) {}
+
+      observe(element: Element) {
+        if (element.classList.contains('m3-search__bar')) {
+          notify = this.callback
+        }
+      }
+
+      disconnect() {}
+    })
+
+    try {
+      const view = render(
+        <M3Search
+          query=""
+          label="Search messages"
+          status=""
+          open
+          onQueryChange={() => {}}
+          onOpenChange={() => {}}
+        />
+      )
+      expect(notify).not.toBeNull()
+
+      view.unmount()
+
+      expect(() => notify!([], {} as ResizeObserver)).not.toThrow()
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
   test('opens from the bar, edits and submits while keeping the query visible', () => {
     const onSubmit = vi.fn()
     render(<SearchHarness onSubmit={onSubmit} />)

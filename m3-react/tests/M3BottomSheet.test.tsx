@@ -1,9 +1,8 @@
 import type { M3BottomSheetExposed } from '@/components/bottom-sheet'
 
+import { act } from '@testing-library/react'
 import { createRef } from 'react'
-
 import {
-  act,
   fireEvent,
   render,
   screen,
@@ -48,12 +47,22 @@ describe('m3-react/bottom-sheet', () => {
 
   test('the handle requests a height change when activated', () => {
     const onExpand = vi.fn()
+    const onExpandChanged = vi.fn()
 
-    render(<M3BottomSheet peek={280} aria-label="Details" shown onExpand={onExpand}>Details</M3BottomSheet>)
+    const view = render(
+      <M3BottomSheet peek={280} aria-label="Details" shown onExpand={onExpand}>Details</M3BottomSheet>
+    )
 
     fireEvent.click(screen.getByRole('button', { name: 'Resize bottom sheet' }))
-
     expect(onExpand).toHaveBeenCalledWith(true)
+
+    view.rerender(
+      <M3BottomSheet peek={280} aria-label="Details" shown onExpand={onExpandChanged}>Details</M3BottomSheet>
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Resize bottom sheet' }))
+
+    expect(onExpand).toHaveBeenCalledTimes(1)
+    expect(onExpandChanged).toHaveBeenCalledWith(false)
   })
 
   test('exposes show, hide, expand, and collapse controls', () => {
@@ -99,5 +108,18 @@ describe('m3-react/bottom-sheet', () => {
 
     const sheet = screen.getByRole('dialog', { name: 'Details' })
     expect(sheet.style.getPropertyValue('--m3-bottom-sheet-height')).toBe('700px')
+  })
+
+  test('unmounts after closing and mounts again when reopened', async () => {
+    const view = render(<M3BottomSheet aria-label="Details" shown>Details</M3BottomSheet>)
+    expect(screen.getByRole('dialog', { name: 'Details' })).toBeTruthy()
+
+    view.rerender(<M3BottomSheet shown={false} aria-label="Details">Details</M3BottomSheet>)
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Details' })).toBeNull()
+    }, { timeout: 1000 })
+
+    view.rerender(<M3BottomSheet aria-label="Details" shown>Details</M3BottomSheet>)
+    expect(screen.getByRole('dialog', { name: 'Details' })).toBeTruthy()
   })
 })
